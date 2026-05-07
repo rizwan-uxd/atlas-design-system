@@ -1,0 +1,167 @@
+/* =================================================================
+   Atlas Textarea — component styles
+   All values reference semantic tokens only.
+   No hex literals. No magic numbers. Logical properties throughout.
+   Mirrors Input token mappings (see Input.module.css) for bg/border/
+   foreground/focus/motion.
+   ================================================================= */
+
+/* ── Wrapper (position context for character counter) ─────────── */
+
+.wrapper {
+  position: relative;
+  display: inline-flex;
+  width: 100%;
+}
+
+/* ── Base textarea ────────────────────────────────────────────── */
+
+.textarea {
+  width: 100%;
+  box-sizing: border-box;
+  font-family: var(--atlas-font-sans);
+  color: var(--atlas-foreground);
+  background-color: var(--atlas-background);
+  border: var(--atlas-border-width-1) solid var(--atlas-border);
+  border-radius: var(--atlas-radius-md);
+  outline: none;
+  resize: vertical; /* default; overridden by .resizeNone / .resizeBoth */
+  transition:
+    border-color     var(--atlas-duration-fast) var(--atlas-easing-standard),
+    background-color var(--atlas-duration-fast) var(--atlas-easing-standard);
+}
+
+.textarea::placeholder {
+  color: var(--atlas-foreground-muted);
+}
+
+/* Hover */
+.textarea:hover:not(:disabled):not([readonly]) {
+  border-color: var(--atlas-border-strong);
+}
+
+/* Focus-visible */
+.textarea:focus-visible {
+  outline: var(--atlas-border-width-2) solid var(--atlas-focus-ring);
+  outline-offset: var(--atlas-spacing-0_5);
+  border-color: var(--atlas-primary);
+}
+
+/* Disabled */
+.textarea:disabled {
+  background-color: var(--atlas-background-muted);
+  color: var(--atlas-foreground-disabled);
+  cursor: not-allowed;
+  opacity: var(--atlas-opacity-disabled);
+  resize: none;
+}
+
+/* Readonly */
+.textarea[readonly] {
+  cursor: default;
+  resize: none;
+}
+
+/* Invalid */
+.textarea[aria-invalid="true"] {
+  border-color: var(--atlas-danger);
+}
+
+/* ── Resize modifiers ─────────────────────────────────────────── */
+
+.resizeNone {
+  resize: none;
+}
+
+.resizeBoth {
+  resize: both;
+}
+
+/* ── Sizes ────────────────────────────────────────────────────── */
+/*
+  Token map:
+    sm: min-height 80px  padding block=spacing-2(8px) inline=spacing-3(12px) type=font-size-sm
+    md: min-height 96px  padding=spacing-3(12px)                              type=text-body(16px)
+    lg: min-height 128px padding block=spacing-3(12px) inline=spacing-4(16px) type=text-body(16px)
+
+  80px  = spacing-10(40) × 2
+  96px  = spacing-12(48) × 2  [closest: use calc]
+  128px = spacing-16(64) × 2
+*/
+
+.sm {
+  min-height: calc(var(--atlas-spacing-10) * 2);       /* 80px */
+  padding-block: var(--atlas-spacing-2);
+  padding-inline: var(--atlas-spacing-3);
+  font-size: var(--atlas-font-size-sm);
+}
+
+.md {
+  min-height: calc(var(--atlas-spacing-12) * 2);       /* 96px */
+  padding-block: var(--atlas-spacing-3);
+  padding-inline: var(--atlas-spacing-3);
+  font-size: var(--atlas-text-body);
+}
+
+.lg {
+  min-height: calc(var(--atlas-spacing-16) * 2);       /* 128px */
+  padding-block: var(--atlas-spacing-3);
+  padding-inline: var(--atlas-spacing-4);
+  font-size: var(--atlas-text-body);
+}
+
+/* ── Variant: filled ──────────────────────────────────────────── */
+
+.filled .textarea {
+  background-color: var(--atlas-background-muted);
+  border: none;
+  border-block-end: var(--atlas-border-width-1) solid transparent;
+  border-start-start-radius: var(--atlas-radius-md);
+  border-start-end-radius: var(--atlas-radius-md);
+  border-end-start-radius: var(--atlas-radius-none);
+  border-end-end-radius: var(--atlas-radius-none);
+}
+
+.filled .textarea:hover:not(:disabled):not([readonly]) {
+  background-color: var(--atlas-background-subtle);
+}
+
+.filled .textarea:focus-visible {
+  background-color: var(--atlas-background);
+  outline: var(--atlas-border-width-2) solid var(--atlas-focus-ring);
+  outline-offset: var(--atlas-spacing-0_5);
+  border-block-end-color: var(--atlas-primary);
+}
+
+.filled .textarea[aria-invalid="true"] {
+  border-block-end-color: var(--atlas-danger);
+}
+
+.filled .textarea:disabled {
+  background-color: var(--atlas-background-muted);
+}
+
+/* ── Character counter ────────────────────────────────────────── */
+
+.counter {
+  position: absolute;
+  inset-block-end: var(--atlas-spacing-2);
+  inset-inline-end: var(--atlas-spacing-3);
+  font-family: var(--atlas-font-sans);
+  font-size: var(--atlas-text-caption); /* font-size-xs */
+  color: var(--atlas-foreground-muted);
+  pointer-events: none;
+  line-height: 1;
+}
+
+.counterOver {
+  color: var(--atlas-danger);
+}
+
+/* ── Reduced motion ───────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .textarea {
+    transition: none;
+  }
+}

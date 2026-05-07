@@ -1,0 +1,225 @@
+/* =================================================================
+   Atlas Alert — component styles
+   All values reference semantic tokens only.
+   No hex literals. No primitive tokens. No magic numbers.
+   ================================================================= */
+
+/* ── Base ─────────────────────────────────────────────────────── */
+
+.alert {
+  /* Size-driven padding, overridden by .sm */
+  --_pad: var(--atlas-spacing-4);
+  /* Accent bar color, overridden per variant */
+  --_accent: var(--atlas-info);
+
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--atlas-spacing-3);
+  /* Extra inline-start padding to clear the 4px accent bar + a small gap */
+  padding: var(--_pad);
+  padding-inline-start: calc(var(--_pad) + var(--atlas-spacing-1) + var(--atlas-spacing-2));
+  border-radius: var(--atlas-radius-md);
+  overflow: hidden;
+  border: var(--atlas-border-width-1) solid transparent;
+  font-family: var(--atlas-font-sans);
+  box-sizing: border-box;
+}
+
+/* ── Accent bar ───────────────────────────────────────────────── */
+/*
+  4px stripe at inline-start.
+  Uses absolute position + overflow hidden on parent.
+*/
+
+.alert::before {
+  content: "";
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  width: var(--atlas-spacing-1); /* 4px */
+  background-color: var(--_accent);
+}
+
+/* ── Sizes ────────────────────────────────────────────────────── */
+
+.sm {
+  --_pad: var(--atlas-spacing-3);
+}
+
+/* md is the default — no override needed */
+
+/* ── Variants ─────────────────────────────────────────────────── */
+/*
+  Strategy: subtle bg + main semantic color for border/icon/title.
+  Description text always uses --atlas-foreground for readability.
+  The `color` property on .alert propagates to icon and title
+  via `color: inherit`.
+*/
+
+.info {
+  --_accent: var(--atlas-info);
+  background-color: var(--atlas-info-subtle);
+  border-color: var(--atlas-info);
+  color: var(--atlas-info);
+}
+
+.success {
+  --_accent: var(--atlas-success);
+  background-color: var(--atlas-success-subtle);
+  border-color: var(--atlas-success);
+  color: var(--atlas-success);
+}
+
+.warning {
+  --_accent: var(--atlas-warning);
+  background-color: var(--atlas-warning-subtle);
+  border-color: var(--atlas-warning);
+  color: var(--atlas-warning);
+}
+
+.danger {
+  --_accent: var(--atlas-danger);
+  background-color: var(--atlas-danger-subtle);
+  border-color: var(--atlas-danger);
+  color: var(--atlas-danger);
+}
+
+/* ── Icon slot ────────────────────────────────────────────────── */
+/*
+  Inherits variant color from .alert root.
+  Offset 0.5 spacing block to align optically with first text line.
+*/
+
+.icon {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--atlas-font-size-base);
+  line-height: var(--atlas-line-height-tight);
+  color: inherit;
+  margin-block-start: var(--atlas-spacing-0_5);
+}
+
+/* ── Body ─────────────────────────────────────────────────────── */
+
+.body {
+  flex: 1;
+  min-width: 0;
+}
+
+/* ── Title ────────────────────────────────────────────────────── */
+
+.title {
+  margin: 0;
+  font-size: var(--atlas-text-body);
+  font-weight: var(--atlas-font-weight-semibold);
+  line-height: var(--atlas-line-height-tight);
+  color: inherit; /* variant color */
+}
+
+.sm .title {
+  font-size: var(--atlas-text-body-sm);
+}
+
+/* ── Description ──────────────────────────────────────────────── */
+/*
+  Description is always neutral foreground — intent is carried by title + icon.
+*/
+
+.description {
+  margin: 0;
+  font-size: var(--atlas-text-body-sm);
+  line-height: var(--atlas-line-height-normal);
+  color: var(--atlas-foreground);
+}
+
+.sm .description {
+  font-size: var(--atlas-text-caption);
+}
+
+/* Gap when both title and description are present */
+.title + .description {
+  margin-block-start: var(--atlas-spacing-1);
+}
+
+/* ── Actions slot ─────────────────────────────────────────────── */
+/*
+  Inline button row below description.
+  Wraps on mobile to avoid overflow.
+*/
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--atlas-spacing-2);
+  margin-block-start: var(--atlas-spacing-3);
+}
+
+/* ── Dismiss button ───────────────────────────────────────────── */
+/*
+  Minimum 44×44px touch target per spec (--atlas-touch-min).
+  Uses negative margin to pull into alert padding without adding visual bulk.
+  Icon inherits variant color.
+*/
+
+.dismissBtn {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  /* 44px touch target */
+  min-width: var(--atlas-touch-min);
+  min-height: var(--atlas-touch-min);
+  /* Pull button into the alert's padding area */
+  margin-block: calc(-1 * var(--_pad));
+  margin-inline-end: calc(-1 * var(--_pad));
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: inherit;
+  font-size: var(--atlas-font-size-base);
+  line-height: 1;
+  border-radius: var(--atlas-radius-sm);
+  opacity: var(--atlas-opacity-hover); /* slightly subdued at rest */
+  outline: none;
+}
+
+.dismissBtn:hover {
+  opacity: 1;
+}
+
+.dismissBtn:focus-visible {
+  opacity: 1;
+  outline: var(--atlas-border-width-2) solid var(--atlas-focus-ring);
+  outline-offset: var(--atlas-spacing-0_5);
+}
+
+/* ── Enter animation ──────────────────────────────────────────── */
+/*
+  Fade + 4px upward translate on mount.
+  Suppressed under prefers-reduced-motion.
+*/
+
+@keyframes alertEnter {
+  from {
+    opacity: 0;
+    transform: translateY(var(--atlas-spacing-1)); /* 4px */
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.alert {
+  animation: alertEnter var(--atlas-duration-base) var(--atlas-easing-emphasized) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .alert {
+    animation: none;
+  }
+}

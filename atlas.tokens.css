@@ -1,0 +1,425 @@
+@import "tailwindcss";
+
+:root {
+  /* ─────────────── Color · Primitive · Neutral ─────────────── */
+  --atlas-color-neutral-0: oklch(1 0 0);
+  --atlas-color-neutral-50: oklch(0.985 0.002 247);
+  --atlas-color-neutral-100: oklch(0.967 0.003 247);
+  --atlas-color-neutral-200: oklch(0.928 0.006 247);
+  --atlas-color-neutral-300: oklch(0.872 0.010 247);
+  --atlas-color-neutral-400: oklch(0.708 0.014 247);
+  --atlas-color-neutral-500: oklch(0.554 0.016 247);
+  --atlas-color-neutral-600: oklch(0.446 0.016 247);
+  --atlas-color-neutral-700: oklch(0.372 0.014 247);
+  --atlas-color-neutral-800: oklch(0.279 0.012 247);
+  --atlas-color-neutral-900: oklch(0.208 0.010 247);
+  --atlas-color-neutral-950: oklch(0.145 0.008 247);
+  --atlas-color-neutral-1000: oklch(0 0 0);
+
+  /* ─────────────── Color · Primitive · Brand ─────────────── */
+  --atlas-color-brand-50: oklch(0.971 0.014 264);
+  --atlas-color-brand-100: oklch(0.936 0.032 264);
+  --atlas-color-brand-200: oklch(0.882 0.062 264);
+  --atlas-color-brand-300: oklch(0.808 0.105 264);
+  --atlas-color-brand-400: oklch(0.712 0.150 264);
+  --atlas-color-brand-500: oklch(0.623 0.188 264);
+  --atlas-color-brand-600: oklch(0.546 0.196 264);
+  --atlas-color-brand-700: oklch(0.470 0.180 264);
+  --atlas-color-brand-800: oklch(0.398 0.150 264);
+  --atlas-color-brand-900: oklch(0.336 0.120 264);
+  --atlas-color-brand-950: oklch(0.245 0.085 264);
+
+  /* ─────────────── Color · Primitive · Semantic scales ─────────────── */
+  --atlas-color-success-50: oklch(0.972 0.024 155);
+  --atlas-color-success-100: oklch(0.938 0.052 155);
+  --atlas-color-success-500: oklch(0.628 0.155 155);
+  --atlas-color-success-600: oklch(0.548 0.160 155);
+  --atlas-color-success-700: oklch(0.468 0.145 155);
+  --atlas-color-success-900: oklch(0.310 0.090 155);
+
+  --atlas-color-warning-50: oklch(0.978 0.030 85);
+  --atlas-color-warning-100: oklch(0.945 0.065 85);
+  --atlas-color-warning-500: oklch(0.748 0.158 85);
+  --atlas-color-warning-600: oklch(0.668 0.162 85);
+  --atlas-color-warning-700: oklch(0.568 0.148 85);
+  --atlas-color-warning-900: oklch(0.385 0.092 85);
+
+  --atlas-color-danger-50: oklch(0.971 0.022 25);
+  --atlas-color-danger-100: oklch(0.938 0.048 25);
+  --atlas-color-danger-400: oklch(0.708 0.195 25);
+  --atlas-color-danger-500: oklch(0.628 0.205 25);
+  --atlas-color-danger-600: oklch(0.548 0.215 25);
+  --atlas-color-danger-700: oklch(0.468 0.195 25);
+  --atlas-color-danger-900: oklch(0.318 0.118 25);
+
+  --atlas-color-info-50: oklch(0.972 0.018 230);
+  --atlas-color-info-100: oklch(0.940 0.042 230);
+  --atlas-color-info-500: oklch(0.658 0.148 230);
+  --atlas-color-info-600: oklch(0.578 0.158 230);
+  --atlas-color-info-700: oklch(0.498 0.142 230);
+  --atlas-color-info-900: oklch(0.338 0.088 230);
+
+  /* ─────────────── Spacing ─────────────── */
+  --atlas-spacing-0: 0px;
+  --atlas-spacing-px: 1px;
+  --atlas-spacing-0_5: 2px;
+  --atlas-spacing-1: 4px;
+  --atlas-spacing-1_5: 6px;
+  --atlas-spacing-2: 8px;
+  --atlas-spacing-3: 12px;
+  --atlas-spacing-4: 16px;
+  --atlas-spacing-5: 20px;
+  --atlas-spacing-6: 24px;
+  --atlas-spacing-8: 32px;
+  --atlas-spacing-10: 40px;
+  --atlas-spacing-12: 48px;
+  --atlas-spacing-16: 64px;
+
+  /* ─────────────── Radius ─────────────── */
+  --atlas-radius-base: 8px;
+  --atlas-radius-none: 0px;
+  --atlas-radius-sm: 4px;
+  --atlas-radius-md: var(--atlas-radius-base);
+  --atlas-radius-lg: 12px;
+  --atlas-radius-xl: 16px;
+  --atlas-radius-2xl: 24px;
+  --atlas-radius-full: 9999px;
+
+  /* ─────────────── Breakpoints ─────────────── */
+  --atlas-breakpoint-sm: 640px;
+  --atlas-breakpoint-md: 768px;
+  --atlas-breakpoint-lg: 1024px;
+  --atlas-breakpoint-xl: 1280px;
+  --atlas-breakpoint-2xl: 1536px;
+
+  /* ─────────────── Layout · per-platform definitions ─────────────── */
+  --atlas-columns-mobile: 4;
+  --atlas-columns-tablet: 8;
+  --atlas-columns-desktop: 12;
+
+  --atlas-gutter-mobile: var(--atlas-spacing-4);
+  --atlas-gutter-tablet: var(--atlas-spacing-6);
+  --atlas-gutter-desktop: var(--atlas-spacing-8);
+
+  --atlas-margin-mobile: var(--atlas-spacing-4);
+  --atlas-margin-tablet: var(--atlas-spacing-6);
+  --atlas-margin-desktop: var(--atlas-spacing-8);
+
+  --atlas-container-sm: 640px;
+  --atlas-container-md: 768px;
+  --atlas-container-lg: 1024px;
+  --atlas-container-xl: 1280px;
+  --atlas-container-2xl: 1536px;
+
+  /* Active layout tokens — mobile-first defaults; uplifted in @media below */
+  --atlas-columns: var(--atlas-columns-mobile);
+  --atlas-gutter: var(--atlas-gutter-mobile);
+  --atlas-margin: var(--atlas-margin-mobile);
+
+  /* ─────────────── Touch targets ─────────────── */
+  --atlas-touch-min: 44px;
+  --atlas-touch-comfortable: 48px;
+  --atlas-touch-spacious: 56px;
+
+  /* ─────────────── Safe area (mobile app / PWA) ─────────────── */
+  --atlas-safe-top: env(safe-area-inset-top);
+  --atlas-safe-bottom: env(safe-area-inset-bottom);
+  --atlas-safe-inline-start: env(safe-area-inset-left);
+  --atlas-safe-inline-end: env(safe-area-inset-right);
+
+  /* ─────────────── Z-index ─────────────── */
+  --atlas-z-base: 0;
+  --atlas-z-dropdown: 1000;
+  --atlas-z-sticky: 1100;
+  --atlas-z-overlay: 1200;
+  --atlas-z-modal: 1300;
+  --atlas-z-popover: 1400;
+  --atlas-z-toast: 1500;
+  --atlas-z-tooltip: 1600;
+
+  /* ─────────────── Motion ─────────────── */
+  --atlas-duration-instant: 0ms;
+  --atlas-duration-fast: 120ms;
+  --atlas-duration-base: 200ms;
+  --atlas-duration-slow: 320ms;
+
+  --atlas-easing-linear: cubic-bezier(0, 0, 1, 1);
+  --atlas-easing-standard: cubic-bezier(0.2, 0, 0, 1);
+  --atlas-easing-emphasized: cubic-bezier(0.3, 0, 0, 1);
+  --atlas-easing-exit: cubic-bezier(0.4, 0, 1, 1);
+
+  /* ─────────────── Typography · families ─────────────── */
+  --atlas-font-sans: "Nunito Sans", ui-sans-serif, system-ui, sans-serif;
+  --atlas-font-arabic: "Noto Sans Arabic", ui-sans-serif, system-ui, sans-serif;
+  --atlas-font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  /* ─────────────── Typography · weights ─────────────── */
+  --atlas-font-weight-regular: 400;
+  --atlas-font-weight-medium: 500;
+  --atlas-font-weight-semibold: 600;
+  --atlas-font-weight-bold: 700;
+
+  /* ─────────────── Typography · static size scale ─────────────── */
+  --atlas-font-size-xs: 12px;
+  --atlas-font-size-sm: 14px;
+  --atlas-font-size-base: 16px;
+  --atlas-font-size-lg: 18px;
+  --atlas-font-size-xl: 20px;
+  --atlas-font-size-2xl: 24px;
+  --atlas-font-size-3xl: 30px;
+  --atlas-font-size-4xl: 36px;
+  --atlas-font-size-5xl: 48px;
+
+  /* ─────────────── Typography · responsive roles ─────────────── */
+  /* Mobile-first defaults; uplifted in @media below */
+  --atlas-text-h1: 28px;
+  --atlas-text-h2: 22px;
+  --atlas-text-h3: 18px;
+  --atlas-text-h4: 16px;
+  --atlas-text-body: var(--atlas-font-size-base);
+  --atlas-text-body-sm: var(--atlas-font-size-sm);
+  --atlas-text-caption: var(--atlas-font-size-xs);
+
+  /* ─────────────── Line-height & letter-spacing ─────────────── */
+  --atlas-line-height-tight: 1.2;
+  --atlas-line-height-snug: 1.35;
+  --atlas-line-height-normal: 1.5;
+  --atlas-line-height-relaxed: 1.65;
+
+  --atlas-letter-spacing-tight: -0.01em;
+  --atlas-letter-spacing-normal: 0em;
+  --atlas-letter-spacing-wide: 0.02em;
+
+  /* ─────────────── Border ─────────────── */
+  --atlas-border-width-0: 0px;
+  --atlas-border-width-1: 1px;
+  --atlas-border-width-2: 2px;
+
+  /* ─────────────── Opacity ─────────────── */
+  --atlas-opacity-disabled: 0.5;
+  --atlas-opacity-hover: 0.9;
+  --atlas-opacity-overlay: 0.6;
+
+  /* ─────────────── Shadow (light defaults) ─────────────── */
+  --atlas-shadow-sm: 0 1px 2px 0 oklch(0 0 0 / 0.05);
+  --atlas-shadow-md: 0 2px 4px -1px oklch(0 0 0 / 0.06), 0 4px 8px -2px oklch(0 0 0 / 0.08);
+  --atlas-shadow-lg: 0 4px 8px -2px oklch(0 0 0 / 0.08), 0 12px 24px -4px oklch(0 0 0 / 0.10);
+  --atlas-shadow-xl: 0 8px 16px -4px oklch(0 0 0 / 0.10), 0 24px 48px -8px oklch(0 0 0 / 0.14);
+
+  /* ─────────────── Semantic · Light ─────────────── */
+  --atlas-background: var(--atlas-color-neutral-0);
+  --atlas-background-subtle: var(--atlas-color-neutral-50);
+  --atlas-background-muted: var(--atlas-color-neutral-100);
+  --atlas-surface: var(--atlas-color-neutral-0);
+  --atlas-surface-raised: var(--atlas-color-neutral-0);
+  --atlas-surface-overlay: var(--atlas-color-neutral-0);
+  --atlas-border: var(--atlas-color-neutral-200);
+  --atlas-border-strong: var(--atlas-color-neutral-300);
+  --atlas-border-subtle: var(--atlas-color-neutral-100);
+  --atlas-foreground: var(--atlas-color-neutral-950);
+  --atlas-foreground-muted: var(--atlas-color-neutral-600);
+  --atlas-foreground-subtle: var(--atlas-color-neutral-500);
+  --atlas-foreground-disabled: var(--atlas-color-neutral-400);
+  --atlas-foreground-on-brand: var(--atlas-color-neutral-0);
+  --atlas-primary: var(--atlas-color-brand-600);
+  --atlas-primary-hover: var(--atlas-color-brand-700);
+  --atlas-primary-active: var(--atlas-color-brand-800);
+  --atlas-primary-subtle: var(--atlas-color-brand-50);
+  --atlas-primary-foreground: var(--atlas-color-neutral-0);
+  --atlas-success: var(--atlas-color-success-600);
+  --atlas-success-subtle: var(--atlas-color-success-50);
+  --atlas-success-foreground: var(--atlas-color-neutral-0);
+  --atlas-warning: var(--atlas-color-warning-500);
+  --atlas-warning-subtle: var(--atlas-color-warning-50);
+  --atlas-warning-foreground: var(--atlas-color-neutral-950);
+  --atlas-danger: var(--atlas-color-danger-600);
+  --atlas-danger-hover: var(--atlas-color-danger-700);
+  --atlas-danger-subtle: var(--atlas-color-danger-50);
+  --atlas-danger-foreground: var(--atlas-color-neutral-0);
+  --atlas-info: var(--atlas-color-info-600);
+  --atlas-info-subtle: var(--atlas-color-info-50);
+  --atlas-info-foreground: var(--atlas-color-neutral-0);
+  --atlas-focus-ring: var(--atlas-color-brand-500);
+  --atlas-overlay: var(--atlas-color-neutral-950);
+}
+
+/* ─────────────── Dark theme override ─────────────── */
+[data-theme="dark"],
+.dark {
+  --atlas-background: var(--atlas-color-neutral-950);
+  --atlas-background-subtle: var(--atlas-color-neutral-900);
+  --atlas-background-muted: var(--atlas-color-neutral-800);
+  --atlas-surface: var(--atlas-color-neutral-900);
+  --atlas-surface-raised: var(--atlas-color-neutral-800);
+  --atlas-surface-overlay: var(--atlas-color-neutral-800);
+  --atlas-border: var(--atlas-color-neutral-800);
+  --atlas-border-strong: var(--atlas-color-neutral-700);
+  --atlas-border-subtle: var(--atlas-color-neutral-900);
+  --atlas-foreground: var(--atlas-color-neutral-50);
+  --atlas-foreground-muted: var(--atlas-color-neutral-400);
+  --atlas-foreground-subtle: var(--atlas-color-neutral-500);
+  --atlas-foreground-disabled: var(--atlas-color-neutral-600);
+  --atlas-foreground-on-brand: var(--atlas-color-neutral-0);
+  --atlas-primary: var(--atlas-color-brand-500);
+  --atlas-primary-hover: var(--atlas-color-brand-400);
+  --atlas-primary-active: var(--atlas-color-brand-300);
+  --atlas-primary-subtle: var(--atlas-color-brand-950);
+  --atlas-primary-foreground: var(--atlas-color-neutral-0);
+  --atlas-success: var(--atlas-color-success-500);
+  --atlas-success-subtle: var(--atlas-color-success-900);
+  --atlas-success-foreground: var(--atlas-color-neutral-950);
+  --atlas-warning: var(--atlas-color-warning-500);
+  --atlas-warning-subtle: var(--atlas-color-warning-900);
+  --atlas-warning-foreground: var(--atlas-color-neutral-950);
+  --atlas-danger: var(--atlas-color-danger-500);
+  --atlas-danger-hover: var(--atlas-color-danger-400);
+  --atlas-danger-subtle: var(--atlas-color-danger-900);
+  --atlas-danger-foreground: var(--atlas-color-neutral-0);
+  --atlas-info: var(--atlas-color-info-500);
+  --atlas-info-subtle: var(--atlas-color-info-900);
+  --atlas-info-foreground: var(--atlas-color-neutral-0);
+  --atlas-focus-ring: var(--atlas-color-brand-400);
+  --atlas-overlay: var(--atlas-color-neutral-1000);
+
+  --atlas-shadow-sm: 0 1px 2px 0 oklch(0 0 0 / 0.40);
+  --atlas-shadow-md: 0 2px 4px -1px oklch(0 0 0 / 0.45), 0 4px 8px -2px oklch(0 0 0 / 0.50);
+  --atlas-shadow-lg: 0 4px 8px -2px oklch(0 0 0 / 0.50), 0 12px 24px -4px oklch(0 0 0 / 0.55);
+  --atlas-shadow-xl: 0 8px 16px -4px oklch(0 0 0 / 0.55), 0 24px 48px -8px oklch(0 0 0 / 0.60);
+}
+
+/* ─────────────── RTL ─────────────── */
+[dir="rtl"] {
+  --atlas-font-sans: var(--atlas-font-arabic);
+}
+
+/* ─────────────── Responsive uplifts ─────────────── */
+/* Tablet: ≥ md (768px) — 8-col grid, larger gutters/margins, larger headings */
+@media (min-width: 768px) {
+  :root {
+    --atlas-columns: var(--atlas-columns-tablet);
+    --atlas-gutter: var(--atlas-gutter-tablet);
+    --atlas-margin: var(--atlas-margin-tablet);
+
+    --atlas-text-h1: 36px;
+    --atlas-text-h2: 28px;
+    --atlas-text-h3: 22px;
+    --atlas-text-h4: 18px;
+  }
+}
+
+/* Desktop: ≥ lg (1024px) — 12-col grid, full heading scale */
+@media (min-width: 1024px) {
+  :root {
+    --atlas-columns: var(--atlas-columns-desktop);
+    --atlas-gutter: var(--atlas-gutter-desktop);
+    --atlas-margin: var(--atlas-margin-desktop);
+
+    --atlas-text-h1: 48px;
+    --atlas-text-h2: 36px;
+    --atlas-text-h3: 24px;
+    --atlas-text-h4: 20px;
+  }
+}
+
+/* ─────────────── Tailwind v4 theme exposure ─────────────── */
+@theme inline {
+  --color-background: var(--atlas-background);
+  --color-background-subtle: var(--atlas-background-subtle);
+  --color-background-muted: var(--atlas-background-muted);
+  --color-surface: var(--atlas-surface);
+  --color-surface-raised: var(--atlas-surface-raised);
+  --color-surface-overlay: var(--atlas-surface-overlay);
+  --color-border: var(--atlas-border);
+  --color-border-strong: var(--atlas-border-strong);
+  --color-border-subtle: var(--atlas-border-subtle);
+  --color-foreground: var(--atlas-foreground);
+  --color-foreground-muted: var(--atlas-foreground-muted);
+  --color-foreground-subtle: var(--atlas-foreground-subtle);
+  --color-foreground-disabled: var(--atlas-foreground-disabled);
+  --color-foreground-on-brand: var(--atlas-foreground-on-brand);
+  --color-primary: var(--atlas-primary);
+  --color-primary-hover: var(--atlas-primary-hover);
+  --color-primary-active: var(--atlas-primary-active);
+  --color-primary-subtle: var(--atlas-primary-subtle);
+  --color-primary-foreground: var(--atlas-primary-foreground);
+  --color-success: var(--atlas-success);
+  --color-success-subtle: var(--atlas-success-subtle);
+  --color-success-foreground: var(--atlas-success-foreground);
+  --color-warning: var(--atlas-warning);
+  --color-warning-subtle: var(--atlas-warning-subtle);
+  --color-warning-foreground: var(--atlas-warning-foreground);
+  --color-danger: var(--atlas-danger);
+  --color-danger-hover: var(--atlas-danger-hover);
+  --color-danger-subtle: var(--atlas-danger-subtle);
+  --color-danger-foreground: var(--atlas-danger-foreground);
+  --color-info: var(--atlas-info);
+  --color-info-subtle: var(--atlas-info-subtle);
+  --color-info-foreground: var(--atlas-info-foreground);
+  --color-focus-ring: var(--atlas-focus-ring);
+  --color-overlay: var(--atlas-overlay);
+
+  --spacing-0: var(--atlas-spacing-0);
+  --spacing-px: var(--atlas-spacing-px);
+  --spacing-0_5: var(--atlas-spacing-0_5);
+  --spacing-1: var(--atlas-spacing-1);
+  --spacing-1_5: var(--atlas-spacing-1_5);
+  --spacing-2: var(--atlas-spacing-2);
+  --spacing-3: var(--atlas-spacing-3);
+  --spacing-4: var(--atlas-spacing-4);
+  --spacing-5: var(--atlas-spacing-5);
+  --spacing-6: var(--atlas-spacing-6);
+  --spacing-8: var(--atlas-spacing-8);
+  --spacing-10: var(--atlas-spacing-10);
+  --spacing-12: var(--atlas-spacing-12);
+  --spacing-16: var(--atlas-spacing-16);
+
+  --radius-none: var(--atlas-radius-none);
+  --radius-sm: var(--atlas-radius-sm);
+  --radius-md: var(--atlas-radius-md);
+  --radius-lg: var(--atlas-radius-lg);
+  --radius-xl: var(--atlas-radius-xl);
+  --radius-2xl: var(--atlas-radius-2xl);
+  --radius-full: var(--atlas-radius-full);
+
+  /* Static pixel values required — Tailwind v4 resolves these at build time
+     to generate sm:, md:, lg: etc. responsive utilities. var() is not supported here. */
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1536px;
+
+  --container-sm: 640px;
+  --container-md: 768px;
+  --container-lg: 1024px;
+  --container-xl: 1280px;
+  --container-2xl: 1536px;
+
+  --font-sans: var(--atlas-font-sans);
+  --font-arabic: var(--atlas-font-arabic);
+  --font-mono: var(--atlas-font-mono);
+
+  --text-xs: var(--atlas-font-size-xs);
+  --text-sm: var(--atlas-font-size-sm);
+  --text-base: var(--atlas-font-size-base);
+  --text-lg: var(--atlas-font-size-lg);
+  --text-xl: var(--atlas-font-size-xl);
+  --text-2xl: var(--atlas-font-size-2xl);
+  --text-3xl: var(--atlas-font-size-3xl);
+  --text-4xl: var(--atlas-font-size-4xl);
+  --text-5xl: var(--atlas-font-size-5xl);
+
+  /* Responsive role tokens — auto-uplift via the @media rules above */
+  --text-h1: var(--atlas-text-h1);
+  --text-h2: var(--atlas-text-h2);
+  --text-h3: var(--atlas-text-h3);
+  --text-h4: var(--atlas-text-h4);
+  --text-body: var(--atlas-text-body);
+  --text-body-sm: var(--atlas-text-body-sm);
+  --text-caption: var(--atlas-text-caption);
+
+  --shadow-sm: var(--atlas-shadow-sm);
+  --shadow-md: var(--atlas-shadow-md);
+  --shadow-lg: var(--atlas-shadow-lg);
+  --shadow-xl: var(--atlas-shadow-xl);
+}

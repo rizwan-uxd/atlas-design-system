@@ -1,0 +1,174 @@
+/* =================================================================
+   Atlas Switch — component styles
+   All values reference semantic tokens only.
+   No hex literals. No magic numbers. Logical properties throughout.
+   ================================================================= */
+
+/* ── Root wrapper ─────────────────────────────────────────────── */
+
+.root {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: var(--atlas-spacing-3);
+}
+
+.root[data-disabled] {
+  opacity: var(--atlas-opacity-disabled);
+  cursor: not-allowed;
+}
+
+/* ── Track (the <button>) ─────────────────────────────────────── */
+
+.track {
+  flex-shrink: 0;
+  border: none;
+  padding: 0;
+  border-radius: var(--atlas-radius-full);
+  background-color: var(--atlas-background-muted); /* off state per spec */
+  position: relative;
+  cursor: pointer;
+  outline: none;
+  transition:
+    background-color var(--atlas-duration-fast) var(--atlas-easing-standard);
+}
+
+.track[data-state="checked"] {
+  background-color: var(--atlas-primary);
+}
+
+/* ── Hover states ─────────────────────────────────────────────── */
+
+.track:hover:not([data-disabled])[data-state="unchecked"] {
+  background-color: var(--atlas-background-subtle);
+}
+
+.track:hover:not([data-disabled])[data-state="checked"] {
+  background-color: var(--atlas-primary-hover);
+}
+
+.track[data-disabled] {
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.track:focus-visible {
+  outline: var(--atlas-border-width-2) solid var(--atlas-focus-ring);
+  outline-offset: var(--atlas-spacing-0_5);
+}
+
+/* ── Sizes ────────────────────────────────────────────────────── */
+/*
+  Spec:
+    sm: 32 × 18 px   thumb: 14 × 14 px   checked translate: 14 px
+    md: 40 × 24 px   thumb: 20 × 20 px   checked translate: 16 px
+
+  Token map:
+    --atlas-spacing-8      = 32 px  (sm track width)
+    --atlas-spacing-10     = 40 px  (md track width)
+    --atlas-spacing-6      = 24 px  (md track height)
+    18 px = spacing-4(16) + spacing-0_5(2) = calc
+    14 px = spacing-3(12) + spacing-0_5(2) = calc  (sm thumb + sm translate)
+    --atlas-spacing-5      = 20 px  (md thumb)
+    --atlas-spacing-4      = 16 px  (md checked translate)
+    --atlas-spacing-0_5    = 2 px   (inset on each side)
+*/
+
+.sm {
+  width: var(--atlas-spacing-8);                                    /* 32 px */
+  height: calc(var(--atlas-spacing-4) + var(--atlas-spacing-0_5)); /* 18 px */
+}
+
+.md {
+  width: var(--atlas-spacing-10); /* 40 px */
+  height: var(--atlas-spacing-6); /* 24 px */
+}
+
+/* ── Thumb ────────────────────────────────────────────────────── */
+
+.thumb {
+  display: block;
+  position: absolute;
+  border-radius: var(--atlas-radius-full);
+  /*
+   * foreground-on-brand = neutral-0 in both light and dark mode.
+   * Always the correct white-thumb colour regardless of theme.
+   */
+  background-color: var(--atlas-foreground-on-brand);
+  box-shadow: var(--atlas-shadow-sm);
+  /* Logical inset — RTL-safe starting position */
+  inset-block-start: var(--atlas-spacing-0_5);
+  inset-inline-start: var(--atlas-spacing-0_5);
+  /* Spec: thumb glide uses duration-base + easing-emphasized */
+  transition: transform var(--atlas-duration-base) var(--atlas-easing-emphasized);
+}
+
+.sm .thumb {
+  /* 14 px = spacing-3(12) + spacing-0_5(2) */
+  width: calc(var(--atlas-spacing-3) + var(--atlas-spacing-0_5));
+  height: calc(var(--atlas-spacing-3) + var(--atlas-spacing-0_5));
+}
+
+.md .thumb {
+  width: var(--atlas-spacing-5);  /* 20 px */
+  height: var(--atlas-spacing-5); /* 20 px */
+}
+
+/*
+  Checked — slide thumb toward inline-end.
+  translate = track-width − thumb-width − 2×inset
+  sm: 32 − 14 − 4 = 14 px = calc(spacing-3 + spacing-0_5)
+  md: 40 − 20 − 4 = 16 px = spacing-4
+*/
+.sm[data-state="checked"] .thumb {
+  transform: translateX(calc(var(--atlas-spacing-3) + var(--atlas-spacing-0_5)));
+}
+
+.md[data-state="checked"] .thumb {
+  transform: translateX(var(--atlas-spacing-4));
+}
+
+/* RTL — negate the translate */
+[dir="rtl"] .sm[data-state="checked"] .thumb {
+  transform: translateX(calc(-1 * (var(--atlas-spacing-3) + var(--atlas-spacing-0_5))));
+}
+
+[dir="rtl"] .md[data-state="checked"] .thumb {
+  transform: translateX(calc(-1 * var(--atlas-spacing-4)));
+}
+
+/* ── Reduced motion ───────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .track,
+  .thumb {
+    transition: none;
+  }
+}
+
+/* ── Label + description ──────────────────────────────────────── */
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--atlas-spacing-1);
+}
+
+.label {
+  font-family: var(--atlas-font-sans);
+  font-size: var(--atlas-font-size-sm);
+  font-weight: var(--atlas-font-weight-medium);
+  color: var(--atlas-foreground);
+  line-height: 1.4;
+  cursor: pointer;
+}
+
+.root[data-disabled] .label {
+  cursor: not-allowed;
+}
+
+.description {
+  font-family: var(--atlas-font-sans);
+  font-size: var(--atlas-font-size-xs);
+  color: var(--atlas-foreground-muted);
+  line-height: 1.4;
+}

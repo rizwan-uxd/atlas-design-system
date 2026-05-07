@@ -1,0 +1,235 @@
+/* =================================================================
+   Atlas Checkbox — component styles
+   All values reference semantic tokens only.
+   No hex literals. No magic numbers. Logical properties throughout.
+   ================================================================= */
+
+/* ── Root wrapper ─────────────────────────────────────────────── */
+
+.root {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: var(--atlas-spacing-3);
+}
+
+/* ── Box (Radix Checkbox.Root) ────────────────────────────────── */
+/*
+  Size → box dimension via --_box-size CSS custom property.
+  sm: 16px = --atlas-spacing-4
+  md: 20px = --atlas-spacing-5
+
+  Icon inside inherits --_icon-size:
+  sm icon: 10px = calc(--atlas-spacing-2 + --atlas-spacing-0_5)
+  md icon: 12px = --atlas-spacing-3
+*/
+
+.box {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: var(--atlas-radius-sm);
+  border: var(--atlas-border-width-1) solid var(--atlas-border-strong);
+  background-color: var(--atlas-background);
+  /* Indicator glyph colour — overridden in error+checked state */
+  color: var(--atlas-primary-foreground);
+  cursor: pointer;
+  outline: none;
+  transition:
+    background-color var(--atlas-duration-fast) var(--atlas-easing-standard),
+    border-color     var(--atlas-duration-fast) var(--atlas-easing-standard);
+}
+
+/* ── Sizes ────────────────────────────────────────────────────── */
+
+.sm {
+  width: var(--atlas-spacing-4);   /* 16px */
+  height: var(--atlas-spacing-4);
+  --_icon-size: calc(var(--atlas-spacing-2) + var(--atlas-spacing-0_5)); /* 10px */
+}
+
+.md {
+  width: var(--atlas-spacing-5);   /* 20px */
+  height: var(--atlas-spacing-5);
+  --_icon-size: var(--atlas-spacing-3); /* 12px */
+}
+
+/* ── Checked / Indeterminate (unchecked is the base state) ─────── */
+
+.box[data-state="checked"],
+.box[data-state="indeterminate"] {
+  background-color: var(--atlas-primary);
+  border-color: transparent;
+}
+
+/* ── Hover states (web only) ──────────────────────────────────── */
+
+.box:hover:not([data-disabled])[data-state="unchecked"] {
+  background-color: var(--atlas-background-subtle);
+  border-color: var(--atlas-foreground);
+}
+
+.box:hover:not([data-disabled])[data-state="checked"],
+.box:hover:not([data-disabled])[data-state="indeterminate"] {
+  background-color: var(--atlas-primary-hover);
+}
+
+/* ── Focus-visible — ring around box only ─────────────────────── */
+
+.box:focus-visible {
+  outline: var(--atlas-border-width-2) solid var(--atlas-focus-ring);
+  outline-offset: var(--atlas-spacing-0_5);
+}
+
+/* ── Disabled ─────────────────────────────────────────────────── */
+
+.box[data-disabled] {
+  opacity: var(--atlas-opacity-disabled);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* ── Error / invalid ──────────────────────────────────────────── */
+
+.box[data-invalid][data-state="unchecked"] {
+  border-color: var(--atlas-danger);
+}
+
+.box[data-invalid][data-state="unchecked"]:hover:not([data-disabled]) {
+  background-color: var(--atlas-background-subtle);
+}
+
+.box[data-invalid][data-state="checked"],
+.box[data-invalid][data-state="indeterminate"] {
+  background-color: var(--atlas-danger);
+  border-color: transparent;
+  /* Indicator glyph uses danger-foreground in error+checked */
+  color: var(--atlas-danger-foreground);
+}
+
+.box[data-invalid][data-state="checked"]:hover:not([data-disabled]),
+.box[data-invalid][data-state="indeterminate"]:hover:not([data-disabled]) {
+  background-color: var(--atlas-danger-hover, var(--atlas-danger));
+}
+
+/* ── Indicator (Radix Checkbox.Indicator) ─────────────────────── */
+
+.indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: atlas-check-in var(--atlas-duration-fast) var(--atlas-easing-emphasized) both;
+}
+
+@keyframes atlas-check-in {
+  from { transform: scale(0); }
+  to   { transform: scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .indicator {
+    animation: none;
+  }
+}
+
+/* ── Indicator icon (SVG) ─────────────────────────────────────── */
+
+.indicatorIcon {
+  /* Sized from --_icon-size set on .sm / .md */
+  width: var(--_icon-size);
+  height: var(--_icon-size);
+  flex-shrink: 0;
+}
+
+/* ── Reduced motion — background transition ───────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .box {
+    transition: none;
+  }
+}
+
+/* ── Label + description text ─────────────────────────────────── */
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--atlas-spacing-1);
+}
+
+.label {
+  font-family: var(--atlas-font-sans);
+  font-weight: var(--atlas-font-weight-medium);
+  color: var(--atlas-foreground);
+  line-height: 1.4;
+  cursor: pointer;
+}
+
+.labelSm { font-size: var(--atlas-font-size-sm); }
+.labelMd { font-size: var(--atlas-text-body);    }
+
+.root[data-disabled] .label {
+  cursor: not-allowed;
+  color: var(--atlas-foreground-disabled);
+}
+
+.description {
+  font-family: var(--atlas-font-sans);
+  font-size: var(--atlas-font-size-xs);
+  color: var(--atlas-foreground-muted);
+  line-height: 1.4;
+}
+
+.root[data-disabled] .description {
+  color: var(--atlas-foreground-disabled);
+}
+
+/* ── Variant: card ────────────────────────────────────────────── */
+/*
+  Whole surface is the click target; box sits inside.
+  Checked → primary subtle bg + primary border.
+*/
+
+.card {
+  border: var(--atlas-border-width-1) solid var(--atlas-border-strong);
+  border-radius: var(--atlas-radius-md);
+  padding: var(--atlas-spacing-3) var(--atlas-spacing-4);
+  background-color: var(--atlas-background);
+  cursor: pointer;
+  width: 100%;
+  box-sizing: border-box;
+  transition:
+    border-color     var(--atlas-duration-fast) var(--atlas-easing-standard),
+    background-color var(--atlas-duration-fast) var(--atlas-easing-standard);
+}
+
+.card[data-checked] {
+  border-color: var(--atlas-primary);
+  background-color: var(--atlas-primary-subtle);
+}
+
+.card[data-invalid] {
+  border-color: var(--atlas-danger);
+}
+
+.card[data-disabled] {
+  opacity: var(--atlas-opacity-disabled);
+  cursor: not-allowed;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card {
+    transition: none;
+  }
+}
+
+/* ── Required marker (inside label) ──────────────────────────── */
+
+.requiredMarker {
+  color: var(--atlas-danger);
+  margin-inline-start: var(--atlas-spacing-1);
+}
+
+.root[data-disabled] .requiredMarker {
+  color: var(--atlas-foreground-disabled);
+}

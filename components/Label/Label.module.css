@@ -1,0 +1,88 @@
+/* =================================================================
+   Atlas Label — component styles
+   All values reference semantic tokens only.
+   No hex literals. No magic numbers. Logical properties throughout.
+   ================================================================= */
+
+/* ── Base ─────────────────────────────────────────────────────── */
+
+.label {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--atlas-spacing-1);
+  font-family: var(--atlas-font-sans);
+  font-weight: var(--atlas-font-weight-medium);
+  color: var(--atlas-foreground);
+  line-height: 1.4;
+  cursor: pointer;
+  /* Gap between label and the control below it */
+  margin-block-end: var(--atlas-spacing-1_5);
+}
+
+/* ── Variant: inline ──────────────────────────────────────────── */
+/*
+  Sits beside the control in a horizontal layout.
+  No block-end margin — the caller's flex/grid gap handles spacing.
+*/
+
+.inline {
+  margin-block-end: 0;
+}
+
+/* ── Sizes ────────────────────────────────────────────────────── */
+/*
+  Mirrors the control it labels:
+    sm → text-sm (14px)
+    md → text-body-sm (14px alias)
+    lg → text-body (16px)
+*/
+
+.sm {
+  font-size: var(--atlas-font-size-sm);
+}
+
+.md {
+  font-size: var(--atlas-text-body-sm); /* alias for font-size-sm */
+}
+
+.lg {
+  font-size: var(--atlas-text-body); /* alias for font-size-base */
+}
+
+/* ── States ───────────────────────────────────────────────────── */
+
+/* Disabled — mirrors the linked control's disabled appearance */
+.label[data-disabled] {
+  color: var(--atlas-foreground-disabled);
+  cursor: not-allowed;
+}
+
+/* Error / invalid — label shifts to danger colour */
+.label[data-invalid] {
+  color: var(--atlas-danger);
+}
+
+/* ── Required marker ──────────────────────────────────────────── */
+
+.required {
+  color: var(--atlas-danger);
+  /* aria-hidden — decorative; requirement signalled on the control */
+}
+
+.label[data-disabled] .required {
+  color: var(--atlas-foreground-disabled);
+}
+
+/* ── Optional hint ────────────────────────────────────────────── */
+
+.optional {
+  font-size: var(--atlas-font-size-xs);
+  font-weight: var(--atlas-font-weight-regular);
+  color: var(--atlas-foreground-muted);
+}
+
+.label[data-disabled] .optional {
+  color: var(--atlas-foreground-disabled);
+}
+
+/* Error state does not shift optional hint colour per spec */

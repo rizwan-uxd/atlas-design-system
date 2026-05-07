@@ -1,0 +1,277 @@
+/* =================================================================
+   Atlas Input — component styles
+   All values reference semantic tokens only.
+   No hex literals. No magic numbers. Logical properties throughout.
+   ================================================================= */
+
+/* ── Wrapper (position context for icons / affixes) ───────────── */
+
+.wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: stretch;
+  width: 100%;
+}
+
+/* ── Base input ───────────────────────────────────────────────── */
+
+.input {
+  width: 100%;
+  flex: 1;
+  min-width: 0;
+  box-sizing: border-box;
+  font-family: var(--atlas-font-sans);
+  color: var(--atlas-foreground);
+  background-color: var(--atlas-background);
+  border: var(--atlas-border-width-1) solid var(--atlas-border);
+  border-radius: var(--atlas-radius-md);
+  outline: none;
+  transition:
+    border-color       var(--atlas-duration-fast) var(--atlas-easing-standard),
+    background-color   var(--atlas-duration-fast) var(--atlas-easing-standard);
+}
+
+.input::placeholder {
+  color: var(--atlas-foreground-muted);
+}
+
+/* Hover */
+.input:hover:not(:disabled):not([readonly]) {
+  border-color: var(--atlas-border-strong);
+}
+
+/* Focus-visible — border shifts to primary; outline ring lives on the wrapper */
+.input:focus-visible {
+  outline: none; /* Ring is shown on the wrapper via :has(:focus-visible) below */
+  border-color: var(--atlas-primary);
+}
+
+/* Disabled */
+.input:disabled {
+  background-color: var(--atlas-background-muted);
+  color: var(--atlas-foreground-disabled);
+  cursor: not-allowed;
+  opacity: var(--atlas-opacity-disabled);
+}
+
+/* Readonly */
+.input[readonly] {
+  cursor: default;
+}
+
+/* Invalid — border shifts to danger */
+.input[aria-invalid="true"] {
+  border-color: var(--atlas-danger);
+}
+
+/* ── Sizes ────────────────────────────────────────────────────── */
+/*
+  Token map:
+    sm: 32px → --atlas-spacing-8   px: spacing-3  type: font-size-sm
+    md: 40px → --atlas-spacing-10  px: spacing-3  type: font-size-base  (text-body per spec)
+    lg: 48px → --atlas-spacing-12  px: spacing-4  type: font-size-base
+*/
+
+.sm {
+  height: var(--atlas-spacing-8);
+  padding-inline: var(--atlas-spacing-3);
+  font-size: var(--atlas-font-size-sm);
+}
+
+.md {
+  height: var(--atlas-spacing-10);
+  padding-inline: var(--atlas-spacing-3);
+  font-size: var(--atlas-font-size-base); /* text-body per spec */
+}
+
+.lg {
+  height: var(--atlas-spacing-12);
+  padding-inline: var(--atlas-spacing-4);
+  font-size: var(--atlas-font-size-base);
+}
+
+/* ── Wrapper focus ring (default + filled variants only) ──────── */
+/*
+  The ring is placed on the container div so it visually wraps the full
+  input including leading/trailing icons and affixes.
+  Uses :has(:focus-visible) so the ring only appears for keyboard focus,
+  matching the same intent as :focus-visible on the native input.
+  Unstyled variant: no ring — bottom-border is the sole focus indicator.
+*/
+
+.default:has(.input:focus-visible) {
+  outline: var(--atlas-border-width-2) solid var(--atlas-focus-ring);
+  outline-offset: var(--atlas-spacing-0_5);
+  border-radius: var(--atlas-radius-md);
+}
+
+.filled:has(.input:focus-visible) {
+  outline: var(--atlas-border-width-2) solid var(--atlas-focus-ring);
+  outline-offset: var(--atlas-spacing-0_5);
+  border-radius: var(--atlas-radius-md);
+}
+
+/* ── Variant: filled ──────────────────────────────────────────── */
+/*
+  Filled: muted bg, no border at rest, bottom border on focus/error.
+  Rounded top corners only.
+*/
+
+.filled .input {
+  background-color: var(--atlas-background-muted);
+  border: none;
+  border-block-end: var(--atlas-border-width-1) solid transparent;
+  border-start-start-radius: var(--atlas-radius-md);
+  border-start-end-radius: var(--atlas-radius-md);
+  border-end-start-radius: var(--atlas-radius-none);
+  border-end-end-radius: var(--atlas-radius-none);
+}
+
+.filled .input:hover:not(:disabled):not([readonly]) {
+  background-color: var(--atlas-background-subtle);
+}
+
+.filled .input:focus-visible {
+  background-color: var(--atlas-background);
+  outline: none; /* Ring is on the wrapper via :has(:focus-visible) */
+  border-block-end-color: var(--atlas-primary);
+}
+
+.filled .input[aria-invalid="true"] {
+  border-block-end-color: var(--atlas-danger);
+}
+
+.filled .input:disabled {
+  background-color: var(--atlas-background-muted);
+}
+
+/* ── Variant: unstyled ────────────────────────────────────────── */
+/*
+  No background, no border at rest. Bottom-border appears on focus/error.
+  No border-radius.
+*/
+
+.unstyled .input {
+  background-color: transparent;
+  border: none;
+  border-block-end: var(--atlas-border-width-1) solid transparent;
+  border-radius: var(--atlas-radius-none);
+}
+
+.unstyled .input:focus-visible {
+  /* No ring for unstyled — bottom border IS the focus indicator (per spec) */
+  outline: none;
+  border-block-end-color: var(--atlas-primary);
+}
+
+.unstyled .input[aria-invalid="true"] {
+  border-block-end-color: var(--atlas-danger);
+}
+
+/* ── Icon slots ───────────────────────────────────────────────── */
+/*
+  Icons are 20px (--atlas-spacing-5) wide, inset at spacing-3 from edge.
+  Input offset = spacing-3 (inset) + spacing-5 (icon) + spacing-2 (gap)
+               = 12 + 20 + 8 = 40px = spacing-10.
+  lg size gets spacing-4 inset so icon also shifts: spacing-4 + 20 + 8 = 44px ≈ spacing-11.
+  We use spacing-10 uniformly since icon size is constant and lg only changes x-padding.
+*/
+
+.icon {
+  position: absolute;
+  inset-block-start: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  color: var(--atlas-foreground-muted);
+  pointer-events: none;
+  /* Icon container matches icon size */
+  width: var(--atlas-spacing-5);
+  height: var(--atlas-spacing-5);
+}
+
+.iconLeading {
+  inset-inline-start: var(--atlas-spacing-3);
+}
+
+.iconTrailing {
+  inset-inline-end: var(--atlas-spacing-3);
+}
+
+/* Expand input padding to clear icon + gap */
+.wrapper[data-leading-icon] .input {
+  padding-inline-start: var(--atlas-spacing-10); /* 40px */
+}
+
+.wrapper[data-trailing-icon] .input {
+  padding-inline-end: var(--atlas-spacing-10); /* 40px */
+}
+
+/* ── Affix slots (prefix / suffix text) ───────────────────────── */
+
+.affix {
+  position: absolute;
+  inset-block-start: 50%;
+  transform: translateY(-50%);
+  font-family: var(--atlas-font-sans);
+  font-size: var(--atlas-font-size-sm);
+  color: var(--atlas-foreground-muted);
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.affixPrefix {
+  inset-inline-start: var(--atlas-spacing-3);
+}
+
+.affixSuffix {
+  inset-inline-end: var(--atlas-spacing-3);
+}
+
+/* When both icon and affix are present the icon takes precedence.
+   Callers should use one or the other, not both on the same side. */
+.wrapper[data-prefix] .input {
+  padding-inline-start: var(--atlas-spacing-10);
+}
+
+.wrapper[data-suffix] .input {
+  padding-inline-end: var(--atlas-spacing-10);
+}
+
+/* ── Loading spinner ──────────────────────────────────────────── */
+
+.spinner {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--atlas-spacing-5);
+  height: var(--atlas-spacing-5);
+}
+
+.spinnerInner {
+  box-sizing: border-box;
+  width: var(--atlas-spacing-4);
+  height: var(--atlas-spacing-4);
+  border: var(--atlas-border-width-2) solid var(--atlas-foreground-muted);
+  border-block-start-color: transparent;
+  border-radius: var(--atlas-radius-full);
+  animation: atlas-input-spin calc(var(--atlas-duration-slow) * 2)
+             var(--atlas-easing-linear) infinite;
+}
+
+@keyframes atlas-input-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Reduced motion ───────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .input {
+    transition: none;
+  }
+
+  .spinnerInner {
+    animation: none;
+    opacity: var(--atlas-opacity-disabled);
+  }
+}

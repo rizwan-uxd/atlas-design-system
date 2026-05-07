@@ -1,0 +1,199 @@
+/* =================================================================
+   Atlas Tabs — component styles
+   All values reference semantic tokens only.
+   No hex literals. No primitive tokens. No magic numbers.
+   ================================================================= */
+
+/* ── Root ─────────────────────────────────────────────────────── */
+/*
+  CSS custom properties propagate size-driven values to all
+  sub-components without prop drilling.
+*/
+
+.root {
+  --_h:  var(--atlas-spacing-10);    /* md: trigger height = 40px */
+  --_px: var(--atlas-spacing-4);     /* md: trigger padding-inline = 16px */
+  --_fs: var(--atlas-text-body);     /* md: font-size = 16px */
+
+  font-family: var(--atlas-font-sans);
+}
+
+/* ── Size overrides ───────────────────────────────────────────── */
+
+.sm {
+  --_h:  var(--atlas-spacing-8);     /* 32px */
+  --_px: var(--atlas-spacing-3);     /* 12px */
+  --_fs: var(--atlas-text-body-sm);  /* 14px */
+}
+
+.lg {
+  --_h:  var(--atlas-spacing-12);    /* 48px */
+  --_px: var(--atlas-spacing-5);     /* 20px */
+  --_fs: var(--atlas-text-body);     /* 16px */
+}
+
+/* ── List ─────────────────────────────────────────────────────── */
+/*
+  Horizontally scrollable when triggers overflow — scroll snap to triggers.
+  Scrollbar hidden for cleaner appearance; swiping still works.
+*/
+
+.list {
+  display: flex;
+  align-items: stretch;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.list::-webkit-scrollbar {
+  display: none;
+}
+
+/* Underline list — hairline bottom border */
+.underline .list {
+  border-block-end: var(--atlas-border-width-1) solid var(--atlas-border);
+  gap: 0;
+}
+
+/* Pills list — no border, spacing between triggers */
+.pills .list {
+  gap: var(--atlas-spacing-1);
+}
+
+/* Enclosed list — muted bg chip */
+.enclosed .list {
+  background-color: var(--atlas-background-muted);
+  border-radius: var(--atlas-radius-md);
+  padding: var(--atlas-spacing-1);
+  gap: var(--atlas-spacing-1);
+}
+
+/* ── Trigger base ─────────────────────────────────────────────── */
+
+.trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--atlas-spacing-2);
+  height: var(--_h);
+  padding-inline: var(--_px);
+  font-family: inherit;
+  font-size: var(--_fs);
+  font-weight: var(--atlas-font-weight-medium);
+  white-space: nowrap;
+  cursor: pointer;
+  border: none;
+  background: none;
+  scroll-snap-align: start;
+  flex-shrink: 0;
+  outline: none;
+  transition:
+    color            var(--atlas-duration-fast) var(--atlas-easing-standard),
+    background-color var(--atlas-duration-fast) var(--atlas-easing-standard),
+    border-color     var(--atlas-duration-fast) var(--atlas-easing-standard),
+    box-shadow       var(--atlas-duration-fast) var(--atlas-easing-standard);
+}
+
+/* ── Focus ring (all variants) ────────────────────────────────── */
+
+.trigger:focus-visible {
+  outline: var(--atlas-border-width-2) solid var(--atlas-focus-ring);
+  outline-offset: var(--atlas-spacing-0_5);
+  border-radius: var(--atlas-radius-sm);
+}
+
+/* ── Disabled (all variants) ──────────────────────────────────── */
+/*
+  Radix sets data-disabled on disabled triggers.
+  aria-disabled="true" is also set by Radix.
+*/
+
+.trigger[data-disabled] {
+  color: var(--atlas-foreground-disabled);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* ── Underline variant triggers ───────────────────────────────── */
+/*
+  Active indicator: 2px bottom border overlapping list's hairline.
+  margin-block-end: -border-width-1 to overlay the list border cleanly.
+*/
+
+.underline .trigger {
+  color: var(--atlas-foreground-muted);
+  border-block-end: var(--atlas-border-width-2) solid transparent;
+  margin-block-end: calc(-1 * var(--atlas-border-width-1));
+  border-radius: 0;
+}
+
+.underline .trigger:hover:not([data-disabled]) {
+  color: var(--atlas-foreground);
+}
+
+.underline .trigger[data-state="active"] {
+  color: var(--atlas-foreground);
+  border-block-end-color: var(--atlas-primary);
+  font-weight: var(--atlas-font-weight-semibold);
+}
+
+/* ── Pills variant triggers ───────────────────────────────────── */
+
+.pills .trigger {
+  color: var(--atlas-foreground-muted);
+  border-radius: var(--atlas-radius-md);
+}
+
+.pills .trigger:hover:not([data-disabled]) {
+  background-color: var(--atlas-background-subtle);
+  color: var(--atlas-foreground);
+}
+
+.pills .trigger[data-state="active"] {
+  background-color: var(--atlas-primary);
+  color: var(--atlas-primary-foreground);
+}
+
+/* ── Enclosed variant triggers ────────────────────────────────── */
+
+.enclosed .trigger {
+  color: var(--atlas-foreground-muted);
+  border-radius: calc(var(--atlas-radius-md) - var(--atlas-spacing-0_5));
+  flex: 1; /* equal width triggers */
+}
+
+.enclosed .trigger:hover:not([data-disabled]) {
+  background-color: var(--atlas-background-subtle);
+  color: var(--atlas-foreground);
+}
+
+.enclosed .trigger[data-state="active"] {
+  background-color: var(--atlas-background);
+  color: var(--atlas-foreground);
+  box-shadow: var(--atlas-shadow-sm);
+}
+
+/* ── Trigger icon slot ────────────────────────────────────────── */
+
+.icon {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+/* ── Panel ────────────────────────────────────────────────────── */
+
+.panel {
+  padding-block-start: var(--atlas-spacing-4);
+  outline: none; /* Radix manages focus; ring not needed on panel */
+}
+
+/* ── Reduced motion ───────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .trigger {
+    transition: none;
+  }
+}

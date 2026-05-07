@@ -1,0 +1,299 @@
+/* =================================================================
+   Atlas Dialog — component styles
+   All values reference semantic tokens only.
+   No hex literals. No primitive tokens. No magic numbers.
+   ================================================================= */
+
+/* ── Overlay ──────────────────────────────────────────────────── */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--atlas-z-overlay);
+  background-color: color-mix(in oklch, var(--atlas-overlay) 65%, transparent);
+}
+
+.overlay[data-state="open"] {
+  animation: overlayShow var(--atlas-duration-fast) var(--atlas-easing-standard);
+}
+
+.overlay[data-state="closed"] {
+  animation: overlayHide var(--atlas-duration-fast) var(--atlas-easing-exit);
+}
+
+@keyframes overlayShow {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes overlayHide {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+/* ── Content base ─────────────────────────────────────────────── */
+
+.content {
+  --_pad: var(--atlas-spacing-6);   /* overridden by size variants */
+  --_max-w: 560px;                  /* overridden by size variants */
+
+  position: fixed;
+  z-index: var(--atlas-z-modal);
+  background-color: var(--atlas-background);
+  border: var(--atlas-border-width-1) solid var(--atlas-border);
+  box-shadow: var(--atlas-shadow-xl);
+  font-family: var(--atlas-font-sans);
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - var(--atlas-spacing-8) * 2);
+  overflow: auto;
+  outline: none; /* focus ring suppressed; Radix manages focus trap */
+}
+
+/* ── Size tokens ──────────────────────────────────────────────── */
+
+.sm  { --_pad: var(--atlas-spacing-4); --_max-w: 400px; }
+/* .md is the default (--_pad: spacing-6, --_max-w: 560px) */
+.lg  { --_pad: var(--atlas-spacing-6); --_max-w: 720px; }
+.xl  { --_pad: var(--atlas-spacing-8); --_max-w: 960px; }
+.full { --_pad: var(--atlas-spacing-6); --_max-w: calc(100% - var(--atlas-spacing-6) * 2); }
+
+/* ── Modal variant ────────────────────────────────────────────── */
+/*
+  Centered via fixed + translate(-50%, -50%).
+  Constrained width: min of --_max-w and (100vw - spacing-8 margins).
+*/
+
+.modal {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(var(--_max-w), calc(100vw - var(--atlas-spacing-8) * 2));
+  border-radius: var(--atlas-radius-lg);
+}
+
+.modal[data-state="open"] {
+  animation: modalShow var(--atlas-duration-base) var(--atlas-easing-emphasized);
+}
+
+.modal[data-state="closed"] {
+  animation: modalHide var(--atlas-duration-base) var(--atlas-easing-exit);
+}
+
+@keyframes modalShow {
+  from { opacity: 0; transform: translate(-50%, -50%) scale(0.96); }
+  to   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+
+@keyframes modalHide {
+  from { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  to   { opacity: 0; transform: translate(-50%, -50%) scale(0.96); }
+}
+
+/* ── Sheet variant ────────────────────────────────────────────── */
+/*
+  Bottom-anchored, full width, top corners rounded only.
+*/
+
+.sheet {
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  max-width: 100%;
+  max-height: 85vh;
+  border-radius: var(--atlas-radius-lg) var(--atlas-radius-lg) 0 0;
+}
+
+.sheet[data-state="open"] {
+  animation: sheetShow var(--atlas-duration-base) var(--atlas-easing-emphasized);
+}
+
+.sheet[data-state="closed"] {
+  animation: sheetHide var(--atlas-duration-base) var(--atlas-easing-exit);
+}
+
+@keyframes sheetShow {
+  from { opacity: 0; transform: translateY(100%); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes sheetHide {
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: 0; transform: translateY(100%); }
+}
+
+/* ── Drawer variant ───────────────────────────────────────────── */
+/*
+  Side-panel. data-side="start" | "end".
+  Logical properties for RTL safety.
+*/
+
+.drawer {
+  top: 0;
+  bottom: 0;
+  width: min(var(--_max-w), 100vw);
+  max-height: 100vh;
+  border-radius: 0;
+}
+
+.drawer[data-side="end"] {
+  right: 0;
+  border-start-start-radius: var(--atlas-radius-lg);
+  border-end-start-radius: var(--atlas-radius-lg);
+}
+
+.drawer[data-side="start"] {
+  left: 0;
+  border-start-end-radius: var(--atlas-radius-lg);
+  border-end-end-radius: var(--atlas-radius-lg);
+}
+
+.drawer[data-side="end"][data-state="open"] {
+  animation: drawerEndShow var(--atlas-duration-base) var(--atlas-easing-emphasized);
+}
+
+.drawer[data-side="end"][data-state="closed"] {
+  animation: drawerEndHide var(--atlas-duration-base) var(--atlas-easing-exit);
+}
+
+.drawer[data-side="start"][data-state="open"] {
+  animation: drawerStartShow var(--atlas-duration-base) var(--atlas-easing-emphasized);
+}
+
+.drawer[data-side="start"][data-state="closed"] {
+  animation: drawerStartHide var(--atlas-duration-base) var(--atlas-easing-exit);
+}
+
+@keyframes drawerEndShow   { from { opacity: 0; transform: translateX(100%); } to { opacity: 1; transform: translateX(0); } }
+@keyframes drawerEndHide   { from { opacity: 1; transform: translateX(0); } to { opacity: 0; transform: translateX(100%); } }
+@keyframes drawerStartShow { from { opacity: 0; transform: translateX(-100%); } to { opacity: 1; transform: translateX(0); } }
+@keyframes drawerStartHide { from { opacity: 1; transform: translateX(0); } to { opacity: 0; transform: translateX(-100%); } }
+
+/* ── Reduced motion ───────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .overlay,
+  .modal,
+  .sheet,
+  .drawer {
+    animation: none !important;
+  }
+}
+
+/* ── Drag handle (sheet only) ─────────────────────────────────── */
+/*
+  36px wide × 4px tall pill centred at top of sheet.
+  Spec: width=36px (spacing-9), height=4px (spacing-1).
+*/
+
+.dragHandle {
+  width: var(--atlas-spacing-9);   /* 36px */
+  height: var(--atlas-spacing-1);  /* 4px */
+  border-radius: var(--atlas-radius-full);
+  background-color: var(--atlas-border-strong);
+  margin: var(--atlas-spacing-2) auto 0;
+  flex-shrink: 0;
+  cursor: grab;
+}
+
+/* ── Header ───────────────────────────────────────────────────── */
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--atlas-spacing-3);
+  padding: var(--_pad) var(--_pad) var(--atlas-spacing-4);
+  border-block-end: var(--atlas-border-width-1) solid var(--atlas-border);
+  flex-shrink: 0;
+}
+
+.headerMain {
+  flex: 1;
+  min-width: 0;
+}
+
+/* ── Title ────────────────────────────────────────────────────── */
+
+.title {
+  margin: 0;
+  font-size: var(--atlas-text-h3);
+  font-weight: var(--atlas-font-weight-semibold);
+  line-height: var(--atlas-line-height-tight);
+  color: var(--atlas-foreground);
+}
+
+/* ── Description ──────────────────────────────────────────────── */
+
+.description {
+  margin: var(--atlas-spacing-1) 0 0;
+  font-size: var(--atlas-text-body-sm);
+  line-height: var(--atlas-line-height-normal);
+  color: var(--atlas-foreground-muted);
+}
+
+/* ── Body ─────────────────────────────────────────────────────── */
+
+.body {
+  flex: 1;
+  overflow: auto;
+  padding: var(--atlas-spacing-4) var(--_pad);
+}
+
+/* ── Footer ───────────────────────────────────────────────────── */
+
+.footer {
+  display: flex;
+  align-items: center;
+  gap: var(--atlas-spacing-3);
+  padding: var(--atlas-spacing-4) var(--_pad) var(--_pad);
+  border-block-start: var(--atlas-border-width-1) solid var(--atlas-border);
+  flex-shrink: 0;
+}
+
+.footerEnd     { justify-content: flex-end; }
+.footerBetween { justify-content: space-between; }
+.footerStart   { justify-content: flex-start; }
+
+/* ── Close button ─────────────────────────────────────────────── */
+/*
+  Ghost icon button matching spec: ghost Button at icon size.
+  Minimum touch target 44px.
+*/
+
+.closeBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  /* 40px visual matches icon Button size */
+  width: var(--atlas-spacing-10);
+  height: var(--atlas-spacing-10);
+  /* Expand to touch-min via negative margin */
+  margin: calc(-1 * var(--atlas-spacing-1));
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--atlas-foreground-muted);
+  font-size: var(--atlas-font-size-lg);
+  line-height: 1;
+  border-radius: var(--atlas-radius-md);
+  outline: none;
+  transition: background-color var(--atlas-duration-fast) var(--atlas-easing-standard),
+              color            var(--atlas-duration-fast) var(--atlas-easing-standard);
+}
+
+.closeBtn:hover {
+  background-color: var(--atlas-background-subtle);
+  color: var(--atlas-foreground);
+}
+
+.closeBtn:focus-visible {
+  outline: var(--atlas-border-width-2) solid var(--atlas-focus-ring);
+  outline-offset: var(--atlas-spacing-0_5);
+  color: var(--atlas-foreground);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .closeBtn { transition: none; }
+}

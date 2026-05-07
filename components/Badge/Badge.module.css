@@ -1,0 +1,160 @@
+/* =================================================================
+   Atlas Badge — component styles
+   All values reference semantic tokens only.
+   No hex literals. No primitive tokens. No magic numbers.
+   ================================================================= */
+
+/* ── Base ─────────────────────────────────────────────────────── */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--atlas-spacing-1);
+  border-radius: var(--atlas-radius-full);
+  font-family: var(--atlas-font-sans);
+  font-weight: var(--atlas-font-weight-medium);
+  white-space: nowrap;
+  line-height: 1;
+  border: var(--atlas-border-width-1) solid transparent; /* reserves space; overridden per variant */
+  box-sizing: border-box;
+}
+
+/* Square prop — tighter radius */
+.square {
+  border-radius: var(--atlas-radius-sm);
+}
+
+/* ── Sizes ────────────────────────────────────────────────────── */
+/*
+  Spec:
+    sm: height=18px  padding-x=spacing-1_5(6px)   type=text-caption
+    md: height=22px  padding-x=spacing-2(8px)      type=text-caption
+    lg: height=26px  padding-x=spacing-2+0_5(10px) type=text-body-sm
+
+  Heights are achieved via height + vertical centering (align-items already centers).
+*/
+
+.sm {
+  height: calc(var(--atlas-spacing-4) + var(--atlas-spacing-0_5)); /* 18px */
+  padding-inline: var(--atlas-spacing-1_5);
+  font-size: var(--atlas-text-caption); /* font-size-xs = 12px */
+}
+
+.md {
+  height: calc(var(--atlas-spacing-5) + var(--atlas-spacing-0_5)); /* 22px */
+  padding-inline: var(--atlas-spacing-2);
+  font-size: var(--atlas-text-caption);
+}
+
+.lg {
+  /* 26px = spacing-6(24) + spacing-0_5(2) */
+  height: calc(var(--atlas-spacing-6) + var(--atlas-spacing-0_5));
+  padding-inline: calc(var(--atlas-spacing-2) + var(--atlas-spacing-0_5)); /* 10px */
+  font-size: var(--atlas-text-body-sm); /* font-size-sm = 14px */
+}
+
+/* ── Variants ─────────────────────────────────────────────────── */
+/*
+  Foreground strategy: use the main semantic color as text on subtle bg.
+  This gives proper contrast in both light and dark mode:
+    Light: subtle=tint-50 (very light)  + main=600 (dark) → good contrast
+    Dark:  subtle=tint-900 (very dark)  + main=400-500 (lighter) → good contrast
+*/
+
+.default {
+  background-color: var(--atlas-background-muted);
+  color: var(--atlas-foreground);
+}
+
+.secondary {
+  background-color: var(--atlas-background-subtle);
+  color: var(--atlas-foreground);
+}
+
+.success {
+  background-color: var(--atlas-success-subtle);
+  color: var(--atlas-success);
+}
+
+.warning {
+  background-color: var(--atlas-warning-subtle);
+  color: var(--atlas-warning);
+}
+
+.danger {
+  background-color: var(--atlas-danger-subtle);
+  color: var(--atlas-danger);
+}
+
+.info {
+  background-color: var(--atlas-info-subtle);
+  color: var(--atlas-info);
+}
+
+/* Outline — transparent bg, border = intent or border-strong */
+.outline {
+  background-color: transparent;
+  color: var(--atlas-foreground);
+  border-color: var(--atlas-border-strong);
+}
+
+/* Outline with intent — border and text adopt the intent color */
+.outline.intentSuccess { color: var(--atlas-success); border-color: var(--atlas-success); }
+.outline.intentWarning { color: var(--atlas-warning); border-color: var(--atlas-warning); }
+.outline.intentDanger  { color: var(--atlas-danger);  border-color: var(--atlas-danger);  }
+.outline.intentInfo    { color: var(--atlas-info);    border-color: var(--atlas-info);    }
+
+/* ── Disabled ─────────────────────────────────────────────────── */
+
+.disabled {
+  opacity: var(--atlas-opacity-disabled);
+  pointer-events: none;
+}
+
+/* ── Dot ──────────────────────────────────────────────────────── */
+/*
+  6px circle — size-1_5 = 6px.
+  Color inherits from parent `color` (currentColor) so it automatically
+  matches the variant foreground without separate token lookups.
+*/
+
+.dot {
+  width: var(--atlas-spacing-1_5);   /* 6px */
+  height: var(--atlas-spacing-1_5);
+  border-radius: var(--atlas-radius-full);
+  background-color: currentColor;
+  flex-shrink: 0;
+}
+
+/* ── Removable button ─────────────────────────────────────────── */
+/*
+  The × button is a proper <button> for keyboard + screen-reader access.
+  It inherits the badge color; focus-visible ring is applied.
+*/
+
+.removeBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  color: currentColor;
+  opacity: var(--atlas-opacity-hover); /* 0.9 — slightly subdued */
+  font-size: 1em; /* scales with badge font-size */
+  line-height: 1;
+  border-radius: var(--atlas-radius-sm);
+  outline: none;
+  flex-shrink: 0;
+}
+
+.removeBtn:hover {
+  opacity: 1;
+}
+
+.removeBtn:focus-visible {
+  outline: var(--atlas-border-width-2) solid var(--atlas-focus-ring);
+  outline-offset: var(--atlas-spacing-0_5);
+}

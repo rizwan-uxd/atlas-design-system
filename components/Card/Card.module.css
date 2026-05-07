@@ -1,0 +1,199 @@
+/* =================================================================
+   Atlas Card — component styles
+   All values reference semantic tokens only.
+   No hex literals. No magic numbers. Logical properties throughout.
+   ================================================================= */
+
+/* ── Root — base + size custom properties ─────────────────────── */
+/*
+  Padding is driven by CSS custom properties set on the root so all
+  sub-components inherit the correct size without prop drilling.
+
+  Spec size table:
+    sm: padding=spacing-3(12px)  gap=spacing-2(8px)
+    md: padding=spacing-4(16px)  gap=spacing-3(12px)
+    lg: padding=spacing-6(24px)  gap=spacing-4(16px)
+*/
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--atlas-radius-lg);
+  overflow: hidden; /* clips children to rounded corners */
+  box-sizing: border-box;
+  /* md defaults */
+  --_card-padding: var(--atlas-spacing-4);
+  --_card-gap:     var(--atlas-spacing-3);
+}
+
+.sm { --_card-padding: var(--atlas-spacing-3); --_card-gap: var(--atlas-spacing-2); }
+.lg { --_card-padding: var(--atlas-spacing-6); --_card-gap: var(--atlas-spacing-4); }
+
+/* ── Variants ─────────────────────────────────────────────────── */
+
+.default {
+  background-color: var(--atlas-background);
+  border: var(--atlas-border-width-1) solid var(--atlas-border);
+}
+
+.elevated {
+  background-color: var(--atlas-background);
+  box-shadow: var(--atlas-shadow-md);
+}
+
+.outlined {
+  background-color: var(--atlas-background);
+  border: var(--atlas-border-width-1) solid var(--atlas-border-strong);
+}
+
+.filled {
+  background-color: var(--atlas-background-muted);
+}
+
+/* ── Selected state — primary border on all variants ─────────── */
+
+.selected.default,
+.selected.outlined {
+  border-color: var(--atlas-primary);
+}
+
+.selected.elevated,
+.selected.filled {
+  border: var(--atlas-border-width-1) solid var(--atlas-primary);
+}
+
+/* ── Interactive — hover, focus, motion ───────────────────────── */
+
+.interactive {
+  cursor: pointer;
+  outline: none;
+  transition:
+    background-color var(--atlas-duration-fast) var(--atlas-easing-standard),
+    box-shadow       var(--atlas-duration-fast) var(--atlas-easing-standard),
+    border-color     var(--atlas-duration-fast) var(--atlas-easing-standard);
+}
+
+/* Default and outlined hover */
+.interactive.default:hover,
+.interactive.outlined:hover,
+.interactive.filled:hover {
+  background-color: var(--atlas-background-subtle);
+}
+
+/* Elevated hover — lift shadow, keep bg */
+.interactive.elevated:hover {
+  box-shadow: var(--atlas-shadow-lg);
+}
+
+/* Focus ring — outline renders outside overflow:hidden in modern browsers */
+.interactive:focus-visible {
+  outline: var(--atlas-border-width-2) solid var(--atlas-focus-ring);
+  outline-offset: var(--atlas-spacing-0_5);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .interactive {
+    transition: none;
+  }
+}
+
+/* ── Disabled ─────────────────────────────────────────────────── */
+
+.disabled {
+  opacity: var(--atlas-opacity-disabled);
+  pointer-events: none;
+}
+
+/* ── Header ───────────────────────────────────────────────────── */
+/*
+  Layout:  [leading] [main (title+desc)] [action]
+  Gap between leading/main/action = spacing-3.
+  Header provides top + inline padding; block-end = 0 (content gap handles it).
+*/
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--atlas-spacing-3);
+  padding-block-start: var(--_card-padding);
+  padding-block-end: 0;
+  padding-inline: var(--_card-padding);
+}
+
+.headerMain {
+  flex: 1;
+  min-width: 0; /* prevent text overflow escaping flex */
+}
+
+.leading {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+}
+
+.action {
+  flex-shrink: 0;
+  margin-inline-start: auto;
+}
+
+/* ── Title ────────────────────────────────────────────────────── */
+
+.title {
+  margin: 0;
+  font-family: var(--atlas-font-sans);
+  font-weight: var(--atlas-font-weight-semibold);
+  font-size: var(--atlas-text-h4); /* responsive heading token */
+  color: var(--atlas-foreground);
+  line-height: var(--atlas-line-height-snug);
+}
+
+/* ── Description ──────────────────────────────────────────────── */
+
+.description {
+  margin: var(--atlas-spacing-1) 0 0;
+  font-family: var(--atlas-font-sans);
+  font-size: var(--atlas-text-body-sm);
+  color: var(--atlas-foreground-muted);
+  line-height: var(--atlas-line-height-normal);
+}
+
+/* ── Content ──────────────────────────────────────────────────── */
+/*
+  block-start = --_card-gap (space after header / from card edge when first)
+  block-end   = --_card-gap (space before footer / from card edge when last)
+  :first-child / :last-child overrides give full --_card-padding when no
+  header or footer is present.
+*/
+
+.content {
+  padding-block-start: var(--_card-gap);
+  padding-block-end: var(--_card-gap);
+  padding-inline: var(--_card-padding);
+}
+
+.content:first-child {
+  padding-block-start: var(--_card-padding);
+}
+
+.content:last-child {
+  padding-block-end: var(--_card-padding);
+}
+
+/* ── Footer ───────────────────────────────────────────────────── */
+/*
+  block-start = 0 (content provides the gap)
+  block-end   = --_card-padding (closes out the card)
+*/
+
+.footer {
+  display: flex;
+  align-items: center;
+  gap: var(--atlas-spacing-2);
+  padding-block-start: 0;
+  padding-block-end: var(--_card-padding);
+  padding-inline: var(--_card-padding);
+}
+
+.footerBetween { justify-content: space-between; }
+.footerEnd     { justify-content: flex-end; }

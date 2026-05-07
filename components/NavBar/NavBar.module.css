@@ -1,0 +1,249 @@
+/* =================================================================
+   Atlas NavBar — component styles (web top app bar)
+   All values reference semantic tokens only.
+   No hex literals. No primitive tokens. No magic numbers.
+   ================================================================= */
+
+/* ── Root ─────────────────────────────────────────────────────── */
+/*
+  position: sticky keeps the bar pinned to the top as content scrolls.
+  z-index: --atlas-z-sticky (1100) — above page content, below modals.
+  Height is size-driven via --_h; inner items centered via flex.
+*/
+
+.navbar {
+  --_h: calc(var(--atlas-spacing-8) * 2); /* md: 64px */
+
+  position: sticky;
+  top: 0;
+  z-index: var(--atlas-z-sticky);
+  display: flex;
+  align-items: center;
+  height: var(--_h);
+  padding-inline: var(--atlas-spacing-6);
+  font-family: var(--atlas-font-sans);
+  box-sizing: border-box;
+  transition:
+    background-color var(--atlas-duration-fast) var(--atlas-easing-standard),
+    box-shadow       var(--atlas-duration-fast) var(--atlas-easing-standard),
+    border-color     var(--atlas-duration-fast) var(--atlas-easing-standard);
+}
+
+/* ── Sizes ────────────────────────────────────────────────────── */
+
+.sm { --_h: var(--atlas-spacing-12); }             /* 48px */
+/* .md is the default — 64px */
+.lg { --_h: calc(var(--atlas-spacing-10) * 2); }   /* 80px */
+
+/* ── Variants ─────────────────────────────────────────────────── */
+
+.default {
+  background-color: var(--atlas-background);
+  border-block-end: var(--atlas-border-width-1) solid var(--atlas-border);
+}
+
+.transparent {
+  background-color: transparent;
+  border-block-end: none;
+}
+
+.elevated {
+  background-color: var(--atlas-background);
+  box-shadow: var(--atlas-shadow-md);
+}
+
+/* ── Inner layout ─────────────────────────────────────────────── */
+/*
+  Three zones: [brand + links] ─── [actions + hamburger]
+*/
+
+.inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: var(--atlas-spacing-4);
+}
+
+.start {
+  display: flex;
+  align-items: center;
+  gap: var(--atlas-spacing-8);
+  min-width: 0;
+}
+
+.end {
+  display: flex;
+  align-items: center;
+  gap: var(--atlas-spacing-2);
+  flex-shrink: 0;
+}
+
+/* ── Brand ────────────────────────────────────────────────────── */
+
+.brand {
+  font-size: var(--atlas-text-h4);
+  font-weight: var(--atlas-font-weight-bold);
+  color: var(--atlas-foreground);
+  text-decoration: none;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* ── Desktop links ────────────────────────────────────────────── */
+/*
+  Hidden on mobile (< 1024px), shown on desktop via media query.
+*/
+
+.links {
+  display: none;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  gap: 0;
+}
+
+@media (min-width: 1024px) {
+  .links { display: flex; }
+}
+
+/* ── Link ─────────────────────────────────────────────────────── */
+
+.link {
+  display: inline-flex;
+  align-items: center;
+  height: var(--_h);
+  padding-inline: var(--atlas-spacing-3);
+  font-size: var(--atlas-text-body-sm);
+  font-weight: var(--atlas-font-weight-medium);
+  color: var(--atlas-foreground-muted);
+  text-decoration: none;
+  white-space: nowrap;
+  border-block-end: var(--atlas-border-width-2) solid transparent;
+  outline: none;
+  transition:
+    color        var(--atlas-duration-fast) var(--atlas-easing-standard),
+    border-color var(--atlas-duration-fast) var(--atlas-easing-standard);
+}
+
+.link:hover {
+  color: var(--atlas-foreground);
+}
+
+.link:focus-visible {
+  outline: var(--atlas-border-width-2) solid var(--atlas-focus-ring);
+  outline-offset: calc(-1 * var(--atlas-spacing-1));
+  border-radius: var(--atlas-radius-sm);
+}
+
+/* Active link — foreground color + primary underline + aria-current="page" */
+.link[aria-current="page"] {
+  color: var(--atlas-foreground);
+  font-weight: var(--atlas-font-weight-semibold);
+  border-block-end-color: var(--atlas-primary);
+}
+
+/* ── Hamburger button ─────────────────────────────────────────── */
+/*
+  Visible on mobile (< 1024px), hidden on desktop.
+  44px touch target. Opens mobile Drawer.
+*/
+
+.hamburger {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--atlas-spacing-1);
+  min-width: var(--atlas-touch-min);
+  min-height: var(--atlas-touch-min);
+  padding: var(--atlas-spacing-2);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--atlas-foreground);
+  border-radius: var(--atlas-radius-md);
+  outline: none;
+}
+
+.hamburger:hover {
+  background-color: var(--atlas-background-subtle);
+}
+
+.hamburger:focus-visible {
+  outline: var(--atlas-border-width-2) solid var(--atlas-focus-ring);
+  outline-offset: var(--atlas-spacing-0_5);
+}
+
+/* Hamburger lines */
+.hamburgerLine {
+  display: block;
+  width: calc(var(--atlas-spacing-4) + var(--atlas-spacing-0_5)); /* 18px */
+  height: var(--atlas-border-width-2);                            /* 2px */
+  background-color: currentColor;
+  border-radius: var(--atlas-radius-full);
+  transition: opacity var(--atlas-duration-fast) var(--atlas-easing-standard);
+}
+
+@media (min-width: 1024px) {
+  .hamburger { display: none; }
+}
+
+/* ── Mobile drawer nav ────────────────────────────────────────── */
+/*
+  Vertical link list inside the Drawer.
+*/
+
+.drawerLinks {
+  display: flex;
+  flex-direction: column;
+  gap: var(--atlas-spacing-1);
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.drawerLink {
+  display: flex;
+  align-items: center;
+  padding: var(--atlas-spacing-3) var(--atlas-spacing-2);
+  font-size: var(--atlas-text-body);
+  font-weight: var(--atlas-font-weight-medium);
+  color: var(--atlas-foreground-muted);
+  text-decoration: none;
+  border-radius: var(--atlas-radius-md);
+  border-inline-start: var(--atlas-border-width-2) solid transparent;
+  outline: none;
+  transition:
+    color            var(--atlas-duration-fast) var(--atlas-easing-standard),
+    background-color var(--atlas-duration-fast) var(--atlas-easing-standard),
+    border-color     var(--atlas-duration-fast) var(--atlas-easing-standard);
+}
+
+.drawerLink:hover {
+  background-color: var(--atlas-background-subtle);
+  color: var(--atlas-foreground);
+}
+
+.drawerLink:focus-visible {
+  outline: var(--atlas-border-width-2) solid var(--atlas-focus-ring);
+  outline-offset: var(--atlas-spacing-0_5);
+}
+
+.drawerLink[aria-current="page"] {
+  color: var(--atlas-primary);
+  font-weight: var(--atlas-font-weight-semibold);
+  border-inline-start-color: var(--atlas-primary);
+  background-color: var(--atlas-background-subtle);
+}
+
+/* ── Reduced motion ───────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .navbar,
+  .link,
+  .hamburger,
+  .drawerLink {
+    transition: none;
+  }
+}
