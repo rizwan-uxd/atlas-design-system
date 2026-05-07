@@ -14,7 +14,7 @@
 |------|------|--------|
 | 0.1 | Expo project init in `packages/mobile/` | ⬜ Not started |
 | 0.2 | Token pipeline: `atlas.tokens.css` → `packages/mobile/tokens/atlas.tokens.ts` | ✅ Done (`scripts/convert-tokens.mjs`) |
-| 0.3 | `ThemeProvider.tsx` + `useTheme.ts` (light/dark via `useColorScheme`) | ⬜ Not started |
+| 0.3 | `ThemeProvider.tsx` + `useTheme.ts` (light/dark via `useColorScheme`) | ✅ Done (`packages/mobile/theme/`) |
 | 0.4 | `shadowHelper.ts` — cross-platform shadow (iOS shadow props vs. Android `elevation`) | ⬜ Not started |
 | 0.5 | `useReducedMotion.ts` — wraps `AccessibilityInfo.isReduceMotionEnabled` | ⬜ Not started |
 
@@ -487,7 +487,7 @@ npx expo install react-native-tab-view react-native-pager-view
 |-------|---------|-----------|--------|
 | 0 | — | Expo init | ⬜ |
 | 0 | — | Token pipeline | ✅ Done |
-| 0 | — | ThemeProvider + useTheme | ⬜ |
+| 0 | — | ThemeProvider + useTheme | ✅ Done |
 | 0 | — | shadowHelper | ⬜ |
 | 0 | — | useReducedMotion | ⬜ |
 | 1 | M1 | Badge | ⬜ |
