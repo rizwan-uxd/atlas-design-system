@@ -12,7 +12,7 @@
 
 | Step | Task | Status |
 |------|------|--------|
-| 0.1 | Expo project init in `packages/mobile/` | ⬜ Not started |
+| 0.1 | Expo project init in `packages/mobile/` | ✅ Done (Expo SDK 54 · React 19 · RN 0.81) |
 | 0.2 | Token pipeline: `atlas.tokens.css` → `packages/mobile/tokens/atlas.tokens.ts` | ✅ Done (`scripts/convert-tokens.mjs`) |
 | 0.3 | `ThemeProvider.tsx` + `useTheme.ts` (light/dark via `useColorScheme`) | ✅ Done (`packages/mobile/theme/`) |
 | 0.4 | `shadowHelper.ts` — cross-platform shadow (iOS shadow props vs. Android `elevation`) | ✅ Done (`packages/mobile/utils/shadowHelper.ts`) |
@@ -485,7 +485,7 @@ npx expo install react-native-tab-view react-native-pager-view
 
 | Phase | Session | Component | Status |
 |-------|---------|-----------|--------|
-| 0 | — | Expo init | ⬜ |
+| 0 | — | Expo init | ✅ Done |
 | 0 | — | Token pipeline | ✅ Done |
 | 0 | — | ThemeProvider + useTheme | ✅ Done |
 | 0 | — | shadowHelper | ✅ Done |
