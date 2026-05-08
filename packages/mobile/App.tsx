@@ -12,6 +12,10 @@ import { Label } from './components/Label/Label'
 import { Alert } from './components/Alert/Alert'
 import { Button } from './components/Button/Button'
 
+// Phase 2 components
+import { Input }    from './components/Input/Input'
+import { Textarea } from './components/Textarea/Textarea'
+
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
 function SectionHeading({ children }: { children: string }) {
@@ -231,6 +235,163 @@ function ButtonDemo() {
   )
 }
 
+// ─── M5 · Input demo ─────────────────────────────────────────────────────────
+
+function InputDemo() {
+  const { tokens } = useTheme()
+  const [text, setText] = useState('')
+  const [password, setPassword] = useState('')
+
+  return (
+    <Card>
+      {/* Variants — md size, default state */}
+      <Input
+        label="Default variant"
+        placeholder="Type something…"
+        helperText="Border appears on focus"
+        value={text}
+        onChangeText={setText}
+      />
+      <Input
+        variant="filled"
+        label="Filled variant"
+        placeholder="Muted background, no border at rest"
+        helperText="Border appears on focus"
+      />
+      <Input
+        variant="ghost"
+        label="Ghost variant"
+        placeholder="No border at rest"
+        helperText="Border and focus ring appear on tap"
+      />
+
+      {/* Sizes */}
+      <View style={{ gap: tokens.spacing[2] }}>
+        <Input size="sm" placeholder="Small (sm)" />
+        <Input size="md" placeholder="Medium (md) — default" />
+        <Input size="lg" placeholder="Large (lg)" />
+      </View>
+
+      {/* States */}
+      <Input
+        label="Error state"
+        state="error"
+        value="bad-input@"
+        errorText="Enter a valid email address"
+      />
+      <Input
+        label="Success state"
+        state="success"
+        value="riz@example.com"
+        successText="Email looks good"
+      />
+      <Input
+        label="Disabled state"
+        state="disabled"
+        value="cannot edit this"
+        helperText="Interaction is suppressed at 50% opacity"
+      />
+
+      {/* With icons (using emoji as stand-in — replace with Ionicons in production) */}
+      <Input
+        label="With icons"
+        placeholder="Search…"
+        leadingIcon={<Text style={{ fontSize: 16 }}>🔍</Text>}
+        trailingIcon={<Text style={{ fontSize: 16 }}>✕</Text>}
+        helperText="leadingIcon + trailingIcon slots"
+      />
+
+      {/* Secure text / password */}
+      <Input
+        label="Password"
+        placeholder="Enter password"
+        secureTextEntry
+        required
+        value={password}
+        onChangeText={setPassword}
+        helperText="secureTextEntry — system eye toggle on iOS"
+      />
+    </Card>
+  )
+}
+
+// ─── M6 · Textarea demo ───────────────────────────────────────────────────────
+
+function TextareaDemo() {
+  const { tokens } = useTheme()
+  const [bio, setBio]             = useState('')
+  const [limited, setLimited]     = useState('')
+  const [autoText, setAutoText]   = useState('')
+
+  return (
+    <Card>
+      {/* Default variant — fixed 3-row height */}
+      <Textarea
+        label="Default variant"
+        placeholder="Write something…"
+        helperText="Fixed height — 3 rows"
+        value={bio}
+        onChangeText={setBio}
+        rows={3}
+      />
+
+      {/* Filled variant */}
+      <Textarea
+        variant="filled"
+        label="Filled variant"
+        placeholder="Muted background, no border at rest"
+        helperText="Border appears on focus"
+        rows={3}
+      />
+
+      {/* Sizes */}
+      <View style={{ gap: tokens.spacing[2] }}>
+        <Textarea size="sm" placeholder="Small (sm) — 3 rows"  rows={3} />
+        <Textarea size="md" placeholder="Medium (md) — default" rows={3} />
+        <Textarea size="lg" placeholder="Large (lg) — 3 rows"  rows={3} />
+      </View>
+
+      {/* States */}
+      <Textarea
+        label="Error state"
+        state="error"
+        value="too short"
+        errorText="Bio must be at least 20 characters"
+        rows={3}
+      />
+      <Textarea
+        label="Disabled state"
+        state="disabled"
+        value="This field cannot be edited right now."
+        rows={3}
+      />
+
+      {/* Character counter */}
+      <Textarea
+        label="With character limit"
+        placeholder="Max 120 characters…"
+        value={limited}
+        onChangeText={setLimited}
+        maxLength={120}
+        rows={3}
+        helperText="Counter turns red at the limit"
+      />
+
+      {/* Auto-grow with maxRows cap */}
+      <Textarea
+        label="Auto-grow (max 6 rows)"
+        placeholder="Start typing — field expands up to 6 rows, then scrolls…"
+        value={autoText}
+        onChangeText={setAutoText}
+        autoGrow
+        rows={3}
+        maxRows={6}
+        helperText="autoGrow + maxRows=6"
+      />
+    </Card>
+  )
+}
+
 // ─── Main demo screen ─────────────────────────────────────────────────────────
 
 function DemoScreen() {
@@ -250,7 +411,7 @@ function DemoScreen() {
             Atlas Mobile
           </Text>
           <Text style={{ color: colors.foregroundMuted, fontSize: tokens.fontSize.sm, marginBottom: tokens.spacing[2] }}>
-            Phase 1 — Primitives
+            Phase 1 · Primitives ✅ · Phase 2 · Forms (M5–M6 done)
           </Text>
 
           <SectionHeading>Phase 0 · Foundation</SectionHeading>
@@ -267,6 +428,12 @@ function DemoScreen() {
 
           <SectionHeading>M4 · Button</SectionHeading>
           <ButtonDemo />
+
+          <SectionHeading>M5 · Input</SectionHeading>
+          <InputDemo />
+
+          <SectionHeading>M6 · Textarea</SectionHeading>
+          <TextareaDemo />
 
           <View style={{ height: tokens.spacing[8] }} />
         </View>

@@ -494,8 +494,8 @@ npx expo install react-native-tab-view react-native-pager-view
 | 1 | M2 | Label | ✅ Done |
 | 1 | M3 | Alert | ✅ Done |
 | 1 | M4 | Button | ✅ Done |
-| 2 | M5 | Input | ⬜ |
-| 2 | M6 | Textarea | ⬜ |
+| 2 | M5 | Input | ✅ Done |
+| 2 | M6 | Textarea | ✅ Done |
 | 2 | M7 | Checkbox | ⬜ |
 | 2 | M8 | Switch | ⬜ |
 | 3 | M9 | Card | ⬜ |
