@@ -490,10 +490,10 @@ npx expo install react-native-tab-view react-native-pager-view
 | 0 | — | ThemeProvider + useTheme | ✅ Done |
 | 0 | — | shadowHelper | ✅ Done |
 | 0 | — | useReducedMotion | ✅ Done |
-| 1 | M1 | Badge | ⬜ |
-| 1 | M2 | Label | ⬜ |
-| 1 | M3 | Alert | ⬜ |
-| 1 | M4 | Button | ⬜ |
+| 1 | M1 | Badge | ✅ Done |
+| 1 | M2 | Label | ✅ Done |
+| 1 | M3 | Alert | ✅ Done |
+| 1 | M4 | Button | ✅ Done |
 | 2 | M5 | Input | ⬜ |
 | 2 | M6 | Textarea | ⬜ |
 | 2 | M7 | Checkbox | ⬜ |

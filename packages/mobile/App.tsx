@@ -1,171 +1,287 @@
+import React, { useState } from 'react'
 import { StatusBar } from 'expo-status-bar'
-import { StyleSheet, Text, View, Switch, ScrollView } from 'react-native'
+import { StyleSheet, Text, View, ScrollView } from 'react-native'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import { ThemeProvider, useTheme } from './theme'
 import { shadowHelper } from './utils/shadowHelper'
 import { useReducedMotion } from './utils/useReducedMotion'
 
-// ??? Demo screen ??????????????????????????????????????????????????????????????
-// Phase 0 sign-off screen: exercises ThemeProvider, useTheme, shadowHelper,
-// and useReducedMotion before any real components are built.
+// Phase 1 components
+import { Badge } from './components/Badge/Badge'
+import { Label } from './components/Label/Label'
+import { Alert } from './components/Alert/Alert'
+import { Button } from './components/Button/Button'
 
-function PhaseZeroDemo() {
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+
+function SectionHeading({ children }: { children: string }) {
+  const { colors, tokens } = useTheme()
+  return (
+    <Text style={{
+      fontSize:      tokens.fontSize.xs,
+      fontWeight:    tokens.fontWeight.semibold,
+      color:         colors.foregroundMuted,
+      textTransform: 'uppercase',
+      letterSpacing: 1,
+      marginBottom:  tokens.spacing[2],
+      marginTop:     tokens.spacing[4],
+    }}>
+      {children}
+    </Text>
+  )
+}
+
+function Card({ children }: { children: React.ReactNode }) {
+  const { colors, tokens, colorScheme } = useTheme()
+  return (
+    <View style={{
+      backgroundColor: colors.surface,
+      borderRadius:    tokens.radius.lg,
+      padding:         tokens.spacing[4],
+      borderWidth:     tokens.borderWidth[1],
+      borderColor:     colors.border,
+      gap:             tokens.spacing[3],
+      ...shadowHelper('sm', colorScheme),
+    }}>
+      {children}
+    </View>
+  )
+}
+
+// ─── Phase 0 section (collapsed to a single status row) ──────────────────────
+
+function PhaseZeroStatus() {
   const { colors, tokens, colorScheme } = useTheme()
   const reduceMotion = useReducedMotion()
 
-  const s = StyleSheet.create({
-    scroll: {
-      flex: 1,
-      backgroundColor: colors.background,
-    },
-    safe: {
-      flex: 1,
-    },
-    container: {
-      padding: tokens.spacing[4],
-      gap: tokens.spacing[4],
-    },
-    heading: {
-      fontSize: tokens.fontSize['2xl'],
-      fontWeight: tokens.fontWeight.bold,
-      color: colors.foreground,
-    },
-    subheading: {
-      fontSize: tokens.fontSize.sm,
-      fontWeight: tokens.fontWeight.medium,
-      color: colors.foregroundMuted,
-      textTransform: 'uppercase',
-      letterSpacing: 1,
-      marginBottom: tokens.spacing[1],
-    },
-    card: {
-      backgroundColor: colors.surface,
-      borderRadius: tokens.radius.lg,
-      padding: tokens.spacing[4],
-      borderWidth: tokens.borderWidth[1],
-      borderColor: colors.border,
-      ...shadowHelper('md', colorScheme),
-    },
-    row: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-    },
-    label: {
-      fontSize: tokens.fontSize.base,
-      color: colors.foreground,
-    },
-    value: {
-      fontSize: tokens.fontSize.base,
-      fontWeight: tokens.fontWeight.semibold,
-      color: colors.primary,
-    },
-    chip: {
-      paddingHorizontal: tokens.spacing[3],
-      paddingVertical: tokens.spacing[1],
-      borderRadius: tokens.radius.full,
-      alignSelf: 'flex-start',
-    },
-    divider: {
-      height: 1,
-      backgroundColor: colors.border,
-      marginVertical: tokens.spacing[1],
-    },
-  })
+  return (
+    <Card>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+        <Text style={{ color: colors.foreground, fontSize: tokens.fontSize.sm, fontWeight: tokens.fontWeight.semibold }}>
+          Phase 0 — Foundation
+        </Text>
+        <Badge variant="success" size="sm">✅ Complete</Badge>
+      </View>
+      <View style={{ flexDirection: 'row', gap: tokens.spacing[2], flexWrap: 'wrap' }}>
+        <Badge variant="neutral" size="sm">Dark mode: {colorScheme}</Badge>
+        <Badge variant="neutral" size="sm">Reduce motion: {String(reduceMotion)}</Badge>
+      </View>
+    </Card>
+  )
+}
 
-  const tokenRows: Array<[string, string]> = [
-    ['colorScheme',   colorScheme],
-    ['primary',       colors.primary],
-    ['background',    colors.background],
-    ['surface',       colors.surface],
-    ['foreground',    colors.foreground],
-    ['border',        colors.border],
-    ['danger',        colors.danger],
-    ['success',       colors.success],
-  ]
+// ─── M1 · Badge demo ──────────────────────────────────────────────────────────
+
+function BadgeDemo() {
+  return (
+    <Card>
+      {/* Variants */}
+      <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
+        <Badge variant="neutral">Neutral</Badge>
+        <Badge variant="brand">Brand</Badge>
+        <Badge variant="success">Success</Badge>
+        <Badge variant="warning">Warning</Badge>
+        <Badge variant="danger">Danger</Badge>
+        <Badge variant="info">Info</Badge>
+      </View>
+
+      {/* Sizes */}
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+        <Badge variant="brand" size="sm">Small</Badge>
+        <Badge variant="brand" size="md">Medium</Badge>
+        <Badge variant="brand" size="lg">Large</Badge>
+      </View>
+
+      {/* Dot */}
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+        <Badge variant="success" dot accessibilityLabel="success status" />
+        <Badge variant="warning" dot accessibilityLabel="warning status" />
+        <Badge variant="danger"  dot accessibilityLabel="danger status" />
+        <Badge variant="info"    dot accessibilityLabel="info status" />
+        <Badge variant="neutral" size="lg">Dot variants →</Badge>
+      </View>
+
+      {/* Long label overflow */}
+      <Badge variant="neutral">This is a very long badge label to test overflow</Badge>
+    </Card>
+  )
+}
+
+// ─── M2 · Label demo ─────────────────────────────────────────────────────────
+
+function LabelDemo() {
+  return (
+    <Card>
+      {/* Sizes */}
+      <View style={{ gap: 4 }}>
+        <Label size="sm">Small label</Label>
+        <Label size="md">Medium label</Label>
+        <Label size="lg">Large label</Label>
+      </View>
+
+      {/* Required */}
+      <View style={{ gap: 4 }}>
+        <Label required>Email address</Label>
+        <Label size="lg" required>Full name (large + required)</Label>
+      </View>
+
+      {/* Disabled */}
+      <Label disabled>Disabled label (50% opacity)</Label>
+      <Label disabled required>Disabled + required</Label>
+    </Card>
+  )
+}
+
+// ─── M3 · Alert demo ─────────────────────────────────────────────────────────
+
+function AlertDemo() {
+  const [dismissed, setDismissed] = useState<Record<string, boolean>>({})
 
   return (
-    <ScrollView style={s.scroll}>
-      <SafeAreaView style={s.safe}>
-        <View style={s.container}>
+    <Card>
+      {!dismissed['info'] && (
+        <Alert
+          variant="info"
+          title="Heads up"
+          description="This is an informational alert with a dismiss button."
+          onDismiss={() => setDismissed(d => ({ ...d, info: true }))}
+        />
+      )}
+      {!dismissed['success'] && (
+        <Alert
+          variant="success"
+          title="All done"
+          description="Your changes have been saved successfully."
+          onDismiss={() => setDismissed(d => ({ ...d, success: true }))}
+        />
+      )}
+      {!dismissed['warning'] && (
+        <Alert
+          variant="warning"
+          description="Your session will expire in 5 minutes."
+          onDismiss={() => setDismissed(d => ({ ...d, warning: true }))}
+        />
+      )}
+      {!dismissed['danger'] && (
+        <Alert
+          variant="danger"
+          title="Error"
+          description="Something went wrong. Please try again."
+          onDismiss={() => setDismissed(d => ({ ...d, danger: true }))}
+        />
+      )}
+      {/* No icon / no dismiss */}
+      <Alert
+        variant="info"
+        description="Alert without icon or dismiss button."
+        icon={false}
+      />
+      {Object.keys(dismissed).length > 0 && (
+        <Button variant="ghost" size="sm" onPress={() => setDismissed({})}>
+          Reset dismissed alerts
+        </Button>
+      )}
+    </Card>
+  )
+}
 
-          <Text style={s.heading}>Atlas Mobile</Text>
-          <Text style={{ color: colors.foregroundMuted, fontSize: tokens.fontSize.sm }}>
-            Phase 0 foundation sign-off
+// ─── M4 · Button demo ────────────────────────────────────────────────────────
+
+function ButtonDemo() {
+  const [loading, setLoading] = useState(false)
+
+  const simulateLoad = () => {
+    setLoading(true)
+    setTimeout(() => setLoading(false), 2000)
+  }
+
+  return (
+    <Card>
+      {/* Variants */}
+      <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
+        <Button variant="primary"   size="sm">Primary</Button>
+        <Button variant="secondary" size="sm">Secondary</Button>
+        <Button variant="ghost"     size="sm">Ghost</Button>
+        <Button variant="danger"    size="sm">Danger</Button>
+      </View>
+
+      {/* Sizes */}
+      <View style={{ gap: 8 }}>
+        <Button variant="primary" size="sm" fullWidth>Small — full width</Button>
+        <Button variant="primary" size="md" fullWidth>Medium — full width</Button>
+        <Button variant="primary" size="lg" fullWidth>Large — full width</Button>
+      </View>
+
+      {/* States */}
+      <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
+        <Button variant="primary"   disabled>Disabled</Button>
+        <Button variant="secondary" disabled>Disabled</Button>
+      </View>
+
+      {/* Loading */}
+      <Button
+        variant="primary"
+        loading={loading}
+        onPress={simulateLoad}
+        fullWidth
+      >
+        {loading ? 'Saving…' : 'Tap to load (2s)'}
+      </Button>
+    </Card>
+  )
+}
+
+// ─── Main demo screen ─────────────────────────────────────────────────────────
+
+function DemoScreen() {
+  const { colors, tokens } = useTheme()
+
+  return (
+    <ScrollView style={{ flex: 1, backgroundColor: colors.background }}>
+      <SafeAreaView style={{ flex: 1 }}>
+        <View style={{ padding: tokens.spacing[4] }}>
+
+          <Text style={{
+            fontSize:   tokens.fontSize['2xl'],
+            fontWeight: tokens.fontWeight.bold,
+            color:      colors.foreground,
+            marginBottom: tokens.spacing[1],
+          }}>
+            Atlas Mobile
+          </Text>
+          <Text style={{ color: colors.foregroundMuted, fontSize: tokens.fontSize.sm, marginBottom: tokens.spacing[2] }}>
+            Phase 1 — Primitives
           </Text>
 
-          {/* Theme tokens */}
-          <Text style={s.subheading}>Semantic colours</Text>
-          <View style={s.card}>
-            {tokenRows.map(([key, val], i) => (
-              <View key={key}>
-                {i > 0 && <View style={s.divider} />}
-                <View style={[s.row, { paddingVertical: tokens.spacing[1] }]}>
-                  <Text style={s.label}>{key}</Text>
-                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: tokens.spacing[2] }}>
-                    {val.startsWith('#') && (
-                      <View style={{
-                        width: 16, height: 16,
-                        borderRadius: tokens.radius.sm,
-                        backgroundColor: val,
-                        borderWidth: 1,
-                        borderColor: colors.border,
-                      }} />
-                    )}
-                    <Text style={s.value}>{val}</Text>
-                  </View>
-                </View>
-              </View>
-            ))}
-          </View>
+          <SectionHeading>Phase 0 · Foundation</SectionHeading>
+          <PhaseZeroStatus />
 
-          {/* Shadow helper */}
-          <Text style={s.subheading}>Shadow helper</Text>
-          <View style={{ flexDirection: 'row', gap: tokens.spacing[3] }}>
-            {(['sm', 'md', 'lg', 'xl'] as const).map(level => (
-              <View
-                key={level}
-                style={{
-                  flex: 1,
-                  aspectRatio: 1,
-                  backgroundColor: colors.surface,
-                  borderRadius: tokens.radius.md,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  ...shadowHelper(level, colorScheme),
-                }}
-              >
-                <Text style={{ color: colors.foregroundMuted, fontSize: tokens.fontSize.xs }}>{level}</Text>
-              </View>
-            ))}
-          </View>
+          <SectionHeading>M1 · Badge</SectionHeading>
+          <BadgeDemo />
 
-          {/* Reduce motion */}
-          <Text style={s.subheading}>Reduced motion</Text>
-          <View style={s.card}>
-            <View style={s.row}>
-              <Text style={s.label}>useReducedMotion()</Text>
-              <View style={[s.chip, { backgroundColor: reduceMotion ? colors.successSubtle : colors.backgroundMuted }]}>
-                <Text style={{ color: reduceMotion ? colors.success : colors.foregroundMuted, fontSize: tokens.fontSize.sm, fontWeight: tokens.fontWeight.semibold }}>
-                  {reduceMotion ? 'true' : 'false'}
-                </Text>
-              </View>
-            </View>
-          </View>
+          <SectionHeading>M2 · Label</SectionHeading>
+          <LabelDemo />
 
+          <SectionHeading>M3 · Alert</SectionHeading>
+          <AlertDemo />
+
+          <SectionHeading>M4 · Button</SectionHeading>
+          <ButtonDemo />
+
+          <View style={{ height: tokens.spacing[8] }} />
         </View>
       </SafeAreaView>
     </ScrollView>
   )
 }
 
-// ??? Root ?????????????????????????????????????????????????????????????????????
+// ─── Root ─────────────────────────────────────────────────────────────────────
 
 export default function App() {
   return (
     <SafeAreaProvider>
       <ThemeProvider>
-        <PhaseZeroDemo />
+        <DemoScreen />
         <StatusBar style="auto" />
       </ThemeProvider>
     </SafeAreaProvider>
