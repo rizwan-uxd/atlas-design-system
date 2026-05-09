@@ -71,6 +71,7 @@
   --atlas-spacing-5: 20px;
   --atlas-spacing-6: 24px;
   --atlas-spacing-8: 32px;
+  --atlas-spacing-9: 36px;
   --atlas-spacing-10: 40px;
   --atlas-spacing-12: 48px;
   --atlas-spacing-16: 64px;
@@ -115,6 +116,12 @@
   --atlas-columns: var(--atlas-columns-mobile);
   --atlas-gutter: var(--atlas-gutter-mobile);
   --atlas-margin: var(--atlas-margin-mobile);
+
+  /* ─────────────── Dialog sizes ─────────────── */
+  --atlas-dialog-sm: 400px;
+  --atlas-dialog-md: 560px;
+  --atlas-dialog-lg: 720px;
+  --atlas-dialog-xl: 960px;
 
   /* ─────────────── Touch targets ─────────────── */
   --atlas-touch-min: 44px;
@@ -369,6 +376,7 @@
   --spacing-5: var(--atlas-spacing-5);
   --spacing-6: var(--atlas-spacing-6);
   --spacing-8: var(--atlas-spacing-8);
+  --spacing-9: var(--atlas-spacing-9);
   --spacing-10: var(--atlas-spacing-10);
   --spacing-12: var(--atlas-spacing-12);
   --spacing-16: var(--atlas-spacing-16);

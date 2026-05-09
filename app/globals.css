@@ -1,2 +1,17 @@
 @import "../atlas.tokens.css";
 @import "tailwindcss";
+
+/* ─────────────── Global reduced-motion safety net ─────────────── */
+/* Individual components declare their own targeted overrides.
+   This block is a catch-all for any component that might miss one. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: var(--atlas-duration-instant) !important;
+    animation-delay: var(--atlas-duration-instant) !important;
+    transition-duration: var(--atlas-duration-instant) !important;
+    transition-delay: var(--atlas-duration-instant) !important;
+    scroll-behavior: auto !important;
+  }
+}

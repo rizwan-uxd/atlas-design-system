@@ -34,8 +34,8 @@
 /* ── Content base ─────────────────────────────────────────────── */
 
 .content {
-  --_pad: var(--atlas-spacing-6);   /* overridden by size variants */
-  --_max-w: 560px;                  /* overridden by size variants */
+  --_pad: var(--atlas-spacing-6);        /* overridden by size variants */
+  --_max-w: var(--atlas-dialog-md);      /* overridden by size variants */
 
   position: fixed;
   z-index: var(--atlas-z-modal);
@@ -52,10 +52,10 @@
 
 /* ── Size tokens ──────────────────────────────────────────────── */
 
-.sm  { --_pad: var(--atlas-spacing-4); --_max-w: 400px; }
-/* .md is the default (--_pad: spacing-6, --_max-w: 560px) */
-.lg  { --_pad: var(--atlas-spacing-6); --_max-w: 720px; }
-.xl  { --_pad: var(--atlas-spacing-8); --_max-w: 960px; }
+.sm  { --_pad: var(--atlas-spacing-4); --_max-w: var(--atlas-dialog-sm); }
+/* .md is the default (--_pad: spacing-6, --_max-w: atlas-dialog-md = 560px) */
+.lg  { --_pad: var(--atlas-spacing-6); --_max-w: var(--atlas-dialog-lg); }
+.xl  { --_pad: var(--atlas-spacing-8); --_max-w: var(--atlas-dialog-xl); }
 .full { --_pad: var(--atlas-spacing-6); --_max-w: calc(100% - var(--atlas-spacing-6) * 2); }
 
 /* ── Modal variant ────────────────────────────────────────────── */
