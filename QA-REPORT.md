@@ -2,7 +2,7 @@
 
 > **Version:** 1.0  
 > **Status:** In progress  
-> **Last updated:** 2026-05-09
+> **Last updated:** 2026-05-09 (QA-03 complete)
 
 ---
 
@@ -10,12 +10,12 @@
 
 | Metric | Value |
 |---|---|
-| Sessions completed | 2 of 14 |
-| Total bugs filed | 6 |
+| Sessions completed | 3 of 14 |
+| Total bugs filed | 9 |
 | P1 bugs open | 0 |
-| P2 bugs open | 2 (BUG-004, BUG-005 — open) |
-| P3 bugs open | 1 (BUG-006 — open) |
-| Components spec-complete | 0 of 12 |
+| P2 bugs open | 0 |
+| P3 bugs open | 0 |
+| Components spec-complete | 0 of 12 (code audits: Button ✅ · Input ✅ · Label ✅; visual + dark-mode passes pending) |
 
 ---
 
@@ -24,9 +24,9 @@
 | Component | Token Audit | Visual QA | Dark Mode | Responsive | Accessibility | Mobile | Notes |
 |---|---|---|---|---|---|---|---|
 | **Token layer** | ✅ Pass | — | — | — | — | — | 3 bugs found + fixed |
-| Button | ✅ Pass | ✅ Pass | ✅ Pass | ⚠️ P2 | ⚠️ P3 | — | 3 bugs open (BUG-004–006) |
-| Input | — | — | — | — | — | — | — |
-| Label | — | — | — | — | — | — | — |
+| Button | ✅ Pass | ✅ Pass | ✅ Pass | ✅ Pass | ✅ Pass | — | 3 bugs (BUG-004–006) found + fixed |
+| Input | ✅ Pass | — | — | — | — | — | 2 bugs (BUG-007–008) found + fixed |
+| Label | ✅ Pass | — | — | — | — | — | 1 bug (BUG-009) found + fixed |
 | Textarea | — | — | — | — | — | — | — |
 | Checkbox | — | — | — | — | — | — | — |
 | Switch | — | — | — | — | — | — | — |
@@ -214,7 +214,139 @@ if (
 - [ ] `icon` size composable with sm/md/lg → **BUG-005**
 - [ ] Runtime `aria-label` warning for icon-only → **BUG-006**
 
-**Exit condition:** 3 open bugs (BUG-004 P2, BUG-005 P2, BUG-006 P3). Fixes pending approval.
+**Exit condition:** All 3 bugs fixed in session QA-03 (BUG-004 P2 ✅, BUG-005 P2 ✅, BUG-006 P3 ✅).
+
+---
+
+---
+
+### QA-03 — Input + Label
+
+---
+
+#### BUG-007 · P2 · FIXED
+
+**Title:** Hover rule suppresses `--atlas-danger` border on invalid inputs
+
+**Guard:** `state-helper`
+
+**Component:** `Input` → `components/Input/Input.module.css` hover rule
+
+**Description:** The base hover rule `.input:hover:not(:disabled):not([readonly])` has CSS specificity (0, 4, 0), while the error rule `.input[aria-invalid="true"]` has specificity (0, 2, 0). When a field is both `invalid=true` and hovered, the hover rule wins and overrides the danger border with `--atlas-border-strong`. The user loses the visual error signal on hover — a form validation regression visible across all three variants (`default`, `filled`, `unstyled`).
+
+**Fix applied:**
+Added `:not([aria-invalid="true"])` guard to the hover rule so the error state always takes priority:
+```css
+.input:hover:not(:disabled):not([readonly]):not([aria-invalid="true"]) {
+  border-color: var(--atlas-border-strong);
+}
+```
+
+**Files changed:** `components/Input/Input.module.css`
+
+---
+
+#### BUG-008 · P2 · FIXED
+
+**Title:** `unstyled` variant shows bottom border on hover — spec defines no hover border
+
+**Guard:** `state-helper`
+
+**Component:** `Input` → `components/Input/Input.module.css` hover + unstyled variant
+
+**Description:** The spec border table defines `unstyled` hover as "none" (no visible border). The base `.input:hover` rule applies `border-color: var(--atlas-border-strong)` to all variants including `unstyled`. For `unstyled`, `border: none` means only the bottom border has width; the hover rule changes that border's color from `transparent` to `border-strong`, making a visible bottom line appear on hover — a spec deviation.
+
+**Fix applied:**
+Added an explicit override under the unstyled namespace that resets the bottom border to `transparent` on hover:
+```css
+.unstyled .input:hover:not(:disabled):not([readonly]):not([aria-invalid="true"]) {
+  border-color: transparent;
+}
+```
+
+**Files changed:** `components/Input/Input.module.css`
+
+---
+
+#### BUG-009 · P3 · FIXED
+
+**Title:** `line-height: 1.4` in `.label` base rule is a magic number
+
+**Guard:** `token-enforcer`
+
+**Component:** `Label` → `components/Label/Label.module.css:11`
+
+**Description:** The `.label` base style used `line-height: 1.4` — a raw unitless value with no corresponding token. The Atlas motion/typography token set defines `--atlas-line-height-normal: 1.5` as the nearest appropriate token for body-adjacent text. Using a literal prevents the token system from controlling label line-height globally.
+
+**Fix applied:**
+```css
+line-height: var(--atlas-line-height-normal); /* was: 1.4 */
+```
+
+**Files changed:** `components/Label/Label.module.css`
+
+---
+
+## QA-03 Checklist — Input
+
+**Source files reviewed:** `components/Input/Input.tsx`, `components/Input/Input.module.css`
+**Spec:** `ATLAS-SPEC/Input.md`
+
+- [x] All 3 variants declared and styled (default, filled, unstyled) ✅
+- [x] All 3 sizes declared (sm 32px, md 40px, lg 48px) ✅
+- [x] All states covered — default · hover · focus-visible · disabled · readonly · error · loading ✅
+- [x] Token audit — no hex literals, no magic pixel numbers ✅
+- [x] Background token mappings per variant × state match spec table ✅
+- [x] Border token mappings per variant × state — hover/focus/error ✅
+- [ ] Hover does not suppress error border → **BUG-007 (P2) — FIXED**
+- [ ] Unstyled hover shows no border per spec → **BUG-008 (P2) — FIXED**
+- [x] Foreground tokens — text: `--atlas-foreground`; placeholder: `--atlas-foreground-muted`; disabled: `--atlas-foreground-disabled`; icon: `--atlas-foreground-muted` ✅
+- [x] Radius — `default` + `filled`: `--atlas-radius-md`; `unstyled`: 0 ✅
+- [x] Focus ring — `2px` `--atlas-focus-ring` on wrapper (default + filled) via `:has(:focus-visible)` ✅
+- [x] Unstyled focus — bottom-border only, no ring (per spec) ✅
+- [x] Motion — `border-color`, `background-color` via `--atlas-duration-fast` + `--atlas-easing-standard` ✅
+- [x] `prefers-reduced-motion` — transitions none; spinner frozen + dimmed ✅
+- [x] Logical properties throughout — `padding-inline`, `inset-inline-start/end` ✅
+- [x] `aria-invalid="true"` set when `invalid=true` ✅
+- [x] `aria-invalid` cleared (attribute removed) when `invalid=false` ✅
+- [x] Leading icon slot positioned via `inset-inline-start` ✅
+- [x] Trailing icon slot positioned via `inset-inline-end` ✅
+- [x] Icon — replaced by spinner when `loading=true` ✅
+- [x] Prefix / suffix affix slots — render mutually exclusive with icon on same side ✅
+- [x] `[data-leading-icon]` / `[data-trailing-icon]` data attrs drive input padding clearance ✅
+- [x] Loading spinner uses `atlas-input-spin` keyframe; `--atlas-duration-slow × 2` timing ✅
+- [x] `readOnly` forwarded as native `readonly` attribute ✅
+- [x] `disabled` forwarded correctly; native `<input disabled>` conveys state to AT ✅
+
+**Exit condition:** 2 P2 bugs found and fixed. All other checklist items pass.
+
+---
+
+## QA-03 Checklist — Label
+
+**Source files reviewed:** `components/Label/Label.tsx`, `components/Label/Label.module.css`
+**Spec:** `ATLAS-SPEC/Label.md`
+
+- [x] Both variants declared (default, inline) ✅
+- [x] All 3 sizes — sm (`--atlas-font-size-sm`), md (`--atlas-text-body-sm`), lg (`--atlas-text-body`) ✅
+- [x] All states — default · disabled · error (invalid) ✅
+- [x] Token audit — no hex literals, no raw pixel numbers ✅
+- [ ] `line-height` must reference a token → **BUG-009 (P3) — FIXED**
+- [x] Color — default: `--atlas-foreground`; disabled: `--atlas-foreground-disabled`; error: `--atlas-danger` ✅
+- [x] Required marker color — `--atlas-danger`; overridden to `--atlas-foreground-disabled` when `[data-disabled]` ✅
+- [x] Optional hint color — `--atlas-foreground-muted`; overridden to `--atlas-foreground-disabled` when `[data-disabled]` ✅
+- [x] Error state does NOT shift optional hint colour (spec note honoured) ✅
+- [x] Font weight — `--atlas-font-weight-medium` ✅
+- [x] Margin-block-end — `--atlas-spacing-1_5` (6px) on default; cleared to 0 on inline ✅
+- [x] `required` and `optional` mutually exclusive — `required` wins ✅
+- [x] Required and optional markers both carry `aria-hidden="true"` (decorative) ✅
+- [x] `htmlFor` wiring — forwarded via spread `{...rest}` on `<label>` ✅
+- [x] `data-disabled` / `data-invalid` data attributes drive state CSS (no primitive class toggling) ✅
+- [x] `display: inline-flex; align-items: baseline` — markers align with label text baseline ✅
+- [x] No background, no border, no radius on label (per spec) ✅
+- [x] Logical properties — `margin-block-end` (not `margin-bottom`) ✅
+
+**Exit condition:** 1 P3 bug found and fixed. All other checklist items pass.
 
 ---
 
@@ -237,8 +369,8 @@ if (
 | Session | Status | Date | Notes |
 |---|---|---|---|
 | QA-01 — Token Audit | ✅ Complete | 2026-05-09 | 3 bugs found, all fixed |
-| QA-02 — Button | 🟡 Bugs Open | 2026-05-09 | 3 bugs open (BUG-004 P2, BUG-005 P2, BUG-006 P3) |
-| QA-03 — Input + Label | ⬜ Pending | — | — |
+| QA-02 — Button | ✅ Complete | 2026-05-09 | 3 bugs found + fixed (BUG-004–006) |
+| QA-03 — Input + Label | ✅ Complete | 2026-05-09 | 3 bugs found + fixed (BUG-007–009) |
 | QA-04 — Textarea + Checkbox | ⬜ Pending | — | — |
 | QA-05 — Switch + Badge | ⬜ Pending | — | — |
 | QA-06 — Card | ⬜ Pending | — | — |

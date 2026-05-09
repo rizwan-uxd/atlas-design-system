@@ -35,9 +35,18 @@
   color: var(--atlas-foreground-muted);
 }
 
-/* Hover */
-.input:hover:not(:disabled):not([readonly]) {
+/* Hover — BUG-007 fix: exclude invalid inputs so the danger border is not suppressed.
+   The :not([aria-invalid="true"]) guard ensures hover (specificity 0-4-0) cannot
+   override the error rule (specificity 0-2-0) when both conditions are true. */
+.input:hover:not(:disabled):not([readonly]):not([aria-invalid="true"]) {
   border-color: var(--atlas-border-strong);
+}
+
+/* BUG-008 fix: unstyled variant has no hover border per spec (column shows "none").
+   The base hover rule above would bleed through and make the transparent bottom border
+   turn to border-strong. Block it with an explicit no-op override. */
+.unstyled .input:hover:not(:disabled):not([readonly]):not([aria-invalid="true"]) {
+  border-color: transparent;
 }
 
 /* Focus-visible — border shifts to primary; outline ring lives on the wrapper */

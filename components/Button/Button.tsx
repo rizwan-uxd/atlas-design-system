@@ -35,7 +35,20 @@ export type ButtonSize = "sm" | "md" | "lg" | "icon"
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant
+  /**
+   * Size of the button.
+   * - `sm | md | lg` — named heights (32 / 40 / 48 px).
+   * - `icon` — legacy alias for `md` + `iconOnly`. Kept for back-compat.
+   *   Prefer explicit `size="md" iconOnly` for new callers.
+   */
   size?: ButtonSize
+  /**
+   * When true, collapses padding to zero and clamps width = height so the
+   * button becomes a square icon-only control.
+   * Composes with `size` — e.g. `size="lg" iconOnly` gives a 48 × 48 button.
+   * Requires `aria-label` or `aria-labelledby` (dev-mode warning fired if absent).
+   */
+  iconOnly?: boolean
   loading?: boolean
   leadingIcon?: React.ReactNode
   trailingIcon?: React.ReactNode
@@ -60,6 +73,7 @@ function cx(...classes: (string | false | null | undefined)[]): string {
 export function Button({
   variant = "primary",
   size = "md",
+  iconOnly = false,
   loading = false,
   leadingIcon,
   trailingIcon,
@@ -73,6 +87,34 @@ export function Button({
 }: ButtonProps) {
   const Comp = (asChild ? Slot : "button") as React.ElementType
 
+  /*
+   * BUG-005 fix: resolve effective size and icon-only modifier independently.
+   *
+   * `size="icon"` is a legacy alias: it maps to `md` height + square layout.
+   * New callers should use `size="sm|md|lg" iconOnly` for composable control.
+   *
+   * effectiveSize — always one of sm | md | lg; drives the height/padding class.
+   * isIconOnly    — when true, applies the .icon modifier (padding:0, width=height).
+   */
+  const effectiveSize: "sm" | "md" | "lg" = size === "icon" ? "md" : size
+  const isIconOnly = size === "icon" || iconOnly
+
+  /*
+   * BUG-006 fix: fire a dev-mode warning when an icon-only button has no
+   * accessible label. Screen readers have no text to announce otherwise.
+   */
+  if (
+    process.env.NODE_ENV !== "production" &&
+    isIconOnly &&
+    !rest["aria-label"] &&
+    !rest["aria-labelledby"]
+  ) {
+    console.warn(
+      "[Atlas Button] Icon-only buttons (size='icon' or iconOnly=true) require " +
+      "an aria-label or aria-labelledby prop for screen reader accessibility.",
+    )
+  }
+
   /**
    * Size class is omitted for the link variant: links are inline elements
    * with no fixed height. The .link CSS class zeroes padding-inline and
@@ -81,7 +123,8 @@ export function Button({
   const classes = cx(
     styles.btn,
     styles[variant],
-    variant !== "link" ? styles[size] : undefined,
+    variant !== "link" ? styles[effectiveSize] : undefined,
+    isIconOnly ? styles.icon : undefined,
     className,
   )
 

@@ -46,6 +46,8 @@
   opacity: var(--atlas-opacity-disabled);
   cursor: not-allowed;
   pointer-events: none;
+  /* BUG-004 fix: explicit foreground token overrides per-variant colors */
+  color: var(--atlas-foreground-disabled);
 }
 
 /* ── Variants ─────────────────────────────────────────── */
@@ -148,13 +150,18 @@
   font-size: var(--atlas-font-size-base);
 }
 
-/* icon — square, no padding */
+/* icon — layout modifier only; zero padding; width is driven by the size compound rule below.
+   Compose via size + iconOnly: e.g. size="sm" iconOnly / size="icon" (legacy md alias).
+   The height is already set by the .sm / .md / .lg size class. */
 .icon {
-  height: var(--atlas-spacing-10);        /* 40px */
-  width: var(--atlas-spacing-10);         /* 40px */
   padding: 0;
-  font-size: var(--atlas-font-size-sm);
+  flex-shrink: 0;
 }
+
+/* Size-specific widths for icon-only buttons (match each size's height) */
+.sm.icon { width: var(--atlas-spacing-8); }   /* 32px */
+.md.icon { width: var(--atlas-spacing-10); }  /* 40px */
+.lg.icon { width: var(--atlas-spacing-12); }  /* 48px */
 
 /* ── Loading — trailing icon placeholder ─────────────── */
 /* Keeps the trailing icon slot in the layout during loading so button

@@ -13,7 +13,7 @@
   font-family: var(--atlas-font-sans);
   font-weight: var(--atlas-font-weight-medium);
   color: var(--atlas-foreground);
-  line-height: 1.4;
+  line-height: var(--atlas-line-height-normal); /* 1.5 — BUG-009 fix: was magic number 1.4 */
   cursor: pointer;
   /* Gap between label and the control below it */
   margin-block-end: var(--atlas-spacing-1_5);
