@@ -13,8 +13,25 @@ import { Alert } from './components/Alert/Alert'
 import { Button } from './components/Button/Button'
 
 // Phase 2 components
-import { Input }    from './components/Input/Input'
-import { Textarea } from './components/Textarea/Textarea'
+import { Input }     from './components/Input/Input'
+import { Textarea }  from './components/Textarea/Textarea'
+import { Checkbox }  from './components/Checkbox/Checkbox'
+import { Switch }    from './components/Switch/Switch'
+
+// Phase 3 components
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  CardFooter,
+} from './components/Card/Card'
+import { Header } from './components/NavBar/Header'
+import { TabBar } from './components/NavBar/TabBar'
+import { Dialog } from './components/Dialog/Dialog'
+import { Tabs }   from './components/Tabs/Tabs'
+import { Ionicons } from '@expo/vector-icons'
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -35,7 +52,8 @@ function SectionHeading({ children }: { children: string }) {
   )
 }
 
-function Card({ children }: { children: React.ReactNode }) {
+/** Lightweight demo shell used by Phase 0–2 sections before the Atlas Card existed. */
+function DemoShell({ children }: { children: React.ReactNode }) {
   const { colors, tokens, colorScheme } = useTheme()
   return (
     <View style={{
@@ -59,7 +77,7 @@ function PhaseZeroStatus() {
   const reduceMotion = useReducedMotion()
 
   return (
-    <Card>
+    <DemoShell>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
         <Text style={{ color: colors.foreground, fontSize: tokens.fontSize.sm, fontWeight: tokens.fontWeight.semibold }}>
           Phase 0 — Foundation
@@ -70,7 +88,7 @@ function PhaseZeroStatus() {
         <Badge variant="neutral" size="sm">Dark mode: {colorScheme}</Badge>
         <Badge variant="neutral" size="sm">Reduce motion: {String(reduceMotion)}</Badge>
       </View>
-    </Card>
+    </DemoShell>
   )
 }
 
@@ -78,7 +96,7 @@ function PhaseZeroStatus() {
 
 function BadgeDemo() {
   return (
-    <Card>
+    <DemoShell>
       {/* Variants */}
       <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
         <Badge variant="neutral">Neutral</Badge>
@@ -107,7 +125,7 @@ function BadgeDemo() {
 
       {/* Long label overflow */}
       <Badge variant="neutral">This is a very long badge label to test overflow</Badge>
-    </Card>
+    </DemoShell>
   )
 }
 
@@ -115,7 +133,7 @@ function BadgeDemo() {
 
 function LabelDemo() {
   return (
-    <Card>
+    <DemoShell>
       {/* Sizes */}
       <View style={{ gap: 4 }}>
         <Label size="sm">Small label</Label>
@@ -132,7 +150,7 @@ function LabelDemo() {
       {/* Disabled */}
       <Label disabled>Disabled label (50% opacity)</Label>
       <Label disabled required>Disabled + required</Label>
-    </Card>
+    </DemoShell>
   )
 }
 
@@ -142,7 +160,7 @@ function AlertDemo() {
   const [dismissed, setDismissed] = useState<Record<string, boolean>>({})
 
   return (
-    <Card>
+    <DemoShell>
       {!dismissed['info'] && (
         <Alert
           variant="info"
@@ -185,7 +203,7 @@ function AlertDemo() {
           Reset dismissed alerts
         </Button>
       )}
-    </Card>
+    </DemoShell>
   )
 }
 
@@ -200,7 +218,7 @@ function ButtonDemo() {
   }
 
   return (
-    <Card>
+    <DemoShell>
       {/* Variants */}
       <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
         <Button variant="primary"   size="sm">Primary</Button>
@@ -231,7 +249,7 @@ function ButtonDemo() {
       >
         {loading ? 'Saving…' : 'Tap to load (2s)'}
       </Button>
-    </Card>
+    </DemoShell>
   )
 }
 
@@ -243,7 +261,7 @@ function InputDemo() {
   const [password, setPassword] = useState('')
 
   return (
-    <Card>
+    <DemoShell>
       {/* Variants — md size, default state */}
       <Input
         label="Default variant"
@@ -311,7 +329,121 @@ function InputDemo() {
         onChangeText={setPassword}
         helperText="secureTextEntry — system eye toggle on iOS"
       />
-    </Card>
+    </DemoShell>
+  )
+}
+
+// ─── M8 · Switch demo ────────────────────────────────────────────────────────
+
+function SwitchDemo() {
+  const { tokens } = useTheme()
+  const [notifications, setNotifications] = useState(true)
+  const [darkMode,      setDarkMode]      = useState(false)
+  const [autoSave,      setAutoSave]      = useState(true)
+
+  return (
+    <DemoShell>
+      {/* Off / on static */}
+      <Switch label="Off (default)" value={false} />
+      <Switch label="On" value={true} />
+
+      {/* Sizes */}
+      <Switch size="sm" label="Small (sm)" value={true} />
+      <Switch size="md" label="Medium (md) — default" value={true} />
+      <Switch size="lg" label="Large (lg)" value={true} />
+
+      {/* Controlled — interactive */}
+      <Switch
+        label="Enable notifications"
+        value={notifications}
+        onValueChange={setNotifications}
+      />
+      <Switch
+        label="Dark mode"
+        value={darkMode}
+        onValueChange={setDarkMode}
+      />
+      <Switch
+        label="Auto-save drafts"
+        value={autoSave}
+        onValueChange={setAutoSave}
+      />
+
+      {/* Disabled states */}
+      <Switch label="Disabled off" disabled value={false} />
+      <Switch label="Disabled on"  disabled value={true} />
+
+      {/* Track-only (no label) */}
+      <View style={{ flexDirection: 'row', gap: tokens.spacing[4], alignItems: 'center' }}>
+        <Switch accessibilityLabel="Option A" value={false} />
+        <Switch accessibilityLabel="Option B" value={true} />
+        <Switch accessibilityLabel="Option C" size="lg" value={true} />
+      </View>
+    </DemoShell>
+  )
+}
+
+// ─── M7 · Checkbox demo ──────────────────────────────────────────────────────
+
+function CheckboxDemo() {
+  const [agreed, setAgreed]           = useState(false)
+  const [newsletter, setNewsletter]   = useState(true)
+  const [allSelected, setAllSelected] = useState<boolean | 'indeterminate'>('indeterminate')
+
+  // Cycle: unchecked → checked → indeterminate → unchecked
+  function cycleGroup() {
+    setAllSelected(prev =>
+      prev === false ? true : prev === true ? 'indeterminate' : false,
+    )
+  }
+
+  return (
+    <DemoShell>
+      {/* Unchecked / checked / indeterminate states */}
+      <Checkbox
+        label="Unchecked (default)"
+        checked={false}
+      />
+      <Checkbox
+        label="Checked"
+        checked={true}
+      />
+      <Checkbox
+        label="Indeterminate — tap to cycle states"
+        checked={allSelected === true}
+        indeterminate={allSelected === 'indeterminate'}
+        onValueChange={cycleGroup}
+      />
+
+      {/* Sizes */}
+      <Checkbox size="sm" label="Small (sm)" checked={true} />
+      <Checkbox size="md" label="Medium (md) — default" checked={true} />
+      <Checkbox size="lg" label="Large (lg)" checked={true} />
+
+      {/* Controlled — interactive */}
+      <Checkbox
+        label="I agree to the Terms of Service"
+        checked={agreed}
+        onValueChange={setAgreed}
+      />
+      <Checkbox
+        label="Subscribe to product updates"
+        checked={newsletter}
+        onValueChange={setNewsletter}
+      />
+
+      {/* Disabled states */}
+      <Checkbox label="Disabled unchecked" disabled />
+      <Checkbox label="Disabled checked"   disabled checked />
+      <Checkbox label="Disabled indeterminate" disabled indeterminate />
+
+      {/* No label — box only (caller provides accessibilityLabel via prop) */}
+      <View style={{ flexDirection: 'row', gap: 16 }}>
+        <Checkbox accessibilityLabel="Option A" />
+        <Checkbox accessibilityLabel="Option B" checked />
+        <Checkbox accessibilityLabel="Option C" indeterminate />
+      </View>
+    </DemoShell>
   )
 }
 
@@ -324,7 +456,7 @@ function TextareaDemo() {
   const [autoText, setAutoText]   = useState('')
 
   return (
-    <Card>
+    <DemoShell>
       {/* Default variant — fixed 3-row height */}
       <Textarea
         label="Default variant"
@@ -388,7 +520,580 @@ function TextareaDemo() {
         maxRows={6}
         helperText="autoGrow + maxRows=6"
       />
-    </Card>
+    </DemoShell>
+  )
+}
+
+// ─── M9 · Card demo ───────────────────────────────────────────────────────────
+
+function CardDemo() {
+  const { colors, tokens } = useTheme()
+  const [tapped, setTapped] = useState(false)
+
+  return (
+    <View style={{ gap: tokens.spacing[4] }}>
+
+      {/* ── Variant: elevated (default) ───────────────────────────────────── */}
+      <Card variant="elevated" padding="md">
+        <CardHeader>
+          <CardTitle>Elevated card</CardTitle>
+          <CardDescription>Cross-platform shadow via shadowHelper — iOS + Android.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Text style={{ color: colors.foregroundMuted, fontSize: tokens.fontSize.sm }}>
+            Any content goes here — text, images, form fields, etc.
+          </Text>
+        </CardContent>
+        <CardFooter justify="end">
+          <Badge variant="neutral" size="sm">variant=elevated</Badge>
+        </CardFooter>
+      </Card>
+
+      {/* ── Variant: outlined ─────────────────────────────────────────────── */}
+      <Card variant="outlined" padding="md">
+        <CardHeader>
+          <CardTitle>Outlined card</CardTitle>
+          <CardDescription>1 pt border in semantic border colour. No shadow.</CardDescription>
+        </CardHeader>
+        <CardFooter>
+          <Badge variant="neutral" size="sm">variant=outlined</Badge>
+        </CardFooter>
+      </Card>
+
+      {/* ── Variant: filled ───────────────────────────────────────────────── */}
+      <Card variant="filled" padding="md">
+        <CardHeader>
+          <CardTitle>Filled card</CardTitle>
+          <CardDescription>backgroundSubtle tinted surface — no border, no shadow.</CardDescription>
+        </CardHeader>
+        <CardFooter>
+          <Badge variant="neutral" size="sm">variant=filled</Badge>
+        </CardFooter>
+      </Card>
+
+      {/* ── Padding variants ──────────────────────────────────────────────── */}
+      <Card variant="outlined" padding="none">
+        <View style={{ padding: tokens.spacing[2] }}>
+          <Text style={{ color: colors.foreground, fontSize: tokens.fontSize.sm }}>padding=none (0 pt)</Text>
+        </View>
+      </Card>
+      <Card variant="outlined" padding="sm">
+        <CardTitle>padding=sm (12 pt)</CardTitle>
+      </Card>
+      <Card variant="outlined" padding="lg">
+        <CardTitle>padding=lg (24 pt)</CardTitle>
+        <CardDescription>Extra breathing room for content-heavy surfaces.</CardDescription>
+      </Card>
+
+      {/* ── CardHeader with leading + action slots ────────────────────────── */}
+      <Card variant="elevated" padding="md">
+        <CardHeader
+          leading={
+            <View style={{
+              width: 40, height: 40,
+              borderRadius: tokens.radius.md,
+              backgroundColor: colors.primarySubtle,
+              alignItems: 'center', justifyContent: 'center',
+            }}>
+              <Text style={{ fontSize: 20 }}>🧩</Text>
+            </View>
+          }
+          action={
+            <Badge variant="brand" size="sm">New</Badge>
+          }
+        >
+          <CardTitle>With leading + action</CardTitle>
+          <CardDescription>Icon in the leading slot, badge in the action slot.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Text style={{ color: colors.foregroundMuted, fontSize: tokens.fontSize.sm }}>
+            CardHeader rows flow: leading → main (title + description) → action.
+          </Text>
+        </CardContent>
+      </Card>
+
+      {/* ── Tappable card ─────────────────────────────────────────────────── */}
+      <Card
+        variant="elevated"
+        padding="md"
+        onPress={() => setTapped(t => !t)}
+        accessibilityLabel="Tappable card — tap to toggle"
+      >
+        <CardHeader>
+          <CardTitle>{tapped ? '✅ Tapped!' : 'Tappable card'}</CardTitle>
+          <CardDescription>Pass onPress to make the entire card interactive. Press feedback via opacity.</CardDescription>
+        </CardHeader>
+        <CardFooter>
+          <Badge variant={tapped ? 'success' : 'neutral'} size="sm">
+            {tapped ? 'pressed = true' : 'tap me'}
+          </Badge>
+        </CardFooter>
+      </Card>
+
+      {/* ── Disabled tappable card ────────────────────────────────────────── */}
+      <Card
+        variant="elevated"
+        padding="md"
+        onPress={() => {}}
+        disabled
+        accessibilityLabel="Disabled card"
+      >
+        <CardHeader>
+          <CardTitle>Disabled card</CardTitle>
+          <CardDescription>disabled=true — 50% opacity, press blocked.</CardDescription>
+        </CardHeader>
+      </Card>
+
+      {/* ── Footer justify variants ───────────────────────────────────────── */}
+      <Card variant="outlined" padding="md">
+        <CardTitle>Footer justify</CardTitle>
+        <CardFooter justify="start">
+          <Badge variant="brand"   size="sm">Start</Badge>
+          <Badge variant="neutral" size="sm">(default)</Badge>
+        </CardFooter>
+        <CardFooter justify="between">
+          <Badge variant="success" size="sm">Between</Badge>
+          <Badge variant="neutral" size="sm">→</Badge>
+        </CardFooter>
+        <CardFooter justify="end">
+          <Badge variant="info"    size="sm">End</Badge>
+        </CardFooter>
+      </Card>
+
+    </View>
+  )
+}
+
+// ─── M10 · NavBar demo ────────────────────────────────────────────────────────
+
+function NavBarDemo() {
+  const { colors, tokens } = useTheme()
+  const [activeTab, setActiveTab] = useState('home')
+
+  const tabs = [
+    {
+      key:     'home',
+      label:   'Home',
+      icon:    ({ color, size }: { color: string; size: number }) =>
+                 <Ionicons name="home" color={color} size={size} />,
+      active:  activeTab === 'home',
+      onPress: () => setActiveTab('home'),
+    },
+    {
+      key:     'search',
+      label:   'Search',
+      icon:    ({ color, size }: { color: string; size: number }) =>
+                 <Ionicons name="search" color={color} size={size} />,
+      active:  activeTab === 'search',
+      onPress: () => setActiveTab('search'),
+    },
+    {
+      key:     'notifications',
+      label:   'Alerts',
+      icon:    ({ color, size }: { color: string; size: number }) =>
+                 <Ionicons name="notifications" color={color} size={size} />,
+      active:  activeTab === 'notifications',
+      onPress: () => setActiveTab('notifications'),
+      badge:   3,
+    },
+    {
+      key:     'profile',
+      label:   'Profile',
+      icon:    ({ color, size }: { color: string; size: number }) =>
+                 <Ionicons name="person" color={color} size={size} />,
+      active:  activeTab === 'profile',
+      onPress: () => setActiveTab('profile'),
+    },
+  ]
+
+  return (
+    <View style={{ gap: tokens.spacing[4] }}>
+
+      {/* ── Header: default ───────────────────────────────────────────────── */}
+      <View>
+        <View style={{ marginBottom: tokens.spacing[2] }}><Badge variant="neutral" size="sm">
+          variant=default
+        </Badge></View>
+        <View style={{ borderRadius: tokens.radius.lg, overflow: 'hidden' }}>
+          <Header
+            title="Settings"
+            leftAction={
+              <Ionicons name="arrow-back" size={24} color={colors.foreground} />
+            }
+            rightAction={
+              <Ionicons name="ellipsis-horizontal" size={24} color={colors.foreground} />
+            }
+          />
+        </View>
+      </View>
+
+      {/* ── Header: elevated ──────────────────────────────────────────────── */}
+      <View>
+        <View style={{ marginBottom: tokens.spacing[2] }}><Badge variant="neutral" size="sm">
+          variant=elevated
+        </Badge></View>
+        <Header
+          variant="elevated"
+          title="Home"
+          leftAction={
+            <Ionicons name="menu" size={24} color={colors.foreground} />
+          }
+          rightAction={
+            <View style={{
+              width: 32, height: 32,
+              borderRadius: tokens.radius.full,
+              backgroundColor: colors.primarySubtle,
+              alignItems: 'center', justifyContent: 'center',
+            }}>
+              <Text style={{ fontSize: 14 }}>R</Text>
+            </View>
+          }
+        />
+      </View>
+
+      {/* ── Header: transparent (shown over a coloured backdrop) ──────────── */}
+      <View>
+        <View style={{ marginBottom: tokens.spacing[2] }}><Badge variant="neutral" size="sm">
+          variant=transparent
+        </Badge></View>
+        <View style={{ borderRadius: tokens.radius.lg, overflow: 'hidden' }}>
+          {/* Hero backdrop to show the transparent effect */}
+          <View style={{
+            height: 120,
+            backgroundColor: colors.primary,
+            justifyContent: 'flex-end',
+          }}>
+            <Header
+              variant="transparent"
+              title="Profile"
+              leftAction={
+                <Ionicons name="arrow-back" size={24} color="#ffffff" />
+              }
+              rightAction={
+                <Ionicons name="share-outline" size={24} color="#ffffff" />
+              }
+              style={{ paddingTop: 0 }}  // demo: no real safe-area offset needed
+            />
+          </View>
+        </View>
+      </View>
+
+      {/* ── Header: title only (no actions) ──────────────────────────────── */}
+      <View>
+        <View style={{ marginBottom: tokens.spacing[2] }}><Badge variant="neutral" size="sm">
+          title only
+        </Badge></View>
+        <View style={{ borderRadius: tokens.radius.lg, overflow: 'hidden' }}>
+          <Header title="Notifications" />
+        </View>
+      </View>
+
+      {/* ── TabBar: default ───────────────────────────────────────────────── */}
+      <View>
+        <View style={{ marginBottom: tokens.spacing[2] }}><Badge variant="neutral" size="sm">
+          TabBar variant=default
+        </Badge></View>
+        <View style={{ borderRadius: tokens.radius.lg, overflow: 'hidden' }}>
+          <TabBar tabs={tabs} variant="default" />
+        </View>
+        <Text style={{
+          marginTop:  tokens.spacing[1],
+          fontSize:   tokens.fontSize.xs,
+          color:      colors.foregroundMuted,
+        }}>
+          Active tab: {activeTab} — tap to switch
+        </Text>
+      </View>
+
+      {/* ── TabBar: floating ──────────────────────────────────────────────── */}
+      <View>
+        <View style={{ marginBottom: tokens.spacing[2] }}><Badge variant="neutral" size="sm">
+          TabBar variant=floating
+        </Badge></View>
+        {/* Simulated page background behind the floating pill */}
+        <View style={{
+          backgroundColor: colors.backgroundSubtle,
+          borderRadius:    tokens.radius.lg,
+          paddingVertical: tokens.spacing[3],
+        }}>
+          <TabBar tabs={tabs} variant="floating" />
+        </View>
+      </View>
+
+    </View>
+  )
+}
+
+// ─── M11 · Dialog demo ────────────────────────────────────────────────────────
+
+function DialogDemo() {
+  const { colors, tokens } = useTheme()
+  const [modalOpen,  setModalOpen]  = useState(false)
+  const [sheetOpen,  setSheetOpen]  = useState(false)
+  const [alertOpen,  setAlertOpen]  = useState(false)
+  const [lastAction, setLastAction] = useState<string | null>(null)
+
+  return (
+    <View style={{ gap: tokens.spacing[3] }}>
+
+      {/* Last action feedback */}
+      {lastAction && (
+        <View style={{
+          backgroundColor: colors.successSubtle,
+          borderRadius:    tokens.radius.md,
+          padding:         tokens.spacing[3],
+        }}>
+          <Text style={{ color: colors.success, fontSize: tokens.fontSize.sm }}>
+            ✓ {lastAction}
+          </Text>
+        </View>
+      )}
+
+      {/* ── Trigger buttons ─────────────────────────────────────────────── */}
+      <Button variant="primary" fullWidth onPress={() => { setLastAction(null); setModalOpen(true) }}>
+        Open modal dialog
+      </Button>
+      <Button variant="secondary" fullWidth onPress={() => { setLastAction(null); setSheetOpen(true) }}>
+        Open bottom sheet
+      </Button>
+      <Button variant="danger" fullWidth onPress={() => { setLastAction(null); setAlertOpen(true) }}>
+        Open alert dialog
+      </Button>
+
+      {/* ── Modal variant ───────────────────────────────────────────────── */}
+      <Dialog
+        variant="modal"
+        visible={modalOpen}
+        onDismiss={() => setModalOpen(false)}
+        title="Save changes?"
+        description="Your unsaved changes will be lost if you leave without saving."
+        actions={
+          <>
+            <Button
+              variant="primary"
+              fullWidth
+              onPress={() => { setModalOpen(false); setLastAction('Changes saved') }}
+            >
+              Save
+            </Button>
+            <Button
+              variant="secondary"
+              fullWidth
+              onPress={() => { setModalOpen(false); setLastAction('Dismissed without saving') }}
+            >
+              Discard
+            </Button>
+          </>
+        }
+      />
+
+      {/* ── Sheet variant ───────────────────────────────────────────────── */}
+      <Dialog
+        variant="sheet"
+        visible={sheetOpen}
+        onDismiss={() => setSheetOpen(false)}
+        title="Add photo"
+        description="Choose how you'd like to add a photo to your profile."
+        actions={
+          <>
+            <Button
+              variant="primary"
+              fullWidth
+              onPress={() => { setSheetOpen(false); setLastAction('Camera opened') }}
+            >
+              Take photo
+            </Button>
+            <Button
+              variant="secondary"
+              fullWidth
+              onPress={() => { setSheetOpen(false); setLastAction('Library opened') }}
+            >
+              Choose from library
+            </Button>
+            <Button
+              variant="ghost"
+              fullWidth
+              onPress={() => setSheetOpen(false)}
+            >
+              Cancel
+            </Button>
+          </>
+        }
+      />
+
+      {/* ── Alert variant ───────────────────────────────────────────────── */}
+      <Dialog
+        variant="alert"
+        visible={alertOpen}
+        onDismiss={() => setAlertOpen(false)}
+        title="Delete account?"
+        description="This will permanently delete your account and all associated data. This action cannot be undone."
+        actions={
+          <>
+            <Button
+              variant="danger"
+              fullWidth
+              onPress={() => { setAlertOpen(false); setLastAction('Account deleted') }}
+            >
+              Delete account
+            </Button>
+            <Button
+              variant="secondary"
+              fullWidth
+              onPress={() => setAlertOpen(false)}
+            >
+              Cancel
+            </Button>
+          </>
+        }
+      />
+
+    </View>
+  )
+}
+
+// ─── M12 · Tabs demo ──────────────────────────────────────────────────────────
+
+/** Simple pane content rendered inside each tab. */
+function PaneContent({ label, color }: { label: string; color: string }) {
+  const { colors, tokens } = useTheme()
+  return (
+    <View style={{
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: tokens.spacing[2],
+      padding: tokens.spacing[4],
+    }}>
+      <View style={{
+        width: 48, height: 48,
+        borderRadius: tokens.radius.full,
+        backgroundColor: color,
+        opacity: 0.18,
+      }} />
+      <Text style={{ color: colors.foreground, fontWeight: tokens.fontWeight.semibold }}>
+        {label}
+      </Text>
+      <Text style={{ color: colors.foregroundMuted, fontSize: tokens.fontSize.sm, textAlign: 'center' }}>
+        Swipe left/right or tap a tab to switch panes.
+      </Text>
+    </View>
+  )
+}
+
+function TabsDemo() {
+  const { colors, tokens } = useTheme()
+
+  const basicTabs = [
+    {
+      value: 'overview',
+      label: 'Overview',
+      content: <PaneContent label="Overview" color={colors.primary} />,
+    },
+    {
+      value: 'details',
+      label: 'Details',
+      content: <PaneContent label="Details" color={colors.success} />,
+    },
+    {
+      value: 'history',
+      label: 'History',
+      content: <PaneContent label="History" color={colors.warning} />,
+    },
+  ]
+
+  const scrollableTabs = [
+    'All', 'Design', 'Engineering', 'Product', 'Marketing', 'Sales', 'Support',
+  ].map((label, i) => ({
+    value: label.toLowerCase(),
+    label,
+    content: <PaneContent label={label} color={colors.primary} />,
+  }))
+
+  // Tab with one disabled entry
+  const tabsWithDisabled = [
+    { value: 'active',   label: 'Active',   content: <PaneContent label="Active"   color={colors.primary} /> },
+    { value: 'pending',  label: 'Pending',  content: <PaneContent label="Pending"  color={colors.warning} /> },
+    { value: 'archived', label: 'Archived', disabled: true, content: <PaneContent label="Archived" color={colors.foregroundSubtle} /> },
+  ]
+
+  return (
+    <View style={{ gap: tokens.spacing[5] }}>
+
+      {/* ── Line (default) ────────────────────────────────────────────────── */}
+      <View>
+        <View style={{ alignSelf: 'flex-start', marginBottom: tokens.spacing[2] }}><Badge variant="neutral" size="sm">
+          variant=line (default)
+        </Badge></View>
+        <View style={{ height: 200, borderRadius: tokens.radius.lg, overflow: 'hidden', borderWidth: tokens.borderWidth[1], borderColor: colors.border }}>
+          <Tabs
+            variant="line"
+            tabs={basicTabs}
+            defaultValue="overview"
+          />
+        </View>
+      </View>
+
+      {/* ── Pill ──────────────────────────────────────────────────────────── */}
+      <View>
+        <View style={{ alignSelf: 'flex-start', marginBottom: tokens.spacing[2] }}><Badge variant="neutral" size="sm">
+          variant=pill
+        </Badge></View>
+        <View style={{ height: 200, borderRadius: tokens.radius.lg, overflow: 'hidden', borderWidth: tokens.borderWidth[1], borderColor: colors.border }}>
+          <View style={{ padding: tokens.spacing[2], backgroundColor: colors.backgroundSubtle }}>
+            <Tabs
+              variant="pill"
+              tabs={basicTabs}
+              defaultValue="details"
+            />
+          </View>
+        </View>
+      </View>
+
+      {/* ── Filled ────────────────────────────────────────────────────────── */}
+      <View>
+        <View style={{ alignSelf: 'flex-start', marginBottom: tokens.spacing[2] }}><Badge variant="neutral" size="sm">
+          variant=filled
+        </Badge></View>
+        <View style={{ height: 200, borderRadius: tokens.radius.lg, overflow: 'hidden', borderWidth: tokens.borderWidth[1], borderColor: colors.border }}>
+          <Tabs
+            variant="filled"
+            tabs={basicTabs}
+            defaultValue="history"
+          />
+        </View>
+      </View>
+
+      {/* ── Scrollable strip ──────────────────────────────────────────────── */}
+      <View>
+        <View style={{ alignSelf: 'flex-start', marginBottom: tokens.spacing[2] }}><Badge variant="neutral" size="sm">
+          scrollable=true · 7 tabs · variant=line
+        </Badge></View>
+        <View style={{ height: 180, borderRadius: tokens.radius.lg, overflow: 'hidden', borderWidth: tokens.borderWidth[1], borderColor: colors.border }}>
+          <Tabs
+            variant="line"
+            scrollable
+            tabs={scrollableTabs}
+            defaultValue="all"
+          />
+        </View>
+      </View>
+
+      {/* ── Disabled tab ──────────────────────────────────────────────────── */}
+      <View>
+        <View style={{ alignSelf: 'flex-start', marginBottom: tokens.spacing[2] }}><Badge variant="neutral" size="sm">
+          disabled tab · variant=pill
+        </Badge></View>
+        <View style={{ height: 180, borderRadius: tokens.radius.lg, overflow: 'hidden', borderWidth: tokens.borderWidth[1], borderColor: colors.border }}>
+          <Tabs
+            variant="pill"
+            tabs={tabsWithDisabled}
+            defaultValue="active"
+          />
+        </View>
+      </View>
+
+    </View>
   )
 }
 
@@ -411,7 +1116,7 @@ function DemoScreen() {
             Atlas Mobile
           </Text>
           <Text style={{ color: colors.foregroundMuted, fontSize: tokens.fontSize.sm, marginBottom: tokens.spacing[2] }}>
-            Phase 1 · Primitives ✅ · Phase 2 · Forms (M5–M6 done)
+            Phase 1 ✅ · Phase 2 ✅ · Phase 3 ✅ · Phase 4 ✅ · All 12 components complete
           </Text>
 
           <SectionHeading>Phase 0 · Foundation</SectionHeading>
@@ -432,8 +1137,26 @@ function DemoScreen() {
           <SectionHeading>M5 · Input</SectionHeading>
           <InputDemo />
 
+          <SectionHeading>M8 · Switch</SectionHeading>
+          <SwitchDemo />
+
+          <SectionHeading>M7 · Checkbox</SectionHeading>
+          <CheckboxDemo />
+
           <SectionHeading>M6 · Textarea</SectionHeading>
           <TextareaDemo />
+
+          <SectionHeading>M9 · Card</SectionHeading>
+          <CardDemo />
+
+          <SectionHeading>M10 · NavBar</SectionHeading>
+          <NavBarDemo />
+
+          <SectionHeading>M11 · Dialog</SectionHeading>
+          <DialogDemo />
+
+          <SectionHeading>M12 · Tabs</SectionHeading>
+          <TabsDemo />
 
           <View style={{ height: tokens.spacing[8] }} />
         </View>

@@ -496,12 +496,12 @@ npx expo install react-native-tab-view react-native-pager-view
 | 1 | M4 | Button | ✅ Done |
 | 2 | M5 | Input | ✅ Done |
 | 2 | M6 | Textarea | ✅ Done |
-| 2 | M7 | Checkbox | ⬜ |
-| 2 | M8 | Switch | ⬜ |
-| 3 | M9 | Card | ⬜ |
-| 3 | M10 | NavBar (Header + TabBar) | ⬜ |
-| 4 | M11 | Dialog | ⬜ |
-| 4 | M12 | Tabs | ⬜ |
+| 2 | M7 | Checkbox | ✅ Done |
+| 2 | M8 | Switch | ✅ Done |
+| 3 | M9 | Card | ✅ Done |
+| 3 | M10 | NavBar (Header + TabBar) | ✅ Done |
+| 4 | M11 | Dialog | ✅ Done |
+| 4 | M12 | Tabs | ✅ Done |
 
 ---
 
