@@ -150,6 +150,43 @@ All components must:
 - Use logical CSS properties (RTL-safe)
 - Use token-based motion with reduced-motion support
 
+## QA Reporting Rules (CRITICAL)
+
+Every QA session MUST update `QA-REPORT.md` before the session ends:
+- Append the full bug log for that session (BUG-NNN entries with guard, location, description, fix)
+- Append the session checklist with pass/fail per item
+- Update the Summary table (sessions completed, total bugs filed, open counts)
+- Update the Component Results table row for the audited component
+- Update the Session Progress table row (status + date + notes)
+
+The file to update is always: `QA-REPORT.md` at the project root.
+NEVER create separate per-session files. All QA content lives in `QA-REPORT.md`.
+
+## Git Commit Rules (CRITICAL)
+
+At the end of every completed QA session, commit and push to `origin/main`:
+
+```bash
+git add -A
+git commit -m "qa(<component>): QA-<NN> audit — <N> bugs filed"
+git push origin main
+```
+
+Commit message format: `qa(<component-lowercase>): QA-<NN> audit — <N> bugs filed`
+
+Examples:
+- `qa(button): QA-02 audit — 3 bugs filed`
+- `qa(input+label): QA-03 audit — 2 bugs filed`
+
+If fixes are applied in the same session, include them in the same commit:
+- `qa(button): QA-02 audit + fixes — 3 bugs found, 3 fixed`
+
+Rules:
+- Always `git add -A` (includes QA-REPORT.md + any patched component files)
+- Always push immediately after commit — do not leave local commits un-pushed
+- If `git push` fails (e.g. remote has changes), run `git pull --rebase origin main` then push again
+- Never commit broken code — only commit after verifying the sandbox still runs
+
 ## If Folder Access Fails
 
 If project folder is not accessible:

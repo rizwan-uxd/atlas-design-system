@@ -10,11 +10,11 @@
 
 | Metric | Value |
 |---|---|
-| Sessions completed | 1 of 14 |
-| Total bugs filed | 3 |
+| Sessions completed | 2 of 14 |
+| Total bugs filed | 6 |
 | P1 bugs open | 0 |
-| P2 bugs open | 0 (both fixed in QA-01) |
-| P3 bugs open | 0 (fixed in QA-01) |
+| P2 bugs open | 2 (BUG-004, BUG-005 — open) |
+| P3 bugs open | 1 (BUG-006 — open) |
 | Components spec-complete | 0 of 12 |
 
 ---
@@ -24,7 +24,7 @@
 | Component | Token Audit | Visual QA | Dark Mode | Responsive | Accessibility | Mobile | Notes |
 |---|---|---|---|---|---|---|---|
 | **Token layer** | ✅ Pass | — | — | — | — | — | 3 bugs found + fixed |
-| Button | — | — | — | — | — | — | — |
+| Button | ✅ Pass | ✅ Pass | ✅ Pass | ⚠️ P2 | ⚠️ P3 | — | 3 bugs open (BUG-004–006) |
 | Input | — | — | — | — | — | — | — |
 | Label | — | — | — | — | — | — | — |
 | Textarea | — | — | — | — | — | — | — |
@@ -105,6 +105,119 @@
 
 ---
 
+### QA-02 — Button
+
+---
+
+#### BUG-004 · P2 · OPEN
+
+**Title:** Disabled state does not apply `--atlas-foreground-disabled` color
+
+**Guard:** `state-helper`
+
+**Component:** `Button` → `components/Button/Button.module.css:44–49`
+
+**Description:** The spec foreground table explicitly maps `--atlas-foreground-disabled` as the text color for all variants when `disabled`. The current implementation applies only `opacity: var(--atlas-opacity-disabled)` at the element level, without overriding the `color` property. A disabled primary button renders `--atlas-primary-foreground` (white) at 50% opacity instead of the spec-defined neutral muted gray, deviating from the intended visual token and creating inconsistency across variants.
+
+**Fix required:**
+```css
+.btn:disabled,
+.btn[aria-disabled="true"] {
+  opacity: var(--atlas-opacity-disabled);
+  cursor: not-allowed;
+  pointer-events: none;
+  color: var(--atlas-foreground-disabled); /* add this */
+}
+```
+
+**Files to change:** `components/Button/Button.module.css`
+
+---
+
+#### BUG-005 · P2 · OPEN
+
+**Title:** `icon` size is a fixed 40px square — not composable with `sm` / `lg`
+
+**Guard:** `structure-enforcer`
+
+**Component:** `Button` → `components/Button/Button.module.css:151–157`
+
+**Description:** The spec states icon should "match size", meaning icon-only layout should be available at all three height steps (32px sm, 40px md, 48px lg). The current implementation treats `icon` as a 4th independent size hardcoded to 40px (md dimensions), making sm-icon and lg-icon impossible without breaking the type contract.
+
+**Fix required:** Remove the standalone height/width from `.icon`. Introduce size-specific icon rules that clamp width = height and zero padding:
+```css
+/* .icon becomes a layout modifier only */
+.icon { padding: 0; }
+.sm.icon { width: var(--atlas-spacing-8); }   /* 32px */
+.md.icon { width: var(--atlas-spacing-10); }  /* 40px */
+.lg.icon { width: var(--atlas-spacing-12); }  /* 48px */
+```
+API stays `size="sm" | "md" | "lg" | "icon"` — but `icon` should combine with a size prop or be a boolean `iconOnly` modifier.
+
+**Files to change:** `components/Button/Button.module.css`, `components/Button/Button.tsx`
+
+---
+
+#### BUG-006 · P3 · OPEN
+
+**Title:** No runtime enforcement of `aria-label` when `size="icon"`
+
+**Guard:** `accessibility-lite`
+
+**Component:** `Button` → `components/Button/Button.tsx:60`
+
+**Description:** The spec requires `aria-label` when `size="icon"` (the label slot is empty, so screen readers have nothing to announce). The requirement is noted only in a JSDoc comment — no dev-mode warning fires if a caller omits it, making the a11y regression silent and hard to catch in review.
+
+**Fix required:** Add a dev-mode invariant in the component body:
+```tsx
+if (
+  process.env.NODE_ENV !== "production" &&
+  size === "icon" &&
+  !rest["aria-label"] &&
+  !rest["aria-labelledby"]
+) {
+  console.warn(
+    "[Atlas Button] size='icon' requires an aria-label or aria-labelledby prop for screen reader accessibility."
+  )
+}
+```
+
+**Files to change:** `components/Button/Button.tsx`
+
+---
+
+## QA-02 Checklist — Button
+
+**Source files reviewed:** `components/Button/Button.tsx`, `components/Button/Button.module.css`
+**Spec:** `ATLAS-SPEC/Button.md`
+
+- [x] All 6 variants declared and styled (primary, secondary, outline, ghost, destructive, link) ✅
+- [x] All 4 sizes declared (sm 32px, md 40px, lg 48px, icon) ✅
+- [x] All 6 states covered (default · hover · focus-visible · active · disabled · loading) ✅
+- [x] Token audit — no hex literals, no magic pixel numbers; all values reference `--atlas-*` semantic tokens ✅
+- [x] Background token mappings per variant × state match spec table ✅
+- [x] Foreground token mappings — default states correct ✅
+- [ ] Foreground token mappings — disabled state: missing `--atlas-foreground-disabled` override → **BUG-004**
+- [x] Border: `outline` variant uses `--atlas-border-strong`; all others use `transparent` border ✅
+- [x] Radius: `--atlas-radius-md` on all variants; link resets to `0` ✅
+- [x] Focus ring: `var(--atlas-border-width-2)` outline + `var(--atlas-focus-ring)` + `var(--atlas-spacing-0_5)` offset ✅
+- [x] Motion: `background-color`, `color`, `border-color` transition via `--atlas-duration-fast` + `--atlas-easing-standard` ✅
+- [x] `prefers-reduced-motion` — transitions disabled; spinner frozen + dimmed ✅
+- [x] Logical properties throughout — `padding-inline`, `border-block-start-color`; no `left`/`right` ✅
+- [x] Loading: spinner replaces leading icon slot; label visible; trailing icon space preserved via `visibility: hidden` ✅
+- [x] `aria-busy="true"` set when loading ✅
+- [x] `aria-disabled="true"` set when disabled OR loading ✅
+- [x] `pointer-events: none` on `[aria-disabled="true"]` ✅
+- [x] `onClick` suppressed in JS when disabled or loading (belt-and-suspenders) ✅
+- [x] Radix `Slot` used for `asChild` — correct polymorphic pattern ✅
+- [x] `type="button"` default prevents accidental form submission ✅
+- [ ] `icon` size composable with sm/md/lg → **BUG-005**
+- [ ] Runtime `aria-label` warning for icon-only → **BUG-006**
+
+**Exit condition:** 3 open bugs (BUG-004 P2, BUG-005 P2, BUG-006 P3). Fixes pending approval.
+
+---
+
 ## QA-01 Checklist — Token Audit
 
 - [x] `grep -rn "#[0-9a-fA-F]{3,6}" components/` — **zero results** ✅
@@ -124,7 +237,7 @@
 | Session | Status | Date | Notes |
 |---|---|---|---|
 | QA-01 — Token Audit | ✅ Complete | 2026-05-09 | 3 bugs found, all fixed |
-| QA-02 — Button | ⬜ Pending | — | — |
+| QA-02 — Button | 🟡 Bugs Open | 2026-05-09 | 3 bugs open (BUG-004 P2, BUG-005 P2, BUG-006 P3) |
 | QA-03 — Input + Label | ⬜ Pending | — | — |
 | QA-04 — Textarea + Checkbox | ⬜ Pending | — | — |
 | QA-05 — Switch + Badge | ⬜ Pending | — | — |
