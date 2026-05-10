@@ -2,7 +2,7 @@
 
 > **Version:** 1.0  
 > **Status:** In progress  
-> **Last updated:** 2026-05-10 (QA-07 complete)
+> **Last updated:** 2026-05-10 (QA-08 complete)
 
 ---
 
@@ -10,12 +10,12 @@
 
 | Metric | Value |
 |---|---|
-| Sessions completed | 7 of 14 |
-| Total bugs filed | 38 |
+| Sessions completed | 8 of 14 |
+| Total bugs filed | 49 |
 | P1 bugs open | 0 |
-| P2 bugs open | 11 |
-| P3 bugs open | 11 |
-| Components spec-complete | 0 of 12 (code audits: Button ✅ · Input ✅ · Label ✅ · Textarea ✅ · Checkbox ✅ · Switch ✅ · Badge ✅ · Card ✅ · Alert ✅ · Dialog ✅; visual + dark-mode passes pending) |
+| P2 bugs open | 19 |
+| P3 bugs open | 14 |
+| Components spec-complete | 0 of 12 (code audits: Button ✅ · Input ✅ · Label ✅ · Textarea ✅ · Checkbox ✅ · Switch ✅ · Badge ✅ · Card ✅ · Alert ✅ · Dialog ✅ · Tabs ✅ · NavBar ✅; visual + dark-mode passes pending) |
 
 ---
 
@@ -34,8 +34,8 @@
 | Badge | ✅ Pass | — | — | — | — | — | 5 bugs (BUG-021–025) found, fixes pending |
 | Alert | ✅ Pass | — | — | — | — | — | 3 bugs (BUG-031–033) found; fixes pending |
 | Dialog | ✅ Pass | — | — | — | — | — | 5 bugs (BUG-034–038) found; fixes pending |
-| Tabs | — | — | — | — | — | — | — |
-| NavBar | — | — | — | — | — | — | — |
+| Tabs | ✅ Pass | — | — | — | — | — | 4 bugs (BUG-039–042) found; fixes pending |
+| NavBar | ✅ Pass | — | — | — | — | — | 7 bugs (BUG-043–049) found; fixes pending |
 
 ---
 
@@ -1313,6 +1313,315 @@ Note: `translate(-50%, -50%)` remains physical. CSS logical transforms (`transla
 
 ---
 
+### QA-08 — Tabs + NavBar
+
+---
+
+#### BUG-039 · P2 · OPEN
+
+**Title:** No sliding indicator animation — active indicator jumps instead of glides between triggers
+
+**Guard:** `state-helper`
+
+**Component:** `Tabs` → `components/Tabs/Tabs.module.css`
+
+**Description:** The spec states "Active indicator slides between positions using `transform: translateX` over `--atlas-duration-base` `--atlas-easing-emphasized`." The implementation applies only `border-block-end-color` / `background-color` transitions (`--atlas-duration-fast`) on each trigger in place. When switching tabs the active indicator (underline or pill background) simply appears on the new trigger and disappears from the old one — there is no sliding or translate animation connecting the two positions. The spec requires a positional glide, typically implemented with an absolutely-positioned indicator element that `transform: translateX`s to follow the active trigger.
+
+**Fix required:** Add an absolutely-positioned `.indicator` element inside `.list` for the `underline` variant that tracks the active trigger's offset via JavaScript (`getBoundingClientRect` or a `data-` attribute). For `pills` and `enclosed`, the fill background can be simulated with the same technique or via CSS `@starting-style` (where supported). At minimum, the underline indicator slide must be implemented.
+
+**Files to change:** `components/Tabs/Tabs.tsx`, `components/Tabs/Tabs.module.css`
+
+---
+
+#### BUG-040 · P2 · OPEN
+
+**Title:** Compound sub-component API (`Tabs.List`, `Tabs.Trigger`, `Tabs.Panel`) not exposed; `forceMount` and `scrollable` unsupported
+
+**Guard:** `structure-enforcer`
+
+**Component:** `Tabs` → `components/Tabs/Tabs.tsx`
+
+**Description:** The spec defines a compound sub-component API: `Tabs.List` (with `scrollable?`), `Tabs.Trigger` (with `value`, `leadingIcon?`, `badge?`, `disabled?`), and `Tabs.Panel` (with `value`, `forceMount?`). The implementation exposes only a flat `items` array prop — callers cannot compose panels with custom layouts, conditionally render individual triggers, or opt out of horizontal scrolling. The most critical missing capability is `forceMount` on panels: without it, panel content is always unmounted when inactive, preventing server-side rendering of off-screen content and breaking use cases like lazy-loaded routes that need all panels in the DOM.
+
+**Fix required:** Export `Tabs.List`, `Tabs.Trigger`, and `Tabs.Panel` as named compound sub-components backed by the corresponding `RadixTabs.*` primitives. The existing `items` array API can be kept as a convenience wrapper alongside the compound API.
+
+**Files to change:** `components/Tabs/Tabs.tsx`
+
+---
+
+#### BUG-041 · P3 · OPEN
+
+**Title:** `aria-label="Tabs"` hardcoded on `RadixTabs.List` — generic accessible name
+
+**Guard:** `accessibility-lite`
+
+**Component:** `Tabs` → `components/Tabs/Tabs.tsx` line 117
+
+**Description:** `<RadixTabs.List aria-label="Tabs">` gives every tabs instance an identical, generic accessible name. When a page contains multiple tab groups (e.g. "Account settings" tabs and "Billing history" tabs), screen readers announce both as "Tabs tablist" with no way to distinguish them. The accessible name should describe the purpose of the specific tab group and be provided by the caller. The `aria-label` should be an optional prop on `Tabs` or `Tabs.List`, defaulting to nothing (the native `tablist` role is self-describing when trigger labels are meaningful).
+
+**Fix required:**
+- Add `aria-label?: string` to `TabsProps`
+- Pass it through: `<RadixTabs.List aria-label={ariaLabel}>`
+- Remove the hardcoded `"Tabs"` default
+
+**Files to change:** `components/Tabs/Tabs.tsx`
+
+---
+
+#### BUG-042 · P3 · OPEN
+
+**Title:** No `:active` / pressed state on tab triggers
+
+**Guard:** `state-helper`
+
+**Component:** `Tabs` → `components/Tabs/Tabs.module.css`
+
+**Description:** The spec state matrix lists `pressed` as a distinct state for each trigger across all variants. The CSS has hover rules for all three variants but no `:active` pseudo-class rules on `.trigger`. On web, the pressed moment (mousedown → mouseup) is visually identical to hover. This is the same omission as BUG-016 (Checkbox), BUG-020 (Switch). P3 because hover and active can share the same token assignments.
+
+**Fix required:** Add `:active` rules per variant mirroring hover assignments:
+```css
+/* underline */
+.underline .trigger:active:not([data-disabled]) { color: var(--atlas-foreground); }
+/* pills */
+.pills .trigger:active:not([data-disabled]) { background-color: var(--atlas-background-subtle); color: var(--atlas-foreground); }
+/* enclosed */
+.enclosed .trigger:active:not([data-disabled]) { background-color: var(--atlas-background-subtle); color: var(--atlas-foreground); }
+```
+
+**Files to change:** `components/Tabs/Tabs.module.css`
+
+---
+
+#### BUG-043 · P2 · OPEN
+
+**Title:** Hamburger breakpoint is 1024px — spec defines collapse at `< md` (768px), leaving tablet without nav links
+
+**Guard:** `structure-enforcer`
+
+**Component:** `NavBar` → `components/NavBar/NavBar.module.css` lines 106, 188
+
+**Description:** The spec responsive table states: "Tablet Web: Same as desktop until `< md` (768px)." This means navigation links should remain visible at tablet widths (768px–1023px) and only collapse into a hamburger below 768px. The implementation uses `@media (min-width: 1024px)` for both the links show and hamburger hide rules, so tablets (768px–1023px) see the hamburger and lose access to the nav link row entirely — a significant UX regression on tablet. This was deferred from QA-01 (NOTE on BUG-003) and is now formally filed.
+
+**Fix required:** Change both media query thresholds from `1024px` to `768px`. Standard CSS cannot use `var()` inside `@media`, so the literal `768px` must be used. Alternatively, migrate the responsive logic to Tailwind `md:` utility classes (which resolve the `--atlas-breakpoint-md: 768px` token at build time).
+
+**Files to change:** `components/NavBar/NavBar.module.css`
+
+---
+
+#### BUG-044 · P2 · OPEN
+
+**Title:** `aria-controls="mobile-nav-drawer"` points to a non-existent DOM id — `DialogContent` drops the `id` prop
+
+**Guard:** `accessibility-lite`
+
+**Component:** `NavBar` → `components/NavBar/NavBar.tsx` line 122, `Dialog` → `components/Dialog/Dialog.tsx`
+
+**Description:** The hamburger button declares `aria-controls="mobile-nav-drawer"`. The `<DialogContent id="mobile-nav-drawer">` prop is silently discarded because `DialogContentProps` has no `id` field and it is not spread onto `RadixDialog.Content`. The resulting DOM has no element with that id, so `aria-controls` always points to nothing. Screen readers that support `aria-controls` (e.g. JAWS) will fail to navigate from the hamburger to the opened drawer.
+
+**Fix required (two parts):**
+1. Add `id?: string` to `DialogContentProps` and forward it: `<RadixDialog.Content id={id} ...>`
+2. Alternatively, remove `aria-controls` from the hamburger and rely on `aria-expanded` alone (sufficient for most AT without explicit controls wiring).
+
+**Files to change:** `components/Dialog/Dialog.tsx`, `components/NavBar/NavBar.tsx`
+
+---
+
+#### BUG-045 · P2 · OPEN
+
+**Title:** `transparent` NavBar variant has no scroll state — background stays transparent indefinitely
+
+**Guard:** `state-helper`
+
+**Component:** `NavBar` → `components/NavBar/NavBar.tsx`, `components/NavBar/NavBar.module.css`
+
+**Description:** The spec token table defines a `transparent (scrolled)` state: `--atlas-background` background + `--atlas-border-width-1` solid `--atlas-border` border-block-end + `--atlas-shadow-sm`. The implementation renders the `transparent` variant with a static transparent background and no scroll event listener. When the page is scrolled, the navbar remains transparent over content, losing the visual separation that prevents text/images from bleeding into the navigation area.
+
+**Fix required:** Add a `useEffect` with a `scroll` event listener in `NavBar`. When `variant === "transparent"` and `window.scrollY > 0`, apply a `.scrolled` CSS class. The `.transparent.scrolled` rule should override to the opaque surface (same as `default` + `--atlas-shadow-sm`).
+
+**Files to change:** `components/NavBar/NavBar.tsx`, `components/NavBar/NavBar.module.css`
+
+---
+
+#### BUG-046 · P2 · OPEN
+
+**Title:** `hideOnScroll` prop missing from `NavBarProps`
+
+**Guard:** `structure-enforcer`
+
+**Component:** `NavBar` → `components/NavBar/NavBar.tsx`
+
+**Description:** The spec API defines `hideOnScroll?: boolean` — a prop that hides the navbar on downward scroll and reveals it on upward scroll (common mobile UX pattern). `NavBarProps` has no such prop and no scroll-direction logic exists in the component. Callers on mobile/tablet have no mechanism to opt into this behaviour.
+
+**Fix required:** Add `hideOnScroll?: boolean` to `NavBarProps`. When `true`, attach a scroll event listener in `useEffect` that tracks direction; apply a `.hidden` CSS class (`transform: translateY(-100%)`) on downscroll and remove it on upscroll. Transition via `--atlas-duration-base` `--atlas-easing-emphasized`; instant under `prefers-reduced-motion`.
+
+**Files to change:** `components/NavBar/NavBar.tsx`, `components/NavBar/NavBar.module.css`
+
+---
+
+#### BUG-047 · P2 · OPEN
+
+**Title:** Disabled nav link has no CSS styling — `[aria-disabled="true"]` on `.link` is unstyled
+
+**Guard:** `state-helper`
+
+**Component:** `NavBar` → `components/NavBar/NavBar.module.css`
+
+**Description:** The spec defines disabled link color as `--atlas-foreground-disabled`. The implementation sets `aria-disabled={link.disabled || undefined}` and `tabIndex={link.disabled ? -1 : undefined}` in JSX, but `NavBar.module.css` has no CSS rule for `.link[aria-disabled="true"]`. A disabled nav link renders identically to the default state (muted foreground, pointer cursor) — there is no visual signal that the link is inactive. The same gap exists for `.drawerLink[aria-disabled="true"]`.
+
+**Fix required:**
+```css
+.link[aria-disabled="true"] {
+  color: var(--atlas-foreground-disabled);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.drawerLink[aria-disabled="true"] {
+  color: var(--atlas-foreground-disabled);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+```
+
+**Files to change:** `components/NavBar/NavBar.module.css`
+
+---
+
+#### BUG-048 · P2 · OPEN
+
+**Title:** `NavLink` interface missing `leadingIcon` and `badge` props defined in spec API
+
+**Guard:** `structure-enforcer`
+
+**Component:** `NavBar` → `components/NavBar/NavBar.tsx`
+
+**Description:** The spec API defines `NavBar.Link — { href, active?, leadingIcon?, badge? }`. The `NavLink` interface and JSX render only `{ label, href?, active?, disabled? }`. There is no slot for a leading icon (common for icon + label nav items) or a badge (e.g. notification counts on a "Messages" link). Callers have no mechanism to add these affordances without forking the component.
+
+**Fix required:**
+- Add `leadingIcon?: React.ReactNode` and `badge?: React.ReactNode` to `NavLink`
+- Render them in both desktop `.link` and drawer `.drawerLink` slots:
+```tsx
+{link.leadingIcon && <span aria-hidden="true">{link.leadingIcon}</span>}
+{link.label}
+{link.badge && <span aria-hidden="true">{link.badge}</span>}
+```
+
+**Files to change:** `components/NavBar/NavBar.tsx`
+
+---
+
+#### BUG-049 · P3 · OPEN
+
+**Title:** `.navbar` uses physical `top: 0` for sticky positioning instead of logical `inset-block-start`
+
+**Guard:** `token-enforcer`
+
+**Component:** `NavBar` → `components/NavBar/NavBar.module.css` line 18
+
+**Description:** `.navbar { top: 0; }` uses the physical `top` property. The Atlas convention requires logical properties throughout. The logical equivalent is `inset-block-start: 0`, which correctly handles both horizontal and vertical writing modes. While `top: 0` is visually equivalent in the common LTR horizontal writing mode, the physical property deviates from the convention established across every other component.
+
+**Fix required:**
+```css
+inset-block-start: 0; /* was: top: 0 */
+```
+
+**Files to change:** `components/NavBar/NavBar.module.css`
+
+---
+
+## QA-08 Checklist — Tabs
+
+**Source files reviewed:** `components/Tabs/Tabs.tsx`, `components/Tabs/Tabs.module.css`
+**Spec:** `ATLAS-SPEC/Tabs.md`
+
+- [x] All 3 variants declared (underline, pills, enclosed) ✅
+- [x] All 3 sizes declared (sm 32px, md 40px, lg 48px) via `--_h`, `--_px`, `--_fs` CSS custom properties ✅
+- [x] `sm` type: `--atlas-text-body-sm` (14px); `md`/`lg` type: `--atlas-text-body` (16px) ✅
+- [x] Underline default trigger: `--atlas-foreground-muted` ✅
+- [x] Underline hover trigger: `--atlas-foreground` ✅
+- [x] Underline active: `--atlas-foreground` + 2px `--atlas-primary` border-block-end ✅
+- [x] Underline list hairline: `--atlas-border-width-1` solid `--atlas-border` on `border-block-end` ✅
+- [x] Pills default: transparent bg, `--atlas-foreground-muted` ✅
+- [x] Pills hover: `--atlas-background-subtle`, `--atlas-foreground` ✅
+- [x] Pills active: `--atlas-primary` bg, `--atlas-primary-foreground` ✅
+- [x] Pills trigger radius: `--atlas-radius-md` ✅
+- [x] Pills list: no border ✅
+- [x] Enclosed list: `--atlas-background-muted` bg, `--atlas-radius-md`, `spacing-1` padding ✅
+- [x] Enclosed default: transparent bg, `--atlas-foreground-muted` ✅
+- [x] Enclosed hover: `--atlas-background-subtle`, `--atlas-foreground` ✅
+- [x] Enclosed active: `--atlas-background` bg, `--atlas-foreground`, `--atlas-shadow-sm` ✅
+- [x] Disabled trigger: `--atlas-foreground-disabled`, `cursor: not-allowed`, `pointer-events: none` ✅ (via `[data-disabled]`)
+- [x] Focus ring: `--atlas-border-width-2` solid `--atlas-focus-ring`, `spacing-0_5` offset, `--atlas-radius-sm` ✅
+- [x] Color/bg transitions: `--atlas-duration-fast` `--atlas-easing-standard` ✅
+- [x] `prefers-reduced-motion`: `transition: none` on trigger ✅
+- [ ] Sliding indicator animation (`translateX` glide on switch) — absent; triggers jump in place → **BUG-039**
+- [ ] `Tabs.List`, `Tabs.Trigger`, `Tabs.Panel` sub-components not exported; `forceMount` and `scrollable` unsupported → **BUG-040**
+- [x] List horizontally scrollable (`overflow-x: auto`, `scroll-snap-type: x mandatory`) ✅
+- [x] Scrollbar hidden (`scrollbar-width: none`, `::-webkit-scrollbar { display: none }`) ✅
+- [x] Radix `@radix-ui/react-tabs` — provides `tablist`/`tab`/`tabpanel` roles, `aria-controls`, `aria-labelledby`, `aria-selected`, roving tabIndex, arrow key navigation, Home/End, disabled skip, activation mode ✅
+- [ ] `aria-label="Tabs"` hardcoded on list — generic label, not caller-provided → **BUG-041**
+- [x] `activationMode` prop: `"automatic"` (focus = activate) / `"manual"` (Enter/Space) — forwarded to Radix ✅
+- [x] `leadingIcon` slot: rendered with `aria-hidden="true"` wrapper ✅
+- [x] `badge` slot: rendered with `aria-hidden="true"` wrapper ✅
+- [x] Backwards-compat aliases: `activeTab`, `defaultTab`, `onTabChange` → resolved to canonical props ✅
+- [ ] No `:active` pressed state on triggers → **BUG-042**
+- [x] Token audit: no hex literals, no rgba(), no raw pixel values ✅
+- [x] Logical properties: `padding-inline`, `border-block-end`, `margin-block-end`, `padding-block-start` ✅
+
+**Exit condition:** 4 bugs found (2 P2, 2 P3). No fixes applied this session.
+
+---
+
+## QA-08 Checklist — NavBar
+
+**Source files reviewed:** `components/NavBar/NavBar.tsx`, `components/NavBar/NavBar.module.css`
+**Spec:** `ATLAS-SPEC/NavBar.md`
+
+- [x] All 3 variants declared (default, transparent, elevated) ✅
+- [x] All 3 sizes declared (sm 48px, md 64px, lg 80px) via `--_h` CSS custom property ✅
+- [x] `default`: `--atlas-background` bg + `--atlas-border-width-1` solid `--atlas-border` on `border-block-end` ✅
+- [x] `transparent`: transparent bg, no border ✅
+- [ ] `transparent (scrolled)` state: no scroll listener; background stays transparent indefinitely → **BUG-045**
+- [x] `elevated`: `--atlas-background` bg + `--atlas-shadow-md`, no border ✅
+- [x] Z-index: `--atlas-z-sticky` ✅
+- [x] Position: `sticky` ✅
+- [ ] `top: 0` — physical property; should be `inset-block-start: 0` → **BUG-049**
+- [x] `padding-inline: --atlas-spacing-6` ✅
+- [x] Transition on bg/shadow/border: `--atlas-duration-fast` `--atlas-easing-standard` ✅
+- [x] `prefers-reduced-motion`: `transition: none` on `.navbar`, `.link`, `.hamburger`, `.drawerLink` ✅
+- [x] Brand: `--atlas-text-h4`, `--atlas-font-weight-bold`, `--atlas-foreground` ✅
+- [x] Link default: `--atlas-foreground-muted` ✅
+- [x] Link hover: `--atlas-foreground` ✅
+- [x] Link active (`aria-current="page"`): `--atlas-foreground` + 2px `--atlas-primary` `border-block-end` ✅
+- [ ] Link disabled: no `.link[aria-disabled="true"]` CSS rule — color/cursor/pointer-events unstyled → **BUG-047**
+- [x] Link focus ring: `--atlas-border-width-2` solid `--atlas-focus-ring` inset (`outline-offset: -4px`) ✅
+- [x] `<header>` root element ✅
+- [x] `<nav aria-label="Primary">` wraps desktop link list ✅
+- [x] `aria-current="page"` on active link ✅
+- [x] `aria-disabled` on disabled link ✅
+- [x] `tabIndex={-1}` on disabled link ✅
+- [x] Hamburger: `type="button"`, `aria-label`, `aria-expanded` ✅
+- [x] Hamburger: `min-width/min-height: var(--atlas-touch-min)` (44px touch target) ✅
+- [x] Hamburger focus ring: `--atlas-border-width-2` solid `--atlas-focus-ring`, `spacing-0_5` offset ✅
+- [x] Hamburger hover: `--atlas-background-subtle` bg ✅
+- [ ] `aria-controls="mobile-nav-drawer"` points to non-existent id — `DialogContent` drops `id` prop → **BUG-044**
+- [x] Mobile drawer opens via Dialog `variant="drawer" side="start"` ✅
+- [x] Drawer link list: `<nav aria-label="Mobile primary">` ✅
+- [x] Drawer link active: `--atlas-primary` color + `--atlas-primary` `border-inline-start` + `--atlas-background-subtle` bg ✅
+- [x] Drawer link hover: `--atlas-background-subtle` bg, `--atlas-foreground` ✅
+- [x] Drawer link focus ring ✅
+- [ ] Drawer link disabled: no `.drawerLink[aria-disabled="true"]` CSS — same gap as BUG-047 → **BUG-047**
+- [ ] Links visible at tablet (768px+) — breakpoint wrong at 1024px → **BUG-043**
+- [ ] `hideOnScroll` prop missing from `NavBarProps` → **BUG-046**
+- [ ] `NavLink` missing `leadingIcon` and `badge` props → **BUG-048**
+- [x] Hamburger lines: width `calc(spacing-4 + spacing-0_5)` (18px), height `--atlas-border-width-2` (2px) — token-only ✅
+- [x] Token audit: no hex literals, no rgba(), no raw pixel values ✅
+- [x] Logical properties: `padding-inline`, `border-block-end`, `border-inline-start`, `inset-block`, `inset-inline-start` throughout ✅ (exception: `top: 0` — BUG-049)
+
+**Exit condition:** 7 bugs found (6 P2, 1 P3). No fixes applied this session.
+
+---
+
 ## Session Progress
 
 | Session | Status | Date | Notes |
@@ -1324,7 +1633,7 @@ Note: `translate(-50%, -50%)` remains physical. CSS logical transforms (`transla
 | QA-05 — Switch + Badge | ✅ Complete | 2026-05-10 | 9 bugs found (BUG-017–025); fixes pending |
 | QA-06 — Card | ✅ Complete | 2026-05-10 | 5 bugs found (BUG-026–030); fixes pending |
 | QA-07 — Alert + Dialog | ✅ Complete | 2026-05-10 | 8 bugs found (BUG-031–038); fixes pending |
-| QA-08 — Tabs + NavBar | ⬜ Pending | — | — |
+| QA-08 — Tabs + NavBar | ✅ Complete | 2026-05-10 | 11 bugs found (BUG-039–049); fixes pending |
 | QA-09 — Dark Mode Pass | ⬜ Pending | — | — |
 | QA-10 — Responsive Pass | ⬜ Pending | — | — |
 | QA-11 — Accessibility Pass | ⬜ Pending | — | — |
