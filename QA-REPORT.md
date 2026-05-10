@@ -2,7 +2,7 @@
 
 > **Version:** 1.0  
 > **Status:** In progress  
-> **Last updated:** 2026-05-10 (QA-08 complete)
+> **Last updated:** 2026-05-10 (QA-09 complete)
 
 ---
 
@@ -10,11 +10,11 @@
 
 | Metric | Value |
 |---|---|
-| Sessions completed | 8 of 14 |
-| Total bugs filed | 49 |
+| Sessions completed | 9 of 14 |
+| Total bugs filed | 56 |
 | P1 bugs open | 0 |
-| P2 bugs open | 19 |
-| P3 bugs open | 14 |
+| P2 bugs open | 25 |
+| P3 bugs open | 15 |
 | Components spec-complete | 0 of 12 (code audits: Button ✅ · Input ✅ · Label ✅ · Textarea ✅ · Checkbox ✅ · Switch ✅ · Badge ✅ · Card ✅ · Alert ✅ · Dialog ✅ · Tabs ✅ · NavBar ✅; visual + dark-mode passes pending) |
 
 ---
@@ -25,15 +25,15 @@
 |---|---|---|---|---|---|---|---|
 | **Token layer** | ✅ Pass | — | — | — | — | — | 3 bugs found + fixed |
 | Button | ✅ Pass | ✅ Pass | ✅ Pass | ✅ Pass | ✅ Pass | — | 3 bugs (BUG-004–006) found + fixed |
-| Input | ✅ Pass | — | — | — | — | — | 2 bugs (BUG-007–008) found + fixed |
+| Input | ✅ Pass | — | 2 bugs (BUG-052, 055) | — | — | — | 2 bugs (BUG-007–008) found + fixed |
 | Label | ✅ Pass | — | — | — | — | — | 1 bug (BUG-009) found + fixed |
-| Textarea | ✅ Pass | — | — | — | — | — | 3 bugs (BUG-010–012) found + fixed |
-| Checkbox | ✅ Pass | — | — | — | — | — | 4 bugs (BUG-013–016) found + fixed |
-| Switch | ✅ Pass | — | — | — | — | — | 4 bugs (BUG-017–020) found, fixes pending |
-| Card | ✅ Pass | — | — | — | — | — | 5 bugs (BUG-026–030) found, fixes pending |
+| Textarea | ✅ Pass | — | 1 bug (BUG-055) | — | — | — | 3 bugs (BUG-010–012) found + fixed |
+| Checkbox | ✅ Pass | — | 1 bug (BUG-056) | — | — | — | 4 bugs (BUG-013–016) found + fixed |
+| Switch | ✅ Pass | — | 1 bug (BUG-053) | — | — | — | 4 bugs (BUG-017–020) found, fixes pending |
+| Card | ✅ Pass | — | 2 bugs (BUG-051, 054) | — | — | — | 5 bugs (BUG-026–030) found, fixes pending |
 | Badge | ✅ Pass | — | — | — | — | — | 5 bugs (BUG-021–025) found, fixes pending |
 | Alert | ✅ Pass | — | — | — | — | — | 3 bugs (BUG-031–033) found; fixes pending |
-| Dialog | ✅ Pass | — | — | — | — | — | 5 bugs (BUG-034–038) found; fixes pending |
+| Dialog | ✅ Pass | — | 1 bug (BUG-050) | — | — | — | 5 bugs (BUG-034–038) found; fixes pending |
 | Tabs | ✅ Pass | — | — | — | — | — | 4 bugs (BUG-039–042) found; fixes pending |
 | NavBar | ✅ Pass | — | — | — | — | — | 7 bugs (BUG-043–049) found; fixes pending |
 
@@ -1634,9 +1634,255 @@ inset-block-start: 0; /* was: top: 0 */
 | QA-06 — Card | ✅ Complete | 2026-05-10 | 5 bugs found (BUG-026–030); fixes pending |
 | QA-07 — Alert + Dialog | ✅ Complete | 2026-05-10 | 8 bugs found (BUG-031–038); fixes pending |
 | QA-08 — Tabs + NavBar | ✅ Complete | 2026-05-10 | 11 bugs found (BUG-039–049); fixes pending |
-| QA-09 — Dark Mode Pass | ⬜ Pending | — | — |
+| QA-09 — Dark Mode Pass | ✅ Complete | 2026-05-10 | 7 bugs found (BUG-050–056); fixes pending |
 | QA-10 — Responsive Pass | ⬜ Pending | — | — |
 | QA-11 — Accessibility Pass | ⬜ Pending | — | — |
 | QA-12 — Mobile Pass | ⬜ Pending | — | — |
 | QA-13 — Regression Pass | ⬜ Pending | — | — |
 | QA-14 — Release Sign-off | ⬜ Pending | — | — |
+
+---
+
+### QA-09 — Dark Mode Pass
+
+---
+
+#### BUG-050 · P2 · OPEN
+
+**Title:** Dialog panel uses `--atlas-background` instead of `--atlas-surface-overlay` — panel merges with page in dark mode
+
+**Guard:** `token-enforcer`
+
+**Component:** `Dialog` → `components/Dialog/Dialog.module.css` line 42
+
+**Description:** The dialog panel (`.panel`) sets `background-color: var(--atlas-background)`. In dark mode `--atlas-background` resolves to `--atlas-color-neutral-950` (L=0.145), the same value as the page background. Because the page and the modal surface share an identical background colour, the dialog panel has zero visual separation from the page — only the border (`--atlas-border`, neutral-800) and drop-shadow distinguish it. The Atlas token system provides `--atlas-surface-overlay` (neutral-800 in dark, L=0.279) precisely for this use case — elevated overlay surfaces that must appear above the base page in dark mode. The NavBar drawer (a `Dialog` variant) inherits the same defect.
+
+**Fix required:**
+```css
+/* components/Dialog/Dialog.module.css */
+.panel {
+  background-color: var(--atlas-surface-overlay); /* was: --atlas-background */
+}
+```
+
+**Files to change:** `components/Dialog/Dialog.module.css`
+
+---
+
+#### BUG-051 · P2 · OPEN
+
+**Title:** Card `elevated` variant uses `--atlas-background` in dark mode — card is visually flat against the page
+
+**Guard:** `token-enforcer`
+
+**Component:** `Card` → `components/Card/Card.module.css` line 41
+
+**Description:** The `elevated` card variant sets `background-color: var(--atlas-background)`. In dark mode this resolves to neutral-950 (L=0.145) — the same value as the page background. The card's only visual differentiation from the page is its `box-shadow: var(--atlas-shadow-md)`, but in dark mode shadows are rendered against a near-black background and are much less perceptible than in light mode. The Atlas token `--atlas-surface-raised` (neutral-800, L=0.279 in dark) exists specifically to give elevated cards a background that reads as "above the page". The `default` and `outlined` variants can legitimately stay on `--atlas-background` (they are flat cards demarcated by a border), but `elevated` has no border and relies entirely on depth cues that dark mode weakens.
+
+**Fix required:**
+```css
+/* components/Card/Card.module.css */
+.elevated {
+  background-color: var(--atlas-surface-raised); /* was: --atlas-background */
+  box-shadow: var(--atlas-shadow-md);
+}
+```
+
+**Files to change:** `components/Card/Card.module.css`
+
+---
+
+#### BUG-052 · P2 · OPEN
+
+**Title:** Input `filled` variant — hover state darkens the input in dark mode (inverted feedback)
+
+**Guard:** `state-helper`
+
+**Component:** `Input` → `components/Input/Input.module.css`
+
+**Description:** The filled input rests on `--atlas-background-muted` and transitions to `--atlas-background-subtle` on hover:
+
+```css
+.filled .input {
+  background-color: var(--atlas-background-muted);
+}
+.filled .input:hover:not(:disabled):not([readonly]) {
+  background-color: var(--atlas-background-subtle);
+}
+```
+
+In **light** mode this is correct: `background-muted` = neutral-100 (L=0.967) → hover `background-subtle` = neutral-50 (L=0.985) — the field lightens slightly on hover ✓.
+
+In **dark** mode the token scale is inverted: `background-muted` = neutral-800 (L=0.279) → hover `background-subtle` = neutral-900 (L=0.208) — the field gets **darker** on hover ✗. Users see the opposite of the expected affordance; the field appears to sink rather than respond.
+
+**Fix required:** The hover state for `filled` inputs in dark mode must use a lighter token. A `[data-theme="dark"]` scoped override is the cleanest fix without restructuring tokens:
+```css
+[data-theme="dark"] .filled .input:hover:not(:disabled):not([readonly]) {
+  background-color: var(--atlas-background-muted); /* step toward page surface = lighter in dark */
+  /* Or use a slightly lighter custom-property override */
+}
+```
+Alternatively, use a `color-mix` approach that explicitly lightens the resting state regardless of mode.
+
+**Files to change:** `components/Input/Input.module.css`
+
+---
+
+#### BUG-053 · P2 · OPEN
+
+**Title:** Switch unchecked track hover darkens in dark mode (inverted feedback)
+
+**Guard:** `state-helper`
+
+**Component:** `Switch` → `components/Switch/Switch.module.css`
+
+**Description:** The Switch track in unchecked state follows the same background-muted → background-subtle hover pattern as BUG-052:
+
+```css
+.track { background-color: var(--atlas-background-muted); } /* neutral-800 in dark */
+.track:hover:not([data-disabled])[data-state="unchecked"] {
+  background-color: var(--atlas-background-subtle); /* neutral-900 in dark — DARKER */
+}
+```
+
+In dark mode the hover makes the track go from L=0.279 (neutral-800) to L=0.208 (neutral-900) — it visually dims on hover. The expected affordance is a subtle lightening. The checked hover (`--atlas-primary-hover`) is unaffected since it uses a purpose-built semantic token.
+
+**Fix required:** Scope a dark-mode override so unchecked track hover uses a lighter step:
+```css
+[data-theme="dark"] .track:hover:not([data-disabled])[data-state="unchecked"] {
+  background-color: var(--atlas-background); /* lightest dark bg — creates visible lightening */
+}
+```
+
+**Files to change:** `components/Switch/Switch.module.css`
+
+---
+
+#### BUG-054 · P2 · OPEN
+
+**Title:** Card `filled` interactive hover darkens in dark mode (inverted feedback)
+
+**Guard:** `state-helper`
+
+**Component:** `Card` → `components/Card/Card.module.css`
+
+**Description:** The interactive card rule applies `--atlas-background-subtle` on hover across `default`, `outlined`, and `filled` variants:
+
+```css
+.interactive.default:hover,
+.interactive.outlined:hover,
+.interactive.filled:hover {
+  background-color: var(--atlas-background-subtle);
+}
+```
+
+For `default` (rests on `--atlas-background` = neutral-950) and `outlined` the hover to `background-subtle` (neutral-900) correctly **lightens** the card. But `filled` rests on `--atlas-background-muted` (neutral-800) — hover to `background-subtle` (neutral-900) **darkens** it. The filled card appears to retreat from the user instead of rising to meet interaction.
+
+**Fix required:** Separate the filled hover rule so it uses a lighter token in dark:
+```css
+/* Add after the combined rule */
+[data-theme="dark"] .interactive.filled:hover {
+  background-color: var(--atlas-background); /* neutral-950 → lighter relative to neutral-800 is wrong; use surface-raised */
+  /* Better: */
+  background-color: var(--atlas-surface-raised); /* neutral-800 already; needs to go one step lighter */
+}
+```
+The safest fix is a dedicated dark-mode override that uses `color-mix` to lighten the resting `background-muted`, or separates `filled` hover into its own explicit rule.
+
+**Files to change:** `components/Card/Card.module.css`
+
+---
+
+#### BUG-055 · P2 · OPEN
+
+**Title:** Textarea `filled` variant hover darkens in dark mode (inverted feedback)
+
+**Guard:** `state-helper`
+
+**Component:** `Textarea` → `components/Textarea/Textarea.module.css`
+
+**Description:** Identical to BUG-052 (Input). Textarea `filled` rests on `--atlas-background-muted` (neutral-800) and applies `--atlas-background-subtle` (neutral-900) on hover:
+
+```css
+.filled .textarea:hover:not(:disabled):not([readonly]) {
+  background-color: var(--atlas-background-subtle); /* darkens in dark mode */
+}
+```
+
+This is the same muted → subtle inversion. In light mode: 967 → 985 (lightens ✓). In dark mode: 0.279 → 0.208 (darkens ✗).
+
+**Fix required:**
+```css
+[data-theme="dark"] .filled .textarea:hover:not(:disabled):not([readonly]) {
+  background-color: var(--atlas-background-muted); /* hold at muted or use lighter step */
+}
+```
+
+**Files to change:** `components/Textarea/Textarea.module.css`
+
+---
+
+#### BUG-056 · P3 · OPEN
+
+**Title:** Checkbox `card` variant — checked background `--atlas-primary-subtle` near-invisible against page in dark mode
+
+**Guard:** `token-enforcer`
+
+**Component:** `Checkbox` → `components/Checkbox/Checkbox.module.css`
+
+**Description:** The card-variant checked state sets:
+
+```css
+.card[data-checked] {
+  border-color: var(--atlas-primary);
+  background-color: var(--atlas-primary-subtle);
+}
+```
+
+In dark mode `--atlas-primary-subtle` resolves to `--atlas-color-brand-950` (L≈0.245). The page background is `--atlas-background` = neutral-950 (L=0.145). The luminance delta between selected card fill (brand-950) and the surrounding page (neutral-950) is L≈0.10 — perceptually almost identical. The only reliable visual indicator of selection in dark mode is the `--atlas-primary` border, but the spec intends the background fill to be the primary signal for card-checkbox selection state. Users with low vision or on low-quality displays will find this state nearly invisible.
+
+**Fix required:** In dark mode the selected card background needs a step up in lightness. Options:
+1. Use `--atlas-primary` at 10–15% opacity via `color-mix`: `background-color: color-mix(in oklch, var(--atlas-primary) 15%, var(--atlas-surface-raised))`
+2. Override `--atlas-primary-subtle` for card checkboxes only in dark mode to use brand-900 instead of brand-950.
+
+**Files to change:** `components/Checkbox/Checkbox.module.css`
+
+---
+
+## QA-09 Checklist — Dark Mode Pass
+
+**Scope:** All 12 components · `atlas.tokens.css` dark theme block · `app/page.tsx` toggle
+**Method:** Static CSS/TSX audit against `[data-theme="dark"]` token values
+
+- [x] No hardcoded hex, rgb(), rgba() in any component CSS module ✅
+- [x] No hardcoded colors in TSX inline styles ✅
+- [x] No hardcoded Tailwind color utilities (e.g. `text-gray-500`) in component TSX ✅
+- [x] Dark theme token block is complete — all semantic tokens redefined for dark context ✅
+- [x] Dialog overlay scrim: `color-mix(in oklch, --atlas-overlay 65%, transparent)` — `--atlas-overlay` = neutral-1000 in dark (pure black scrim) ✅
+- [x] Dialog close button: `color: --atlas-foreground-muted` adapts ✅
+- [x] Button variants: all use semantic tokens; `primary`, `destructive`, `secondary`, `outline`, `ghost`, `link` adapt via token cascade ✅
+- [x] Input `default` variant: bg=`--atlas-background`, border=`--atlas-border` — adapts correctly ✅
+- [x] Input `unstyled` variant: transparent bg — no dark-mode issues ✅
+- [ ] Input `filled` variant hover: darkens in dark mode (background-muted → background-subtle) → **BUG-052**
+- [x] Label: all states (`default`, `disabled`, `invalid`) use semantic foreground tokens ✅
+- [x] Textarea `default` hover: `--atlas-border-strong` adapts ✅
+- [ ] Textarea `filled` hover: darkens in dark mode → **BUG-055**
+- [x] Checkbox unchecked border: `--atlas-border` adapts (neutral-800 in dark) ✅
+- [ ] Checkbox `card` checked background: `--atlas-primary-subtle` near-invisible in dark → **BUG-056**
+- [x] Switch checked track: `--atlas-primary` adapts (brand-500 in dark) ✅
+- [ ] Switch unchecked track hover: darkens in dark mode (background-muted → background-subtle) → **BUG-053**
+- [x] Card `default`, `outlined` interactive hover: `background-subtle` correctly lightens from `background` in dark ✅
+- [ ] Card `elevated` background: `--atlas-background` = page bg in dark, no elevation → **BUG-051**
+- [ ] Card `filled` interactive hover: darkens in dark mode → **BUG-054**
+- [x] Badge all variants: semantic tokens cascade correctly in dark ✅
+- [x] Alert all variants: semantic subtle bg + semantic accent color adapt correctly in dark ✅
+- [ ] Dialog panel background: `--atlas-background` = page bg in dark, no surface elevation → **BUG-050**
+- [x] Tabs `pills` active: `--atlas-primary` adapts ✅
+- [x] Tabs `enclosed` active: `--atlas-background` panel on `--atlas-background-muted` list — adapts (neutral-950 on neutral-800 in dark — correct lightening contrast) ✅
+- [x] NavBar `default`/`elevated` backgrounds adapt via `--atlas-background` ✅
+- [x] NavBar link active indicator: `--atlas-primary` adapts ✅
+- [x] Dark mode toggle in `app/page.tsx` correctly sets `data-theme="dark"` on `<html>` ✅
+- [x] `app/globals.css`: no hardcoded colours; imports `atlas.tokens.css` first ✅
+
+**Exit condition:** 7 bugs found (6 P2, 1 P3). No fixes applied this session.
+
