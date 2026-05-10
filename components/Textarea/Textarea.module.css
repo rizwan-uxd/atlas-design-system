@@ -35,8 +35,8 @@
   color: var(--atlas-foreground-muted);
 }
 
-/* Hover */
-.textarea:hover:not(:disabled):not([readonly]) {
+/* Hover — guarded so error border is never overridden */
+.textarea:hover:not(:disabled):not([readonly]):not([aria-invalid="true"]) {
   border-color: var(--atlas-border-strong);
 }
 
@@ -151,7 +151,7 @@
   font-size: var(--atlas-text-caption); /* font-size-xs */
   color: var(--atlas-foreground-muted);
   pointer-events: none;
-  line-height: 1;
+  line-height: var(--atlas-line-height-tight);
 }
 
 .counterOver {

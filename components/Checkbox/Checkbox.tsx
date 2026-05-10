@@ -45,6 +45,8 @@ export interface CheckboxProps {
   label?: React.ReactNode
   description?: React.ReactNode
   id?: string
+  /** Links to error text or helper text via ID — forwarded to the checkbox root for screen readers */
+  "aria-describedby"?: string
   className?: string
 }
 
@@ -102,6 +104,7 @@ export function Checkbox({
   label,
   description,
   id,
+  "aria-describedby": ariaDescribedBy,
   className,
 }: CheckboxProps) {
   const generatedId = useId()
@@ -148,6 +151,7 @@ export function Checkbox({
         disabled={disabled}
         required={required}
         aria-invalid={invalid || undefined}
+        aria-describedby={ariaDescribedBy}
         className={cx(styles.box, styles[size])}
         data-invalid={invalid || undefined}
       >

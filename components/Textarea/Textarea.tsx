@@ -49,6 +49,8 @@ export interface TextareaProps
   showCount?: boolean
   /** Marks the field as invalid — sets aria-invalid */
   invalid?: boolean
+  /** Marks the field as required — sets aria-required */
+  required?: boolean
 }
 
 /* ── Helpers ────────────────────────────────────────────────── */
@@ -68,6 +70,7 @@ export function Textarea({
   showCount = false,
   maxLength,
   invalid = false,
+  required = false,
   disabled = false,
   readOnly,
   value,
@@ -136,6 +139,7 @@ export function Textarea({
         defaultValue={defaultValue}
         maxLength={undefined} /* enforce via counter/UX, not native truncation */
         aria-invalid={invalid || undefined}
+        aria-required={required || undefined}
         aria-describedby={
           showCount
             ? cx(rest["aria-describedby"] as string, counterId)

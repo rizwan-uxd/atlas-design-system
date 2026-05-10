@@ -74,6 +74,18 @@
   background-color: var(--atlas-primary-hover);
 }
 
+/* ── Pressed / active (web only) ─────────────────────────────── */
+
+.box:active:not([data-disabled])[data-state="unchecked"] {
+  background-color: var(--atlas-background-subtle);
+  border-color: var(--atlas-foreground);
+}
+
+.box:active:not([data-disabled])[data-state="checked"],
+.box:active:not([data-disabled])[data-state="indeterminate"] {
+  background-color: var(--atlas-primary-hover);
+}
+
 /* ── Focus-visible — ring around box only ─────────────────────── */
 
 .box:focus-visible {
@@ -87,6 +99,12 @@
   opacity: var(--atlas-opacity-disabled);
   cursor: not-allowed;
   pointer-events: none;
+}
+
+/* Unchecked disabled: spec maps background-muted + border (not border-strong) */
+.box[data-disabled][data-state="unchecked"] {
+  background-color: var(--atlas-background-muted);
+  border-color: var(--atlas-border);
 }
 
 /* ── Error / invalid ──────────────────────────────────────────── */
@@ -161,7 +179,7 @@
   font-family: var(--atlas-font-sans);
   font-weight: var(--atlas-font-weight-medium);
   color: var(--atlas-foreground);
-  line-height: 1.4;
+  line-height: var(--atlas-line-height-normal);
   cursor: pointer;
 }
 
@@ -177,7 +195,7 @@
   font-family: var(--atlas-font-sans);
   font-size: var(--atlas-font-size-xs);
   color: var(--atlas-foreground-muted);
-  line-height: 1.4;
+  line-height: var(--atlas-line-height-normal);
 }
 
 .root[data-disabled] .description {

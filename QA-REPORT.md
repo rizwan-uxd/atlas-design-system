@@ -2,7 +2,7 @@
 
 > **Version:** 1.0  
 > **Status:** In progress  
-> **Last updated:** 2026-05-09 (QA-03 complete)
+> **Last updated:** 2026-05-10 (QA-04 complete)
 
 ---
 
@@ -10,12 +10,12 @@
 
 | Metric | Value |
 |---|---|
-| Sessions completed | 3 of 14 |
-| Total bugs filed | 9 |
+| Sessions completed | 4 of 14 |
+| Total bugs filed | 16 |
 | P1 bugs open | 0 |
 | P2 bugs open | 0 |
 | P3 bugs open | 0 |
-| Components spec-complete | 0 of 12 (code audits: Button ✅ · Input ✅ · Label ✅; visual + dark-mode passes pending) |
+| Components spec-complete | 0 of 12 (code audits: Button ✅ · Input ✅ · Label ✅ · Textarea ✅ · Checkbox ✅; visual + dark-mode passes pending) |
 
 ---
 
@@ -27,8 +27,8 @@
 | Button | ✅ Pass | ✅ Pass | ✅ Pass | ✅ Pass | ✅ Pass | — | 3 bugs (BUG-004–006) found + fixed |
 | Input | ✅ Pass | — | — | — | — | — | 2 bugs (BUG-007–008) found + fixed |
 | Label | ✅ Pass | — | — | — | — | — | 1 bug (BUG-009) found + fixed |
-| Textarea | — | — | — | — | — | — | — |
-| Checkbox | — | — | — | — | — | — | — |
+| Textarea | ✅ Pass | — | — | — | — | — | 3 bugs (BUG-010–012) found + fixed |
+| Checkbox | ✅ Pass | — | — | — | — | — | 4 bugs (BUG-013–016) found + fixed |
 | Switch | — | — | — | — | — | — | — |
 | Card | — | — | — | — | — | — | — |
 | Badge | — | — | — | — | — | — | — |
@@ -350,6 +350,240 @@ line-height: var(--atlas-line-height-normal); /* was: 1.4 */
 
 ---
 
+### QA-04 — Textarea + Checkbox
+
+---
+
+#### BUG-010 · P2 · FIXED
+
+**Title:** Hover rule suppresses `--atlas-danger` border on invalid Textarea
+
+**Guard:** `state-helper`
+
+**Component:** `Textarea` → `components/Textarea/Textarea.module.css` hover rule
+
+**Description:** The base hover rule `.textarea:hover:not(:disabled):not([readonly])` sets `border-color: var(--atlas-border-strong)` with specificity (0, 3, 0). The invalid rule `.textarea[aria-invalid="true"]` has specificity (0, 2, 0). When a textarea is both invalid and hovered, the hover rule wins and replaces the `--atlas-danger` border with `--atlas-border-strong`. This is an identical pattern to BUG-007 (Input), hidden until a textarea has both `invalid` and user focus — making form validation errors visually disappear on hover.
+
+**Fix applied:**
+Added `:not([aria-invalid="true"])` guard to the hover selector:
+```css
+.textarea:hover:not(:disabled):not([readonly]):not([aria-invalid="true"]) {
+  border-color: var(--atlas-border-strong);
+}
+```
+
+**Files changed:** `components/Textarea/Textarea.module.css`
+
+---
+
+#### BUG-011 · P2 · FIXED
+
+**Title:** `required` prop and `aria-required` missing from Textarea
+
+**Guard:** `accessibility-lite`
+
+**Component:** `Textarea` → `components/Textarea/Textarea.tsx`
+
+**Description:** The spec API table lists `required?: boolean` as a prop. The TextareaProps interface had no `required` field and the native `<textarea>` element received no `aria-required` attribute. Callers had no way to mark a textarea as required for assistive technologies — screen readers would not announce the field as required in form contexts.
+
+**Fix applied:**
+- Added `required?: boolean` to `TextareaProps`
+- Destructured `required = false` in the component body
+- Added `aria-required={required || undefined}` to the `<textarea>` element
+
+**Files changed:** `components/Textarea/Textarea.tsx`
+
+---
+
+#### BUG-012 · P3 · FIXED
+
+**Title:** `line-height: 1` in `.counter` is a magic number
+
+**Guard:** `token-enforcer`
+
+**Component:** `Textarea` → `components/Textarea/Textarea.module.css:154`
+
+**Description:** The character counter element used `line-height: 1` — a raw unitless value with no corresponding token. The Atlas typography system defines `--atlas-line-height-tight: 1.2` as the tightest available line-height token. For a single-line caption display, `--atlas-line-height-tight` is the appropriate choice.
+
+**Fix applied:**
+```css
+line-height: var(--atlas-line-height-tight); /* was: 1 */
+```
+
+**Files changed:** `components/Textarea/Textarea.module.css`
+
+---
+
+#### BUG-013 · P2 · FIXED
+
+**Title:** Disabled unchecked Checkbox uses wrong background and border tokens
+
+**Guard:** `token-enforcer` + `state-helper`
+
+**Component:** `Checkbox` → `components/Checkbox/Checkbox.module.css` disabled rule
+
+**Description:** The spec token table defines disabled unchecked background as `--atlas-background-muted` and border as `--atlas-border` (not `--atlas-border-strong`). The existing `.box[data-disabled]` rule only applied `opacity: var(--atlas-opacity-disabled)` without overriding the base background or border-color. As a result, a disabled unchecked checkbox rendered with `--atlas-background` (the default white surface) and `--atlas-border-strong` instead of the spec-correct muted background and softer border — misrepresenting its inert state.
+
+**Fix applied:**
+Added a state-scoped disabled rule below the generic disabled block:
+```css
+.box[data-disabled][data-state="unchecked"] {
+  background-color: var(--atlas-background-muted);
+  border-color: var(--atlas-border);
+}
+```
+
+**Files changed:** `components/Checkbox/Checkbox.module.css`
+
+---
+
+#### BUG-014 · P2 · FIXED
+
+**Title:** Checkbox has no `aria-describedby` prop — error text cannot be linked
+
+**Guard:** `accessibility-lite`
+
+**Component:** `Checkbox` → `components/Checkbox/Checkbox.tsx`
+
+**Description:** The spec states error state requires `aria-invalid="true"` + `aria-describedby` linked to the error text element. The `CheckboxProps` interface did not include an `aria-describedby` field and the props object was not spread onto the `RadixCheckbox.Root` (only named props were forwarded). Callers had no mechanism to connect an error message — screen readers in error state received `aria-invalid` but no pointer to the error text, breaking form error announcement.
+
+**Fix applied:**
+- Added `"aria-describedby"?: string` to `CheckboxProps`
+- Destructured it as `ariaDescribedBy` in the component body
+- Forwarded as `aria-describedby={ariaDescribedBy}` on `RadixCheckbox.Root`
+
+**Files changed:** `components/Checkbox/Checkbox.tsx`
+
+---
+
+#### BUG-015 · P3 · FIXED
+
+**Title:** `line-height: 1.4` in `.label` and `.description` are magic numbers
+
+**Guard:** `token-enforcer`
+
+**Component:** `Checkbox` → `components/Checkbox/Checkbox.module.css` lines 164, 181
+
+**Description:** Both `.label` and `.description` used `line-height: 1.4` — a raw value with no Atlas token equivalent. The nearest defined token is `--atlas-line-height-normal: 1.5`. This matches BUG-009 (Label) in pattern. Using the token keeps line-height globally controllable through the token system.
+
+**Fix applied:**
+```css
+/* .label */
+line-height: var(--atlas-line-height-normal); /* was: 1.4 */
+
+/* .description */
+line-height: var(--atlas-line-height-normal); /* was: 1.4 */
+```
+
+**Files changed:** `components/Checkbox/Checkbox.module.css`
+
+---
+
+#### BUG-016 · P3 · FIXED
+
+**Title:** No `:active` / pressed state in Checkbox CSS
+
+**Guard:** `state-helper`
+
+**Component:** `Checkbox` → `components/Checkbox/Checkbox.module.css`
+
+**Description:** The spec state matrix lists `pressed` as a distinct state. The CSS had hover states for all check states but no `:active` pseudo-class rules. On web, the pressed moment (between mousedown and mouseup) was visually identical to hover — no darker press feedback. This is P3 because the hover and active can share tokens, but the omission means the spec's state matrix is incomplete.
+
+**Fix applied:**
+Added `:active` rules mirroring the hover token assignments (unchecked uses `--atlas-background-subtle` + `--atlas-foreground` border; checked/indeterminate uses `--atlas-primary-hover`), placed before the focus-visible rule:
+```css
+.box:active:not([data-disabled])[data-state="unchecked"] {
+  background-color: var(--atlas-background-subtle);
+  border-color: var(--atlas-foreground);
+}
+.box:active:not([data-disabled])[data-state="checked"],
+.box:active:not([data-disabled])[data-state="indeterminate"] {
+  background-color: var(--atlas-primary-hover);
+}
+```
+
+**Files changed:** `components/Checkbox/Checkbox.module.css`
+
+---
+
+## QA-04 Checklist — Textarea
+
+**Source files reviewed:** `components/Textarea/Textarea.tsx`, `components/Textarea/Textarea.module.css`
+**Spec:** `ATLAS-SPEC/Textarea.md`
+
+- [x] Both variants declared and styled (default, filled) ✅
+- [x] All 3 sizes declared (sm 80px, md 96px, lg 128px) — min-heights via `calc()` on spacing tokens ✅
+- [x] All states covered — default · hover · focus-visible · disabled · readonly · error ✅
+- [x] Token audit — no hex literals, no magic pixel numbers ✅
+- [x] Background token mappings per variant × state match spec (mirrors Input) ✅
+- [x] Border token mappings per variant × state ✅
+- [ ] Hover does not suppress error border → **BUG-010 (P2) — FIXED**
+- [x] `filled` hover updates background only; error border-block-end unaffected ✅
+- [x] Focus ring — `border-width-2` `focus-ring` outline + `spacing-0_5` offset ✅
+- [x] `filled` focus ring present + border-block-end changes to `--atlas-primary` ✅
+- [x] Foreground — text: `--atlas-foreground`; placeholder: `--atlas-foreground-muted`; disabled: `--atlas-foreground-disabled` ✅
+- [x] Radius — `--atlas-radius-md` on default; filled uses start-radius only (block-end corners are 0) ✅
+- [x] `resize` prop — `vertical` default; `none` and `both` modifiers; forced `none` on disabled/readonly/autoGrow ✅
+- [x] `autoGrow` — height measured and clamped to `maxRows` via scroll-height logic ✅
+- [x] `showCount` — counter renders with `aria-live="polite"` + `aria-atomic` + `role="status"` ✅
+- [x] Counter color — `--atlas-foreground-muted` default; `--atlas-danger` when over limit ✅
+- [ ] Counter `line-height: 1` magic number → **BUG-012 (P3) — FIXED**
+- [x] `maxLength` — enforced via counter UX, not native truncation (native `maxLength` set to `undefined`) ✅
+- [x] `aria-invalid="true"` set when `invalid=true` ✅
+- [ ] Missing `required` / `aria-required` prop → **BUG-011 (P2) — FIXED**
+- [x] `aria-describedby` — wired via spread `{...rest}` allowing caller to link helper/error text ✅
+- [x] Motion — `border-color`, `background-color` via `--atlas-duration-fast` + `--atlas-easing-standard` ✅
+- [x] `prefers-reduced-motion` — transition: none ✅
+- [x] Logical properties throughout — `padding-block`, `padding-inline`, `inset-block-end`, `inset-inline-end` ✅
+
+**Exit condition:** 3 bugs found (2 P2, 1 P3), all fixed in session QA-04.
+
+---
+
+## QA-04 Checklist — Checkbox
+
+**Source files reviewed:** `components/Checkbox/Checkbox.tsx`, `components/Checkbox/Checkbox.module.css`
+**Spec:** `ATLAS-SPEC/Checkbox.md`
+
+- [x] Both variants declared and styled (default, card) ✅
+- [x] Both sizes declared (sm 16px, md 20px) ✅
+- [x] All states covered — unchecked · checked · indeterminate · hover · focus-visible · pressed · disabled · error ✅
+- [x] Uses Radix `@radix-ui/react-checkbox` — role="checkbox", `aria-checked="true|false|mixed"` ✅
+- [x] Token audit — no hex literals, no magic pixel numbers ✅
+- [x] Box background: unchecked=`--atlas-background`; checked/indeterminate=`--atlas-primary` ✅
+- [x] Box border: unchecked=`border-strong`; checked/indeterminate=`transparent` (filled) ✅
+- [x] Hover unchecked: `--atlas-background-subtle` bg + `--atlas-foreground` border ✅
+- [x] Hover checked/indeterminate: `--atlas-primary-hover` ✅
+- [ ] Disabled unchecked: wrong background + border tokens → **BUG-013 (P2) — FIXED**
+- [x] Error unchecked: `--atlas-danger` border ✅
+- [x] Error checked/indeterminate: `--atlas-danger` bg + `--atlas-danger-foreground` indicator ✅
+- [x] Error hover states — unchecked hover bg only; checked/indeterminate get `--atlas-danger-hover` ✅
+- [x] Indicator — CheckIcon (M2 6l3 3 5-5) for checked; DashIcon (M2 6h8) for indeterminate ✅
+- [x] Indicator SVGs use `stroke="currentColor"` — no hardcoded color literals ✅
+- [x] Indicator color — `--atlas-primary-foreground` (normal); `--atlas-danger-foreground` (error+checked) ✅
+- [x] Icon sized via `--_icon-size` custom property — sm: 10px, md: 12px ✅
+- [x] Indicator scale animation `0→1` via `--atlas-duration-fast` + `--atlas-easing-emphasized` ✅
+- [x] `prefers-reduced-motion` — animation: none on indicator; transition: none on box + card ✅
+- [x] Focus ring — `border-width-2` `focus-ring` outline on `.box:focus-visible` only (not the full row) ✅
+- [ ] No `:active` pressed state in CSS → **BUG-016 (P3) — FIXED**
+- [x] `aria-invalid` on Radix Root when `invalid=true` ✅
+- [x] `aria-required` forwarded via Radix Root `required` prop ✅
+- [ ] No `aria-describedby` prop support → **BUG-014 (P2) — FIXED**
+- [x] Label linked via `htmlFor={uid}` ✅
+- [x] Required marker `aria-hidden="true"` and colored `--atlas-danger` ✅
+- [x] Disabled label: `cursor: not-allowed` + `--atlas-foreground-disabled` ✅
+- [ ] Label + description `line-height: 1.4` magic numbers → **BUG-015 (P3) — FIXED**
+- [x] Card variant: `border-radius-md`, `border-strong` border, full-width surface ✅
+- [x] Card checked: `--atlas-primary` border + `--atlas-primary-subtle` bg ✅
+- [x] Card invalid: `--atlas-danger` border ✅
+- [x] Card disabled: `opacity-disabled` + `cursor: not-allowed` ✅
+- [x] Card motion — border-color + background-color via `--atlas-duration-fast` ✅
+- [x] Logical properties — `gap`, `margin-inline-start` on required marker ✅
+
+**Exit condition:** 4 bugs found (2 P2, 2 P3), all fixed in session QA-04.
+
+---
+
 ## QA-01 Checklist — Token Audit
 
 - [x] `grep -rn "#[0-9a-fA-F]{3,6}" components/` — **zero results** ✅
@@ -371,7 +605,7 @@ line-height: var(--atlas-line-height-normal); /* was: 1.4 */
 | QA-01 — Token Audit | ✅ Complete | 2026-05-09 | 3 bugs found, all fixed |
 | QA-02 — Button | ✅ Complete | 2026-05-09 | 3 bugs found + fixed (BUG-004–006) |
 | QA-03 — Input + Label | ✅ Complete | 2026-05-09 | 3 bugs found + fixed (BUG-007–009) |
-| QA-04 — Textarea + Checkbox | ⬜ Pending | — | — |
+| QA-04 — Textarea + Checkbox | ✅ Complete | 2026-05-10 | 7 bugs found + fixed (BUG-010–016) |
 | QA-05 — Switch + Badge | ⬜ Pending | — | — |
 | QA-06 — Card | ⬜ Pending | — | — |
 | QA-07 — Alert + Dialog | ⬜ Pending | — | — |
