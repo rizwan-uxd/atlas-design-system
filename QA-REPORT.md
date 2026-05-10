@@ -2,7 +2,7 @@
 
 > **Version:** 1.0  
 > **Status:** In progress  
-> **Last updated:** 2026-05-10 (QA-06 complete)
+> **Last updated:** 2026-05-10 (QA-07 complete)
 
 ---
 
@@ -10,12 +10,12 @@
 
 | Metric | Value |
 |---|---|
-| Sessions completed | 6 of 14 |
-| Total bugs filed | 30 |
+| Sessions completed | 7 of 14 |
+| Total bugs filed | 38 |
 | P1 bugs open | 0 |
-| P2 bugs open | 7 |
-| P3 bugs open | 7 |
-| Components spec-complete | 0 of 12 (code audits: Button ✅ · Input ✅ · Label ✅ · Textarea ✅ · Checkbox ✅ · Switch ✅ · Badge ✅ · Card ✅; visual + dark-mode passes pending) |
+| P2 bugs open | 11 |
+| P3 bugs open | 11 |
+| Components spec-complete | 0 of 12 (code audits: Button ✅ · Input ✅ · Label ✅ · Textarea ✅ · Checkbox ✅ · Switch ✅ · Badge ✅ · Card ✅ · Alert ✅ · Dialog ✅; visual + dark-mode passes pending) |
 
 ---
 
@@ -32,8 +32,8 @@
 | Switch | ✅ Pass | — | — | — | — | — | 4 bugs (BUG-017–020) found, fixes pending |
 | Card | ✅ Pass | — | — | — | — | — | 5 bugs (BUG-026–030) found, fixes pending |
 | Badge | ✅ Pass | — | — | — | — | — | 5 bugs (BUG-021–025) found, fixes pending |
-| Alert | — | — | — | — | — | — | — |
-| Dialog | — | — | — | — | — | — | — |
+| Alert | ✅ Pass | — | — | — | — | — | 3 bugs (BUG-031–033) found; fixes pending |
+| Dialog | ✅ Pass | — | — | — | — | — | 5 bugs (BUG-034–038) found; fixes pending |
 | Tabs | — | — | — | — | — | — | — |
 | NavBar | — | — | — | — | — | — | — |
 
@@ -1039,6 +1039,280 @@ line-height: var(--atlas-line-height-tight); /* was: 1 */
 
 ---
 
+### QA-07 — Alert + Dialog
+
+---
+
+#### BUG-031 · P2 · OPEN
+
+**Title:** Alert border uses `--atlas-{intent}` instead of spec-defined `--atlas-{intent}-muted`
+
+**Guard:** `token-enforcer`
+
+**Component:** `Alert` → `components/Alert/Alert.module.css` lines 63–86
+
+**Description:** The spec border table explicitly maps each variant to its muted sibling token: `info → --atlas-info-muted`, `success → --atlas-success-muted`, `warning → --atlas-warning-muted`, `danger → --atlas-danger-muted`. The implementation uses the full-intensity semantic color (`--atlas-info`, `--atlas-success`, etc.) for `border-color`. The full-intensity border overpowers the subtle background, making the alert feel visually heavier and more alarming than the spec intends. Additionally, `--atlas-{intent}-muted` tokens do not yet exist in `atlas.tokens.css` — they must be added before this fix can be applied.
+
+**Fix required (two parts):**
+1. Add `--atlas-info-muted`, `--atlas-success-muted`, `--atlas-warning-muted`, `--atlas-danger-muted` tokens to `atlas.tokens.css` (recommend: the 100-level tint for each intent scale, e.g. `--atlas-color-info-100`)
+2. Update Alert variant border rules: `.info { border-color: var(--atlas-info-muted); }` etc.
+
+**Files to change:** `atlas.tokens.css`, `components/Alert/Alert.module.css`
+
+---
+
+#### BUG-032 · P2 · OPEN
+
+**Title:** No exit (dismiss) animation — alert unmounts instantly on `onDismiss`
+
+**Guard:** `state-helper`
+
+**Component:** `Alert` → `components/Alert/Alert.tsx`, `components/Alert/Alert.module.css`
+
+**Description:** The spec defines a "dismissing" state: "fade + height collapse over `--atlas-duration-base` `--atlas-easing-exit`." The implementation has an enter animation (`alertEnter`) but no complementary exit. When the dismiss button fires `onDismiss`, the parent is expected to unmount the alert — this happens instantly with no transition. The dismissing state is entirely absent from both the component and the CSS. Screen readers and sighted users lose the visual continuity cue that the alert is leaving, not just hidden.
+
+**Fix required:** Introduce internal `dismissing` state management so the component can run an exit animation before calling `onDismiss`:
+```tsx
+const [isDismissing, setIsDismissing] = useState(false)
+
+const handleDismiss = () => {
+  setIsDismissing(true)
+  // onDismiss fires after animation completes via onAnimationEnd
+}
+```
+Add a `.dismissing` CSS class with an `alertExit` keyframe (`opacity 1→0 + max-height collapse`) and wire `onAnimationEnd` to call `onDismiss()` and remove the element.
+
+**Files to change:** `components/Alert/Alert.tsx`, `components/Alert/Alert.module.css`
+
+---
+
+#### BUG-033 · P3 · OPEN
+
+**Title:** `line-height: 1` in `.dismissBtn` is a magic number
+
+**Guard:** `token-enforcer`
+
+**Component:** `Alert` → `components/Alert/Alert.module.css` line 184
+
+**Description:** `.dismissBtn` uses `line-height: 1` — a raw unitless value with no corresponding Atlas token. This is the same pattern as BUG-009 (Label), BUG-012 (Textarea), BUG-015 (Checkbox), BUG-017 (Switch), and BUG-025 (Badge). The nearest defined token is `--atlas-line-height-tight: 1.2`.
+
+**Fix required:**
+```css
+line-height: var(--atlas-line-height-tight); /* was: 1 */
+```
+
+**Files to change:** `components/Alert/Alert.module.css`
+
+---
+
+#### BUG-034 · P3 · OPEN
+
+**Title:** Dialog `.description` uses non-logical `margin` shorthand
+
+**Guard:** `token-enforcer`
+
+**Component:** `Dialog` → `components/Dialog/Dialog.module.css` line 229
+
+**Description:** `.description { margin: var(--atlas-spacing-1) 0 0; }` — the non-zero block-start value is embedded in a physical margin shorthand that sets all four sides. This is the same pattern as BUG-028 (Card description). The Atlas convention requires logical properties for all directional values. Using the shorthand silently sets `margin-left` and `margin-right` to `0` as physical values.
+
+**Fix required:**
+```css
+/* replace shorthand with logical property */
+margin-block-start: var(--atlas-spacing-1); /* was: margin: var(--atlas-spacing-1) 0 0 */
+```
+
+**Files to change:** `components/Dialog/Dialog.module.css`
+
+---
+
+#### BUG-035 · P3 · OPEN
+
+**Title:** `line-height: 1` in Dialog `.closeBtn` is a magic number
+
+**Guard:** `token-enforcer`
+
+**Component:** `Dialog` → `components/Dialog/Dialog.module.css` line 279
+
+**Description:** `.closeBtn` uses `line-height: 1` — a raw unitless value with no corresponding Atlas token. Same pattern as BUG-033 (Alert dismiss), BUG-025 (Badge), BUG-017 (Switch). Replace with `var(--atlas-line-height-tight)`.
+
+**Fix required:**
+```css
+line-height: var(--atlas-line-height-tight); /* was: 1 */
+```
+
+**Files to change:** `components/Dialog/Dialog.module.css`
+
+---
+
+#### BUG-036 · P2 · OPEN
+
+**Title:** Sheet and Drawer variants use physical CSS positioning properties (`left`, `right`, `bottom`)
+
+**Guard:** `token-enforcer`
+
+**Component:** `Dialog` → `components/Dialog/Dialog.module.css` lines 99–150
+
+**Description:** The `.sheet` variant uses `left: 0; right: 0; bottom: 0;` and the `.drawer` variants use `right: 0` (end side) and `left: 0` (start side) — all physical properties that break RTL layouts. The Atlas convention requires logical properties throughout. In an RTL document, `right: 0` places the element at the physical right edge (which is the logical start in RTL), causing the drawer to slide from the wrong side.
+
+**Fix required:**
+```css
+/* Sheet */
+.sheet {
+  inset-inline: 0;          /* was: left: 0; right: 0; */
+  inset-block-end: 0;       /* was: bottom: 0; */
+  ...
+}
+
+/* Drawer sides */
+.drawer[data-side="end"]   { inset-inline-end: 0; }   /* was: right: 0; */
+.drawer[data-side="start"] { inset-inline-start: 0; }  /* was: left: 0; */
+```
+
+**Files to change:** `components/Dialog/Dialog.module.css`
+
+---
+
+#### BUG-037 · P2 · OPEN
+
+**Title:** Drag handle wrapped in `RadixDialog.Close` — click-to-dismiss overrides drag-to-dismiss UX
+
+**Guard:** `structure-enforcer`
+
+**Component:** `Dialog` → `components/Dialog/Dialog.tsx` lines 154–163
+
+**Description:** The sheet drag handle element is wrapped in `<RadixDialog.Close asChild>`, so any click (or tap) on the handle immediately closes the dialog. This conflates two distinct interactions: dragging (the primary intended gesture) and clicking (which would normally trigger the close button in the header, not the drag handle). Users who accidentally touch the handle will instantly dismiss the sheet without performing a drag gesture. Additionally, the handle is given `role="button"` — a drag handle is not semantically a button; it is a positional affordance. Giving it `role="button"` causes screen readers to announce it as an interactive control redundant with the header close button.
+
+**Fix required:** Remove `RadixDialog.Close` from the drag handle. Render it as a plain `<div>` with the correct visual styling. The close button in the header (`showClose` prop) is the correct dismissal affordance. For actual drag-to-dismiss on web, a future enhancement should add pointer event listeners; for now the handle should be visual-only.
+
+```tsx
+{/* Drag handle — sheet only; visual affordance only (no click-to-close) */}
+{variant === "sheet" && (
+  <div className={styles.dragHandle} aria-hidden="true" />
+)}
+```
+
+**Files to change:** `components/Dialog/Dialog.tsx`
+
+---
+
+#### BUG-038 · P3 · OPEN
+
+**Title:** Modal variant uses physical `left/top` properties instead of logical equivalents
+
+**Guard:** `token-enforcer`
+
+**Component:** `Dialog` → `components/Dialog/Dialog.module.css` lines 67–73
+
+**Description:** `.modal { top: 50%; left: 50%; transform: translate(-50%, -50%); }` uses physical CSS properties `left` and `top`. The Atlas convention requires logical properties: `inset-block-start` for `top` and `inset-inline-start` for `left`. While the centering-via-translate technique produces visually identical output in LTR and RTL (because `translate(-50%)` is always relative to the element's own width), the physical property usage is inconsistent with the logical-property convention used in every other component.
+
+**Fix required:**
+```css
+.modal {
+  inset-block-start: 50%;   /* was: top: 50%; */
+  inset-inline-start: 50%;  /* was: left: 50%; */
+  transform: translate(-50%, -50%);
+}
+```
+
+Note: `translate(-50%, -50%)` remains physical. CSS logical transforms (`translate(-50% in inline direction)`) are not yet widely available. This is an accepted limitation; only the positioning properties need correction.
+
+**Files to change:** `components/Dialog/Dialog.module.css`
+
+---
+
+## QA-07 Checklist — Alert
+
+**Source files reviewed:** `components/Alert/Alert.tsx`, `components/Alert/Alert.module.css`
+**Spec:** `ATLAS-SPEC/Alert.md`
+
+- [x] All 4 variants declared and styled (info, success, warning, danger) ✅
+- [x] Both sizes declared (sm padding `--atlas-spacing-3`, md `--atlas-spacing-4`) ✅
+- [x] `sm` title: `--atlas-text-body-sm`; `sm` description: `--atlas-text-caption` ✅
+- [x] `md` title: `--atlas-text-body`; `md` description: `--atlas-text-body-sm` ✅
+- [x] Background tokens: all 4 variants use `--atlas-{intent}-subtle` ✅
+- [ ] Border tokens: implementation uses `--atlas-{intent}` (full intensity); spec defines `--atlas-{intent}-muted` → **BUG-031** (tokens also missing from `atlas.tokens.css`)
+- [x] Radius: `--atlas-radius-md` ✅
+- [x] Title foreground: `color: inherit` — inherits variant intent color from `.alert` root (deviation from spec `--atlas-{intent}-foreground`; confirmed spec error — foreground tokens resolve to white, no contrast on subtle bg) ✅
+- [x] Description foreground: `--atlas-foreground` ✅
+- [x] Icon color: `color: inherit` → follows variant intent color ✅
+- [x] `role="alert"` for warning/danger; `role="status"` for info/success ✅
+- [x] Enter animation: fade + 4px `translateY` over `--atlas-duration-base` `--atlas-easing-emphasized` ✅
+- [x] `prefers-reduced-motion`: enter animation suppressed ✅
+- [ ] Exit/dismiss animation: no `dismissing` state, no exit keyframe — alert unmounts instantly → **BUG-032**
+- [x] Leading icon: `aria-hidden="true"` ✅
+- [x] Default icons per variant: info ℹ · success ✓ · warning ⚠ · danger ⊗ ✅
+- [x] `hideIcon` prop suppresses icon ✅
+- [x] `icon` prop overrides default ✅
+- [x] `actions` slot: flex-wrap row, `--atlas-spacing-3` block-start margin, `--atlas-spacing-2` gap ✅
+- [x] Dismiss button: renders only when `dismissible=true` ✅
+- [x] Dismiss `aria-label`: `"Dismiss {variant} alert"` ✅
+- [x] Dismiss touch target: `min-width/min-height: var(--atlas-touch-min)` (44px) ✅
+- [x] Dismiss focus ring: `--atlas-border-width-2` solid `--atlas-focus-ring` + `spacing-0_5` offset ✅
+- [ ] Dismiss `line-height: 1` magic number → **BUG-033**
+- [x] Token audit: no hex literals, no rgba(), no raw pixel values ✅
+- [x] Logical properties: `padding-inline-start`, `inset-block`, `inset-inline-start`, `margin-block-start` ✅
+- [x] `description` prop and `children` prop — both supported, `description` takes priority ✅
+
+**Exit condition:** 3 bugs found (2 P2, 1 P3). No fixes applied this session.
+
+---
+
+## QA-07 Checklist — Dialog
+
+**Source files reviewed:** `components/Dialog/Dialog.tsx`, `components/Dialog/Dialog.module.css`
+**Spec:** `ATLAS-SPEC/Dialog.md`
+
+- [x] All 3 variants declared (modal, sheet, drawer) ✅
+- [x] All 5 sizes declared (sm, md, lg, xl, full) via `--_max-w` + `--_pad` CSS custom properties ✅
+- [x] Size max-widths from tokens: `--atlas-dialog-sm/md/lg/xl`; full = `calc(100% - spacing-6 * 2)` ✅
+- [x] Overlay: `color-mix` with `--atlas-overlay` at 65% opacity ✅
+- [x] Overlay z-index: `--atlas-z-overlay` ✅
+- [x] Content z-index: `--atlas-z-modal` ✅
+- [x] Content background: `--atlas-background` ✅
+- [x] Content border: `--atlas-border-width-1` solid `--atlas-border` ✅
+- [x] Content shadow: `--atlas-shadow-xl` ✅
+- [x] Modal radius: `--atlas-radius-lg` ✅
+- [x] Sheet radius: `--atlas-radius-lg` on top corners only (`0` on bottom) ✅
+- [x] Drawer radius: `0` on the slide-from edge; `--atlas-radius-lg` on opposite corners ✅
+- [x] Modal enter: scale `0.96→1` + fade over `--atlas-duration-base` `--atlas-easing-emphasized` ✅
+- [x] Sheet enter: `translateY(100%→0)` + fade over `--atlas-duration-base` `--atlas-easing-emphasized` ✅
+- [x] Drawer enter: `translateX(±100%→0)` + fade over `--atlas-duration-base` `--atlas-easing-emphasized` ✅
+- [x] Overlay enter: fade over `--atlas-duration-fast` `--atlas-easing-standard` ✅
+- [x] `prefers-reduced-motion`: all animations set to `none !important` ✅
+- [ ] Modal: `left: 50%; top: 50%;` physical properties — should be logical `inset-inline-start`/`inset-block-start` → **BUG-038**
+- [ ] Sheet: `left: 0; right: 0; bottom: 0;` physical properties → **BUG-036**
+- [ ] Drawer: `right: 0` / `left: 0` physical properties → **BUG-036**
+- [x] Radix `RadixDialog.Root` powers focus trap, scroll lock, Escape dismiss, `aria-modal`, `aria-labelledby`, `aria-describedby` ✅
+- [x] `closeOnEscape=false` → `e.preventDefault()` on `onEscapeKeyDown` ✅
+- [x] `closeOnOverlayClick=false` → `e.preventDefault()` on `onInteractOutside` ✅
+- [x] `DialogTitle` → `RadixDialog.Title` → auto-wires `aria-labelledby` ✅
+- [x] `DialogDescription` → `RadixDialog.Description` → auto-wires `aria-describedby` ✅
+- [x] Close button: `aria-label="Close dialog"` ✅
+- [x] Close button size: 40px (`--atlas-spacing-10`) visual + negative margin for touch expansion ✅
+- [x] Close button focus ring: `--atlas-border-width-2` solid `--atlas-focus-ring` + `spacing-0_5` offset ✅
+- [x] Close button hover: `--atlas-background-subtle` bg + `--atlas-foreground` color ✅
+- [x] Close button motion: `background-color + color` via `--atlas-duration-fast` `--atlas-easing-standard` ✅
+- [ ] Drag handle wrapped in `RadixDialog.Close` — click closes sheet; should be visual-only → **BUG-037**
+- [x] Drag handle width: `--atlas-spacing-9` (36px) ✅
+- [x] Drag handle height: `--atlas-spacing-1` (4px) ✅
+- [x] Drag handle color: `--atlas-border-strong` ✅
+- [x] Drag handle radius: `--atlas-radius-full` ✅
+- [x] Drag handle margin: `--atlas-spacing-2 auto 0` — centred horizontally ✅
+- [x] Header separator: `--atlas-border-width-1` solid `--atlas-border` on `border-block-end` ✅
+- [x] Footer separator: `--atlas-border-width-1` solid `--atlas-border` on `border-block-start` ✅
+- [x] `DialogFooter` justify: start/between/end via flex `justify-content` ✅
+- [x] Title: `--atlas-text-h3`, `--atlas-font-weight-semibold`, `--atlas-foreground` ✅
+- [x] Description: `--atlas-text-body-sm`, `--atlas-foreground-muted` ✅
+- [ ] Description `margin: var(--atlas-spacing-1) 0 0` — non-logical shorthand → **BUG-034**
+- [ ] CloseBtn `line-height: 1` magic number → **BUG-035**
+- [x] `side` prop on `DialogContent` (drawer only) → forwarded as `data-side` attribute for CSS targeting ✅
+- [x] Token audit: no hex literals, no rgba(), no raw pixel values ✅
+- [x] Logical properties on header/footer/body padding — `padding-block`, `padding-inline` ✅ (exception: overlay/content positioning — BUG-036/038)
+
+**Exit condition:** 5 bugs found (2 P2, 3 P3). No fixes applied this session.
+
+---
+
 ## Session Progress
 
 | Session | Status | Date | Notes |
@@ -1049,7 +1323,7 @@ line-height: var(--atlas-line-height-tight); /* was: 1 */
 | QA-04 — Textarea + Checkbox | ✅ Complete | 2026-05-10 | 7 bugs found + fixed (BUG-010–016) |
 | QA-05 — Switch + Badge | ✅ Complete | 2026-05-10 | 9 bugs found (BUG-017–025); fixes pending |
 | QA-06 — Card | ✅ Complete | 2026-05-10 | 5 bugs found (BUG-026–030); fixes pending |
-| QA-07 — Alert + Dialog | ⬜ Pending | — | — |
+| QA-07 — Alert + Dialog | ✅ Complete | 2026-05-10 | 8 bugs found (BUG-031–038); fixes pending |
 | QA-08 — Tabs + NavBar | ⬜ Pending | — | — |
 | QA-09 — Dark Mode Pass | ⬜ Pending | — | — |
 | QA-10 — Responsive Pass | ⬜ Pending | — | — |
