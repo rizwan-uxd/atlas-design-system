@@ -2,7 +2,7 @@
 
 > **Version:** 1.0  
 > **Status:** In progress  
-> **Last updated:** 2026-05-10 (QA-04 complete)
+> **Last updated:** 2026-05-10 (QA-06 complete)
 
 ---
 
@@ -10,12 +10,12 @@
 
 | Metric | Value |
 |---|---|
-| Sessions completed | 4 of 14 |
-| Total bugs filed | 16 |
+| Sessions completed | 6 of 14 |
+| Total bugs filed | 30 |
 | P1 bugs open | 0 |
-| P2 bugs open | 0 |
-| P3 bugs open | 0 |
-| Components spec-complete | 0 of 12 (code audits: Button ✅ · Input ✅ · Label ✅ · Textarea ✅ · Checkbox ✅; visual + dark-mode passes pending) |
+| P2 bugs open | 7 |
+| P3 bugs open | 7 |
+| Components spec-complete | 0 of 12 (code audits: Button ✅ · Input ✅ · Label ✅ · Textarea ✅ · Checkbox ✅ · Switch ✅ · Badge ✅ · Card ✅; visual + dark-mode passes pending) |
 
 ---
 
@@ -29,9 +29,9 @@
 | Label | ✅ Pass | — | — | — | — | — | 1 bug (BUG-009) found + fixed |
 | Textarea | ✅ Pass | — | — | — | — | — | 3 bugs (BUG-010–012) found + fixed |
 | Checkbox | ✅ Pass | — | — | — | — | — | 4 bugs (BUG-013–016) found + fixed |
-| Switch | — | — | — | — | — | — | — |
-| Card | — | — | — | — | — | — | — |
-| Badge | — | — | — | — | — | — | — |
+| Switch | ✅ Pass | — | — | — | — | — | 4 bugs (BUG-017–020) found, fixes pending |
+| Card | ✅ Pass | — | — | — | — | — | 5 bugs (BUG-026–030) found, fixes pending |
+| Badge | ✅ Pass | — | — | — | — | — | 5 bugs (BUG-021–025) found, fixes pending |
 | Alert | — | — | — | — | — | — | — |
 | Dialog | — | — | — | — | — | — | — |
 | Tabs | — | — | — | — | — | — | — |
@@ -584,6 +584,162 @@ Added `:active` rules mirroring the hover token assignments (unchecked uses `--a
 
 ---
 
+### QA-06 — Card
+
+---
+
+#### BUG-026 · P2 · OPEN
+
+**Title:** Selected state missing `background-color: --atlas-background-subtle` across all variants
+
+**Guard:** `token-enforcer` + `state-helper`
+
+**Component:** `Card` → `components/Card/Card.module.css` lines 56–64
+
+**Description:** The spec background table defines `selected` background as `--atlas-background-subtle` for all four card variants (default, elevated, outlined, filled). The implementation's selected rules only change the border — there is no `background-color` override. A selected card is visually indistinguishable from a non-selected one except for the border color, losing the subtle fill the spec prescribes to reinforce the selected state.
+
+**Fix required:**
+```css
+.selected.default,
+.selected.elevated,
+.selected.outlined,
+.selected.filled {
+  background-color: var(--atlas-background-subtle);
+}
+```
+(Combined with the existing border rules.)
+
+**Files to change:** `components/Card/Card.module.css`
+
+---
+
+#### BUG-027 · P2 · OPEN
+
+**Title:** Interactive card missing `aria-labelledby` → CardTitle linkage
+
+**Guard:** `accessibility-lite`
+
+**Component:** `Card` → `components/Card/Card.tsx` line 87–105, `CardTitle` → line 164
+
+**Description:** The spec accessibility section states "interactive cards use `aria-labelledby` pointing to the title." The JSDoc comment on Card.tsx mentions this requirement (`aria-labelledby → CardTitle`), but neither the Card's interactive render branch sets `aria-labelledby` nor does `CardTitle` generate a stable `id` to reference. Screen readers announcing an interactive card (`role="button"`) will find no programmatic label — they fall back to the full text content of the card, which may include body copy, making announcements verbose and unreliable.
+
+**Fix required:**
+- Add an optional `titleId` prop to `CardTitle` (or generate one via `useId`)
+- Pass this id from the parent `Card` to `aria-labelledby` on the interactive `<div role="button">`
+- The cleanest pattern: `Card` generates a `titleId = uid + "-title"` and passes it via context; `CardTitle` consumes it and sets `id={titleId}`.
+
+**Files to change:** `components/Card/Card.tsx`
+
+---
+
+#### BUG-028 · P3 · OPEN
+
+**Title:** `.description` uses non-logical `margin` shorthand — breaks logical property convention
+
+**Guard:** `token-enforcer`
+
+**Component:** `Card` → `components/Card/Card.module.css` line 154
+
+**Description:** The `.description` rule uses `margin: var(--atlas-spacing-1) 0 0` — a physical margin shorthand that sets all four sides including `margin-left: 0` and `margin-right: 0` as physical values. The Atlas convention requires logical properties throughout (RTL-safe). While both inline values are `0` (making RTL impact negligible), the physical shorthand is inconsistent with every other component's convention and risks drift if values are later changed.
+
+**Fix required:**
+```css
+/* .description — replace shorthand with logical property */
+margin-block-start: var(--atlas-spacing-1); /* was: margin: var(--atlas-spacing-1) 0 0 */
+```
+The `0` values for block-end and inline sides are browser defaults and don't need explicit declarations.
+
+**Files to change:** `components/Card/Card.module.css`
+
+---
+
+#### BUG-029 · P3 · OPEN
+
+**Title:** `CardTitle` renders as `<p>` inside `<article>` — missing heading semantics
+
+**Guard:** `accessibility-lite`
+
+**Component:** `Card` → `components/Card/Card.tsx` line 166
+
+**Description:** `CardTitle` renders as `<p>` — a paragraph — inside a `<article>` landmark. The spec defines Card as `<article>` or `<section>`, both of which should contain a heading to correctly express the document outline and allow screen reader users to navigate by heading. `text-h4` in the spec refers to the typographic style; it does not override the semantic requirement for a heading element. Without a heading inside `<article>`, screen reader users cannot jump between cards using heading navigation (H key in NVDA/JAWS).
+
+**Fix required:** Render `CardTitle` as `<h3>` (or an appropriate heading level via an `as` prop):
+```tsx
+export function CardTitle({ as: As = "h3", className, children }: CardTitleProps) {
+  return <As className={cx(styles.title, className)}>{children}</As>
+}
+```
+Adding an `as` prop allows callers to adjust heading level to fit the page's document outline without forcing a single level globally.
+
+**Files to change:** `components/Card/Card.tsx`
+
+---
+
+#### BUG-030 · P3 · OPEN
+
+**Title:** Interactive card uses `<div role="button">` instead of `<button>`; `asChild` prop absent from CardProps
+
+**Guard:** `structure-enforcer`
+
+**Component:** `Card` → `components/Card/Card.tsx` line 87, `CardProps` interface
+
+**Description:** The spec states "Interactive cards become `<button>` (web)". The implementation uses `<div role="button">` with a manual `onKeyDown` handler for Enter/Space. While `role="button"` is semantically equivalent for AT, a native `<button>` provides implicit keyboard activation (no `onKeyDown` needed), correct `type="button"` default (no accidental form submission), and is always focusable without explicit `tabIndex`. Additionally, the spec API includes `asChild?: boolean` (Radix Slot) which is entirely absent from `CardProps` — callers cannot use the polymorphic rendering pattern the spec documents.
+
+**Fix required (two parts):**
+1. For simple interactive cards with no block-level children: render native `<button type="button">`.
+2. For cards with block-level children (where `<button>` is invalid HTML): expose `asChild?: boolean` using Radix `Slot` so callers can compose with a link (`<a>`) or custom element. Add `asChild` to `CardProps` and install `@radix-ui/react-slot` if not present.
+
+**Files to change:** `components/Card/Card.tsx`
+
+---
+
+## QA-06 Checklist — Card
+
+**Source files reviewed:** `components/Card/Card.tsx`, `components/Card/Card.module.css`
+**Spec:** `ATLAS-SPEC/Card.md`
+
+- [x] All 4 variants declared (default, elevated, outlined, filled) ✅
+- [x] All 3 sizes declared via CSS custom properties (sm/md/lg) — padding and gap values match spec ✅
+- [x] `default`: `--atlas-background` bg + `--atlas-border-width-1` solid `--atlas-border` border ✅
+- [x] `elevated`: `--atlas-background` bg + `--atlas-shadow-md` — no border ✅
+- [x] `outlined`: `--atlas-background` bg + `--atlas-border-width-1` solid `--atlas-border-strong` — no shadow ✅
+- [x] `filled`: `--atlas-background-muted` bg — no border, no shadow ✅
+- [x] Selected border: all variants get `--atlas-primary` border when `selected=true` ✅
+- [ ] Selected background: `--atlas-background-subtle` missing — only border updated → **BUG-026**
+- [x] Interactive hover — default/outlined/filled: `--atlas-background-subtle` bg ✅
+- [x] Interactive hover — elevated: `--atlas-shadow-lg` lift (no bg change, matching spec) ✅
+- [x] Focus ring: `--atlas-border-width-2` solid `--atlas-focus-ring` + `spacing-0_5` offset on `.interactive:focus-visible` ✅
+- [x] Motion: `background-color`, `box-shadow`, `border-color` via `--atlas-duration-fast` `--atlas-easing-standard` ✅
+- [x] `prefers-reduced-motion`: `transition: none` on `.interactive` ✅
+- [x] Disabled: `opacity-disabled` + `pointer-events: none` ✅
+- [x] Radius: `--atlas-radius-lg` on `.card` base ✅
+- [x] Token audit — no hex literals, no rgba(), no raw pixel values in live CSS ✅
+- [x] `line-height` on `.title`: `--atlas-line-height-snug` (token) ✅
+- [x] `line-height` on `.description`: `--atlas-line-height-normal` (token) ✅
+- [ ] `.description` uses non-logical `margin` shorthand → **BUG-028**
+- [x] Non-interactive card renders as `<article>` ✅
+- [ ] Interactive card uses `<div role="button">` not `<button>`; `asChild` absent → **BUG-030**
+- [x] Interactive: `tabIndex={disabled ? -1 : 0}` ✅
+- [x] Interactive: `aria-disabled` set when disabled ✅
+- [x] Interactive: `aria-pressed={selected}` set ✅
+- [x] Interactive: `onClick` suppressed when disabled ✅
+- [x] Interactive: `onKeyDown` handles Enter + Space ✅
+- [ ] Interactive: no `aria-labelledby` wired to CardTitle id → **BUG-027**
+- [x] `CardHeader`: leading slot (inline-start, `aria-hidden`) + action slot (inline-end via `margin-inline-start: auto`) ✅
+- [x] `CardHeader`: `headerMain` flex container grows to fill remaining space, `min-width: 0` prevents overflow ✅
+- [ ] `CardTitle` renders as `<p>` inside `<article>` — not a heading element → **BUG-029**
+- [x] `CardTitle`: `font-weight: --atlas-font-weight-semibold`, `font-size: --atlas-text-h4`, `color: --atlas-foreground` ✅
+- [x] `CardDescription`: `font-size: --atlas-text-body-sm`, `color: --atlas-foreground-muted` ✅
+- [x] `CardContent`: `padding-block-start/end: --_card-gap`; overrides to `--_card-padding` when `:first-child` / `:last-child` ✅
+- [x] `CardFooter`: `justify` prop drives `justify-content` (start/between/end) ✅
+- [x] `CardFooter`: `gap: --atlas-spacing-2` between footer items ✅
+- [x] Logical properties throughout — `padding-block-start`, `padding-inline`, `margin-inline-start` ✅ (except `.description` margin — BUG-028)
+- [x] Compound slots compose without layout break ✅
+
+**Exit condition:** 5 bugs found (2 P2, 3 P3). No fixes applied this session.
+
+---
+
 ## QA-01 Checklist — Token Audit
 
 - [x] `grep -rn "#[0-9a-fA-F]{3,6}" components/` — **zero results** ✅
@@ -598,6 +754,291 @@ Added `:active` rules mirroring the hover token assignments (unchecked uses `--a
 
 ---
 
+### QA-05 — Switch + Badge
+
+---
+
+#### BUG-017 · P3 · OPEN
+
+**Title:** `line-height: 1.4` in `.label` and `.description` are magic numbers
+
+**Guard:** `token-enforcer`
+
+**Component:** `Switch` → `components/Switch/Switch.module.css` lines 161, 173
+
+**Description:** Both `.label` and `.description` use `line-height: 1.4` — a raw unitless value with no Atlas token equivalent. This is the same pattern as BUG-009 (Label) and BUG-015 (Checkbox). The nearest defined token is `--atlas-line-height-normal: 1.5`. Using the literal prevents the token system from controlling line-height globally.
+
+**Fix required:**
+```css
+/* .label */
+line-height: var(--atlas-line-height-normal); /* was: 1.4 */
+
+/* .description */
+line-height: var(--atlas-line-height-normal); /* was: 1.4 */
+```
+
+**Files to change:** `components/Switch/Switch.module.css`
+
+---
+
+#### BUG-018 · P2 · OPEN
+
+**Title:** `required` prop missing from SwitchProps — no `aria-required` forwarded to button
+
+**Guard:** `accessibility-lite`
+
+**Component:** `Switch` → `components/Switch/Switch.tsx`
+
+**Description:** The spec API table lists `required?: boolean` as a prop. The `SwitchProps` interface has no `required` field and the `<button role="switch">` element receives no `aria-required` attribute. Callers marking a switch as required (e.g., in a settings form) have no mechanism to convey this to assistive technologies. Screen readers will not announce the field as required.
+
+**Fix required:**
+- Add `required?: boolean` to `SwitchProps`
+- Destructure `required = false` in the component body
+- Add `aria-required={required || undefined}` to the `<button>` element
+
+**Files to change:** `components/Switch/Switch.tsx`
+
+---
+
+#### BUG-019 · P3 · OPEN
+
+**Title:** Thumb background uses `--atlas-foreground-on-brand` instead of spec-defined `--atlas-background`
+
+**Guard:** `token-enforcer`
+
+**Component:** `Switch` → `components/Switch/Switch.module.css` line 97
+
+**Description:** The spec token table defines the thumb color as `--atlas-background` (the white surface token). The implementation uses `--atlas-foreground-on-brand` with the comment "neutral-0 in both light and dark mode." In light mode both tokens resolve identically. In dark mode, `--atlas-background` switches to the dark surface (near-black), whereas `--atlas-foreground-on-brand` remains white — making the thumb always white regardless of theme. The implementation choice produces the correct visual, but diverges from the spec-specified token. This creates a token audit violation and a maintenance risk if `--atlas-foreground-on-brand` is ever reassigned.
+
+**Fix required:** Replace `--atlas-foreground-on-brand` with `--atlas-background` and verify the dark-mode token for `--atlas-background` is set to `neutral-0` (white) in the dark override block of `atlas.tokens.css`. If `--atlas-background` resolves to the surface color (dark in dark mode), the spec should be updated to use `--atlas-foreground-on-brand` instead — but that correction belongs in the spec, not in the component.
+
+**Files to change:** `components/Switch/Switch.module.css` (and possibly `atlas.tokens.css` if the dark override needs adjustment)
+
+---
+
+#### BUG-020 · P3 · OPEN
+
+**Title:** No `:active` pressed state on track CSS
+
+**Guard:** `state-helper`
+
+**Component:** `Switch` → `components/Switch/Switch.module.css`
+
+**Description:** The spec state matrix lists `pressed` as a distinct state. The CSS has hover rules for both off and on states but no `:active` pseudo-class rules on `.track`. On web, the pressed moment (mousedown → mouseup) is visually identical to hover — no darker press feedback. This is the same omission as BUG-016 (Checkbox). P3 because hover and active can share the same tokens, but the spec's state matrix is incomplete without it.
+
+**Fix required:** Add `:active` rules on `.track` mirroring the hover token assignments:
+```css
+.track:active:not([data-disabled])[data-state="unchecked"] {
+  background-color: var(--atlas-background-subtle);
+}
+.track:active:not([data-disabled])[data-state="checked"] {
+  background-color: var(--atlas-primary-hover);
+}
+```
+
+**Files to change:** `components/Switch/Switch.module.css`
+
+---
+
+#### BUG-021 · P2 · OPEN
+
+**Title:** Badge success/warning/danger/info foreground uses `--atlas-{intent}` instead of spec-defined `--atlas-{intent}-foreground`
+
+**Guard:** `token-enforcer`
+
+**Component:** `Badge` → `components/Badge/Badge.module.css` lines 77–90
+
+**Description:** The spec foreground table explicitly maps `--atlas-success-foreground`, `--atlas-warning-foreground`, `--atlas-danger-foreground`, and `--atlas-info-foreground` as the text color for their respective badge variants. The implementation uses the main semantic colors (`--atlas-success`, `--atlas-warning`, `--atlas-danger`, `--atlas-info`) instead. The CSS comment acknowledges this deviation ("use the main semantic color as text on subtle bg") but does not align with the spec. Regardless of the visual result, using the wrong token breaks the token contract and prevents global foreground adjustments from propagating correctly.
+
+**Fix required:**
+```css
+.success { color: var(--atlas-success-foreground); }
+.warning { color: var(--atlas-warning-foreground); }
+.danger  { color: var(--atlas-danger-foreground); }
+.info    { color: var(--atlas-info-foreground); }
+```
+Note: If these tokens resolve to white (foreground ON a full-intensity background), contrast must be verified against the subtle background. If contrast fails, the spec token mapping should be raised as a spec correction rather than silently diverging in code.
+
+**Files to change:** `components/Badge/Badge.module.css`
+
+---
+
+#### BUG-022 · P2 · OPEN
+
+**Title:** Disabled Badge applies opacity only — missing `--atlas-foreground-disabled` color override
+
+**Guard:** `token-enforcer` + `state-helper`
+
+**Component:** `Badge` → `components/Badge/Badge.module.css` lines 109–112
+
+**Description:** The spec states "Disabled foreground: `--atlas-foreground-disabled`". The `.disabled` rule applies only `opacity: var(--atlas-opacity-disabled)` and `pointer-events: none` without overriding the `color` property. A disabled danger badge will still render its intent foreground color at reduced opacity rather than the neutral muted gray prescribed by the spec. This is the same pattern as BUG-004 (Button) and creates visual inconsistency — disabled badges look faded but retain their intent color instead of becoming uniformly neutral.
+
+**Fix required:**
+```css
+.disabled {
+  opacity: var(--atlas-opacity-disabled);
+  pointer-events: none;
+  color: var(--atlas-foreground-disabled); /* add this */
+}
+```
+
+**Files to change:** `components/Badge/Badge.module.css`
+
+---
+
+#### BUG-023 · P2 · OPEN
+
+**Title:** No badge-level hover state and missing `onClick` prop — interactive badge surface not implemented
+
+**Guard:** `structure-enforcer`
+
+**Component:** `Badge` → `components/Badge/Badge.tsx`, `components/Badge/Badge.module.css`
+
+**Description:** The spec defines hover states for badges when `removable=true` OR when an `onClick` handler is present (making the full badge a clickable surface). The `BadgeProps` interface has no `onClick` prop, and no hover CSS rules exist on the `.badge` class. As a result, the interactive badge pattern (the entire badge as a pressable chip) is not implementable by callers. Only the remove button inside the badge has hover treatment. This leaves a spec-defined interaction mode entirely absent from the API.
+
+Hover backgrounds per spec (needed on `.badge` when interactive):
+- `default` hover → `--atlas-background-subtle`
+- `secondary` hover → `--atlas-background-muted`
+- `success` hover → `--atlas-success-muted`
+- `warning` hover → `--atlas-warning-muted`
+- `danger` hover → `--atlas-danger-muted`
+- `info` hover → `--atlas-info-muted`
+- `outline` hover → `--atlas-background-subtle`
+
+**Fix required:**
+- Add `onClick?: () => void` to `BadgeProps`
+- When `onClick` is present, render `<button>` instead of `<span>` (or use `asChild` / Radix `Slot` pattern)
+- Add hover CSS rules on `.badge` scoped to `[data-interactive]` attribute driven by the presence of `onClick`
+- Add `focus-visible` ring on `.badge` for the interactive case
+
+**Files to change:** `components/Badge/Badge.tsx`, `components/Badge/Badge.module.css`
+
+---
+
+#### BUG-024 · P2 · OPEN
+
+**Title:** Remove button `aria-label` falls back to generic "Remove item" when children is not a string
+
+**Guard:** `accessibility-lite`
+
+**Component:** `Badge` → `components/Badge/Badge.tsx` lines 95, 123
+
+**Description:** The spec requires the remove close affordance to have `aria-label="Remove {label}"` where `{label}` is the badge's text content. The implementation derives `labelText` as `typeof children === "string" ? children : "item"`. When children is a ReactNode (e.g. `<strong>Beta</strong>` or a component), `labelText` falls back to `"item"`, producing `aria-label="Remove item"` — a generic, unhelpful label that fails to identify which badge is being removed. Screen reader users with multiple removable badges in a list cannot distinguish between them.
+
+**Fix required:** Accept an explicit `label?: string` prop on Badge to provide the accessible name when children is not a plain string, and use it as the remove button's aria-label target:
+```tsx
+const labelText = label ?? (typeof children === "string" ? children : "item")
+```
+Or, alternatively, require callers to pass `aria-label` on the remove button via a `removeLabel` prop:
+```tsx
+removable?: boolean;
+removeLabel?: string; // required when removable=true and children is not a string
+```
+Add a dev-mode warning if `removable=true` and neither children is a string nor `removeLabel` is provided.
+
+**Files to change:** `components/Badge/Badge.tsx`
+
+---
+
+#### BUG-025 · P3 · OPEN
+
+**Title:** `line-height: 1` in `.badge` base and `.removeBtn` are magic numbers
+
+**Guard:** `token-enforcer`
+
+**Component:** `Badge` → `components/Badge/Badge.module.css` lines 17, 147
+
+**Description:** The `.badge` base rule uses `line-height: 1` and `.removeBtn` also uses `line-height: 1` — both raw unitless values with no corresponding Atlas token. The nearest tight token is `--atlas-line-height-tight: 1.2`. For single-line inline labels like badges and icon buttons, `--atlas-line-height-tight` is the appropriate replacement. This matches the pattern of BUG-009, BUG-012, BUG-015, and BUG-017.
+
+**Fix required:**
+```css
+/* .badge */
+line-height: var(--atlas-line-height-tight); /* was: 1 */
+
+/* .removeBtn */
+line-height: var(--atlas-line-height-tight); /* was: 1 */
+```
+
+**Files to change:** `components/Badge/Badge.module.css`
+
+---
+
+## QA-05 Checklist — Switch
+
+**Source files reviewed:** `components/Switch/Switch.tsx`, `components/Switch/Switch.module.css`
+**Spec:** `ATLAS-SPEC/Switch.md`
+
+- [x] Both sizes declared (sm 32×18px track + 14px thumb, md 40×24px track + 20px thumb) ✅
+- [x] Size dimensions from tokens only — calc() over spacing tokens; no hardcoded px in live CSS ✅
+- [x] Track off default: `--atlas-background-muted` ✅
+- [x] Track on checked: `--atlas-primary` ✅
+- [x] Hover off: `--atlas-background-subtle` ✅
+- [x] Hover on: `--atlas-primary-hover` ✅
+- [x] Disabled: `opacity-disabled` on `.root[data-disabled]` ✅ (opacity-only pattern consistent with spec — spec does not list a separate disabled foreground for track)
+- [x] Checked translate: sm=14px calc(spacing-3+spacing-0_5), md=16px spacing-4 — both correct ✅
+- [x] RTL: `[dir="rtl"]` negated translateX for both sizes ✅
+- [x] Track radius: `--atlas-radius-full` ✅
+- [x] Thumb radius: `--atlas-radius-full` ✅
+- [x] Thumb shadow: `--atlas-shadow-sm` ✅
+- [ ] Thumb background token: `--atlas-foreground-on-brand` used; spec defines `--atlas-background` → **BUG-019**
+- [x] Thumb motion: `transform var(--atlas-duration-base) var(--atlas-easing-emphasized)` ✅
+- [x] Track motion: `background-color var(--atlas-duration-fast) var(--atlas-easing-standard)` ✅
+- [x] `prefers-reduced-motion`: both track and thumb transitions set to `none` ✅
+- [x] Focus ring: `var(--atlas-border-width-2)` solid `--atlas-focus-ring` + `spacing-0_5` offset on `.track:focus-visible` ✅
+- [ ] No `:active` / pressed state on track → **BUG-020**
+- [x] `role="switch"` on `<button>` ✅
+- [x] `aria-checked={isChecked}` reflects controlled + uncontrolled state ✅
+- [x] `aria-disabled={disabled || undefined}` set ✅
+- [x] `aria-labelledby` → label element id when label present ✅
+- [x] `aria-describedby` → description element id when description present ✅
+- [ ] `required` prop absent from SwitchProps; no `aria-required` forwarded → **BUG-018**
+- [x] Controlled mode: `checked` prop + `onCheckedChange` wired correctly ✅
+- [x] Uncontrolled mode: `defaultChecked` + internal `useState` ✅
+- [x] `pointer-events: none` on `[data-disabled]` track ✅
+- [x] Label element uses `htmlFor={uid}` → clicking label toggles switch ✅
+- [x] No hex literals, no rgba(), no raw pixel values in live CSS ✅
+- [ ] `line-height: 1.4` in `.label` and `.description` → **BUG-017**
+- [x] Logical properties: `inset-block-start`, `inset-inline-start` on thumb ✅
+
+**Exit condition:** 4 bugs found (1 P2, 3 P3). No fixes applied this session.
+
+---
+
+## QA-05 Checklist — Badge
+
+**Source files reviewed:** `components/Badge/Badge.tsx`, `components/Badge/Badge.module.css`
+**Spec:** `ATLAS-SPEC/Badge.md`
+
+- [x] All 7 variants declared (default, secondary, success, warning, danger, info, outline) ✅
+- [x] All 3 sizes declared (sm 18px, md 22px, lg 26px) ✅
+- [x] Size heights achieved via calc() over spacing tokens — no hardcoded px in live CSS ✅
+- [x] Size padding-x: sm=spacing-1_5 (6px), md=spacing-2 (8px), lg=calc(spacing-2+spacing-0_5) (10px) ✅
+- [x] Font sizes: sm+md=`--atlas-text-caption`, lg=`--atlas-text-body-sm` ✅
+- [x] `white-space: nowrap` enforces single-line text ✅
+- [x] Background tokens: all 7 variants correct per spec ✅
+- [ ] Foreground tokens: success/warning/danger/info use `--atlas-{intent}` not spec `--atlas-{intent}-foreground` → **BUG-021**
+- [x] Outline variant: `background=transparent`, `border-color=--atlas-border-strong` ✅
+- [x] Outline with intent: border + text adopt intent color ✅
+- [x] Radius: `--atlas-radius-full` (pill) default ✅
+- [x] Square prop: `--atlas-radius-sm` ✅
+- [ ] Disabled: opacity only; no `--atlas-foreground-disabled` color override → **BUG-022**
+- [x] Dot: 6px via `--atlas-spacing-1_5`, `border-radius: --atlas-radius-full`, `background-color: currentColor` ✅
+- [x] Leading icon slot: `aria-hidden="true"` wrapper ✅
+- [x] Trailing icon slot: suppressed when `removable=true` ✅
+- [x] `removable`: remove `<button>` rendered with correct type, focus-visible ring, `disabled` + `tabIndex` forwarded ✅
+- [ ] Remove `aria-label` falls back to "Remove item" for non-string children → **BUG-024**
+- [ ] No badge-level hover state; `onClick` prop missing from BadgeProps → **BUG-023**
+- [x] Focus ring on `.removeBtn:focus-visible`: `border-width-2` solid `focus-ring` + `spacing-0_5` offset ✅
+- [x] No hex literals, no rgba(), no raw pixel values in live CSS ✅
+- [ ] `line-height: 1` in `.badge` and `.removeBtn` → **BUG-025**
+- [x] `font-weight: --atlas-font-weight-medium` ✅
+- [x] Logical properties: `padding-inline` on all sizes ✅
+- [x] `disabled` prop: sets `.disabled` class on outer span + `disabled` attr + `tabIndex=-1` on removeBtn ✅
+
+**Exit condition:** 5 bugs found (3 P2, 2 P3). No fixes applied this session.
+
+---
+
 ## Session Progress
 
 | Session | Status | Date | Notes |
@@ -606,8 +1047,8 @@ Added `:active` rules mirroring the hover token assignments (unchecked uses `--a
 | QA-02 — Button | ✅ Complete | 2026-05-09 | 3 bugs found + fixed (BUG-004–006) |
 | QA-03 — Input + Label | ✅ Complete | 2026-05-09 | 3 bugs found + fixed (BUG-007–009) |
 | QA-04 — Textarea + Checkbox | ✅ Complete | 2026-05-10 | 7 bugs found + fixed (BUG-010–016) |
-| QA-05 — Switch + Badge | ⬜ Pending | — | — |
-| QA-06 — Card | ⬜ Pending | — | — |
+| QA-05 — Switch + Badge | ✅ Complete | 2026-05-10 | 9 bugs found (BUG-017–025); fixes pending |
+| QA-06 — Card | ✅ Complete | 2026-05-10 | 5 bugs found (BUG-026–030); fixes pending |
 | QA-07 — Alert + Dialog | ⬜ Pending | — | — |
 | QA-08 — Tabs + NavBar | ⬜ Pending | — | — |
 | QA-09 — Dark Mode Pass | ⬜ Pending | — | — |
