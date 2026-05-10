@@ -2,7 +2,7 @@
 
 > **Version:** 1.0  
 > **Status:** In progress  
-> **Last updated:** 2026-05-10 (QA-09 complete)
+> **Last updated:** 2026-05-10 (QA-11 complete)
 
 ---
 
@@ -10,11 +10,11 @@
 
 | Metric | Value |
 |---|---|
-| Sessions completed | 9 of 14 |
-| Total bugs filed | 56 |
+| Sessions completed | 11 of 14 |
+| Total bugs filed | 68 |
 | P1 bugs open | 0 |
-| P2 bugs open | 25 |
-| P3 bugs open | 15 |
+| P2 bugs open | 34 |
+| P3 bugs open | 18 |
 | Components spec-complete | 0 of 12 (code audits: Button ✅ · Input ✅ · Label ✅ · Textarea ✅ · Checkbox ✅ · Switch ✅ · Badge ✅ · Card ✅ · Alert ✅ · Dialog ✅ · Tabs ✅ · NavBar ✅; visual + dark-mode passes pending) |
 
 ---
@@ -1635,8 +1635,8 @@ inset-block-start: 0; /* was: top: 0 */
 | QA-07 — Alert + Dialog | ✅ Complete | 2026-05-10 | 8 bugs found (BUG-031–038); fixes pending |
 | QA-08 — Tabs + NavBar | ✅ Complete | 2026-05-10 | 11 bugs found (BUG-039–049); fixes pending |
 | QA-09 — Dark Mode Pass | ✅ Complete | 2026-05-10 | 7 bugs found (BUG-050–056); fixes pending |
-| QA-10 — Responsive Pass | ⬜ Pending | — | — |
-| QA-11 — Accessibility Pass | ⬜ Pending | — | — |
+| QA-10 — Responsive Pass | ✅ Complete | 2026-05-10 | 7 bugs found (BUG-057–063); fixes pending |
+| QA-11 — Accessibility Pass | ✅ Complete | 2026-05-10 | 5 bugs found (BUG-064–068); fixes pending |
 | QA-12 — Mobile Pass | ⬜ Pending | — | — |
 | QA-13 — Regression Pass | ⬜ Pending | — | — |
 | QA-14 — Release Sign-off | ⬜ Pending | — | — |
@@ -1885,4 +1885,447 @@ In dark mode `--atlas-primary-subtle` resolves to `--atlas-color-brand-950` (L�
 - [x] `app/globals.css`: no hardcoded colours; imports `atlas.tokens.css` first ✅
 
 **Exit condition:** 7 bugs found (6 P2, 1 P3). No fixes applied this session.
+
+
+---
+
+### QA-10 — Responsive Pass
+
+---
+
+#### BUG-057 · P2 · OPEN
+
+**Title:** Dialog `size="full"` variant missing from TSX prop type and CSS
+
+**Guard:** `structure-enforcer`
+
+**Component:** `Dialog` → `components/Dialog/Dialog.tsx`, `components/Dialog/Dialog.module.css`
+
+**Description:** The spec API defines `size?: "sm" | "md" | "lg" | "xl" | "full"`. The `full` size is described as "100% width with `spacing.6` margin on web; 100vh on mobile-app." The current implementation's `DialogSize` type is `"sm" | "md" | "lg" | "xl"` — `full` is absent. There is no `.full` CSS rule in `Dialog.module.css`. Callers who need a near-fullscreen modal (e.g., image lightboxes, full-screen forms) have no compliant way to achieve this without overriding styles.
+
+**Fix required:**
+- Add `"full"` to `DialogSize` type in `Dialog.tsx`
+- Add CSS rule:
+```css
+.full {
+  --_pad: var(--atlas-spacing-6);
+  --_max-w: calc(100vw - var(--atlas-spacing-6) * 2);
+  max-height: calc(100vh - var(--atlas-spacing-6) * 2);
+}
+```
+
+**Files to change:** `components/Dialog/Dialog.tsx`, `components/Dialog/Dialog.module.css`
+
+---
+
+#### BUG-058 · P2 · OPEN
+
+**Title:** Dialog modal has no responsive auto-sheet conversion below 640px viewport width
+
+**Guard:** `structure-enforcer`
+
+**Component:** `Dialog` → `components/Dialog/Dialog.module.css`
+
+**Description:** The spec defines: "Mobile Web — `size = sm`/`md` becomes a bottom sheet automatically (responsive override at `< sm` breakpoint = 640px)." No such `@media (max-width: 639px)` rule exists in `Dialog.module.css`. On a 375px mobile-web viewport a `size="md"` modal renders centered with `width: min(560px, calc(100vw - 32px))` — correctly clamps to near-full-width, but retains the centered modal positioning (translate -50%, -50%). It never adopts bottom-anchored, full-width sheet behaviour, so bottom-sheet UX conventions expected on mobile web (swipe to dismiss, bottom anchor, rounded top corners only) are absent for the `modal` variant on small screens.
+
+**Fix required:**
+```css
+@media (max-width: 639px) {
+  .modal.sm,
+  .modal.md {
+    /* adopt sheet geometry */
+    inset-block-start: auto;
+    inset-block-end: 0;
+    inset-inline: 0;
+    transform: none;
+    width: 100%;
+    max-width: 100%;
+    border-radius: var(--atlas-radius-lg) var(--atlas-radius-lg) 0 0;
+    max-height: 85vh;
+  }
+}
+```
+
+**Files to change:** `components/Dialog/Dialog.module.css`
+
+---
+
+#### BUG-059 · P2 · OPEN
+
+**Title:** Dialog `lg`/`xl` modal sizes have no full-screen override on viewports < 640px
+
+**Guard:** `structure-enforcer`
+
+**Component:** `Dialog` → `components/Dialog/Dialog.module.css`
+
+**Description:** The spec states: "Mobile Web — `lg`/`xl` become full-screen." Below 640px, a `size="lg"` modal currently renders as `width: min(720px, calc(100vw - 32px))` centred on screen — which clamps to near-full-width but keeps vertical centering with top/bottom margins. There is no `@media (max-width: 639px)` rule making `lg`/`xl` go fully full-screen (filling the entire viewport). Users on 375px screens see a modal with top/bottom dead space instead of the spec-mandated full-screen surface.
+
+**Fix required:**
+```css
+@media (max-width: 639px) {
+  .modal.lg,
+  .modal.xl {
+    inset: 0;
+    transform: none;
+    width: 100%;
+    max-width: 100%;
+    max-height: 100vh;
+    border-radius: 0;
+  }
+}
+```
+
+**Files to change:** `components/Dialog/Dialog.module.css`
+
+---
+
+#### BUG-060 · P2 · OPEN
+
+**Title:** Switch track (`<button>`) has no minimum touch target — sm=18px, md=24px, both below 44px
+
+**Guard:** `state-helper`
+
+**Component:** `Switch` → `components/Switch/Switch.module.css`
+
+**Description:** The Switch track is the interactive `<button>` element. Its height is:
+- `sm`: `calc(--atlas-spacing-4 + --atlas-spacing-0_5)` = 18px
+- `md`: `--atlas-spacing-6` = 24px
+
+Both are well below `--atlas-touch-min` (44px). The spec mandates "tap target ≥ `--atlas-touch-min`" and all other interactive controls (Alert dismiss, NavBar hamburger) correctly apply `min-height: var(--atlas-touch-min)`. The Switch track does not. On touch devices the effective tap area is 18–24px tall, causing frequent mis-taps, particularly for `sm` switches in list rows.
+
+**Fix required:** Apply `min-height: var(--atlas-touch-min)` with `padding-block` compensation to keep the visual track centred:
+```css
+.track {
+  min-height: var(--atlas-touch-min); /* 44px touch target */
+  /* visual track centred inside touch area via padding */
+  display: flex;
+  align-items: center;
+}
+/* Override for explicit sizes — padding forces visual height */
+```
+Or wrap the track in a transparent touch-target container of 44px height using a pseudo-element/clip approach to avoid layout shifts.
+
+**Files to change:** `components/Switch/Switch.module.css`
+
+---
+
+#### BUG-061 · P2 · OPEN
+
+**Title:** Tabs trigger has no minimum touch target — sm=32px, md=40px, both below 44px on touch devices
+
+**Guard:** `state-helper`
+
+**Component:** `Tabs` → `components/Tabs/Tabs.module.css`
+
+**Description:** Tabs trigger heights via `--_h`:
+- `sm`: `--atlas-spacing-8` = 32px
+- `md`: `--atlas-spacing-10` = 40px
+- `lg`: `--atlas-spacing-12` = 48px ✓
+
+The spec states "Mobile-app baseline: `md` minimum; tap target ≥ `--atlas-touch-min`." The `lg` trigger (48px) passes. `md` (40px) falls 4px short of the 44px minimum, and `sm` (32px) is 12px short. No `min-height: var(--atlas-touch-min)` is applied to `.trigger`. On touch devices using `sm` or `md` tabs, users must tap in a narrow 32–40px window.
+
+**Fix required:**
+```css
+@media (pointer: coarse) {
+  .trigger {
+    min-height: var(--atlas-touch-min); /* 44px */
+  }
+}
+```
+
+**Files to change:** `components/Tabs/Tabs.module.css`
+
+---
+
+#### BUG-062 · P3 · OPEN
+
+**Title:** Dialog drawer uses physical CSS position properties (`top`, `bottom`, `left`, `right`) instead of logical equivalents
+
+**Guard:** `token-enforcer`
+
+**Component:** `Dialog` → `components/Dialog/Dialog.module.css`
+
+**Description:** The `.drawer` rule uses physical properties:
+```css
+.drawer          { top: 0; bottom: 0; }
+.drawer[data-side="end"]   { right: 0; }
+.drawer[data-side="start"] { left: 0; }
+```
+
+Atlas convention (established across every other component) requires logical properties for RTL safety:
+- `top: 0; bottom: 0` → `inset-block: 0`
+- `right: 0` → `inset-inline-end: 0`
+- `left: 0` → `inset-inline-start: 0`
+
+In an RTL layout, the `start` drawer should slide from the inline-end (right in RTL). The physical `left: 0` keeps it pinned to the physical left edge regardless of writing direction — breaking RTL navigation drawers.
+
+**Fix required:**
+```css
+.drawer { inset-block: 0; }
+.drawer[data-side="end"]   { inset-inline-end: 0; }
+.drawer[data-side="start"] { inset-inline-start: 0; }
+```
+
+**Files to change:** `components/Dialog/Dialog.module.css`
+
+---
+
+#### BUG-063 · P3 · OPEN
+
+**Title:** Button `sm` and Input `sm` (32px) have no coarse-pointer touch-target enforcement on mobile-web
+
+**Guard:** `state-helper`
+
+**Component:** `Button` → `components/Button/Button.module.css` · `Input` → `components/Input/Input.module.css`
+
+**Description:** The spec explicitly flags `sm` as "web-only — promote to `md` on mobile-app surfaces" and requires "Hit area ≥ `--atlas-touch-min`" on Mobile Web. Both Button `sm` and Input `sm` render at 32px height with no coarse-pointer guard:
+- Button sm: height = `--atlas-spacing-8` (32px) — 12px below the 44px minimum
+- Input sm: height = `--atlas-spacing-8` (32px) — same deficit
+
+There is no `@media (pointer: coarse)` override to automatically promote the height to 44px or add `min-height: var(--atlas-touch-min)`. On mobile-web, any consumer using `sm` size produces an undersized touch target without any runtime feedback.
+
+**Fix required:**
+```css
+/* Button.module.css */
+@media (pointer: coarse) {
+  .sm { min-height: var(--atlas-touch-min); }
+}
+
+/* Input.module.css */
+@media (pointer: coarse) {
+  .sm { min-height: var(--atlas-touch-min); }
+}
+```
+
+**Files to change:** `components/Button/Button.module.css`, `components/Input/Input.module.css`
+
+---
+
+## QA-10 Checklist — Responsive Pass
+
+**Scope:** All 12 components · breakpoint tokens · `atlas.tokens.css` responsive uplifts
+**Method:** Static CSS/TSX audit against spec responsive behaviour table + `--atlas-breakpoint-*` / `--atlas-touch-min` tokens
+
+- [x] `atlas.tokens.css` responsive uplifts: typography `text-h1`–`text-h4` correctly scale at `md` (768px) and `lg` (1024px) via `@media` ✅
+- [x] `atlas.tokens.css` layout tokens: `--atlas-columns`, `--atlas-gutter`, `--atlas-margin` uplift at `md`/`lg` ✅
+- [x] Card `title` uses `--atlas-text-h4` — inherits responsive uplift (16px → 18px → 20px) ✅
+- [x] Dialog `sm`/`md`/`lg`/`xl` modal: `width: min(--_max-w, calc(100vw - margin))` correctly clamps on narrow viewports ✅
+- [x] Dialog sheet: `width: 100%`, `max-width: 100%` — correctly full-width ✅
+- [x] Dialog `max-height: calc(100vh - spacing-8 × 2)` prevents overflow on short screens ✅
+- [ ] Dialog missing `size="full"` variant → **BUG-057**
+- [ ] Dialog modal: no auto-sheet conversion below 640px → **BUG-058**
+- [ ] Dialog `lg`/`xl` modal: no full-screen override on small viewports → **BUG-059**
+- [x] NavBar: hamburger show/hide at 1024px (already flagged as wrong breakpoint — **BUG-043**) ✅ (reviewed; not double-counted)
+- [x] NavBar: `padding-inline: --atlas-spacing-6` — adapts on all viewports ✅
+- [x] NavBar: hamburger `min-width/min-height: --atlas-touch-min` (44px) ✅
+- [x] Alert dismiss button: `min-height: --atlas-touch-min` (44px) ✅
+- [ ] Switch track: sm=18px, md=24px — no `min-height` touch target → **BUG-060**
+- [ ] Tabs trigger: sm=32px, md=40px — no coarse-pointer min-height → **BUG-061**
+- [ ] Dialog drawer: physical `top`/`bottom`/`left`/`right` — not logical → **BUG-062**
+- [ ] Button sm (32px) / Input sm (32px): no coarse-pointer touch target → **BUG-063**
+- [x] Button `md` (40px), `lg` (48px): within or above touch-min ✅
+- [x] Input `md` (40px), `lg` (48px): within or above touch-min ✅
+- [x] Tabs `lg` trigger (48px): meets touch-min ✅
+- [x] No raw `px` breakpoint values in component CSS — all breakpoint media queries use token-mapped pixel values (NavBar uses `1024px` raw but it should be `--atlas-breakpoint-lg`; already flagged as part of BUG-043) ✅
+- [x] Checkbox `card` variant: full-surface click target, naturally large ✅
+- [x] Card: padding driven by `--_card-padding` custom property — no responsive override needed, sizes (sm/md/lg) are caller-chosen ✅
+- [x] Badge: inline-flex, wraps naturally ✅
+- [x] Label: inline-flex, adapts to parent width ✅
+
+**Exit condition:** 7 bugs found (5 P2, 2 P3). No fixes applied this session.
+
+
+---
+
+### QA-11 — Accessibility Pass
+
+---
+
+#### BUG-064 · P2 · OPEN
+
+**Title:** Switch — `SwitchProps` has no `aria-label` and no `...rest` spread; toggle is unlabeled when `label` prop is omitted
+
+**Guard:** `accessibility-lite`
+
+**Component:** `Switch` → `components/Switch/Switch.tsx`
+
+**Description:** `SwitchProps` defines: `size`, `checked`, `defaultChecked`, `onCheckedChange`, `disabled`, `label`, `description`, `id`. There is no `aria-label?: string` and no `...rest: React.ButtonHTMLAttributes<HTMLButtonElement>` spread forwarded to the underlying `<button>`. When `label` is omitted the button gets `aria-labelledby={undefined}` — leaving the `role="switch"` element with zero accessible name. The spec explicitly states label-less switches (e.g., a dark-mode toggle in a compact toolbar) must receive `aria-label` from the caller. Callers currently have no API surface to pass it.
+
+**Fix required:**
+```tsx
+export interface SwitchProps
+  extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>,
+    "onChange" | "checked" | "defaultChecked"> {
+  ...
+}
+// Then spread rest onto the <button>:
+<button ... {...rest}>
+```
+Also add a dev-mode warning (parallel to Button's BUG-006 fix) when neither `label` nor `aria-label` nor `aria-labelledby` is provided.
+
+**Files to change:** `components/Switch/Switch.tsx`
+
+---
+
+#### BUG-065 · P2 · OPEN
+
+**Title:** Card interactive — `role="button"` div has no `aria-labelledby`; accessible name is empty
+
+**Guard:** `accessibility-lite`
+
+**Component:** `Card` → `components/Card/Card.tsx`
+
+**Description:** The JSDoc states: "Interactive: tabIndex=0, role='button', aria-labelledby → CardTitle." The interactive Card renders a `<div role="button">` with `id={uid}` but no `aria-labelledby` attribute. `CardTitle` renders a `<p>` with no id, so there is nothing to point at even if the attribute were added. Screen readers announce the card as an unlabeled button — VoiceOver: "button", NVDA: "button". Users have no way to know what action the card represents without reading all child content first.
+
+**Fix required:**
+1. Add an auto-generated `titleId` alongside `uid`:
+```tsx
+const titleId = `${uid}-title`
+```
+2. Apply `id={titleId}` to the `<p>` inside `CardTitle`
+3. Add `aria-labelledby={titleId}` to the interactive `<div role="button">`
+
+**Files to change:** `components/Card/Card.tsx`
+
+---
+
+#### BUG-066 · P2 · OPEN
+
+**Title:** Dialog sheet drag handle uses `<div role="button">` instead of native `<button>`
+
+**Guard:** `accessibility-lite`
+
+**Component:** `Dialog` → `components/Dialog/Dialog.tsx` line 157
+
+**Description:** The sheet drag handle is rendered as:
+```tsx
+<RadixDialog.Close asChild>
+  <div
+    role="button"
+    aria-label="Dismiss sheet"
+    tabIndex={0}
+    onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") e.currentTarget.click() }}
+  />
+</RadixDialog.Close>
+```
+A `<div>` with `role="button"` is a ARIA antipattern when a native `<button>` is available. Issues: (1) `<div>` lacks implicit `type="button"` preventing accidental form submission; (2) some AT may not announce it as a button despite the role; (3) Radix `asChild` expects the child to be a focusable interactive element — a `<div tabIndex={0}>` works but loses the implicit keyboard contract a `<button>` provides; (4) the manual `onKeyDown` only handles Enter/Space but misses Radix's own close handling chain. 
+
+**Fix required:**
+```tsx
+<RadixDialog.Close asChild>
+  <button
+    type="button"
+    className={styles.dragHandle}
+    aria-label="Dismiss sheet"
+  />
+</RadixDialog.Close>
+```
+No manual `onKeyDown` needed — `<button>` activates on Space/Enter natively.
+
+**Files to change:** `components/Dialog/Dialog.tsx`
+
+---
+
+#### BUG-067 · P2 · OPEN
+
+**Title:** Badge remove button — visible `×` character not `aria-hidden`; risks double-announcement by screen readers
+
+**Guard:** `accessibility-lite`
+
+**Component:** `Badge` → `components/Badge/Badge.tsx` line 128
+
+**Description:** The remove button renders:
+```tsx
+<button type="button" aria-label={`Remove ${labelText}`}>
+  ×
+</button>
+```
+The `×` character (HTML entity `&times;`) is visible text content inside the button. While `aria-label` provides the accessible name ("Remove item"), several screen readers (particularly NVDA + Firefox and older TalkBack) may announce both the `aria-label` AND the inner text, producing "Remove item times" or "Remove item ×". The fix is to wrap the visible character in `aria-hidden` so the accessible name is derived solely from `aria-label`.
+
+**Fix required:**
+```tsx
+<button type="button" aria-label={`Remove ${labelText}`}>
+  <span aria-hidden="true">×</span>
+</button>
+```
+
+**Files to change:** `components/Badge/Badge.tsx`
+
+---
+
+#### BUG-068 · P3 · OPEN
+
+**Title:** NavBar `brand` slot has no `brandHref` prop and no `<a>` wrapper — brand logo is not keyboard-navigable
+
+**Guard:** `accessibility-lite`
+
+**Component:** `NavBar` → `components/NavBar/NavBar.tsx`
+
+**Description:** The spec describes `NavBar.Brand` as "brand/logo area, links home." The current implementation wraps the caller-provided `brand` prop in a plain `<span className={styles.brand}>`. There is no `brandHref` prop and no automatic `<a>` wrapping. Callers who pass a plain `<img>` or `<svg>` logo get a non-interactive, non-focusable brand mark with no link. Keyboard users and screen reader users cannot navigate to the home page via the logo — a fundamental convention of web navigation. The spec's "links home" description makes the link a requirement, not a suggestion.
+
+**Fix required:**
+Add `brandHref?: string` to `NavBarProps`. Render conditionally:
+```tsx
+{brand && (
+  brandHref
+    ? <a href={brandHref} className={styles.brand} aria-label="Go to homepage">{brand}</a>
+    : <span className={styles.brand}>{brand}</span>
+)}
+```
+
+**Files to change:** `components/NavBar/NavBar.tsx`, `components/NavBar/NavBar.module.css`
+
+---
+
+## QA-11 Checklist — Accessibility Pass
+
+**Scope:** All 12 components
+**Method:** Static TSX/CSS audit against ARIA spec, focus-management, semantic HTML, and accessible naming conventions
+
+- [x] Button: `iconOnly` fires dev-mode warning when `aria-label`/`aria-labelledby` absent ✅
+- [x] Button: `aria-busy="true"` during loading ✅
+- [x] Button: `aria-disabled="true"` covers asChild `<a>` case ✅
+- [x] Input: `aria-invalid="true"` wired on invalid prop ✅
+- [x] Input: `::placeholder` color uses `--atlas-foreground-muted` — passes 3:1 placeholder contrast (non-text UI) ✅
+- [x] Label: `aria-hidden="true"` on required `*` and optional hint spans ✅
+- [x] Label: `htmlFor` links to control id ✅
+- [x] Textarea: `aria-invalid`, `aria-required` wired ✅
+- [x] Textarea: char counter has `aria-live="polite"` + `aria-atomic="true"` ✅
+- [x] Textarea: `maxLength={undefined}` — avoids native truncation, counter provides UX feedback ✅
+- [x] Checkbox: Radix provides `role="checkbox"` + `aria-checked="true|false|mixed"` ✅
+- [x] Checkbox: `aria-invalid`, `aria-required` passed to Radix Root ✅
+- [x] Checkbox: indeterminate icon and check icon have `aria-hidden="true"` ✅
+- [x] Checkbox: required `*` marker is `aria-hidden` ✅
+- [ ] Switch: no `aria-label` in props + no `...rest` spread — unlabeled when `label` omitted → **BUG-064**
+- [x] Switch: `role="switch"` + `aria-checked` ✅
+- [x] Switch: `aria-disabled` keeps focus target while CSS blocks pointer events ✅
+- [ ] Card interactive: `role="button"` div has no `aria-labelledby` → **BUG-065**
+- [x] Card: keyboard handler fires `onClick` on Enter + Space; `e.preventDefault()` prevents page scroll ✅
+- [x] Card: `aria-pressed` for toggle semantics ✅
+- [x] Card: non-interactive renders as `<article>` — correct landmark ✅
+- [x] Badge: `aria-label={Remove ${label}}` on remove button ✅
+- [ ] Badge: `×` character inside remove button not `aria-hidden` → **BUG-067**
+- [x] Alert: `role="alert"` (assertive) for warning/danger; `role="status"` (polite) for info/success ✅
+- [x] Alert: dismiss button has `aria-label="Dismiss {variant} alert"` ✅
+- [x] Alert: icon slot is `aria-hidden="true"` ✅
+- [x] Dialog: `role="dialog"` + `aria-modal="true"` via Radix ✅
+- [x] Dialog: `aria-labelledby` → `DialogTitle` auto-wired by Radix ✅
+- [x] Dialog: `aria-describedby` → `DialogDescription` auto-wired by Radix ✅
+- [x] Dialog: close button has `aria-label="Close dialog"` ✅
+- [ ] Dialog: drag handle uses `<div role="button">` instead of `<button>` → **BUG-066**
+- [x] Tabs: Radix provides `tablist`/`tab`/`tabpanel` roles, `aria-selected`, `aria-controls`, roving tabIndex ✅
+- [x] Tabs: `aria-label="Tabs"` hardcoded generic — already filed as **BUG-041** (not double-counted)
+- [x] Tabs: `leadingIcon` and `badge` slots wrapped in `aria-hidden="true"` ✅
+- [x] Tabs: `[data-disabled]` triggers CSS `pointer-events: none` + `cursor: not-allowed` ✅
+- [x] NavBar: `<header>` root — correct banner landmark ✅
+- [x] NavBar: `<nav aria-label="Primary">` — labeled landmark ✅
+- [x] NavBar: `<nav aria-label="Mobile primary">` — labeled drawer landmark ✅
+- [x] NavBar: hamburger `aria-label` + `aria-expanded` ✅
+- [x] NavBar: `aria-current="page"` on active link ✅
+- [x] NavBar: `aria-disabled` + `tabIndex={-1}` on disabled links ✅
+- [ ] NavBar: brand slot not wrapped in `<a>` — no `brandHref` prop → **BUG-068**
+- [x] All components: `outline: none` always paired with `:focus-visible` ring replacement ✅
+- [x] All components: no `tabIndex > 0` (roving tabIndex managed by Radix in Tabs; all others 0 or -1) ✅
+
+**Exit condition:** 5 bugs found (4 P2, 1 P3). No fixes applied this session.
 
