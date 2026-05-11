@@ -116,6 +116,7 @@ export interface DialogContentProps {
   size?:                DialogSize
   /** Drawer only: which edge to slide from */
   side?:                DialogSide
+  id?:                  string
   closeOnEscape?:       boolean
   closeOnOverlayClick?: boolean
   className?:           string
@@ -126,6 +127,7 @@ export function DialogContent({
   variant             = "modal",
   size                = "md",
   side                = "end",
+  id,
   closeOnEscape       = true,
   closeOnOverlayClick = true,
   className,
@@ -145,6 +147,7 @@ export function DialogContent({
 
       {/* Content surface */}
       <RadixDialog.Content
+        id={id}
         className={contentClasses}
         data-side={variant === "drawer" ? side : undefined}
         onEscapeKeyDown={(e) => { if (!closeOnEscape) e.preventDefault() }}

@@ -155,7 +155,7 @@ export function Checkbox({
         className={cx(styles.box, styles[size])}
         data-invalid={invalid || undefined}
       >
-        <RadixCheckbox.Indicator className={styles.indicator} forceMount={false}>
+        <RadixCheckbox.Indicator className={styles.indicator}>
           {isIndeterminate ? (
             <DashIcon className={styles.indicatorIcon} />
           ) : (

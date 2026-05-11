@@ -15,16 +15,26 @@
  * Variants:  underline (default) | pills | enclosed
  * Sizes:     sm | md | lg
  *
- * Usage (items array API — recommended):
+ * Two usage patterns:
+ *
+ * 1. Array API (shorthand):
  *   <Tabs
- *     variant="underline"
- *     size="md"
+ *     variant="underline" size="md"
  *     items={[
  *       { id: "one", label: "Overview", content: <p>…</p> },
  *       { id: "two", label: "Details",  content: <p>…</p>, badge: <Badge>3</Badge> },
- *       { id: "three", label: "Hidden", content: <></>, disabled: true },
  *     ]}
  *   />
+ *
+ * 2. Compound API (full control):
+ *   <Tabs.Root variant="underline" size="md" defaultValue="one">
+ *     <Tabs.List aria-label="My tabs">
+ *       <Tabs.Trigger value="one">Overview</Tabs.Trigger>
+ *       <Tabs.Trigger value="two" badge={<Badge>3</Badge>}>Details</Tabs.Trigger>
+ *     </Tabs.List>
+ *     <Tabs.Panel value="one"><p>…</p></Tabs.Panel>
+ *     <Tabs.Panel value="two"><p>…</p></Tabs.Panel>
+ *   </Tabs.Root>
  *
  * Token compliance: all values via semantic tokens in Tabs.module.css.
  */
@@ -55,32 +65,138 @@ export interface TabItem {
   disabled?: boolean
 }
 
-export interface TabsProps {
+/* ── Tabs.Root ──────────────────────────────────────────────────── */
+
+export interface TabsRootProps {
   variant?:        TabsVariant
   size?:           TabsSize
-  items:           TabItem[]
   /** Controlled active value */
   value?:          string
-  /** Uncontrolled default — falls back to first item */
+  /** Uncontrolled default — falls back to first item when used in array API */
   defaultValue?:   string
-  /** @deprecated — use value */
-  activeTab?:      string
-  /** @deprecated — use defaultValue */
-  defaultTab?:     string
   onValueChange?:  (value: string) => void
-  /** @deprecated — use onValueChange */
-  onTabChange?:    (value: string) => void
-  /**
-   * automatic: arrow key focus immediately activates the tab
-   * manual:    focus then Enter/Space activates
-   */
   activationMode?: "automatic" | "manual"
   className?:      string
+  children?:       React.ReactNode
 }
 
-/* ── Component ──────────────────────────────────────────────────── */
+export function TabsRoot({
+  variant        = "underline",
+  size           = "md",
+  value,
+  defaultValue,
+  onValueChange,
+  activationMode = "automatic",
+  className,
+  children,
+}: TabsRootProps) {
+  const rootClasses = cx(
+    styles.root,
+    styles[variant],
+    size !== "md" && styles[size],
+    className,
+  )
 
-export function Tabs({
+  return (
+    <RadixTabs.Root
+      className={rootClasses}
+      value={value}
+      defaultValue={defaultValue}
+      onValueChange={onValueChange}
+      activationMode={activationMode}
+    >
+      {children}
+    </RadixTabs.Root>
+  )
+}
+
+/* ── Tabs.List ──────────────────────────────────────────────────── */
+
+export interface TabsListProps {
+  /** Accessible name for the tab group — required when multiple tab lists exist on one page */
+  "aria-label"?: string
+  className?:    string
+  children?:     React.ReactNode
+}
+
+export function TabsList({
+  "aria-label": ariaLabel = "Tabs",
+  className,
+  children,
+}: TabsListProps) {
+  return (
+    <RadixTabs.List className={cx(styles.list, className)} aria-label={ariaLabel}>
+      {children}
+    </RadixTabs.List>
+  )
+}
+
+/* ── Tabs.Trigger ───────────────────────────────────────────────── */
+
+export interface TabsTriggerProps {
+  value:        string
+  disabled?:    boolean
+  /** Optional leading icon — aria-hidden */
+  leadingIcon?: React.ReactNode
+  /** Optional trailing badge (count or status) — aria-hidden */
+  badge?:       React.ReactNode
+  className?:   string
+  children?:    React.ReactNode
+}
+
+export function TabsTrigger({
+  value,
+  disabled,
+  leadingIcon,
+  badge,
+  className,
+  children,
+}: TabsTriggerProps) {
+  return (
+    <RadixTabs.Trigger
+      value={value}
+      disabled={disabled}
+      className={cx(styles.trigger, className)}
+    >
+      {leadingIcon && (
+        <span className={styles.icon} aria-hidden="true">{leadingIcon}</span>
+      )}
+      {children}
+      {badge && <span aria-hidden="true">{badge}</span>}
+    </RadixTabs.Trigger>
+  )
+}
+
+/* ── Tabs.Panel ─────────────────────────────────────────────────── */
+
+export interface TabsPanelProps {
+  value:      string
+  className?: string
+  children?:  React.ReactNode
+}
+
+export function TabsPanel({ value, className, children }: TabsPanelProps) {
+  return (
+    <RadixTabs.Content value={value} className={cx(styles.panel, className)}>
+      {children}
+    </RadixTabs.Content>
+  )
+}
+
+/* ── Tabs (array shorthand API + compound properties) ───────────── */
+
+export interface TabsProps extends TabsRootProps {
+  /** Array shorthand — renders List + Triggers + Panels automatically */
+  items: TabItem[]
+  /** @deprecated — use value */
+  activeTab?:  string
+  /** @deprecated — use defaultValue */
+  defaultTab?: string
+  /** @deprecated — use onValueChange */
+  onTabChange?: (value: string) => void
+}
+
+function TabsBase({
   variant        = "underline",
   size           = "md",
   items,
@@ -98,53 +214,48 @@ export function Tabs({
   const resolvedDefaultValue = defaultValue ?? defaultTab ?? items[0]?.id
   const handleChange         = (v: string) => { onValueChange?.(v); onTabChange?.(v) }
 
-  const rootClasses = cx(
-    styles.root,
-    styles[variant],
-    size !== "md" && styles[size],
-    className,
-  )
-
   return (
-    <RadixTabs.Root
-      className={rootClasses}
+    <TabsRoot
+      variant={variant}
+      size={size}
       value={resolvedValue}
       defaultValue={resolvedDefaultValue}
       onValueChange={handleChange}
       activationMode={activationMode}
+      className={className}
     >
-      {/* Trigger list */}
-      <RadixTabs.List className={styles.list} aria-label="Tabs">
+      <TabsList>
         {items.map((item) => (
-          <RadixTabs.Trigger
+          <TabsTrigger
             key={item.id}
             value={item.id}
             disabled={item.disabled}
-            className={styles.trigger}
+            leadingIcon={item.icon}
+            badge={item.badge}
           >
-            {item.icon && (
-              <span className={styles.icon} aria-hidden="true">
-                {item.icon}
-              </span>
-            )}
             {item.label}
-            {item.badge && (
-              <span aria-hidden="true">{item.badge}</span>
-            )}
-          </RadixTabs.Trigger>
+          </TabsTrigger>
         ))}
-      </RadixTabs.List>
+      </TabsList>
 
-      {/* Content panels */}
       {items.map((item) => (
-        <RadixTabs.Content
-          key={item.id}
-          value={item.id}
-          className={styles.panel}
-        >
+        <TabsPanel key={item.id} value={item.id}>
           {item.content}
-        </RadixTabs.Content>
+        </TabsPanel>
       ))}
-    </RadixTabs.Root>
+    </TabsRoot>
   )
 }
+
+/**
+ * `Tabs` — shorthand array API with compound sub-components attached.
+ *
+ * Use `<Tabs items={...} />` for the quick API.
+ * Use `<Tabs.Root>` + `<Tabs.List>` + `<Tabs.Trigger>` + `<Tabs.Panel>` for full control.
+ */
+export const Tabs = Object.assign(TabsBase, {
+  Root:    TabsRoot,
+  List:    TabsList,
+  Trigger: TabsTrigger,
+  Panel:   TabsPanel,
+})

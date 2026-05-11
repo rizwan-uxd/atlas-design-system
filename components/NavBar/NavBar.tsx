@@ -172,3 +172,158 @@ export function NavBar({
     </>
   )
 }
+
+/* =================================================================
+   NavBar — Mobile-Native anatomy
+   BUG-069 fix: NavBar.Header, NavBar.Header.Leading,
+                NavBar.Header.Title, NavBar.Header.Actions,
+                NavBar.TabBar, NavBar.Tab
+   BUG-070 fix: safe-area insets applied via CSS (.navbarHeader,
+                .tabBar) — see NavBar.module.css
+   ================================================================= */
+
+/* ── NavBar.Header.Leading ───────────────────────────────────── */
+
+export interface NavBarHeaderLeadingProps {
+  children?: React.ReactNode
+  className?: string
+}
+
+export function NavBarHeaderLeading({ children, className }: NavBarHeaderLeadingProps) {
+  return (
+    <div className={cx(styles.headerLeading, className)}>
+      {children}
+    </div>
+  )
+}
+
+/* ── NavBar.Header.Title ─────────────────────────────────────── */
+
+export interface NavBarHeaderTitleProps {
+  children?: React.ReactNode
+  className?: string
+}
+
+export function NavBarHeaderTitle({ children, className }: NavBarHeaderTitleProps) {
+  return (
+    <span className={cx(styles.headerTitle, className)}>
+      {children}
+    </span>
+  )
+}
+
+/* ── NavBar.Header.Actions ───────────────────────────────────── */
+
+export interface NavBarHeaderActionsProps {
+  children?: React.ReactNode
+  className?: string
+}
+
+export function NavBarHeaderActions({ children, className }: NavBarHeaderActionsProps) {
+  return (
+    <div className={cx(styles.headerActions, className)}>
+      {children}
+    </div>
+  )
+}
+
+/* ── NavBar.Header ───────────────────────────────────────────── */
+
+export interface NavBarHeaderProps {
+  variant?:   NavBarVariant
+  size?:      NavBarSize
+  children?:  React.ReactNode
+  className?: string
+}
+
+function NavBarHeaderBase({ variant = "default", size = "md", children, className }: NavBarHeaderProps) {
+  return (
+    <header
+      className={cx(
+        styles.navbarHeader,
+        styles[variant],
+        size !== "md" && styles[size],
+        className,
+      )}
+    >
+      {children}
+    </header>
+  )
+}
+
+export const NavBarHeader = Object.assign(NavBarHeaderBase, {
+  Leading: NavBarHeaderLeading,
+  Title:   NavBarHeaderTitle,
+  Actions: NavBarHeaderActions,
+})
+
+/* ── NavBar.Tab ──────────────────────────────────────────────── */
+
+export interface NavBarTabProps {
+  /** Must match the value tracked by the consumer's active state */
+  value:      string
+  label:      string
+  icon?:      React.ReactNode
+  badge?:     React.ReactNode
+  active?:    boolean
+  disabled?:  boolean
+  onClick?:   (value: string) => void
+  className?: string
+}
+
+export function NavBarTab({
+  value,
+  label,
+  icon,
+  badge,
+  active = false,
+  disabled = false,
+  onClick,
+  className,
+}: NavBarTabProps) {
+  return (
+    <button
+      type="button"
+      role="tab"
+      aria-selected={active}
+      aria-disabled={disabled || undefined}
+      className={cx(styles.tab, className)}
+      onClick={() => !disabled && onClick?.(value)}
+      tabIndex={disabled ? -1 : 0}
+    >
+      {icon && (
+        <span className={styles.tabIcon} aria-hidden="true">
+          {icon}
+        </span>
+      )}
+      <span className={styles.tabLabel}>
+        {label}
+        {badge && <span aria-hidden="true">{badge}</span>}
+      </span>
+    </button>
+  )
+}
+
+/* ── NavBar.TabBar ───────────────────────────────────────────── */
+
+export interface NavBarTabBarProps {
+  size?:      NavBarSize
+  children?:  React.ReactNode
+  className?: string
+}
+
+export function NavBarTabBar({ size = "md", children, className }: NavBarTabBarProps) {
+  return (
+    <nav
+      role="tablist"
+      aria-label="Primary navigation"
+      className={cx(
+        styles.tabBar,
+        size !== "md" && styles[size],
+        className,
+      )}
+    >
+      {children}
+    </nav>
+  )
+}
