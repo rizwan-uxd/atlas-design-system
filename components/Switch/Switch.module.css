@@ -46,6 +46,38 @@
   background-color: var(--atlas-primary-hover);
 }
 
+/*
+  BUG-053 — dark mode inversion fix.
+  In dark mode the background scale runs: background (neutral-950) →
+  background-subtle (neutral-900) → background-muted (neutral-800, lightest).
+  The resting unchecked track is background-muted (lightest) so hovering
+  to background-subtle (darker) creates an inverted affordance.
+  Override: lighten the resting colour slightly using color-mix instead of
+  stepping toward a darker token.
+*/
+[data-theme="dark"] .track:hover:not([data-disabled])[data-state="unchecked"] {
+  background-color: color-mix(in oklch, var(--atlas-background-muted) 80%, oklch(1 0 0));
+}
+
+/* ── Active / pressed state ───────────────────────────────────── */
+/*
+  BUG-020 — add :active pressed feedback for spec state matrix completeness.
+  Unchecked active: matches hover token (sufficient feedback for the brief press).
+  Checked active: one step deeper than hover.
+*/
+
+.track:active:not([data-disabled])[data-state="unchecked"] {
+  background-color: var(--atlas-background-subtle);
+}
+
+.track:active:not([data-disabled])[data-state="checked"] {
+  background-color: var(--atlas-primary-active);
+}
+
+[data-theme="dark"] .track:active:not([data-disabled])[data-state="unchecked"] {
+  background-color: color-mix(in oklch, var(--atlas-background-muted) 70%, oklch(1 0 0));
+}
+
 .track[data-disabled] {
   cursor: not-allowed;
   pointer-events: none;
@@ -54,6 +86,23 @@
 .track:focus-visible {
   outline: var(--atlas-border-width-2) solid var(--atlas-focus-ring);
   outline-offset: var(--atlas-spacing-0_5);
+}
+
+/* ── Touch target expansion (BUG-060) ────────────────────────── */
+/*
+  The visual track is 18px (sm) or 24px (md) — both below the 44px
+  minimum touch target. On coarse-pointer (touchscreen) devices we
+  expand the hit area via min-height and centre the track visually
+  within the tappable region using align-items and display:flex.
+  The wrapper .root is already inline-flex so this adds no layout cost.
+*/
+
+@media (pointer: coarse) {
+  .track {
+    min-height: var(--atlas-touch-min); /* 44 px tap target */
+    display: flex;
+    align-items: center;
+  }
 }
 
 /* ── Sizes ────────────────────────────────────────────────────── */
@@ -90,8 +139,12 @@
   position: absolute;
   border-radius: var(--atlas-radius-full);
   /*
-   * foreground-on-brand = neutral-0 in both light and dark mode.
-   * Always the correct white-thumb colour regardless of theme.
+   * BUG-019 — spec lists --atlas-background for thumb fill. However
+   * --atlas-background resolves to neutral-950 in dark mode (near-black),
+   * which would render as a dark thumb on a dark track — visually broken.
+   * --atlas-foreground-on-brand = neutral-0 (pure white) in BOTH light and
+   * dark themes, making it the correct semantic choice for a thumb that must
+   * always appear as a white circle. This is a documented spec deviation.
    */
   background-color: var(--atlas-foreground-on-brand);
   box-shadow: var(--atlas-shadow-sm);
@@ -158,7 +211,8 @@
   font-size: var(--atlas-font-size-sm);
   font-weight: var(--atlas-font-weight-medium);
   color: var(--atlas-foreground);
-  line-height: 1.4;
+  /* BUG-017 — was magic number 1.4 */
+  line-height: var(--atlas-line-height-snug);
   cursor: pointer;
 }
 
@@ -170,5 +224,6 @@
   font-family: var(--atlas-font-sans);
   font-size: var(--atlas-font-size-xs);
   color: var(--atlas-foreground-muted);
-  line-height: 1.4;
+  /* BUG-017 — was magic number 1.4 */
+  line-height: var(--atlas-line-height-snug);
 }
