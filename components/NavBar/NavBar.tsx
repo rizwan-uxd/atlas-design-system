@@ -1,30 +1,29 @@
 "use client"
 
 /**
- * Atlas NavBar — top app bar (web)
+ * Atlas NavBar — top app bar (web) + mobile-native shell
  *
- * Variants:  default | transparent | elevated
- * Sizes:     sm (48px) | md (64px) | lg (80px)
+ * Web variants:  default | transparent | elevated
+ * Web sizes:     sm (48px) | md (64px) | lg (80px)
  *
  * Layout zones:
  *   [brand]  [desktop nav links]  ──────────  [actions]  [hamburger]
  *
  * Responsive behaviour:
- *   ≥ 1024px (lg): desktop links visible, hamburger hidden
- *   < 1024px:      desktop links hidden, hamburger visible → opens Drawer
+ *   ≥ 768px (md): desktop links visible, hamburger hidden  — FIX BUG-043
+ *   < 768px:      desktop links hidden, hamburger visible → opens Drawer
  *
  * Accessibility:
  *   - <header> root element
  *   - <nav aria-label="Primary"> wraps the link list
  *   - aria-current="page" on the active link
- *   - Hamburger button: aria-label, aria-expanded, aria-controls
- *   - Drawer link list: same aria-current wiring
+ *   - Hamburger: aria-label, aria-expanded, aria-controls (id forwarded to DialogContent)
  *   - Focus ring on all interactive elements
  *
  * Token compliance: all values via semantic tokens in NavBar.module.css.
  */
 
-import React, { useState } from "react"
+import React, { useState, useEffect, useRef, useCallback } from "react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from "@/components/Dialog/Dialog"
 import styles from "./NavBar.module.css"
 
@@ -40,44 +39,94 @@ export type NavBarVariant = "default" | "transparent" | "elevated"
 export type NavBarSize    = "sm" | "md" | "lg"
 
 export interface NavLink {
-  label:     string
-  href?:     string
-  active?:   boolean
-  disabled?: boolean
+  label:        string
+  href?:        string
+  active?:      boolean
+  disabled?:    boolean
+  /** FIX BUG-048: leading icon slot */
+  leadingIcon?: React.ReactNode
+  /** FIX BUG-048: trailing badge slot (count, status) */
+  badge?:       React.ReactNode
 }
 
 export interface NavBarProps {
-  variant?:  NavBarVariant
-  size?:     NavBarSize
+  variant?:      NavBarVariant
+  size?:         NavBarSize
   /** Brand node — logo + wordmark */
-  brand?:    React.ReactNode
+  brand?:        React.ReactNode
+  /**
+   * URL the brand/logo links to.
+   * When provided, wraps brand in an <a> tag.
+   * FIX BUG-068
+   */
+  brandHref?:    string
   /** Navigation links */
-  links?:    NavLink[]
+  links?:        NavLink[]
   /** Right-side action slot — buttons, avatar, etc. */
-  actions?:  React.ReactNode
-  className?: string
+  actions?:      React.ReactNode
+  /**
+   * Hide navbar on downward scroll, reveal on upward scroll.
+   * FIX BUG-046
+   */
+  hideOnScroll?: boolean
+  className?:    string
   /** @deprecated — use className */
-  style?:    React.CSSProperties
+  style?:        React.CSSProperties
 }
 
 /* ── Component ──────────────────────────────────────────────────── */
 
 export function NavBar({
-  variant   = "default",
-  size      = "md",
+  variant       = "default",
+  size          = "md",
   brand,
+  brandHref,
   links,
   actions,
+  hideOnScroll  = false,
   className,
 }: NavBarProps) {
-  const [drawerOpen, setDrawerOpen] = useState(false)
+  const [drawerOpen,  setDrawerOpen]  = useState(false)
+  const [scrolled,    setScrolled]    = useState(false)   /* FIX BUG-045 */
+  const [hidden,      setHidden]      = useState(false)   /* FIX BUG-046 */
+  const lastScrollY = useRef(0)
+
+  /* FIX BUG-045 + BUG-046: scroll event listener */
+  const handleScroll = useCallback(() => {
+    const currentY = window.scrollY
+
+    /* BUG-045: transparent → scrolled state */
+    setScrolled(currentY > 0)
+
+    /* BUG-046: hide on downscroll, reveal on upscroll */
+    if (hideOnScroll) {
+      const isScrollingDown = currentY > lastScrollY.current && currentY > 64
+      setHidden(isScrollingDown)
+    }
+
+    lastScrollY.current = currentY
+  }, [hideOnScroll])
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll, { passive: true })
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [handleScroll])
 
   const navbarClasses = cx(
     styles.navbar,
     styles[variant],
     size !== "md" && styles[size],
+    scrolled && styles.scrolled,        /* FIX BUG-045 */
+    hidden  && styles.navbarHidden,     /* FIX BUG-046 */
     className,
   )
+
+  /* FIX BUG-068: brand wrapped in <a> when brandHref provided */
+  const brandNode = brand ? (
+    brandHref
+      ? <a href={brandHref} className={styles.brand}>{brand}</a>
+      : <span className={styles.brand}>{brand}</span>
+  ) : null
 
   return (
     <>
@@ -85,12 +134,9 @@ export function NavBar({
         <div className={styles.inner}>
           {/* ── Start zone: brand + desktop links ── */}
           <div className={styles.start}>
-            {/* Brand */}
-            {brand && (
-              <span className={styles.brand}>{brand}</span>
-            )}
+            {brandNode}
 
-            {/* Desktop nav links — hidden below lg breakpoint */}
+            {/* Desktop nav links — hidden below md breakpoint (FIX BUG-043: was lg) */}
             {links && links.length > 0 && (
               <nav aria-label="Primary">
                 <ul className={styles.links}>
@@ -99,11 +145,18 @@ export function NavBar({
                       <a
                         href={link.href ?? "#"}
                         className={styles.link}
-                        aria-current={link.active ? "page" : undefined}
+                        aria-current={link.active   ? "page"      : undefined}
                         aria-disabled={link.disabled || undefined}
                         tabIndex={link.disabled ? -1 : undefined}
                       >
+                        {/* FIX BUG-048 */}
+                        {link.leadingIcon && (
+                          <span aria-hidden="true" className={styles.linkIcon}>{link.leadingIcon}</span>
+                        )}
                         {link.label}
+                        {link.badge && (
+                          <span aria-hidden="true">{link.badge}</span>
+                        )}
                       </a>
                     </li>
                   ))}
@@ -116,7 +169,7 @@ export function NavBar({
           <div className={styles.end}>
             {actions}
 
-            {/* Hamburger — visible below lg, hidden on desktop */}
+            {/* Hamburger — visible below md, hidden on desktop (FIX BUG-043: was lg) */}
             {links && links.length > 0 && (
               <button
                 type="button"
@@ -135,7 +188,7 @@ export function NavBar({
         </div>
       </header>
 
-      {/* Mobile drawer — rendered via Dialog for focus trap + Esc close */}
+      {/* Mobile drawer */}
       {links && links.length > 0 && (
         <Dialog open={drawerOpen} onOpenChange={setDrawerOpen}>
           <DialogContent
@@ -156,10 +209,17 @@ export function NavBar({
                       <a
                         href={link.href ?? "#"}
                         className={styles.drawerLink}
-                        aria-current={link.active ? "page" : undefined}
+                        aria-current={link.active   ? "page"      : undefined}
                         aria-disabled={link.disabled || undefined}
                       >
+                        {/* FIX BUG-048 */}
+                        {link.leadingIcon && (
+                          <span aria-hidden="true" className={styles.linkIcon}>{link.leadingIcon}</span>
+                        )}
                         {link.label}
+                        {link.badge && (
+                          <span aria-hidden="true">{link.badge}</span>
+                        )}
                       </a>
                     </DialogClose>
                   </li>
@@ -174,15 +234,11 @@ export function NavBar({
 }
 
 /* =================================================================
-   NavBar — Mobile-Native anatomy
-   BUG-069 fix: NavBar.Header, NavBar.Header.Leading,
-                NavBar.Header.Title, NavBar.Header.Actions,
-                NavBar.TabBar, NavBar.Tab
-   BUG-070 fix: safe-area insets applied via CSS (.navbarHeader,
-                .tabBar) — see NavBar.module.css
+   NavBar — Mobile-Native anatomy  (BUG-069 + BUG-070 already fixed)
+   NavBar.Header, NavBar.Header.Leading,
+   NavBar.Header.Title, NavBar.Header.Actions,
+   NavBar.TabBar, NavBar.Tab
    ================================================================= */
-
-/* ── NavBar.Header.Leading ───────────────────────────────────── */
 
 export interface NavBarHeaderLeadingProps {
   children?: React.ReactNode
@@ -190,14 +246,8 @@ export interface NavBarHeaderLeadingProps {
 }
 
 export function NavBarHeaderLeading({ children, className }: NavBarHeaderLeadingProps) {
-  return (
-    <div className={cx(styles.headerLeading, className)}>
-      {children}
-    </div>
-  )
+  return <div className={cx(styles.headerLeading, className)}>{children}</div>
 }
-
-/* ── NavBar.Header.Title ─────────────────────────────────────── */
 
 export interface NavBarHeaderTitleProps {
   children?: React.ReactNode
@@ -205,14 +255,8 @@ export interface NavBarHeaderTitleProps {
 }
 
 export function NavBarHeaderTitle({ children, className }: NavBarHeaderTitleProps) {
-  return (
-    <span className={cx(styles.headerTitle, className)}>
-      {children}
-    </span>
-  )
+  return <span className={cx(styles.headerTitle, className)}>{children}</span>
 }
-
-/* ── NavBar.Header.Actions ───────────────────────────────────── */
 
 export interface NavBarHeaderActionsProps {
   children?: React.ReactNode
@@ -220,14 +264,8 @@ export interface NavBarHeaderActionsProps {
 }
 
 export function NavBarHeaderActions({ children, className }: NavBarHeaderActionsProps) {
-  return (
-    <div className={cx(styles.headerActions, className)}>
-      {children}
-    </div>
-  )
+  return <div className={cx(styles.headerActions, className)}>{children}</div>
 }
-
-/* ── NavBar.Header ───────────────────────────────────────────── */
 
 export interface NavBarHeaderProps {
   variant?:   NavBarVariant
@@ -257,10 +295,7 @@ export const NavBarHeader = Object.assign(NavBarHeaderBase, {
   Actions: NavBarHeaderActions,
 })
 
-/* ── NavBar.Tab ──────────────────────────────────────────────── */
-
 export interface NavBarTabProps {
-  /** Must match the value tracked by the consumer's active state */
   value:      string
   label:      string
   icon?:      React.ReactNode
@@ -272,14 +307,9 @@ export interface NavBarTabProps {
 }
 
 export function NavBarTab({
-  value,
-  label,
-  icon,
-  badge,
-  active = false,
-  disabled = false,
-  onClick,
-  className,
+  value, label, icon, badge,
+  active = false, disabled = false,
+  onClick, className,
 }: NavBarTabProps) {
   return (
     <button
@@ -291,11 +321,7 @@ export function NavBarTab({
       onClick={() => !disabled && onClick?.(value)}
       tabIndex={disabled ? -1 : 0}
     >
-      {icon && (
-        <span className={styles.tabIcon} aria-hidden="true">
-          {icon}
-        </span>
-      )}
+      {icon && <span className={styles.tabIcon} aria-hidden="true">{icon}</span>}
       <span className={styles.tabLabel}>
         {label}
         {badge && <span aria-hidden="true">{badge}</span>}
@@ -303,8 +329,6 @@ export function NavBarTab({
     </button>
   )
 }
-
-/* ── NavBar.TabBar ───────────────────────────────────────────── */
 
 export interface NavBarTabBarProps {
   size?:      NavBarSize
@@ -317,11 +341,7 @@ export function NavBarTabBar({ size = "md", children, className }: NavBarTabBarP
     <nav
       role="tablist"
       aria-label="Primary navigation"
-      className={cx(
-        styles.tabBar,
-        size !== "md" && styles[size],
-        className,
-      )}
+      className={cx(styles.tabBar, size !== "md" && styles[size], className)}
     >
       {children}
     </nav>

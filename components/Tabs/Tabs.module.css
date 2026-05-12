@@ -5,10 +5,6 @@
    ================================================================= */
 
 /* ── Root ─────────────────────────────────────────────────────── */
-/*
-  CSS custom properties propagate size-driven values to all
-  sub-components without prop drilling.
-*/
 
 .root {
   --_h:  var(--atlas-spacing-10);    /* md: trigger height = 40px */
@@ -33,10 +29,6 @@
 }
 
 /* ── List ─────────────────────────────────────────────────────── */
-/*
-  Horizontally scrollable when triggers overflow — scroll snap to triggers.
-  Scrollbar hidden for cleaner appearance; swiping still works.
-*/
 
 .list {
   display: flex;
@@ -51,18 +43,36 @@
   display: none;
 }
 
-/* Underline list — hairline bottom border */
+/* Underline list */
 .underline .list {
+  position: relative; /* FIX BUG-039: anchor for ::after indicator */
   border-block-end: var(--atlas-border-width-1) solid var(--atlas-border);
   gap: 0;
 }
 
-/* Pills list — no border, spacing between triggers */
+/* FIX BUG-039: sliding underline indicator via CSS custom properties set by JS */
+.underline .list::after {
+  content: "";
+  position: absolute;
+  inset-block-end: calc(-1 * var(--atlas-border-width-1)); /* overlap list border */
+  inset-inline-start: 0;
+  height: var(--atlas-border-width-2);
+  background-color: var(--atlas-primary);
+  border-radius: var(--atlas-radius-full);
+  width: var(--_ind-w, 0px);
+  transform: translateX(var(--_ind-x, 0px));
+  transition:
+    transform var(--atlas-duration-base) var(--atlas-easing-emphasized),
+    width     var(--atlas-duration-base) var(--atlas-easing-emphasized);
+  pointer-events: none;
+}
+
+/* Pills list */
 .pills .list {
   gap: var(--atlas-spacing-1);
 }
 
-/* Enclosed list — muted bg chip */
+/* Enclosed list */
 .enclosed .list {
   background-color: var(--atlas-background-muted);
   border-radius: var(--atlas-radius-md);
@@ -105,10 +115,6 @@
 }
 
 /* ── Disabled (all variants) ──────────────────────────────────── */
-/*
-  Radix sets data-disabled on disabled triggers.
-  aria-disabled="true" is also set by Radix.
-*/
 
 .trigger[data-disabled] {
   color: var(--atlas-foreground-disabled);
@@ -116,10 +122,19 @@
   pointer-events: none;
 }
 
+/* ── Touch target — FIX BUG-061 ──────────────────────────────── */
+/* sm=32px and md=40px are both below 44px on coarse-pointer devices */
+
+@media (pointer: coarse) {
+  .trigger {
+    min-height: var(--atlas-touch-min); /* 44px */
+  }
+}
+
 /* ── Underline variant triggers ───────────────────────────────── */
 /*
-  Active indicator: 2px bottom border overlapping list's hairline.
-  margin-block-end: -border-width-1 to overlay the list border cleanly.
+  FIX BUG-039: active border-block-end-color set to transparent — the
+  sliding ::after indicator on .list handles the active underline.
 */
 
 .underline .trigger {
@@ -133,9 +148,14 @@
   color: var(--atlas-foreground);
 }
 
+/* FIX BUG-042: :active pressed state */
+.underline .trigger:active:not([data-disabled]) {
+  color: var(--atlas-foreground);
+}
+
 .underline .trigger[data-state="active"] {
   color: var(--atlas-foreground);
-  border-block-end-color: var(--atlas-primary);
+  border-block-end-color: transparent; /* indicator ::after handles this */
   font-weight: var(--atlas-font-weight-semibold);
 }
 
@@ -151,6 +171,12 @@
   color: var(--atlas-foreground);
 }
 
+/* FIX BUG-042: :active pressed state */
+.pills .trigger:active:not([data-disabled]) {
+  background-color: var(--atlas-background-subtle);
+  color: var(--atlas-foreground);
+}
+
 .pills .trigger[data-state="active"] {
   background-color: var(--atlas-primary);
   color: var(--atlas-primary-foreground);
@@ -161,10 +187,16 @@
 .enclosed .trigger {
   color: var(--atlas-foreground-muted);
   border-radius: calc(var(--atlas-radius-md) - var(--atlas-spacing-0_5));
-  flex: 1; /* equal width triggers */
+  flex: 1;
 }
 
 .enclosed .trigger:hover:not([data-disabled]) {
+  background-color: var(--atlas-background-subtle);
+  color: var(--atlas-foreground);
+}
+
+/* FIX BUG-042: :active pressed state */
+.enclosed .trigger:active:not([data-disabled]) {
   background-color: var(--atlas-background-subtle);
   color: var(--atlas-foreground);
 }
@@ -187,13 +219,22 @@
 
 .panel {
   padding-block-start: var(--atlas-spacing-4);
-  outline: none; /* Radix manages focus; ring not needed on panel */
+  outline: none;
+}
+
+/* Hidden panel when forceMount is active (Radix sets data-state="inactive") */
+.panel[data-state="inactive"] {
+  display: none;
 }
 
 /* ── Reduced motion ───────────────────────────────────────────── */
 
 @media (prefers-reduced-motion: reduce) {
   .trigger {
+    transition: none;
+  }
+  /* Instant indicator jump under reduced motion */
+  .underline .list::after {
     transition: none;
   }
 }

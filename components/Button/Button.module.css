@@ -28,6 +28,12 @@
     border-color    var(--atlas-duration-fast) var(--atlas-easing-standard);
 }
 
+
+/* BUG-063: Button sm (32px) touch-target expansion on coarse-pointer devices */
+@media (pointer: coarse) {
+  .sm { min-height: var(--atlas-touch-min); }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .btn {
     transition: none;

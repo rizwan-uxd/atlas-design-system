@@ -39,7 +39,8 @@
 
   position: fixed;
   z-index: var(--atlas-z-modal);
-  background-color: var(--atlas-background);
+  /* FIX BUG-050: was --atlas-background; merges with page in dark mode */
+  background-color: var(--atlas-surface-overlay);
   border: var(--atlas-border-width-1) solid var(--atlas-border);
   box-shadow: var(--atlas-shadow-xl);
   font-family: var(--atlas-font-sans);
@@ -56,17 +57,22 @@
 /* .md is the default (--_pad: spacing-6, --_max-w: atlas-dialog-md = 560px) */
 .lg  { --_pad: var(--atlas-spacing-6); --_max-w: var(--atlas-dialog-lg); }
 .xl  { --_pad: var(--atlas-spacing-8); --_max-w: var(--atlas-dialog-xl); }
-.full { --_pad: var(--atlas-spacing-6); --_max-w: calc(100% - var(--atlas-spacing-6) * 2); }
+/* FIX BUG-057: added max-height constraint for full size */
+.full {
+  --_pad: var(--atlas-spacing-6);
+  --_max-w: calc(100% - var(--atlas-spacing-6) * 2);
+  max-height: calc(100vh - var(--atlas-spacing-6) * 2);
+}
 
 /* ── Modal variant ────────────────────────────────────────────── */
 /*
   Centered via fixed + translate(-50%, -50%).
-  Constrained width: min of --_max-w and (100vw - spacing-8 margins).
+  FIX BUG-038: left/top → logical inset-inline-start/inset-block-start.
 */
 
 .modal {
-  top: 50%;
-  left: 50%;
+  inset-block-start: 50%;   /* FIX BUG-038: was top: 50% */
+  inset-inline-start: 50%;  /* FIX BUG-038: was left: 50% */
   transform: translate(-50%, -50%);
   width: min(var(--_max-w), calc(100vw - var(--atlas-spacing-8) * 2));
   border-radius: var(--atlas-radius-lg);
@@ -90,19 +96,54 @@
   to   { opacity: 0; transform: translate(-50%, -50%) scale(0.96); }
 }
 
+/* ── Modal responsive — FIX BUG-058 + BUG-059 ────────────────── */
+/*
+  Spec: < 640px viewport:
+    sm/md → auto-converts to bottom sheet geometry
+    lg/xl → full-screen
+*/
+
+@media (max-width: 639px) {
+  /* FIX BUG-058: sm/md modal → bottom sheet */
+  .modal.sm,
+  .modal.md {
+    inset-block-start: auto;
+    inset-block-end: 0;
+    inset-inline: 0;
+    transform: none;
+    width: 100%;
+    max-width: 100%;
+    border-radius: var(--atlas-radius-lg) var(--atlas-radius-lg) 0 0;
+    max-height: 85vh;
+  }
+
+  /* FIX BUG-059: lg/xl modal → full-screen */
+  .modal.lg,
+  .modal.xl {
+    inset: 0;
+    transform: none;
+    width: 100%;
+    max-width: 100%;
+    max-height: 100vh;
+    border-radius: 0;
+  }
+}
+
 /* ── Sheet variant ────────────────────────────────────────────── */
 /*
   Bottom-anchored, full width, top corners rounded only.
+  FIX BUG-036: physical left/right/bottom → logical inset-inline/inset-block-end
+  FIX BUG-071: safe-area padding for iOS home indicator
 */
 
 .sheet {
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset-inline: 0;          /* FIX BUG-036: was left: 0; right: 0 */
+  inset-block-end: 0;       /* FIX BUG-036: was bottom: 0 */
   width: 100%;
   max-width: 100%;
   max-height: 85vh;
   border-radius: var(--atlas-radius-lg) var(--atlas-radius-lg) 0 0;
+  padding-block-end: var(--atlas-safe-bottom); /* FIX BUG-071 */
 }
 
 .sheet[data-state="open"] {
@@ -126,25 +167,26 @@
 /* ── Drawer variant ───────────────────────────────────────────── */
 /*
   Side-panel. data-side="start" | "end".
-  Logical properties for RTL safety.
+  FIX BUG-036/BUG-062: physical top/bottom/left/right → logical inset-block/inset-inline-*
+  FIX BUG-072: safe-area padding for device status bar
 */
 
 .drawer {
-  top: 0;
-  bottom: 0;
+  inset-block: 0;            /* FIX BUG-062: was top: 0; bottom: 0 */
   width: min(var(--_max-w), 100vw);
   max-height: 100vh;
   border-radius: 0;
+  padding-block-start: var(--atlas-safe-top); /* FIX BUG-072 */
 }
 
 .drawer[data-side="end"] {
-  right: 0;
+  inset-inline-end: 0;        /* FIX BUG-036: was right: 0 */
   border-start-start-radius: var(--atlas-radius-lg);
   border-end-start-radius: var(--atlas-radius-lg);
 }
 
 .drawer[data-side="start"] {
-  left: 0;
+  inset-inline-start: 0;      /* FIX BUG-036: was left: 0 */
   border-start-end-radius: var(--atlas-radius-lg);
   border-end-end-radius: var(--atlas-radius-lg);
 }
@@ -184,7 +226,7 @@
 /* ── Drag handle (sheet only) ─────────────────────────────────── */
 /*
   36px wide × 4px tall pill centred at top of sheet.
-  Spec: width=36px (spacing-9), height=4px (spacing-1).
+  Visual affordance only — no interactive role (BUG-037/BUG-066 fixed in Dialog.tsx).
 */
 
 .dragHandle {
@@ -194,7 +236,6 @@
   background-color: var(--atlas-border-strong);
   margin: var(--atlas-spacing-2) auto 0;
   flex-shrink: 0;
-  cursor: grab;
 }
 
 /* ── Header ───────────────────────────────────────────────────── */
@@ -226,7 +267,9 @@
 /* ── Description ──────────────────────────────────────────────── */
 
 .description {
-  margin: var(--atlas-spacing-1) 0 0;
+  margin: 0;
+  /* FIX BUG-034: was margin: var(--atlas-spacing-1) 0 0 — non-logical shorthand */
+  margin-block-start: var(--atlas-spacing-1);
   font-size: var(--atlas-text-body-sm);
   line-height: var(--atlas-line-height-normal);
   color: var(--atlas-foreground-muted);
@@ -256,27 +299,21 @@
 .footerStart   { justify-content: flex-start; }
 
 /* ── Close button ─────────────────────────────────────────────── */
-/*
-  Ghost icon button matching spec: ghost Button at icon size.
-  Minimum touch target 44px.
-*/
 
 .closeBtn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  /* 40px visual matches icon Button size */
   width: var(--atlas-spacing-10);
   height: var(--atlas-spacing-10);
-  /* Expand to touch-min via negative margin */
   margin: calc(-1 * var(--atlas-spacing-1));
   background: none;
   border: none;
   cursor: pointer;
   color: var(--atlas-foreground-muted);
   font-size: var(--atlas-font-size-lg);
-  line-height: 1;
+  line-height: var(--atlas-line-height-tight); /* FIX BUG-035: was line-height: 1 */
   border-radius: var(--atlas-radius-md);
   outline: none;
   transition: background-color var(--atlas-duration-fast) var(--atlas-easing-standard),

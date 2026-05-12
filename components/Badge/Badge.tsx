@@ -152,7 +152,8 @@ export function Badge({
           disabled={disabled}
           tabIndex={disabled ? -1 : 0}
         >
-          ×
+          {/* FIX BUG-067: aria-hidden prevents double-announcement ("Remove item times") */}
+          <span aria-hidden="true">×</span>
         </button>
       )}
     </>

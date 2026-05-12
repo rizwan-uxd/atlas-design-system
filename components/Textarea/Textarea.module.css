@@ -160,6 +160,13 @@
 
 /* ── Reduced motion ───────────────────────────────────────────── */
 
+
+/* BUG-055: Dark mode filled hover inversion fix (same root cause as BUG-052).
+   In dark mode background-subtle is darker than background-muted — override. */
+[data-theme="dark"] .filled .textarea:hover:not(:disabled):not([readonly]) {
+  background-color: color-mix(in oklch, var(--atlas-background-muted) 80%, oklch(1 0 0));
+}
+
 @media (prefers-reduced-motion: reduce) {
   .textarea {
     transition: none;

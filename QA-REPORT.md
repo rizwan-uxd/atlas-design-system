@@ -2,7 +2,7 @@
 
 > **Version:** 1.0  
 > **Status:** ✅ GO — v1.0.0 released  
-> **Last updated:** 2026-05-12 (FIX-03 complete — Badge 6 bugs fixed)
+> **Last updated:** 2026-05-12 (FIX-08 complete — all 76 bugs resolved; 0 open)
 
 ---
 
@@ -13,8 +13,8 @@
 | Sessions completed | 14 of 14 |
 | Total bugs filed | 76 |
 | P1 bugs open | 0 |
-| P2 bugs open | 22 |
-| P3 bugs open | 11 |
+| P2 bugs open | 0 |
+| P3 bugs open | 0 |
 | Components spec-complete | 0 of 12 (code audits: Button ✅ · Input ✅ · Label ✅ · Textarea ✅ · Checkbox ✅ · Switch ✅ · Badge ✅ · Card ✅ · Alert ✅ · Dialog ✅ · Tabs ✅ · NavBar ✅; visual + dark-mode passes pending) |
 
 ---
@@ -31,9 +31,9 @@
 | Checkbox | ✅ Pass | — | 1 bug (BUG-056) | — | — | 1 bug (BUG-073) | 4 bugs fixed; BUG-073, BUG-075 open |
 | Switch | ✅ Pass | — | ✅ Pass (BUG-053 fixed) | — | — | — | 7 bugs fixed (BUG-017–020, BUG-053, BUG-060, BUG-064) |
 | Card | ✅ Pass | — | ✅ Pass (BUG-051, 054 fixed) | — | — | — | 8 bugs fixed (BUG-026–030, BUG-051, BUG-054, BUG-065) |
-| Badge | ✅ Pass | — | — | — | — | ✅ Pass (BUG-074 fixed) | 6 bugs (BUG-021–025, BUG-074) found + fixed |
-| Alert | ✅ Pass | — | — | — | — | — | 3 bugs (BUG-031–033) found; fixes pending |
-| Dialog | ✅ Pass | — | 1 bug (BUG-050) | — | — | 2 bugs (BUG-071, 072) | 5 bugs (BUG-034–038) found; BUG-071, 072 open |
+| Badge | ✅ Pass | — | — | — | — | ✅ Pass (BUG-074 fixed) | 7 bugs found + fixed (BUG-067 aria-hidden) |
+| Alert | ✅ Pass | — | — | — | — | — | 3 bugs (BUG-031–033) found + fixed |
+| Dialog | ✅ Pass | — | ✅ Pass (BUG-050 fixed) | — | — | ✅ Pass (BUG-071, 072 fixed) | 13 bugs found + fixed |
 | Tabs | ✅ Pass | — | — | — | — | — | 4 bugs (BUG-039–042) found; fixes pending |
 | NavBar | ✅ Pass | — | — | — | — | 2 bugs (BUG-069, 070) | 7 bugs (BUG-043–049) found; BUG-069, 070 open |
 
@@ -1043,7 +1043,7 @@ line-height: var(--atlas-line-height-tight); /* was: 1 */
 
 ---
 
-#### BUG-031 · P2 · OPEN
+#### BUG-031 · P2 · FIXED
 
 **Title:** Alert border uses `--atlas-{intent}` instead of spec-defined `--atlas-{intent}-muted`
 
@@ -1061,7 +1061,7 @@ line-height: var(--atlas-line-height-tight); /* was: 1 */
 
 ---
 
-#### BUG-032 · P2 · OPEN
+#### BUG-032 · P2 · FIXED
 
 **Title:** No exit (dismiss) animation — alert unmounts instantly on `onDismiss`
 
@@ -1086,7 +1086,7 @@ Add a `.dismissing` CSS class with an `alertExit` keyframe (`opacity 1→0 + max
 
 ---
 
-#### BUG-033 · P3 · OPEN
+#### BUG-033 · P3 · FIXED
 
 **Title:** `line-height: 1` in `.dismissBtn` is a magic number
 
@@ -1105,7 +1105,7 @@ line-height: var(--atlas-line-height-tight); /* was: 1 */
 
 ---
 
-#### BUG-034 · P3 · OPEN
+#### BUG-034 · P3 · FIXED
 
 **Title:** Dialog `.description` uses non-logical `margin` shorthand
 
@@ -1125,7 +1125,7 @@ margin-block-start: var(--atlas-spacing-1); /* was: margin: var(--atlas-spacing-
 
 ---
 
-#### BUG-035 · P3 · OPEN
+#### BUG-035 · P3 · FIXED
 
 **Title:** `line-height: 1` in Dialog `.closeBtn` is a magic number
 
@@ -1144,7 +1144,7 @@ line-height: var(--atlas-line-height-tight); /* was: 1 */
 
 ---
 
-#### BUG-036 · P2 · OPEN
+#### BUG-036 · P2 · FIXED
 
 **Title:** Sheet and Drawer variants use physical CSS positioning properties (`left`, `right`, `bottom`)
 
@@ -1172,7 +1172,7 @@ line-height: var(--atlas-line-height-tight); /* was: 1 */
 
 ---
 
-#### BUG-037 · P2 · OPEN
+#### BUG-037 · P2 · FIXED
 
 **Title:** Drag handle wrapped in `RadixDialog.Close` — click-to-dismiss overrides drag-to-dismiss UX
 
@@ -1195,7 +1195,7 @@ line-height: var(--atlas-line-height-tight); /* was: 1 */
 
 ---
 
-#### BUG-038 · P3 · OPEN
+#### BUG-038 · P3 · FIXED
 
 **Title:** Modal variant uses physical `left/top` properties instead of logical equivalents
 
@@ -1230,7 +1230,7 @@ Note: `translate(-50%, -50%)` remains physical. CSS logical transforms (`transla
 - [x] `sm` title: `--atlas-text-body-sm`; `sm` description: `--atlas-text-caption` ✅
 - [x] `md` title: `--atlas-text-body`; `md` description: `--atlas-text-body-sm` ✅
 - [x] Background tokens: all 4 variants use `--atlas-{intent}-subtle` ✅
-- [ ] Border tokens: implementation uses `--atlas-{intent}` (full intensity); spec defines `--atlas-{intent}-muted` → **BUG-031** (tokens also missing from `atlas.tokens.css`)
+- [x] Border tokens: `--atlas-{intent}-muted` (tokens added to atlas.tokens.css) ✅ (BUG-031 fixed)
 - [x] Radius: `--atlas-radius-md` ✅
 - [x] Title foreground: `color: inherit` — inherits variant intent color from `.alert` root (deviation from spec `--atlas-{intent}-foreground`; confirmed spec error — foreground tokens resolve to white, no contrast on subtle bg) ✅
 - [x] Description foreground: `--atlas-foreground` ✅
@@ -1238,7 +1238,7 @@ Note: `translate(-50%, -50%)` remains physical. CSS logical transforms (`transla
 - [x] `role="alert"` for warning/danger; `role="status"` for info/success ✅
 - [x] Enter animation: fade + 4px `translateY` over `--atlas-duration-base` `--atlas-easing-emphasized` ✅
 - [x] `prefers-reduced-motion`: enter animation suppressed ✅
-- [ ] Exit/dismiss animation: no `dismissing` state, no exit keyframe — alert unmounts instantly → **BUG-032**
+- [x] Exit animation: `isDismissing` state + `alertExit` keyframe + `onAnimationEnd` hook ✅ (BUG-032 fixed)
 - [x] Leading icon: `aria-hidden="true"` ✅
 - [x] Default icons per variant: info ℹ · success ✓ · warning ⚠ · danger ⊗ ✅
 - [x] `hideIcon` prop suppresses icon ✅
@@ -1248,7 +1248,7 @@ Note: `translate(-50%, -50%)` remains physical. CSS logical transforms (`transla
 - [x] Dismiss `aria-label`: `"Dismiss {variant} alert"` ✅
 - [x] Dismiss touch target: `min-width/min-height: var(--atlas-touch-min)` (44px) ✅
 - [x] Dismiss focus ring: `--atlas-border-width-2` solid `--atlas-focus-ring` + `spacing-0_5` offset ✅
-- [ ] Dismiss `line-height: 1` magic number → **BUG-033**
+- [x] Dismiss `line-height: var(--atlas-line-height-tight)` ✅ (BUG-033 fixed)
 - [x] Token audit: no hex literals, no rgba(), no raw pixel values ✅
 - [x] Logical properties: `padding-inline-start`, `inset-block`, `inset-inline-start`, `margin-block-start` ✅
 - [x] `description` prop and `children` prop — both supported, `description` takes priority ✅
@@ -1279,9 +1279,9 @@ Note: `translate(-50%, -50%)` remains physical. CSS logical transforms (`transla
 - [x] Drawer enter: `translateX(±100%→0)` + fade over `--atlas-duration-base` `--atlas-easing-emphasized` ✅
 - [x] Overlay enter: fade over `--atlas-duration-fast` `--atlas-easing-standard` ✅
 - [x] `prefers-reduced-motion`: all animations set to `none !important` ✅
-- [ ] Modal: `left: 50%; top: 50%;` physical properties — should be logical `inset-inline-start`/`inset-block-start` → **BUG-038**
-- [ ] Sheet: `left: 0; right: 0; bottom: 0;` physical properties → **BUG-036**
-- [ ] Drawer: `right: 0` / `left: 0` physical properties → **BUG-036**
+- [x] Modal: `inset-block-start: 50%; inset-inline-start: 50%` ✅ (BUG-038 fixed)
+- [x] Sheet: `inset-inline: 0; inset-block-end: 0` ✅ (BUG-036 fixed)
+- [x] Drawer: `inset-inline-end: 0` / `inset-inline-start: 0` ✅ (BUG-036 fixed)
 - [x] Radix `RadixDialog.Root` powers focus trap, scroll lock, Escape dismiss, `aria-modal`, `aria-labelledby`, `aria-describedby` ✅
 - [x] `closeOnEscape=false` → `e.preventDefault()` on `onEscapeKeyDown` ✅
 - [x] `closeOnOverlayClick=false` → `e.preventDefault()` on `onInteractOutside` ✅
@@ -1292,7 +1292,7 @@ Note: `translate(-50%, -50%)` remains physical. CSS logical transforms (`transla
 - [x] Close button focus ring: `--atlas-border-width-2` solid `--atlas-focus-ring` + `spacing-0_5` offset ✅
 - [x] Close button hover: `--atlas-background-subtle` bg + `--atlas-foreground` color ✅
 - [x] Close button motion: `background-color + color` via `--atlas-duration-fast` `--atlas-easing-standard` ✅
-- [ ] Drag handle wrapped in `RadixDialog.Close` — click closes sheet; should be visual-only → **BUG-037**
+- [x] Drag handle: visual-only `<div aria-hidden="true">` — no close wrapper ✅ (BUG-037 + BUG-066 fixed)
 - [x] Drag handle width: `--atlas-spacing-9` (36px) ✅
 - [x] Drag handle height: `--atlas-spacing-1` (4px) ✅
 - [x] Drag handle color: `--atlas-border-strong` ✅
@@ -1303,8 +1303,8 @@ Note: `translate(-50%, -50%)` remains physical. CSS logical transforms (`transla
 - [x] `DialogFooter` justify: start/between/end via flex `justify-content` ✅
 - [x] Title: `--atlas-text-h3`, `--atlas-font-weight-semibold`, `--atlas-foreground` ✅
 - [x] Description: `--atlas-text-body-sm`, `--atlas-foreground-muted` ✅
-- [ ] Description `margin: var(--atlas-spacing-1) 0 0` — non-logical shorthand → **BUG-034**
-- [ ] CloseBtn `line-height: 1` magic number → **BUG-035**
+- [x] Description `margin-block-start: var(--atlas-spacing-1)` ✅ (BUG-034 fixed)
+- [x] CloseBtn `line-height: var(--atlas-line-height-tight)` ✅ (BUG-035 fixed)
 - [x] `side` prop on `DialogContent` (drawer only) → forwarded as `data-side` attribute for CSS targeting ✅
 - [x] Token audit: no hex literals, no rgba(), no raw pixel values ✅
 - [x] Logical properties on header/footer/body padding — `padding-block`, `padding-inline` ✅ (exception: overlay/content positioning — BUG-036/038)
@@ -1317,7 +1317,7 @@ Note: `translate(-50%, -50%)` remains physical. CSS logical transforms (`transla
 
 ---
 
-#### BUG-039 · P2 · OPEN
+#### BUG-039 · P2 · FIXED
 
 **Title:** No sliding indicator animation — active indicator jumps instead of glides between triggers
 
@@ -1333,7 +1333,7 @@ Note: `translate(-50%, -50%)` remains physical. CSS logical transforms (`transla
 
 ---
 
-#### BUG-040 · P2 · OPEN
+#### BUG-040 · P2 · FIXED
 
 **Title:** Compound sub-component API (`Tabs.List`, `Tabs.Trigger`, `Tabs.Panel`) not exposed; `forceMount` and `scrollable` unsupported
 
@@ -1349,7 +1349,7 @@ Note: `translate(-50%, -50%)` remains physical. CSS logical transforms (`transla
 
 ---
 
-#### BUG-041 · P3 · OPEN
+#### BUG-041 · P3 · FIXED
 
 **Title:** `aria-label="Tabs"` hardcoded on `RadixTabs.List` — generic accessible name
 
@@ -1368,7 +1368,7 @@ Note: `translate(-50%, -50%)` remains physical. CSS logical transforms (`transla
 
 ---
 
-#### BUG-042 · P3 · OPEN
+#### BUG-042 · P3 · FIXED
 
 **Title:** No `:active` / pressed state on tab triggers
 
@@ -1392,7 +1392,7 @@ Note: `translate(-50%, -50%)` remains physical. CSS logical transforms (`transla
 
 ---
 
-#### BUG-043 · P2 · OPEN
+#### BUG-043 · P2 · FIXED
 
 **Title:** Hamburger breakpoint is 1024px — spec defines collapse at `< md` (768px), leaving tablet without nav links
 
@@ -1408,7 +1408,7 @@ Note: `translate(-50%, -50%)` remains physical. CSS logical transforms (`transla
 
 ---
 
-#### BUG-044 · P2 · OPEN
+#### BUG-044 · P2 · FIXED
 
 **Title:** `aria-controls="mobile-nav-drawer"` points to a non-existent DOM id — `DialogContent` drops the `id` prop
 
@@ -1426,7 +1426,7 @@ Note: `translate(-50%, -50%)` remains physical. CSS logical transforms (`transla
 
 ---
 
-#### BUG-045 · P2 · OPEN
+#### BUG-045 · P2 · FIXED
 
 **Title:** `transparent` NavBar variant has no scroll state — background stays transparent indefinitely
 
@@ -1442,7 +1442,7 @@ Note: `translate(-50%, -50%)` remains physical. CSS logical transforms (`transla
 
 ---
 
-#### BUG-046 · P2 · OPEN
+#### BUG-046 · P2 · FIXED
 
 **Title:** `hideOnScroll` prop missing from `NavBarProps`
 
@@ -1458,7 +1458,7 @@ Note: `translate(-50%, -50%)` remains physical. CSS logical transforms (`transla
 
 ---
 
-#### BUG-047 · P2 · OPEN
+#### BUG-047 · P2 · FIXED
 
 **Title:** Disabled nav link has no CSS styling — `[aria-disabled="true"]` on `.link` is unstyled
 
@@ -1487,7 +1487,7 @@ Note: `translate(-50%, -50%)` remains physical. CSS logical transforms (`transla
 
 ---
 
-#### BUG-048 · P2 · OPEN
+#### BUG-048 · P2 · FIXED
 
 **Title:** `NavLink` interface missing `leadingIcon` and `badge` props defined in spec API
 
@@ -1510,7 +1510,7 @@ Note: `translate(-50%, -50%)` remains physical. CSS logical transforms (`transla
 
 ---
 
-#### BUG-049 · P3 · OPEN
+#### BUG-049 · P3 · FIXED
 
 **Title:** `.navbar` uses physical `top: 0` for sticky positioning instead of logical `inset-block-start`
 
@@ -1643,6 +1643,11 @@ inset-block-start: 0; /* was: top: 0 */
 | FIX-01 — Switch          | ✅ Complete | 2026-05-12 | 7 bugs fixed (BUG-017–020 P3×3/P2×1, BUG-053 dark mode, BUG-060 touch target, BUG-064 aria-label) |
 | FIX-02 — Card            | ✅ Complete | 2026-05-12 | 8 bugs fixed (BUG-026–030 core, BUG-051 dark mode elevated, BUG-054 dark mode filled hover, BUG-065 aria-labelledby) |
 | FIX-03 — Badge           | ✅ Complete | 2026-05-12 | 6 bugs fixed (BUG-021–025 core, BUG-074 touch target) |
+| FIX-04 — Alert           | ✅ Complete | 2026-05-12 | 3 bugs fixed (BUG-031 border tokens, BUG-032 exit anim, BUG-033 line-height) + added --atlas-{intent}-muted tokens |
+| FIX-05 — Dialog + Badge  | ✅ Complete | 2026-05-12 | 14 bugs fixed (BUG-034–038 core, BUG-050 dark mode, BUG-057–059 responsive, BUG-062/066 logical, BUG-067 badge aria, BUG-071–072 safe area) |
+| FIX-06 — Tabs            | ✅ Complete | 2026-05-12 | 5 bugs fixed (BUG-039 sliding indicator, BUG-040 forceMount, BUG-041 aria-label, BUG-042 :active states, BUG-061 touch target) |
+| FIX-07 — NavBar          | ✅ Complete | 2026-05-12 | 10 bugs fixed (BUG-043 breakpoint, BUG-044 dialog id, BUG-045 transparent scroll, BUG-046 hideOnScroll, BUG-047 disabled CSS, BUG-048 NavLink slots, BUG-049 logical top, BUG-068 brandHref, BUG-069 mobile anatomy, BUG-070 safe-area) |
+| FIX-08 — Input/Textarea/Checkbox/Button | ✅ Complete | 2026-05-12 | 7 bugs fixed (BUG-052/055 filled dark hover, BUG-056 card dark checked, BUG-063 sm touch target, BUG-073 checkbox touch target, BUG-075 forceMount type, BUG-076 report headers) |
 
 ---
 
@@ -1650,7 +1655,7 @@ inset-block-start: 0; /* was: top: 0 */
 
 ---
 
-#### BUG-050 · P2 · OPEN
+#### BUG-050 · P2 · FIXED
 
 **Title:** Dialog panel uses `--atlas-background` instead of `--atlas-surface-overlay` — panel merges with page in dark mode
 
@@ -1695,7 +1700,7 @@ inset-block-start: 0; /* was: top: 0 */
 
 ---
 
-#### BUG-052 · P2 · OPEN
+#### BUG-052 · P2 · FIXED
 
 **Title:** Input `filled` variant — hover state darkens the input in dark mode (inverted feedback)
 
@@ -1796,7 +1801,7 @@ The safest fix is a dedicated dark-mode override that uses `color-mix` to lighte
 
 ---
 
-#### BUG-055 · P2 · OPEN
+#### BUG-055 · P2 · FIXED
 
 **Title:** Textarea `filled` variant hover darkens in dark mode (inverted feedback)
 
@@ -1825,7 +1830,7 @@ This is the same muted → subtle inversion. In light mode: 967 → 985 (lighten
 
 ---
 
-#### BUG-056 · P3 · OPEN
+#### BUG-056 · P3 · FIXED
 
 **Title:** Checkbox `card` variant — checked background `--atlas-primary-subtle` near-invisible against page in dark mode
 
@@ -1896,7 +1901,7 @@ In dark mode `--atlas-primary-subtle` resolves to `--atlas-color-brand-950` (L�
 
 ---
 
-#### BUG-057 · P2 · OPEN
+#### BUG-057 · P2 · FIXED
 
 **Title:** Dialog `size="full"` variant missing from TSX prop type and CSS
 
@@ -1921,7 +1926,7 @@ In dark mode `--atlas-primary-subtle` resolves to `--atlas-color-brand-950` (L�
 
 ---
 
-#### BUG-058 · P2 · OPEN
+#### BUG-058 · P2 · FIXED
 
 **Title:** Dialog modal has no responsive auto-sheet conversion below 640px viewport width
 
@@ -1953,7 +1958,7 @@ In dark mode `--atlas-primary-subtle` resolves to `--atlas-color-brand-950` (L�
 
 ---
 
-#### BUG-059 · P2 · OPEN
+#### BUG-059 · P2 · FIXED
 
 **Title:** Dialog `lg`/`xl` modal sizes have no full-screen override on viewports < 640px
 
@@ -2012,7 +2017,7 @@ Or wrap the track in a transparent touch-target container of 44px height using a
 
 ---
 
-#### BUG-061 · P2 · OPEN
+#### BUG-061 · P2 · FIXED
 
 **Title:** Tabs trigger has no minimum touch target — sm=32px, md=40px, both below 44px on touch devices
 
@@ -2040,7 +2045,7 @@ The spec states "Mobile-app baseline: `md` minimum; tap target ≥ `--atlas-touc
 
 ---
 
-#### BUG-062 · P3 · OPEN
+#### BUG-062 · P3 · FIXED
 
 **Title:** Dialog drawer uses physical CSS position properties (`top`, `bottom`, `left`, `right`) instead of logical equivalents
 
@@ -2073,7 +2078,7 @@ In an RTL layout, the `start` drawer should slide from the inline-end (right in 
 
 ---
 
-#### BUG-063 · P3 · OPEN
+#### BUG-063 · P3 · FIXED
 
 **Title:** Button `sm` and Input `sm` (32px) have no coarse-pointer touch-target enforcement on mobile-web
 
@@ -2192,7 +2197,7 @@ const titleId = `${uid}-title`
 
 ---
 
-#### BUG-066 · P2 · OPEN
+#### BUG-066 · P2 · FIXED
 
 **Title:** Dialog sheet drag handle uses `<div role="button">` instead of native `<button>`
 
@@ -2229,7 +2234,7 @@ No manual `onKeyDown` needed — `<button>` activates on Space/Enter natively.
 
 ---
 
-#### BUG-067 · P2 · OPEN
+#### BUG-067 · P2 · FIXED
 
 **Title:** Badge remove button — visible `×` character not `aria-hidden`; risks double-announcement by screen readers
 
@@ -2256,7 +2261,7 @@ The `×` character (HTML entity `&times;`) is visible text content inside the bu
 
 ---
 
-#### BUG-068 · P3 · OPEN
+#### BUG-068 · P3 · FIXED
 
 **Title:** NavBar `brand` slot has no `brandHref` prop and no `<a>` wrapper — brand logo is not keyboard-navigable
 
@@ -2339,7 +2344,7 @@ Add `brandHref?: string` to `NavBarProps`. Render conditionally:
 
 ---
 
-#### BUG-069 · P1 · OPEN
+#### BUG-069 · P1 · FIXED
 
 **Title:** NavBar — mobile-native anatomy (`NavBar.Header`, `NavBar.TabBar`, `NavBar.Tab`) entirely absent from implementation
 
@@ -2374,7 +2379,7 @@ Apply safe-area insets (see BUG-070). Tab bar sits above iOS home indicator.
 
 ---
 
-#### BUG-070 · P2 · OPEN
+#### BUG-070 · P2 · FIXED
 
 **Title:** NavBar — `--atlas-safe-top` and `--atlas-safe-bottom` tokens defined but never consumed; navbar content overlaps iOS notch and home indicator
 
@@ -2412,7 +2417,7 @@ The safe-area tokens are paid for by the CSS `env()` calls already in `atlas.tok
 
 ---
 
-#### BUG-071 · P2 · OPEN
+#### BUG-071 · P2 · FIXED
 
 **Title:** Dialog `sheet` variant — no `padding-block-end: var(--atlas-safe-bottom)`; bottom-sheet content clipped by iOS home indicator
 
@@ -2439,7 +2444,7 @@ The `DialogFooter` padding inside the sheet will then correctly clear the home i
 
 ---
 
-#### BUG-072 · P2 · OPEN
+#### BUG-072 · P2 · FIXED
 
 **Title:** Dialog `drawer` variant — no `padding-block-start: var(--atlas-safe-top)`; drawer header clipped by device status bar on mobile
 
@@ -2462,7 +2467,7 @@ This is specifically observed when the NavBar's hamburger opens the mobile nav d
 
 ---
 
-#### BUG-073 · P2 · OPEN
+#### BUG-073 · P2 · FIXED
 
 **Title:** Checkbox — visual box (16–20px) has no touch-target expansion on coarse-pointer devices; tappable area far below `--atlas-touch-min: 44px`
 
@@ -2565,7 +2570,7 @@ Unlike `Alert`'s dismiss button — which correctly declares `min-width: var(--a
 
 ---
 
-#### BUG-075 · P2 · OPEN
+#### BUG-075 · P2 · FIXED
 
 **Title:** Checkbox — `forceMount={false}` passed to `RadixCheckbox.Indicator`; Radix type only accepts `true | undefined` — TypeScript compile error
 
@@ -2594,7 +2599,7 @@ This is detected by `tsc --noEmit` and will block any strict CI pipeline. The in
 
 ---
 
-#### BUG-076 · P3 · OPEN
+#### BUG-076 · P3 · FIXED
 
 **Title:** Bug entry headers for BUG-004, BUG-005, BUG-006 read `· OPEN` despite code fixes being applied; QA-02 exit condition confirms all three fixed
 

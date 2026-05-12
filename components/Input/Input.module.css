@@ -274,6 +274,19 @@
 
 /* ── Reduced motion ───────────────────────────────────────────── */
 
+
+/* BUG-052: Dark mode filled hover inversion fix.
+   In dark mode background-subtle = neutral-900 (darker than background-muted = neutral-800).
+   Hover must lighten, not darken — override via color-mix. */
+[data-theme="dark"] .filled .input:hover:not(:disabled):not([readonly]) {
+  background-color: color-mix(in oklch, var(--atlas-background-muted) 80%, oklch(1 0 0));
+}
+
+/* BUG-063: sm (32px) touch-target expansion on coarse-pointer devices */
+@media (pointer: coarse) {
+  .sm { min-height: var(--atlas-touch-min); }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .input {
     transition: none;

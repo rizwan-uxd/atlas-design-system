@@ -153,17 +153,11 @@ export function DialogContent({
         onEscapeKeyDown={(e) => { if (!closeOnEscape) e.preventDefault() }}
         onInteractOutside={(e) => { if (!closeOnOverlayClick) e.preventDefault() }}
       >
-        {/* Drag handle — sheet only */}
+        {/* Drag handle — sheet only; visual affordance only (FIX BUG-037 + BUG-066)
+             Not interactive: close is via header × button or swipe gesture.
+             aria-hidden prevents screen readers from announcing the decoration. */}
         {variant === "sheet" && (
-          <RadixDialog.Close asChild>
-            <div
-              className={styles.dragHandle}
-              role="button"
-              aria-label="Dismiss sheet"
-              tabIndex={0}
-              onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") e.currentTarget.click() }}
-            />
-          </RadixDialog.Close>
+          <div className={styles.dragHandle} aria-hidden="true" />
         )}
 
         {children}

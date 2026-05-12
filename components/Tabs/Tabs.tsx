@@ -28,18 +28,18 @@
  *
  * 2. Compound API (full control):
  *   <Tabs.Root variant="underline" size="md" defaultValue="one">
- *     <Tabs.List aria-label="My tabs">
+ *     <Tabs.List aria-label="Account settings">
  *       <Tabs.Trigger value="one">Overview</Tabs.Trigger>
  *       <Tabs.Trigger value="two" badge={<Badge>3</Badge>}>Details</Tabs.Trigger>
  *     </Tabs.List>
  *     <Tabs.Panel value="one"><p>…</p></Tabs.Panel>
- *     <Tabs.Panel value="two"><p>…</p></Tabs.Panel>
+ *     <Tabs.Panel value="two" forceMount><p>…</p></Tabs.Panel>
  *   </Tabs.Root>
  *
  * Token compliance: all values via semantic tokens in Tabs.module.css.
  */
 
-import React from "react"
+import React, { useRef, useEffect, useLayoutEffect, useCallback } from "react"
 import * as RadixTabs from "@radix-ui/react-tabs"
 import styles from "./Tabs.module.css"
 
@@ -113,19 +113,66 @@ export function TabsRoot({
 /* ── Tabs.List ──────────────────────────────────────────────────── */
 
 export interface TabsListProps {
-  /** Accessible name for the tab group — required when multiple tab lists exist on one page */
+  /**
+   * Accessible name for the tab group.
+   * Provide a unique description when multiple tab lists exist on one page.
+   * FIX BUG-041: no longer defaults to "Tabs" (was generic and duplicated)
+   */
   "aria-label"?: string
   className?:    string
   children?:     React.ReactNode
 }
 
 export function TabsList({
-  "aria-label": ariaLabel = "Tabs",
+  "aria-label": ariaLabel,  /* FIX BUG-041: was = "Tabs" */
   className,
   children,
 }: TabsListProps) {
+  /* FIX BUG-039: sliding indicator via MutationObserver + CSS custom properties */
+  const listRef = useRef<HTMLDivElement>(null)
+
+  const updateIndicator = useCallback(() => {
+    const list = listRef.current
+    if (!list) return
+    const active = list.querySelector<HTMLElement>('[data-state="active"]')
+    if (!active) return
+    const listRect = list.getBoundingClientRect()
+    const activeRect = active.getBoundingClientRect()
+    /* scrollLeft accounts for lists that have scrolled horizontally */
+    list.style.setProperty("--_ind-x", `${activeRect.left - listRect.left + list.scrollLeft}px`)
+    list.style.setProperty("--_ind-w", `${activeRect.width}px`)
+  }, [])
+
+  /* Run after every render to catch Radix updating data-state */
+  useLayoutEffect(() => {
+    updateIndicator()
+  })
+
+  /* Observe data-state attribute changes + window resize */
+  useEffect(() => {
+    const list = listRef.current
+    if (!list) return
+
+    const observer = new MutationObserver(updateIndicator)
+    observer.observe(list, {
+      subtree:         true,
+      attributes:      true,
+      attributeFilter: ["data-state"],
+    })
+    window.addEventListener("resize", updateIndicator)
+
+    return () => {
+      observer.disconnect()
+      window.removeEventListener("resize", updateIndicator)
+    }
+  }, [updateIndicator])
+
   return (
-    <RadixTabs.List className={cx(styles.list, className)} aria-label={ariaLabel}>
+    <RadixTabs.List
+      ref={listRef as React.Ref<HTMLDivElement>}
+      className={cx(styles.list, className)}
+      aria-label={ariaLabel}
+    >
       {children}
     </RadixTabs.List>
   )
@@ -170,14 +217,24 @@ export function TabsTrigger({
 /* ── Tabs.Panel ─────────────────────────────────────────────────── */
 
 export interface TabsPanelProps {
-  value:      string
-  className?: string
-  children?:  React.ReactNode
+  value:       string
+  /**
+   * Keep panel mounted even when not active.
+   * Enables SSR of off-screen content and lazy-loaded routes.
+   * FIX BUG-040: forceMount was missing from the API
+   */
+  forceMount?: true
+  className?:  string
+  children?:   React.ReactNode
 }
 
-export function TabsPanel({ value, className, children }: TabsPanelProps) {
+export function TabsPanel({ value, forceMount, className, children }: TabsPanelProps) {
   return (
-    <RadixTabs.Content value={value} className={cx(styles.panel, className)}>
+    <RadixTabs.Content
+      value={value}
+      forceMount={forceMount}
+      className={cx(styles.panel, className)}
+    >
       {children}
     </RadixTabs.Content>
   )
@@ -209,7 +266,6 @@ function TabsBase({
   activationMode = "automatic",
   className,
 }: TabsProps) {
-  /* Backwards-compat aliases */
   const resolvedValue        = value        ?? activeTab
   const resolvedDefaultValue = defaultValue ?? defaultTab ?? items[0]?.id
   const handleChange         = (v: string) => { onValueChange?.(v); onTabChange?.(v) }
@@ -247,12 +303,6 @@ function TabsBase({
   )
 }
 
-/**
- * `Tabs` — shorthand array API with compound sub-components attached.
- *
- * Use `<Tabs items={...} />` for the quick API.
- * Use `<Tabs.Root>` + `<Tabs.List>` + `<Tabs.Trigger>` + `<Tabs.Panel>` for full control.
- */
 export const Tabs = Object.assign(TabsBase, {
   Root:    TabsRoot,
   List:    TabsList,

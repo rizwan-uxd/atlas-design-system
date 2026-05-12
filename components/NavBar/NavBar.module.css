@@ -15,7 +15,7 @@
   --_h: calc(var(--atlas-spacing-8) * 2); /* md: 64px */
 
   position: sticky;
-  top: 0;
+  inset-block-start: 0; /* BUG-049: logical property (RTL-safe) */
   z-index: var(--atlas-z-sticky);
   display: flex;
   align-items: center;
@@ -103,7 +103,7 @@
   gap: 0;
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 768px) {
   .links { display: flex; }
 }
 
@@ -141,6 +141,23 @@
   color: var(--atlas-foreground);
   font-weight: var(--atlas-font-weight-semibold);
   border-block-end-color: var(--atlas-primary);
+}
+
+/* ── Disabled links (BUG-047) ────────────────────────────────── */
+
+.link[aria-disabled="true"] {
+  color: var(--atlas-foreground-disabled);
+  cursor: not-allowed;
+  pointer-events: none;
+  border-block-end-color: transparent;
+}
+
+.drawerLink[aria-disabled="true"] {
+  color: var(--atlas-foreground-disabled);
+  cursor: not-allowed;
+  pointer-events: none;
+  border-inline-start-color: transparent;
+  background-color: transparent;
 }
 
 /* ── Hamburger button ─────────────────────────────────────────── */
@@ -185,7 +202,7 @@
   transition: opacity var(--atlas-duration-fast) var(--atlas-easing-standard);
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 768px) {
   .hamburger { display: none; }
 }
 
@@ -235,6 +252,33 @@
   font-weight: var(--atlas-font-weight-semibold);
   border-inline-start-color: var(--atlas-primary);
   background-color: var(--atlas-background-subtle);
+}
+
+/* ── Transparent + scrolled (BUG-045) ────────────────────────── */
+/*
+  When the page has scrolled past the top, the transparent navbar
+  switches to an opaque surface so content remains readable.
+*/
+
+.transparent.scrolled {
+  background-color: var(--atlas-background);
+  border-block-end: var(--atlas-border-width-1) solid var(--atlas-border);
+  box-shadow: var(--atlas-shadow-sm);
+}
+
+/* ── Hide-on-scroll (BUG-046) ─────────────────────────────────── */
+/*
+  Applied when hideOnScroll=true and the user is scrolling down.
+  Slides the bar off-screen upward; slides back on scroll-up.
+*/
+
+.navbarHidden {
+  transform: translateY(-100%);
+  transition:
+    transform            var(--atlas-duration-normal) var(--atlas-easing-standard),
+    background-color     var(--atlas-duration-fast)   var(--atlas-easing-standard),
+    box-shadow           var(--atlas-duration-fast)   var(--atlas-easing-standard),
+    border-color         var(--atlas-duration-fast)   var(--atlas-easing-standard);
 }
 
 /* ── Reduced motion ───────────────────────────────────────────── */

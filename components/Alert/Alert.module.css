@@ -27,10 +27,6 @@
 }
 
 /* ── Accent bar ───────────────────────────────────────────────── */
-/*
-  4px stripe at inline-start.
-  Uses absolute position + overflow hidden on parent.
-*/
 
 .alert::before {
   content: "";
@@ -47,49 +43,42 @@
   --_pad: var(--atlas-spacing-3);
 }
 
-/* md is the default — no override needed */
-
 /* ── Variants ─────────────────────────────────────────────────── */
 /*
-  Strategy: subtle bg + main semantic color for border/icon/title.
-  Description text always uses --atlas-foreground for readability.
-  The `color` property on .alert propagates to icon and title
-  via `color: inherit`.
+  FIX BUG-031: border-color now uses --atlas-{intent}-muted (100-level tint)
+  instead of the full-intensity --atlas-{intent} color.
+  Accent bar (--_accent) retains full-intensity for visual weight.
 */
 
 .info {
   --_accent: var(--atlas-info);
   background-color: var(--atlas-info-subtle);
-  border-color: var(--atlas-info);
+  border-color: var(--atlas-info-muted);  /* was: var(--atlas-info) */
   color: var(--atlas-info);
 }
 
 .success {
   --_accent: var(--atlas-success);
   background-color: var(--atlas-success-subtle);
-  border-color: var(--atlas-success);
+  border-color: var(--atlas-success-muted);  /* was: var(--atlas-success) */
   color: var(--atlas-success);
 }
 
 .warning {
   --_accent: var(--atlas-warning);
   background-color: var(--atlas-warning-subtle);
-  border-color: var(--atlas-warning);
+  border-color: var(--atlas-warning-muted);  /* was: var(--atlas-warning) */
   color: var(--atlas-warning);
 }
 
 .danger {
   --_accent: var(--atlas-danger);
   background-color: var(--atlas-danger-subtle);
-  border-color: var(--atlas-danger);
+  border-color: var(--atlas-danger-muted);  /* was: var(--atlas-danger) */
   color: var(--atlas-danger);
 }
 
 /* ── Icon slot ────────────────────────────────────────────────── */
-/*
-  Inherits variant color from .alert root.
-  Offset 0.5 spacing block to align optically with first text line.
-*/
 
 .icon {
   flex-shrink: 0;
@@ -116,7 +105,7 @@
   font-size: var(--atlas-text-body);
   font-weight: var(--atlas-font-weight-semibold);
   line-height: var(--atlas-line-height-tight);
-  color: inherit; /* variant color */
+  color: inherit;
 }
 
 .sm .title {
@@ -124,9 +113,6 @@
 }
 
 /* ── Description ──────────────────────────────────────────────── */
-/*
-  Description is always neutral foreground — intent is carried by title + icon.
-*/
 
 .description {
   margin: 0;
@@ -139,16 +125,11 @@
   font-size: var(--atlas-text-caption);
 }
 
-/* Gap when both title and description are present */
 .title + .description {
   margin-block-start: var(--atlas-spacing-1);
 }
 
 /* ── Actions slot ─────────────────────────────────────────────── */
-/*
-  Inline button row below description.
-  Wraps on mobile to avoid overflow.
-*/
 
 .actions {
   display: flex;
@@ -159,21 +140,14 @@
 }
 
 /* ── Dismiss button ───────────────────────────────────────────── */
-/*
-  Minimum 44×44px touch target per spec (--atlas-touch-min).
-  Uses negative margin to pull into alert padding without adding visual bulk.
-  Icon inherits variant color.
-*/
 
 .dismissBtn {
   flex-shrink: 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  /* 44px touch target */
   min-width: var(--atlas-touch-min);
   min-height: var(--atlas-touch-min);
-  /* Pull button into the alert's padding area */
   margin-block: calc(-1 * var(--_pad));
   margin-inline-end: calc(-1 * var(--_pad));
   background: none;
@@ -181,9 +155,9 @@
   cursor: pointer;
   color: inherit;
   font-size: var(--atlas-font-size-base);
-  line-height: 1;
+  line-height: var(--atlas-line-height-tight); /* FIX BUG-033: was line-height: 1 */
   border-radius: var(--atlas-radius-sm);
-  opacity: var(--atlas-opacity-hover); /* slightly subdued at rest */
+  opacity: var(--atlas-opacity-hover);
   outline: none;
 }
 
@@ -198,10 +172,6 @@
 }
 
 /* ── Enter animation ──────────────────────────────────────────── */
-/*
-  Fade + 4px upward translate on mount.
-  Suppressed under prefers-reduced-motion.
-*/
 
 @keyframes alertEnter {
   from {
@@ -214,12 +184,49 @@
   }
 }
 
+/* ── Exit animation — FIX BUG-032 ────────────────────────────── */
+/*
+  Spec: "fade + height collapse over --atlas-duration-base --atlas-easing-exit"
+  Two-step: first opacity fade, then max-height collapse via overflow hidden.
+  onAnimationEnd in Alert.tsx fires onDismiss() after this completes.
+*/
+
+@keyframes alertExit {
+  0% {
+    opacity: 1;
+    max-height: 200px; /* large enough for any alert */
+    margin-block-end: 0;
+  }
+  50% {
+    opacity: 0;
+    max-height: 200px;
+    margin-block-end: 0;
+  }
+  100% {
+    opacity: 0;
+    max-height: 0;
+    margin-block-end: calc(-1 * var(--atlas-spacing-3));
+    padding-block: 0;
+  }
+}
+
 .alert {
   animation: alertEnter var(--atlas-duration-base) var(--atlas-easing-emphasized) both;
+}
+
+.dismissing {
+  animation: alertExit var(--atlas-duration-base) var(--atlas-easing-standard) forwards;
+  overflow: hidden;
+  pointer-events: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .alert {
     animation: none;
+  }
+  /* Under reduced motion, skip exit animation and call onDismiss immediately */
+  .dismissing {
+    animation: none;
+    opacity: 0;
   }
 }

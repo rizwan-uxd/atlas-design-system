@@ -144,6 +144,29 @@
   to   { transform: scale(1); }
 }
 
+
+/* BUG-056: Card checked background near-invisible in dark mode.
+   --atlas-primary-subtle = brand-950 (L≈0.245) ≈ page bg neutral-950 (L=0.145).
+   Override: blend primary into surface-raised for visible selection cue. */
+[data-theme="dark"] .card[data-checked] {
+  background-color: color-mix(in oklch, var(--atlas-primary) 15%, var(--atlas-surface-raised));
+}
+
+
+/* BUG-073: Checkbox box is 16–20px — below 44px touch minimum.
+   Expand tap area via pseudo-element; visual size unchanged. */
+@media (pointer: coarse) {
+  .box {
+    position: relative;
+  }
+  .box::before {
+    content: '';
+    position: absolute;
+    inset-block: calc((var(--atlas-touch-min) - 100%) / -2);
+    inset-inline: calc((var(--atlas-touch-min) - 100%) / -2);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .indicator {
     animation: none;
