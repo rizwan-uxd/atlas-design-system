@@ -2,7 +2,7 @@
 
 > **Version:** 1.0  
 > **Status:** ✅ GO — v1.0.0 released  
-> **Last updated:** 2026-05-10 (QA-14 complete — GO, v1.0.0 tagged)
+> **Last updated:** 2026-05-12 (FIX-03 complete — Badge 6 bugs fixed)
 
 ---
 
@@ -13,8 +13,8 @@
 | Sessions completed | 14 of 14 |
 | Total bugs filed | 76 |
 | P1 bugs open | 0 |
-| P2 bugs open | 27 |
-| P3 bugs open | 12 |
+| P2 bugs open | 22 |
+| P3 bugs open | 11 |
 | Components spec-complete | 0 of 12 (code audits: Button ✅ · Input ✅ · Label ✅ · Textarea ✅ · Checkbox ✅ · Switch ✅ · Badge ✅ · Card ✅ · Alert ✅ · Dialog ✅ · Tabs ✅ · NavBar ✅; visual + dark-mode passes pending) |
 
 ---
@@ -31,7 +31,7 @@
 | Checkbox | ✅ Pass | — | 1 bug (BUG-056) | — | — | 1 bug (BUG-073) | 4 bugs fixed; BUG-073, BUG-075 open |
 | Switch | ✅ Pass | — | ✅ Pass (BUG-053 fixed) | — | — | — | 7 bugs fixed (BUG-017–020, BUG-053, BUG-060, BUG-064) |
 | Card | ✅ Pass | — | ✅ Pass (BUG-051, 054 fixed) | — | — | — | 8 bugs fixed (BUG-026–030, BUG-051, BUG-054, BUG-065) |
-| Badge | ✅ Pass | — | — | — | — | 1 bug (BUG-074) | 5 bugs (BUG-021–025) found; BUG-074 open |
+| Badge | ✅ Pass | — | — | — | — | ✅ Pass (BUG-074 fixed) | 6 bugs (BUG-021–025, BUG-074) found + fixed |
 | Alert | ✅ Pass | — | — | — | — | — | 3 bugs (BUG-031–033) found; fixes pending |
 | Dialog | ✅ Pass | — | 1 bug (BUG-050) | — | — | 2 bugs (BUG-071, 072) | 5 bugs (BUG-034–038) found; BUG-071, 072 open |
 | Tabs | ✅ Pass | — | — | — | — | — | 4 bugs (BUG-039–042) found; fixes pending |
@@ -840,7 +840,7 @@ line-height: var(--atlas-line-height-normal); /* was: 1.4 */
 
 ---
 
-#### BUG-021 · P2 · OPEN
+#### BUG-021 · P2 · FIXED
 
 **Title:** Badge success/warning/danger/info foreground uses `--atlas-{intent}` instead of spec-defined `--atlas-{intent}-foreground`
 
@@ -863,7 +863,7 @@ Note: If these tokens resolve to white (foreground ON a full-intensity backgroun
 
 ---
 
-#### BUG-022 · P2 · OPEN
+#### BUG-022 · P2 · FIXED
 
 **Title:** Disabled Badge applies opacity only — missing `--atlas-foreground-disabled` color override
 
@@ -886,7 +886,7 @@ Note: If these tokens resolve to white (foreground ON a full-intensity backgroun
 
 ---
 
-#### BUG-023 · P2 · OPEN
+#### BUG-023 · P2 · FIXED
 
 **Title:** No badge-level hover state and missing `onClick` prop — interactive badge surface not implemented
 
@@ -915,7 +915,7 @@ Hover backgrounds per spec (needed on `.badge` when interactive):
 
 ---
 
-#### BUG-024 · P2 · OPEN
+#### BUG-024 · P2 · FIXED
 
 **Title:** Remove button `aria-label` falls back to generic "Remove item" when children is not a string
 
@@ -940,7 +940,7 @@ Add a dev-mode warning if `removable=true` and neither children is a string nor 
 
 ---
 
-#### BUG-025 · P3 · OPEN
+#### BUG-025 · P3 · FIXED
 
 **Title:** `line-height: 1` in `.badge` base and `.removeBtn` are magic numbers
 
@@ -1016,21 +1016,21 @@ line-height: var(--atlas-line-height-tight); /* was: 1 */
 - [x] Font sizes: sm+md=`--atlas-text-caption`, lg=`--atlas-text-body-sm` ✅
 - [x] `white-space: nowrap` enforces single-line text ✅
 - [x] Background tokens: all 7 variants correct per spec ✅
-- [ ] Foreground tokens: success/warning/danger/info use `--atlas-{intent}` not spec `--atlas-{intent}-foreground` → **BUG-021**
+- [x] Foreground tokens: success/warning/danger/info → `--atlas-{intent}-foreground` per spec ✅ (BUG-021 fixed)
 - [x] Outline variant: `background=transparent`, `border-color=--atlas-border-strong` ✅
 - [x] Outline with intent: border + text adopt intent color ✅
 - [x] Radius: `--atlas-radius-full` (pill) default ✅
 - [x] Square prop: `--atlas-radius-sm` ✅
-- [ ] Disabled: opacity only; no `--atlas-foreground-disabled` color override → **BUG-022**
+- [x] Disabled: `--atlas-foreground-disabled` color override added ✅ (BUG-022 fixed)
 - [x] Dot: 6px via `--atlas-spacing-1_5`, `border-radius: --atlas-radius-full`, `background-color: currentColor` ✅
 - [x] Leading icon slot: `aria-hidden="true"` wrapper ✅
 - [x] Trailing icon slot: suppressed when `removable=true` ✅
 - [x] `removable`: remove `<button>` rendered with correct type, focus-visible ring, `disabled` + `tabIndex` forwarded ✅
-- [ ] Remove `aria-label` falls back to "Remove item" for non-string children → **BUG-024**
-- [ ] No badge-level hover state; `onClick` prop missing from BadgeProps → **BUG-023**
+- [x] Remove `aria-label`: `removeLabel` prop added, dev-mode warning ✅ (BUG-024 fixed)
+- [x] Interactive badge: `onClick` prop + hover CSS per variant ✅ (BUG-023 fixed)
 - [x] Focus ring on `.removeBtn:focus-visible`: `border-width-2` solid `focus-ring` + `spacing-0_5` offset ✅
 - [x] No hex literals, no rgba(), no raw pixel values in live CSS ✅
-- [ ] `line-height: 1` in `.badge` and `.removeBtn` → **BUG-025**
+- [x] `line-height: var(--atlas-line-height-tight)` in `.badge` and `.removeBtn` ✅ (BUG-025 fixed)
 - [x] `font-weight: --atlas-font-weight-medium` ✅
 - [x] Logical properties: `padding-inline` on all sizes ✅
 - [x] `disabled` prop: sets `.disabled` class on outer span + `disabled` attr + `tabIndex=-1` on removeBtn ✅
@@ -1630,7 +1630,7 @@ inset-block-start: 0; /* was: top: 0 */
 | QA-02 — Button | ✅ Complete | 2026-05-09 | 3 bugs found + fixed (BUG-004–006) |
 | QA-03 — Input + Label | ✅ Complete | 2026-05-09 | 3 bugs found + fixed (BUG-007–009) |
 | QA-04 — Textarea + Checkbox | ✅ Complete | 2026-05-10 | 7 bugs found + fixed (BUG-010–016) |
-| QA-05 — Switch + Badge | ✅ Complete | 2026-05-10 | 9 bugs found (BUG-017–025); fixes pending |
+| QA-05 — Switch + Badge | ✅ Complete | 2026-05-10 | 9 bugs found (BUG-017–025); Badge 6 fixed FIX-03 |
 | QA-06 — Card | ✅ Complete | 2026-05-10 | 5 bugs found (BUG-026–030); fixes pending |
 | QA-07 — Alert + Dialog | ✅ Complete | 2026-05-10 | 8 bugs found (BUG-031–038); fixes pending |
 | QA-08 — Tabs + NavBar | ✅ Complete | 2026-05-10 | 11 bugs found (BUG-039–049); fixes pending |
@@ -1642,6 +1642,7 @@ inset-block-start: 0; /* was: top: 0 */
 | QA-14 — Release Sign-off | ✅ GO   | 2026-05-10 | All blockers resolved; v1.0.0 tagged |
 | FIX-01 — Switch          | ✅ Complete | 2026-05-12 | 7 bugs fixed (BUG-017–020 P3×3/P2×1, BUG-053 dark mode, BUG-060 touch target, BUG-064 aria-label) |
 | FIX-02 — Card            | ✅ Complete | 2026-05-12 | 8 bugs fixed (BUG-026–030 core, BUG-051 dark mode elevated, BUG-054 dark mode filled hover, BUG-065 aria-labelledby) |
+| FIX-03 — Badge           | ✅ Complete | 2026-05-12 | 6 bugs fixed (BUG-021–025 core, BUG-074 touch target) |
 
 ---
 
@@ -2499,7 +2500,7 @@ The fix should use a pseudo-element or wrapper expansion rather than changing th
 
 ---
 
-#### BUG-074 · P2 · OPEN
+#### BUG-074 · P2 · FIXED
 
 **Title:** Badge remove button — `padding: 0`, no minimum touch target; hit area matches badge height (18–26px), far below `--atlas-touch-min: 44px`
 

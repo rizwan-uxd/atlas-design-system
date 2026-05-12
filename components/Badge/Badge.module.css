@@ -14,7 +14,7 @@
   font-family: var(--atlas-font-sans);
   font-weight: var(--atlas-font-weight-medium);
   white-space: nowrap;
-  line-height: 1;
+  line-height: var(--atlas-line-height-tight); /* FIX BUG-025: was line-height: 1 */
   border: var(--atlas-border-width-1) solid transparent; /* reserves space; overridden per variant */
   box-sizing: border-box;
 }
@@ -54,12 +54,6 @@
 }
 
 /* ── Variants ─────────────────────────────────────────────────── */
-/*
-  Foreground strategy: use the main semantic color as text on subtle bg.
-  This gives proper contrast in both light and dark mode:
-    Light: subtle=tint-50 (very light)  + main=600 (dark) → good contrast
-    Dark:  subtle=tint-900 (very dark)  + main=400-500 (lighter) → good contrast
-*/
 
 .default {
   background-color: var(--atlas-background-muted);
@@ -71,24 +65,25 @@
   color: var(--atlas-foreground);
 }
 
+/* FIX BUG-021: use --atlas-{intent}-foreground per spec; not --atlas-{intent} */
 .success {
   background-color: var(--atlas-success-subtle);
-  color: var(--atlas-success);
+  color: var(--atlas-success-foreground);
 }
 
 .warning {
   background-color: var(--atlas-warning-subtle);
-  color: var(--atlas-warning);
+  color: var(--atlas-warning-foreground);
 }
 
 .danger {
   background-color: var(--atlas-danger-subtle);
-  color: var(--atlas-danger);
+  color: var(--atlas-danger-foreground);
 }
 
 .info {
   background-color: var(--atlas-info-subtle);
-  color: var(--atlas-info);
+  color: var(--atlas-info-foreground);
 }
 
 /* Outline — transparent bg, border = intent or border-strong */
@@ -104,11 +99,39 @@
 .outline.intentDanger  { color: var(--atlas-danger);  border-color: var(--atlas-danger);  }
 .outline.intentInfo    { color: var(--atlas-info);    border-color: var(--atlas-info);    }
 
+/* ── Interactive hover states — FIX BUG-023 ───────────────────── */
+/*
+  Applied when onClick is present: badge renders with data-interactive attr.
+  Hover backgrounds per spec.
+*/
+
+.badge[data-interactive] {
+  cursor: pointer;
+  /* reset button styles */
+  appearance: none;
+  text-decoration: none;
+}
+
+.badge[data-interactive]:focus-visible {
+  outline: var(--atlas-border-width-2) solid var(--atlas-focus-ring);
+  outline-offset: var(--atlas-spacing-0_5);
+}
+
+.badge.default[data-interactive]:hover   { background-color: var(--atlas-background-subtle); }
+.badge.secondary[data-interactive]:hover { background-color: var(--atlas-background-muted); }
+.badge.success[data-interactive]:hover   { background-color: var(--atlas-success-muted); }
+.badge.warning[data-interactive]:hover   { background-color: var(--atlas-warning-muted); }
+.badge.danger[data-interactive]:hover    { background-color: var(--atlas-danger-muted); }
+.badge.info[data-interactive]:hover      { background-color: var(--atlas-info-muted); }
+.badge.outline[data-interactive]:hover   { background-color: var(--atlas-background-subtle); }
+
 /* ── Disabled ─────────────────────────────────────────────────── */
 
+/* FIX BUG-022: add --atlas-foreground-disabled color override */
 .disabled {
   opacity: var(--atlas-opacity-disabled);
   pointer-events: none;
+  color: var(--atlas-foreground-disabled);
 }
 
 /* ── Dot ──────────────────────────────────────────────────────── */
@@ -144,7 +167,7 @@
   color: currentColor;
   opacity: var(--atlas-opacity-hover); /* 0.9 — slightly subdued */
   font-size: 1em; /* scales with badge font-size */
-  line-height: 1;
+  line-height: var(--atlas-line-height-tight); /* FIX BUG-025: was line-height: 1 */
   border-radius: var(--atlas-radius-sm);
   outline: none;
   flex-shrink: 0;
@@ -157,4 +180,12 @@
 .removeBtn:focus-visible {
   outline: var(--atlas-border-width-2) solid var(--atlas-focus-ring);
   outline-offset: var(--atlas-spacing-0_5);
+}
+
+/* FIX BUG-074: coarse-pointer touch target expansion */
+@media (pointer: coarse) {
+  .removeBtn {
+    min-width: var(--atlas-touch-min);   /* 44px */
+    min-height: var(--atlas-touch-min);
+  }
 }
