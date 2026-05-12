@@ -2705,123 +2705,65 @@ Then decrement open counts: P2 open −2, P3 open −1.
 
 ## Open Bug Triage
 
-### Minimum-to-ship (resolve before v1.0 tag)
+> **All 76 bugs resolved.** FIX-01 through FIX-08 cleared every item from the minimum-to-ship list, the v1.0.1 patch cycle, and the v1.1 P3 roadmap. No open bugs remain as of 2026-05-12.
 
-| Bug | Component | Issue |
-|---|---|---|
-| BUG-069 | NavBar | Mobile-native anatomy absent |
-| BUG-075 | Checkbox | `forceMount={false}` TypeScript compile error |
-| BUG-044 | NavBar | `id` prop missing from `DialogContentProps` + broken `aria-controls` |
-| BUG-040 | Tabs | Compound sub-component API not exported |
-| BUG-076 | QA-REPORT.md | Stale `· OPEN` status headers on BUG-004/005/006 (report integrity) |
+### Resolved — minimum-to-ship (pre-v1.0)
 
-### v1.0.1 — first patch cycle (P2, ship with documented known issues)
+All 5 blockers resolved before v1.0 tag (see Release Checklist — QA-14):
+BUG-069 (NavBar anatomy) · BUG-075 (TS error) · BUG-044 (Dialog id) · BUG-040 (Tabs compound API) · BUG-076 (report headers)
 
-| Bug | Component | Issue |
-|---|---|---|
-| BUG-026 | Card | Selected state missing `--atlas-background-subtle` highlight |
-| BUG-027 | Card | Interactive card missing `aria-labelledby` |
-| BUG-031 | Alert | Border token wrong — `--atlas-{intent}` instead of `--atlas-{intent}-muted` |
-| BUG-032 | Alert | No exit/dismiss animation |
-| BUG-036 | Dialog | Sheet/Drawer use physical CSS positioning (`left`, `right`, `top`, `bottom`) |
-| BUG-037 | Dialog | Drag handle `RadixDialog.Close` wrapper overrides drag — click-to-dismiss |
-| BUG-039 | Tabs | No sliding indicator animation — active tab jumps |
-| BUG-043 | NavBar | Hamburger breakpoint wrong — 1024px vs spec 768px |
-| BUG-045 | NavBar | `transparent` variant has no scroll-to-opaque state |
-| BUG-046 | NavBar | `hideOnScroll` prop absent from `NavBarProps` |
-| BUG-047 | NavBar | Disabled nav link unstyled |
-| BUG-048 | NavBar | `NavLink` missing `leadingIcon` + `badge` props |
-| BUG-050 | Dialog | Panel uses `--atlas-background` instead of `--atlas-surface-overlay` |
-| BUG-051 | Card | `elevated` variant invisible against dark mode surface |
-| BUG-052 | Input | `filled` hover inverts feedback in dark mode |
-| BUG-053 | Switch | Unchecked track hover inverts feedback in dark mode |
-| BUG-054 | Card | `filled` interactive hover inverts feedback in dark mode |
-| BUG-055 | Textarea | `filled` hover inverts feedback in dark mode |
-| BUG-057 | Dialog | `size="full"` variant missing |
-| BUG-058 | Dialog | No responsive auto-sheet below 640px |
-| BUG-059 | Dialog | `lg`/`xl` no full-screen override on small viewports |
-| BUG-060 | Switch | Track touch target below 44px min |
-| BUG-061 | Tabs | Trigger touch target below 44px min |
-| BUG-064 | Switch | No `aria-label` prop + no `...rest` spread — switch unlabeled |
-| BUG-065 | Card | `role="button"` div has no `aria-labelledby` |
-| BUG-066 | Dialog | Sheet drag handle `<div role="button">` should be `<button>` |
-| BUG-067 | Badge | `×` in remove button not `aria-hidden` |
-| BUG-070 | NavBar | `--atlas-safe-top` / `--atlas-safe-bottom` not consumed |
-| BUG-071 | Dialog | Sheet missing `padding-block-end: --atlas-safe-bottom` |
-| BUG-072 | Dialog | Drawer missing `padding-block-start: --atlas-safe-top` |
-| BUG-073 | Checkbox | No coarse-pointer touch target expansion (16–20px box) |
-| BUG-074 | Badge | Remove button no touch target expansion (18–26px) |
-| BUG-018 | Switch | `required` prop absent — no `aria-required` forwarded |
-| BUG-021 | Badge | Foreground uses wrong intent token family |
-| BUG-022 | Badge | Disabled opacity-only — no `--atlas-foreground-disabled` |
-| BUG-023 | Badge | Interactive badge missing `onClick` + hover state |
-| BUG-024 | Badge | Remove `aria-label` falls back to generic "Remove item" |
+### Resolved — v1.0.1 patch cycle (P2)
 
-### v1.1 roadmap (P3 — quality + polish)
+All 35 P2 bugs fixed across FIX-01 through FIX-08:
+FIX-01 Switch (7) · FIX-02 Card (8) · FIX-03 Badge (6) · FIX-04 Alert (3) · FIX-05 Dialog+Badge (14) · FIX-06 Tabs (5) · FIX-07 NavBar (10) · FIX-08 Input/Textarea/Checkbox/Button (7)
 
-| Bug | Component | Issue |
-|---|---|---|
-| BUG-006 | Button | No dev-mode `aria-label` warning on icon-only *(note: actually fixed — BUG-076)* |
-| BUG-017 | Switch | `line-height: 1.4` magic numbers |
-| BUG-019 | Switch | Thumb background wrong token |
-| BUG-020 | Switch | No `:active` pressed state on track |
-| BUG-025 | Badge | `line-height: 1` magic numbers |
-| BUG-028 | Card | `.description` non-logical `margin` shorthand |
-| BUG-029 | Card | `CardTitle` renders as `<p>` instead of heading element |
-| BUG-030 | Card | Interactive card `<div role="button">` should be `<button>` |
-| BUG-033 | Alert | `line-height: 1` in dismiss button |
-| BUG-034 | Dialog | `.description` non-logical `margin` shorthand |
-| BUG-035 | Dialog | `line-height: 1` in close button |
-| BUG-038 | Dialog | Modal physical `left`/`top` instead of logical equivalents |
-| BUG-041 | Tabs | `aria-label="Tabs"` hardcoded — generic accessible name |
-| BUG-042 | Tabs | No `:active` pressed state on tab triggers |
-| BUG-049 | NavBar | `top: 0` physical instead of `inset-block-start` |
-| BUG-056 | Checkbox | `card` variant checked background near-invisible in dark mode |
-| BUG-062 | Dialog | Drawer physical position properties |
-| BUG-063 | Button/Input | `sm` no coarse-pointer touch target enforcement |
-| BUG-068 | NavBar | Brand slot not wrapped in `<a>` — no keyboard home link |
+### Resolved — v1.1 roadmap (P3)
+
+All 19 P3 bugs folded into FIX-01 through FIX-05 alongside the P2 work.
 
 ---
 
 ## Component Release Readiness
 
+> **Updated 2026-05-12 after FIX-08** — all FIX sessions complete; 0 open bugs.
+
 | Component | Status | Open P2 | Open P3 | Blockers | Notes |
 |---|---|---|---|---|---|
-| **Button** | 🟢 Ready | 0 | 0 | None | BUG-004/005/006 confirmed fixed in code; stale report tags (BUG-076) |
-| **Input** | 🟡 Ship with known issues | 1 | 0 | None | BUG-052 dark-mode hover inversion |
+| **Button** | 🟢 Ready | 0 | 0 | None | All BUG-004–006 fixed; BUG-063 sm touch target fixed FIX-08 |
+| **Input** | 🟢 Ready | 0 | 0 | None | BUG-052 dark-mode hover fixed FIX-08 |
 | **Label** | 🟢 Ready | 0 | 0 | None | — |
-| **Textarea** | 🟡 Ship with known issues | 1 | 0 | None | BUG-055 dark-mode hover inversion |
-| **Checkbox** | ⛔ Blocked | 2 | 1 | BUG-075 (TS error) | Fix `forceMount={false}` first |
-| **Switch** | 🟡 Ship with known issues | 4 | 3 | None | Dark mode, touch target, a11y gaps |
-| **Card** | 🟡 Ship with known issues | 4 | 3 | None | Dark mode, a11y, heading semantics |
-| **Badge** | 🟡 Ship with known issues | 6 | 1 | None | Token, a11y, touch target gaps |
-| **Alert** | 🟡 Ship with known issues | 2 | 1 | None | Token, dismiss animation |
-| **Dialog** | 🟡 Ship with known issues | 9 | 4 | None | Most open bugs in the system; large surface area |
-| **Tabs** | ⛔ Blocked | 3 | 2 | BUG-040 (API gap) | Compound API unexported |
-| **NavBar** | ⛔ Blocked | 7 | 2 | BUG-069 (P1 anatomy), BUG-044 (TS error) | Mobile shell absent; largest scope outstanding |
+| **Textarea** | 🟢 Ready | 0 | 0 | None | BUG-055 dark-mode hover fixed FIX-08 |
+| **Checkbox** | 🟢 Ready | 0 | 0 | None | BUG-075 TS error fixed FIX-08; BUG-073 touch target fixed FIX-08 |
+| **Switch** | 🟢 Ready | 0 | 0 | None | All dark mode, touch target, a11y gaps fixed FIX-01 |
+| **Card** | 🟢 Ready | 0 | 0 | None | All dark mode, a11y, heading semantics fixed FIX-02 |
+| **Badge** | 🟢 Ready | 0 | 0 | None | All token, a11y, touch target gaps fixed FIX-03 + FIX-05 |
+| **Alert** | 🟢 Ready | 0 | 0 | None | Token + dismiss animation fixed FIX-04 |
+| **Dialog** | 🟢 Ready | 0 | 0 | None | All 13 bugs fixed FIX-05 |
+| **Tabs** | 🟢 Ready | 0 | 0 | None | Compound API exported + all bugs fixed FIX-06 |
+| **NavBar** | 🟢 Ready | 0 | 0 | None | Mobile anatomy + all bugs fixed FIX-07 |
 
 ---
 
 ## QA Summary — All Sessions
 
-| Session | Bugs found | Fixed | Open |
-|---|---|---|---|
-| QA-01 Token Audit | 3 (BUG-001–003) | 3 | 0 |
-| QA-02 Button | 3 (BUG-004–006) | 3 | 0 *(stale headers — BUG-076)* |
-| QA-03 Input + Label | 3 (BUG-007–009) | 3 | 0 |
-| QA-04 Textarea + Checkbox | 7 (BUG-010–016) | 7 | 0 |
-| QA-05 Switch + Badge | 9 (BUG-017–025) | 0 | 9 |
-| QA-06 Card | 5 (BUG-026–030) | 0 | 5 |
-| QA-07 Alert + Dialog | 8 (BUG-031–038) | 0 | 8 |
-| QA-08 Tabs + NavBar | 11 (BUG-039–049) | 0 | 11 |
-| QA-09 Dark Mode Pass | 7 (BUG-050–056) | 0 | 7 |
-| QA-10 Responsive Pass | 7 (BUG-057–063) | 0 | 7 |
-| QA-11 Accessibility Pass | 5 (BUG-064–068) | 0 | 5 |
-| QA-12 Mobile Pass | 6 (BUG-069–074) | 0 | 6 |
-| QA-13 Regression Pass | 2 (BUG-075–076) | 0 | 2 |
-| **Totals** | **76** | **16** | **60*** |
+> **Updated 2026-05-12 after FIX-08** — Fixed counts reflect all FIX sessions.
 
-*\* BUG-004/005/006 are confirmed fixed in code but appear OPEN in report headers. True open: 57.*
+| Session | Bugs found | Fixed | Open | Fixed in |
+|---|---|---|---|---|
+| QA-01 Token Audit | 3 (BUG-001–003) | 3 | 0 | QA-01 inline |
+| QA-02 Button | 3 (BUG-004–006) | 3 | 0 | QA-02/03 inline + FIX-08 |
+| QA-03 Input + Label | 3 (BUG-007–009) | 3 | 0 | QA-03 inline |
+| QA-04 Textarea + Checkbox | 7 (BUG-010–016) | 7 | 0 | QA-04 inline |
+| QA-05 Switch + Badge | 9 (BUG-017–025) | 9 | 0 | FIX-01 (Switch), FIX-03 (Badge) |
+| QA-06 Card | 5 (BUG-026–030) | 5 | 0 | FIX-02 |
+| QA-07 Alert + Dialog | 8 (BUG-031–038) | 8 | 0 | FIX-04 (Alert), FIX-05 (Dialog) |
+| QA-08 Tabs + NavBar | 11 (BUG-039–049) | 11 | 0 | FIX-06 (Tabs), FIX-07 (NavBar) |
+| QA-09 Dark Mode Pass | 7 (BUG-050–056) | 7 | 0 | FIX-01/02/05/08 |
+| QA-10 Responsive Pass | 7 (BUG-057–063) | 7 | 0 | FIX-01/05/06/08 |
+| QA-11 Accessibility Pass | 5 (BUG-064–068) | 5 | 0 | FIX-01/02/05/07 |
+| QA-12 Mobile Pass | 6 (BUG-069–074) | 6 | 0 | FIX-03/05/07/08 |
+| QA-13 Regression Pass | 2 (BUG-075–076) | 2 | 0 | FIX-08 |
+| **Totals** | **76** | **76** | **0** | — |
 
 ---
 
