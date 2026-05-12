@@ -13,8 +13,8 @@
 | Sessions completed | 14 of 14 |
 | Total bugs filed | 76 |
 | P1 bugs open | 0 |
-| P2 bugs open | 32 |
-| P3 bugs open | 15 |
+| P2 bugs open | 27 |
+| P3 bugs open | 12 |
 | Components spec-complete | 0 of 12 (code audits: Button ✅ · Input ✅ · Label ✅ · Textarea ✅ · Checkbox ✅ · Switch ✅ · Badge ✅ · Card ✅ · Alert ✅ · Dialog ✅ · Tabs ✅ · NavBar ✅; visual + dark-mode passes pending) |
 
 ---
@@ -30,7 +30,7 @@
 | Textarea | ✅ Pass | — | 1 bug (BUG-055) | — | — | — | 3 bugs (BUG-010–012) found + fixed |
 | Checkbox | ✅ Pass | — | 1 bug (BUG-056) | — | — | 1 bug (BUG-073) | 4 bugs fixed; BUG-073, BUG-075 open |
 | Switch | ✅ Pass | — | ✅ Pass (BUG-053 fixed) | — | — | — | 7 bugs fixed (BUG-017–020, BUG-053, BUG-060, BUG-064) |
-| Card | ✅ Pass | — | 2 bugs (BUG-051, 054) | — | — | — | 5 bugs (BUG-026–030) found, fixes pending |
+| Card | ✅ Pass | — | ✅ Pass (BUG-051, 054 fixed) | — | — | — | 8 bugs fixed (BUG-026–030, BUG-051, BUG-054, BUG-065) |
 | Badge | ✅ Pass | — | — | — | — | 1 bug (BUG-074) | 5 bugs (BUG-021–025) found; BUG-074 open |
 | Alert | ✅ Pass | — | — | — | — | — | 3 bugs (BUG-031–033) found; fixes pending |
 | Dialog | ✅ Pass | — | 1 bug (BUG-050) | — | — | 2 bugs (BUG-071, 072) | 5 bugs (BUG-034–038) found; BUG-071, 072 open |
@@ -588,7 +588,7 @@ Added `:active` rules mirroring the hover token assignments (unchecked uses `--a
 
 ---
 
-#### BUG-026 · P2 · OPEN
+#### BUG-026 · P2 · FIXED
 
 **Title:** Selected state missing `background-color: --atlas-background-subtle` across all variants
 
@@ -613,7 +613,7 @@ Added `:active` rules mirroring the hover token assignments (unchecked uses `--a
 
 ---
 
-#### BUG-027 · P2 · OPEN
+#### BUG-027 · P2 · FIXED
 
 **Title:** Interactive card missing `aria-labelledby` → CardTitle linkage
 
@@ -632,7 +632,7 @@ Added `:active` rules mirroring the hover token assignments (unchecked uses `--a
 
 ---
 
-#### BUG-028 · P3 · OPEN
+#### BUG-028 · P3 · FIXED
 
 **Title:** `.description` uses non-logical `margin` shorthand — breaks logical property convention
 
@@ -653,7 +653,7 @@ The `0` values for block-end and inline sides are browser defaults and don't nee
 
 ---
 
-#### BUG-029 · P3 · OPEN
+#### BUG-029 · P3 · FIXED
 
 **Title:** `CardTitle` renders as `<p>` inside `<article>` — missing heading semantics
 
@@ -675,7 +675,7 @@ Adding an `as` prop allows callers to adjust heading level to fit the page's doc
 
 ---
 
-#### BUG-030 · P3 · OPEN
+#### BUG-030 · P3 · FIXED
 
 **Title:** Interactive card uses `<div role="button">` instead of `<button>`; `asChild` prop absent from CardProps
 
@@ -1641,6 +1641,7 @@ inset-block-start: 0; /* was: top: 0 */
 | QA-13 — Regression Pass | ✅ Complete | 2026-05-10 | 2 bugs found (BUG-075–076); fixes pending |
 | QA-14 — Release Sign-off | ✅ GO   | 2026-05-10 | All blockers resolved; v1.0.0 tagged |
 | FIX-01 — Switch          | ✅ Complete | 2026-05-12 | 7 bugs fixed (BUG-017–020 P3×3/P2×1, BUG-053 dark mode, BUG-060 touch target, BUG-064 aria-label) |
+| FIX-02 — Card            | ✅ Complete | 2026-05-12 | 8 bugs fixed (BUG-026–030 core, BUG-051 dark mode elevated, BUG-054 dark mode filled hover, BUG-065 aria-labelledby) |
 
 ---
 
@@ -1670,7 +1671,7 @@ inset-block-start: 0; /* was: top: 0 */
 
 ---
 
-#### BUG-051 · P2 · OPEN
+#### BUG-051 · P2 · FIXED
 
 **Title:** Card `elevated` variant uses `--atlas-background` in dark mode — card is visually flat against the page
 
@@ -1759,7 +1760,7 @@ In dark mode the hover makes the track go from L=0.279 (neutral-800) to L=0.208 
 
 ---
 
-#### BUG-054 · P2 · OPEN
+#### BUG-054 · P2 · FIXED
 
 **Title:** Card `filled` interactive hover darkens in dark mode (inverted feedback)
 
@@ -2168,7 +2169,7 @@ Also add a dev-mode warning (parallel to Button's BUG-006 fix) when neither `lab
 
 ---
 
-#### BUG-065 · P2 · OPEN
+#### BUG-065 · P2 · FIXED
 
 **Title:** Card interactive — `role="button"` div has no `aria-labelledby`; accessible name is empty
 

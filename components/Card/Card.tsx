@@ -20,7 +20,7 @@
  *
  * Accessibility:
  *   - Non-interactive: <article> (semantic landmark)
- *   - Interactive: tabIndex=0, role="button", aria-labelledby → CardTitle
+ *   - Interactive: <button type="button">, aria-labelledby → CardTitle id (via context)
  *   - Selected: aria-pressed="true" (toggle) or aria-selected (listbox/grid)
  *   - Disabled: aria-disabled, pointer-events suppressed
  *   - Focus ring via CSS :focus-visible on the card root
@@ -28,7 +28,7 @@
  * Logical properties and token-only values in Card.module.css.
  */
 
-import React, { useId } from "react"
+import React, { createContext, useContext, useId } from "react"
 import styles from "./Card.module.css"
 
 /* ── Helpers ─────────────────────────────────────────────────── */
@@ -36,6 +36,19 @@ import styles from "./Card.module.css"
 function cx(...classes: (string | false | null | undefined)[]): string {
   return classes.filter(Boolean).join(" ")
 }
+
+/* ── Card context ────────────────────────────────────────────── */
+/*
+ * Passes the auto-generated titleId down to CardTitle so it can
+ * self-assign id={titleId}, enabling aria-labelledby from the
+ * interactive card root without prop-drilling.
+ */
+
+interface CardContextValue {
+  titleId: string
+}
+
+const CardContext = createContext<CardContextValue | null>(null)
 
 /* ── Types ───────────────────────────────────────────────────── */
 
@@ -47,7 +60,7 @@ export interface CardProps {
   size?:        CardSize
   /** Adds hover, focus-visible, and cursor:pointer styles */
   interactive?: boolean
-  /** Shows primary border; use aria-pressed/aria-selected on caller */
+  /** Shows primary border + subtle bg; use aria-pressed/aria-selected on caller */
   selected?:    boolean
   /** Suppresses interaction; applies opacity-disabled */
   disabled?:    boolean
@@ -71,7 +84,8 @@ export function Card({
   id,
 }: CardProps) {
   const generatedId = useId()
-  const uid = id ?? generatedId
+  const uid      = id ?? generatedId
+  const titleId  = `${uid}-title`
 
   const classes = cx(
     styles.card,
@@ -83,36 +97,40 @@ export function Card({
     className,
   )
 
-  if (interactive) {
-    return (
-      <div
-        id={uid}
-        role="button"
-        tabIndex={disabled ? -1 : 0}
-        aria-disabled={disabled || undefined}
-        aria-pressed={selected || undefined}
-        onClick={disabled ? undefined : onClick}
-        onKeyDown={disabled ? undefined : (e) => {
-          if (e.key === "Enter" || e.key === " ") {
-            e.preventDefault()
-            onClick?.(e as unknown as React.MouseEvent<HTMLElement>)
-          }
-        }}
-        className={classes}
-      >
-        {children}
-      </div>
-    )
-  }
-
   return (
-    <article
-      id={uid}
-      aria-disabled={disabled || undefined}
-      className={classes}
-    >
-      {children}
-    </article>
+    <CardContext.Provider value={{ titleId }}>
+      {interactive ? (
+        /*
+         * BUG-030 — native <button> instead of <div role="button">.
+         * Native button: implicit role="button", keyboard activation
+         * (Enter + Space) built-in, correct type="button" default.
+         * No manual onKeyDown needed.
+         *
+         * BUG-027/065 — aria-labelledby wired to CardTitle via context-
+         * provided titleId so screen readers announce the card by its title.
+         */
+        <button
+          id={uid}
+          type="button"
+          aria-labelledby={titleId}
+          aria-disabled={disabled || undefined}
+          aria-pressed={selected || undefined}
+          onClick={disabled ? undefined : onClick}
+          tabIndex={disabled ? -1 : 0}
+          className={classes}
+        >
+          {children}
+        </button>
+      ) : (
+        <article
+          id={uid}
+          aria-disabled={disabled || undefined}
+          className={classes}
+        >
+          {children}
+        </article>
+      )}
+    </CardContext.Provider>
   )
 }
 
@@ -155,17 +173,31 @@ export function CardHeader({ leading, action, className, children }: CardHeaderP
 }
 
 /* ── CardTitle ───────────────────────────────────────────────── */
+/*
+ * BUG-029 — render as a semantic heading (h3 by default) instead of <p>.
+ * The `as` prop allows callers to adjust the heading level to fit the
+ * page's document outline without forcing a global level.
+ *
+ * BUG-027/065 — consumes CardContext to self-assign id={titleId},
+ * enabling the interactive Card root's aria-labelledby reference.
+ */
 
 export interface CardTitleProps {
+  /** Heading level — defaults to "h3" to match article landmark convention */
+  as?:        "h1" | "h2" | "h3" | "h4" | "h5" | "h6"
   className?: string
   children?:  React.ReactNode
 }
 
-export function CardTitle({ className, children }: CardTitleProps) {
+export function CardTitle({ as: As = "h3", className, children }: CardTitleProps) {
+  const ctx = useContext(CardContext)
   return (
-    <p className={cx(styles.title, className)}>
+    <As
+      id={ctx?.titleId}
+      className={cx(styles.title, className)}
+    >
       {children}
-    </p>
+    </As>
   )
 }
 

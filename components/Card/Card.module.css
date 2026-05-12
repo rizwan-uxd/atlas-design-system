@@ -37,8 +37,15 @@
   border: var(--atlas-border-width-1) solid var(--atlas-border);
 }
 
+/*
+ * BUG-051 — elevated uses --atlas-surface-raised instead of --atlas-background.
+ * In dark mode --atlas-background = neutral-950 (same as page bg), making
+ * the elevated card visually flat. --atlas-surface-raised = neutral-800 in
+ * dark (clearly above the page) and neutral-0 in light (same as background —
+ * no visual change in light mode, correct depth cue in dark mode).
+ */
 .elevated {
-  background-color: var(--atlas-background);
+  background-color: var(--atlas-surface-raised);
   box-shadow: var(--atlas-shadow-md);
 }
 
@@ -51,21 +58,49 @@
   background-color: var(--atlas-background-muted);
 }
 
-/* ── Selected state — primary border on all variants ─────────── */
+/* ── Selected state — primary border + subtle bg on all variants ─ */
+/*
+ * BUG-026 — spec background table defines selected bg as
+ * --atlas-background-subtle for all variants. Previously only border
+ * was updated; bg was missing, making selected indistinguishable
+ * from default except for border colour.
+ */
 
 .selected.default,
 .selected.outlined {
   border-color: var(--atlas-primary);
+  background-color: var(--atlas-background-subtle);
 }
 
 .selected.elevated,
 .selected.filled {
   border: var(--atlas-border-width-1) solid var(--atlas-primary);
+  background-color: var(--atlas-background-subtle);
 }
 
-/* ── Interactive — hover, focus, motion ───────────────────────── */
+/* ── Interactive — button reset + hover, focus, motion ────────── */
+/*
+ * BUG-030 — interactive card now renders as <button type="button">.
+ * Browser default button styles must be reset so variant and size
+ * tokens apply cleanly.
+ */
 
 .interactive {
+  /* button element reset */
+  appearance: none;
+  -webkit-appearance: none;
+  font: inherit;
+  color: inherit;
+  text-align: start;
+  width: 100%;
+  padding: 0;
+  border: none;
+  background: none;
+  /* layout — card already sets display:flex/flex-direction:column
+     but <button> is inline by default; force block-level stretch */
+  display: flex;
+  flex-direction: column;
+
   cursor: pointer;
   outline: none;
   transition:
@@ -76,9 +111,23 @@
 
 /* Default and outlined hover */
 .interactive.default:hover,
-.interactive.outlined:hover,
+.interactive.outlined:hover {
+  background-color: var(--atlas-background-subtle);
+}
+
+/* Filled hover — light mode correct (bg-muted → bg-subtle = lighter) */
 .interactive.filled:hover {
   background-color: var(--atlas-background-subtle);
+}
+
+/*
+ * BUG-054 — dark mode inversion fix for filled interactive hover.
+ * In dark mode bg-muted = neutral-800 (resting) and bg-subtle = neutral-900
+ * (darker) — hover darkens instead of lightening. Override with color-mix
+ * to always lighten the resting fill by ~20% toward white.
+ */
+[data-theme="dark"] .interactive.filled:hover {
+  background-color: color-mix(in oklch, var(--atlas-background-muted) 80%, oklch(1 0 0));
 }
 
 /* Elevated hover — lift shadow, keep bg */
@@ -151,7 +200,10 @@
 /* ── Description ──────────────────────────────────────────────── */
 
 .description {
-  margin: var(--atlas-spacing-1) 0 0;
+  /* BUG-028 — was: margin: var(--atlas-spacing-1) 0 0 (physical shorthand).
+     Replaced with a single logical property; inline and block-end are
+     browser defaults (0) and need not be declared. */
+  margin-block-start: var(--atlas-spacing-1);
   font-family: var(--atlas-font-sans);
   font-size: var(--atlas-text-body-sm);
   color: var(--atlas-foreground-muted);
