@@ -2,7 +2,7 @@
 
 > **Version:** 1.0  
 > **Status:** ✅ GO — v1.0.0 released  
-> **Last updated:** 2026-05-12 (FIX-08 complete — all 76 bugs resolved; 0 open)
+> **Last updated:** 2026-05-12 (QA-14 complete — all 76 bugs resolved; Code Connect files written for all 12 components)
 
 ---
 
@@ -2778,6 +2778,6 @@ All 19 P3 bugs folded into FIX-01 through FIX-05 alongside the P2 work.
 - [x] `npm run dev` sandbox runs without console errors
 - [x] `tsc --noEmit` exits 0 on web components
 - [x] Git tag `v1.0.0` cut and pushed
-- [ ] Code Connect mappings verified for all 12 components (deferred from QA-08)
+- [x] Code Connect mappings written for all 12 components — `code-connect/*.figma.tsx` + `figma.config.json` committed; run `npx figma connect publish` to push once Developer seat is available
 
 **Exit condition:** All 5 checklist items resolved → re-run this checklist → tag v1.0.0.
