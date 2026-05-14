@@ -2,7 +2,7 @@
 
 > **Version:** 1.0  
 > **Status:** ✅ GO — v1.0.0 released  
-> **Last updated:** 2026-05-12 (QA-14 complete — all 76 bugs resolved; Code Connect files written for all 12 components)
+> **Last updated:** 2026-05-14 (SYNC-01 complete — Code → Figma sync of visual fixes: 5 new tokens, 56 variant rebindings, 8 new Dialog full-size variants)
 
 ---
 
@@ -1648,6 +1648,66 @@ inset-block-start: 0; /* was: top: 0 */
 | FIX-06 — Tabs            | ✅ Complete | 2026-05-12 | 5 bugs fixed (BUG-039 sliding indicator, BUG-040 forceMount, BUG-041 aria-label, BUG-042 :active states, BUG-061 touch target) |
 | FIX-07 — NavBar          | ✅ Complete | 2026-05-12 | 10 bugs fixed (BUG-043 breakpoint, BUG-044 dialog id, BUG-045 transparent scroll, BUG-046 hideOnScroll, BUG-047 disabled CSS, BUG-048 NavLink slots, BUG-049 logical top, BUG-068 brandHref, BUG-069 mobile anatomy, BUG-070 safe-area) |
 | FIX-08 — Input/Textarea/Checkbox/Button | ✅ Complete | 2026-05-12 | 7 bugs fixed (BUG-052/055 filled dark hover, BUG-056 card dark checked, BUG-063 sm touch target, BUG-073 checkbox touch target, BUG-075 forceMount type, BUG-076 report headers) |
+| SYNC-01 — Code → Figma | ✅ Complete | 2026-05-14 | Mirrored React fixes into Atlas Figma library `cKYhfaHLCoyMHi9nKr63Ig`. See section below. |
+
+---
+
+## SYNC-01 — Code → Figma sync
+
+**Date:** 2026-05-14
+**Scope:** Mirror visual subset of QA-01..QA-14 React fixes into the published Atlas Figma library.
+**File:** `cKYhfaHLCoyMHi9nKr63Ig` (Atlas Design System v1)
+
+### Synced
+
+**Atlas/Semantic — 5 new variables added (Light + Dark mode aliases mirroring atlas.tokens.css):**
+- `success-muted` (Light → success/100, Dark → success/700)
+- `warning-muted` (Light → warning/100, Dark → warning/700)
+- `danger-muted`  (Light → danger/100,  Dark → danger/700)
+- `info-muted`    (Light → info/100,    Dark → info/700)
+- `background-hovered` (Light → neutral/50, Dark → neutral/700) — fixes hover-darkens-in-dark inversion
+
+**Component variant rebindings:**
+- **Alert · BUG-031** — 50 intent variants (24 Web + 16 Mobile-Native) re-bound from generic `border-subtle` to matching `{intent}-muted` token. Neutral variants left on `border-subtle`.
+- **Input · BUG-052** — 3 Web `Variant=filled, State=hover` variants re-bound from `background-subtle` → `background-hovered`.
+- **Textarea · BUG-055** — 3 Web `Variant=filled, State=hover` variants re-bound from `background-subtle` → `background-hovered`.
+
+**New variants added:**
+- **Dialog · BUG-057** — 8 `Size=full` variants created (4 Web `default/destructive × default/loading` + 4 Mobile-Native equivalents). Web full = 1200w; Mobile = 390w (full-bleed).
+
+### Already correct in Figma (no change needed)
+
+These bugs were React-only — the Figma component was already bound to the right semantic token; only the CSS module was wrong:
+- BUG-050 Dialog dark panel bg — Figma was on `surface-overlay` ✅
+- BUG-051 Card elevated dark bg — Figma was on `surface-raised` ✅
+- BUG-038 Dialog modal positioning (logical inset properties — Figma agnostic)
+- BUG-049 NavBar `top: 0` (logical CSS — Figma agnostic)
+
+### Code-only — no Figma representation
+
+These fixes have no visual surface in Figma and are intentionally not synced:
+- ARIA attributes / props (BUG-005, 006, 010, 011, 014, 018, 027, 037, 044, 064, 065, 067, 068)
+- Logical CSS properties (BUG-028, 034, 036, 062, 066)
+- React state machinery (BUG-032 exit anim, BUG-045 scroll listener, BUG-046 hideOnScroll, BUG-075 forceMount type)
+- Line-height token swaps in text layers (BUG-009, 012, 015, 017, 025, 033, 035) — Figma uses its own line-height, not CSS
+- TypeScript prop/type additions (BUG-040 forceMount, BUG-046, 048, 057 type)
+- Semantic HTML (BUG-029, 030)
+
+### Pending — needs deeper variant work in a future session
+
+These would require recursing into nested layers per variant (track / thumb / box / indicator):
+- BUG-053 Switch unchecked-track hover dark — track is a child Rectangle, not the variant frame fill
+- BUG-054 Card filled-interactive hover dark — `filled` Card variant doesn't exist yet in Figma (current: default/outlined/elevated)
+- BUG-056 Checkbox card-checked dark — needs nested checkbox-box layer rebind
+- BUG-039 Tabs sliding indicator — animation, hard to represent statically
+- BUG-040 Tabs scrollable variant — net-new variant
+- BUG-048 NavBar NavLink leadingIcon + badge slots — net-new variant
+- Touch-target sizing (BUG-060/061/063/073/074) — would need height adjustments per variant
+- BUG-070 NavBar safe-area inset — handled at runtime, not statically representable
+
+### Manual step required
+
+The library was already published to "Rizwan's team library" before this sync. **You need to re-publish in Figma** (Assets panel → "Publish library…") to push the new tokens, Alert border updates, and Dialog full-size variants to subscribers. The Figma Plugin API does not expose publish.
 
 ---
 
