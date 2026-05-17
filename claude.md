@@ -3,16 +3,19 @@
 # Atlas Design System — Project State
 
 ## Status
-> **Sandbox running.** All 12 v1 components scaffolded in `components/`. Visual sandbox live at `app/page.tsx`. Next: refine components one per session to full spec compliance.
+> **Monorepo restructured.** All 12 v1 components live in `packages/ui-web/src/` (classified by tier). Visual sandbox at `app/page.tsx`. Next: refine components one per session to full spec compliance.
 
 ---
 
 ## What is this project?
-A Next.js 16 app (`app/` router) that serves as:
-1. **Visual sandbox** — renders all 12 Atlas components for visual testing (`app/page.tsx`)
-2. **Component library source** — `components/<Name>/<Name>.tsx` is the implementation for each Atlas/Web component
+A monorepo that houses:
+1. **Visual sandbox** — Next.js 16 app (`app/page.tsx`) rendering all 12 Atlas components
+2. **Component library** — `packages/ui-web/src/` (web) + `packages/ui-native/` (React Native)
+3. **Design tokens** — `packages/tokens/` (CSS vars, JSON, Figma export)
+4. **Figma sync** — `packages/figma-sync/` (Code Connect mappings + MCP configs)
+5. **AI workflows** — `packages/ai-workflows/` (Claude skill definitions)
 
-Stack: React 19 · Next.js 16 · Tailwind v4 · Radix UI · Atlas tokens via `atlas.tokens.css`
+Stack: React 19 · Next.js 16 · Tailwind v4 · Radix UI · Atlas tokens via `packages/tokens/atlas.tokens.css`
 
 ---
 
@@ -76,33 +79,41 @@ npm run dev
 
 ## File map
 ```
-components/
-├── Button/Button.tsx
-├── Input/Input.tsx
-├── Label/Label.tsx
-├── Textarea/Textarea.tsx
-├── Checkbox/Checkbox.tsx
-├── Switch/Switch.tsx
-├── Card/Card.tsx
-├── Badge/Badge.tsx
-├── Alert/Alert.tsx
-├── Dialog/Dialog.tsx
-├── Tabs/Tabs.tsx
-└── NavBar/NavBar.tsx
+packages/
+├── tokens/
+│   ├── atlas.tokens.css          ← CSS custom properties (source of truth)
+│   ├── atlas.tokens.json         ← Raw token JSON
+│   └── atlas.figma.tokens.json   ← Figma Variables export
+├── ui-web/src/
+│   ├── primitives/               ← Button, Input, Label, Textarea, Checkbox, Switch, Badge
+│   ├── compositions/             ← Alert, Card, Dialog
+│   ├── patterns/                 ← Tabs
+│   ├── layouts/                  ← NavBar
+│   └── templates/                ← (coming soon)
+├── ui-native/                    ← React Native components (Expo)
+├── figma-sync/
+│   ├── code-connect/             ← *.figma.tsx Code Connect mappings
+│   └── mcp/configs/              ← figma.config.json
+├── ai-workflows/
+│   └── atlas-ui-skill/           ← Claude skill definition
+└── governance/                   ← Token lint, API contracts (planned)
 app/
-├── page.tsx          ← visual sandbox (imports all 12 components)
-├── globals.css       ← imports atlas.tokens.css + tailwind
+├── page.tsx          ← visual sandbox (imports from packages/ui-web/src/*)
+├── globals.css       ← imports packages/tokens/atlas.tokens.css + tailwind
 └── layout.tsx
-atlas.tokens.css      ← design tokens (CSS variables, source of truth)
-ATLAS-SPEC/           ← per-component specs (read before refining)
-ATLAS-COMPONENTS-V1.md ← locked v1 decisions
+docs/
+├── architecture/ATLAS-SPEC/      ← per-component specs (read before refining)
+├── decisions/                    ← ATLAS-COMPONENTS-V1.md (locked v1 decisions)
+├── audits/                       ← QA-REPORT.md, QA-PLAN.md, QA-SESSIONS.md
+├── sessions/                     ← session planning logs
+└── implementation/               ← implementation plans + mobile handoff
 ```
 
 ## Key decisions
 - `@/*` alias → project root (set in `tsconfig.json`)
-- Only Radix package installed so far: `@radix-ui/react-checkbox`
 - Token prefix: `--atlas-*`
 - Dark mode: `data-theme="dark"` on `<html>`
+- Radix packages installed: `@radix-ui/react-checkbox`, `@radix-ui/react-dialog`, `@radix-ui/react-tabs`
 
 ---
 
@@ -114,21 +125,29 @@ ATLAS-COMPONENTS-V1.md ← locked v1 decisions
 
 ## Component Writing Convention
 
-When creating or updating components:
-- Locate the correct component folder before writing
-- Write directly into: `components/<ComponentName>/`
+When creating or updating **web** components:
+- Locate the correct tier folder before writing
+- Write directly into the appropriate tier under `packages/ui-web/src/`
+
+| Tier | Path | Components |
+|------|------|-----------|
+| Primitives | `packages/ui-web/src/primitives/<Name>/` | Button, Input, Label, Textarea, Checkbox, Switch, Badge |
+| Compositions | `packages/ui-web/src/compositions/<Name>/` | Alert, Card, Dialog |
+| Patterns | `packages/ui-web/src/patterns/<Name>/` | Tabs |
+| Layouts | `packages/ui-web/src/layouts/<Name>/` | NavBar |
 
 Examples:
-- Button → `components/Button/Button.tsx`
-- Input → `components/Input/Input.tsx`
-- Checkbox → `components/Checkbox/Checkbox.tsx`
+- Button → `packages/ui-web/src/primitives/Button/Button.tsx`
+- Alert → `packages/ui-web/src/compositions/Alert/Alert.tsx`
+- NavBar → `packages/ui-web/src/layouts/NavBar/NavBar.tsx`
+
+For **native** components: `packages/ui-native/components/<Name>/`
 
 If the component already exists:
 - Modify the existing file in place
 - DO NOT create duplicate or alternative versions
 
-If the component does not exist:
-- Create the appropriate folder and files inside `/components`
+If adding a new component, determine its tier first, then create the appropriate folder.
 
 ## No Session Artifacts
 - Do NOT generate files in:
@@ -159,8 +178,8 @@ Every QA session MUST update `QA-REPORT.md` before the session ends:
 - Update the Component Results table row for the audited component
 - Update the Session Progress table row (status + date + notes)
 
-The file to update is always: `QA-REPORT.md` at the project root.
-NEVER create separate per-session files. All QA content lives in `QA-REPORT.md`.
+The file to update is always: `docs/audits/QA-REPORT.md`.
+NEVER create separate per-session files. All QA content lives in `docs/audits/QA-REPORT.md`.
 
 ## Git Commit Rules (CRITICAL)
 

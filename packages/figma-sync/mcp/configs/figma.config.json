@@ -1,0 +1,12 @@
+{
+  "codeConnect": {
+    "include": [
+      "packages/figma-sync/code-connect/**/*.figma.tsx",
+      "packages/ui-web/src/**/*.tsx"
+    ],
+    "parser": "react",
+    "paths": {
+      "@/*": ["./*"]
+    }
+  }
+}

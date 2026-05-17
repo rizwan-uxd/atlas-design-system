@@ -1,5 +1,5 @@
 import figma from "@figma/code-connect"
-import { Switch } from "@/components/Switch/Switch"
+import { Switch } from "@/packages/ui-web/src/primitives/Switch/Switch"
 
 figma.connect(
   Switch,

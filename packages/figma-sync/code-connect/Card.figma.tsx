@@ -1,5 +1,5 @@
 import figma from "@figma/code-connect"
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/Card/Card"
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/packages/ui-web/src/compositions/Card/Card"
 
 /**
  * Atlas Card — Code Connect

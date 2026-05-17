@@ -1,4 +1,4 @@
-@import "../atlas.tokens.css";
+@import "../packages/tokens/atlas.tokens.css";
 @import "tailwindcss";
 
 /* ─────────────── Global reduced-motion safety net ─────────────── */

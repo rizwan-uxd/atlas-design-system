@@ -1,5 +1,5 @@
 import figma from "@figma/code-connect"
-import { Textarea } from "@/components/Textarea/Textarea"
+import { Textarea } from "@/packages/ui-web/src/primitives/Textarea/Textarea"
 
 figma.connect(
   Textarea,

@@ -1,5 +1,5 @@
 import figma from "@figma/code-connect"
-import { Alert } from "@/components/Alert/Alert"
+import { Alert } from "@/packages/ui-web/src/compositions/Alert/Alert"
 
 figma.connect(
   Alert,

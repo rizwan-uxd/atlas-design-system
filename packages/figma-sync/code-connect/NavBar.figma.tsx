@@ -1,5 +1,5 @@
 import figma from "@figma/code-connect"
-import { NavBar } from "@/components/NavBar/NavBar"
+import { NavBar } from "@/packages/ui-web/src/layouts/NavBar/NavBar"
 
 /**
  * Atlas NavBar — Code Connect
