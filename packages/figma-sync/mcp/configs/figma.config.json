@@ -6,7 +6,8 @@
     ],
     "parser": "react",
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./*"],
+      "@atlas/ui-web/*": ["./packages/ui-web/src/*"]
     }
   }
 }

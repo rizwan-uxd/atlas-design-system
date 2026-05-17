@@ -19,6 +19,7 @@
     "packages/tokens/**/*.ts",
     "packages/figma-sync/**/*.ts",
     "packages/figma-sync/**/*.tsx",
+    "packages/governance/**/*.ts",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts"
   ],
