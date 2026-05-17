@@ -5,23 +5,20 @@
 
 // ─── Primitive colors ──────────────────────────────────────────────────────────
 export const primitive = {
-  // Neutral
-  "neutral-0":    "#ffffff",
-  "neutral-50":   "#f9fafb",
-  "neutral-100":  "#f2f4f6",
-  "neutral-200":  "#e4e8eb",
-  "neutral-300":  "#d0d6db",
-  "neutral-400":  "#9aa2a9",
-  "neutral-500":  "#6b747c",
-  "neutral-600":  "#4d555d",
-  "neutral-700":  "#3a4147",
-  "neutral-800":  "#24292e",
-  "neutral-900":  "#14181c",
-  "neutral-950":  "#080a0d",
+  "neutral-0": "#ffffff",
+  "neutral-50": "#f9fafb",
+  "neutral-100": "#f2f4f6",
+  "neutral-200": "#e4e8eb",
+  "neutral-300": "#d0d6db",
+  "neutral-400": "#9aa2a9",
+  "neutral-500": "#6b747c",
+  "neutral-600": "#4d555d",
+  "neutral-700": "#3a4147",
+  "neutral-800": "#24292e",
+  "neutral-900": "#14181c",
+  "neutral-950": "#080a0d",
   "neutral-1000": "#000000",
-
-  // Brand
-  "brand-50":  "#f1f6ff",
+  "brand-50": "#f1f6ff",
   "brand-100": "#dfeaff",
   "brand-200": "#c4d9ff",
   "brand-300": "#9ec0ff",
@@ -32,34 +29,26 @@ export const primitive = {
   "brand-800": "#1b3f96",
   "brand-900": "#153174",
   "brand-950": "#0a1d48",
-
-  // Success
-  "success-50":  "#eafbef",
+  "success-50": "#eafbef",
   "success-100": "#d0f5dc",
   "success-500": "#01a35d",
   "success-600": "#008a44",
   "success-700": "#007033",
   "success-900": "#003d1a",
-
-  // Warning
-  "warning-50":  "#fff7e2",
+  "warning-50": "#fff7e2",
   "warning-100": "#ffeabc",
   "warning-500": "#dba300",
   "warning-600": "#c28a00",
   "warning-700": "#9e6d00",
   "warning-900": "#5a3e00",
-
-  // Danger
-  "danger-50":  "#fff0ee",
+  "danger-50": "#fff0ee",
   "danger-100": "#ffdfda",
   "danger-400": "#ff6460",
   "danger-500": "#eb4244",
   "danger-600": "#d11226",
   "danger-700": "#ad0016",
   "danger-900": "#610a0f",
-
-  // Info
-  "info-50":  "#eaf8ff",
+  "info-50": "#eaf8ff",
   "info-100": "#d0f1ff",
   "info-500": "#00a0da",
   "info-600": "#0087c4",
@@ -70,123 +59,92 @@ export const primitive = {
 export type PrimitiveColor = keyof typeof primitive
 
 // ─── Semantic themes ──────────────────────────────────────────────────────────
-
 export const light = {
-  // Backgrounds
-  background:        "#ffffff",
-  backgroundSubtle:  "#f9fafb",
-  backgroundMuted:   "#f2f4f6",
-
-  // Surfaces
-  surface:           "#ffffff",
-  surfaceRaised:     "#ffffff",
-  surfaceOverlay:    "#ffffff",
-
-  // Borders
-  border:            "#e4e8eb",
-  borderStrong:      "#d0d6db",
-  borderSubtle:      "#f2f4f6",
-
-  // Foregrounds
-  foreground:         "#080a0d",
-  foregroundMuted:    "#4d555d",
-  foregroundSubtle:   "#6b747c",
+  background: "#ffffff",
+  backgroundSubtle: "#f9fafb",
+  backgroundMuted: "#f2f4f6",
+  surface: "#ffffff",
+  surfaceRaised: "#ffffff",
+  surfaceOverlay: "#ffffff",
+  border: "#e4e8eb",
+  borderStrong: "#d0d6db",
+  borderSubtle: "#f2f4f6",
+  foreground: "#080a0d",
+  foregroundMuted: "#4d555d",
+  foregroundSubtle: "#6b747c",
   foregroundDisabled: "#9aa2a9",
-  foregroundOnBrand:  "#ffffff",
-
-  // Brand / Primary
-  primary:            "#3265e0",
-  primaryHover:       "#2350be",
-  primaryActive:      "#1b3f96",
-  primarySubtle:      "#f1f6ff",
-  primaryForeground:  "#ffffff",
-
-  // Success
-  success:            "#008a44",
-  successSubtle:      "#eafbef",
-  successForeground:  "#ffffff",
-
-  // Warning
-  warning:            "#dba300",
-  warningSubtle:      "#fff7e2",
-  warningForeground:  "#080a0d",
-
-  // Danger
-  danger:             "#d11226",
-  dangerHover:        "#ad0016",
-  dangerSubtle:       "#fff0ee",
-  dangerForeground:   "#ffffff",
-
-  // Info
-  info:               "#0087c4",
-  infoSubtle:         "#eaf8ff",
-  infoForeground:     "#ffffff",
-
-  // Utility
-  focusRing:          "#4b7ff7",
-  overlay:            "#080a0d",
+  foregroundOnBrand: "#ffffff",
+  primary: "#3265e0",
+  primaryHover: "#2350be",
+  primaryActive: "#1b3f96",
+  primarySubtle: "#f1f6ff",
+  primaryForeground: "#ffffff",
+  success: "#008a44",
+  successSubtle: "#eafbef",
+  successMuted: "#d0f5dc",
+  successForeground: "#ffffff",
+  warning: "#dba300",
+  warningSubtle: "#fff7e2",
+  warningMuted: "#ffeabc",
+  warningForeground: "#080a0d",
+  danger: "#d11226",
+  dangerHover: "#ad0016",
+  dangerSubtle: "#fff0ee",
+  dangerMuted: "#ffdfda",
+  dangerForeground: "#ffffff",
+  info: "#0087c4",
+  infoSubtle: "#eaf8ff",
+  infoMuted: "#d0f1ff",
+  infoForeground: "#ffffff",
+  focusRing: "#4b7ff7",
+  overlay: "#080a0d",
 } as const
 
 export const dark = {
-  // Backgrounds
-  background:        "#080a0d",
-  backgroundSubtle:  "#14181c",
-  backgroundMuted:   "#24292e",
-
-  // Surfaces
-  surface:           "#14181c",
-  surfaceRaised:     "#24292e",
-  surfaceOverlay:    "#24292e",
-
-  // Borders
-  border:            "#24292e",
-  borderStrong:      "#3a4147",
-  borderSubtle:      "#14181c",
-
-  // Foregrounds
-  foreground:         "#f9fafb",
-  foregroundMuted:    "#9aa2a9",
-  foregroundSubtle:   "#6b747c",
+  background: "#080a0d",
+  backgroundSubtle: "#14181c",
+  backgroundMuted: "#24292e",
+  surface: "#14181c",
+  surfaceRaised: "#24292e",
+  surfaceOverlay: "#24292e",
+  border: "#24292e",
+  borderStrong: "#3a4147",
+  borderSubtle: "#14181c",
+  foreground: "#f9fafb",
+  foregroundMuted: "#9aa2a9",
+  foregroundSubtle: "#6b747c",
   foregroundDisabled: "#4d555d",
-  foregroundOnBrand:  "#ffffff",
-
-  // Brand / Primary
-  primary:            "#4b7ff7",
-  primaryHover:       "#729fff",
-  primaryActive:      "#9ec0ff",
-  primarySubtle:      "#0a1d48",
-  primaryForeground:  "#ffffff",
-
-  // Success
-  success:            "#01a35d",
-  successSubtle:      "#003d1a",
-  successForeground:  "#080a0d",
-
-  // Warning
-  warning:            "#dba300",
-  warningSubtle:      "#5a3e00",
-  warningForeground:  "#080a0d",
-
-  // Danger
-  danger:             "#eb4244",
-  dangerHover:        "#ff6460",
-  dangerSubtle:       "#610a0f",
-  dangerForeground:   "#ffffff",
-
-  // Info
-  info:               "#00a0da",
-  infoSubtle:         "#003e5c",
-  infoForeground:     "#ffffff",
-
-  // Utility
-  focusRing:          "#729fff",
-  overlay:            "#000000",
+  foregroundOnBrand: "#ffffff",
+  primary: "#4b7ff7",
+  primaryHover: "#729fff",
+  primaryActive: "#9ec0ff",
+  primarySubtle: "#0a1d48",
+  primaryForeground: "#ffffff",
+  success: "#01a35d",
+  successSubtle: "#003d1a",
+  successMuted: "#007033",
+  successForeground: "#080a0d",
+  warning: "#dba300",
+  warningSubtle: "#5a3e00",
+  warningMuted: "#9e6d00",
+  warningForeground: "#080a0d",
+  danger: "#eb4244",
+  dangerHover: "#ff6460",
+  dangerSubtle: "#610a0f",
+  dangerMuted: "#ad0016",
+  dangerForeground: "#ffffff",
+  info: "#00a0da",
+  infoSubtle: "#003e5c",
+  infoMuted: "#006ea3",
+  infoForeground: "#ffffff",
+  focusRing: "#729fff",
+  overlay: "#000000",
 } as const
 
 export type SemanticColor = keyof typeof light
 export type Theme = typeof light
 
-// ─── Spacing (px numbers for RN StyleSheet) ───────────────────────────────────
+// ─── Spacing (px numbers for RN) ─────────────────────────────────────────────
 export const spacing = {
   px:  1,
   0:   0,
@@ -206,46 +164,35 @@ export const spacing = {
 
 // ─── Border radius ────────────────────────────────────────────────────────────
 export const radius = {
-  none:  0,
-  sm:    4,
-  md:    8,
-  lg:    12,
-  xl:    16,
+  none: 0,
+  sm:   4,
+  md:   8,
+  lg:   12,
+  xl:   16,
   "2xl": 24,
-  full:  9999,
+  full: 9999,
 } as const
 
 // ─── Typography · sizes ───────────────────────────────────────────────────────
 export const fontSize = {
-  xs:    12,
-  sm:    14,
-  base:  16,
-  lg:    18,
-  xl:    20,
+  xs:   12,
+  sm:   14,
+  base: 16,
+  lg:   18,
+  xl:   20,
   "2xl": 24,
   "3xl": 30,
   "4xl": 36,
   "5xl": 48,
 } as const
 
-// ─── Typography · text-role sizes (mobile defaults) ──────────────────────────
-export const textRole = {
-  h1:      28,
-  h2:      22,
-  h3:      18,
-  h4:      16,
-  body:    16,
-  bodySm:  14,
-  caption: 12,
-} as const
-
 // ─── Typography · weights ─────────────────────────────────────────────────────
 export const fontWeight = {
-  regular:  "400" as const,
-  medium:   "500" as const,
-  semibold: "600" as const,
-  bold:     "700" as const,
-}
+  regular:  "400",
+  medium:   "500",
+  semibold: "600",
+  bold:     "700",
+} as const
 
 // ─── Typography · line-height ─────────────────────────────────────────────────
 export const lineHeight = {
@@ -253,13 +200,6 @@ export const lineHeight = {
   snug:    1.35,
   normal:  1.5,
   relaxed: 1.65,
-} as const
-
-// ─── Typography · letter-spacing ─────────────────────────────────────────────
-export const letterSpacing = {
-  tight:  -0.01,
-  normal: 0,
-  wide:   0.02,
 } as const
 
 // ─── Motion · duration (ms) ───────────────────────────────────────────────────
@@ -279,9 +219,9 @@ export const opacity = {
 
 // ─── Touch targets ────────────────────────────────────────────────────────────
 export const touchTarget = {
-  min:         44,
+  min:        44,
   comfortable: 48,
-  spacious:    56,
+  spacious:   56,
 } as const
 
 // ─── Border widths ────────────────────────────────────────────────────────────
@@ -290,23 +230,3 @@ export const borderWidth = {
   1: 1,
   2: 2,
 } as const
-
-// ─── Convenience re-export ────────────────────────────────────────────────────
-const tokens = {
-  primitive,
-  light,
-  dark,
-  spacing,
-  radius,
-  fontSize,
-  textRole,
-  fontWeight,
-  lineHeight,
-  letterSpacing,
-  duration,
-  opacity,
-  touchTarget,
-  borderWidth,
-} as const
-
-export default tokens

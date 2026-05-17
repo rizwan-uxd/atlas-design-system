@@ -24,7 +24,7 @@
  */
 
 import React, { useState, useEffect, useRef, useCallback } from "react"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from "@/packages/ui-web/src/compositions/Dialog/Dialog"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from "@atlas/ui-web/compositions/Dialog/Dialog"
 import styles from "./NavBar.module.css"
 
 /* ── Helpers ────────────────────────────────────────────────────── */

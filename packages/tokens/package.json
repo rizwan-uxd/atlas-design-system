@@ -1,0 +1,11 @@
+{
+  "name": "@atlas/tokens",
+  "version": "0.1.0",
+  "private": true,
+  "main": "./atlas.tokens.css",
+  "exports": {
+    "./css": "./atlas.tokens.css",
+    "./json": "./atlas.tokens.json",
+    "./figma": "./atlas.figma.tokens.json"
+  }
+}

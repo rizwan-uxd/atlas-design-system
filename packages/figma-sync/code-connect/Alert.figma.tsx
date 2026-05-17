@@ -1,5 +1,5 @@
 import figma from "@figma/code-connect"
-import { Alert } from "@/packages/ui-web/src/compositions/Alert/Alert"
+import { Alert } from "@atlas/ui-web/compositions/Alert/Alert"
 
 figma.connect(
   Alert,
@@ -12,7 +12,7 @@ figma.connect(
         warning: "warning",
         danger:  "danger",
       }),
-      size:        figma.enum("Size",  { sm: "sm", md: "md", lg: "lg" }),
+      size:        figma.enum("Size",  { sm: "sm", md: "md" }),
       dismissible: figma.enum("State", { dismissible: true }),
     },
     example: ({ variant, size, dismissible }) => (

@@ -1,5 +1,5 @@
 import figma from "@figma/code-connect"
-import { Badge } from "@/packages/ui-web/src/primitives/Badge/Badge"
+import { Badge } from "@atlas/ui-web/primitives/Badge/Badge"
 
 figma.connect(
   Badge,

@@ -1,5 +1,5 @@
 import figma from "@figma/code-connect"
-import { Tabs } from "@/packages/ui-web/src/patterns/Tabs/Tabs"
+import { Tabs } from "@atlas/ui-web/patterns/Tabs/Tabs"
 
 /**
  * Atlas Tabs — Code Connect

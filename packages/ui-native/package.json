@@ -1,5 +1,5 @@
 {
-  "name": "@atlas/mobile",
+  "name": "@atlas/ui-native",
   "version": "0.1.0",
   "main": "index.ts",
   "scripts": {

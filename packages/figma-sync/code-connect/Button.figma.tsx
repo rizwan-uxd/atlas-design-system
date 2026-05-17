@@ -1,5 +1,5 @@
 import figma from "@figma/code-connect"
-import { Button } from "@/packages/ui-web/src/primitives/Button/Button"
+import { Button } from "@atlas/ui-web/primitives/Button/Button"
 
 /**
  * Atlas Button — Code Connect

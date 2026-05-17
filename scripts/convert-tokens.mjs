@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * Atlas Design System — Token Conversion Pipeline
- * atlas.tokens.css → packages/mobile/tokens/atlas.tokens.ts
+ * packages/tokens/atlas.tokens.css → packages/ui-native/tokens/atlas.tokens.ts
  *
  * Parses OKLCH color values from atlas.tokens.css, converts to hex,
  * resolves semantic var() references for light/dark themes,
@@ -20,8 +20,8 @@ import { fileURLToPath } from "url"
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const ROOT = path.resolve(__dirname, "..")
-const CSS_PATH = path.join(ROOT, "atlas.tokens.css")
-const OUT_PATH = path.join(ROOT, "packages/mobile/tokens/atlas.tokens.ts")
+const CSS_PATH = path.join(ROOT, "packages/tokens/atlas.tokens.css")
+const OUT_PATH = path.join(ROOT, "packages/ui-native/tokens/atlas.tokens.ts")
 
 // ─── Pure-JS OKLCH → hex (no culori required) ───────────────────────────────
 

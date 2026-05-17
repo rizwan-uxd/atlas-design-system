@@ -1,5 +1,6 @@
 import figma from "@figma/code-connect"
-import { NavBar } from "@/packages/ui-web/src/layouts/NavBar/NavBar"
+import { NavBar } from "@atlas/ui-web/layouts/NavBar/NavBar"
+import { Button } from "@atlas/ui-web/primitives/Button/Button"
 
 /**
  * Atlas NavBar — Code Connect

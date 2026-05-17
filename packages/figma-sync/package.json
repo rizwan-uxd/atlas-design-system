@@ -1,0 +1,12 @@
+{
+  "name": "@atlas/figma-sync",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "parse": "figma connect parse --config mcp/configs/figma.config.json",
+    "publish": "figma connect publish --config mcp/configs/figma.config.json"
+  },
+  "devDependencies": {
+    "@figma/code-connect": ">=1"
+  }
+}

@@ -1,5 +1,5 @@
 import figma from "@figma/code-connect"
-import { Input } from "@/packages/ui-web/src/primitives/Input/Input"
+import { Input } from "@atlas/ui-web/primitives/Input/Input"
 
 figma.connect(
   Input,

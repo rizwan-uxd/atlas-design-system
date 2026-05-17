@@ -1,5 +1,5 @@
 import figma from "@figma/code-connect"
-import { Checkbox } from "@/packages/ui-web/src/primitives/Checkbox/Checkbox"
+import { Checkbox } from "@atlas/ui-web/primitives/Checkbox/Checkbox"
 
 figma.connect(
   Checkbox,

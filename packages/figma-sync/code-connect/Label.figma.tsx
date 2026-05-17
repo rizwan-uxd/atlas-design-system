@@ -1,5 +1,5 @@
 import figma from "@figma/code-connect"
-import { Label } from "@/packages/ui-web/src/primitives/Label/Label"
+import { Label } from "@atlas/ui-web/primitives/Label/Label"
 
 figma.connect(
   Label,

@@ -1,5 +1,5 @@
 import figma from "@figma/code-connect"
-import { Switch } from "@/packages/ui-web/src/primitives/Switch/Switch"
+import { Switch } from "@atlas/ui-web/primitives/Switch/Switch"
 
 figma.connect(
   Switch,
@@ -7,7 +7,7 @@ figma.connect(
   {
     props: {
       defaultChecked: figma.enum("Variant", { off: false, on: true }),
-      size:           figma.enum("Size",    { sm: "sm", md: "md", lg: "lg" }),
+      size:           figma.enum("Size",    { sm: "sm", md: "md" }),
       disabled:       figma.enum("State",   { disabled: true }),
     },
     example: ({ defaultChecked, size, disabled }) => (
