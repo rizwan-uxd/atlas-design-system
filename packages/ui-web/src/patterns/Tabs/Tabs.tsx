@@ -143,10 +143,13 @@ export function TabsList({
     list.style.setProperty("--_ind-w", `${activeRect.width}px`)
   }, [])
 
-  /* Run after every render to catch Radix updating data-state */
+  /* Run once on mount to set initial indicator position.
+     Subsequent updates are handled by the MutationObserver (data-state changes)
+     and the resize listener below. Running on every render was causing
+     getBoundingClientRect() to force synchronous layout after each render. */
   useLayoutEffect(() => {
     updateIndicator()
-  })
+  }, [updateIndicator])
 
   /* Observe data-state attribute changes + window resize */
   useEffect(() => {
