@@ -230,3 +230,45 @@ export const borderWidth = {
   1: 1,
   2: 2,
 } as const
+
+// ─── Typography · responsive roles (px numbers for RN; mobile-first) ──────────
+export const textRole = {
+  h1: 28,
+  h2: 22,
+  h3: 18,
+  h4: 16,
+  body: 16,
+  bodySm: 14,
+  caption: 12,
+} as const
+
+// ─── Letter spacing (CSS em → RN pt) ──────────────────────────────────────────
+// RN letterSpacing is absolute (same unit as fontSize); CSS em is relative to
+// font size (rendered pt = em × fontSize). Tokens are constants, so each em value
+// is normalized at the base font size: pt = em × 16. Per-size
+// exactness would require em × fontSize at the call site.
+export const letterSpacing = {
+  tight: -0.16,
+  normal: 0,
+  wide: 0.32,
+} as const
+
+// ─── Default aggregate — scheme-independent scale tokens ──────────────────────
+// Consumed as: import tokens from './atlas.tokens'  (across components + theme).
+// Colors are provided separately via the theme (useTheme().colors), so they are
+// intentionally not part of this default object.
+const tokens = {
+  spacing,
+  radius,
+  fontSize,
+  fontWeight,
+  lineHeight,
+  duration,
+  opacity,
+  touchTarget,
+  borderWidth,
+  textRole,
+  letterSpacing,
+} as const
+
+export default tokens

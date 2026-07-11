@@ -101,6 +101,62 @@ function extractSemanticBlock(css, selector) {
 const lightSemantic = extractSemanticBlock(css, ":root {")
 const darkSemantic  = extractSemanticBlock(css, '[data-theme="dark"]')
 
+// ─── Parse typography roles + letter-spacing from CSS ──────────────────────────
+// Read from the :root block only, so we take the mobile-first defaults and ignore
+// any responsive @media uplifts (React Native has no media queries).
+
+function extractRootBlock(css) {
+  const start = css.indexOf(":root {")
+  if (start === -1) return ""
+  const blockStart = css.indexOf("{", start) + 1
+  let depth = 1, i = blockStart
+  while (i < css.length && depth > 0) {
+    const c = css[i++]
+    if (c === "{") depth++
+    else if (c === "}") depth--
+  }
+  return css.slice(blockStart, i - 1)
+}
+
+const camel = (s) => s.replace(/-([a-z])/g, (_, c) => c.toUpperCase())
+const rootBlock = extractRootBlock(css)
+
+// Static font-size scale (px) — needed to resolve var() refs in the text roles.
+const fontSizePx = {}
+for (const mm of rootBlock.matchAll(/--atlas-font-size-([\w-]+):\s*(\d+)px/g)) {
+  fontSizePx[camel(mm[1])] = parseInt(mm[2], 10)
+}
+// Base font size is the reference for the em→pt letter-spacing conversion below.
+// Sourced from the tokens (not hardcoded); falls back to the CSS default of 16.
+const BASE_FONT_PX = fontSizePx.base ?? 16
+
+// Responsive typography roles → px numbers for RN. Values are either a literal
+// "NNpx" or a var() reference into the font-size scale.
+const textRole = {}
+for (const mm of rootBlock.matchAll(/--atlas-text-([\w-]+):\s*([^;]+);/g)) {
+  const raw = mm[2].trim()
+  const pxMatch = raw.match(/^(\d+)px$/)
+  const varMatch = raw.match(/var\(--atlas-font-size-([\w-]+)\)/)
+  let px
+  if (pxMatch) px = parseInt(pxMatch[1], 10)
+  else if (varMatch) px = fontSizePx[camel(varMatch[1])]
+  if (px != null) textRole[camel(mm[1])] = px
+}
+
+// Letter-spacing: CSS em → React Native pt.
+//
+//   CSS `letter-spacing` in `em` is RELATIVE to the element's font size
+//   (rendered pt = em × fontSize). React Native `letterSpacing` is ABSOLUTE, in
+//   the same density-independent unit as `fontSize`. A design token is a single
+//   constant applied across text sizes, so we normalize each em value at the base
+//   font size:  pt = em × BASE_FONT_PX. (Exact per-size tracking would require
+//   em × fontSize at each call site — out of scope; no component changes.)
+const letterSpacing = {}
+for (const mm of rootBlock.matchAll(/--atlas-letter-spacing-([\w-]+):\s*(-?[\d.]+)em/g)) {
+  const em = parseFloat(mm[2])
+  letterSpacing[camel(mm[1])] = Math.round(em * BASE_FONT_PX * 1000) / 1000
+}
+
 // ─── Generate output ──────────────────────────────────────────────────────────
 
 const primitivesTs = Object.entries(primitives)
@@ -113,6 +169,14 @@ const lightTs = Object.entries(lightSemantic)
 
 const darkTs = Object.entries(darkSemantic)
   .map(([k, v]) => `  ${k}: "${v}",`)
+  .join("\n")
+
+const textRoleTs = Object.entries(textRole)
+  .map(([k, v]) => `  ${k}: ${v},`)
+  .join("\n")
+
+const letterSpacingTs = Object.entries(letterSpacing)
+  .map(([k, v]) => `  ${k}: ${v},`)
   .join("\n")
 
 const output = `// AUTO-GENERATED — do not edit manually
@@ -225,6 +289,40 @@ export const borderWidth = {
   1: 1,
   2: 2,
 } as const
+
+// ─── Typography · responsive roles (px numbers for RN; mobile-first) ──────────
+export const textRole = {
+${textRoleTs}
+} as const
+
+// ─── Letter spacing (CSS em → RN pt) ──────────────────────────────────────────
+// RN letterSpacing is absolute (same unit as fontSize); CSS em is relative to
+// font size (rendered pt = em × fontSize). Tokens are constants, so each em value
+// is normalized at the base font size: pt = em × ${BASE_FONT_PX}. Per-size
+// exactness would require em × fontSize at the call site.
+export const letterSpacing = {
+${letterSpacingTs}
+} as const
+
+// ─── Default aggregate — scheme-independent scale tokens ──────────────────────
+// Consumed as: import tokens from './atlas.tokens'  (across components + theme).
+// Colors are provided separately via the theme (useTheme().colors), so they are
+// intentionally not part of this default object.
+const tokens = {
+  spacing,
+  radius,
+  fontSize,
+  fontWeight,
+  lineHeight,
+  duration,
+  opacity,
+  touchTarget,
+  borderWidth,
+  textRole,
+  letterSpacing,
+} as const
+
+export default tokens
 `
 
 fs.mkdirSync(path.dirname(OUT_PATH), { recursive: true })
