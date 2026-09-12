@@ -47,3 +47,6 @@ next-env.d.ts
 # ── Generated / temp ──────────────────────────────────────────────
 *.generated.*
 .turbo/
+
+# ── Atlas sync scratch (Figma MCP pull) ───────────────────────────
+.atlas-pull/

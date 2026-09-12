@@ -11,6 +11,8 @@
     "lint": "eslint",
     "tokens:build": "node scripts/convert-tokens.mjs",
     "token-lint": "node packages/governance/token-lint.mjs",
+    "atlas:sync": "node scripts/atlas-sync.mjs",
+    "atlas:sync:check": "node scripts/atlas-sync.mjs --check",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage"

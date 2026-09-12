@@ -77,7 +77,7 @@ Skills are **authored** in `.agents/skills/<name>/` (`SKILL.md` + `references/`)
 |---|---|
 | Build a prototype flow or screen | `atlas-prototype` skill *(phase 7 — until it exists, follow §2 disclosure order and end with the verify checks)* |
 | Create or change a library component | `atlas-component` skill *(phase 7)* |
-| Refresh the snapshot from Figma | `atlas-figma-sync` skill *(phase 5)* |
+| Refresh the snapshot from Figma | `atlas-figma-sync` skill + `scripts/atlas-sync.mjs` |
 | Check work before reporting done | `atlas-verify` skill + `scripts/atlas-verify.mjs` *(phase 6 — until then: `npm run token-lint`, `npx tsc --noEmit`, `npm test`)* |
 | QA audit of a component | `docs/audits/QA-REPORT.md` only — never a new per-session file. Append the bug log (BUG-NNN: guard, location, description, fix) and the checklist, then update the Summary, Component Results and Session Progress tables. |
 | Measure agent cost or quality | `benchmarks/run.sh <label> <task> <reps> <model>`, then score with `benchmarks/rubric.md` |
