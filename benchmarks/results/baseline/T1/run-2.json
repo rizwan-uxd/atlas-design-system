@@ -1,0 +1,104 @@
+{
+  "model": "claude-sonnet-5",
+  "ok": true,
+  "turns": 38,
+  "durationS": 137,
+  "costUsd": 0.9108234,
+  "tokens": {
+    "input": 50,
+    "cacheWrite": 83658,
+    "cacheRead": 2160592,
+    "output": 14284,
+    "totalContext": 2244300
+  },
+  "tools": {
+    "Bash": 17,
+    "Read": 13,
+    "Write": 6,
+    "Edit": 1
+  },
+  "toolCalls": 37,
+  "figmaCalls": 0,
+  "verifyRuns": 4,
+  "reworkEdits": 7,
+  "toolResultChars": {
+    "Bash": 31141,
+    "Read": 47109,
+    "Write": 1315,
+    "Edit": 227
+  },
+  "skillsUsed": [],
+  "reads": {
+    "total": 13,
+    "unique": 13,
+    "offTask": 0,
+    "byCategory": {
+      "prototype-shell": 7,
+      "prototype-examples": 5,
+      "components": 1
+    },
+    "files": [
+      "app/prototypes/_shared/flowRegistry.ts",
+      "app/prototypes/_shared/FlowShell.tsx",
+      "app/prototypes/_shared/PhoneFrame.tsx",
+      "app/prototypes/_shared/StepProgress.tsx",
+      "app/prototypes/_shared/useFlowState.ts",
+      "app/prototypes/_shared/mockApi.ts",
+      "app/prototypes/page.tsx",
+      "app/prototypes/tabby/page.tsx",
+      "app/prototypes/tabby/schema.ts",
+      "app/prototypes/tabby/steps/Phone.tsx",
+      "app/prototypes/tabby/steps/Success.tsx",
+      "app/prototypes/tabby/steps/_chrome.tsx",
+      "packages/ui-web/src/compositions/Dialog/Dialog.tsx"
+    ]
+  },
+  "bashCmds": [
+    "find /private/var/folders/mj/4bm9y0256pbc4jdsdqsm5zs00000gn/T/atlas-bench/baseline-T1-2 -maxdepth 3 -not -path '*/node_modules/*' -not -path '*/.git/*' | sort",
+    "find app/prototypes -type f | sort && echo \"---LINT---\" && cat packages/governance/token-lint.mjs",
+    "find packages/ui-web/src -maxdepth 2 -type d | sort",
+    "sed -n '1,80p' packages/ui-web/src/primitives/Input/Input.tsx",
+    "sed -n '1,80p' packages/ui-web/src/compositions/Card/Card.tsx",
+    "sed -n '1,60p' packages/ui-web/src/primitives/Badge/Badge.tsx",
+    "sed -n '1,60p' packages/ui-web/src/compositions/Alert/Alert.tsx",
+    "grep -E -- \"--atlas-success|--atlas-primary\\b|--atlas-primary-subtle\" packages/tokens/atlas.tokens.css | head -20",
+    "node packages/governance/token-lint.mjs",
+    "npx tsc --noEmit -p tsconfig.json 2>&1 | grep -i \"send-money\" ",
+    "timeout 40 npx next build 2>&1 | tail -60",
+    "npx next build 2>&1 | tail -80",
+    "npx next build > /tmp/build.log 2>&1; tail -100 /tmp/build.log",
+    "npx next build",
+    "npx next build",
+    "npx next build 2>&1 | tail -100",
+    "npx tsc --noEmit -p tsconfig.json 2>&1 | head -60"
+  ],
+  "quality": {
+    "outputExists": true,
+    "files": 6,
+    "loc": 591,
+    "registered": true,
+    "tokenLintViolations": 0,
+    "tscErrors": 0,
+    "atlasComponentsImported": [
+      "Input",
+      "Card",
+      "CardContent",
+      "Badge",
+      "Button",
+      "Dialog",
+      "DialogContent",
+      "DialogHeader",
+      "DialogTitle",
+      "DialogDescription",
+      "DialogBody",
+      "DialogFooter",
+      "DialogClose",
+      "Label",
+      "Alert"
+    ],
+    "expectedCoverage": "7/7",
+    "rawElements": 1,
+    "numericStyleLiterals": 32,
+    "primitiveTokenRefs": 0
+  }
+}

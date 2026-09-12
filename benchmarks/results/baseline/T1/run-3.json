@@ -1,0 +1,109 @@
+{
+  "model": "claude-sonnet-5",
+  "ok": true,
+  "turns": 40,
+  "durationS": 197,
+  "costUsd": 0.9089644,
+  "tokens": {
+    "input": 56,
+    "cacheWrite": 79959,
+    "cacheRead": 2150367,
+    "output": 15781,
+    "totalContext": 2230382
+  },
+  "tools": {
+    "Bash": 15,
+    "Glob": 1,
+    "Read": 16,
+    "Write": 5,
+    "Edit": 2
+  },
+  "toolCalls": 39,
+  "figmaCalls": 0,
+  "verifyRuns": 3,
+  "reworkEdits": 0,
+  "toolResultChars": {
+    "Bash": 19642,
+    "Glob": 14,
+    "Read": 52344,
+    "Write": 1093,
+    "Edit": 461
+  },
+  "skillsUsed": [],
+  "reads": {
+    "total": 16,
+    "unique": 16,
+    "offTask": 1,
+    "byCategory": {
+      "other": 1,
+      "prototype-shell": 7,
+      "prototype-examples": 5,
+      "governance": 1,
+      "components": 2
+    },
+    "files": [
+      "package.json",
+      "app/prototypes/_shared/flowRegistry.ts",
+      "app/prototypes/_shared/FlowShell.tsx",
+      "app/prototypes/_shared/PhoneFrame.tsx",
+      "app/prototypes/_shared/StepProgress.tsx",
+      "app/prototypes/_shared/useFlowState.ts",
+      "app/prototypes/_shared/mockApi.ts",
+      "app/prototypes/page.tsx",
+      "app/prototypes/tabby/page.tsx",
+      "app/prototypes/tabby/steps/_chrome.tsx",
+      "app/prototypes/tabby/schema.ts",
+      "app/prototypes/tabby/steps/Phone.tsx",
+      "app/prototypes/tabby/steps/Success.tsx",
+      "packages/governance/token-lint.mjs",
+      "packages/ui-web/src/compositions/Card/Card.tsx",
+      "packages/ui-web/src/compositions/Alert/Alert.tsx"
+    ]
+  },
+  "bashCmds": [
+    "ls && echo --- && find . -maxdepth 4 -iname \"*prototype*\" -not -path \"*/node_modules/*\" && echo --- && cat AGENTS.md",
+    "ls node_modules/next/dist/docs 2>&1 | head -20; echo \"---version---\"; cat node_modules/next/package.json | grep '\"version\"'",
+    "find app/prototypes -maxdepth 3 -not -path \"*/node_modules/*\" | sort",
+    "sed -n '1,80p' packages/ui-web/src/primitives/Input/Input.tsx",
+    "sed -n '1,120p' packages/ui-web/src/compositions/Dialog/Dialog.tsx",
+    "grep -n \"^export function\\|^export const\" packages/ui-web/src/compositions/Dialog/Dialog.tsx packages/ui-web/src/primitives/Badge/Badge.tsx packages/ui-web/src/primitives/Button/Button.tsx packages/ui-web/src/compositions/Card/Card.tsx packages/ui-web/src/compositions/Alert/Alert.tsx packages/ui-web/src/primitives/Label/Label.tsx",
+    "grep -n \"variant\\|size\\|leading\\|interactive\" packages/ui-web/src/compositions/Card/Card.tsx | head -30 && echo --- && grep -n \"variant\\|dot\\|removable\" packages/ui-web/src/primitives/Badge/Badge.tsx | head -20 && echo --- && grep -n \"variant\\|size\\|loading\\|disabled\" packages/ui-web/src/primitives/Button/Button.tsx | head -20",
+    "grep -n \"success-subtle\\|--atlas-success\\b\\|--atlas-primary\\b\\|--atlas-primary-subtle\" packages/tokens/atlas.tokens.css | head -20",
+    "npm run token-lint 2>&1 | tail -40",
+    "npx tsc --noEmit -p tsconfig.json 2>&1 | tail -80",
+    "npm run build 2>&1 | tail -80",
+    "npx eslint app/prototypes/send-money app/prototypes/_shared/flowRegistry.ts 2>&1 | tail -60",
+    "npx eslint app/prototypes/send-money app/prototypes/_shared/flowRegistry.ts",
+    "npx eslint app/prototypes/send-money app/prototypes/_shared/flowRegistry.ts",
+    "npm run token-lint"
+  ],
+  "quality": {
+    "outputExists": true,
+    "files": 5,
+    "loc": 599,
+    "registered": true,
+    "tokenLintViolations": 0,
+    "tscErrors": 0,
+    "atlasComponentsImported": [
+      "Input",
+      "Card",
+      "CardContent",
+      "Badge",
+      "Button",
+      "Dialog",
+      "DialogContent",
+      "DialogHeader",
+      "DialogTitle",
+      "DialogDescription",
+      "DialogBody",
+      "DialogFooter",
+      "DialogClose",
+      "Label",
+      "Alert"
+    ],
+    "expectedCoverage": "7/7",
+    "rawElements": 0,
+    "numericStyleLiterals": 34,
+    "primitiveTokenRefs": 0
+  }
+}

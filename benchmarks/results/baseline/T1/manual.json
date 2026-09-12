@@ -1,0 +1,9 @@
+{
+  "run": 3,
+  "fidelity": 4,
+  "hierarchy": 4,
+  "states": 4,
+  "discipline": 3,
+  "total": 15,
+  "notes": "Scored the median run (3 of 3). Full happy path works: recipient list -> live FX conversion + fee breakdown -> review -> confirm dialog -> success. States are strong: Continue disabled until valid, Input invalid on bad amount, loading on the dialog's send button, success screen with reset. Fidelity loses a point for an emoji search glyph as the Input leading icon and a Dialog that renders at browser width instead of inside the phone frame. Discipline is the weak axis: all 7 expected Atlas components imported, but every layout is inline style objects (no classes/CVA), avatar circles and recipient rows are hand-rolled with no candidate flagged, and raw numeric literals remain (fontWeight 700, fontSize 14) - 34 numeric style literals by the automated count."
+}

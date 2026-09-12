@@ -1,0 +1,9 @@
+{
+  "run": 3,
+  "fidelity": 4,
+  "hierarchy": 4,
+  "states": 3,
+  "discipline": 3,
+  "total": 14,
+  "notes": "Scored run 3 of 3 (re-run to completion; the first attempt at rep 3 ended without a result event). Screen reads well: profile header, Notifications card with three switches using the component's own label/description props, Appearance card, destructive Sign out with a working confirm dialog. Fidelity loses a point because the run rolled its own phone chrome instead of importing the shared PhoneFrame, so it doesn't match the other prototypes (square corners, no bezel/notch). States: toggles and dialog work, but the theme choice is local state that applies no data-theme, and Sign out has no loading or confirmed state. Discipline is mid: Tabs (pills) used correctly for the segmented theme choice and no raw HTML controls at all, but the Avatar gap is hand-rolled with no candidate flagged, PhoneFrame is bypassed, and Label is never used (5/6 expected components)."
+}

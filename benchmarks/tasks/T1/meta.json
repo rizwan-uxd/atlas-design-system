@@ -1,0 +1,1 @@
+{ "slug": "send-money", "expectedComponents": ["Input", "Label", "Button", "Card", "Badge", "Alert", "Dialog"] }

@@ -1,0 +1,99 @@
+{
+  "model": "claude-sonnet-5",
+  "ok": true,
+  "turns": 28,
+  "durationS": 115,
+  "costUsd": 0.6252582,
+  "tokens": {
+    "input": 42,
+    "cacheWrite": 49114,
+    "cacheRead": 1641741,
+    "output": 9928,
+    "totalContext": 1690897
+  },
+  "tools": {
+    "Skill": 1,
+    "Bash": 13,
+    "Read": 9,
+    "Write": 1,
+    "Edit": 1,
+    "ToolSearch": 1
+  },
+  "toolCalls": 26,
+  "figmaCalls": 0,
+  "verifyRuns": 4,
+  "reworkEdits": 2,
+  "toolResultChars": {
+    "Skill": 44,
+    "Bash": 6374,
+    "Read": 71093,
+    "Write": 211,
+    "Edit": 227,
+    "ToolSearch": 49
+  },
+  "skillsUsed": [
+    "mattpocock-skills:prototype"
+  ],
+  "reads": {
+    "total": 9,
+    "unique": 9,
+    "offTask": 1,
+    "byCategory": {
+      "governance": 1,
+      "prototype-shell": 3,
+      "prototype-examples": 1,
+      "components": 3,
+      "other": 1
+    },
+    "files": [
+      "packages/governance/token-lint.mjs",
+      "app/prototypes/page.tsx",
+      "app/prototypes/wise-home/page.tsx",
+      "app/prototypes/_shared/PhoneFrame.tsx",
+      "app/prototypes/_shared/flowRegistry.ts",
+      "packages/ui-web/src/primitives/Switch/Switch.tsx",
+      "packages/ui-web/src/compositions/Dialog/Dialog.tsx",
+      "packages/ui-web/src/primitives/Button/Button.tsx",
+      "/tmp/claude-501/-private-var-folders-mj-4bm9y0256pbc4jdsdqsm5zs00000gn-T-atlas-bench-baseline-T2-1/383cc3e3-1d3f-4f5c-8d08-128051a8b754/tasks/b61b3os1g.output"
+    ]
+  },
+  "bashCmds": [
+    "find . -iname \"*prototype*\" -not -path \"*/node_modules/*\" 2>/dev/null; echo \"---lint---\"; find . -iname \"*token*lint*\" -not -path \"*/node_modules/*\" 2>/dev/null; echo \"---structure---\"; ls",
+    "find ./app/prototypes -maxdepth 3 | head -80",
+    "find packages/ui-web/src -maxdepth 2 -type d",
+    "grep -n \"atlas/ui-web\" tsconfig*.json 2>/dev/null; echo \"---\"; sed -n '1,50p' packages/ui-web/src/compositions/Card/Card.tsx",
+    "mkdir -p \"/private/var/folders/mj/4bm9y0256pbc4jdsdqsm5zs00000gn/T/atlas-bench/baseline-T2-1/app/prototypes/settings\"",
+    "grep -nE \"\\-\\-atlas-(color-brand-100|color-brand-700|color-brand-600|foreground-on-brand|letter-spacing-wide|spacing-8|font-size-2xl|font-size-lg)\\b\" packages/tokens/atlas.tokens.css",
+    "node packages/governance/token-lint.mjs",
+    "node packages/governance/token-lint.mjs 2>&1 | grep -i \"settings\" ; echo \"no settings violations if empty above\"",
+    "npx tsc --noEmit -p tsconfig.json 2>&1 | head -60",
+    "(npm run dev > /tmp/atlas-dev.log 2>&1 &) ; sleep 6 && curl -s -o /dev/null -w \"%{http_code}\\n\" http://localhost:3000/prototypes/settings; curl -s -o /dev/null -w \"%{http_code}\\n\" http://localhost:3000/prototypes",
+    "npm run dev > /tmp/atlas-dev.log 2>&1 &\ndisown\nsleep 8\ncurl -s -o /dev/null -w \"settings: %{http_code}\\n\" http://localhost:3000/prototypes/settings\ncurl -s -o /dev/null -w \"index: %{http_code}\\n\" http://localhost:3000/prototypes",
+    "npm run dev > /tmp/atlas-dev.log 2>&1 & disown; sleep 8; curl -s -o /dev/null -w \"settings: %{http_code}\\n\" http://localhost:3000/prototypes/settings; curl -s -o /dev/null -w \"index: %{http_code}\\n\" http://localhost:3000/prototypes",
+    "npm run dev"
+  ],
+  "quality": {
+    "outputExists": true,
+    "files": 1,
+    "loc": 338,
+    "registered": true,
+    "tokenLintViolations": 0,
+    "tscErrors": 0,
+    "atlasComponentsImported": [
+      "Button",
+      "Switch",
+      "Dialog",
+      "DialogTrigger",
+      "DialogContent",
+      "DialogHeader",
+      "DialogTitle",
+      "DialogDescription",
+      "DialogFooter",
+      "DialogClose"
+    ],
+    "expectedCoverage": "3/6",
+    "rawElements": 1,
+    "numericStyleLiterals": 5,
+    "primitiveTokenRefs": 0
+  }
+}

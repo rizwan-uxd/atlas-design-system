@@ -1,0 +1,107 @@
+{
+  "model": "claude-sonnet-5",
+  "ok": true,
+  "turns": 31,
+  "durationS": 142,
+  "costUsd": 0.7945312,
+  "tokens": {
+    "input": 42,
+    "cacheWrite": 80922,
+    "cacheRead": 1794496,
+    "output": 11077,
+    "totalContext": 1875460
+  },
+  "tools": {
+    "Bash": 13,
+    "Read": 13,
+    "Glob": 1,
+    "Write": 1,
+    "Edit": 2
+  },
+  "toolCalls": 30,
+  "figmaCalls": 0,
+  "verifyRuns": 3,
+  "reworkEdits": 3,
+  "toolResultChars": {
+    "Bash": 4865,
+    "Read": 97269,
+    "Glob": 580,
+    "Write": 211,
+    "Edit": 448
+  },
+  "skillsUsed": [],
+  "reads": {
+    "total": 13,
+    "unique": 13,
+    "offTask": 1,
+    "byCategory": {
+      "governance": 1,
+      "prototype-examples": 2,
+      "prototype-shell": 3,
+      "components": 6,
+      "other": 1
+    },
+    "files": [
+      "packages/governance/token-lint.mjs",
+      "app/prototypes/wise-home/page.tsx",
+      "app/prototypes/page.tsx",
+      "app/prototypes/_shared/PhoneFrame.tsx",
+      "app/prototypes/_shared/flowRegistry.ts",
+      "packages/ui-web/src/primitives/Switch/Switch.tsx",
+      "packages/ui-web/src/compositions/Dialog/Dialog.tsx",
+      "packages/ui-web/src/primitives/Button/Button.tsx",
+      "packages/ui-web/src/compositions/Card/Card.tsx",
+      "packages/ui-web/src/patterns/Tabs/Tabs.tsx",
+      "app/prototypes/tabby/page.tsx",
+      "packages/ui-web/src/primitives/Badge/Badge.tsx",
+      "/tmp/claude-501/-private-var-folders-mj-4bm9y0256pbc4jdsdqsm5zs00000gn-T-atlas-bench-baseline-T2-3/1af0be9c-0c58-4d5f-a28b-7c9c75f9e44e/tasks/bz74z74bl.output"
+    ]
+  },
+  "bashCmds": [
+    "find . -iname \"*prototype*\" -not -path \"*/node_modules/*\" 2>/dev/null",
+    "find . -iname \"*lint*\" -not -path \"*/node_modules/*\" 2>/dev/null; echo \"---\"; ls",
+    "find app/prototypes -maxdepth 3 | head -100",
+    "cat package.json",
+    "grep -n \"atlas\" tsconfig*.json -r",
+    "mkdir -p \"/private/var/folders/mj/4bm9y0256pbc4jdsdqsm5zs00000gn/T/atlas-bench/baseline-T2-3/app/prototypes/settings\"",
+    "npm run token-lint",
+    "npx tsc --noEmit -p tsconfig.json 2>&1 | grep -i \"settings\" ",
+    "(npm run dev > /tmp/settings-dev.log 2>&1 &) && sleep 6 && curl -s -o /tmp/settings.html -w \"%{http_code}\\n\" http://localhost:3030/prototypes/settings && curl -s -o /tmp/prototypes.html -w \"%{http_code}\\n\" http://localhost:3030/prototypes",
+    "npm run dev > /tmp/settings-dev.log 2>&1 &\ndisown\nsleep 6\ncurl -s -o /tmp/settings.html -w \"settings: %{http_code}\\n\" http://localhost:3030/prototypes/settings\ncurl -s -o /tmp/prototypes.html -w \"prototypes: %{http_code}\\n\" http://localhost:3030/prototypes",
+    "nohup npm run dev > /tmp/settings-dev.log 2>&1 &\ndisown\necho started",
+    "npm run dev",
+    "sleep 5 && curl -s -o /tmp/settings.html -w \"settings: %{http_code}\\n\" http://localhost:3030/prototypes/settings; curl -s -o /tmp/prototypes.html -w \"prototypes: %{http_code}\\n\" http://localhost:3030/prototypes"
+  ],
+  "quality": {
+    "outputExists": true,
+    "files": 1,
+    "loc": 306,
+    "registered": true,
+    "tokenLintViolations": 0,
+    "tscErrors": 0,
+    "atlasComponentsImported": [
+      "Button",
+      "Switch",
+      "Badge",
+      "Card",
+      "CardHeader",
+      "CardTitle",
+      "CardContent",
+      "Dialog",
+      "DialogTrigger",
+      "DialogContent",
+      "DialogHeader",
+      "DialogTitle",
+      "DialogDescription",
+      "DialogFooter",
+      "DialogClose",
+      "TabsRoot",
+      "TabsList",
+      "TabsTrigger"
+    ],
+    "expectedCoverage": "5/6",
+    "rawElements": 0,
+    "numericStyleLiterals": 6,
+    "primitiveTokenRefs": 0
+  }
+}

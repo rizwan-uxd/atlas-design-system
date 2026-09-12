@@ -3,9 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "clean": "rm -rf .next .turbo node_modules/.cache",
+    "dev": "next dev --port 3030",
+    "dev:fresh": "rm -rf .next .turbo && next dev --port 3030",
     "build": "next build",
-    "start": "next start",
+    "start": "next start --port 3030",
     "lint": "eslint",
     "tokens:build": "node scripts/convert-tokens.mjs",
     "token-lint": "node packages/governance/token-lint.mjs",

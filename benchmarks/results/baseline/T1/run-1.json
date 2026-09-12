@@ -1,0 +1,110 @@
+{
+  "model": "claude-sonnet-5",
+  "ok": true,
+  "turns": 41,
+  "durationS": 195,
+  "costUsd": 1.017174,
+  "tokens": {
+    "input": 48,
+    "cacheWrite": 101617,
+    "cacheRead": 2221685,
+    "output": 16514,
+    "totalContext": 2323350
+  },
+  "tools": {
+    "Skill": 1,
+    "Bash": 11,
+    "Read": 20,
+    "Write": 6,
+    "Edit": 1
+  },
+  "toolCalls": 39,
+  "figmaCalls": 0,
+  "verifyRuns": 3,
+  "reworkEdits": 0,
+  "toolResultChars": {
+    "Skill": 44,
+    "Bash": 6562,
+    "Read": 115927,
+    "Write": 1315,
+    "Edit": 227
+  },
+  "skillsUsed": [
+    "mattpocock-skills:prototype"
+  ],
+  "reads": {
+    "total": 20,
+    "unique": 20,
+    "offTask": 0,
+    "byCategory": {
+      "prototype-shell": 7,
+      "prototype-examples": 6,
+      "governance": 1,
+      "components": 6
+    },
+    "files": [
+      "app/prototypes/_shared/flowRegistry.ts",
+      "app/prototypes/page.tsx",
+      "app/prototypes/_shared/FlowShell.tsx",
+      "app/prototypes/_shared/PhoneFrame.tsx",
+      "app/prototypes/_shared/StepProgress.tsx",
+      "app/prototypes/_shared/useFlowState.ts",
+      "app/prototypes/_shared/mockApi.ts",
+      "app/prototypes/wise-home/page.tsx",
+      "app/prototypes/tabby/page.tsx",
+      "app/prototypes/tabby/schema.ts",
+      "app/prototypes/tabby/steps/_chrome.tsx",
+      "app/prototypes/tabby/steps/Phone.tsx",
+      "app/prototypes/tabby/steps/Success.tsx",
+      "packages/governance/token-lint.mjs",
+      "packages/ui-web/src/compositions/Dialog/Dialog.tsx",
+      "packages/ui-web/src/primitives/Input/Input.tsx",
+      "packages/ui-web/src/compositions/Card/Card.tsx",
+      "packages/ui-web/src/primitives/Badge/Badge.tsx",
+      "packages/ui-web/src/primitives/Button/Button.tsx",
+      "packages/ui-web/src/compositions/Alert/Alert.tsx"
+    ]
+  },
+  "bashCmds": [
+    "find . -maxdepth 6 -iname \"*prototype*\" -not -path \"*/node_modules/*\"",
+    "find app/prototypes -not -path \"*/node_modules/*\" | sort",
+    "ls packages/ui-web/src/primitives packages/ui-web/src/compositions packages/ui-web/src/patterns packages/ui-web/src/layouts 2>/dev/null; find . -iname \"*lint*\" -not -path \"*/node_modules/*\" | grep -v \".git\"",
+    "mkdir -p /private/var/folders/mj/4bm9y0256pbc4jdsdqsm5zs00000gn/T/atlas-bench/baseline-T1-1/app/prototypes/send-money/steps",
+    "grep -E \"success|spacing-1_5|spacing-0_5\" packages/tokens/atlas.tokens.css | head -30",
+    "node packages/governance/token-lint.mjs",
+    "node packages/governance/token-lint.mjs 2>&1 | grep -i \"send-money\" || echo \"no violations in send-money\"",
+    "cat package.json | grep -A5 '\"scripts\"'",
+    "npx tsc --noEmit -p tsconfig.json 2>&1 | head -80",
+    "npm run build 2>&1 | tail -60",
+    "ls -la node_modules | head -3; readlink -f node_modules 2>/dev/null || true"
+  ],
+  "quality": {
+    "outputExists": true,
+    "files": 6,
+    "loc": 689,
+    "registered": true,
+    "tokenLintViolations": 0,
+    "tscErrors": 0,
+    "atlasComponentsImported": [
+      "Input",
+      "Card",
+      "CardContent",
+      "Badge",
+      "Button",
+      "Dialog",
+      "DialogContent",
+      "DialogHeader",
+      "DialogTitle",
+      "DialogDescription",
+      "DialogBody",
+      "DialogFooter",
+      "DialogClose",
+      "Label",
+      "Alert"
+    ],
+    "expectedCoverage": "7/7",
+    "rawElements": 1,
+    "numericStyleLiterals": 32,
+    "primitiveTokenRefs": 0
+  }
+}

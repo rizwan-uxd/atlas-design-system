@@ -1,0 +1,1 @@
+{ "slug": "settings", "expectedComponents": ["Switch", "Label", "Tabs", "Button", "Card", "Dialog"], "gapComponents": ["Avatar"] }

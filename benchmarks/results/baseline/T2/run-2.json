@@ -1,0 +1,97 @@
+{
+  "model": "claude-sonnet-5",
+  "ok": true,
+  "turns": 24,
+  "durationS": 95,
+  "costUsd": 0.6866996000000001,
+  "tokens": {
+    "input": 34,
+    "cacheWrite": 80921,
+    "cacheRead": 1347888,
+    "output": 9228,
+    "totalContext": 1428843
+  },
+  "tools": {
+    "Bash": 11,
+    "Read": 10,
+    "Write": 1,
+    "Edit": 1
+  },
+  "toolCalls": 23,
+  "figmaCalls": 0,
+  "verifyRuns": 3,
+  "reworkEdits": 2,
+  "toolResultChars": {
+    "Bash": 7773,
+    "Read": 86447,
+    "Write": 211,
+    "Edit": 227
+  },
+  "skillsUsed": [],
+  "reads": {
+    "total": 10,
+    "unique": 10,
+    "offTask": 0,
+    "byCategory": {
+      "prototype-examples": 1,
+      "prototype-shell": 3,
+      "governance": 1,
+      "components": 5
+    },
+    "files": [
+      "app/prototypes/wise-home/page.tsx",
+      "app/prototypes/page.tsx",
+      "app/prototypes/_shared/flowRegistry.ts",
+      "packages/governance/token-lint.mjs",
+      "packages/ui-web/src/primitives/Switch/Switch.tsx",
+      "packages/ui-web/src/compositions/Dialog/Dialog.tsx",
+      "packages/ui-web/src/compositions/Card/Card.tsx",
+      "packages/ui-web/src/primitives/Button/Button.tsx",
+      "packages/ui-web/src/patterns/Tabs/Tabs.tsx",
+      "app/prototypes/_shared/PhoneFrame.tsx"
+    ]
+  },
+  "bashCmds": [
+    "ls && echo --- && find . -maxdepth 3 -iname \"*prototype*\" -not -path \"*/node_modules/*\"",
+    "find ./app/prototypes -maxdepth 3 && echo --- && cat package.json | grep -A2 -i lint && echo --- && find ./scripts -iname \"*lint*\" -o -iname \"*token*\"",
+    "find packages/ui-web/src -maxdepth 2 -type d && echo --- && cat package.json | grep -A5 '\"paths\"' tsconfig.base.json 2>/dev/null; grep -A10 '\"@atlas' tsconfig*.json",
+    "grep -E \"^\\s*--atlas-(spacing|radius|font-size|font-weight|shadow|foreground|background|border|touch|duration|easing|line-height|letter-spacing)\" packages/tokens/atlas.tokens.css | sort -u | head -100",
+    "mkdir -p /private/var/folders/mj/4bm9y0256pbc4jdsdqsm5zs00000gn/T/atlas-bench/baseline-T2-2/app/prototypes/settings",
+    "npm run token-lint 2>&1 | tail -40",
+    "npx tsc --noEmit -p tsconfig.json 2>&1 | grep -i \"settings\" ",
+    "npx eslint app/prototypes/settings/page.tsx app/prototypes/_shared/flowRegistry.ts 2>&1 | tail -60",
+    "npx eslint app/prototypes/settings/page.tsx app/prototypes/_shared/flowRegistry.ts",
+    "npx eslint app/prototypes/settings/page.tsx app/prototypes/_shared/flowRegistry.ts",
+    "timeout 60 npm run dev > /tmp/dev.log 2>&1 & sleep 8 && curl -s -o /tmp/settings.html -w \"%{http_code}\\n\" http://localhost:3000/prototypes/settings; curl -s -o /tmp/index.html -w \"%{http_code}\\n\" http://localhost:3000/prototypes"
+  ],
+  "quality": {
+    "outputExists": true,
+    "files": 1,
+    "loc": 330,
+    "registered": true,
+    "tokenLintViolations": 0,
+    "tscErrors": 0,
+    "atlasComponentsImported": [
+      "Card",
+      "CardHeader",
+      "CardTitle",
+      "CardContent",
+      "Switch",
+      "Tabs",
+      "Button",
+      "Dialog",
+      "DialogTrigger",
+      "DialogContent",
+      "DialogHeader",
+      "DialogTitle",
+      "DialogDescription",
+      "DialogBody",
+      "DialogFooter",
+      "DialogClose"
+    ],
+    "expectedCoverage": "5/6",
+    "rawElements": 1,
+    "numericStyleLiterals": 5,
+    "primitiveTokenRefs": 0
+  }
+}
