@@ -28,6 +28,7 @@ Often composed inside a `Field` with `Label` and `HelperText`. The label tap zon
 |---|---|---|
 | `sm` | 16px | `text-sm` |
 | `md` | 20px | `text-body` |
+| `lg` | 24px | `font-size-lg` |
 
 Mobile-app: tap target is the whole row, ≥ `--atlas-touch-min`. Box itself stays compact.
 
@@ -109,7 +110,7 @@ Indicator scales `0 → 1` over `--atlas-duration-fast` `--atlas-easing-emphasiz
 ```ts
 type CheckboxProps = {
   variant?: "default" | "card";
-  size?: "sm" | "md";
+  size?: "sm" | "md" | "lg";
   checked?: boolean | "indeterminate";
   defaultChecked?: boolean | "indeterminate";
   onCheckedChange?: (checked: boolean | "indeterminate") => void;

@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import Link from "next/link"
 import { Button } from "@atlas/ui-web/primitives/Button/Button"
 import { Input } from "@atlas/ui-web/primitives/Input/Input"
 import { Label } from "@atlas/ui-web/primitives/Label/Label"
@@ -65,9 +66,14 @@ export default function SandboxPage() {
           { label: "Guidelines" },
         ]}
         actions={
-          <Button variant="ghost" size="sm" onClick={toggleTheme}>
-            {dark ? "☀ Light" : "☾ Dark"}
-          </Button>
+          <div style={{ display: "flex", gap: "var(--atlas-spacing-2)", alignItems: "center" }}>
+            <Link href="/prototypes" style={{ textDecoration: "none" }}>
+              <Button variant="outline" size="sm">Prototypes →</Button>
+            </Link>
+            <Button variant="ghost" size="sm" onClick={toggleTheme}>
+              {dark ? "☀ Light" : "☾ Dark"}
+            </Button>
+          </div>
         }
       />
 
@@ -279,6 +285,13 @@ export default function SandboxPage() {
               <Checkbox id="cb-sm1" size="sm" label="Small unchecked" />
               <Checkbox id="cb-sm2" size="sm" checked={true} label="Small checked" onCheckedChange={() => {}} />
               <Checkbox id="cb-sm3" size="sm" checked="indeterminate" label="Small indeterminate" onCheckedChange={() => {}} />
+            </Row>
+
+            {/* lg size */}
+            <Row>
+              <Checkbox id="cb-lg1" size="lg" label="Large unchecked" />
+              <Checkbox id="cb-lg2" size="lg" checked={true} label="Large checked" onCheckedChange={() => {}} />
+              <Checkbox id="cb-lg3" size="lg" checked="indeterminate" label="Large indeterminate" onCheckedChange={() => {}} />
             </Row>
 
             {/* Error states — unchecked, checked, indeterminate */}

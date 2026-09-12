@@ -21,6 +21,8 @@
   Icon inside inherits --_icon-size:
   sm icon: 10px = calc(--atlas-spacing-2 + --atlas-spacing-0_5)
   md icon: 12px = --atlas-spacing-3
+  lg: 24px = --atlas-spacing-6
+  lg icon: 14px = calc(--atlas-spacing-3 + --atlas-spacing-0_5)
 */
 
 .box {
@@ -52,6 +54,12 @@
   width: var(--atlas-spacing-5);   /* 20px */
   height: var(--atlas-spacing-5);
   --_icon-size: var(--atlas-spacing-3); /* 12px */
+}
+
+.lg {
+  width: var(--atlas-spacing-6);   /* 24px */
+  height: var(--atlas-spacing-6);
+  --_icon-size: calc(var(--atlas-spacing-3) + var(--atlas-spacing-0_5)); /* 14px */
 }
 
 /* ── Checked / Indeterminate (unchecked is the base state) ─────── */
@@ -208,6 +216,7 @@
 
 .labelSm { font-size: var(--atlas-font-size-sm); }
 .labelMd { font-size: var(--atlas-text-body);    }
+.labelLg { font-size: var(--atlas-font-size-lg);  }
 
 .root[data-disabled] .label {
   cursor: not-allowed;

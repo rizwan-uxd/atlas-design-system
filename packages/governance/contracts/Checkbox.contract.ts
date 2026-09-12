@@ -9,7 +9,7 @@ type AssertCheckboxVariant = CheckboxVariant extends "default" | "card"
   ? true : false
 const _v: AssertCheckboxVariant = true; void _v
 
-type AssertCheckboxSize = CheckboxSize extends "sm" | "md"
+type AssertCheckboxSize = CheckboxSize extends "sm" | "md" | "lg"
   ? true : false
 const _s: AssertCheckboxSize = true; void _s
 

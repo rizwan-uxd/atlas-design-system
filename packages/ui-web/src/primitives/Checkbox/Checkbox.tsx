@@ -4,7 +4,7 @@
  * Atlas Checkbox — binary or tri-state selector
  *
  * Variants:  default | card
- * Sizes:     sm | md
+ * Sizes:     sm | md | lg
  * States:    unchecked · checked · indeterminate
  *            × hover (web) · focus-visible · disabled · error
  *
@@ -31,7 +31,7 @@ import styles from "./Checkbox.module.css"
 /* ── Types ──────────────────────────────────────────────────── */
 
 export type CheckboxVariant = "default" | "card"
-export type CheckboxSize = "sm" | "md"
+export type CheckboxSize = "sm" | "md" | "lg"
 
 export interface CheckboxProps {
   variant?: CheckboxVariant
@@ -129,7 +129,8 @@ export function Checkbox({
   const isIndeterminate = resolvedChecked === "indeterminate"
 
   /* Label size class mirrors box size */
-  const labelSizeClass = size === "sm" ? styles.labelSm : styles.labelMd
+  const labelSizeClass =
+    size === "sm" ? styles.labelSm : size === "lg" ? styles.labelLg : styles.labelMd
 
   const rootClasses = cx(
     styles.root,
