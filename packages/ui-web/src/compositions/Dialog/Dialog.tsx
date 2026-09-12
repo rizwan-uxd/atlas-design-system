@@ -40,7 +40,7 @@
  * Token compliance: all values via semantic tokens in Dialog.module.css.
  */
 
-import React, { useId } from "react"
+import React from "react"
 import * as RadixDialog from "@radix-ui/react-dialog"
 import styles from "./Dialog.module.css"
 

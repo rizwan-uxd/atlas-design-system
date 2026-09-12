@@ -40,6 +40,7 @@ export function PhoneFrame({
         borderRadius: 48,
         background: background ?? "var(--atlas-background)",
         boxShadow:
+          /* token-lint-disable-next-line — device bezel drop shadow, not an Atlas surface */
           "0 0 0 12px var(--atlas-color-neutral-900), 0 0 0 13px var(--atlas-color-neutral-700), 0 30px 60px -20px rgba(0,0,0,0.45)",
         position: "relative",
         overflow: "hidden",

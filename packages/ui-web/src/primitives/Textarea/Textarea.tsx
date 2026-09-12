@@ -86,17 +86,12 @@ export function Textarea({
 
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
-  /* Track character count for the counter display */
-  const [charCount, setCharCount] = useState<number>(() => {
-    if (value !== undefined) return String(value).length
-    if (defaultValue !== undefined) return String(defaultValue).length
-    return 0
-  })
-
-  /* Sync count when controlled value changes */
-  useEffect(() => {
-    if (value !== undefined) setCharCount(String(value).length)
-  }, [value])
+  /* Character count: derived from the controlled value, tracked locally when uncontrolled.
+     Deriving avoids a setState inside an effect and the cascading render it causes. */
+  const [uncontrolledCount, setUncontrolledCount] = useState<number>(() =>
+    defaultValue !== undefined ? String(defaultValue).length : 0,
+  )
+  const charCount = value !== undefined ? String(value).length : uncontrolledCount
 
   /* autoGrow — recalculate height on every content change */
   useEffect(() => {
@@ -112,7 +107,7 @@ export function Textarea({
   }, [autoGrow, maxRows, value, charCount])
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setCharCount(e.target.value.length)
+    setUncontrolledCount(e.target.value.length)
     onChange?.(e)
   }
 

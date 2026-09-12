@@ -6,7 +6,7 @@
 
 ## Status
 Monorepo restructured; all 12 v1 components live in `packages/ui-web/src/` classified by tier, with a visual sandbox at `app/page.tsx` and coded prototypes under `app/prototypes/`.
-**Current work:** the AI upgrade in `docs/ATLAS-AI-UPGRADE-PLAN.md` — phase 1 of 8 (harness rules). Phase 0 baseline is measured and locked in `benchmarks/results/SUMMARY.md`.
+**Current work:** the AI upgrade in `docs/ATLAS-AI-UPGRADE-PLAN.md` — phases 0, 1, 2C (Checkbox) and 4 are done; phase 5 (sync skill) is next. The phase 0 baseline is locked in `benchmarks/results/SUMMARY.md`.
 
 ## What this is
 A monorepo holding: the visual sandbox (Next.js 16, `app/page.tsx`), the web component library (`packages/ui-web/src/`), a React Native library (`packages/ui-native/`), design tokens (`packages/tokens/`), Figma sync (`packages/figma-sync/`), governance checks (`packages/governance/`), and the agent benchmark (`benchmarks/`).
@@ -62,7 +62,7 @@ docs/
 ├── architecture/ATLAS-SPEC/   per-component specs
 └── decisions/                 ATLAS-COMPONENTS-V1.md (locked v1 decisions)
 ```
-`atlas/` (the generated snapshot the agent reads) does not exist yet — phase 4 creates it.
+`atlas/` holds the generated snapshot the agent reads: `index.md`, per-component docs and metadata, semantic tokens, and `state/` (status, discrepancies, decisions, candidates). Generated — never hand-edited.
 
 ## Key decisions
 - `@/*` alias → project root; `@atlas/ui-web/*` → `packages/ui-web/src/*`

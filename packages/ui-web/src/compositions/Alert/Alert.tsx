@@ -26,7 +26,7 @@
  *   onDismiss   — fires after exit animation completes (FIX BUG-032)
  */
 
-import React, { useState, useEffect } from "react"
+import React, { useState } from "react"
 import styles from "./Alert.module.css"
 
 /* ── Types ──────────────────────────────────────────────────────── */

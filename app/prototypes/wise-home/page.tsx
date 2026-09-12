@@ -5,6 +5,7 @@
  * ──────────────────────────────────────────────────────────────
  * Faithful recreation of the Wise mobile banking home screen.
  * Built with Atlas design tokens (spacing, radius, typography, shadow).
+ * token-lint-disable-next-line
  * Brand green (#9fe870) is a Wise-specific override, not an Atlas token.
  *
  * Route: /prototypes/wise-home
@@ -636,6 +637,7 @@ export default function WiseHome() {
               <div
                 style={{
                   borderRadius: "var(--atlas-radius-xl)",
+                  /* token-lint-disable-next-line — Wise brand card colour */
                   background: "oklch(0.18 0.04 25)",  /* dark maroon-brown */
                   minHeight: 160,
                   position: "relative",
@@ -683,6 +685,7 @@ export default function WiseHome() {
                     width: 28,
                     height: 28,
                     borderRadius: "var(--atlas-radius-full)",
+                    /* token-lint-disable-next-line — translucent overlay on brand card */
                     background: "rgba(255,255,255,0.15)",
                     border: "none",
                     display: "flex",
@@ -708,6 +711,7 @@ export default function WiseHome() {
                   <span
                     style={{
                       fontSize: "var(--atlas-font-size-sm)",
+                      /* token-lint-disable-next-line — muted text on brand card */
                       color: "rgba(255,255,255,0.65)",
                     }}
                   >

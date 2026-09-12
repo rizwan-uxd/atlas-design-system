@@ -6,6 +6,7 @@ import { TabbyStepProps, TABBY_GREEN } from "../schema"
 
 const SLIDES = [
   {
+    /* token-lint-disable-next-line — Tabby brand artwork, deliberately not Atlas */
     bg: "linear-gradient(140deg, #F2D26E 0%, #5CCFC2 100%)",
     title: "Split your purchases in 4 payments.",
     sub: "Always interest-free. No fees.",
@@ -76,6 +77,7 @@ export function Marketing({ next }: TabbyStepProps) {
             style={{
               fontSize: 72,
               alignSelf: "center",
+              /* token-lint-disable-next-line — shadow on decorative emoji artwork */
               filter: "drop-shadow(0 4px 16px rgba(0,0,0,0.08))",
             }}
           >
@@ -130,6 +132,7 @@ export function Marketing({ next }: TabbyStepProps) {
                 background:
                   i === slide
                     ? "var(--atlas-color-neutral-950)"
+                    /* token-lint-disable-next-line — inactive dot over brand artwork */
                     : "rgba(0,0,0,0.25)",
                 borderRadius: "var(--atlas-radius-full)",
                 cursor: "pointer",

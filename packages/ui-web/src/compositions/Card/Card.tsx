@@ -124,7 +124,7 @@ export function Card({
       ) : (
         <article
           id={uid}
-          aria-disabled={disabled || undefined}
+          data-disabled={disabled || undefined}
           className={classes}
         >
           {children}
