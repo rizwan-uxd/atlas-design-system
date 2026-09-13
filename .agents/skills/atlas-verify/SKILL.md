@@ -22,6 +22,8 @@ what it finds, and re-runs until it passes — then reports the actual output.
    Add `--base <ref>` when the work spans commits (default `HEAD` = uncommitted changes).
    Add `--allow-new-component` / `--allow-new-token` **only** when the user asked for that addition.
    While iterating, `--skip tests,tsc` is fine; the final run skips nothing.
+   Component tasks add `--stamp` and `atlas/state/status.json` to the scope on the final run: a full pass
+   records `verifiedAt` for the changed components.
 
 3. **Read the result** — one line per check, `PASS | WARN | FAIL | SKIP`, mismatches indented under it,
    exit 1 on any FAIL. What each check means and how to fix it: `references/checks.md`.

@@ -45,6 +45,7 @@ Skipping ahead to code is the mistake this skill exists to prevent.
 7. **Verify** — the `atlas-verify` skill with scope
    `packages/ui-web/src/<tier>/<Name>/**,packages/figma-sync/code-connect/<Name>.figma.tsx,packages/governance/contracts/<Name>.contract.ts,packages/ui-web/tests/<Name>.test.tsx,atlas/**`
    plus any named call sites. `design.snapshot-current` must pass — that proves step 6 ran.
+   The final, unskipped run adds `--stamp`, which records `verifiedAt` in `status.json`.
 8. **Report** — the Figma change (or "none, code-only" and why), files changed, discrepancies
    closed/opened, state rows updated, Figma MCP escalations, and the verify summary line.
 

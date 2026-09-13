@@ -39,7 +39,7 @@ Raw controls are only checked under `app/` — library components in `packages/u
 
 ## Flags
 `--base <ref>` (default `HEAD`) · `--scope <globs>` · `--skip <id,...>` (e.g. `tests,tsc`, or `code.a11y`) ·
-`--allow-new-component` · `--allow-new-token` · `--json`. Exit 0 = no FAIL; exit 1 = at least one FAIL.
+`--allow-new-component` · `--allow-new-token` · `--json` · `--stamp` (on a run with no FAIL and no SKIP, writes the current ISO time to `verifiedAt` in `atlas/state/status.json` for each component whose `packages/ui-web/src` folder changed; otherwise prints why it did not). Exit 0 = no FAIL; exit 1 = at least one FAIL.
 
 ## Known limits
 - Heuristic, not a parser: JSX tags are scanned textually, so props passed by spread (`{...props}`)

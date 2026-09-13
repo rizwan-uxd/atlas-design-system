@@ -55,7 +55,7 @@ The generator restamps these headers and keeps their bodies; edit only the rows 
 
 | File | When | Edit |
 |---|---|---|
-| `status.json` | parity or code status changed | `components.<Name>`: `parity` `match \| code-applied \| open`, `code` `scaffolded \| spec-complete`. Leave `figmaMetadata` to match what Figma has (`none \| description-written \| complete`). `verifiedAt` is not set by hand. |
+| `status.json` | parity or code status changed | `components.<Name>`: `parity` `match \| code-applied \| open`, `code` `scaffolded \| spec-complete`. Leave `figmaMetadata` to match what Figma has (`none \| description-written \| complete`). `verifiedAt` is written only by `atlas-verify --stamp`, never by hand. |
 | `discrepancies.json` | a **hand-written** entry (no `detectedBy`) is resolved | `status: "closed"`, `side: "closed"`, `resolution` rewritten as what was done + date, like DISC-003. Entries with `detectedBy` (`sync:figma`, `sync:code-connect`) close themselves on re-sync — never edit those. |
 | `candidates.json` | the task promoted a candidate into a component | remove its entry. |
 | `decisions.json` | the user made a new design decision in this task | append `{ id: "DEC-NNN", topic, decision, date }`. Never record your own guess as a decision. |

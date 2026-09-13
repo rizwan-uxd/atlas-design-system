@@ -15,6 +15,7 @@
  *   node scripts/atlas-verify.mjs --scope "app/prototypes/foo/**,app/prototypes/_shared/flowRegistry.ts"
  *   node scripts/atlas-verify.mjs --base main --allow-new-component --skip tests
  *   node scripts/atlas-verify.mjs --json
+ *   node scripts/atlas-verify.mjs --scope "…" --stamp                  # on a full pass, stamp verifiedAt
  *
  * Exit: 0 when no check fails (warnings allowed), 1 when any check fails.
  */
@@ -35,6 +36,7 @@ const SKIP = new Set(list(opt("--skip")))
 const JSON_OUT = flag("--json")
 const ALLOW_COMPONENT = flag("--allow-new-component")
 const ALLOW_TOKEN = flag("--allow-new-token")
+const STAMP = flag("--stamp")
 
 const read = (rel) => fs.readFileSync(path.join(ROOT, rel), "utf8")
 const exists = (rel) => fs.existsSync(path.join(ROOT, rel))
@@ -107,11 +109,12 @@ const literalProp = (attrs, prop) => {
 
 // ─── design ──────────────────────────────────────────────────────────────────
 
+const libChanged = new Set() // components whose library folder changed — the only ones --stamp marks verified
 const touched = new Set()
 for (const { file, src } of sources) {
   for (const u of atlasUsage(src)) touched.add(u.component)
   const lib = file.match(/^packages\/ui-web\/src\/\w+\/(\w+)\//)
-  if (lib) touched.add(lib[1])
+  if (lib) { touched.add(lib[1]); libChanged.add(lib[1]) }
 }
 
 check("design", "snapshot-current", () => {
@@ -246,8 +249,31 @@ check("scope", "no-new-components", () => {
 // ─── Report ──────────────────────────────────────────────────────────────────
 
 const failed = results.filter((r) => r.status === "fail")
+
+// --stamp: record the pass in atlas/state/status.json (repo state; the sync keeps its body). Only a full
+// run qualifies — no FAIL and nothing skipped — and only for components whose library code changed.
+// The row is edited in place so the generator's compact formatting survives.
+const stamped = []
+const stampNote = []
+if (STAMP) {
+  const skipped = results.filter((r) => r.status === "skip").map((r) => r.id)
+  if (failed.length) stampNote.push("not stamped: a check failed")
+  else if (skipped.length) stampNote.push(`not stamped: skipped ${skipped.join(", ")}`)
+  else if (!libChanged.size) stampNote.push("not stamped: no library component changed")
+  else {
+    const rel = "atlas/state/status.json"
+    const at = new Date().toISOString()
+    let body = read(rel)
+    for (const name of [...libChanged].sort()) {
+      const row = new RegExp(`("${name}": \\{[^}]*"verifiedAt": )(null|"[^"]*")`)
+      if (row.test(body)) { body = body.replace(row, `$1"${at}"`); stamped.push(name) }
+      else stampNote.push(`not stamped: ${name} has no row in ${rel}`)
+    }
+    if (stamped.length) fs.writeFileSync(path.join(ROOT, rel), body)
+  }
+}
 if (JSON_OUT) {
-  console.log(JSON.stringify({ base: BASE, changed, touchedComponents: [...touched].sort(), ok: !failed.length, results }, null, 2))
+  console.log(JSON.stringify({ base: BASE, changed, touchedComponents: [...touched].sort(), ok: !failed.length, stamped, stampNote, results }, null, 2))
 } else {
   const icon = { pass: "PASS", fail: "FAIL", warn: "WARN", skip: "SKIP" }
   console.log(`atlas-verify — ${changed.length} changed file(s) vs ${BASE}${touched.size ? `; components: ${[...touched].sort().join(", ")}` : ""}\n`)
@@ -260,5 +286,7 @@ if (JSON_OUT) {
   }
   const count = (s) => results.filter((r) => r.status === s).length
   console.log(`\n${failed.length ? "FAILED" : "OK"} — ${count("pass")} pass · ${count("warn")} warn · ${count("fail")} fail · ${count("skip")} skip`)
+  if (stamped.length) console.log(`verifiedAt stamped: ${stamped.join(", ")} (atlas/state/status.json)`)
+  for (const n of stampNote) console.log(n)
 }
 process.exit(failed.length ? 1 : 0)
