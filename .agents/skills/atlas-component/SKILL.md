@@ -30,6 +30,8 @@ Skipping ahead to code is the mistake this skill exists to prevent.
    state the exact Figma edit, **get approval**, apply it, and confirm with a metadata read. If the
    snapshot is stale or `syncedAt` is null, escalate to Figma MCP for those fields and say so.
    Code-only changes (a11y, focus ring, a bug) that alter no property skip the edit, not the check.
+   **A new visual state or prop Figma does not draw is never code-only** — even when the user asked for
+   it and even when another component already has it: propose the Figma edit and wait.
 3. **Docs via sync** — `npm run atlas:sync` (or the `atlas-figma-sync` skill after a Figma edit) so
    `atlas/metadata/<Name>.json` and `atlas/<Name>.md` reflect Figma. Never edit them by hand; a doc
    that needs new guidance gets it as the Figma description.

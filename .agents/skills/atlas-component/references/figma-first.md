@@ -11,8 +11,17 @@ File key `cKYhfaHLCoyMHi9nKr63Ig`. The component's node id is in
 | A code-only option that is real (e.g. `inline`) | **Yes** — add it to Figma rather than delete it from code (DEC-002) |
 | A value prop (checked, on/off, dismissible) | **Yes** — its own Figma property, never a Variant value (DEC-003) |
 | Usage guidance for `atlas/<Name>.md` | **Yes** — written as the component set description (see the doc rule below) |
+| A new prop or state that changes how the component looks (`invalid`, `loading`, `selected`, an error colour) and has no matching value in `metadata.figmaProperties` | **Yes** — stop before coding it. Figma draws it first; the visual treatment is a design decision, not yours |
 | A11y, focus ring, keyboard, reduced motion, bug fix, token swap with no visual change | No — code-only; say so in the report |
 | Visual change (size, radius, colour, spacing) | Check the Figma variant first; if Figma already shows it, code-only. If not, **Yes** |
+
+**Precedent is not approval.** Another component already shipping a similar prop or state without a
+Figma property (e.g. Checkbox `invalid`) is itself undocumented drift — never a reason to copy it.
+Name that drift in the report instead.
+
+**When the user asked for it but Figma lacks it** — the request settles *what*, not *how it looks*.
+Implement the non-visual part if any (`aria-invalid`, the prop, tests), then stop and propose the Figma
+edit (next section). Without approval, leave the visual part out and list it as unresolved.
 
 A discrepancy with `side: "figma"` is fixed in Figma; `side: "code"` in code; `side: "both"` needs a
 decision first — stop and name it.
