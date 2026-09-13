@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 // analyze.mjs <run.jsonl> <workspace> <meta.json>  → JSON metrics on stdout
-import fs from "fs"; import path from "path"; import { execSync } from "child_process"
+import fs from "fs"; import path from "path"
+import { sh, atlasImports, coverage, rawElements, numericStyleLiterals, primitiveTokenRefs, tokenLintViolations, tscErrors, registered } from "../scripts/lib/quality-checks.mjs"
 const [log, ws, metaPath] = process.argv.slice(2)
 const meta = JSON.parse(fs.readFileSync(metaPath, "utf8"))
 const lines = fs.readFileSync(log, "utf8").split("\n").filter(Boolean).map(l => { try { return JSON.parse(l) } catch { return null } }).filter(Boolean)
@@ -49,26 +50,25 @@ const readsByCat = {}
 for (const r of reads) readsByCat[cat(r)] = (readsByCat[cat(r)] || 0) + 1
 const offTask = ["planning-docs", "other-platforms", "framework-docs", "other"].reduce((a, k) => a + (readsByCat[k] || 0), 0)
 
-// ---- quality checks on the output ----
-const sh = cmd => { try { return execSync(cmd, { cwd: ws, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"], timeout: 180000 }) } catch (e) { return (e.stdout || "") + (e.stderr || "") } }
+// ---- quality checks on the output (shared with scripts/atlas-verify.mjs) ----
+const run = cmd => sh(cmd, ws).out
 const outDir = path.join(ws, "app/prototypes", meta.slug)
-const files = fs.existsSync(outDir) ? sh(`find app/prototypes/${meta.slug} -name '*.tsx' -o -name '*.ts'`).split("\n").filter(Boolean) : []
+const files = fs.existsSync(outDir) ? run(`find app/prototypes/${meta.slug} -name '*.tsx' -o -name '*.ts'`).split("\n").filter(Boolean) : []
 const src = files.map(f => fs.readFileSync(path.join(ws, f), "utf8")).join("\n")
-const imported = [...new Set([...src.matchAll(/import\s*\{([^}]+)\}\s*from\s*["']@atlas\/ui-web[^"']*["']/g)].flatMap(m => m[1].split(",").map(s => s.trim().split(" as ")[0])).filter(Boolean))]
+const imported = atlasImports(src)
 const registry = fs.existsSync(path.join(ws, "app/prototypes/_shared/flowRegistry.ts")) ? fs.readFileSync(path.join(ws, "app/prototypes/_shared/flowRegistry.ts"), "utf8") : ""
-const lint = sh("node packages/governance/token-lint.mjs")
-const tsc = sh("npx tsc --noEmit -p tsconfig.json")
+const lint = run("node packages/governance/token-lint.mjs")
+const tsc = run("npx tsc --noEmit -p tsconfig.json")
 const q = {
   outputExists: files.length > 0, files: files.length, loc: src.split("\n").length,
-  registered: registry.includes(`"${meta.slug}"`),
-  tokenLintViolations: lint.split("\n").filter(l => l.includes(`prototypes/${meta.slug}`)).length,
-  tscErrors: tsc.split("\n").filter(l => l.includes(`prototypes/${meta.slug}`) && l.includes("error TS")).length,
+  registered: registered(registry, meta.slug),
+  tokenLintViolations: tokenLintViolations(lint, `prototypes/${meta.slug}`),
+  tscErrors: tscErrors(tsc, `prototypes/${meta.slug}`),
   atlasComponentsImported: imported,
-  // a component counts as covered if its root or any sub-part is imported (Tabs → TabsRoot/TabsList/TabsTrigger)
-  expectedCoverage: `${meta.expectedComponents.filter(c => imported.some(i => i === c || i.startsWith(c))).length}/${meta.expectedComponents.length}`,
-  rawElements: (src.match(/<(button|input|textarea|dialog|select)[\s>]/g) || []).length,
-  numericStyleLiterals: (src.match(/:\s*["']?(?!0["',\s}])\d+(\.\d+)?(px|rem)?["']?\s*(?=[,}\n])/g) || []).length,
-  primitiveTokenRefs: (src.match(/--atlas-(blue|gray|grey|red|green|amber|yellow|neutral|slate)-\d+/g) || []).length,
+  expectedCoverage: coverage(meta.expectedComponents, imported),
+  rawElements: rawElements(src),
+  numericStyleLiterals: numericStyleLiterals(src),
+  primitiveTokenRefs: primitiveTokenRefs(src),
 }
 
 // derived harness metrics

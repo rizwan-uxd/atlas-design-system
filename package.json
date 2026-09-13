@@ -13,6 +13,7 @@
     "token-lint": "node packages/governance/token-lint.mjs",
     "atlas:sync": "node scripts/atlas-sync.mjs",
     "atlas:sync:check": "node scripts/atlas-sync.mjs --check",
+    "atlas:verify": "node scripts/atlas-verify.mjs",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage"
