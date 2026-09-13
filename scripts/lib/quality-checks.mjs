@@ -16,6 +16,8 @@ export const ATLAS_IMPORT = /import\s*\{([^}]+)\}\s*from\s*["'](@atlas\/ui-web[^
 export const RAW_ELEMENT = /<(button|input|textarea|dialog|select)[\s>]/g
 export const NUMERIC_STYLE_LITERAL = /:\s*["']?(?!0["',\s}])\d+(\.\d+)?(px|rem)?["']?\s*(?=[,}\n])/g
 export const PRIMITIVE_TOKEN_REF = /--atlas-(blue|gray|grey|red|green|amber|yellow|neutral|slate)-\d+/g
+// The one scoped colour exception (DEC-008): a prototype's own brand.ts. Mirrored in packages/governance/token-lint.mjs.
+export const BRAND_FILE = /^app\/prototypes\/(?!_)[^/]+\/brand\.ts$/
 
 // Names imported from @atlas/ui-web, deduplicated, aliases resolved to the exported name.
 export const atlasImports = (src) =>

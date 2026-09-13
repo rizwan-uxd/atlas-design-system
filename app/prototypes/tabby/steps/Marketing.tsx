@@ -2,12 +2,12 @@
 
 import React, { useState } from "react"
 import { Button } from "@atlas/ui-web/primitives/Button/Button"
-import { TabbyStepProps, TABBY_GREEN } from "../schema"
+import { TabbyStepProps } from "../schema"
+import { TABBY } from "../brand"
 
 const SLIDES = [
   {
-    /* token-lint-disable-next-line — Tabby brand artwork, deliberately not Atlas */
-    bg: "linear-gradient(140deg, #F2D26E 0%, #5CCFC2 100%)",
+    bg: TABBY.slideGradient,
     title: "Split your purchases in 4 payments.",
     sub: "Always interest-free. No fees.",
     illo: "🧘",
@@ -53,7 +53,7 @@ export function Marketing({ next }: TabbyStepProps) {
             fontSize: 28,
             fontWeight: 800,
             letterSpacing: "-0.04em",
-            color: "var(--atlas-color-neutral-950)",
+            color: TABBY.ink,
           }}
         >
           tabby
@@ -64,7 +64,7 @@ export function Marketing({ next }: TabbyStepProps) {
               width: 4,
               height: 4,
               borderRadius: "var(--atlas-radius-full)",
-              background: "var(--atlas-color-neutral-950)",
+              background: TABBY.ink,
               transform: "translateY(-12px)",
             }}
           />
@@ -77,8 +77,7 @@ export function Marketing({ next }: TabbyStepProps) {
             style={{
               fontSize: 72,
               alignSelf: "center",
-              /* token-lint-disable-next-line — shadow on decorative emoji artwork */
-              filter: "drop-shadow(0 4px 16px rgba(0,0,0,0.08))",
+              filter: TABBY.artworkShadow,
             }}
           >
             {current.illo}
@@ -91,7 +90,7 @@ export function Marketing({ next }: TabbyStepProps) {
               fontWeight: 700,
               lineHeight: 1.15,
               letterSpacing: "-0.01em",
-              color: "var(--atlas-color-neutral-950)",
+              color: TABBY.ink,
             }}
           >
             {current.title}
@@ -101,7 +100,7 @@ export function Marketing({ next }: TabbyStepProps) {
               style={{
                 margin: 0,
                 fontSize: "var(--atlas-font-size-base)",
-                color: "var(--atlas-color-neutral-800)",
+                color: TABBY.inkSoft,
                 lineHeight: 1.4,
               }}
             >
@@ -131,9 +130,8 @@ export function Marketing({ next }: TabbyStepProps) {
                 border: 0,
                 background:
                   i === slide
-                    ? "var(--atlas-color-neutral-950)"
-                    /* token-lint-disable-next-line — inactive dot over brand artwork */
-                    : "rgba(0,0,0,0.25)",
+                    ? TABBY.ink
+                    : TABBY.dotInactive,
                 borderRadius: "var(--atlas-radius-full)",
                 cursor: "pointer",
                 transition: "width 200ms ease",
@@ -158,8 +156,8 @@ export function Marketing({ next }: TabbyStepProps) {
           size="lg"
           style={{
             width: "100%",
-            background: "var(--atlas-color-neutral-950)",
-            color: "var(--atlas-color-neutral-0)",
+            background: TABBY.ink,
+            color: TABBY.onInk,
             borderRadius: "var(--atlas-radius-full)",
             height: 52,
           }}
@@ -182,8 +180,6 @@ export function Marketing({ next }: TabbyStepProps) {
         </Button>
       </div>
 
-      {/* Hidden helper to use the Tabby brand color somewhere visible — keeps import warning-free */}
-      <span style={{ display: "none" }} aria-hidden data-brand={TABBY_GREEN} />
     </div>
   )
 }

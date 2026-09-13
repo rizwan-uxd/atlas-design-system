@@ -5,19 +5,14 @@
  * ──────────────────────────────────────────────────────────────
  * Faithful recreation of the Wise mobile banking home screen.
  * Built with Atlas design tokens (spacing, radius, typography, shadow).
- * token-lint-disable-next-line
- * Brand green (#9fe870) is a Wise-specific override, not an Atlas token.
+ * Brand colours with no Atlas token live in ./brand.ts (DEC-008).
  *
  * Route: /prototypes/wise-home
  */
 
 import React, { useState } from "react"
 import Link from "next/link"
-
-/* ── Wise brand token (local override — NOT an Atlas semantic token) ── */
-const WISE_GREEN = "#9fe870"
-const WISE_GREEN_DARK = "#7acc4e"
-const WISE_BG = "#ffffff"
+import { WISE } from "./brand"
 
 /* ── Helpers ───────────────────────────────────────────────────── */
 function cx(...cls: (string | false | undefined | null)[]): string {
@@ -67,7 +62,7 @@ const IconX = () => (
 )
 
 const IconHome = ({ active }: { active?: boolean }) => (
-  <svg width="22" height="22" viewBox="0 0 24 24" fill={active ? WISE_GREEN : "none"} stroke={active ? WISE_GREEN_DARK : "currentColor"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg width="22" height="22" viewBox="0 0 24 24" fill={active ? WISE.green : "none"} stroke={active ? WISE.greenDark : "currentColor"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
     <polyline points="9 22 9 12 15 12 15 22" />
   </svg>
@@ -101,17 +96,17 @@ const IconPayments = () => (
 /* ── Singapore Flag SVG ───────────────────────────────────────── */
 const SingaporeFlag = () => (
   <svg width="36" height="36" viewBox="0 0 36 36" style={{ borderRadius: "50%", display: "block" }}>
-    <circle cx="18" cy="18" r="18" fill="#fff" />
-    <path d="M0 18a18 18 0 0 1 36 0z" fill="#EF3340" />
+    <circle cx="18" cy="18" r="18" fill={WISE.flagWhite} />
+    <path d="M0 18a18 18 0 0 1 36 0z" fill={WISE.flagRed} />
     {/* Crescent */}
-    <circle cx="13" cy="14" r="5" fill="#fff" />
-    <circle cx="15" cy="14" r="5" fill="#EF3340" />
+    <circle cx="13" cy="14" r="5" fill={WISE.flagWhite} />
+    <circle cx="15" cy="14" r="5" fill={WISE.flagRed} />
     {/* 5 stars */}
     {[0, 1, 2, 3, 4].map((i) => {
       const angle = (i * 72 - 90) * (Math.PI / 180)
       const x = 19 + 3.8 * Math.cos(angle)
       const y = 14 + 3.8 * Math.sin(angle)
-      return <polygon key={i} points={star(x, y, 1.2, 0.5, 5)} fill="#fff" />
+      return <polygon key={i} points={star(x, y, 1.2, 0.5, 5)} fill={WISE.flagWhite} />
     })}
   </svg>
 )
@@ -189,7 +184,7 @@ export default function WiseHome() {
           width: "100%",
           maxWidth: 390,
           minHeight: 844,
-          background: WISE_BG,
+          background: WISE.pageBg,
           borderRadius: "var(--atlas-radius-2xl)",
           boxShadow: "var(--atlas-shadow-xl)",
           overflow: "hidden",
@@ -255,7 +250,7 @@ export default function WiseHome() {
                   right: 1,
                   width: 10,
                   height: 10,
-                  background: "#e53935",
+                  background: "var(--atlas-danger)",
                   borderRadius: "var(--atlas-radius-full)",
                   border: "2px solid white",
                 }}
@@ -267,13 +262,13 @@ export default function WiseHome() {
               {/* Earn pill */}
               <button
                 style={{
-                  background: WISE_GREEN,
+                  background: WISE.green,
                   border: "none",
                   borderRadius: "var(--atlas-radius-full)",
                   padding: "var(--atlas-spacing-1_5) var(--atlas-spacing-4)",
                   fontSize: "var(--atlas-font-size-sm)",
                   fontWeight: "var(--atlas-font-weight-semibold)" as React.CSSProperties["fontWeight"],
-                  color: "#1a3300",
+                  color: WISE.onGreen,
                   cursor: "pointer",
                   transition: `background var(--atlas-duration-fast) var(--atlas-easing-standard)`,
                 }}
@@ -354,13 +349,13 @@ export default function WiseHome() {
             {/* Send — filled green */}
             <button
               style={{
-                background: WISE_GREEN,
+                background: WISE.green,
                 border: "none",
                 borderRadius: "var(--atlas-radius-full)",
                 padding: "var(--atlas-spacing-2) var(--atlas-spacing-5)",
                 fontSize: "var(--atlas-font-size-base)",
                 fontWeight: "var(--atlas-font-weight-semibold)" as React.CSSProperties["fontWeight"],
-                color: "#1a3300",
+                color: WISE.onGreen,
                 cursor: "pointer",
                 minHeight: "var(--atlas-touch-min)",
                 transition: `background var(--atlas-duration-fast) var(--atlas-easing-standard)`,
@@ -536,7 +531,7 @@ export default function WiseHome() {
                 style={{
                   background: "none",
                   border: "none",
-                  color: WISE_GREEN_DARK,
+                  color: WISE.greenDark,
                   fontSize: "var(--atlas-font-size-base)",
                   fontWeight: "var(--atlas-font-weight-medium)" as React.CSSProperties["fontWeight"],
                   cursor: "pointer",
@@ -601,7 +596,7 @@ export default function WiseHome() {
                   style={{
                     fontWeight: "var(--atlas-font-weight-semibold)" as React.CSSProperties["fontWeight"],
                     fontSize: "var(--atlas-font-size-base)",
-                    color: WISE_GREEN_DARK,
+                    color: WISE.greenDark,
                     marginBottom: 2,
                   }}
                 >
@@ -637,8 +632,7 @@ export default function WiseHome() {
               <div
                 style={{
                   borderRadius: "var(--atlas-radius-xl)",
-                  /* token-lint-disable-next-line — Wise brand card colour */
-                  background: "oklch(0.18 0.04 25)",  /* dark maroon-brown */
+                  background: WISE.promoCard,
                   minHeight: 160,
                   position: "relative",
                   overflow: "hidden",
@@ -667,11 +661,11 @@ export default function WiseHome() {
                         rx={32}
                         ry={20}
                         transform={`rotate(${angle}, ${100 + 45 * Math.cos((angle * Math.PI) / 180)}, ${100 + 45 * Math.sin((angle * Math.PI) / 180)})`}
-                        fill={i % 2 === 0 ? "#e07060" : "#d45040"}
+                        fill={i % 2 === 0 ? WISE.coralLight : WISE.coral}
                         opacity={0.85}
                       />
                     ))}
-                    <circle cx="100" cy="100" r="22" fill="#c04030" />
+                    <circle cx="100" cy="100" r="22" fill={WISE.coralCentre} />
                   </svg>
                 </div>
 
@@ -685,8 +679,7 @@ export default function WiseHome() {
                     width: 28,
                     height: 28,
                     borderRadius: "var(--atlas-radius-full)",
-                    /* token-lint-disable-next-line — translucent overlay on brand card */
-                    background: "rgba(255,255,255,0.15)",
+                    background: WISE.onPromoOverlay,
                     border: "none",
                     display: "flex",
                     alignItems: "center",
@@ -711,8 +704,7 @@ export default function WiseHome() {
                   <span
                     style={{
                       fontSize: "var(--atlas-font-size-sm)",
-                      /* token-lint-disable-next-line — muted text on brand card */
-                      color: "rgba(255,255,255,0.65)",
+                      color: WISE.onPromoMuted,
                     }}
                   >
                     Earn more on your balance
@@ -730,7 +722,7 @@ export default function WiseHome() {
             bottom: 0,
             left: 0,
             right: 0,
-            background: WISE_BG,
+            background: WISE.pageBg,
             borderTop: "1px solid var(--atlas-border)",
             display: "flex",
             justifyContent: "space-around",
@@ -757,7 +749,7 @@ export default function WiseHome() {
                 padding: "var(--atlas-spacing-1) var(--atlas-spacing-3)",
                 minWidth: 56,
                 minHeight: "var(--atlas-touch-min)",
-                color: active ? WISE_GREEN_DARK : "var(--atlas-foreground-muted)",
+                color: active ? WISE.greenDark : "var(--atlas-foreground-muted)",
               }}
               aria-label={label}
               aria-current={active ? "page" : undefined}
@@ -804,8 +796,8 @@ export default function WiseHome() {
           display: "inline-flex",
           alignItems: "center",
           gap: "var(--atlas-spacing-1)",
-          background: WISE_GREEN,
-          color: "#1a3300",
+          background: WISE.green,
+          color: WISE.onGreen,
           borderRadius: "var(--atlas-radius-sm)",
           padding: "2px 6px",
           fontWeight: "var(--atlas-font-weight-bold)" as React.CSSProperties["fontWeight"],

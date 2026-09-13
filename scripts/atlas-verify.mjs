@@ -21,7 +21,7 @@
 import fs from "fs"
 import path from "path"
 import { fileURLToPath } from "url"
-import { sh, ATLAS_IMPORT, RAW_ELEMENT, NUMERIC_STYLE_LITERAL, PRIMITIVE_TOKEN_REF } from "./lib/quality-checks.mjs"
+import { sh, ATLAS_IMPORT, RAW_ELEMENT, NUMERIC_STYLE_LITERAL, PRIMITIVE_TOKEN_REF, BRAND_FILE } from "./lib/quality-checks.mjs"
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..")
 const args = process.argv.slice(2)
@@ -145,10 +145,12 @@ check("design", "variants-sizes", () => {
 check("design", "tokens", () => {
   const fails = []
   for (const { file, src } of sources) {
+    const brand = BRAND_FILE.test(file) // DEC-008: brand colours may reference the palette here
     for (const m of src.matchAll(/--atlas-[\w-]+/g)) {
       const name = m[0], line = lineOf(src, m.index)
       if (/^\s*:/.test(src.slice(m.index + name.length, m.index + name.length + 8))) continue // a definition, not a use
-      if (/^--atlas-color-/.test(name) || new RegExp(`^${PRIMITIVE_TOKEN_REF.source}$`).test(name))
+      if (brand) { if (!tokens.has(name)) fails.push(`${file}:${line} ${name} is not defined in ${TOKEN_CSS}`) }
+      else if (/^--atlas-color-/.test(name) || new RegExp(`^${PRIMITIVE_TOKEN_REF.source}$`).test(name))
         fails.push(`${file}:${line} ${name} is a primitive — use a semantic token`)
       else if (!tokens.has(name)) fails.push(`${file}:${line} ${name} is not defined in ${TOKEN_CSS}`)
     }

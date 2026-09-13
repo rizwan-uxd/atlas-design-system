@@ -8,6 +8,7 @@ Everything a new flow needs from `app/prototypes/_shared/`. Read this instead of
 app/prototypes/<slug>/
 ├── page.tsx          "use client" · useFlowState + FlowShell + one step per key
 ├── schema.ts         <Flow>Data type, <FLOW>_INITIAL, <FLOW>_STEPS, <Flow>StepProps
+├── brand.ts          only for a cloned brand: named colours with no semantic token (DEC-008)
 └── steps/<Step>.tsx  one screen each, receives <Flow>StepProps
 ```
 A single-screen prototype may skip `schema.ts`/`steps/` and render inside `FlowShell` directly

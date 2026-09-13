@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from "react"
 import { Button } from "@atlas/ui-web/primitives/Button/Button"
 import { Alert } from "@atlas/ui-web/compositions/Alert/Alert"
 import { TabbyStepProps } from "../schema"
+import { TABBY } from "../brand"
 import { mockVerifyOtp } from "../../_shared/mockApi"
 import { ScreenHeader } from "./_chrome"
 
@@ -214,9 +215,9 @@ export function OTP({ data, patch, next, back }: TabbyStepProps) {
         style={{
           width: "100%",
           background: full
-            ? "var(--atlas-color-neutral-950)"
+            ? TABBY.ink
             : "var(--atlas-background-muted)",
-          color: full ? "var(--atlas-color-neutral-0)" : "var(--atlas-foreground-disabled)",
+          color: full ? TABBY.onInk : "var(--atlas-foreground-disabled)",
           borderRadius: "var(--atlas-radius-full)",
           height: 52,
         }}

@@ -3,7 +3,8 @@
 import React from "react"
 import { FlowShell } from "../_shared/FlowShell"
 import { useFlowState } from "../_shared/useFlowState"
-import { TABBY_INITIAL, TABBY_STEPS, TABBY_GREEN, TabbyData, TabbyStepProps } from "./schema"
+import { TABBY_INITIAL, TABBY_STEPS, TabbyData, TabbyStepProps } from "./schema"
+import { TABBY } from "./brand"
 import { Splash } from "./steps/Splash"
 import { Country } from "./steps/Country"
 import { Marketing } from "./steps/Marketing"
@@ -32,7 +33,7 @@ export default function TabbyFlowPage() {
 
   // Step-specific phone-frame tinting
   const isSplash = stepKey === "splash"
-  const phoneBackground = isSplash ? TABBY_GREEN : "var(--atlas-background)"
+  const phoneBackground = isSplash ? TABBY.green : "var(--atlas-background)"
   const statusBarTint = "dark" as const
 
   return (

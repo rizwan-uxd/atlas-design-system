@@ -16,6 +16,9 @@
  *   - Files in packages/tokens/ are always skipped.
  *   - Test files (*.test.*) and governance scripts are skipped.
  *   - Storybook / example files are skipped.
+ *   - app/prototypes/<slug>/brand.ts is the one scoped colour exception (DEC-008): a cloned
+ *     prototype keeps its brand colours there and nowhere else. Brand files are listed in the
+ *     report so the exception stays visible. _shared/ never qualifies.
  *
  * Usage:
  *   node packages/governance/token-lint.mjs
@@ -56,6 +59,9 @@ const SKIP_FILE_PATTERNS = [
 ]
 
 const SCAN_EXTENSIONS = new Set([".ts", ".tsx", ".css"])
+
+// Mirrors BRAND_FILE in scripts/lib/quality-checks.mjs
+const BRAND_FILE = /^app\/prototypes\/(?!_)[^/]+\/brand\.ts$/
 
 // ─── Rules ───────────────────────────────────────────────────────────────────
 
@@ -114,10 +120,15 @@ function* walkFiles(dir) {
 // ─── Lint ────────────────────────────────────────────────────────────────────
 
 const violations = []
+const brandFiles = []
 
 for (const dir of SCAN_DIRS) {
   for (const filePath of walkFiles(dir)) {
     const rel = path.relative(ROOT, filePath)
+    if (BRAND_FILE.test(rel.split(path.sep).join("/"))) {
+      brandFiles.push(rel)
+      continue
+    }
     const lines = fs.readFileSync(filePath, "utf8").split("\n")
 
     let suppressNext = false
@@ -146,6 +157,8 @@ for (const dir of SCAN_DIRS) {
 }
 
 // ─── Report ──────────────────────────────────────────────────────────────────
+
+if (brandFiles.length) console.log(`Brand colour exceptions (DEC-008): ${brandFiles.join(", ")}`)
 
 if (violations.length === 0) {
   console.log("✅ Token lint: 0 violations")

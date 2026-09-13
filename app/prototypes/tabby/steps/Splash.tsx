@@ -2,6 +2,7 @@
 
 import React, { useEffect } from "react"
 import { TabbyStepProps } from "../schema"
+import { TABBY } from "../brand"
 
 /**
  * Splash — Tabby green wordmark. Auto-advances after 1.6s,
@@ -40,7 +41,7 @@ function Wordmark() {
         fontSize: 64,
         fontWeight: 800,
         letterSpacing: "-0.04em",
-        color: "var(--atlas-color-neutral-950)",
+        color: TABBY.ink,
         display: "flex",
         alignItems: "center",
       }}
@@ -53,7 +54,7 @@ function Wordmark() {
           width: 8,
           height: 8,
           borderRadius: "var(--atlas-radius-full)",
-          background: "var(--atlas-color-neutral-950)",
+          background: TABBY.ink,
         }}
       />
     </div>

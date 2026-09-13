@@ -51,9 +51,6 @@ export const TABBY_STEPS = [
 
 export type TabbyStepKey = (typeof TABBY_STEPS)[number]
 
-/** Iconic Tabby mint-green — used only on the splash; not an Atlas token. */
-export const TABBY_GREEN = "#3BFFC1"
-
 /** Props every Tabby step receives */
 export type TabbyStepProps = {
   data: TabbyData

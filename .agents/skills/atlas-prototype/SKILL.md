@@ -53,9 +53,9 @@ question, open `packages/ui-web/src/<tier>/<Name>/<Name>.tsx` for that one prop 
 ## Rules
 - A needed variant or size that is not in the index is a Figma decision: use the closest listed value,
   and name the missing value in the report. Don't invent one, don't cast around the type.
-- Brand colours of a cloned app that have no semantic token: use the closest semantic token
-  (`primary`, `success`…) and name the brand colour in the report. No hex/rgb literals, even in a
-  constant — the older `TABBY_GREEN` is not a pattern to copy.
+- Brand colours of a cloned app that have no semantic token go in `app/prototypes/<slug>/brand.ts`
+  as one named `const` (DEC-008) — the only file where literals are allowed. Status, text and
+  surfaces still use semantic tokens. No colour literals elsewhere, no `token-lint-disable` comments.
 - Don't refactor `_shared/` or other prototypes. A shared-helper need is reported, not built.
 
 ## References

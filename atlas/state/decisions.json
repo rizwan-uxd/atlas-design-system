@@ -47,6 +47,12 @@
       "decision": "lg label uses --atlas-font-size-lg, continuing sm→text-sm, md→text-body. Not specified in Figma; confirm during the Checkbox metadata pass.",
       "date": "2026-09-12",
       "status": "provisional"
+    },
+    {
+      "id": "DEC-008",
+      "topic": "prototype brand colours",
+      "decision": "A cloned prototype keeps colours that have no semantic token in app/prototypes/<slug>/brand.ts and nowhere else; token-lint and atlas-verify exempt only that file and list it. Shared prototype chrome (_shared/, e.g. PhoneFrame) uses semantic tokens only. No inline token-lint suppressions in app/.",
+      "date": "2026-09-13"
     }
   ]
 }

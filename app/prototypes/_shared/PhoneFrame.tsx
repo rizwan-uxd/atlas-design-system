@@ -26,11 +26,11 @@ export function PhoneFrame({
   hideStatusBar?: boolean
 }) {
   const tintColor =
-    statusBarTint === "light" ? "var(--atlas-color-neutral-0)" : "var(--atlas-color-neutral-950)"
+    statusBarTint === "light" ? "var(--atlas-foreground-on-brand)" : "var(--atlas-foreground)"
   const homeColor =
     homeIndicatorTint === "light"
-      ? "var(--atlas-color-neutral-0)"
-      : "var(--atlas-color-neutral-950)"
+      ? "var(--atlas-foreground-on-brand)"
+      : "var(--atlas-foreground)"
 
   return (
     <div
@@ -40,8 +40,7 @@ export function PhoneFrame({
         borderRadius: 48,
         background: background ?? "var(--atlas-background)",
         boxShadow:
-          /* token-lint-disable-next-line — device bezel drop shadow, not an Atlas surface */
-          "0 0 0 12px var(--atlas-color-neutral-900), 0 0 0 13px var(--atlas-color-neutral-700), 0 30px 60px -20px rgba(0,0,0,0.45)",
+          "0 0 0 12px var(--atlas-overlay), 0 0 0 13px var(--atlas-foreground-subtle), var(--atlas-shadow-xl)",
         position: "relative",
         overflow: "hidden",
         display: "flex",
@@ -59,7 +58,7 @@ export function PhoneFrame({
           transform: "translateX(-50%)",
           width: 130,
           height: 28,
-          background: "var(--atlas-color-neutral-900)",
+          background: "var(--atlas-overlay)",
           borderBottomLeftRadius: 18,
           borderBottomRightRadius: 18,
           zIndex: 2,

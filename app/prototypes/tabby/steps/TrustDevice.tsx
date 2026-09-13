@@ -3,6 +3,7 @@
 import React from "react"
 import { Button } from "@atlas/ui-web/primitives/Button/Button"
 import { TabbyStepProps } from "../schema"
+import { TABBY } from "../brand"
 import { IllustrationDisc, ScreenHeader } from "./_chrome"
 
 export function TrustDevice({ patch, next, back }: TabbyStepProps) {
@@ -31,7 +32,7 @@ export function TrustDevice({ patch, next, back }: TabbyStepProps) {
           paddingBlockStart: "var(--atlas-spacing-4)",
         }}
       >
-        <IllustrationDisc emoji="🛡️" tint="var(--atlas-color-info-100)" fg="var(--atlas-color-info-700)" />
+        <IllustrationDisc emoji="🛡️" tint="var(--atlas-info-muted)" fg="var(--atlas-info)" />
         <h1
           style={{
             margin: 0,
@@ -68,8 +69,8 @@ export function TrustDevice({ patch, next, back }: TabbyStepProps) {
           onClick={accept}
           style={{
             width: "100%",
-            background: "var(--atlas-color-neutral-950)",
-            color: "var(--atlas-color-neutral-0)",
+            background: TABBY.ink,
+            color: TABBY.onInk,
             borderRadius: "var(--atlas-radius-full)",
             height: 52,
           }}

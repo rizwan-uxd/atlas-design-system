@@ -5,6 +5,7 @@ import { Button } from "@atlas/ui-web/primitives/Button/Button"
 import { Input } from "@atlas/ui-web/primitives/Input/Input"
 import { Label } from "@atlas/ui-web/primitives/Label/Label"
 import { TabbyStepProps } from "../schema"
+import { TABBY } from "../brand"
 import { mockSubmit } from "../../_shared/mockApi"
 import { ScreenHeader } from "./_chrome"
 
@@ -121,10 +122,10 @@ export function Phone({ data, patch, next, back, goTo }: TabbyStepProps) {
         style={{
           width: "100%",
           background: canContinue
-            ? "var(--atlas-color-neutral-950)"
+            ? TABBY.ink
             : "var(--atlas-background-muted)",
           color: canContinue
-            ? "var(--atlas-color-neutral-0)"
+            ? TABBY.onInk
             : "var(--atlas-foreground-disabled)",
           borderRadius: "var(--atlas-radius-full)",
           height: 52,

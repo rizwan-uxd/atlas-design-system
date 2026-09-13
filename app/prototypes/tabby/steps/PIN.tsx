@@ -3,6 +3,7 @@
 import React from "react"
 import { Button } from "@atlas/ui-web/primitives/Button/Button"
 import { TabbyStepProps } from "../schema"
+import { TABBY } from "../brand"
 import { IllustrationDisc, ScreenHeader } from "./_chrome"
 
 export function PIN({ next, back }: TabbyStepProps) {
@@ -57,8 +58,8 @@ export function PIN({ next, back }: TabbyStepProps) {
           onClick={next}
           style={{
             width: "100%",
-            background: "var(--atlas-color-neutral-950)",
-            color: "var(--atlas-color-neutral-0)",
+            background: TABBY.ink,
+            color: TABBY.onInk,
             borderRadius: "var(--atlas-radius-full)",
             height: 52,
           }}

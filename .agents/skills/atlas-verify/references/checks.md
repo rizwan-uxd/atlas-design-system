@@ -11,7 +11,7 @@ tsc and tests run repo-wide. Pattern logic shared with the benchmark lives in
 |---|---|---|---|
 | `snapshot-current` | `atlas-sync --check` would write files (code enums moved, snapshot not regenerated); a touched component has no `atlas/metadata/<Name>.json` | a touched component's metadata has `syncedAt: null` or `source` other than `figma-synced` | `npm run atlas:sync`; for stale Figma facts run the `atlas-figma-sync` skill |
 | `variants-sizes` | a literal `variant=` / `size=` on an Atlas root component (`<Name>` or `<NameRoot>`, aliases resolved) is not in `metadata.variants` / `metadata.sizes` | — | use a listed value |
-| `tokens` | a `--atlas-*` reference is a primitive (`--atlas-color-*`, `--atlas-blue-500`) or is not defined in `packages/tokens/atlas.tokens.css` | — | use a semantic token from `atlas/tokens.md` |
+| `tokens` | a `--atlas-*` reference is a primitive (`--atlas-color-*`, `--atlas-blue-500`) or is not defined in `packages/tokens/atlas.tokens.css`. Exception: `app/prototypes/<slug>/brand.ts` may reference primitives (DEC-008) | — | use a semantic token from `atlas/tokens.md` |
 
 "Touched component" = imported from `@atlas/ui-web/...` by a changed file, or whose library folder changed.
 Only string literals are checked; `variant={isOn ? "a" : "b"}` is left to tsc.
@@ -20,7 +20,7 @@ Only string literals are checked; `variant={isOn ? "a" : "b"}` is left to tsc.
 
 | Check | Fails when | Warns when |
 |---|---|---|
-| `token-lint` | `packages/governance/token-lint.mjs` exits 1 (hex, rgb, hsl, raw oklch) | — |
+| `token-lint` | `packages/governance/token-lint.mjs` exits 1 (hex, rgb, hsl, raw oklch); skips only `app/prototypes/<slug>/brand.ts` and lists it | — |
 | `tsc` | `npx tsc --noEmit -p tsconfig.json` has errors (changed files listed first) | — |
 | `tests` | `npx vitest run` fails | — |
 | `atlas-components` | a changed `app/` file renders a raw `<button> <input> <textarea> <dialog> <select>` | numeric style literals (`padding: 24`) in changed `app/` files |
