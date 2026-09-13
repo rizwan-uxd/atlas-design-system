@@ -1,0 +1,167 @@
+{
+  "model": "claude-sonnet-5",
+  "ok": true,
+  "turns": 34,
+  "durationS": 162,
+  "costUsd": 0.6393819000000001,
+  "tokens": {
+    "input": 44,
+    "cacheWrite": 69457,
+    "cacheRead": 1586192,
+    "output": 14728,
+    "totalContext": 1655693
+  },
+  "tools": {
+    "Skill": 2,
+    "Read": 15,
+    "Glob": 1,
+    "Grep": 1,
+    "Bash": 3,
+    "Write": 6,
+    "Edit": 3
+  },
+  "toolCalls": 31,
+  "figmaCalls": 0,
+  "verifyRuns": 2,
+  "reworkEdits": 1,
+  "toolResultChars": {
+    "Skill": 61,
+    "Read": 34668,
+    "Glob": 14,
+    "Grep": 59,
+    "Bash": 994,
+    "Write": 1308,
+    "Edit": 671
+  },
+  "skillsUsed": [
+    "atlas-prototype",
+    "atlas-verify"
+  ],
+  "reads": {
+    "total": 15,
+    "unique": 15,
+    "offTask": 0,
+    "byCategory": {
+      "atlas-snapshot": 10,
+      "skills": 2,
+      "prototype-shell": 1,
+      "components": 1,
+      "new-output": 1
+    },
+    "files": [
+      "atlas/index.md",
+      "atlas/Button.md",
+      "atlas/Input.md",
+      "atlas/Label.md",
+      "atlas/Badge.md",
+      "atlas/Alert.md",
+      "atlas/Card.md",
+      "atlas/Dialog.md",
+      "atlas/tokens.md",
+      ".claude/skills/atlas-prototype/references/flow-scaffold.md",
+      ".claude/skills/atlas-prototype/references/gaps.md",
+      "atlas/state/candidates.json",
+      "app/prototypes/_shared/flowRegistry.ts",
+      "packages/ui-web/src/compositions/Card/Card.tsx",
+      "app/prototypes/send-money/steps/_parts.tsx"
+    ]
+  },
+  "bashCmds": [
+    "ls /private/var/folders/mj/4bm9y0256pbc4jdsdqsm5zs00000gn/T/atlas-bench/harness-T1-2/app/prototypes/_shared/",
+    "node scripts/atlas-verify.mjs --scope \"app/prototypes/send-money/**,app/prototypes/_shared/flowRegistry.ts,atlas/state/candidates.json\"",
+    "node scripts/atlas-verify.mjs --scope \"app/prototypes/send-money/**,app/prototypes/_shared/flowRegistry.ts,atlas/state/candidates.json\""
+  ],
+  "quality": {
+    "outputExists": true,
+    "files": 6,
+    "loc": 460,
+    "registered": true,
+    "tokenLintViolations": 0,
+    "tscErrors": 0,
+    "atlasComponentsImported": [
+      "Input",
+      "Label",
+      "Card",
+      "CardContent",
+      "Badge",
+      "Alert",
+      "Button",
+      "Dialog",
+      "DialogTrigger",
+      "DialogContent",
+      "DialogHeader",
+      "DialogTitle",
+      "DialogDescription",
+      "DialogBody",
+      "DialogFooter",
+      "DialogClose"
+    ],
+    "expectedCoverage": "7/7",
+    "rawElements": 0,
+    "numericStyleLiterals": 2,
+    "primitiveTokenRefs": 0
+  },
+  "phase8": {
+    "readsAll": {
+      "total": 16,
+      "unique": 15,
+      "viaBash": 0,
+      "files": [
+        "atlas/index.md",
+        "atlas/Button.md",
+        "atlas/Input.md",
+        "atlas/Label.md",
+        "atlas/Badge.md",
+        "atlas/Alert.md",
+        "atlas/Card.md",
+        "atlas/Dialog.md",
+        "atlas/tokens.md",
+        ".claude/skills/atlas-prototype/references/flow-scaffold.md",
+        ".claude/skills/atlas-prototype/references/gaps.md",
+        "atlas/state/candidates.json",
+        "app/prototypes/_shared/flowRegistry.ts",
+        "Grep:packages/ui-web/src/compositions/Card/Card.tsx",
+        "packages/ui-web/src/compositions/Card/Card.tsx",
+        "app/prototypes/send-money/steps/_parts.tsx"
+      ]
+    },
+    "sourceOpened": {
+      "component-source": [
+        "packages/ui-web/src/compositions/Card/Card.tsx"
+      ]
+    },
+    "sourceOpenedCount": 1,
+    "verify": {
+      "runs": 2,
+      "failures": 1,
+      "firstPass": false,
+      "finalPass": true,
+      "calls": [
+        {
+          "cmd": "node scripts/atlas-verify.mjs --scope \"app/prototypes/send-money/**,app/prototypes/_shared/flowRegistry.ts,atlas/state/c",
+          "failed": true
+        },
+        {
+          "cmd": "node scripts/atlas-verify.mjs --scope \"app/prototypes/send-money/**,app/prototypes/_shared/flowRegistry.ts,atlas/state/c",
+          "failed": false
+        }
+      ]
+    },
+    "wasted": {
+      "duplicateReads": 1,
+      "unusedComponentReads": [],
+      "offTask": [],
+      "verifierInternals": [],
+      "failedToolCalls": 0,
+      "total": 1
+    },
+    "gaps": {
+      "available": true,
+      "candidatesChanged": [
+        "CAND-002 ListRow"
+      ],
+      "expected": [],
+      "recognised": []
+    }
+  }
+}
