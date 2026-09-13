@@ -1,0 +1,89 @@
+{
+  "model": "claude-sonnet-5",
+  "cli": "2.1.270",
+  "common": {
+    "cli": "2.1.270",
+    "tooling": {
+      "benchmarks/run.sh": "560d309c6b9080dd44f45499ec4683bcb1912a0b",
+      "benchmarks/analyze.mjs": "73ea836a8df069fc914e658833084355d43db2a3",
+      "benchmarks/summarize.mjs": "d759eb2fd9caf96e5112dce59df624c644b51271",
+      "benchmarks/rubric-component.md": "cdb0cdf94b47b47e780f38738d4c0c68c3f791f7",
+      "benchmarks/phase-9/validate-fixtures.mjs": "7fb483bb47469909ea87d8b15a4e69f4c2dcd70b",
+      "benchmarks/phase-9/component-metrics.mjs": "e54ae523464c7653866fdfcb210631451705175d",
+      "benchmarks/phase-9/budget.mjs": "fb1f31103519c4d80cfddc9ff46d77d8a6f7a4bc",
+      "benchmarks/phase-9/pins.mjs": "cdb2685270093b08db9df62b5b95823980315b0d",
+      "benchmarks/phase-9/no-skill.patch": "ccfc67bf092ec93312f8a337528db6865f47e8e5",
+      "benchmarks/phase-9/live-figma.json": "309f8d33fed95e1bd7e8f9522ac1e46a9b0f108b",
+      "benchmarks/tasks/T3/prompt.md": "2b5082e20e1ae9b5623f58beb817f2357cf6c546",
+      "benchmarks/tasks/T3/meta.json": "fc1a94364dace338f9d6deb33defa6175a718196",
+      "benchmarks/tasks/T4/prompt.md": "60bd5bc0d379061aba363754e601f58ac7f78f8e",
+      "benchmarks/tasks/T4/meta.json": "6d144c18bc6f8b8c7970d1af245ad5c493c07225",
+      "scripts/lib/quality-checks.mjs": "9d416b38948bb6edd4b920a212b60b64d9691830"
+    },
+    "user": {
+      "claudeMd": "c51a033a0d710013",
+      "skills": "brandkit design-taste-frontend design-taste-frontend-v1 emil-design-eng frontend-design full-output-enforcement gpt-taste graft high-end-visual-design image-to-code imagegen-frontend-mobile imagegen-frontend-web industrial-brutalist-ui minimalist-ui redesign-existing-projects review-animations shadcn-ui stitch-design-taste ui-ux-pro-max web-design-guidelines",
+      "plugins": "figma@claude-plugins-official mattpocock-skills@claude-plugins-official superpowers@superpowers-dev vercel@claude-plugins-official",
+      "projectSettingsLocal": "4b1d7b73f45d3592"
+    }
+  },
+  "labels": {
+    "harness-v2": {
+      "tree": "ab5a4ad74023c0c49b7a2e60823ee8177ac74a90",
+      "figmaVersion": "lib:Atlas Design System v1@2026-07-06T03:42:12Z",
+      "paths": {
+        ".agents/skills/atlas-component": "7948a1402949e37443b72c2195d6ba3499132fe5",
+        ".agents/skills/atlas-verify": "edd3edb24044d9706a0cb095cca12706a281aeaa",
+        ".agents/skills/atlas-prototype": "df36c94ed6b3f35bced41f2f35f49808cb71c148",
+        ".agents/skills/atlas-figma-sync": "5e11d2727b7ec002e7f80a6e3ea2ac536bc12f7b",
+        "AGENTS.md": "39ad4a4268af8cfd5bb1e1746f2f47df1e5bfdbd",
+        "claude.md": "ea94cba64ff893ccd424c8153cb4057618c01e3f",
+        "scripts/atlas-verify.mjs": "1b7995166d577d61125e0cb892c40bbe24ba18c1",
+        "scripts/atlas-sync.mjs": "9c965b238952a96cd0d59da4be06ddf9781c1899",
+        "scripts/lib": "f3cd246f48c5d764147e9a95831105d50a7b8444",
+        "packages/governance/token-lint.mjs": "70c6187a31b1a624879bcb6b9bd97584fe66a228",
+        "atlas/metadata/Switch.json": "1db42188244d4258969da4d5412ac1daf2a4b8a3",
+        "atlas/metadata/Badge.json": "20afa4c2c81280fcff5f267b7db3e0cf61381c8f",
+        "atlas/Switch.md": "b5e26fd8a14331d9f9150ccbb431917df4212a12",
+        "atlas/Badge.md": "4e224438d1162f46f6539795d8456db906769e30",
+        "atlas/state": "aad3d87a14fd1bdd3bc387ee3556d950ba5b677a",
+        "packages/ui-web/src/primitives/Switch": "4ec030d2640fe5502a823d13c94a0a2dadde77d5",
+        "packages/ui-web/src/primitives/Badge": "d5dab0023756efbd9ae2dd23d7a977e1fb8d9695",
+        "packages/ui-web/tests": "ca7f7a6747932c1cc78029b042a90c70fff20e19",
+        "packages/figma-sync/code-connect/Switch.figma.tsx": "3e30b6750053f4c8132d450ad6aadd92b5e08e07",
+        "packages/figma-sync/code-connect/Badge.figma.tsx": "6f364a3d016f449d7d7b7520cb8af69a0fe0fd19",
+        "packages/governance/contracts/Switch.contract.ts": "832fc5773aa97177bf2d3c380e622dd139de93e7",
+        "packages/governance/contracts/Badge.contract.ts": "b2f06033d6e9789be5449b649c123d7cfe8adde5"
+      }
+    },
+    "no-skill": {
+      "tree": "27cb8d73a72da80865fe314216a23b7e4a17e1f1",
+      "figmaVersion": "lib:Atlas Design System v1@2026-07-06T03:42:12Z",
+      "paths": {
+        ".agents/skills/atlas-component": "absent",
+        ".agents/skills/atlas-verify": "edd3edb24044d9706a0cb095cca12706a281aeaa",
+        ".agents/skills/atlas-prototype": "7e80ffd9e97f74b0210c7a74654962c859d3ab73",
+        ".agents/skills/atlas-figma-sync": "a6ad0085d839cde1b26cdf3811e2af730a98a806",
+        "AGENTS.md": "cd6e1a1b72b944b37afc608d46ec6c3f50332171",
+        "claude.md": "f74dd2a45346f736597fef7befacdfb0aa45803a",
+        "scripts/atlas-verify.mjs": "1b7995166d577d61125e0cb892c40bbe24ba18c1",
+        "scripts/atlas-sync.mjs": "9c965b238952a96cd0d59da4be06ddf9781c1899",
+        "scripts/lib": "f3cd246f48c5d764147e9a95831105d50a7b8444",
+        "packages/governance/token-lint.mjs": "70c6187a31b1a624879bcb6b9bd97584fe66a228",
+        "atlas/metadata/Switch.json": "1db42188244d4258969da4d5412ac1daf2a4b8a3",
+        "atlas/metadata/Badge.json": "20afa4c2c81280fcff5f267b7db3e0cf61381c8f",
+        "atlas/Switch.md": "b5e26fd8a14331d9f9150ccbb431917df4212a12",
+        "atlas/Badge.md": "4e224438d1162f46f6539795d8456db906769e30",
+        "atlas/state": "aad3d87a14fd1bdd3bc387ee3556d950ba5b677a",
+        "packages/ui-web/src/primitives/Switch": "4ec030d2640fe5502a823d13c94a0a2dadde77d5",
+        "packages/ui-web/src/primitives/Badge": "d5dab0023756efbd9ae2dd23d7a977e1fb8d9695",
+        "packages/ui-web/tests": "ca7f7a6747932c1cc78029b042a90c70fff20e19",
+        "packages/figma-sync/code-connect/Switch.figma.tsx": "3e30b6750053f4c8132d450ad6aadd92b5e08e07",
+        "packages/figma-sync/code-connect/Badge.figma.tsx": "6f364a3d016f449d7d7b7520cb8af69a0fe0fd19",
+        "packages/governance/contracts/Switch.contract.ts": "832fc5773aa97177bf2d3c380e622dd139de93e7",
+        "packages/governance/contracts/Badge.contract.ts": "b2f06033d6e9789be5449b649c123d7cfe8adde5"
+      }
+    }
+  },
+  "runtime": null
+}
