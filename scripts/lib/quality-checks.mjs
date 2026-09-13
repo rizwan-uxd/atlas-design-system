@@ -28,7 +28,19 @@ export const coverage = (expected, imported) =>
   `${expected.filter((c) => imported.some((i) => i === c || i.startsWith(c))).length}/${expected.length}`
 
 export const rawElements = (src) => (src.match(RAW_ELEMENT) || []).length
+// Benchmark metric only — kept as-is so results stay comparable with the phase 0 baseline.
 export const numericStyleLiterals = (src) => (src.match(NUMERIC_STYLE_LITERAL) || []).length
+
+// atlas-verify's check: a hardcoded length on a property that has spacing/size/radius/type tokens.
+// Unitless properties (flex, opacity, zIndex, fontWeight, lineHeight, order) and data fields are not
+// length properties, so `flex: 1` and `tipPercent: 15` never match. %, fr, vh/vw and calc() multipliers pass.
+const LENGTH_PROP = /(?<![\w-])((?:padding|margin|inset|gap|rowGap|columnGap|row-gap|column-gap|width|height|min-?[wW]idth|max-?[wW]idth|min-?[hH]eight|max-?[hH]eight|top|right|bottom|left|fontSize|font-size|letterSpacing|letter-spacing|borderRadius|border-radius|borderWidth|border-width|outlineOffset|outline-offset)(?:[A-Z]\w*|-[\w-]+)?)\s*:\s*(["'`]?)([^;,}\n"'`]*)\2/g
+const LENGTH_VALUE = /^-?[1-9]\d*(\.\d+)?$|^-?0?\.\d*[1-9]\d*$|(?<![\w.-])-?(?:\d*\.)?\d*[1-9]\d*(?:px|rem|em)\b/
+
+export const lengthLiterals = (src) =>
+  [...src.matchAll(LENGTH_PROP)]
+    .filter((m) => LENGTH_VALUE.test(m[3].trim()))
+    .map((m) => ({ index: m.index, prop: m[1], value: m[3].trim() }))
 export const primitiveTokenRefs = (src) => (src.match(PRIMITIVE_TOKEN_REF) || []).length
 
 // Lines of token-lint / tsc output that mention a path fragment.

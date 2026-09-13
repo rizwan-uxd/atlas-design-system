@@ -23,7 +23,7 @@ Only string literals are checked; `variant={isOn ? "a" : "b"}` is left to tsc.
 | `token-lint` | `packages/governance/token-lint.mjs` exits 1 (hex, rgb, hsl, raw oklch); skips only `app/prototypes/<slug>/brand.ts` and lists it | — |
 | `tsc` | `npx tsc --noEmit -p tsconfig.json` has errors (changed files listed first) | — |
 | `tests` | `npx vitest run` fails | — |
-| `atlas-components` | a changed `app/` file renders a raw `<button> <input> <textarea> <dialog> <select>` | numeric style literals (`padding: 24`) in changed `app/` files |
+| `atlas-components` | a changed `app/` file renders a raw `<button> <input> <textarea> <dialog> <select>` | a hardcoded px/rem/em or bare number on a length property (padding, margin, inset, gap, width/height, top/left…, font-size, letter-spacing, border-radius/width, outline-offset) in changed `app/` files — one line each. Not flagged: unitless properties (`flex: 1`, `opacity`, `zIndex`, `fontWeight`, `lineHeight`), data fields (`tipPercent: 15`), `0`, `%`/`fr`/`vh`, `calc()` multipliers |
 | `a11y` | `<img>` without `alt` · `onClick` on `div/span/li/p` without `role` **and** `tabIndex` · positive `tabIndex` · `role="radiogroup|tablist|listbox|menu|menubar|grid|tree"` in a file with no `onKeyDown` · `outline: none` / `outline-none` with no focus style on the same line | — |
 | `prototype-registered` | a changed `app/prototypes/<slug>/` with a `page.tsx` has no `"<slug>"` in `_shared/flowRegistry.ts` | — |
 

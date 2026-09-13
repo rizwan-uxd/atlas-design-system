@@ -43,7 +43,8 @@ what it finds, and re-runs until it passes — then reports the actual output.
 6. **Handle WARNs** — they don't block, but each goes in the report:
    - stale snapshot for a touched component → per `AGENTS.md` §1 you may escalate to Figma MCP for the
      fields you relied on; say that you did.
-   - numeric style literals → replace with tokens where one fits; leave layout one-offs.
+   - hardcoded length (`file:line prop: value`) → swap in the token from `atlas/tokens.md`; if none
+     fits, name it in the report. Each line is a real hit — no need to open the verifier.
    - no `--scope` → re-run with one. A WARN here means scope was never checked.
 
 7. **Report** — paste the final summary line (`OK — N pass · N warn · 0 fail · N skip`), list each

@@ -22,7 +22,7 @@
 import fs from "fs"
 import path from "path"
 import { fileURLToPath } from "url"
-import { sh, ATLAS_IMPORT, RAW_ELEMENT, NUMERIC_STYLE_LITERAL, PRIMITIVE_TOKEN_REF, BRAND_FILE } from "./lib/quality-checks.mjs"
+import { sh, ATLAS_IMPORT, RAW_ELEMENT, lengthLiterals, PRIMITIVE_TOKEN_REF, BRAND_FILE } from "./lib/quality-checks.mjs"
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..")
 const args = process.argv.slice(2)
@@ -187,8 +187,8 @@ check("code", "atlas-components", () => {
   const fails = [], warns = []
   for (const { file, src } of appSources) {
     for (const m of src.matchAll(RAW_ELEMENT)) fails.push(`${file}:${lineOf(src, m.index)} raw <${m[1]}> — use the Atlas component`)
-    const literals = [...src.matchAll(NUMERIC_STYLE_LITERAL)].map((m) => lineOf(src, m.index))
-    if (literals.length) warns.push(`${file}: ${literals.length} numeric style literal(s), lines ${[...new Set(literals)].slice(0, 8).join(", ")} — prefer spacing/size tokens`)
+    for (const l of lengthLiterals(src))
+      warns.push(`${file}:${lineOf(src, l.index)} ${l.prop}: ${l.value} — hardcoded length; use a spacing/size/radius/type token from atlas/tokens.md`)
   }
   return verdict(fails, warns)
 })
