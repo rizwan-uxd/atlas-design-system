@@ -201,6 +201,10 @@ check("code", "a11y", () => {
       if (/\bonClick=/.test(tag.attrs) && !(/\brole=/.test(tag.attrs) && /\btabIndex=/.test(tag.attrs)))
         fails.push(`${file}:${tag.line} <${el} onClick> without role + tabIndex — use Button, or make it keyboard-reachable`)
     }
+    // composite widgets promise arrow-key navigation; a file that declares one and handles no keys breaks it
+    for (const m of src.matchAll(/role=\{?\s*["'](radiogroup|tablist|listbox|menu|menubar|grid|tree)["']/g))
+      if (!/\bonKeyDown=/.test(src))
+        fails.push(`${file}:${lineOf(src, m.index)} role="${m[1]}" with no onKeyDown in the file — add arrow-key navigation, or use Buttons with aria-pressed`)
     for (const m of src.matchAll(/tabIndex=\{?\s*["']?([1-9]\d*)/g)) fails.push(`${file}:${lineOf(src, m.index)} positive tabIndex=${m[1]} breaks focus order`)
     src.split("\n").forEach((l, i) => {
       if (/\boutline:\s*["']?none|\boutline-none\b/.test(l) && !/focus/.test(l))

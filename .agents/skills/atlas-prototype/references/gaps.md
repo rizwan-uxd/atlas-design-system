@@ -10,9 +10,19 @@ ones already seen.
 - Assemble from Atlas components first (`Card` as a surface, `Badge` as a pill, `Button
   variant="ghost"` as a pressable row), then plain `div`/`span` with semantic tokens only.
 - Keep it accessible: a pressable `div` gets `role="button"`, `tabIndex={0}` and an Enter/Space
-  handler; a single choice from a list is a group of `Checkbox variant="card"` driven as one value
-  or `Button`s with `aria-pressed` — never a raw `<select>` or `<input type="radio">`.
+  handler. A single choice from a few options is either
+  - `Button`s with `aria-pressed` (each is a tab stop; no arrow keys needed) — the simple default, or
+  - `role="radiogroup"` + `role="radio"` with `aria-checked`, roving `tabIndex` (0 on the checked one,
+    -1 on the rest) and an `onKeyDown` that moves with ArrowLeft/Right/Up/Down — all of it, or don't
+    use the roles (atlas-verify fails a radiogroup/tablist/listbox with no key handling).
+  Never a raw `<select>` or `<input type="radio">`.
 - Use the composition already written in `candidates.json` `composedFrom` when one exists.
+
+## It is a gap even when it is built from Atlas components
+Composing from `Button`/`Card` does not make it "no gap". It is a gap — and gets a candidate entry — when
+the thing you built does the job of a component the index footer lists as missing (Avatar, Table,
+Tooltip, Select, Radio, Toast) or of a pattern with no index row (segmented control, list row, stepper,
+chip group). A tip/amount/plan picker is a Radio or segmented-control gap.
 
 ## Log it — `atlas/state/candidates.json`
 This is the one `atlas/` file a prototype writes: the sync keeps its entries and only restamps the
