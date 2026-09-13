@@ -50,3 +50,6 @@ next-env.d.ts
 
 # ── Atlas sync scratch (Figma MCP pull) ───────────────────────────
 .atlas-pull/
+
+# graft's local graph cache — regenerable, not committed (run `graft build`).
+/graft/
