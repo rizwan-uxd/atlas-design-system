@@ -9,9 +9,9 @@
       "benchmarks/summarize.mjs": "d759eb2fd9caf96e5112dce59df624c644b51271",
       "benchmarks/rubric-component.md": "cdb0cdf94b47b47e780f38738d4c0c68c3f791f7",
       "benchmarks/phase-9/validate-fixtures.mjs": "7fb483bb47469909ea87d8b15a4e69f4c2dcd70b",
-      "benchmarks/phase-9/component-metrics.mjs": "e54ae523464c7653866fdfcb210631451705175d",
+      "benchmarks/phase-9/component-metrics.mjs": "c8138a919aa8b1b30ef44971dde91176500c0366",
       "benchmarks/phase-9/budget.mjs": "fb1f31103519c4d80cfddc9ff46d77d8a6f7a4bc",
-      "benchmarks/phase-9/pins.mjs": "cdb2685270093b08db9df62b5b95823980315b0d",
+      "benchmarks/phase-9/pins.mjs": "37a892463805c01127bd3f59a729ba83391c9d84",
       "benchmarks/phase-9/no-skill.patch": "ccfc67bf092ec93312f8a337528db6865f47e8e5",
       "benchmarks/phase-9/live-figma.json": "309f8d33fed95e1bd7e8f9522ac1e46a9b0f108b",
       "benchmarks/tasks/T3/prompt.md": "2b5082e20e1ae9b5623f58beb817f2357cf6c546",
@@ -85,5 +85,9 @@
       }
     }
   },
-  "runtime": null
+  "runtime": {
+    "component": {
+      "mcpServers": "claude.ai Firecrawl | claude.ai Gmail | claude.ai Google Calendar | claude.ai Google Drive | figma | figma-desktop | graft | plugin:vercel:vercel"
+    }
+  }
 }
