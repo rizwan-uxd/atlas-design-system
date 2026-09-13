@@ -38,3 +38,28 @@ Wrap every transition in `@media (prefers-reduced-motion: reduce)` and switch it
 `border-width-0` 0px · `border-width-1` 1px · `border-width-2` 2px
 `opacity-disabled` 0.5 · `opacity-hover` 0.9 · `opacity-overlay` 0.6
 `touch-min` 44px · `touch-comfortable` 48px · `touch-spacious` 56px
+
+<!-- BEGIN:generated-layout-tokens -->
+
+## Typography families and letter spacing
+`font-sans` "Nunito Sans", ui-sans-serif, system-ui, sans-serif
+`font-arabic` "Noto Sans Arabic", ui-sans-serif, system-ui, sans-serif
+`font-mono` "JetBrains Mono", ui-monospace, monospace
+`letter-spacing-tight` -0.01em · `letter-spacing-normal` 0em · `letter-spacing-wide` 0.02em
+
+## Layout grid
+`breakpoint-sm` 640px · `breakpoint-md` 768px · `breakpoint-lg` 1024px · `breakpoint-xl` 1280px · `breakpoint-2xl` 1536px
+`container-sm` 640px · `container-md` 768px · `container-lg` 1024px · `container-xl` 1280px · `container-2xl` 1536px
+`columns-mobile` 4 · `columns-tablet` 8 · `columns-desktop` 12 · `columns` var(--atlas-columns-mobile)
+`gutter-mobile` var(--atlas-spacing-4) · `gutter-tablet` var(--atlas-spacing-6) · `gutter-desktop` var(--atlas-spacing-8) · `gutter` var(--atlas-gutter-mobile)
+`margin-mobile` var(--atlas-spacing-4) · `margin-tablet` var(--atlas-spacing-6) · `margin-desktop` var(--atlas-spacing-8) · `margin` var(--atlas-margin-mobile)
+
+## Dialog widths
+`dialog-sm` 400px · `dialog-md` 560px · `dialog-lg` 720px · `dialog-xl` 960px
+
+## Safe area
+`safe-top` env(safe-area-inset-top) · `safe-bottom` env(safe-area-inset-bottom) · `safe-inline-start` env(safe-area-inset-left) · `safe-inline-end` env(safe-area-inset-right)
+
+## Z-index
+`z-base` 0 · `z-dropdown` 1000 · `z-sticky` 1100 · `z-overlay` 1200 · `z-modal` 1300 · `z-popover` 1400 · `z-toast` 1500 · `z-tooltip` 1600
+<!-- END:generated-layout-tokens -->

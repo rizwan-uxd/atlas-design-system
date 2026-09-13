@@ -28,10 +28,20 @@ const ORDER = [
   "Button", "Input", "Label", "Textarea", "Checkbox", "Switch", "Badge",
   "Alert", "Card", "Dialog", "Tabs", "NavBar",
 ]
+/** Layout/platform groups; also rendered into a generated section of atlas/tokens.md. */
+const LAYOUT_GROUPS = {
+  "Typography families and letter spacing": ["font-sans", "font-arabic", "font-mono", "letter-spacing-"],
+  "Layout grid": ["breakpoint-", "container-", "columns", "gutter", "margin"],
+  "Dialog widths": ["dialog-"],
+  "Safe area": ["safe-"],
+  "Z-index": ["z-"],
+}
+
 /** Scale groups kept in tokens.json, in this order; file order within a group. */
 const SCALE_PREFIXES = [
   "spacing-", "radius-", "font-size-", "text-", "font-weight-", "line-height-",
   "duration-", "easing-", "shadow-", "border-width-", "opacity-", "touch-",
+  ...Object.values(LAYOUT_GROUPS).flat(),
 ]
 
 /* ── args ───────────────────────────────────────────────── */
@@ -411,9 +421,31 @@ write("atlas/tokens.json", compactJson({
   scales: tok.scales,
 }))
 
+// tokens.md keeps its curated body; the layout/platform groups are rendered between markers
+const LAYOUT_BEGIN = "<!-- BEGIN:generated-layout-tokens -->"
+const LAYOUT_END = "<!-- END:generated-layout-tokens -->"
+const layoutSection = [
+  LAYOUT_BEGIN,
+  ...Object.entries(LAYOUT_GROUPS).flatMap(([title, prefixes]) => [
+    "", `## ${title}`,
+    prefixes.map((p) => Object.entries(tok.scales)
+      .filter(([k]) => k.startsWith(`--atlas-${p}`))
+      .map(([k, v]) => `\`${k.slice(8)}\` ${v}`).join(" · ")).filter(Boolean).join("\n"),
+  ]),
+  LAYOUT_END,
+].join("\n")
+
 for (const rel of ["atlas/tokens.md", "atlas/README.md"]) {
   const abs = path.join(ROOT, rel)
-  if (fs.existsSync(abs)) write(rel, read(abs).replace(/^<!-- GENERATED[^>]*-->/, `<!-- ${HEADER} -->`))
+  if (!fs.existsSync(abs)) continue
+  let body = read(abs).replace(/^<!-- GENERATED[^>]*-->/, `<!-- ${HEADER} -->`)
+  if (rel === "atlas/tokens.md") {
+    const at = body.indexOf(LAYOUT_BEGIN)
+    body = at === -1
+      ? `${body.trimEnd()}\n\n${layoutSection}\n`
+      : `${body.slice(0, at)}${layoutSection}${body.slice(body.indexOf(LAYOUT_END) + LAYOUT_END.length)}`
+  }
+  write(rel, body)
 }
 
 /* ── state/discrepancies.json ───────────────────────────── */
