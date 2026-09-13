@@ -23,6 +23,9 @@ for i in $(seq 1 "$REPS"); do
     --exclude '*.fig' --exclude .DS_Store --exclude tsconfig.tsbuildinfo \
     --exclude docs/ATLAS-AI-UPGRADE-PLAN.md "$ROOT/" "$WS/"
   ln -s "$ROOT/node_modules" "$WS/node_modules"
+  # atlas-verify diffs against git HEAD, so the copy is committed as-is (phase 8; phase 0 copies had no .git)
+  ( cd "$WS" && git init -q && printf '/node_modules\n/.next\n' >> .git/info/exclude && git add -A \
+      && git -c user.name=bench -c user.email=bench@local commit -qm "bench base" )
   echo "▶ $LABEL $TASK run $i/$REPS  ($WS)"
   ( cd "$WS" && claude -p "$(cat "$TDIR/prompt.md")" --model "$MODEL" \
       --output-format stream-json --verbose --permission-mode acceptEdits \

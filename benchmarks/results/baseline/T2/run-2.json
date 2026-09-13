@@ -93,5 +93,84 @@
     "rawElements": 1,
     "numericStyleLiterals": 5,
     "primitiveTokenRefs": 0
+  },
+  "phase8": {
+    "readsAll": {
+      "total": 14,
+      "unique": 13,
+      "viaBash": 4,
+      "files": [
+        "Bash:package.json",
+        "app/prototypes/wise-home/page.tsx",
+        "app/prototypes/page.tsx",
+        "app/prototypes/_shared/flowRegistry.ts",
+        "packages/governance/token-lint.mjs",
+        "Bash:package.json",
+        "Bash:tsconfig.base.json",
+        "packages/ui-web/src/primitives/Switch/Switch.tsx",
+        "packages/ui-web/src/compositions/Dialog/Dialog.tsx",
+        "packages/ui-web/src/compositions/Card/Card.tsx",
+        "packages/ui-web/src/primitives/Button/Button.tsx",
+        "packages/ui-web/src/patterns/Tabs/Tabs.tsx",
+        "Bash:packages/tokens/atlas.tokens.css",
+        "app/prototypes/_shared/PhoneFrame.tsx"
+      ]
+    },
+    "sourceOpened": {
+      "other-prototypes": [
+        "app/prototypes/wise-home/page.tsx"
+      ],
+      "verifier-internals": [
+        "packages/governance/token-lint.mjs"
+      ],
+      "component-source": [
+        "packages/ui-web/src/primitives/Switch/Switch.tsx",
+        "packages/ui-web/src/compositions/Dialog/Dialog.tsx",
+        "packages/ui-web/src/compositions/Card/Card.tsx",
+        "packages/ui-web/src/primitives/Button/Button.tsx",
+        "packages/ui-web/src/patterns/Tabs/Tabs.tsx"
+      ],
+      "token-source": [
+        "packages/tokens/atlas.tokens.css"
+      ],
+      "shared-internals": [
+        "app/prototypes/_shared/PhoneFrame.tsx"
+      ]
+    },
+    "sourceOpenedCount": 9,
+    "verify": {
+      "runs": 2,
+      "failures": 1,
+      "firstPass": false,
+      "finalPass": true,
+      "calls": [
+        {
+          "cmd": "npm run token-lint 2>&1 | tail -40",
+          "failed": true
+        },
+        {
+          "cmd": "npx tsc --noEmit -p tsconfig.json 2>&1 | grep -i \"settings\" ",
+          "failed": false
+        }
+      ]
+    },
+    "wasted": {
+      "duplicateReads": 1,
+      "unusedComponentReads": [],
+      "offTask": [],
+      "verifierInternals": [
+        "packages/governance/token-lint.mjs"
+      ],
+      "failedToolCalls": 4,
+      "total": 6
+    },
+    "gaps": {
+      "available": false,
+      "candidatesChanged": [],
+      "expected": [
+        "Avatar"
+      ],
+      "recognised": []
+    }
   }
 }

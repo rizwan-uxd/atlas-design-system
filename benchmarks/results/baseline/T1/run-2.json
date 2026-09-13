@@ -100,5 +100,103 @@
     "rawElements": 1,
     "numericStyleLiterals": 32,
     "primitiveTokenRefs": 0
+  },
+  "phase8": {
+    "readsAll": {
+      "total": 19,
+      "unique": 19,
+      "viaBash": 6,
+      "files": [
+        "Bash:packages/governance/token-lint.mjs",
+        "app/prototypes/_shared/flowRegistry.ts",
+        "app/prototypes/_shared/FlowShell.tsx",
+        "app/prototypes/_shared/PhoneFrame.tsx",
+        "app/prototypes/_shared/StepProgress.tsx",
+        "app/prototypes/_shared/useFlowState.ts",
+        "app/prototypes/_shared/mockApi.ts",
+        "app/prototypes/page.tsx",
+        "app/prototypes/tabby/page.tsx",
+        "app/prototypes/tabby/schema.ts",
+        "app/prototypes/tabby/steps/Phone.tsx",
+        "app/prototypes/tabby/steps/Success.tsx",
+        "app/prototypes/tabby/steps/_chrome.tsx",
+        "packages/ui-web/src/compositions/Dialog/Dialog.tsx",
+        "Bash:packages/ui-web/src/primitives/Input/Input.tsx",
+        "Bash:packages/ui-web/src/compositions/Card/Card.tsx",
+        "Bash:packages/ui-web/src/primitives/Badge/Badge.tsx",
+        "Bash:packages/ui-web/src/compositions/Alert/Alert.tsx",
+        "Bash:packages/tokens/atlas.tokens.css"
+      ]
+    },
+    "sourceOpened": {
+      "verifier-internals": [
+        "packages/governance/token-lint.mjs"
+      ],
+      "shared-internals": [
+        "app/prototypes/_shared/FlowShell.tsx",
+        "app/prototypes/_shared/PhoneFrame.tsx",
+        "app/prototypes/_shared/StepProgress.tsx",
+        "app/prototypes/_shared/useFlowState.ts",
+        "app/prototypes/_shared/mockApi.ts"
+      ],
+      "other-prototypes": [
+        "app/prototypes/tabby/page.tsx",
+        "app/prototypes/tabby/schema.ts",
+        "app/prototypes/tabby/steps/Phone.tsx",
+        "app/prototypes/tabby/steps/Success.tsx",
+        "app/prototypes/tabby/steps/_chrome.tsx"
+      ],
+      "component-source": [
+        "packages/ui-web/src/compositions/Dialog/Dialog.tsx",
+        "packages/ui-web/src/primitives/Input/Input.tsx",
+        "packages/ui-web/src/compositions/Card/Card.tsx",
+        "packages/ui-web/src/primitives/Badge/Badge.tsx",
+        "packages/ui-web/src/compositions/Alert/Alert.tsx"
+      ],
+      "token-source": [
+        "packages/tokens/atlas.tokens.css"
+      ]
+    },
+    "sourceOpenedCount": 17,
+    "verify": {
+      "runs": 4,
+      "failures": 2,
+      "firstPass": false,
+      "finalPass": true,
+      "calls": [
+        {
+          "cmd": "find app/prototypes -type f | sort && echo \"---LINT---\" && cat packages/governance/token-lint.mjs",
+          "failed": true
+        },
+        {
+          "cmd": "node packages/governance/token-lint.mjs",
+          "failed": true
+        },
+        {
+          "cmd": "npx tsc --noEmit -p tsconfig.json 2>&1 | grep -i \"send-money\" ",
+          "failed": false
+        },
+        {
+          "cmd": "npx tsc --noEmit -p tsconfig.json 2>&1 | head -60",
+          "failed": false
+        }
+      ]
+    },
+    "wasted": {
+      "duplicateReads": 0,
+      "unusedComponentReads": [],
+      "offTask": [],
+      "verifierInternals": [
+        "packages/governance/token-lint.mjs"
+      ],
+      "failedToolCalls": 6,
+      "total": 7
+    },
+    "gaps": {
+      "available": false,
+      "candidatesChanged": [],
+      "expected": [],
+      "recognised": []
+    }
   }
 }
