@@ -8,7 +8,7 @@ const big = x => x >= 1e6 ? (x / 1e6).toFixed(2) + "M" : x >= 1e4 ? (x / 1e3).to
 const mr = (a, f = fmt) => { const s = nums(a); if (!s.length) return "–"; const m = s.reduce((p, c) => p + c, 0) / s.length; const lo = Math.min(...s), hi = Math.max(...s); return lo === hi ? f(m) : `${f(m)} (${f(lo)}–${f(hi)})` }
 const count = (runs, f) => `${runs.filter(f).length}/${runs.length}`
 
-const rows = []
+const rows = [], compRows = []
 for (const label of fs.readdirSync(dir).filter(d => fs.statSync(path.join(dir, d)).isDirectory()))
   for (const task of fs.readdirSync(path.join(dir, label)).filter(d => fs.statSync(path.join(dir, label, d)).isDirectory())) {
     const tdir = path.join(dir, label, task)
@@ -17,6 +17,21 @@ for (const label of fs.readdirSync(dir).filter(d => fs.statSync(path.join(dir, d
     let manual = null; try { manual = JSON.parse(fs.readFileSync(path.join(tdir, "manual.json"), "utf8")) } catch {}
     const p8 = runs.every(r => r.phase8)
     const P = f => p8 ? runs.map(f) : []
+    if (runs.every(r => r.component)) {
+      const C = f => runs.map(r => f(r.component))
+      const sig = k => `${mr(C(c => c.signals[k]))} [${C(c => c.present[k.slice(0, 2)]).filter(Boolean).length}/${runs.length}]`
+      compRows.push({ label, task, cells: [
+        runs.length, count(runs, r => r.ok), count(runs, r => r.component.gatesPass),
+        mr(C(c => c.useFigmaAttempts)), count(runs, r => r.component.gates.stopped ?? r.component.gates.notStopped),
+        count(runs, r => r.component.gates.tests), mr(C(c => c.tscErrors)), count(runs, r => r.component.gates.finalVerify ?? r.component.gates.verifyNotFailing),
+        count(runs, r => r.component.stamped), count(runs, r => r.component.gates.scope),
+        manual ? `${manual.total ?? "–"} (run ${manual.run})` : "–",
+        sig("H1_stateFileReads"), sig("H2_otherTestOpens"), sig("H3_syncRuns"), sig("H4_invalidDiscWrites"), sig("H5_otherComponentOpens"),
+        mr(runs.map(r => r.turns)), mr(runs.map(r => r.costUsd)), mr(runs.map(r => r.tokens.cacheRead), big), mr(P(r => r.phase8.readsAll.total)),
+        mr(C(c => c.figmaReads.length)), count(runs, r => r.component.maxTurnsExit),
+      ] })
+      continue
+    }
     rows.push({ label, task, cells: [
       runs.length,
       count(runs, r => r.ok && r.quality.outputExists),
@@ -37,7 +52,10 @@ for (const label of fs.readdirSync(dir).filter(d => fs.statSync(path.join(dir, d
 const H = ["runs", "completed", "registered", "coverage", "lint", "tsc", "raw els", "manual /20", "final verify ok",
   "turns", "cost $", "cache read", "context tok", "output tok", "tool calls", "time s",
   "files opened", "via Bash", "source/verifier opened", "verify failures", "first-pass verify", "wasted exploration", "gap recognised"]
-const table = rs => `| task | label | ${H.join(" | ")} |\n|${["", "", ...H].map(() => "---").join("|")}|\n` +
+const CH = ["runs", "completed", "all gates", "figma writes", "stop decision ok", "tests", "tsc", "verify ok", "stamped", "in scope", "manual /20",
+  "H1 state-file reads [runs]", "H2 other tests [runs]", "H3 sync runs [runs over limit]", "H4 invalid DISC [runs]", "H5 other components [runs]",
+  "turns", "cost $", "cache read", "files opened", "figma reads", "max-turns exits"]
+const table = (rs, h = H) => `| task | label | ${h.join(" | ")} |\n|${["", "", ...h].map(() => "---").join("|")}|\n` +
   rs.sort((a, b) => a.task.localeCompare(b.task) || a.label.localeCompare(b.label)).map(r => `| ${r.task} | ${r.label} | ${r.cells.join(" | ")} |`).join("\n")
 
 let phase0 = ""; try { phase0 = fs.readFileSync(path.join(dir, "baseline", "PHASE0-SUMMARY.md"), "utf8").trim() } catch {}
@@ -52,5 +70,12 @@ Correctness first — a label only wins if these are equal or better. Lower is b
 - **gap recognised**: the expected gap (meta.gapComponents) was logged in candidates.json; n/a when the workspace had no candidates.json (phase 0).
 
 ${table(rows)}
-`
+${compRows.length ? `
+## Phase 9 — component tasks, mean (min–max) across runs
+
+Gates first (proposal §8.1); a count is runs passing. H columns are the §5B source signals: mean (min–max), then [runs where the
+signal is present] — a hypothesis reproduces at ≥2/3 in harness-v2. Effort columns are reported, not used for acceptance.
+
+${table(compRows, CH)}
+` : ""}`
 fs.writeFileSync(path.join(dir, "SUMMARY.md"), md)

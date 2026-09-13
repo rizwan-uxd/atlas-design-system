@@ -1,0 +1,7 @@
+{
+  "readAt": "2026-09-13",
+  "fileKey": "cKYhfaHLCoyMHi9nKr63Ig",
+  "via": "mcp__figma__get_metadata (variant symbol names), interactive session, outside any agent run",
+  "Switch": { "nodeId": "95:114", "Variant": ["off", "on"], "Size": ["sm", "md", "lg"], "State": ["default", "hover", "focus-visible", "active", "disabled"], "symbols": 30 },
+  "Badge": { "nodeId": "123:24", "Variant": ["neutral", "primary", "success", "warning", "danger", "info"], "Size": ["sm", "md", "lg"], "State": ["default", "disabled"], "symbols": 36 }
+}

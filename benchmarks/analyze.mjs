@@ -2,6 +2,7 @@
 // analyze.mjs <run.jsonl> <workspace> <meta.json> [candidates-before.json]  → JSON metrics on stdout
 import fs from "fs"; import path from "path"
 import { sh, atlasImports, coverage, rawElements, numericStyleLiterals, primitiveTokenRefs, tokenLintViolations, tscErrors, registered } from "../scripts/lib/quality-checks.mjs"
+import { componentMetrics } from "./phase-9/component-metrics.mjs"
 const [log, ws, metaPath] = process.argv.slice(2)
 const meta = JSON.parse(fs.readFileSync(metaPath, "utf8"))
 const lines = fs.readFileSync(log, "utf8").split("\n").filter(Boolean).map(l => { try { return JSON.parse(l) } catch { return null } }).filter(Boolean)
@@ -52,8 +53,8 @@ const offTask = ["planning-docs", "other-platforms", "framework-docs", "other"].
 
 // ---- quality checks on the output (shared with scripts/atlas-verify.mjs) ----
 const run = cmd => sh(cmd, ws).out
-const outDir = path.join(ws, "app/prototypes", meta.slug)
-const files = fs.existsSync(outDir) ? run(`find app/prototypes/${meta.slug} -name '*.tsx' -o -name '*.ts'`).split("\n").filter(Boolean) : []
+const outDir = meta.slug ? path.join(ws, "app/prototypes", meta.slug) : null // component tasks have no prototype output
+const files = outDir && fs.existsSync(outDir) ? run(`find app/prototypes/${meta.slug} -name '*.tsx' -o -name '*.ts'`).split("\n").filter(Boolean) : []
 const src = files.map(f => fs.readFileSync(path.join(ws, f), "utf8")).join("\n")
 const imported = atlasImports(src)
 const registry = fs.existsSync(path.join(ws, "app/prototypes/_shared/flowRegistry.ts")) ? fs.readFileSync(path.join(ws, "app/prototypes/_shared/flowRegistry.ts"), "utf8") : ""
@@ -65,7 +66,7 @@ const q = {
   tokenLintViolations: tokenLintViolations(lint, `prototypes/${meta.slug}`),
   tscErrors: tscErrors(tsc, `prototypes/${meta.slug}`),
   atlasComponentsImported: imported,
-  expectedCoverage: coverage(meta.expectedComponents, imported),
+  expectedCoverage: coverage(meta.expectedComponents || [], imported),
   rawElements: rawElements(src),
   numericStyleLiterals: numericStyleLiterals(src),
   primitiveTokenRefs: primitiveTokenRefs(src),
@@ -167,6 +168,9 @@ const phase8 = {
   gaps: { available: fs.existsSync(path.join(ws, "atlas/state/candidates.json")), candidatesChanged, expected: expectedGaps, recognised: gapsRecognised },
 }
 
+// phase 9: component tasks get correctness gates and H1–H5 source signals (prototype metrics above are unchanged)
+const component = meta.type === "component" ? componentMetrics({ ws, meta, calls, allReads, events, result, sh, tscOut: tsc, verify: phase8.verify }) : undefined
+
 const u = result?.usage || {}
 console.log(JSON.stringify({
   // a usage-limit or API error still arrives as subtype "success" with is_error set
@@ -176,5 +180,5 @@ console.log(JSON.stringify({
     totalContext: (u.input_tokens || 0) + (u.cache_creation_input_tokens || 0) + (u.cache_read_input_tokens || 0) },
   tools, toolCalls, figmaCalls, verifyRuns, reworkEdits, toolResultChars: resultChars, skillsUsed,
   reads: { total: reads.length, unique: new Set(reads).size, offTask, byCategory: readsByCat, files: reads },
-  bashCmds, quality: q, phase8,
+  bashCmds, quality: q, phase8, component, subtype: result?.subtype,
 }, null, 2))
