@@ -35,10 +35,12 @@ question, name the missing fact in the report — it is a generator gap to fix, 
 1. **Parse** — list the screens/steps, and for each the Atlas components it needs. Choose the slug
    (kebab-case) and check that one path exists (Glob `app/prototypes/<slug>/*` — not a sweep of
    `app/prototypes/**`); if it exists, edit in place.
-2. **Map to the library** — every control, surface and message maps to an index row. Anything that
-   does not is a **gap** (Avatar, list row, select, radio, toast, tooltip…). Judge by the **pattern**,
-   not the parts: a pick-one group (tip/amount/plan picker, segmented control) is a Radio gap even
-   when every option is an Atlas Button. Write the gap list down before step 3, "none" included.
+2. **Map to the library** — every control, surface and message maps to an index row. **Before calling
+   anything a gap, read the `atlas/<Name>.md` of the closest index component and check its "When to
+   use"** — e.g. a segmented choice between a few named options (theme, tip %, plan tier) is `Tabs`
+   `variant="pills"`, even with no panels. Only a pattern no index component covers is a **gap**
+   (Avatar, list row, select, radio, toast, tooltip…). Judge by the pattern, not the parts: a gap built
+   from Atlas Buttons is still a gap. Write the gap list down before step 3, "none" included.
 3. **Handle gaps** — **read `references/gaps.md` now (required whenever step 2 found anything that
    is not a plain index row, and whenever you are unsure)**: compose from primitives + semantic tokens inside the
    prototype, and add or bump the entry in `atlas/state/candidates.json`. Never create a component in

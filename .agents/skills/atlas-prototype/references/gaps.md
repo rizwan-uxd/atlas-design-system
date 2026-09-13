@@ -10,7 +10,7 @@ ones already seen.
 - Assemble from Atlas components first (`Card` as a surface, `Badge` as a pill, `Button
   variant="ghost"` as a pressable row), then plain `div`/`span` with semantic tokens only.
 - Keep it accessible: a pressable `div` gets `role="button"`, `tabIndex={0}` and an Enter/Space
-  handler. A single choice from a few options is either
+  handler. A single choice that Tabs can't represent (a Radio gap — see below) is either
   - `Button`s with `aria-pressed` (each is a tab stop; no arrow keys needed) — the simple default, or
   - `role="radiogroup"` + `role="radio"` with `aria-checked`, roving `tabIndex` (0 on the checked one,
     -1 on the rest) and an `onKeyDown` that moves with ArrowLeft/Right/Up/Down — all of it, or don't
@@ -21,8 +21,13 @@ ones already seen.
 ## It is a gap even when it is built from Atlas components
 Composing from `Button`/`Card` does not make it "no gap". It is a gap — and gets a candidate entry — when
 the thing you built does the job of a component the index footer lists as missing (Avatar, Table,
-Tooltip, Select, Radio, Toast) or of a pattern with no index row (segmented control, list row, stepper,
-chip group). A tip/amount/plan picker is a Radio or segmented-control gap.
+Tooltip, Select, Radio, Toast) or of a pattern no index component covers (list row, stepper, chip group).
+
+## It is not a gap when an index component's doc covers the pattern
+Check the closest component's "When to use" first. A segmented choice between a few short named options
+(theme, tip %, plan tier) is `Tabs` `variant="pills"` — `TabsRoot` + `TabsList` + `TabsTrigger`, panels
+optional — so it gets no composition and no candidate. A pick-one that Tabs can't represent (options
+with descriptions or other content, a long vertical list) is a Radio gap.
 
 ## Log it — `atlas/state/candidates.json`
 This is the one `atlas/` file a prototype writes: the sync keeps its entries and only restamps the
@@ -38,9 +43,9 @@ header. Edit the `candidates` array only; leave `_generated`, `syncedAt` and `fi
 ```json
 {
   "id": "CAND-005",
-  "name": "SegmentedControl",
+  "name": "QuantityStepper",
   "seenIn": ["app/prototypes/<slug>"],
-  "composedFrom": "row of Button variant=ghost with aria-pressed, selected one variant=secondary",
+  "composedFrom": "Button variant=outline − and + around a count in a span with aria-live=polite",
   "occurrences": 1,
   "note": "One sentence: what the screen needed and why no existing component fits."
 }
