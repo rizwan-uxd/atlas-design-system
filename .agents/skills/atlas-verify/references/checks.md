@@ -45,7 +45,6 @@ Raw controls are only checked under `app/` — library components in `packages/u
 - Heuristic, not a parser: JSX tags are scanned textually, so props passed by spread (`{...props}`)
   are invisible to `variants-sizes` and `a11y`.
 - a11y is a floor, not an audit — no contrast, label association or screen-reader checks.
-- token-lint's hex rule needs whitespace, `:`, `,` or `(` before the `#`, so a quoted value like
-  `color: "#ff0000"` is not caught. The fix belongs in `packages/governance/token-lint.mjs`.
+- token-lint does not catch CSS named colours (`white`, `black`) — they are not hex/rgb/hsl/oklch.
 - `atlas/tokens.json` lists fewer tokens than `atlas.tokens.css` defines (z-index, dialog widths,
   safe areas, some motion/typography), so `tokens` checks existence against the CSS file.

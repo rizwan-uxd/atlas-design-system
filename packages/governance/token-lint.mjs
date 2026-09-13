@@ -69,10 +69,12 @@ const RULES = [
   {
     id: "no-hex-color",
     description: "Hardcoded hex colour — use an --atlas-* token instead",
-    // Matches #RGB, #RRGGBB, #RRGGBBAA — but not CSS ID selectors or comments
-    pattern: /(?<![/]{2}[^\n]*)(?:^|[\s:,(])(#[0-9a-fA-F]{3,8})\b/,
-    // Skip lines that are pure CSS selectors (e.g. #app { )
-    skip: (line) => /^#[\w-]+\s*[{,]/.test(line.trim()),
+    // Matches #RGB, #RGBA, #RRGGBB, #RRGGBBAA after whitespace, : , ( = or an opening quote/backtick,
+    // so CSS values, JS strings ("#fff") and JSX attributes (fill="#fff") are all caught.
+    // Not matched: // line comments, and a hex-like run that continues into a word (#fade-in).
+    pattern: /(?<![/]{2}[^\n]*)(?:^|[\s:,(="'`])(#(?:[0-9a-fA-F]{8}|[0-9a-fA-F]{6}|[0-9a-fA-F]{3,4}))(?![\w-])/,
+    // Skip pure CSS selector lines (e.g. #app {) and block-comment lines
+    skip: (line) => /^#[\w-]+\s*[{,]/.test(line.trim()) || /^(\/\*|\*)/.test(line.trim()),
   },
   {
     id: "no-rgb",
