@@ -53,3 +53,6 @@ next-env.d.ts
 
 # graft's local graph cache — regenerable, not committed (run `graft build`).
 /graft/
+
+# Local Figma file exports — binary, kept outside git.
+*.fig
