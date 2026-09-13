@@ -14,6 +14,9 @@
  *   - aria-required="true" when required=true
  *   - aria-disabled="true" when disabled (keeps focus target; pointer-events
  *     suppressed via CSS so mouse clicks are blocked)
+ *   - aria-invalid="true" when invalid prop is set. Figma's State property has
+ *     no "invalid" value for Switch, so this is announced to AT but carries no
+ *     visual treatment yet — open design decision, see DISC-028.
  *   - Focus ring via CSS :focus-visible; never suppressed
  *   - Dev-mode warning fires when no accessible name is detectable
  *
@@ -37,6 +40,8 @@ export interface SwitchProps
   defaultChecked?: boolean
   onCheckedChange?: (checked: boolean) => void
   disabled?: boolean
+  /** Sets aria-invalid; no visual treatment yet (no Figma State=invalid) */
+  invalid?: boolean
   /** Shows a visible label linked via aria-labelledby */
   label?: React.ReactNode
   description?: React.ReactNode
@@ -54,6 +59,7 @@ export function Switch({
   defaultChecked = false,
   onCheckedChange,
   disabled = false,
+  invalid = false,
   label,
   description,
   required,
@@ -105,6 +111,7 @@ export function Switch({
         role="switch"
         aria-checked={isChecked}
         aria-disabled={disabled || undefined}
+        aria-invalid={invalid || undefined}
         aria-required={required || undefined}
         aria-labelledby={label ? labelId : undefined}
         aria-describedby={description ? descId : undefined}
@@ -112,6 +119,7 @@ export function Switch({
         className={`${styles.track} ${styles[size]}`}
         data-state={isChecked ? "checked" : "unchecked"}
         data-disabled={disabled || undefined}
+        data-invalid={invalid || undefined}
         {...rest}
       >
         <span className={styles.thumb} aria-hidden="true" />

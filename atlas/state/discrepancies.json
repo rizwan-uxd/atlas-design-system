@@ -271,6 +271,15 @@
       "detectedBy": "sync:description",
       "firstSeen": "2026-09-12T00:00:00.000Z",
       "lastSeen": "2026-09-12T00:00:00.000Z"
+    },
+    {
+      "id": "DISC-028",
+      "component": "Switch",
+      "side": "both",
+      "status": "open",
+      "issue": "Code has an `invalid` prop (aria-invalid + data-invalid, no styling) but Figma's Switch State property has no invalid value, so there is no approved visual treatment. Checkbox ships `invalid` the same way, undocumented — not a precedent.",
+      "resolution": "undecided — design intent needed first: does an invalid Switch get a visual at all, and if so as a State value or an Invalid boolean (DEC-003)? Figma is not edited until that is decided; code then adds only the matching CSS.",
+      "date": "2026-09-13"
     }
   ]
 }

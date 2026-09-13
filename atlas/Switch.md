@@ -35,6 +35,7 @@ import { Switch } from "@atlas/ui-web/primitives/Switch/Switch"
 - `defaultChecked?: boolean`
 - `onCheckedChange?: (checked: boolean) => void`
 - `disabled?: boolean`
+- `invalid?: boolean`
 - `label?: React.ReactNode`
 - `description?: React.ReactNode`
 - `required?: boolean`

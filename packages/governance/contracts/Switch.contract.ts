@@ -15,6 +15,7 @@ type AssertSwitchShape = {
   defaultChecked?:   boolean
   onCheckedChange?:  (checked: boolean) => void
   disabled?:         boolean
+  invalid?:          boolean
   label?:            React.ReactNode
   description?:      React.ReactNode
   required?:         boolean

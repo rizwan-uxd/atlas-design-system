@@ -15,7 +15,7 @@
     "Label": { "parity": "open", "figmaMetadata": "none", "code": "scaffolded", "verifiedAt": null },
     "Textarea": { "parity": "open", "figmaMetadata": "none", "code": "scaffolded", "verifiedAt": null },
     "Checkbox": { "parity": "code-applied", "figmaMetadata": "description-written", "code": "scaffolded", "verifiedAt": null },
-    "Switch": { "parity": "open", "figmaMetadata": "none", "code": "scaffolded", "verifiedAt": null },
+    "Switch": { "parity": "open", "figmaMetadata": "none", "code": "scaffolded", "verifiedAt": "2026-09-13T08:00:35.464Z" },
     "Badge": { "parity": "open", "figmaMetadata": "none", "code": "scaffolded", "verifiedAt": null },
     "Alert": { "parity": "open", "figmaMetadata": "none", "code": "scaffolded", "verifiedAt": null },
     "Card": { "parity": "open", "figmaMetadata": "none", "code": "scaffolded", "verifiedAt": null },

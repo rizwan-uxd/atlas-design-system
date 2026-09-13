@@ -11,6 +11,7 @@
     { "name": "defaultChecked", "required": false, "type": "boolean" },
     { "name": "onCheckedChange", "required": false, "type": "(checked: boolean) => void" },
     { "name": "disabled", "required": false, "type": "boolean" },
+    { "name": "invalid", "required": false, "type": "boolean" },
     { "name": "label", "required": false, "type": "React.ReactNode" },
     { "name": "description", "required": false, "type": "React.ReactNode" },
     { "name": "required", "required": false, "type": "boolean" },
