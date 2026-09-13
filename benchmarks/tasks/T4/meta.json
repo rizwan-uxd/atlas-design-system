@@ -1,0 +1,16 @@
+{
+  "type": "component", "component": "Badge", "tier": "primitives",
+  "expectFigmaEdit": true, "expectStop": true,
+  "union": { "type": "BadgeVariant", "file": "packages/ui-web/src/primitives/Badge/Badge.tsx", "mustInclude": ["outline"] },
+  "allowedPaths": ["atlas/state/discrepancies.json", "atlas/state/status.json"],
+  "stopForbiddenPaths": [
+    "packages/ui-web/src/primitives/Badge/**",
+    "packages/figma-sync/code-connect/Badge.figma.tsx",
+    "packages/governance/contracts/Badge.contract.ts",
+    "packages/ui-web/tests/Badge.test.tsx",
+    "app/**"
+  ],
+  "expectClose": [],
+  "protectedDiscrepancies": ["DISC-028"],
+  "expectStamp": false
+}

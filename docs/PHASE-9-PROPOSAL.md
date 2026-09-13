@@ -80,7 +80,14 @@ all differ, so a gap would mix up "no skill" with "older verifier, older sync, d
 - All other rules stay: AGENTS.md Figma-first, `decisions.json`, `atlas-verify`, `atlas-figma-sync`. So
   `no-skill` measures what `atlas-component` adds on top of today's harness.
 
-Before any run, `grep -r atlas-component` on the patched tree must return 0 hits.
+Before any run, `grep -rE "atlas-component([^s]|$)"` on the patched tree must return 0 hits outside `docs/`.
+- The `([^s]|$)` excludes the verifier check named `atlas-components`.
+- Agents don't read `docs/`.
+
+*Implementation note:* at `d7967d7` three other skill files also name the skill.
+- The patch rewrites those pointers to "a component task", so no dangling route is left.
+- Files: `atlas-figma-sync/SKILL.md` line 14, the `atlas-prototype` description, `atlas-prototype/references/gaps.md`.
+- 9 files, 5 insertions, 234 deletions.
 
 `d7967d7` vs `main` (`235ef87`) outside `benchmarks/`: **0 files differ**, so `d7967d7` is also the current tree.
 

@@ -1,0 +1,314 @@
+diff --git a/.agents/skills/atlas-component/SKILL.md b/.agents/skills/atlas-component/SKILL.md
+deleted file mode 100644
+index 5356ba3..0000000
+--- a/.agents/skills/atlas-component/SKILL.md
++++ /dev/null
+@@ -1,67 +0,0 @@
+----
+-name: atlas-component
+-description: Create or change an Atlas library component in packages/ui-web/src/<tier>/<Name> — add or rename a variant or size, fix a spec gap (focus ring, states, a11y), close a Figma↔code discrepancy, run a component refinement pass, or promote an approved candidate. Works Figma first, then the atlas/ docs via sync, then code, Code Connect, contract, tests and state, and ends with atlas-verify. Not for building a prototype screen in app/prototypes (that is atlas-prototype) and not for a snapshot-only refresh (that is atlas-figma-sync).
+----
+-
+-# atlas-component
+-
+-Figma is the authority, so a component change runs in one direction:
+-**Figma → atlas/ (sync) → code → Code Connect + contract + tests → state → verify.**
+-Skipping ahead to code is the mistake this skill exists to prevent.
+-
+-## Scope — one component per task
+-- Writes: `packages/ui-web/src/<tier>/<Name>/**`, `packages/figma-sync/code-connect/<Name>.figma.tsx`,
+-  `packages/governance/contracts/<Name>.contract.ts`, `packages/ui-web/tests/<Name>.test.tsx`,
+-  `atlas/` **only through** `npm run atlas:sync`, repo-state rows in `atlas/state/*.json`, and the
+-  Figma component set (only after the user approves the Figma change).
+-- Also touches call sites under `app/` **only** when an API change breaks them (name them up front).
+-- Never: a second component, a new token, `app/prototypes` redesigns, `docs/` rewrites.
+-
+-## Steps
+-1. **Parse and look up** — name the component, tier and the exact change. Read
+-   `atlas/state/decisions.json` and the component's open rows in `atlas/state/discrepancies.json`,
+-   then `atlas/metadata/<Name>.json` and `atlas/<Name>.md`. A decision that already answers the
+-   question is followed, not re-argued. A new component needs an explicit user request
+-   (`--allow-new-component` later) and a Figma design — otherwise stop.
+-2. **Figma first** — **Read `references/figma-first.md` now (required, every task, including
+-   code-only ones)**; its table decides whether Figma changes. Compare the change with
+-   `metadata.figmaProperties`. If Figma must change (new variant value, renamed property, usage
+-   description, a state or prop whose visuals Figma does not draw):
+-   state the exact Figma edit, **get approval**, apply it, and confirm with a metadata read. If the
+-   snapshot is stale or `syncedAt` is null, escalate to Figma MCP for those fields and say so.
+-   Code-only changes (a11y, focus ring, a bug) that alter no property skip the edit, not the check.
+-   **A new visual state or prop Figma does not draw is never code-only** — even when the user asked for
+-   it and even when another component already has it: propose the Figma edit and wait.
+-3. **Docs via sync** — `npm run atlas:sync` (or the `atlas-figma-sync` skill after a Figma edit) so
+-   `atlas/metadata/<Name>.json` and `atlas/<Name>.md` reflect Figma. Never edit them by hand; a doc
+-   that needs new guidance gets it as the Figma description.
+-4. **Code** — **read `references/code-rules.md` before the first edit (required)**, then edit
+-   `<Name>.tsx` / `<Name>.module.css` in place:
+-   exported `<Name>Variant`/`<Name>Size` unions match Figma values exactly (DEC-002), value props
+-   stay props (DEC-003), semantic tokens only, every state, logical properties, reduced motion.
+-5. **Code Connect, contract, tests** — **read `references/companions.md` before touching them
+-   (required)**; it has the patterns, so don't open another component's companion files. Update all three: `figma.enum` maps list every Figma value; the contract asserts the
+-   new unions and prop shape; the test covers the variant × size matrix, states and axe.
+-6. **Re-sync and state** — `npm run atlas:sync` again: code-derived `variants`/`sizes` update and
+-   sync-detected discrepancies close themselves. Then update repo state by hand, per
+-   `references/companions.md`: the `status.json` row, a repo-carried discrepancy closed with a dated
+-   resolution, a promoted candidate removed from `candidates.json`, and a new `decisions.json` entry
+-   only if the user made a decision in this task.
+-7. **Verify** — the `atlas-verify` skill with scope
+-   `packages/ui-web/src/<tier>/<Name>/**,packages/figma-sync/code-connect/<Name>.figma.tsx,packages/governance/contracts/<Name>.contract.ts,packages/ui-web/tests/<Name>.test.tsx,atlas/**`
+-   plus any named call sites. `design.snapshot-current` must pass — that proves step 6 ran.
+-   The final, unskipped run adds `--stamp`, which records `verifiedAt` in `status.json`.
+-8. **Report** — the Figma change (or "none, code-only" and why), files changed, discrepancies
+-   closed/opened, state rows updated, Figma MCP escalations, and the verify summary line.
+-
+-## Rules
+-- Figma and code disagree → Figma wins. Never "fix" drift by changing only code to match your guess.
+-- An ambiguous design rule stops the task: name the missing decision (AGENTS.md §6).
+-- Don't rename or restyle beyond the asked change; the component status table's "Remaining focus" is
+-  a refinement pass only when the user asked for one.
+-- Figma writes are outward-facing: describe them and wait for a yes before calling `use_figma`.
+-
+-## References — required reads, at the step that names them
+-- `references/figma-first.md` — when Figma must change, the approval step, MCP calls, confirming it.
+-- `references/code-rules.md` — file layout, type exports, states, tokens, a11y bar per tier.
+-- `references/companions.md` — Code Connect, contract, test and state file formats with examples.
+diff --git a/.agents/skills/atlas-component/references/code-rules.md b/.agents/skills/atlas-component/references/code-rules.md
+deleted file mode 100644
+index 66bf8a7..0000000
+--- a/.agents/skills/atlas-component/references/code-rules.md
++++ /dev/null
+@@ -1,42 +0,0 @@
+-# Code rules
+-
+-## Location and files
+-`packages/ui-web/src/<tier>/<Name>/<Name>.tsx` + `<Name>.module.css`. Tiers are fixed:
+-primitives (Button, Input, Label, Textarea, Checkbox, Switch, Badge) · compositions (Alert, Card,
+-Dialog) · patterns (Tabs) · layouts (NavBar). Import path `@atlas/ui-web/<tier>/<Name>/<Name>`.
+-Edit in place — no `<Name>V2`, no parallel folder. `templates/` is not a tier for real components.
+-
+-## API shape (the generator reads it)
+-- `"use client"` first; a header comment listing Variants, Sizes, States and Accessibility.
+-- `export type <Name>Variant = "a" | "b"` and `export type <Name>Size = …` — string-literal unions
+-  whose values are **exactly** the Figma values. `atlas-sync` builds `metadata.variants`/`sizes`
+-  from these names; a renamed type silently drops them.
+-- `export interface <Name>Props` — own members only become `metadata.props`; keep jsdoc short.
+-- Subcomponents are exported as `<Name><Part>` (`CardHeader`, `TabsTrigger`).
+-- Value props (`checked`, `open`, `dismissible`) stay props, not variant values (DEC-003).
+-
+-## Styling
+-- Semantic `--atlas-*` tokens only — no hex/rgb/hsl/oklch, no px literals, no `--atlas-color-*`
+-  primitives. `atlas/tokens.md` lists what exists; a missing token stops the task (no new tokens).
+-- Variant/size/state via `data-*` attributes or class maps in the CSS module.
+-- Logical properties: `padding-inline`, `margin-block-start`, `inset-inline-end`, `border-inline-start`.
+-- Motion from `--atlas-duration-*` / `--atlas-easing-*`, disabled under
+-  `@media (prefers-reduced-motion: reduce)`.
+-
+-## States — every interactive component
+-default · hover (`:hover:not([data-disabled])`) · active · `:focus-visible` ring with
+-`--atlas-focus-ring` on the interactive element only · disabled (`aria-disabled`/`disabled`,
+-`--atlas-opacity-disabled`) · invalid (`aria-invalid`, danger tokens) · loading where Figma has it
+-(`aria-busy`). Touch targets respect `--atlas-touch-min`.
+-
+-## Accessibility bar
+-- Prefer Radix primitives already installed (checkbox, dialog, tabs) for roles and keyboard.
+-- Label association: `htmlFor`/`id` via `useId`; no label → caller must pass `aria-label` (dev warn).
+-- Keyboard: Enter/Space activate; arrow-key roving focus in groups (Tabs); Escape closes overlays;
+-  focus trap and scroll lock for Dialog.
+-- `aria-describedby` forwarded for helper/error text.
+-
+-## Don't
+-- Don't change another component or `_shared` prototype files to make this one fit.
+-- Don't widen a union "for flexibility"; every value must exist in Figma.
+-- Don't leave call sites broken: `tsc` in atlas-verify runs repo-wide.
+diff --git a/.agents/skills/atlas-component/references/companions.md b/.agents/skills/atlas-component/references/companions.md
+deleted file mode 100644
+index 983703b..0000000
+--- a/.agents/skills/atlas-component/references/companions.md
++++ /dev/null
+@@ -1,63 +0,0 @@
+-# Companions and state
+-
+-Every API change updates all three companions in the same task. A missing companion is created from
+-the pattern below (only Button has a test today; 7 components have contracts).
+-
+-## Code Connect — `packages/figma-sync/code-connect/<Name>.figma.tsx`
+-Maps Figma properties to props. Keys on the left are **Figma** values, right side is what the prop gets.
+-```tsx
+-import figma from "@figma/code-connect"
+-import { Checkbox } from "@atlas/ui-web/primitives/Checkbox/Checkbox"
+-
+-figma.connect(Checkbox, "https://www.figma.com/design/cKYhfaHLCoyMHi9nKr63Ig/Atlas-Design-System?node-id=82-24", {
+-  props: {
+-    variant:  figma.enum("Variant", { default: "default", card: "card" }),
+-    checked:  figma.enum("Checked", { unchecked: false, checked: true, indeterminate: "indeterminate" }),
+-    size:     figma.enum("Size",    { sm: "sm", md: "md", lg: "lg" }),
+-    disabled: figma.enum("State",   { disabled: true }),
+-  },
+-  example: ({ variant, checked, size, disabled }) => (
+-    <Checkbox variant={variant} checked={checked} size={size} disabled={disabled} label="Checkbox label" />
+-  ),
+-})
+-```
+-- Every value in `metadata.figmaProperties` for a mapped property appears as a key.
+-- The URL's `node-id` is the sync's pull list — change it only when the Figma node id changed.
+-- Publishing (`npx figma connect publish --config packages/figma-sync/mcp/configs/figma.config.json`)
+-  is outward-facing: ask first, and don't publish unless the user asked.
+-
+-## Contract — `packages/governance/contracts/<Name>.contract.ts`
+-Type-level assertions; `tsc` fails when the union or props drift.
+-```ts
+-import type { CheckboxProps, CheckboxVariant, CheckboxSize } from "@atlas/ui-web/primitives/Checkbox/Checkbox"
+-
+-type AssertCheckboxVariant = CheckboxVariant extends "default" | "card" ? true : false
+-const _v: AssertCheckboxVariant = true; void _v
+-
+-type AssertCheckboxSize = CheckboxSize extends "sm" | "md" | "lg" ? true : false
+-const _s: AssertCheckboxSize = true; void _s
+-
+-type AssertCheckboxShape = { variant?: CheckboxVariant; size?: CheckboxSize; /* …public props */ }
+-type _CheckCheckboxProps = AssertCheckboxShape extends Pick<CheckboxProps, keyof AssertCheckboxShape & keyof CheckboxProps> ? true : never
+-const _p: _CheckCheckboxProps = true; void _p
+-```
+-
+-## Test — `packages/ui-web/tests/<Name>.test.tsx`
+-Pattern: `packages/ui-web/tests/Button.test.tsx` (vitest + Testing Library + jest-axe; the only
+-included test path). Cover: renders by default · every variant × size · each state from
+-`code-rules.md` (disabled blocks interaction, invalid sets `aria-invalid`, loading sets `aria-busy`)
+-· keyboard activation · `axe` has no violations per variant. Run while iterating:
+-`npx vitest run packages/ui-web/tests/<Name>.test.tsx`.
+-
+-## State — `atlas/state/*.json`
+-The generator restamps these headers and keeps their bodies; edit only the rows below, never
+-`_generated`, `syncedAt`, `figmaVersion`.
+-
+-| File | When | Edit |
+-|---|---|---|
+-| `status.json` | parity or code status changed | `components.<Name>`: `parity` `match \| code-applied \| open`, `code` `scaffolded \| spec-complete`. Leave `figmaMetadata` to match what Figma has (`none \| description-written \| complete`). `verifiedAt` is written only by `atlas-verify --stamp`, never by hand. |
+-| `discrepancies.json` | a **hand-written** entry (no `detectedBy`) is resolved | `status: "closed"`, `side: "closed"`, `resolution` rewritten as what was done + date, like DISC-003. Entries with `detectedBy` (`sync:figma`, `sync:code-connect`) close themselves on re-sync — never edit those. |
+-| `candidates.json` | the task promoted a candidate into a component | remove its entry. |
+-| `decisions.json` | the user made a new design decision in this task | append `{ id: "DEC-NNN", topic, decision, date }`. Never record your own guess as a decision. |
+-
+-After editing state, `npm run atlas:sync` once more and confirm it writes 0 files on a second run.
+diff --git a/.agents/skills/atlas-component/references/figma-first.md b/.agents/skills/atlas-component/references/figma-first.md
+deleted file mode 100644
+index 7487410..0000000
+--- a/.agents/skills/atlas-component/references/figma-first.md
++++ /dev/null
+@@ -1,56 +0,0 @@
+-# Figma first
+-
+-File key `cKYhfaHLCoyMHi9nKr63Ig`. The component's node id is in
+-`packages/figma-sync/code-connect/<Name>.figma.tsx` (`node-id=<a>-<b>` → `<a>:<b>`) and in
+-`atlas/metadata/<Name>.json` `figmaNodeId`. Don't browse the file tree for it.
+-
+-## Does Figma have to change?
+-| Change | Figma edit? |
+-|---|---|
+-| New/renamed/removed variant or size value | **Yes** — Figma first, code follows the Figma value name (DEC-002) |
+-| A code-only option that is real (e.g. `inline`) | **Yes** — add it to Figma rather than delete it from code (DEC-002) |
+-| A value prop (checked, on/off, dismissible) | **Yes** — its own Figma property, never a Variant value (DEC-003) |
+-| Usage guidance for `atlas/<Name>.md` | **Yes** — written as the component set description (see the doc rule below) |
+-| A new prop or state that changes how the component looks (`invalid`, `loading`, `selected`, an error colour) and has no matching value in `metadata.figmaProperties` | **Yes** — stop before coding it. Figma draws it first; the visual treatment is a design decision, not yours |
+-| A11y, focus ring, keyboard, reduced motion, bug fix, token swap with no visual change | No — code-only; say so in the report |
+-| Visual change (size, radius, colour, spacing) | Check the Figma variant first; if Figma already shows it, code-only. If not, **Yes** |
+-
+-**Precedent is not approval.** Another component already shipping a similar prop or state without a
+-Figma property (e.g. Checkbox `invalid`) is itself undocumented drift — never a reason to copy it.
+-Name that drift in the report instead.
+-
+-**When the user asked for it but Figma lacks it** — the request settles *what*, not *how it looks*.
+-Implement the non-visual part if any (`aria-invalid`, the prop, tests), then stop and propose the Figma
+-edit (next section). Without approval, leave the visual part out and list it as unresolved.
+-
+-A discrepancy with `side: "figma"` is fixed in Figma; `side: "code"` in code; `side: "both"` needs a
+-decision first — stop and name it.
+-
+-## Approval
+-Figma is shared and outward-facing. Before any write, show the user the exact edit:
+-```
+-Figma edit — Checkbox (82:24)
+-  rename property Variant value "unchecked" → move to new property Checked
+-  add variants: Variant=card × Checked × State at Size=md (15)
+-Proceed?
+-```
+-Wait for a yes. No reply or a no → continue code-side only if the change is code-only; otherwise stop.
+-
+-## Calls
+-1. Load the `figma-use` skill before the first `mcp__figma__use_figma` call (mandatory).
+-2. `mcp__figma__get_metadata` on the node — current children, property values. One call.
+-3. `mcp__figma__use_figma` — apply the approved edit. Keep to the one component set.
+-4. `mcp__figma__get_metadata` again — confirm the property values now match the plan.
+-5. Only when guidance changed: `mcp__figma__search_design_system` (`entity: component`) to read the
+-   description back.
+-
+-No `get_design_context` unless a visual value is genuinely unknown; no screenshots for property work.
+-
+-## Getting it into atlas/
+-Run the `atlas-figma-sync` skill (pull file → `node scripts/atlas-sync.mjs --pull .atlas-pull/pull.json`).
+-Without a Figma edit, `npm run atlas:sync` carries Figma facts forward and refreshes code facts.
+-
+-## The doc rule
+-The sync replaces `atlas/<Name>.md` with the Figma description only when it contains "when to use" /
+-"when not to" or runs 200+ characters; a shorter description is filed as a content gap and the doc
+-is kept. So new guidance is written in Figma in that shape — not typed into `atlas/`.
+diff --git a/.agents/skills/atlas-figma-sync/SKILL.md b/.agents/skills/atlas-figma-sync/SKILL.md
+index 9436f59..8e48a7a 100644
+--- a/.agents/skills/atlas-figma-sync/SKILL.md
++++ b/.agents/skills/atlas-figma-sync/SKILL.md
+@@ -11,7 +11,7 @@ Figma and code disagree. It **reads** Figma and **writes** `atlas/` — never th
+ ## Scope
+ - Writes: `atlas/**` (via the generator) and `.atlas-pull/` (scratch, gitignored).
+ - Never writes: Figma, `packages/ui-web`, `app/`, `docs/`.
+-- Never resolves drift. It records it; fixing is a component task (`atlas-component`).
++- Never resolves drift. It records it; fixing is a component task.
+ 
+ ## Steps
+ 
+diff --git a/.agents/skills/atlas-prototype/SKILL.md b/.agents/skills/atlas-prototype/SKILL.md
+index be82772..c4b074b 100644
+--- a/.agents/skills/atlas-prototype/SKILL.md
++++ b/.agents/skills/atlas-prototype/SKILL.md
+@@ -1,6 +1,6 @@
+ ---
+ name: atlas-prototype
+-description: Build a coded prototype flow or screen in app/prototypes/<slug> from existing Atlas components — "prototype a send-money flow", "mock up a settings screen", "clone this app's onboarding". Uses FlowShell, useFlowState and the flow registry, reads only atlas/index.md plus the atlas/<Name>.md of components it uses, composes gaps locally and logs them in atlas/state/candidates.json, and ends with atlas-verify. Not for creating or changing a library component in packages/ui-web (that is atlas-component) and never calls Figma.
++description: Build a coded prototype flow or screen in app/prototypes/<slug> from existing Atlas components — "prototype a send-money flow", "mock up a settings screen", "clone this app's onboarding". Uses FlowShell, useFlowState and the flow registry, reads only atlas/index.md plus the atlas/<Name>.md of components it uses, composes gaps locally and logs them in atlas/state/candidates.json, and ends with atlas-verify. Not for creating or changing a library component in packages/ui-web and never calls Figma.
+ ---
+ 
+ # atlas-prototype
+diff --git a/.agents/skills/atlas-prototype/references/gaps.md b/.agents/skills/atlas-prototype/references/gaps.md
+index ca6cdbb..df97108 100644
+--- a/.agents/skills/atlas-prototype/references/gaps.md
++++ b/.agents/skills/atlas-prototype/references/gaps.md
+@@ -51,5 +51,5 @@ header. Edit the `candidates` array only; leave `_generated`, `syncedAt` and `fi
+ }
+ ```
+ 
+-A candidate is not a component. Promoting one is a design decision in Figma, then an
+-`atlas-component` task — never part of a prototype.
++A candidate is not a component. Promoting one is a design decision in Figma, then a
++component task — never part of a prototype.
+diff --git a/AGENTS.md b/AGENTS.md
+index 39ad4a4..cd6e1a1 100644
+--- a/AGENTS.md
++++ b/AGENTS.md
+@@ -76,7 +76,6 @@ Skills are **authored** in `.agents/skills/<name>/` (`SKILL.md` + `references/`)
+ | Task | Use |
+ |---|---|
+ | Build a prototype flow or screen | `atlas-prototype` skill |
+-| Create or change a library component | `atlas-component` skill |
+ | Refresh the snapshot from Figma | `atlas-figma-sync` skill + `scripts/atlas-sync.mjs` |
+ | Check work before reporting done | `atlas-verify` skill + `scripts/atlas-verify.mjs` (`npm run atlas:verify -- --scope "<globs>"`) |
+ | QA audit of a component | `docs/audits/QA-REPORT.md` only — never a new per-session file. Append the bug log (BUG-NNN: guard, location, description, fix) and the checklist, then update the Summary, Component Results and Session Progress tables. |
+diff --git a/claude.md b/claude.md
+index ea94cba..f74dd2a 100644
+--- a/claude.md
++++ b/claude.md
+@@ -55,7 +55,7 @@ app/
+ ├── page.tsx           visual sandbox
+ ├── prototypes/        coded flows (FlowShell + PhoneFrame + Atlas components)
+ └── globals.css        imports tokens + tailwind
+-.agents/skills/        authored skills (symlinked as .claude/skills) — atlas-figma-sync · atlas-verify · atlas-prototype · atlas-component
++.agents/skills/        authored skills (symlinked as .claude/skills) — atlas-figma-sync · atlas-verify · atlas-prototype
+ scripts/               convert-tokens.mjs · atlas-sync.mjs (regenerates atlas/)
+ benchmarks/            agent cost/quality benchmark · tasks/ · results/ · rubric.md
+ docs/

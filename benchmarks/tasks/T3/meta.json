@@ -1,0 +1,20 @@
+{
+  "type": "component", "component": "Switch", "tier": "primitives",
+  "expectFigmaEdit": false, "expectStop": false,
+  "union": { "type": "SwitchSize", "file": "packages/ui-web/src/primitives/Switch/Switch.tsx", "mustInclude": ["lg"] },
+  "allowedPaths": [
+    "packages/ui-web/src/primitives/Switch/**",
+    "packages/figma-sync/code-connect/Switch.figma.tsx",
+    "packages/governance/contracts/Switch.contract.ts",
+    "packages/ui-web/tests/Switch.test.tsx",
+    "atlas/**"
+  ],
+  "expectedCompanions": {
+    "codeConnect": "packages/figma-sync/code-connect/Switch.figma.tsx",
+    "contract": "packages/governance/contracts/Switch.contract.ts",
+    "test": "packages/ui-web/tests/Switch.test.tsx"
+  },
+  "expectClose": ["DISC-014"],
+  "protectedDiscrepancies": ["DISC-028"],
+  "expectStamp": true
+}
