@@ -83,8 +83,16 @@ Output: pass/fail per check + mismatches. "It compiles" is not done.
 ### Phase 7 — Task skills
 `atlas-prototype` (build a flow; index → only the components used → tokens; gap policy; ends in verify) and `atlas-component` (build/change a component: Figma first → docs → code → Code Connect → verify). Both progressively disclosed: description → SKILL.md → references.
 
-### Phase 8 — Context diet, retire old skills, re-benchmark
+### Phase 8 — Context diet, retire old skills, re-benchmark — ✅ done (2026-09-13)
 Archive stale `docs/` plans, retire `atlas-context` + `atlas-ui-system`, re-run T1/T2 and compare against Phase 0.
+- **Re-benchmark:** harness-v2 (`d7967d7`), T1/T2 × 3 (`816ff1c`, manual scores `235ef87`). Correctness equal or better:
+  T1 7/7 ×3, T2 5/6 ×3, final verify 3/3 both, manual T1 16/20 (phase 0: 15), T2 16/20 (14).
+  Effort below phase 0: cost T1 $0.95 → $0.78, T2 $0.70 → $0.51; cache read T1 2.18M → 1.50M, T2 1.59M → 0.88M.
+- **Diet:** stale plans moved to `docs/_archive/` (root `ROADMAP.md`, `ATLAS-REPO-ANALYSIS.md`, `implementation/`, `sessions/`);
+  `packages/ai-workflows/atlas-ui-skill` removed (no `atlas-context` leftovers remained). No re-run needed: all 6 harness-v2 runs read 0 off-task files.
+
+### Phase 9 — Benchmark and tighten the component workflow — in progress
+Approved 2026-09-13. Plan, pins, fixture gate, rubric, budget ($40 cap) and causal acceptance: `docs/PHASE-9-PROPOSAL.md`.
 
 ## Execution
 Run in Claude Code via `docs/HANDOFF-CLAUDE-CODE.md` — one ready-to-paste prompt per phase (scope, files to read, constraints, done criteria). Figma MCP is configured in `.mcp.json`; only phases 2F, 3 and 5 need it.

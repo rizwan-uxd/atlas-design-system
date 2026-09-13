@@ -6,7 +6,7 @@
 
 ## Status
 Monorepo restructured; all 12 v1 components live in `packages/ui-web/src/` classified by tier, with a visual sandbox at `app/page.tsx` and coded prototypes under `app/prototypes/`.
-**Current work:** the AI upgrade in `docs/ATLAS-AI-UPGRADE-PLAN.md` — phases 0, 1, 2C (Checkbox), 4, 5, 6 and 7 are done; phase 8 (diet and re-benchmark) is next. The phase 0 baseline is locked in `benchmarks/results/SUMMARY.md`.
+**Current work:** the AI upgrade in `docs/ATLAS-AI-UPGRADE-PLAN.md` — phases 0, 1, 2C (Checkbox), 4, 5, 6, 7 and 8 are done; **phase 9 (benchmark and tighten the component workflow) is in progress** per `docs/PHASE-9-PROPOSAL.md` (approved 2026-09-13). The phase 0 baseline and phase 8 results are in `benchmarks/results/SUMMARY.md`.
 
 ## What this is
 A monorepo holding: the visual sandbox (Next.js 16, `app/page.tsx`), the web component library (`packages/ui-web/src/`), a React Native library (`packages/ui-native/`), design tokens (`packages/tokens/`), Figma sync (`packages/figma-sync/`), governance checks (`packages/governance/`), and the agent benchmark (`benchmarks/`).
@@ -50,7 +50,7 @@ packages/
 ├── ui-native/         React Native components (Expo)
 ├── figma-sync/        code-connect/*.figma.tsx · mcp/configs/
 ├── governance/        token-lint.mjs · contracts/
-└── ai-workflows/      legacy skill definitions (retired in phase 8)
+└── ai-workflows/      retired in phase 8 (README only)
 app/
 ├── page.tsx           visual sandbox
 ├── prototypes/        coded flows (FlowShell + PhoneFrame + Atlas components)
@@ -60,10 +60,12 @@ scripts/               convert-tokens.mjs · atlas-sync.mjs (regenerates atlas/)
 benchmarks/            agent cost/quality benchmark · tasks/ · results/ · rubric.md
 docs/
 ├── ATLAS-AI-UPGRADE-PLAN.md   current programme
+├── PHASE-9-PROPOSAL.md        approved phase 9 plan (runs, pins, gates, acceptance)
 ├── HANDOFF-CLAUDE-CODE.md     one ready-to-paste prompt per phase
 ├── audits/                    QA-REPORT.md · FIGMA-CODE-PARITY.md
 ├── architecture/ATLAS-SPEC/   per-component specs
-└── decisions/                 ATLAS-COMPONENTS-V1.md (locked v1 decisions)
+├── decisions/                 ATLAS-COMPONENTS-V1.md (locked v1 decisions)
+└── _archive/                  stale planning docs (history only)
 ```
 The snapshot was first synced from Figma on 2026-09-12 (`figmaVersion` `lib:Atlas Design System v1@2026-07-06T03:42:12Z`); 17 drift entries are open in `atlas/state/discrepancies.json`.
 
@@ -80,3 +82,9 @@ The snapshot was first synced from Figma on 2026-09-12 (`figmaVersion` `lib:Atla
 |---|---|---|---|---|---|
 | T1 send-money | 2,244,300 | 40 | 16 | 7/7 | 15 |
 | T2 settings | 1,690,897 | 28 | 10 | 5/6 | 14 |
+
+## Phase 8 result (harness-v2 `d7967d7`, sonnet, 3 runs each, means)
+| task | cost $ | turns | cache read | coverage | final verify | manual /20 |
+|---|---|---|---|---|---|---|
+| T1 send-money | 0.78 | 32.3 | 1.50M | 7/7 ×3 | 3/3 | 16 |
+| T2 settings | 0.51 | 24.3 | 0.88M | 5/6 ×3 | 3/3 | 16 |
