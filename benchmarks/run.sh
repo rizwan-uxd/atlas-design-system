@@ -33,5 +33,7 @@ for i in $(seq 1 "$REPS"); do
       > "$OUT/run-$i.jsonl" 2> "$OUT/run-$i.err" )
   node "$ROOT/benchmarks/analyze.mjs" "$OUT/run-$i.jsonl" "$WS" "$TDIR/meta.json" > "$OUT/run-$i.json" \
     && echo "  ✓ analysed → results/$LABEL/$TASK/run-$i.json"
+  ERR=$(node -e 'const r=require(process.argv[1]); if (r.error) console.log(r.error)' "$OUT/run-$i.json" 2>/dev/null)
+  [ -n "$ERR" ] && { echo "  ✗ run $i ended in an API error — stopping: $ERR"; exit 1; }
 done
 node "$ROOT/benchmarks/summarize.mjs" "$ROOT/benchmarks/results" && echo "Summary → benchmarks/results/SUMMARY.md"

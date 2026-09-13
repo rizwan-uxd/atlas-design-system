@@ -169,7 +169,8 @@ const phase8 = {
 
 const u = result?.usage || {}
 console.log(JSON.stringify({
-  model: init.model, ok: result?.subtype === "success",
+  // a usage-limit or API error still arrives as subtype "success" with is_error set
+  model: init.model, ok: result?.subtype === "success" && !result?.is_error, error: result?.is_error ? (result.result || "").slice(0, 200) : null,
   turns: result?.num_turns, durationS: Math.round((result?.duration_ms || 0) / 1000), costUsd: result?.total_cost_usd,
   tokens: { input: u.input_tokens, cacheWrite: u.cache_creation_input_tokens, cacheRead: u.cache_read_input_tokens, output: u.output_tokens,
     totalContext: (u.input_tokens || 0) + (u.cache_creation_input_tokens || 0) + (u.cache_read_input_tokens || 0) },

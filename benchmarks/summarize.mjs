@@ -19,11 +19,12 @@ for (const label of fs.readdirSync(dir).filter(d => fs.statSync(path.join(dir, d
     const P = f => p8 ? runs.map(f) : []
     rows.push({ label, task, cells: [
       runs.length,
+      count(runs, r => r.ok && r.quality.outputExists),
       // correctness
       count(runs, r => r.quality.registered), runs.map(r => r.quality.expectedCoverage).join(" "),
       mr(runs.map(r => r.quality.tokenLintViolations)), mr(runs.map(r => r.quality.tscErrors)), mr(runs.map(r => r.quality.rawElements)),
       manual ? `${manual.total ?? "–"} (run ${manual.run})` : "–",
-      p8 ? count(runs, r => r.phase8.verify.finalPass !== false) : "–",
+      p8 ? count(runs, r => r.phase8.verify.finalPass === true) : "–",
       // effort
       mr(runs.map(r => r.turns)), mr(runs.map(r => r.costUsd)), mr(runs.map(r => r.tokens.cacheRead), big), mr(runs.map(r => r.tokens.totalContext), big),
       mr(runs.map(r => r.tokens.output), big), mr(runs.map(r => r.toolCalls)), mr(runs.map(r => r.durationS)),
@@ -33,7 +34,7 @@ for (const label of fs.readdirSync(dir).filter(d => fs.statSync(path.join(dir, d
       p8 ? (runs.every(r => r.phase8.gaps.available) ? (runs[0].phase8.gaps.expected.length ? count(runs, r => r.phase8.gaps.recognised.length === r.phase8.gaps.expected.length) : count(runs, r => r.phase8.gaps.candidatesChanged.length > 0) + " logged any") : "n/a") : "–",
     ] })
   }
-const H = ["runs", "registered", "coverage", "lint", "tsc", "raw els", "manual /20", "final verify ok",
+const H = ["runs", "completed", "registered", "coverage", "lint", "tsc", "raw els", "manual /20", "final verify ok",
   "turns", "cost $", "cache read", "context tok", "output tok", "tool calls", "time s",
   "files opened", "via Bash", "source/verifier opened", "verify failures", "first-pass verify", "wasted exploration", "gap recognised"]
 const table = rs => `| task | label | ${H.join(" | ")} |\n|${["", "", ...H].map(() => "---").join("|")}|\n` +
