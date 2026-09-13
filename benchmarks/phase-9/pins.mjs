@@ -58,11 +58,15 @@ if (cmd === "check") {
   const init = fs.readFileSync(log, "utf8").split("\n").filter(Boolean).map(l => { try { return JSON.parse(l) } catch { return {} } }).find(l => l.type === "system" && l.subtype === "init") || {}
   if (init.model !== pins.model) { console.error(`✗ pins: model ${init.model} ≠ pinned ${pins.model}`); process.exit(1) }
   const figma = (init.mcp_servers || []).find(s => s.name === "figma")
-  const runtime = { figmaStatus: figma?.status || "absent", figmaTools: (init.tools || []).filter(t => /^mcp__figma__/.test(t)).sort().join(" ") }
-  if (runtime.figmaStatus !== "connected") { console.error(`✗ pins: figma MCP ${runtime.figmaStatus} in ${label} (infrastructure failure)`); process.exit(1) }
+  // the project's http `figma` server connects asynchronously: init reports "pending" and its tools arrive later as
+  // deferred tools (ToolSearch). Only a failed/absent figma server is an infrastructure failure. The set of MCP
+  // servers (user + project; names, not statuses) is what shapes context, so that is pinned.
+  const status = figma?.status || "absent"
+  const runtime = { mcpServers: (init.mcp_servers || []).map(s => s.name).sort().join(" | ") }
+  if (!["connected", "pending"].includes(status)) { console.error(`✗ pins: figma MCP ${status} in ${label} (infrastructure failure)`); process.exit(1) }
   // only a real run can observe these, so the first run of each task type records them
   const type = process.argv[5] || "component"; pins.runtime = pins.runtime || {}
   if (!pins.runtime[type]) { pins.runtime[type] = runtime; save(); console.log(`  • pinned runtime.${type}`) }
   else { const d = diffs(pins.runtime[type], runtime); if (d.length) { console.error(`✗ pins: runtime.${type} mismatch\n  ${d.join("\n  ")}`); process.exit(1) } }
-  console.log(`  ✓ model ${init.model}, figma MCP connected`)
+  console.log(`  ✓ model ${init.model}, figma MCP ${status}`)
 } else { console.error("usage: pins.mjs check <ws> <label> [--record] | post <label> <run.jsonl> [--record]"); process.exit(1) }
