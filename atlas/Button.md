@@ -35,6 +35,7 @@ import { Button } from "@atlas/ui-web/primitives/Button/Button"
 ```
 
 **Button** — also accepts native `<button>` attributes
+- ref: not forwarded — `ref` does not type-check; reach the element by `id`
 - `variant?: ButtonVariant`
 - `size?: ButtonSize`
 - `iconOnly?: boolean`

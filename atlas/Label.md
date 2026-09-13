@@ -31,6 +31,7 @@ import { Label } from "@atlas/ui-web/primitives/Label/Label"
 ```
 
 **Label** — also accepts native `<label>` attributes
+- ref: not forwarded — `ref` does not type-check; reach the element by `id`
 - `variant?: LabelVariant`
 - `size?: LabelSize`
 - `required?: boolean`

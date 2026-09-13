@@ -31,6 +31,7 @@ import { Textarea } from "@atlas/ui-web/primitives/Textarea/Textarea"
 ```
 
 **Textarea** — also accepts native `<textarea>` attributes (except size)
+- ref: not forwarded — `ref` does not type-check; reach the element by `id`
 - `variant?: TextareaVariant`
 - `size?: TextareaSize`
 - `resize?: TextareaResize`

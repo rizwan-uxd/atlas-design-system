@@ -30,6 +30,7 @@ import { Alert } from "@atlas/ui-web/compositions/Alert/Alert"
 ```
 
 **Alert**
+- ref: not forwarded — `ref` does not type-check; reach the element by `id`
 - `variant?: AlertVariant`
 - `size?: AlertSize`
 - `title?: React.ReactNode`

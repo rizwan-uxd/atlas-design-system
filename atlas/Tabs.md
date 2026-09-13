@@ -36,12 +36,14 @@ import { Tabs, TabsRoot, TabsList, TabsTrigger, TabsPanel } from "@atlas/ui-web/
 ```
 
 **Tabs**
+- ref: not forwarded — `ref` does not type-check; reach the element by `id`
 - `items: TabItem[]`
 - `activeTab?: string`
 - `defaultTab?: string`
 - `onTabChange?: (value: string) => void`
 
 **TabsRoot**
+- ref: not forwarded — `ref` does not type-check; reach the element by `id`
 - `variant?: TabsVariant`
 - `size?: TabsSize`
 - `value?: string`
@@ -52,11 +54,13 @@ import { Tabs, TabsRoot, TabsList, TabsTrigger, TabsPanel } from "@atlas/ui-web/
 - `children?: React.ReactNode`
 
 **TabsList**
+- ref: not forwarded — `ref` does not type-check; reach the element by `id`
 - `aria-label?: string`
 - `className?: string`
 - `children?: React.ReactNode`
 
 **TabsTrigger**
+- ref: not forwarded — `ref` does not type-check; reach the element by `id`
 - `value: string`
 - `disabled?: boolean`
 - `leadingIcon?: React.ReactNode`
@@ -65,6 +69,7 @@ import { Tabs, TabsRoot, TabsList, TabsTrigger, TabsPanel } from "@atlas/ui-web/
 - `children?: React.ReactNode`
 
 **TabsPanel**
+- ref: not forwarded — `ref` does not type-check; reach the element by `id`
 - `value: string`
 - `forceMount?: true`
 - `className?: string`

@@ -32,6 +32,7 @@ import { Input } from "@atlas/ui-web/primitives/Input/Input"
 ```
 
 **Input** — also accepts native `<input>` attributes (except size, prefix)
+- ref: not forwarded — `ref` does not type-check; reach the element by `id`
 - `variant?: InputVariant`
 - `size?: InputSize`
 - `invalid?: boolean`

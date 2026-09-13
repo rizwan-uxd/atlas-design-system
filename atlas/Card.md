@@ -36,6 +36,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter }
 ```
 
 **Card**
+- ref: not forwarded — `ref` does not type-check; reach the element by `id`
 - `variant?: CardVariant`
 - `size?: CardSize`
 - `interactive?: boolean`
@@ -47,25 +48,30 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter }
 - `id?: string`
 
 **CardHeader**
+- ref: not forwarded — `ref` does not type-check; reach the element by `id`
 - `leading?: React.ReactNode`
 - `action?: React.ReactNode`
 - `className?: string`
 - `children?: React.ReactNode`
 
 **CardTitle**
+- ref: not forwarded — `ref` does not type-check; reach the element by `id`
 - `as?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6"`
 - `className?: string`
 - `children?: React.ReactNode`
 
 **CardDescription**
+- ref: not forwarded — `ref` does not type-check; reach the element by `id`
 - `className?: string`
 - `children?: React.ReactNode`
 
 **CardContent**
+- ref: not forwarded — `ref` does not type-check; reach the element by `id`
 - `className?: string`
 - `children?: React.ReactNode`
 
 **CardFooter**
+- ref: not forwarded — `ref` does not type-check; reach the element by `id`
 - `justify?: "start" | "between" | "end"`
 - `className?: string`
 - `children?: React.ReactNode`

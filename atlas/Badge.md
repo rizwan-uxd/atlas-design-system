@@ -31,6 +31,7 @@ import { Badge } from "@atlas/ui-web/primitives/Badge/Badge"
 ```
 
 **Badge**
+- ref: not forwarded — `ref` does not type-check; reach the element by `id`
 - `variant?: BadgeVariant`
 - `size?: BadgeSize`
 - `intent?: BadgeIntent`

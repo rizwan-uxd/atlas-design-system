@@ -17,8 +17,8 @@ tokens or Figma, and it never reads `docs/`.
 ## Read — in this order, and nothing else
 1. `atlas/index.md` — pick components, variants and sizes from its table.
 2. `atlas/<Name>.md` — **only** for each component you will render. Its generated `## API` block has
-   the import line, every own prop with its type, the native element it extends and each
-   subcomponent's props — the source adds nothing, so don't open it.
+   the import line, every own prop with its type, the native element it extends, whether `ref` is
+   forwarded, and each subcomponent's props — the source adds nothing, so don't open it.
 3. `atlas/tokens.md` — **required before you write the first `var(--atlas-…)`** in a style. Every token
    name you write must appear there; never guess a name from a pattern (`font-weight-normal` does not
    exist — it is `font-weight-regular`). Skip it only if no screen has an inline style.

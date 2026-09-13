@@ -34,6 +34,7 @@ import { Checkbox } from "@atlas/ui-web/primitives/Checkbox/Checkbox"
 ```
 
 **Checkbox**
+- ref: not forwarded — `ref` does not type-check; reach the element by `id`
 - `variant?: CheckboxVariant`
 - `size?: CheckboxSize`
 - `checked?: boolean | "indeterminate"`

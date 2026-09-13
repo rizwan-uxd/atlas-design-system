@@ -36,6 +36,7 @@ import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, Dialog
 ```
 
 **Dialog**
+- ref: not forwarded — `ref` does not type-check; reach the element by `id`
 - `open?: boolean`
 - `defaultOpen?: boolean`
 - `onOpenChange?: (open: boolean) => void`
@@ -43,10 +44,12 @@ import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, Dialog
 - `children?: React.ReactNode`
 
 **DialogTrigger**
+- ref: not forwarded — `ref` does not type-check; reach the element by `id`
 - `asChild?: boolean`
 - `children?: React.ReactNode`
 
 **DialogContent**
+- ref: not forwarded — `ref` does not type-check; reach the element by `id`
 - `variant?: DialogVariant`
 - `size?: DialogSize`
 - `side?: DialogSide`
@@ -57,29 +60,35 @@ import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, Dialog
 - `children?: React.ReactNode`
 
 **DialogHeader**
+- ref: not forwarded — `ref` does not type-check; reach the element by `id`
 - `showClose?: boolean`
 - `onClose?: () => void`
 - `className?: string`
 - `children?: React.ReactNode`
 
 **DialogTitle**
+- ref: not forwarded — `ref` does not type-check; reach the element by `id`
 - `className?: string`
 - `children?: React.ReactNode`
 
 **DialogDescription**
+- ref: not forwarded — `ref` does not type-check; reach the element by `id`
 - `className?: string`
 - `children?: React.ReactNode`
 
 **DialogBody**
+- ref: not forwarded — `ref` does not type-check; reach the element by `id`
 - `className?: string`
 - `children?: React.ReactNode`
 
 **DialogFooter**
+- ref: not forwarded — `ref` does not type-check; reach the element by `id`
 - `justify?: "start" | "between" | "end"`
 - `className?: string`
 - `children?: React.ReactNode`
 
 **DialogClose**
+- ref: not forwarded — `ref` does not type-check; reach the element by `id`
 - `asChild?: boolean`
 - `children?: React.ReactNode`
 <!-- END:generated-api -->

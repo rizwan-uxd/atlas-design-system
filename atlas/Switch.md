@@ -30,6 +30,7 @@ import { Switch } from "@atlas/ui-web/primitives/Switch/Switch"
 ```
 
 **Switch** — also accepts native `<button>` attributes (except onChange, checked, defaultChecked, children)
+- ref: not forwarded — `ref` does not type-check; reach the element by `id`
 - `size?: SwitchSize`
 - `checked?: boolean`
 - `defaultChecked?: boolean`

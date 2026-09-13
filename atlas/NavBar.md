@@ -31,6 +31,7 @@ import { NavBar, NavBarHeaderLeading, NavBarHeaderTitle, NavBarHeaderActions, Na
 ```
 
 **NavBar**
+- ref: not forwarded — `ref` does not type-check; reach the element by `id`
 - `variant?: NavBarVariant`
 - `size?: NavBarSize`
 - `brand?: React.ReactNode`
@@ -42,24 +43,29 @@ import { NavBar, NavBarHeaderLeading, NavBarHeaderTitle, NavBarHeaderActions, Na
 - `style?: React.CSSProperties`
 
 **NavBarHeaderLeading**
+- ref: not forwarded — `ref` does not type-check; reach the element by `id`
 - `children?: React.ReactNode`
 - `className?: string`
 
 **NavBarHeaderTitle**
+- ref: not forwarded — `ref` does not type-check; reach the element by `id`
 - `children?: React.ReactNode`
 - `className?: string`
 
 **NavBarHeaderActions**
+- ref: not forwarded — `ref` does not type-check; reach the element by `id`
 - `children?: React.ReactNode`
 - `className?: string`
 
 **NavBarHeader**
+- ref: not forwarded — `ref` does not type-check; reach the element by `id`
 - `variant?: NavBarVariant`
 - `size?: NavBarSize`
 - `children?: React.ReactNode`
 - `className?: string`
 
 **NavBarTab**
+- ref: not forwarded — `ref` does not type-check; reach the element by `id`
 - `value: string`
 - `label: string`
 - `icon?: React.ReactNode`
@@ -70,6 +76,7 @@ import { NavBar, NavBarHeaderLeading, NavBarHeaderTitle, NavBarHeaderActions, Na
 - `className?: string`
 
 **NavBarTabBar**
+- ref: not forwarded — `ref` does not type-check; reach the element by `id`
 - `size?: NavBarSize`
 - `children?: React.ReactNode`
 - `className?: string`

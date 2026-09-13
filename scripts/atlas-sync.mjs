@@ -160,6 +160,16 @@ function nativeBase(src, typeName) {
   return `native \`<${tag}>\` attributes${omitted.length ? ` (except ${omitted.join(", ")})` : ""}`
 }
 
+/** whether `<Name ref={…}>` type-checks: forwardRef, or a props type that carries `ref` (React 19 passes it as a prop) */
+function refSupport(src, name, typeName) {
+  if (new RegExp(`\\b${name}\\s*=\\s*(?:React\\.)?forwardRef\\b`).test(src)) return true
+  const start = src.indexOf(`export interface ${typeName}`)
+  if (start === -1) return false
+  const head = src.slice(start, src.indexOf("{", start))
+  return /ComponentPropsWithRef|ComponentProps<|DetailedHTMLProps|RefAttributes/.test(head) ||
+    props(src, typeName).some((p) => p.name === "ref")
+}
+
 /** replace the text between two marker comments, or append the block when the markers are absent */
 function upsertSection(body, begin, end, block) {
   const at = body.indexOf(begin)
@@ -265,7 +275,7 @@ const comps = components().map((c) => {
     props: props(src, `${c.name}Props`),
     subcomponents: subcomponents(src, c.name),
     api: [c.name, ...subcomponents(src, c.name)].map((n) => ({
-      name: n, props: props(src, `${n}Props`), base: nativeBase(src, `${n}Props`),
+      name: n, props: props(src, `${n}Props`), base: nativeBase(src, `${n}Props`), ref: refSupport(src, n, `${n}Props`),
     })),
     tokensUsed: tokensUsed(c.dir),
     nodeId: figma?.nodeId ?? nodeId,
@@ -407,6 +417,9 @@ const apiSection = (c) => [
   ...c.api.flatMap((a) => [
     "",
     `**${a.name}**${a.base ? ` — also accepts ${a.base}` : ""}`,
+    a.ref
+      ? "- ref: forwarded"
+      : "- ref: not forwarded — `ref` does not type-check; reach the element by `id`",
     ...(a.props.length ? a.props.map((p) => `- \`${p.name}${p.required ? "" : "?"}: ${p.type}\``) : ["- no own props"]),
   ]),
   API_END,
