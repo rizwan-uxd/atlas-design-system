@@ -23,19 +23,22 @@ Skipping ahead to code is the mistake this skill exists to prevent.
    then `atlas/metadata/<Name>.json` and `atlas/<Name>.md`. A decision that already answers the
    question is followed, not re-argued. A new component needs an explicit user request
    (`--allow-new-component` later) and a Figma design — otherwise stop.
-2. **Figma first** — compare the change with `metadata.figmaProperties`. If Figma must change
-   (new variant value, renamed property, usage description), follow `references/figma-first.md`:
+2. **Figma first** — **Read `references/figma-first.md` now (required, every task, including
+   code-only ones)**; its table decides whether Figma changes. Compare the change with
+   `metadata.figmaProperties`. If Figma must change (new variant value, renamed property, usage
+   description, a state or prop whose visuals Figma does not draw):
    state the exact Figma edit, **get approval**, apply it, and confirm with a metadata read. If the
    snapshot is stale or `syncedAt` is null, escalate to Figma MCP for those fields and say so.
    Code-only changes (a11y, focus ring, a bug) that alter no property skip the edit, not the check.
 3. **Docs via sync** — `npm run atlas:sync` (or the `atlas-figma-sync` skill after a Figma edit) so
    `atlas/metadata/<Name>.json` and `atlas/<Name>.md` reflect Figma. Never edit them by hand; a doc
    that needs new guidance gets it as the Figma description.
-4. **Code** — edit `<Name>.tsx` / `<Name>.module.css` in place, per `references/code-rules.md`:
+4. **Code** — **read `references/code-rules.md` before the first edit (required)**, then edit
+   `<Name>.tsx` / `<Name>.module.css` in place:
    exported `<Name>Variant`/`<Name>Size` unions match Figma values exactly (DEC-002), value props
    stay props (DEC-003), semantic tokens only, every state, logical properties, reduced motion.
-5. **Code Connect, contract, tests** — update the three companions in the same change
-   (`references/companions.md`): `figma.enum` maps list every Figma value; the contract asserts the
+5. **Code Connect, contract, tests** — **read `references/companions.md` before touching them
+   (required)**; it has the patterns, so don't open another component's companion files. Update all three: `figma.enum` maps list every Figma value; the contract asserts the
    new unions and prop shape; the test covers the variant × size matrix, states and axe.
 6. **Re-sync and state** — `npm run atlas:sync` again: code-derived `variants`/`sizes` update and
    sync-detected discrepancies close themselves. Then update repo state by hand, per
@@ -56,7 +59,7 @@ Skipping ahead to code is the mistake this skill exists to prevent.
   a refinement pass only when the user asked for one.
 - Figma writes are outward-facing: describe them and wait for a yes before calling `use_figma`.
 
-## References
+## References — required reads, at the step that names them
 - `references/figma-first.md` — when Figma must change, the approval step, MCP calls, confirming it.
 - `references/code-rules.md` — file layout, type exports, states, tokens, a11y bar per tier.
 - `references/companions.md` — Code Connect, contract, test and state file formats with examples.
