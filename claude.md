@@ -6,7 +6,7 @@
 
 ## Status
 Monorepo restructured; all 12 v1 components live in `packages/ui-web/src/` classified by tier, with a visual sandbox at `app/page.tsx` and coded prototypes under `app/prototypes/`.
-**Current work:** the AI upgrade in `docs/ATLAS-AI-UPGRADE-PLAN.md` — phases 0, 1, 2C (Checkbox), 4, 5 and 6 are done; phase 7 (task skills) is next. The phase 0 baseline is locked in `benchmarks/results/SUMMARY.md`.
+**Current work:** the AI upgrade in `docs/ATLAS-AI-UPGRADE-PLAN.md` — phases 0, 1, 2C (Checkbox), 4, 5, 6 and 7 are done; phase 8 (diet and re-benchmark) is next. The phase 0 baseline is locked in `benchmarks/results/SUMMARY.md`.
 
 ## What this is
 A monorepo holding: the visual sandbox (Next.js 16, `app/page.tsx`), the web component library (`packages/ui-web/src/`), a React Native library (`packages/ui-native/`), design tokens (`packages/tokens/`), Figma sync (`packages/figma-sync/`), governance checks (`packages/governance/`), and the agent benchmark (`benchmarks/`).
@@ -55,7 +55,7 @@ app/
 ├── page.tsx           visual sandbox
 ├── prototypes/        coded flows (FlowShell + PhoneFrame + Atlas components)
 └── globals.css        imports tokens + tailwind
-.agents/skills/        authored skills (symlinked as .claude/skills) — atlas-figma-sync
+.agents/skills/        authored skills (symlinked as .claude/skills) — atlas-figma-sync · atlas-verify · atlas-prototype · atlas-component
 scripts/               convert-tokens.mjs · atlas-sync.mjs (regenerates atlas/)
 benchmarks/            agent cost/quality benchmark · tasks/ · results/ · rubric.md
 docs/
