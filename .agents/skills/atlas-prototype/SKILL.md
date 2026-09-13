@@ -36,7 +36,9 @@ question, name the missing fact in the report — it is a generator gap to fix, 
    (kebab-case) and check that one path exists (Glob `app/prototypes/<slug>/*` — not a sweep of
    `app/prototypes/**`); if it exists, edit in place.
 2. **Map to the library** — every control, surface and message maps to an index row. Anything that
-   does not is a **gap** (Avatar, list row, select, radio, toast, tooltip…).
+   does not is a **gap** (Avatar, list row, select, radio, toast, tooltip…). Judge by the **pattern**,
+   not the parts: a pick-one group (tip/amount/plan picker, segmented control) is a Radio gap even
+   when every option is an Atlas Button. Write the gap list down before step 3, "none" included.
 3. **Handle gaps** — **read `references/gaps.md` now (required whenever step 2 found anything that
    is not a plain index row, and whenever you are unsure)**: compose from primitives + semantic tokens inside the
    prototype, and add or bump the entry in `atlas/state/candidates.json`. Never create a component in
