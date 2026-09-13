@@ -22,3 +22,21 @@ Multi-line text entry with optional character counter.
 <Label htmlFor="note">Note</Label>
 <Textarea id="note" rows={4} maxLength={280} />
 ```
+
+<!-- BEGIN:generated-api -->
+
+## API
+```tsx
+import { Textarea } from "@atlas/ui-web/primitives/Textarea/Textarea"
+```
+
+**Textarea** — also accepts native `<textarea>` attributes (except size)
+- `variant?: TextareaVariant`
+- `size?: TextareaSize`
+- `resize?: TextareaResize`
+- `autoGrow?: boolean`
+- `maxRows?: number`
+- `showCount?: boolean`
+- `invalid?: boolean`
+- `required?: boolean`
+<!-- END:generated-api -->

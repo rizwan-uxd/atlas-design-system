@@ -27,3 +27,46 @@ Figma names these `line` `pill` `segmented`; the code has not been renamed yet a
   <TabsList aria-label="Theme"><TabsTrigger value="light">Light</TabsTrigger></TabsList>
 </TabsRoot>
 ```
+
+<!-- BEGIN:generated-api -->
+
+## API
+```tsx
+import { Tabs, TabsRoot, TabsList, TabsTrigger, TabsPanel } from "@atlas/ui-web/patterns/Tabs/Tabs"
+```
+
+**Tabs**
+- `items: TabItem[]`
+- `activeTab?: string`
+- `defaultTab?: string`
+- `onTabChange?: (value: string) => void`
+
+**TabsRoot**
+- `variant?: TabsVariant`
+- `size?: TabsSize`
+- `value?: string`
+- `defaultValue?: string`
+- `onValueChange?: (value: string) => void`
+- `activationMode?: "automatic" | "manual"`
+- `className?: string`
+- `children?: React.ReactNode`
+
+**TabsList**
+- `aria-label?: string`
+- `className?: string`
+- `children?: React.ReactNode`
+
+**TabsTrigger**
+- `value: string`
+- `disabled?: boolean`
+- `leadingIcon?: React.ReactNode`
+- `badge?: React.ReactNode`
+- `className?: string`
+- `children?: React.ReactNode`
+
+**TabsPanel**
+- `value: string`
+- `forceMount?: true`
+- `className?: string`
+- `children?: React.ReactNode`
+<!-- END:generated-api -->

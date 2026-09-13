@@ -17,6 +17,7 @@ What `scripts/atlas-sync.mjs` regenerates, from what, and how it decides somethi
 | `index.md` | all of the above, one row per component | |
 | `tokens.json` / `tokens.md` | `packages/tokens/atlas.tokens.css` | Figma MCP has no variable table (see `pull-file.md`) |
 | `<Name>.md` | the Figma description **if it reads as guidance**, else preserved | see below |
+| `<Name>.md` `## API` block | `<Name>Props` and each subcomponent's `<Sub>Props` (own members, extended native element) — between `generated-api` markers, regenerated on every run | |
 
 `atlas/README.md`, `atlas/tokens.md` and preserved `<Name>.md` files keep their body; only the
 `<!-- GENERATED … -->` stamp on line 1 is rewritten.

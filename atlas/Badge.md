@@ -22,3 +22,27 @@ Figma models tone and outline as separate properties (Variant + Appearance); the
 ```tsx
 <Badge variant="success" size="sm" dot>Active</Badge>
 ```
+
+<!-- BEGIN:generated-api -->
+
+## API
+```tsx
+import { Badge } from "@atlas/ui-web/primitives/Badge/Badge"
+```
+
+**Badge**
+- `variant?: BadgeVariant`
+- `size?: BadgeSize`
+- `intent?: BadgeIntent`
+- `square?: boolean`
+- `dot?: boolean`
+- `leadingIcon?: React.ReactNode`
+- `trailingIcon?: React.ReactNode`
+- `removable?: boolean`
+- `onRemove?: () => void`
+- `removeLabel?: string`
+- `onClick?: () => void`
+- `disabled?: boolean`
+- `className?: string`
+- `children: React.ReactNode`
+<!-- END:generated-api -->

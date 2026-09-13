@@ -148,6 +148,26 @@ function props(src, typeName) {
   return out
 }
 
+/** native element a Props interface extends, e.g. `button (omits size)` — null when it extends nothing */
+function nativeBase(src, typeName) {
+  const start = src.indexOf(`export interface ${typeName}`)
+  if (start === -1) return null
+  const head = src.slice(start, src.indexOf("{", start))
+  const el = head.match(/React\.\w*HTMLAttributes<HTML(\w+?)Element>/)
+  if (!el) return null
+  const tag = { Anchor: "a", Paragraph: "p", Heading: "h2", TextArea: "textarea", Div: "div" }[el[1]] ?? el[1].toLowerCase()
+  const omitted = [...(head.match(/,\s*((?:"[^"]+"\s*\|?\s*)+)>/)?.[1] ?? "").matchAll(/"([^"]+)"/g)].map((m) => m[1])
+  return `native \`<${tag}>\` attributes${omitted.length ? ` (except ${omitted.join(", ")})` : ""}`
+}
+
+/** replace the text between two marker comments, or append the block when the markers are absent */
+function upsertSection(body, begin, end, block) {
+  const at = body.indexOf(begin)
+  return at === -1
+    ? `${body.trimEnd()}\n\n${block}\n`
+    : `${body.slice(0, at)}${block}${body.slice(body.indexOf(end) + end.length)}`
+}
+
 function subcomponents(src, name) {
   const found = [
     ...src.matchAll(/export (?:function|const) (\w+)/g),
@@ -244,6 +264,9 @@ const comps = components().map((c) => {
     sizes: union(src, `${c.name}Size`),
     props: props(src, `${c.name}Props`),
     subcomponents: subcomponents(src, c.name),
+    api: [c.name, ...subcomponents(src, c.name)].map((n) => ({
+      name: n, props: props(src, `${n}Props`), base: nativeBase(src, `${n}Props`),
+    })),
     tokensUsed: tokensUsed(c.dir),
     nodeId: figma?.nodeId ?? nodeId,
     ccEnums: enums,
@@ -370,6 +393,25 @@ write("atlas/index.md", [
  */
 const isGuidance = (d) => /when to use|when not to/i.test(d) || d.length >= 200
 
+// Every component doc carries a generated API block (import, props, subcomponents) so a prototype
+// never has to open component source for a prop name.
+const API_BEGIN = "<!-- BEGIN:generated-api -->"
+const API_END = "<!-- END:generated-api -->"
+const apiSection = (c) => [
+  API_BEGIN,
+  "",
+  "## API",
+  "```tsx",
+  `import { ${c.api.map((a) => a.name).join(", ")} } from "@atlas/ui-web/${c.tier}/${c.name}/${c.name}"`,
+  "```",
+  ...c.api.flatMap((a) => [
+    "",
+    `**${a.name}**${a.base ? ` — also accepts ${a.base}` : ""}`,
+    ...(a.props.length ? a.props.map((p) => `- \`${p.name}${p.required ? "" : "?"}: ${p.type}\``) : ["- no own props"]),
+  ]),
+  API_END,
+].join("\n")
+
 const docsReplaced = []
 for (const c of comps) {
   const rel = `atlas/${c.name}.md`
@@ -394,14 +436,13 @@ for (const c of comps) {
       "## Sizes",
       (c.sizes ?? []).join(" · ") || "—",
       "",
-      "```tsx",
-      `import { ${c.name} } from "@atlas/ui-web/${c.tier}/${c.name}/${c.name}"`,
-      "```",
+      apiSection(c),
       "",
     ].join("\n"))
   } else if (fs.existsSync(abs)) {
-    // no Figma description yet — keep the existing guidance, refresh the stamp only
-    write(rel, read(abs).replace(/^<!-- GENERATED[^>]*-->/, `<!-- ${HEADER} -->`))
+    // no Figma description yet — keep the existing guidance, refresh the stamp and the API block
+    const body = read(abs).replace(/^<!-- GENERATED[^>]*-->/, `<!-- ${HEADER} -->`)
+    write(rel, upsertSection(body, API_BEGIN, API_END, apiSection(c)))
   }
 }
 
@@ -440,10 +481,7 @@ for (const rel of ["atlas/tokens.md", "atlas/README.md"]) {
   if (!fs.existsSync(abs)) continue
   let body = read(abs).replace(/^<!-- GENERATED[^>]*-->/, `<!-- ${HEADER} -->`)
   if (rel === "atlas/tokens.md") {
-    const at = body.indexOf(LAYOUT_BEGIN)
-    body = at === -1
-      ? `${body.trimEnd()}\n\n${layoutSection}\n`
-      : `${body.slice(0, at)}${layoutSection}${body.slice(body.indexOf(LAYOUT_END) + LAYOUT_END.length)}`
+    body = upsertSection(body, LAYOUT_BEGIN, LAYOUT_END, layoutSection)
   }
   write(rel, body)
 }

@@ -25,3 +25,26 @@ Independent on/off choice, or a tri-state parent of a group.
 <Checkbox label="Email me receipts" description="Sent after every transfer" />
 <Checkbox variant="card" label="Standard delivery" checked={v} onCheckedChange={setV} />
 ```
+
+<!-- BEGIN:generated-api -->
+
+## API
+```tsx
+import { Checkbox } from "@atlas/ui-web/primitives/Checkbox/Checkbox"
+```
+
+**Checkbox**
+- `variant?: CheckboxVariant`
+- `size?: CheckboxSize`
+- `checked?: boolean | "indeterminate"`
+- `defaultChecked?: boolean | "indeterminate"`
+- `onCheckedChange?: (checked: boolean | "indeterminate") => void`
+- `disabled?: boolean`
+- `invalid?: boolean`
+- `required?: boolean`
+- `label?: React.ReactNode`
+- `description?: React.ReactNode`
+- `id?: string`
+- `aria-describedby?: string`
+- `className?: string`
+<!-- END:generated-api -->

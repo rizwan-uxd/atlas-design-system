@@ -22,3 +22,20 @@ Names a form control and extends its click target.
 <Label htmlFor="amount" size="sm" required>Amount</Label>
 <Input id="amount" size="sm" />
 ```
+
+<!-- BEGIN:generated-api -->
+
+## API
+```tsx
+import { Label } from "@atlas/ui-web/primitives/Label/Label"
+```
+
+**Label** — also accepts native `<label>` attributes
+- `variant?: LabelVariant`
+- `size?: LabelSize`
+- `required?: boolean`
+- `optional?: boolean`
+- `disabled?: boolean`
+- `invalid?: boolean`
+- `children: React.ReactNode`
+<!-- END:generated-api -->

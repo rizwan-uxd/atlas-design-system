@@ -26,3 +26,21 @@ Triggers an action. The only element that should look clickable and act on submi
 <Button variant="primary" size="md" onClick={submit}>Save changes</Button>
 <Button variant="ghost" size="icon" aria-label="Close"><XIcon /></Button>
 ```
+
+<!-- BEGIN:generated-api -->
+
+## API
+```tsx
+import { Button } from "@atlas/ui-web/primitives/Button/Button"
+```
+
+**Button** — also accepts native `<button>` attributes
+- `variant?: ButtonVariant`
+- `size?: ButtonSize`
+- `iconOnly?: boolean`
+- `loading?: boolean`
+- `leadingIcon?: React.ReactNode`
+- `trailingIcon?: React.ReactNode`
+- `asChild?: boolean`
+- `children?: React.ReactNode`
+<!-- END:generated-api -->

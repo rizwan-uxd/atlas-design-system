@@ -16,8 +16,9 @@ tokens or Figma, and it never reads `docs/`.
 
 ## Read — in this order, and nothing else
 1. `atlas/index.md` — pick components, variants and sizes from its table.
-2. `atlas/<Name>.md` — **only** for each component you will render. Skip one you already know from
-   the index row (e.g. a plain `Button variant="primary"`).
+2. `atlas/<Name>.md` — **only** for each component you will render. Its generated `## API` block has
+   the import line, every own prop with its type, the native element it extends and each
+   subcomponent's props — the source adds nothing, so don't open it.
 3. `atlas/tokens.md` — **only** if a screen needs custom layout (spacing, radius, type, surfaces).
 4. `references/flow-scaffold.md` — the FlowShell / useFlowState / registry wiring. Read it instead of
    opening an existing prototype.
@@ -26,7 +27,7 @@ tokens or Figma, and it never reads `docs/`.
 
 Not on the list: `docs/`, `packages/ui-web/src`, `atlas/metadata/*.json`, other prototypes,
 `node_modules/next/dist/docs`, Figma MCP. If the index and the component doc cannot answer a
-question, open `packages/ui-web/src/<tier>/<Name>/<Name>.tsx` for that one prop and say why in the report.
+question, name the missing fact in the report — it is a generator gap to fix, not a reason to read source.
 
 ## Steps
 1. **Parse** — list the screens/steps, and for each the Atlas components it needs. Choose the slug

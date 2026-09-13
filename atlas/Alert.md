@@ -21,3 +21,24 @@ Inline message that explains status or feedback in place. Not a toast.
 ```tsx
 <Alert variant="warning" title="Rate expires in 2 minutes" description="Confirm to lock it in." />
 ```
+
+<!-- BEGIN:generated-api -->
+
+## API
+```tsx
+import { Alert } from "@atlas/ui-web/compositions/Alert/Alert"
+```
+
+**Alert**
+- `variant?: AlertVariant`
+- `size?: AlertSize`
+- `title?: React.ReactNode`
+- `description?: React.ReactNode`
+- `icon?: React.ReactNode`
+- `hideIcon?: boolean`
+- `actions?: React.ReactNode`
+- `dismissible?: boolean`
+- `onDismiss?: () => void`
+- `className?: string`
+- `children?: React.ReactNode`
+<!-- END:generated-api -->

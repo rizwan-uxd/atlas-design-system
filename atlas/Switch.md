@@ -21,3 +21,22 @@ Applies a setting the moment it is toggled.
 ```tsx
 <Switch label="Push notifications" description="Alerts on this device" checked={on} onCheckedChange={setOn} />
 ```
+
+<!-- BEGIN:generated-api -->
+
+## API
+```tsx
+import { Switch } from "@atlas/ui-web/primitives/Switch/Switch"
+```
+
+**Switch** — also accepts native `<button>` attributes (except onChange, checked, defaultChecked, children)
+- `size?: SwitchSize`
+- `checked?: boolean`
+- `defaultChecked?: boolean`
+- `onCheckedChange?: (checked: boolean) => void`
+- `disabled?: boolean`
+- `label?: React.ReactNode`
+- `description?: React.ReactNode`
+- `required?: boolean`
+- `id?: string`
+<!-- END:generated-api -->

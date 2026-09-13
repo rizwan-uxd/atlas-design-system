@@ -23,3 +23,21 @@ Single-line text entry. Pair with Label; never rely on placeholder as the label.
 <Label htmlFor="email" required>Email</Label>
 <Input id="email" type="email" invalid={!!error} aria-describedby="email-err" />
 ```
+
+<!-- BEGIN:generated-api -->
+
+## API
+```tsx
+import { Input } from "@atlas/ui-web/primitives/Input/Input"
+```
+
+**Input** — also accepts native `<input>` attributes (except size, prefix)
+- `variant?: InputVariant`
+- `size?: InputSize`
+- `invalid?: boolean`
+- `loading?: boolean`
+- `leadingIcon?: React.ReactNode`
+- `trailingIcon?: React.ReactNode`
+- `prefix?: React.ReactNode`
+- `suffix?: React.ReactNode`
+<!-- END:generated-api -->

@@ -27,3 +27,46 @@ Groups related content on a raised or bordered surface.
   <CardContent>{rows}</CardContent>
 </Card>
 ```
+
+<!-- BEGIN:generated-api -->
+
+## API
+```tsx
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@atlas/ui-web/compositions/Card/Card"
+```
+
+**Card**
+- `variant?: CardVariant`
+- `size?: CardSize`
+- `interactive?: boolean`
+- `selected?: boolean`
+- `disabled?: boolean`
+- `onClick?: React.MouseEventHandler<HTMLElement>`
+- `className?: string`
+- `children?: React.ReactNode`
+- `id?: string`
+
+**CardHeader**
+- `leading?: React.ReactNode`
+- `action?: React.ReactNode`
+- `className?: string`
+- `children?: React.ReactNode`
+
+**CardTitle**
+- `as?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6"`
+- `className?: string`
+- `children?: React.ReactNode`
+
+**CardDescription**
+- `className?: string`
+- `children?: React.ReactNode`
+
+**CardContent**
+- `className?: string`
+- `children?: React.ReactNode`
+
+**CardFooter**
+- `justify?: "start" | "between" | "end"`
+- `className?: string`
+- `children?: React.ReactNode`
+<!-- END:generated-api -->

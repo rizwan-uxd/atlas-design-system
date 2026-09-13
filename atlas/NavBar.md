@@ -22,3 +22,55 @@ Figma names these `default | bordered | floating`; the sets do not match and `el
 ```tsx
 <NavBar brand="Atlas" links={[{ label: "Components", href: "/", active: true }]} />
 ```
+
+<!-- BEGIN:generated-api -->
+
+## API
+```tsx
+import { NavBar, NavBarHeaderLeading, NavBarHeaderTitle, NavBarHeaderActions, NavBarHeader, NavBarTab, NavBarTabBar } from "@atlas/ui-web/layouts/NavBar/NavBar"
+```
+
+**NavBar**
+- `variant?: NavBarVariant`
+- `size?: NavBarSize`
+- `brand?: React.ReactNode`
+- `brandHref?: string`
+- `links?: NavLink[]`
+- `actions?: React.ReactNode`
+- `hideOnScroll?: boolean`
+- `className?: string`
+- `style?: React.CSSProperties`
+
+**NavBarHeaderLeading**
+- `children?: React.ReactNode`
+- `className?: string`
+
+**NavBarHeaderTitle**
+- `children?: React.ReactNode`
+- `className?: string`
+
+**NavBarHeaderActions**
+- `children?: React.ReactNode`
+- `className?: string`
+
+**NavBarHeader**
+- `variant?: NavBarVariant`
+- `size?: NavBarSize`
+- `children?: React.ReactNode`
+- `className?: string`
+
+**NavBarTab**
+- `value: string`
+- `label: string`
+- `icon?: React.ReactNode`
+- `badge?: React.ReactNode`
+- `active?: boolean`
+- `disabled?: boolean`
+- `onClick?: (value: string) => void`
+- `className?: string`
+
+**NavBarTabBar**
+- `size?: NavBarSize`
+- `children?: React.ReactNode`
+- `className?: string`
+<!-- END:generated-api -->

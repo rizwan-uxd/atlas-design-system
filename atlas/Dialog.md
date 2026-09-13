@@ -27,3 +27,59 @@ Figma models `default | destructive` as Variant and presentation as a separate T
   <DialogContent size="sm"><DialogHeader><DialogTitle>Delete this transfer?</DialogTitle></DialogHeader></DialogContent>
 </Dialog>
 ```
+
+<!-- BEGIN:generated-api -->
+
+## API
+```tsx
+import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogBody, DialogFooter, DialogClose } from "@atlas/ui-web/compositions/Dialog/Dialog"
+```
+
+**Dialog**
+- `open?: boolean`
+- `defaultOpen?: boolean`
+- `onOpenChange?: (open: boolean) => void`
+- `onClose?: () => void`
+- `children?: React.ReactNode`
+
+**DialogTrigger**
+- `asChild?: boolean`
+- `children?: React.ReactNode`
+
+**DialogContent**
+- `variant?: DialogVariant`
+- `size?: DialogSize`
+- `side?: DialogSide`
+- `id?: string`
+- `closeOnEscape?: boolean`
+- `closeOnOverlayClick?: boolean`
+- `className?: string`
+- `children?: React.ReactNode`
+
+**DialogHeader**
+- `showClose?: boolean`
+- `onClose?: () => void`
+- `className?: string`
+- `children?: React.ReactNode`
+
+**DialogTitle**
+- `className?: string`
+- `children?: React.ReactNode`
+
+**DialogDescription**
+- `className?: string`
+- `children?: React.ReactNode`
+
+**DialogBody**
+- `className?: string`
+- `children?: React.ReactNode`
+
+**DialogFooter**
+- `justify?: "start" | "between" | "end"`
+- `className?: string`
+- `children?: React.ReactNode`
+
+**DialogClose**
+- `asChild?: boolean`
+- `children?: React.ReactNode`
+<!-- END:generated-api -->
