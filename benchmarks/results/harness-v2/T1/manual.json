@@ -1,0 +1,9 @@
+{
+  "run": 1,
+  "fidelity": 4,
+  "hierarchy": 4,
+  "states": 3,
+  "discipline": 5,
+  "total": 16,
+  "notes": "Scored the median run (1 of 3 by turns, cost and context). Full happy path works in the shared FlowShell/PhoneFrame: recipient list (tap selects and advances, search filters with an empty state) -> amount with live conversion and fee/rate/total breakdown plus an info Alert for arrival time -> review Card -> confirm Dialog with loading, a wired error Alert, and a success state whose Done resets the flow. Fidelity loses a point because the Dialog overlay still covers the whole browser rather than the phone, and steps 1-2 have no screen heading, so content sits directly under the status bar. Hierarchy: consistent Atlas spacing tokens throughout; a point off for the missing step headings and a Back button placed inside the review Card while the primary action sits outside it. States drop to 3: Continue is disabled until the amount is valid, but an invalid amount (typing 'abc') shows no invalid state on the Input — only the disabled button. Discipline is the strong axis: all 7 expected components, Card interactive used for the recipient rows, zero raw controls and zero hardcoded lengths, and both gaps composed locally in steps/_parts.tsx and logged (CAND-001 Avatar, CAND-002 ListRow)."
+}

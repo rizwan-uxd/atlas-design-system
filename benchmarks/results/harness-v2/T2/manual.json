@@ -1,0 +1,9 @@
+{
+  "run": 3,
+  "fidelity": 4,
+  "hierarchy": 4,
+  "states": 4,
+  "discipline": 4,
+  "total": 16,
+  "notes": "Scored the median run (3 of 3 by cost and context; turns tie). Renders inside the shared FlowShell/PhoneFrame, so it matches the other prototypes (bezel, notch, rounded screen). Profile header with an initials avatar, name and email; Notifications Card with three Switches using the component's own label/description props; Appearance Card with Tabs pills for Light/Dark/System; destructive Sign out opening a confirm Dialog. Fidelity loses a point because the Dialog description sits outside DialogBody and renders flush against the dialog edge with no padding, and the overlay covers the whole browser. Hierarchy: clean card rhythm with Atlas spacing; the misaligned dialog text is the one inconsistency. States: toggles and the theme choice work (theme is local state and applies no data-theme), and Sign out shows a loading state then closes, but there is no signed-out/confirmed state afterwards. Discipline: Tabs (pills) used correctly for the segmented theme choice, no raw controls, shared shell used, and the Avatar gap composed in Avatar.tsx and logged (CAND-001 bumped); a point off because the avatar size is a hardcoded 64px rather than a size token, and Label is never used (5/6 expected components)."
+}
