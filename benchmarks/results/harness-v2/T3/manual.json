@@ -1,0 +1,4 @@
+{ "run": 3, "figmaFirst": 5, "codeOrRestraint": 5, "companionsOrPlan": 5, "stateReporting": 4, "total": 19,
+  "notes": { "median": "2 runs passed every gate (r1 44 turns $1.17, r3 42 turns $0.98); r3 = lower turns and cost",
+    "stateReporting": "DISC-004 hand-closed with non-schema side \"closed\"; report otherwise checkable, DISC-013/028 named",
+    "blind": "not blind — scored by the session that ran the batches; label known" } }

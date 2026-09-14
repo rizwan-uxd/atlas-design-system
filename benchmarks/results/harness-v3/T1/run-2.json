@@ -1,0 +1,161 @@
+{
+  "model": "claude-sonnet-5",
+  "ok": true,
+  "error": null,
+  "turns": 36,
+  "durationS": 187,
+  "costUsd": 0.8118832,
+  "tokens": {
+    "input": 46,
+    "cacheWrite": 73986,
+    "cacheRead": 1685921,
+    "output": 17753,
+    "totalContext": 1759953
+  },
+  "tools": {
+    "Skill": 2,
+    "Read": 15,
+    "Bash": 4,
+    "Write": 6,
+    "Edit": 6
+  },
+  "toolCalls": 33,
+  "figmaCalls": 0,
+  "verifyRuns": 1,
+  "reworkEdits": 0,
+  "toolResultChars": {
+    "Skill": 61,
+    "Read": 38685,
+    "Bash": 2078,
+    "Write": 1326,
+    "Edit": 1370
+  },
+  "skillsUsed": [
+    "atlas-prototype",
+    "atlas-verify"
+  ],
+  "reads": {
+    "total": 15,
+    "unique": 15,
+    "offTask": 0,
+    "byCategory": {
+      "atlas-snapshot": 9,
+      "skills": 2,
+      "prototype-shell": 4
+    },
+    "files": [
+      "atlas/index.md",
+      ".claude/skills/atlas-prototype/references/flow-scaffold.md",
+      ".claude/skills/atlas-prototype/references/gaps.md",
+      "atlas/tokens.md",
+      "atlas/Button.md",
+      "atlas/Input.md",
+      "atlas/Label.md",
+      "atlas/Alert.md",
+      "atlas/Card.md",
+      "atlas/Dialog.md",
+      "atlas/Badge.md",
+      "app/prototypes/_shared/flowRegistry.ts",
+      "app/prototypes/_shared/mockApi.ts",
+      "app/prototypes/_shared/useFlowState.ts",
+      "app/prototypes/_shared/FlowShell.tsx"
+    ]
+  },
+  "bashCmds": [
+    "cat /private/var/folders/mj/4bm9y0256pbc4jdsdqsm5zs00000gn/T/atlas-bench/harness-v3-T1-2/atlas/state/candidates.json",
+    "ls /private/var/folders/mj/4bm9y0256pbc4jdsdqsm5zs00000gn/T/atlas-bench/harness-v3-T1-2/app/prototypes/ 2>/dev/null",
+    "ls /private/var/folders/mj/4bm9y0256pbc4jdsdqsm5zs00000gn/T/atlas-bench/harness-v3-T1-2/app/prototypes/_shared/",
+    "node scripts/atlas-verify.mjs --scope \"app/prototypes/send-money/**,app/prototypes/_shared/flowRegistry.ts,atlas/state/candidates.json\""
+  ],
+  "quality": {
+    "outputExists": true,
+    "files": 6,
+    "loc": 564,
+    "registered": true,
+    "tokenLintViolations": 0,
+    "tscErrors": 0,
+    "atlasComponentsImported": [
+      "Input",
+      "Label",
+      "Badge",
+      "Alert",
+      "Button",
+      "Dialog",
+      "DialogBody",
+      "DialogContent",
+      "DialogFooter",
+      "DialogHeader",
+      "DialogTitle",
+      "DialogTrigger"
+    ],
+    "expectedCoverage": "6/7",
+    "rawElements": 0,
+    "numericStyleLiterals": 7,
+    "primitiveTokenRefs": 0
+  },
+  "phase8": {
+    "readsAll": {
+      "total": 16,
+      "unique": 16,
+      "viaBash": 1,
+      "files": [
+        "atlas/index.md",
+        ".claude/skills/atlas-prototype/references/flow-scaffold.md",
+        ".claude/skills/atlas-prototype/references/gaps.md",
+        "Bash:atlas/state/candidates.json",
+        "atlas/tokens.md",
+        "atlas/Button.md",
+        "atlas/Input.md",
+        "atlas/Label.md",
+        "atlas/Alert.md",
+        "atlas/Card.md",
+        "atlas/Dialog.md",
+        "atlas/Badge.md",
+        "app/prototypes/_shared/flowRegistry.ts",
+        "app/prototypes/_shared/mockApi.ts",
+        "app/prototypes/_shared/useFlowState.ts",
+        "app/prototypes/_shared/FlowShell.tsx"
+      ]
+    },
+    "sourceOpened": {
+      "shared-internals": [
+        "app/prototypes/_shared/mockApi.ts",
+        "app/prototypes/_shared/useFlowState.ts",
+        "app/prototypes/_shared/FlowShell.tsx"
+      ]
+    },
+    "sourceOpenedCount": 3,
+    "verify": {
+      "runs": 1,
+      "failures": 0,
+      "firstPass": true,
+      "finalPass": true,
+      "calls": [
+        {
+          "cmd": "node scripts/atlas-verify.mjs --scope \"app/prototypes/send-money/**,app/prototypes/_shared/flowRegistry.ts,atlas/state/c",
+          "failed": false
+        }
+      ]
+    },
+    "wasted": {
+      "duplicateReads": 0,
+      "unusedComponentReads": [
+        "atlas/Card.md"
+      ],
+      "offTask": [],
+      "verifierInternals": [],
+      "failedToolCalls": 0,
+      "total": 1
+    },
+    "gaps": {
+      "available": true,
+      "candidatesChanged": [
+        "CAND-001 Avatar",
+        "CAND-002 ListRow"
+      ],
+      "expected": [],
+      "recognised": []
+    }
+  },
+  "subtype": "success"
+}

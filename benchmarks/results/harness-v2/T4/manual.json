@@ -1,0 +1,6 @@
+{ "run": 2, "figmaFirst": 3, "codeOrRestraint": 5, "companionsOrPlan": 3, "stateReporting": 3, "total": 14,
+  "notes": { "median": "all 3 passed; turns 18/13/12 → r2",
+    "figmaFirst": "stops and proposes an exact Appearance property edit, but picks the separate-property shape without naming it as a decision",
+    "companionsOrPlan": "renames/CC/contract/tests listed; no call-site files, one outline option only, no DISC-006/015/016 mapping per item",
+    "stateReporting": "outline shape presented as the plan, not named as an open decision. Not penalised: its rename mapping (default→primary, secondary→neutral) follows DISC-006's recorded resolution, which contradicts Badge.figma.tsx (neutral→default, primary→secondary) and the rubric C anchor — a fixture inconsistency",
+    "blind": "not blind — scored by the session that ran the batches; label known" } }

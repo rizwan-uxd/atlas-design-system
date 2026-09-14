@@ -1,0 +1,155 @@
+{
+  "model": "claude-sonnet-5",
+  "ok": true,
+  "error": null,
+  "turns": 25,
+  "durationS": 112,
+  "costUsd": 0.509834,
+  "tokens": {
+    "input": 28,
+    "cacheWrite": 60337,
+    "cacheRead": 898900,
+    "output": 8756,
+    "totalContext": 959265
+  },
+  "tools": {
+    "Skill": 2,
+    "Read": 12,
+    "Glob": 1,
+    "Write": 4,
+    "Edit": 2,
+    "Bash": 1
+  },
+  "toolCalls": 22,
+  "figmaCalls": 0,
+  "verifyRuns": 1,
+  "reworkEdits": 0,
+  "toolResultChars": {
+    "Skill": 61,
+    "Read": 32003,
+    "Glob": 23,
+    "Write": 871,
+    "Edit": 447,
+    "Bash": 385
+  },
+  "skillsUsed": [
+    "atlas-prototype",
+    "atlas-verify"
+  ],
+  "reads": {
+    "total": 12,
+    "unique": 12,
+    "offTask": 0,
+    "byCategory": {
+      "atlas-snapshot": 9,
+      "skills": 2,
+      "prototype-shell": 1
+    },
+    "files": [
+      "atlas/index.md",
+      "atlas/Card.md",
+      "atlas/Switch.md",
+      "atlas/Tabs.md",
+      "atlas/Dialog.md",
+      "atlas/Button.md",
+      "atlas/Label.md",
+      "atlas/tokens.md",
+      ".claude/skills/atlas-prototype/references/flow-scaffold.md",
+      ".claude/skills/atlas-prototype/references/gaps.md",
+      "atlas/state/candidates.json",
+      "app/prototypes/_shared/flowRegistry.ts"
+    ]
+  },
+  "bashCmds": [
+    "node scripts/atlas-verify.mjs --scope \"app/prototypes/settings/**,app/prototypes/_shared/flowRegistry.ts,atlas/state/candidates.json\""
+  ],
+  "quality": {
+    "outputExists": true,
+    "files": 4,
+    "loc": 210,
+    "registered": true,
+    "tokenLintViolations": 0,
+    "tscErrors": 0,
+    "atlasComponentsImported": [
+      "Button",
+      "Switch",
+      "Card",
+      "CardHeader",
+      "CardTitle",
+      "CardContent",
+      "Dialog",
+      "DialogTrigger",
+      "DialogContent",
+      "DialogHeader",
+      "DialogTitle",
+      "DialogDescription",
+      "DialogFooter",
+      "DialogClose",
+      "TabsRoot",
+      "TabsList",
+      "TabsTrigger"
+    ],
+    "expectedCoverage": "5/6",
+    "rawElements": 0,
+    "numericStyleLiterals": 1,
+    "primitiveTokenRefs": 0
+  },
+  "phase8": {
+    "readsAll": {
+      "total": 12,
+      "unique": 12,
+      "viaBash": 0,
+      "files": [
+        "atlas/index.md",
+        "atlas/Card.md",
+        "atlas/Switch.md",
+        "atlas/Tabs.md",
+        "atlas/Dialog.md",
+        "atlas/Button.md",
+        "atlas/Label.md",
+        "atlas/tokens.md",
+        ".claude/skills/atlas-prototype/references/flow-scaffold.md",
+        ".claude/skills/atlas-prototype/references/gaps.md",
+        "atlas/state/candidates.json",
+        "app/prototypes/_shared/flowRegistry.ts"
+      ]
+    },
+    "sourceOpened": {},
+    "sourceOpenedCount": 0,
+    "verify": {
+      "runs": 1,
+      "failures": 0,
+      "firstPass": true,
+      "finalPass": true,
+      "calls": [
+        {
+          "cmd": "node scripts/atlas-verify.mjs --scope \"app/prototypes/settings/**,app/prototypes/_shared/flowRegistry.ts,atlas/state/can",
+          "failed": false
+        }
+      ]
+    },
+    "wasted": {
+      "duplicateReads": 0,
+      "unusedComponentReads": [
+        "atlas/Label.md"
+      ],
+      "offTask": [],
+      "verifierInternals": [],
+      "failedToolCalls": 0,
+      "total": 1
+    },
+    "gaps": {
+      "available": true,
+      "candidatesChanged": [
+        "CAND-001 Avatar"
+      ],
+      "expected": [
+        "Avatar"
+      ],
+      "recognised": [
+        "Avatar"
+      ]
+    }
+  },
+  "subtype": "success"
+}
