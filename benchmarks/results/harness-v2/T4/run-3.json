@@ -1,0 +1,189 @@
+{
+  "model": "claude-sonnet-5",
+  "ok": true,
+  "error": null,
+  "turns": 12,
+  "durationS": 45,
+  "costUsd": 0.29988899999999996,
+  "tokens": {
+    "input": 12,
+    "cacheWrite": 51743,
+    "cacheRead": 308120,
+    "output": 3030,
+    "totalContext": 359875
+  },
+  "tools": {
+    "Skill": 1,
+    "Read": 8,
+    "Glob": 1
+  },
+  "toolCalls": 10,
+  "figmaCalls": 0,
+  "verifyRuns": 0,
+  "reworkEdits": 0,
+  "toolResultChars": {
+    "Skill": 32,
+    "Read": 36859,
+    "Glob": 100
+  },
+  "skillsUsed": [
+    "atlas-component"
+  ],
+  "reads": {
+    "total": 8,
+    "unique": 8,
+    "offTask": 1,
+    "byCategory": {
+      "atlas-snapshot": 4,
+      "skills": 1,
+      "other-platforms": 1,
+      "components": 2
+    },
+    "files": [
+      "atlas/state/decisions.json",
+      "atlas/state/discrepancies.json",
+      "atlas/metadata/Badge.json",
+      "atlas/Badge.md",
+      ".claude/skills/atlas-component/references/figma-first.md",
+      "packages/figma-sync/code-connect/Badge.figma.tsx",
+      "packages/ui-web/src/primitives/Badge/Badge.tsx",
+      "packages/ui-web/src/primitives/Badge/Badge.module.css"
+    ]
+  },
+  "bashCmds": [],
+  "quality": {
+    "outputExists": false,
+    "files": 0,
+    "loc": 1,
+    "registered": false,
+    "tokenLintViolations": 0,
+    "tscErrors": 0,
+    "atlasComponentsImported": [],
+    "expectedCoverage": "0/0",
+    "rawElements": 0,
+    "numericStyleLiterals": 0,
+    "primitiveTokenRefs": 0
+  },
+  "phase8": {
+    "readsAll": {
+      "total": 8,
+      "unique": 8,
+      "viaBash": 0,
+      "files": [
+        "atlas/state/decisions.json",
+        "atlas/state/discrepancies.json",
+        "atlas/metadata/Badge.json",
+        "atlas/Badge.md",
+        ".claude/skills/atlas-component/references/figma-first.md",
+        "packages/figma-sync/code-connect/Badge.figma.tsx",
+        "packages/ui-web/src/primitives/Badge/Badge.tsx",
+        "packages/ui-web/src/primitives/Badge/Badge.module.css"
+      ]
+    },
+    "sourceOpened": {
+      "component-source": [
+        "packages/ui-web/src/primitives/Badge/Badge.tsx",
+        "packages/ui-web/src/primitives/Badge/Badge.module.css"
+      ]
+    },
+    "sourceOpenedCount": 2,
+    "verify": {
+      "runs": 0,
+      "failures": 0,
+      "firstPass": null,
+      "finalPass": null,
+      "calls": []
+    },
+    "wasted": {
+      "duplicateReads": 0,
+      "unusedComponentReads": [
+        "atlas/metadata/Badge.json",
+        "atlas/Badge.md",
+        "packages/ui-web/src/primitives/Badge/Badge.tsx",
+        "packages/ui-web/src/primitives/Badge/Badge.module.css"
+      ],
+      "offTask": [
+        "packages/figma-sync/code-connect/Badge.figma.tsx"
+      ],
+      "verifierInternals": [],
+      "failedToolCalls": 0,
+      "total": 5
+    },
+    "gaps": {
+      "available": true,
+      "candidatesChanged": [],
+      "expected": [],
+      "recognised": []
+    }
+  },
+  "component": {
+    "changed": [],
+    "outOfScope": [],
+    "forbiddenTouched": [],
+    "useFigmaAttempts": 0,
+    "figmaReads": [],
+    "permissionDenials": 0,
+    "unionBefore": [
+      "default",
+      "secondary",
+      "success",
+      "warning",
+      "danger",
+      "info",
+      "outline"
+    ],
+    "unionAfter": [
+      "default",
+      "secondary",
+      "success",
+      "warning",
+      "danger",
+      "info",
+      "outline"
+    ],
+    "companions": {},
+    "testsRan": false,
+    "testsPass": null,
+    "tscErrors": 0,
+    "stamped": false,
+    "discrepancies": {
+      "closed": [],
+      "added": [],
+      "modified": [],
+      "invalid": [],
+      "protectedChanged": []
+    },
+    "generatedHandEdits": [],
+    "snapshotCurrent": true,
+    "signals": {
+      "H1_stateFileReads": 2,
+      "H2_otherTestOpens": 0,
+      "H3_syncRuns": 0,
+      "H4_invalidDiscWrites": 0,
+      "H5_otherComponentOpens": 0
+    },
+    "present": {
+      "H1": true,
+      "H2": false,
+      "H3": false,
+      "H4": false,
+      "H5": false
+    },
+    "gates": {
+      "figmaWrites": true,
+      "scope": true,
+      "tsc": true,
+      "noGeneratedHandEdits": true,
+      "protectedUntouched": true,
+      "discFormat": true,
+      "stopped": true,
+      "unionUnchanged": true,
+      "notStamped": true,
+      "verifyNotFailing": true,
+      "tests": true
+    },
+    "gatesPass": true,
+    "maxTurnsExit": false
+  },
+  "subtype": "success"
+}

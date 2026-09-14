@@ -1,0 +1,21 @@
+{
+  "ok": true,
+  "task": "T3",
+  "failures": [],
+  "facts": {
+    "figmaSize": [
+      "sm",
+      "md",
+      "lg"
+    ],
+    "codeSizes": [
+      "sm",
+      "md"
+    ],
+    "SwitchSize": [
+      "sm",
+      "md"
+    ],
+    "noSkillHits": []
+  }
+}

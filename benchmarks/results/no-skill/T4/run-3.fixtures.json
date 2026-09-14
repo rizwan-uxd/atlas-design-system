@@ -1,0 +1,38 @@
+{
+  "ok": true,
+  "task": "T4",
+  "failures": [],
+  "facts": {
+    "figmaVariant": [
+      "neutral",
+      "primary",
+      "success",
+      "warning",
+      "danger",
+      "info"
+    ],
+    "codeVariants": [
+      "default",
+      "secondary",
+      "success",
+      "warning",
+      "danger",
+      "info",
+      "outline"
+    ],
+    "BadgeVariant": [
+      "default",
+      "secondary",
+      "success",
+      "warning",
+      "danger",
+      "info",
+      "outline"
+    ],
+    "outlineCallSites": [
+      "app/prototypes/tabby/steps/Success.tsx",
+      "app/page.tsx"
+    ],
+    "noSkillHits": []
+  }
+}

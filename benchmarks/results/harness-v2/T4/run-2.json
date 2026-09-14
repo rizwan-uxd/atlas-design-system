@@ -1,0 +1,189 @@
+{
+  "model": "claude-sonnet-5",
+  "ok": true,
+  "error": null,
+  "turns": 13,
+  "durationS": 66,
+  "costUsd": 0.3453006,
+  "tokens": {
+    "input": 18,
+    "cacheWrite": 49360,
+    "cacheRead": 474578,
+    "output": 5195,
+    "totalContext": 523956
+  },
+  "tools": {
+    "Skill": 1,
+    "Bash": 4,
+    "Grep": 1,
+    "Read": 5
+  },
+  "toolCalls": 11,
+  "figmaCalls": 0,
+  "verifyRuns": 0,
+  "reworkEdits": 0,
+  "toolResultChars": {
+    "Skill": 32,
+    "Bash": 2876,
+    "Grep": 43,
+    "Read": 26513
+  },
+  "skillsUsed": [
+    "atlas-component"
+  ],
+  "reads": {
+    "total": 5,
+    "unique": 5,
+    "offTask": 0,
+    "byCategory": {
+      "atlas-snapshot": 3,
+      "skills": 1,
+      "components": 1
+    },
+    "files": [
+      "atlas/metadata/Badge.json",
+      "atlas/state/discrepancies.json",
+      ".claude/skills/atlas-component/references/figma-first.md",
+      "atlas/Badge.md",
+      "packages/ui-web/src/primitives/Badge/Badge.tsx"
+    ]
+  },
+  "bashCmds": [
+    "cat atlas/state/decisions.json",
+    "cat atlas/state/discrepancies.json | python3 -c \"import json,sys; d=json.load(sys.stdin); print(json.dumps([x for x in d if 'Badge' in json.dumps(x)], indent=2))\"",
+    "python3 -c \"\nimport json\nd = json.load(open('atlas/state/discrepancies.json'))\nprint(type(d))\nprint(list(d.keys()) if isinstance(d, dict) else len(d))\n\"\n",
+    "find packages/ui-web/src/primitives/Badge -type f"
+  ],
+  "quality": {
+    "outputExists": false,
+    "files": 0,
+    "loc": 1,
+    "registered": false,
+    "tokenLintViolations": 0,
+    "tscErrors": 0,
+    "atlasComponentsImported": [],
+    "expectedCoverage": "0/0",
+    "rawElements": 0,
+    "numericStyleLiterals": 0,
+    "primitiveTokenRefs": 0
+  },
+  "phase8": {
+    "readsAll": {
+      "total": 9,
+      "unique": 6,
+      "viaBash": 3,
+      "files": [
+        "Bash:atlas/state/decisions.json",
+        "Bash:atlas/state/discrepancies.json",
+        "Grep:atlas/state/discrepancies.json",
+        "atlas/metadata/Badge.json",
+        "Bash:atlas/state/discrepancies.json",
+        "atlas/state/discrepancies.json",
+        ".claude/skills/atlas-component/references/figma-first.md",
+        "atlas/Badge.md",
+        "packages/ui-web/src/primitives/Badge/Badge.tsx"
+      ]
+    },
+    "sourceOpened": {
+      "component-source": [
+        "packages/ui-web/src/primitives/Badge/Badge.tsx"
+      ]
+    },
+    "sourceOpenedCount": 1,
+    "verify": {
+      "runs": 0,
+      "failures": 0,
+      "firstPass": null,
+      "finalPass": null,
+      "calls": []
+    },
+    "wasted": {
+      "duplicateReads": 3,
+      "unusedComponentReads": [
+        "atlas/metadata/Badge.json",
+        "atlas/Badge.md",
+        "packages/ui-web/src/primitives/Badge/Badge.tsx"
+      ],
+      "offTask": [],
+      "verifierInternals": [],
+      "failedToolCalls": 2,
+      "total": 8
+    },
+    "gaps": {
+      "available": true,
+      "candidatesChanged": [],
+      "expected": [],
+      "recognised": []
+    }
+  },
+  "component": {
+    "changed": [],
+    "outOfScope": [],
+    "forbiddenTouched": [],
+    "useFigmaAttempts": 0,
+    "figmaReads": [],
+    "permissionDenials": 2,
+    "unionBefore": [
+      "default",
+      "secondary",
+      "success",
+      "warning",
+      "danger",
+      "info",
+      "outline"
+    ],
+    "unionAfter": [
+      "default",
+      "secondary",
+      "success",
+      "warning",
+      "danger",
+      "info",
+      "outline"
+    ],
+    "companions": {},
+    "testsRan": false,
+    "testsPass": null,
+    "tscErrors": 0,
+    "stamped": false,
+    "discrepancies": {
+      "closed": [],
+      "added": [],
+      "modified": [],
+      "invalid": [],
+      "protectedChanged": []
+    },
+    "generatedHandEdits": [],
+    "snapshotCurrent": true,
+    "signals": {
+      "H1_stateFileReads": 5,
+      "H2_otherTestOpens": 0,
+      "H3_syncRuns": 0,
+      "H4_invalidDiscWrites": 0,
+      "H5_otherComponentOpens": 0
+    },
+    "present": {
+      "H1": true,
+      "H2": false,
+      "H3": false,
+      "H4": false,
+      "H5": false
+    },
+    "gates": {
+      "figmaWrites": true,
+      "scope": true,
+      "tsc": true,
+      "noGeneratedHandEdits": true,
+      "protectedUntouched": true,
+      "discFormat": true,
+      "stopped": true,
+      "unionUnchanged": true,
+      "notStamped": true,
+      "verifyNotFailing": true,
+      "tests": true
+    },
+    "gatesPass": true,
+    "maxTurnsExit": false
+  },
+  "subtype": "success"
+}

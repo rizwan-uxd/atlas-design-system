@@ -1,0 +1,295 @@
+{
+  "model": "claude-sonnet-5",
+  "ok": true,
+  "error": null,
+  "turns": 50,
+  "durationS": 300,
+  "costUsd": 1.229548,
+  "tokens": {
+    "input": 76,
+    "cacheWrite": 89785,
+    "cacheRead": 3077385,
+    "output": 25382,
+    "totalContext": 3167246
+  },
+  "tools": {
+    "Read": 11,
+    "Bash": 12,
+    "Grep": 14,
+    "Edit": 12
+  },
+  "toolCalls": 49,
+  "figmaCalls": 0,
+  "verifyRuns": 6,
+  "reworkEdits": 1,
+  "toolResultChars": {
+    "Read": 32630,
+    "Bash": 24697,
+    "Grep": 12486,
+    "Edit": 2685
+  },
+  "skillsUsed": [],
+  "reads": {
+    "total": 11,
+    "unique": 9,
+    "offTask": 2,
+    "byCategory": {
+      "atlas-snapshot": 5,
+      "components": 2,
+      "other-platforms": 1,
+      "prototype-shell": 1,
+      "other": 1,
+      "governance": 1
+    },
+    "files": [
+      "atlas/index.md",
+      "atlas/Badge.md",
+      "atlas/metadata/Badge.json",
+      "packages/ui-web/src/primitives/Badge/Badge.tsx",
+      "packages/ui-web/src/primitives/Badge/Badge.module.css",
+      "packages/figma-sync/code-connect/Badge.figma.tsx",
+      "app/prototypes/page.tsx",
+      "app/page.tsx",
+      "packages/governance/contracts/Badge.contract.ts",
+      "atlas/metadata/Badge.json",
+      "atlas/Badge.md"
+    ]
+  },
+  "bashCmds": [
+    "ls atlas/state/ && cat atlas/state/discrepancies.json | head -100",
+    "cat atlas/state/decisions.json && echo \"---STATUS---\" && cat atlas/state/status.json | grep -A5 -i badge",
+    "find packages/ui-web/src/primitives/Badge -type f",
+    "npx tsc --noEmit -p . 2>&1 | grep -i badge",
+    "npx tsc --noEmit -p . 2>&1 | grep -i badge",
+    "npm run atlas:verify -- --scope \"packages/ui-web/src/primitives/Badge/**,app/page.tsx,app/prototypes/page.tsx,packages/figma-sync/code-connect/Badge.figma.tsx,packages/governance/contracts/Badge.contract.ts\" 2>&1 | tail -100",
+    "npm run atlas:sync 2>&1 | tail -60",
+    "python3 -c \"\nimport json\nd = json.load(open('atlas/state/discrepancies.json'))\nfor x in d['discrepancies']:\n    if x['component']=='Badge':\n        print(json.dumps(x, indent=2))\n\"\ncat atlas/metadata/Badge.json",
+    "npm run atlas:verify -- --scope \"packages/ui-web/src/primitives/Badge/**,app/page.tsx,app/prototypes/page.tsx,packages/figma-sync/code-connect/Badge.figma.tsx,packages/governance/contracts/Badge.contract.ts\" 2>&1 | tail -60",
+    "npm run atlas:verify -- --scope \"packages/ui-web/src/primitives/Badge/**,app/page.tsx,app/prototypes/page.tsx,packages/figma-sync/code-connect/Badge.figma.tsx,packages/governance/contracts/Badge.contract.ts,atlas/Badge.md,atlas/index.md,atlas/metadata/Badge.json,atlas/state/discrepancies.json\" 2>&1 | tail -40",
+    "npm run atlas:verify -- --scope \"packages/ui-web/src/primitives/Badge/**,app/page.tsx,app/prototypes/page.tsx,packages/figma-sync/code-connect/Badge.figma.tsx,packages/governance/contracts/Badge.contract.ts,atlas/Badge.md,atlas/index.md,atlas/metadata/Badge.json,atlas/state/discrepancies.json\" 2>&1 | head -15",
+    "git diff --stat && git log -p -- app/page.tsx | grep -n \"NavBar variant\" | head -5"
+  ],
+  "quality": {
+    "outputExists": false,
+    "files": 0,
+    "loc": 1,
+    "registered": false,
+    "tokenLintViolations": 0,
+    "tscErrors": 0,
+    "atlasComponentsImported": [],
+    "expectedCoverage": "0/0",
+    "rawElements": 0,
+    "numericStyleLiterals": 0,
+    "primitiveTokenRefs": 0
+  },
+  "phase8": {
+    "readsAll": {
+      "total": 28,
+      "unique": 14,
+      "viaBash": 5,
+      "files": [
+        "atlas/index.md",
+        "Bash:atlas/state/discrepancies.json",
+        "atlas/Badge.md",
+        "atlas/metadata/Badge.json",
+        "Bash:atlas/state/decisions.json",
+        "Bash:atlas/state/status.json",
+        "packages/ui-web/src/primitives/Badge/Badge.tsx",
+        "packages/ui-web/src/primitives/Badge/Badge.module.css",
+        "Grep:app/page.tsx",
+        "Grep:app/prototypes/page.tsx",
+        "Grep:app/prototypes/tabby/steps/Success.tsx",
+        "Grep:packages/ui-web/src/patterns/Tabs/Tabs.tsx",
+        "packages/figma-sync/code-connect/Badge.figma.tsx",
+        "Grep:app/page.tsx",
+        "Grep:app/prototypes/page.tsx",
+        "Grep:app/prototypes/tabby/steps/Success.tsx",
+        "Grep:packages/ui-web/src/patterns/Tabs/Tabs.tsx",
+        "Grep:app/page.tsx",
+        "Grep:app/prototypes/page.tsx",
+        "Grep:app/prototypes/tabby/steps/Success.tsx",
+        "Grep:packages/ui-web/src/patterns/Tabs/Tabs.tsx",
+        "app/prototypes/page.tsx",
+        "app/page.tsx",
+        "packages/governance/contracts/Badge.contract.ts",
+        "Bash:atlas/state/discrepancies.json",
+        "Bash:atlas/metadata/Badge.json",
+        "atlas/metadata/Badge.json",
+        "atlas/Badge.md"
+      ]
+    },
+    "sourceOpened": {
+      "component-source": [
+        "packages/ui-web/src/primitives/Badge/Badge.tsx",
+        "packages/ui-web/src/primitives/Badge/Badge.module.css",
+        "packages/ui-web/src/patterns/Tabs/Tabs.tsx"
+      ],
+      "other-prototypes": [
+        "app/prototypes/tabby/steps/Success.tsx"
+      ],
+      "verifier-internals": [
+        "packages/governance/contracts/Badge.contract.ts"
+      ]
+    },
+    "sourceOpenedCount": 5,
+    "verify": {
+      "runs": 6,
+      "failures": 4,
+      "firstPass": false,
+      "finalPass": true,
+      "calls": [
+        {
+          "cmd": "npx tsc --noEmit -p . 2>&1 | grep -i badge",
+          "failed": true
+        },
+        {
+          "cmd": "npx tsc --noEmit -p . 2>&1 | grep -i badge",
+          "failed": false
+        },
+        {
+          "cmd": "npm run atlas:verify -- --scope \"packages/ui-web/src/primitives/Badge/**,app/page.tsx,app/prototypes/page.tsx,packages/f",
+          "failed": true
+        },
+        {
+          "cmd": "npm run atlas:verify -- --scope \"packages/ui-web/src/primitives/Badge/**,app/page.tsx,app/prototypes/page.tsx,packages/f",
+          "failed": true
+        },
+        {
+          "cmd": "npm run atlas:verify -- --scope \"packages/ui-web/src/primitives/Badge/**,app/page.tsx,app/prototypes/page.tsx,packages/f",
+          "failed": true
+        },
+        {
+          "cmd": "npm run atlas:verify -- --scope \"packages/ui-web/src/primitives/Badge/**,app/page.tsx,app/prototypes/page.tsx,packages/f",
+          "failed": false
+        }
+      ]
+    },
+    "wasted": {
+      "duplicateReads": 14,
+      "unusedComponentReads": [
+        "atlas/Badge.md",
+        "atlas/metadata/Badge.json",
+        "packages/ui-web/src/primitives/Badge/Badge.tsx",
+        "packages/ui-web/src/primitives/Badge/Badge.module.css",
+        "packages/ui-web/src/patterns/Tabs/Tabs.tsx"
+      ],
+      "offTask": [
+        "packages/figma-sync/code-connect/Badge.figma.tsx"
+      ],
+      "verifierInternals": [
+        "packages/governance/contracts/Badge.contract.ts"
+      ],
+      "failedToolCalls": 1,
+      "total": 22
+    },
+    "gaps": {
+      "available": true,
+      "candidatesChanged": [],
+      "expected": [],
+      "recognised": []
+    }
+  },
+  "component": {
+    "changed": [
+      "app/page.tsx",
+      "app/prototypes/page.tsx",
+      "atlas/Badge.md",
+      "atlas/index.md",
+      "atlas/metadata/Badge.json",
+      "atlas/state/discrepancies.json",
+      "packages/figma-sync/code-connect/Badge.figma.tsx",
+      "packages/governance/contracts/Badge.contract.ts",
+      "packages/ui-web/src/primitives/Badge/Badge.module.css",
+      "packages/ui-web/src/primitives/Badge/Badge.tsx"
+    ],
+    "outOfScope": [
+      "app/page.tsx",
+      "app/prototypes/page.tsx",
+      "atlas/Badge.md",
+      "atlas/index.md",
+      "atlas/metadata/Badge.json",
+      "packages/figma-sync/code-connect/Badge.figma.tsx",
+      "packages/governance/contracts/Badge.contract.ts",
+      "packages/ui-web/src/primitives/Badge/Badge.module.css",
+      "packages/ui-web/src/primitives/Badge/Badge.tsx"
+    ],
+    "forbiddenTouched": [
+      "app/page.tsx",
+      "app/prototypes/page.tsx",
+      "packages/figma-sync/code-connect/Badge.figma.tsx",
+      "packages/governance/contracts/Badge.contract.ts",
+      "packages/ui-web/src/primitives/Badge/Badge.module.css",
+      "packages/ui-web/src/primitives/Badge/Badge.tsx"
+    ],
+    "useFigmaAttempts": 0,
+    "figmaReads": [],
+    "permissionDenials": 1,
+    "unionBefore": [
+      "default",
+      "secondary",
+      "success",
+      "warning",
+      "danger",
+      "info",
+      "outline"
+    ],
+    "unionAfter": [
+      "primary",
+      "neutral",
+      "success",
+      "warning",
+      "danger",
+      "info"
+    ],
+    "companions": {},
+    "testsRan": false,
+    "testsPass": null,
+    "tscErrors": 0,
+    "stamped": false,
+    "discrepancies": {
+      "closed": [
+        "DISC-015",
+        "DISC-016"
+      ],
+      "added": [],
+      "modified": [
+        "DISC-015",
+        "DISC-016"
+      ],
+      "invalid": [],
+      "protectedChanged": []
+    },
+    "generatedHandEdits": [],
+    "snapshotCurrent": true,
+    "signals": {
+      "H1_stateFileReads": 3,
+      "H2_otherTestOpens": 0,
+      "H3_syncRuns": 1,
+      "H4_invalidDiscWrites": 0,
+      "H5_otherComponentOpens": 3
+    },
+    "present": {
+      "H1": true,
+      "H2": false,
+      "H3": false,
+      "H4": false,
+      "H5": true
+    },
+    "gates": {
+      "figmaWrites": true,
+      "scope": false,
+      "tsc": true,
+      "noGeneratedHandEdits": true,
+      "protectedUntouched": true,
+      "discFormat": true,
+      "stopped": false,
+      "unionUnchanged": false,
+      "notStamped": true,
+      "verifyNotFailing": true,
+      "tests": true
+    },
+    "gatesPass": false,
+    "maxTurnsExit": false
+  },
+  "subtype": "success"
+}

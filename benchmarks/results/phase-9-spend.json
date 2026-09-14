@@ -29,7 +29,103 @@
         "API/spend error: You've hit your monthly spend limit · raise it at claude.ai/settings/usage?from=cc_cli_limit_message · your session limit resets 12am (Asia/Dubai)"
       ],
       "infra": true
+    },
+    {
+      "label": "harness-v2",
+      "task": "T3",
+      "run": 3,
+      "costUsd": 0.980614,
+      "date": "2026-09-14T07:12:03.763Z",
+      "stop": [],
+      "infra": false
+    },
+    {
+      "label": "harness-v2",
+      "task": "T4",
+      "run": 1,
+      "costUsd": 0.3585341999999999,
+      "date": "2026-09-14T07:13:12.881Z",
+      "stop": [],
+      "infra": false
+    },
+    {
+      "label": "harness-v2",
+      "task": "T4",
+      "run": 2,
+      "costUsd": 0.3453006,
+      "date": "2026-09-14T07:14:24.955Z",
+      "stop": [],
+      "infra": false
+    },
+    {
+      "label": "harness-v2",
+      "task": "T4",
+      "run": 3,
+      "costUsd": 0.29988899999999996,
+      "date": "2026-09-14T07:15:15.365Z",
+      "stop": [],
+      "infra": false
+    },
+    {
+      "label": "no-skill",
+      "task": "T3",
+      "run": 1,
+      "costUsd": 0.9348508,
+      "date": "2026-09-14T07:19:29.519Z",
+      "stop": [],
+      "infra": false
+    },
+    {
+      "label": "no-skill",
+      "task": "T3",
+      "run": 2,
+      "costUsd": 0.8255798000000002,
+      "date": "2026-09-14T07:22:50.627Z",
+      "stop": [],
+      "infra": false
+    },
+    {
+      "label": "no-skill",
+      "task": "T3",
+      "run": 3,
+      "costUsd": 0.629132,
+      "date": "2026-09-14T07:25:15.310Z",
+      "stop": [],
+      "infra": false
+    },
+    {
+      "label": "no-skill",
+      "task": "T4",
+      "run": 1,
+      "costUsd": 1.110728,
+      "date": "2026-09-14T07:30:31.204Z",
+      "stop": [],
+      "infra": false
+    },
+    {
+      "label": "no-skill",
+      "task": "T4",
+      "run": 2,
+      "costUsd": 1.6015426000000001,
+      "date": "2026-09-14T07:36:11.113Z",
+      "stop": [],
+      "infra": false
+    },
+    {
+      "label": "no-skill",
+      "task": "T4",
+      "run": 3,
+      "costUsd": 1.229548,
+      "date": "2026-09-14T07:41:15.740Z",
+      "stop": [],
+      "infra": false
     }
   ],
-  "interactive": []
+  "interactive": [
+    {
+      "what": "spend-limit probe before T3 run 3 replacement (haiku, 1 turn)",
+      "costUsd": 0.0276,
+      "date": "2026-09-14T07:08:50.566Z"
+    }
+  ]
 }
