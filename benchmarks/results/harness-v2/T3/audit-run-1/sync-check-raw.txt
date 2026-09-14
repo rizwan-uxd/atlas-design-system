@@ -1,0 +1,36 @@
+atlas-sync — no pull; Figma facts carried forward from the last sync
+  source       figma-synced
+  syncedAt     2026-09-12T00:00:00.000Z
+  figmaVersion lib:Atlas Design System v1@2026-07-06T03:42:12Z
+  components   12 (12 in pull)
+  would write    0 file(s)
+
+  drift — 15 detected this run, 26 open in state/discrepancies.json
+    DISC-001 Label [figma] Figma has no `inline` Variant; code does.
+    DISC-002 Textarea [code] Figma has Variant `unstyled`; code has only default and filled.
+    DISC-004 Switch [figma] Figma used Variant for on/off.
+    DISC-005 Card [figma] Code has Variant `filled`; Figma does not.
+    DISC-006 Badge [both] Different tone names, and `outline` is a style folded into variant.
+    DISC-007 Alert [both] Code missing `neutral` and size lg; Figma models dismissible as a State.
+    DISC-008 Dialog [both] Two different axes — Figma Variant = intent, code variant = presentation.
+    DISC-009 Tabs [code] Different names: underline/pills/enclosed vs line/pill/segmented; segmented is a restyle.
+    DISC-010 NavBar [both] Different sets: default/transparent/elevated vs default/bordered/floating.
+    DISC-011 Label [figma] Code has Variant default, inline; Figma has no Variant property.
+    DISC-012 Textarea [code] Variant mismatch — Figma: default, filled, unstyled · code: default, filled.
+    DISC-013 Switch [code] Figma has Variant off, on; code exports no SwitchVariant.
+    DISC-015 Badge [code] Code Connect maps Variant value(s) neutral, primary that BadgeVariant does not export.
+    DISC-016 Badge [both] Variant mismatch — Figma: neutral, primary, success, warning, danger, info · code: default, secondary, success, warning, danger, info, outline.
+    DISC-017 Alert [code] Variant mismatch — Figma: info, success, warning, danger, neutral · code: info, success, warning, danger.
+    DISC-018 Alert [code] Size mismatch — Figma: sm, md, lg · code: sm, md.
+    DISC-019 Card [figma] Variant mismatch — Figma: default, outlined, elevated · code: default, elevated, outlined, filled.
+    DISC-020 Dialog [code] Code Connect maps Variant value(s) default that DialogVariant does not export.
+    DISC-021 Dialog [both] Variant mismatch — Figma: default, destructive · code: modal, sheet, drawer.
+    DISC-022 Dialog [figma] Size mismatch — Figma: sm, md, lg, full · code: sm, md, lg, xl, full.
+    DISC-023 Tabs [code] Code Connect maps Variant value(s) line, pill, segmented that TabsVariant does not export.
+    DISC-024 Tabs [both] Variant mismatch — Figma: line, pill, segmented · code: underline, pills, enclosed.
+    DISC-025 NavBar [code] Code Connect maps Variant value(s) bordered, floating that NavBarVariant does not export.
+    DISC-026 NavBar [both] Variant mismatch — Figma: default, bordered, floating · code: default, transparent, elevated.
+    DISC-027 Checkbox [figma] Figma description is a spec summary, not usage guidance: "Atlas Checkbox v1 — 3 variants × 3 sizes × 5 states (45 total).".
+    DISC-028 Switch [both] Code has an `invalid` prop (aria-invalid + data-invalid, no styling) but Figma's Switch State property has no invalid value, so there is no approved visual treatment. Checkbox ships `invalid` the same way, undocumented — not a precedent.
+
+  ⚠ no --pull: Figma-side facts were last read 2026-09-12T00:00:00.000Z — re-run the atlas-figma-sync skill to refresh them.

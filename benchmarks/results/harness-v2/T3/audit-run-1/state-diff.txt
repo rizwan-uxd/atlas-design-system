@@ -1,0 +1,48 @@
+diff --git a/atlas/state/discrepancies.json b/atlas/state/discrepancies.json
+index f00fefd..6fb4819 100644
+--- a/atlas/state/discrepancies.json
++++ b/atlas/state/discrepancies.json
+@@ -32,10 +32,10 @@
+     {
+       "id": "DISC-004",
+       "component": "Switch",
+-      "side": "both",
++      "side": "figma",
+       "status": "open",
+-      "issue": "Figma used Variant for on/off; code has no size lg.",
+-      "resolution": "Figma: Variant → Checked boolean. Code: add size lg."
++      "issue": "Figma used Variant for on/off.",
++      "resolution": "Figma: Variant → Checked boolean. Code: size lg added (2026-09-13)."
+     },
+     {
+       "id": "DISC-005",
+@@ -122,12 +122,14 @@
+       "id": "DISC-014",
+       "component": "Switch",
+       "side": "code",
+-      "status": "open",
++      "status": "closed",
+       "issue": "Size mismatch — Figma: sm, md, lg · code: sm, md.",
+       "resolution": "add lg to SwitchSize",
+       "detectedBy": "sync:figma",
+       "firstSeen": "2026-09-12T00:00:00.000Z",
+-      "lastSeen": "2026-09-12T00:00:00.000Z"
++      "lastSeen": "2026-09-12T00:00:00.000Z",
++      "closedAt": "2026-09-12T00:00:00.000Z",
++      "closedBy": "sync:figma"
+     },
+     {
+       "id": "DISC-015",
+diff --git a/atlas/state/status.json b/atlas/state/status.json
+index 2964fbc..821019c 100644
+--- a/atlas/state/status.json
++++ b/atlas/state/status.json
+@@ -15,7 +15,7 @@
+     "Label": { "parity": "open", "figmaMetadata": "none", "code": "scaffolded", "verifiedAt": null },
+     "Textarea": { "parity": "open", "figmaMetadata": "none", "code": "scaffolded", "verifiedAt": null },
+     "Checkbox": { "parity": "code-applied", "figmaMetadata": "description-written", "code": "scaffolded", "verifiedAt": null },
+-    "Switch": { "parity": "open", "figmaMetadata": "none", "code": "scaffolded", "verifiedAt": "2026-09-13T08:00:35.464Z" },
++    "Switch": { "parity": "code-applied", "figmaMetadata": "none", "code": "scaffolded", "verifiedAt": "2026-09-13T17:37:08.758Z" },
+     "Badge": { "parity": "open", "figmaMetadata": "none", "code": "scaffolded", "verifiedAt": null },
+     "Alert": { "parity": "open", "figmaMetadata": "none", "code": "scaffolded", "verifiedAt": null },
+     "Card": { "parity": "open", "figmaMetadata": "none", "code": "scaffolded", "verifiedAt": null },

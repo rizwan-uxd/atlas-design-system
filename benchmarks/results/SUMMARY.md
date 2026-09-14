@@ -23,3 +23,12 @@ Correctness first — a label only wins if these are equal or better. Lower is b
 | T2 | baseline | 3 | 3/3 | 3/3 | 3/6 5/6 5/6 | 0 | 0 | 0.67 (0–1) | 14 (run 3) | 3/3 | 27.67 (24–31) | 0.70 (0.63–0.79) | 1.59M (1.35M–1.79M) | 1.67M (1.43M–1.88M) | 10.1k (9228–11.1k) | 26.33 (23–30) | 117 (95–142) | 13 (11–14) | 2.33 (1–4) | 9 (8–10) | 1 | 0/3 | 5.33 (5–6) | n/a |
 | T2 | harness | 3 | 3/3 | 3/3 | 4/6 4/6 4/6 | 0 | 0 | 0 | – | 3/3 | 26.33 (23–29) | 0.47 (0.40–0.54) | 1.09M (822.9k–1.39M) | 1.16M (882.0k–1.46M) | 9453 (8178–10.2k) | 23.33 (20–26) | 115 (98–133) | 11.33 (11–12) | 0 | 0 | 0.33 (0–1) | 2/3 | 1 | 3/3 |
 | T2 | harness-v2 | 3 | 3/3 | 3/3 | 5/6 5/6 5/6 | 0 | 0 | 0 | 16 (run 3) | 3/3 | 24.33 (23–25) | 0.51 (0.47–0.58) | 880.8k (753.9k–1.06M) | 942.2k (813.7k–1.12M) | 8912 (7515–10.8k) | 21.33 (20–22) | 101 (79–121) | 12.67 (12–13) | 0.33 (0–1) | 0.33 (0–1) | 0.33 (0–1) | 2/3 | 1 | 3/3 |
+
+## Phase 9 — component tasks, mean (min–max) across runs
+
+Gates first (proposal §8.1); a count is runs passing. H columns are the §5B source signals: mean (min–max), then [runs where the
+signal is present] — a hypothesis reproduces at ≥2/3 in harness-v2. Effort columns are reported, not used for acceptance.
+
+| task | label | runs | completed | all gates | figma writes | stop decision ok | tests | tsc | verify ok | stamped | in scope | manual /20 | H1 state-file reads [runs] | H2 other tests [runs] | H3 sync runs [runs over limit] | H4 invalid DISC [runs] | H5 other components [runs] | turns | cost $ | cache read | files opened | figma reads | max-turns exits |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| T3 | harness-v2 | 2 | 2/2 | 1/2 | 0 | 2/2 | 2/2 | 0 | 2/2 | 2/2 | 2/2 | – | 2.50 (2–3) [2/2] | 0.50 (0–1) [1/2] | 2 (1–3) [1/2] | 0 [0/2] | 2.50 (2–3) [2/2] | 46.50 (44–49) | 1.10 (1.04–1.17) | 2.57M (2.51M–2.62M) | 21 (19–23) | 3.50 (2–5) | 0/2 |

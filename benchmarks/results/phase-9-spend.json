@@ -1,0 +1,35 @@
+{
+  "cap": 40,
+  "runs": [
+    {
+      "label": "harness-v2",
+      "task": "T3",
+      "run": 1,
+      "costUsd": 1.1650148000000002,
+      "date": "2026-09-13T17:37:18.904Z",
+      "stop": [],
+      "infra": false
+    },
+    {
+      "label": "harness-v2",
+      "task": "T3",
+      "run": 2,
+      "costUsd": 1.0421681999999999,
+      "date": "2026-09-13T17:42:48.369Z",
+      "stop": [],
+      "infra": false
+    },
+    {
+      "label": "harness-v2",
+      "task": "T3",
+      "run": 3,
+      "costUsd": 0.5487366,
+      "date": "2026-09-13T17:45:16.232Z",
+      "stop": [
+        "API/spend error: You've hit your monthly spend limit · raise it at claude.ai/settings/usage?from=cc_cli_limit_message · your session limit resets 12am (Asia/Dubai)"
+      ],
+      "infra": true
+    }
+  ],
+  "interactive": []
+}
