@@ -1,6 +1,6 @@
 # Phase 9 — v3 change proposals (H1, H3, H5)
 
-Status: **awaiting approval — nothing implemented.** Written 2026-09-14 from frozen harness-v2 evidence (`d7967d7`, commits `2b7e5bc`, `b00c6b8`).
+Status: **approved 2026-09-14 (`f10119c` + H3 + H5; H1 deferred); measured; Phase 9 on HOLD. See `PHASE-9-RESULTS.md`.** Originally: Written 2026-09-14 from frozen harness-v2 evidence (`d7967d7`, commits `2b7e5bc`, `b00c6b8`).
 
 Required v3 change, already committed on `bench/phase-9-v3`: **`f10119c`** — `atlas-sync` derives `## Variants` / `## Sizes`
 (correctness fix for the harness-v2 T3 run 2 hand edit of `atlas/Switch.md`). Its primary metric is generated-file hand edits.

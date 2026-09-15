@@ -91,8 +91,16 @@ Archive stale `docs/` plans, retire `atlas-context` + `atlas-ui-system`, re-run 
 - **Diet:** stale plans moved to `docs/_archive/` (root `ROADMAP.md`, `ATLAS-REPO-ANALYSIS.md`, `implementation/`, `sessions/`);
   `packages/ai-workflows/atlas-ui-skill` removed (no `atlas-context` leftovers remained). No re-run needed: all 6 harness-v2 runs read 0 off-task files.
 
-### Phase 9 — Benchmark and tighten the component workflow — in progress
+### Phase 9 — Benchmark and tighten the component workflow — ⏸ HOLD (2026-09-15)
 Approved 2026-09-13. Plan, pins, fixture gate, rubric, budget ($40 cap) and causal acceptance: `docs/PHASE-9-PROPOSAL.md`.
+v3 proposals: `docs/PHASE-9-V3-PROPOSALS.md`. Results and the HOLD rationale: `docs/PHASE-9-RESULTS.md`.
+- **Why HOLD:** the T3 fixture is defective. Switch `sm`/`md` code dimensions don't match Figma, and v3 T3 run 2 correctly
+  stopped on it. The v3 evidence is inconclusive, not PASS or FAIL.
+- **Nothing merged:** `f10119c`, H3 and H5 stay on `bench/phase-9-v3`.
+  - H3 and H5 improved their direct metrics but are not accepted (T3 correctness 2/3).
+- **Open:** T1 coverage 6/7 in harness-v3 run 2 is an unresolved regression signal.
+- **Restart:** reconcile Switch `sm`/`md` to Figma (a narrow Phase 2 prerequisite), build a new T3 fixture, then re-run T3
+  no-skill, v2 and v3. Older T3 runs are diagnostic only.
 
 ## Execution
 Run in Claude Code via `docs/HANDOFF-CLAUDE-CODE.md` — one ready-to-paste prompt per phase (scope, files to read, constraints, done criteria). Figma MCP is configured in `.mcp.json`; only phases 2F, 3 and 5 need it.

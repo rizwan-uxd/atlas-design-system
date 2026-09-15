@@ -116,6 +116,9 @@
   "runtime": {
     "component": {
       "mcpServers": "claude.ai Firecrawl | claude.ai Gmail | claude.ai Google Calendar | claude.ai Google Drive | figma | figma-desktop | graft | plugin:vercel:vercel"
+    },
+    "prototype": {
+      "mcpServers": "claude.ai Firecrawl | claude.ai Gmail | claude.ai Google Calendar | claude.ai Google Drive | figma | figma-desktop | graft | plugin:vercel:vercel"
     }
   }
 }
