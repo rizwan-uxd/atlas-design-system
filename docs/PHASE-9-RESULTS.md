@@ -156,3 +156,12 @@ run then re-synced "to confirm it writes 0 files".
 - Under the no-overlap rule, a combined result can't be used to accept either change.
 
 **Status:** Phase 9 stays HOLD. `f10119c`, H3 and H6 are not accepted, and nothing is merged.
+
+## harness-v5-t3f2 T3 (2026-09-15) — API/spend stop on run 1 → HOLD
+- **Source:** `56170dc` = `3016033` + `f10119c` + H3 revised (`companions.md` sync rule) + H6. Freeze `2447f3e`. Cap $42.
+- **Runtime:** CLI 2.1.271, `claude-sonnet-5`, same MCP set and statuses as the fixture-2 baselines.
+- **Stop:** run 1 hit "You've hit your monthly spend limit" after $0.13. `budget.mjs` recorded it as an infrastructure stop
+  (3/2 replacements used) and the chain stopped. Runs 2 and 3 never started.
+- **Policy (user, 2026-09-15):** no replacements or retries, and any API/spend stop leaves Phase 9 on HOLD. Run 1 is kept
+  as-is and not scored. The trace sha256 is in `benchmarks/results/harness-v5-t3f2/T3/trace-run-1.sha256`.
+- **Nothing accepted or merged.** Spend: $29.90 / $42.

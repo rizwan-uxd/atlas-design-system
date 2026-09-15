@@ -1,0 +1,16 @@
+{
+  "workspace": "harness-v5-t3f2-T3-1",
+  "lgShipped": false,
+  "stale": null,
+  "reasons": [
+    "lg not shipped — metric not applicable"
+  ],
+  "row": {
+    "id": "DISC-004",
+    "component": "Switch",
+    "side": "both",
+    "status": "open",
+    "issue": "Figma used Variant for on/off; code has no size lg.",
+    "resolution": "Figma: Variant → Checked boolean. Code: add size lg."
+  }
+}
