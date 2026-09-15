@@ -133,3 +133,26 @@ to 2.1.271 (`6caa423`). Evidence, from the `init` event in each run's `run-N.jso
 - **Result:** every fixture-2 comparison label used 2.1.271, so v4 resumes unchanged.
 - **Interrupted run:** v4 T3 run 2 was operator-stopped for this check. Its trace is kept in
   `benchmarks/results/harness-v4-t3f2/T3/operator-stopped-run-2/`, it isn't scored, and it re-runs from the same freeze.
+
+## harness-v4-t3f2 T3 (2026-09-15) — continuation gate FAILED on H3; T4 and T1/T2 not run
+- **Source:** `1fd95aa` = `3016033` + `f10119c` + H3 + H6 (H5 dropped). Freeze `2fa88a8`.
+- **Runs:** 3, CLI 2.1.271. Run 2 re-ran after the operator stop.
+
+| Condition | Result | Pass |
+|---|---|---|
+| All gates | 3/3 | ✓ |
+| Stale-row metric (H6) | 0/3 (v2 2/3, v3 2/3) | ✓ |
+| `f10119c` | hand edits 0/3 · derived docs 3/3 · second sync 0 ×3 | ✓ |
+| H3 | runs with a redundant state-edit sync **3/3** (limit 1/3) · mean syncs **2.33** (limit ≤ 2) · `snapshotCurrent` and verify 3/3 | **✗** |
+| Rubric, median r1 | 20/20 (A5 B5 C5 **D5**) vs v2 median 20 (D5) | ✓ |
+
+**Cause of the H3 failure: H3 and H6 interact.** Every v4 run followed H6 and narrowed DISC-004 after the post-code sync. Every
+run then re-synced "to confirm it writes 0 files".
+- That re-sync is what `companions.md` line 63 still says: "After editing state, `npm run atlas:sync` once more and confirm it
+  writes 0 files on a second run".
+- H3 changed only SKILL.md step 6, so it conflicts with that line.
+- In harness-v3-t3f2, only 1 run in 3 edited state after the sync, so the conflict rarely triggered.
+- H6 makes the state edit happen in every run, which exposes the conflict.
+- Under the no-overlap rule, a combined result can't be used to accept either change.
+
+**Status:** Phase 9 stays HOLD. `f10119c`, H3 and H6 are not accepted, and nothing is merged.

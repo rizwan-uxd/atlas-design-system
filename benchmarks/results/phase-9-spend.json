@@ -328,6 +328,24 @@
       "date": "2026-09-15T07:07:54.560Z",
       "stop": [],
       "infra": false
+    },
+    {
+      "label": "harness-v4-t3f2",
+      "task": "T3",
+      "run": 2,
+      "costUsd": 0.9050444000000001,
+      "date": "2026-09-15T07:13:19.844Z",
+      "stop": [],
+      "infra": false
+    },
+    {
+      "label": "harness-v4-t3f2",
+      "task": "T3",
+      "run": 3,
+      "costUsd": 0.7677563999999999,
+      "date": "2026-09-15T07:15:56.550Z",
+      "stop": [],
+      "infra": false
     }
   ],
   "interactive": [

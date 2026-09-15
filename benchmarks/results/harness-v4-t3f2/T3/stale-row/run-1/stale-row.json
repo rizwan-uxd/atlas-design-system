@@ -1,0 +1,15 @@
+{
+  "workspace": "harness-v4-t3f2-T3-1",
+  "lgShipped": true,
+  "stale": false,
+  "reasons": [],
+  "row": {
+    "id": "DISC-004",
+    "component": "Switch",
+    "side": "figma",
+    "status": "open",
+    "issue": "Figma used Variant for the on/off value instead of a Checked boolean property (DEC-003).",
+    "resolution": "Figma: Variant → Checked boolean.",
+    "date": "2026-09-15"
+  }
+}
