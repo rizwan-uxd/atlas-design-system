@@ -40,6 +40,24 @@ if (task === "T3") {
   must(!decisions.some(d => d.status === "provisional" && /switch/i.test(`${d.topic} ${d.decision}`)), "no provisional decision may name Switch")
   must(disc("DISC-014")?.status === "open", "DISC-014 (Switch size drift) must be open")
   if (live) must(live.Switch?.Size?.includes("lg"), "live Figma Switch Size must include lg")
+  // fixture 2: the sizes the code already has must match live Figma geometry, so adding lg is not also a sm/md fix
+  if (live?.Switch?.geometry) {
+    const tok = Object.fromEntries([...fs.readFileSync(path.join(ws, "packages/tokens/atlas.tokens.css"), "utf8")
+      .matchAll(/--(atlas-spacing-[\w]+):\s*([\d.]+)px/g)].map(x => [x[1], Number(x[2])]))
+    const css = read("packages/ui-web/src/primitives/Switch/Switch.module.css").replace(/\/\*[\s\S]*?\*\//g, "")
+    const px = expr => { const e = expr.replace(/var\(--([\w-]+)\)/g, (_, n) => tok[n] ?? NaN).replace(/calc|translateX/g, "")
+      return /^[\d\s.+\-*()]+$/.test(e) ? Function(`return (${e})`)() : NaN }
+    const decl = (sel, prop) => { const m = css.match(new RegExp(`(^|\\n)${sel.replace(/[.[\]"=]/g, "\\$&")}\\s*\\{([^}]*)\\}`)); const d = m && m[2].match(new RegExp(`(^|;|\\s)${prop}:\\s*([^;]+);`)); return d ? px(d[2].trim()) : NaN }
+    facts.switchGeometry = {}
+    for (const size of Object.keys(live.Switch.geometry).filter(sz => union("packages/ui-web/src/primitives/Switch/Switch.tsx", "SwitchSize")?.includes(sz))) {
+      const want = live.Switch.geometry[size]
+      const got = { track: [decl(`.${size}`, "width"), decl(`.${size}`, "height")], thumb: decl(`.${size} .thumb`, "width"),
+        translate: decl(`.${size}[data-state="checked"] .thumb`, "transform") }
+      facts.switchGeometry[size] = got
+      must(JSON.stringify(got) === JSON.stringify({ track: want.track, thumb: want.thumb, translate: want.translate }),
+        `code Switch ${size} geometry ${JSON.stringify(got)} must match live Figma ${JSON.stringify(want)}`)
+    }
+  }
 } else if (task === "T4") {
   const m = json("atlas/metadata/Badge.json")
   facts.figmaVariant = m.figmaProperties?.Variant; facts.codeVariants = m.variants

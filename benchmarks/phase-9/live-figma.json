@@ -2,6 +2,8 @@
   "readAt": "2026-09-13",
   "fileKey": "cKYhfaHLCoyMHi9nKr63Ig",
   "via": "mcp__figma__get_metadata (variant symbol names), interactive session, outside any agent run",
-  "Switch": { "nodeId": "95:114", "Variant": ["off", "on"], "Size": ["sm", "md", "lg"], "State": ["default", "hover", "focus-visible", "active", "disabled"], "symbols": 30 },
+  "Switch": { "nodeId": "95:114", "Variant": ["off", "on"], "Size": ["sm", "md", "lg"], "State": ["default", "hover", "focus-visible", "active", "disabled"], "symbols": 30,
+    "geometry": { "sm": { "track": [28, 16], "thumb": 12, "translate": 12 }, "md": { "track": [36, 20], "thumb": 16, "translate": 16 }, "lg": { "track": [44, 24], "thumb": 20, "translate": 20 } },
+    "geometryReadAt": "2026-09-15 via mcp__figma__get_metadata on symbols 95:24, 95:39, 95:69, 95:84, 95:99 (Track frame, Thumb ellipse x/width)" },
   "Badge": { "nodeId": "123:24", "Variant": ["neutral", "primary", "success", "warning", "danger", "info"], "Size": ["sm", "md", "lg"], "State": ["default", "disabled"], "symbols": 36 }
 }

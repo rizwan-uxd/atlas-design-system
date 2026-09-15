@@ -1,5 +1,5 @@
 {
-  "type": "component", "component": "Switch", "tier": "primitives",
+  "type": "component", "component": "Switch", "tier": "primitives", "fixture": 2,
   "expectFigmaEdit": false, "expectStop": false,
   "union": { "type": "SwitchSize", "file": "packages/ui-web/src/primitives/Switch/Switch.tsx", "mustInclude": ["lg"] },
   "allowedPaths": [
