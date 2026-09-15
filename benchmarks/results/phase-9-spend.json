@@ -319,6 +319,15 @@
       "date": "2026-09-15T03:34:02.308Z",
       "stop": [],
       "infra": false
+    },
+    {
+      "label": "harness-v4-t3f2",
+      "task": "T3",
+      "run": 1,
+      "costUsd": 0.8931001999999999,
+      "date": "2026-09-15T07:07:54.560Z",
+      "stop": [],
+      "infra": false
     }
   ],
   "interactive": [
@@ -331,6 +340,11 @@
       "what": "spend-limit probe before v3 T3 run 2 replacement (haiku, 1 turn)",
       "costUsd": 0.0242,
       "date": "2026-09-14T11:56:56.358Z"
+    },
+    {
+      "what": "harness-v4-t3f2 T3 run 2 operator-stopped at 19 tool calls (user-directed CLI check); no result event, cost estimated conservatively from usage (cache read 0.95M vs run 1 2.17M = $0.89)",
+      "costUsd": 0.6,
+      "date": "2026-09-15T07:10:33.445Z"
     }
   ]
 }

@@ -117,3 +117,19 @@ H5: **not accepted.**
 - **Rubric D, §8.3 step 3.** The v3 median scored D 4 against v2's 5, which strictly fails "no criterion lower".
   - Scores are not blind.
   - It needs a decision.
+
+## CLI version check (2026-09-15)
+Phase 9 was first pinned to Claude CLI 2.1.270. The CLI auto-updated to 2.1.271 before any fixture-2 run, and fixture 2 was pinned
+to 2.1.271 (`6caa423`). Evidence, from the `init` event in each run's `run-N.jsonl`:
+
+| Label | Runs | CLI |
+|---|---|---|
+| no-skill-t3f2 | 3 | 2.1.271 ×3 |
+| harness-v2-t3f2 | 3 | 2.1.271 ×3 |
+| harness-v3-t3f2 | 3 | 2.1.271 ×3 |
+| harness-v4-t3f2 | 2 started | 2.1.271 ×2 |
+| fixture 1: harness-v2, harness-v3, no-skill (T3) | 9 | 2.1.270 (`env.txt`, `pins-t3-fixture1.json`) — diagnostic only, not compared |
+
+- **Result:** every fixture-2 comparison label used 2.1.271, so v4 resumes unchanged.
+- **Interrupted run:** v4 T3 run 2 was operator-stopped for this check. Its trace is kept in
+  `benchmarks/results/harness-v4-t3f2/T3/operator-stopped-run-2/`, it isn't scored, and it re-runs from the same freeze.
