@@ -1,7 +1,34 @@
 {
   "model": "claude-sonnet-5",
   "cli": "2.1.271",
-  "common": null,
+  "common": {
+    "cli": "2.1.271",
+    "tooling": {
+      "benchmarks/run.sh": "560d309c6b9080dd44f45499ec4683bcb1912a0b",
+      "benchmarks/analyze.mjs": "73ea836a8df069fc914e658833084355d43db2a3",
+      "benchmarks/summarize.mjs": "d759eb2fd9caf96e5112dce59df624c644b51271",
+      "benchmarks/rubric-component.md": "cdb0cdf94b47b47e780f38738d4c0c68c3f791f7",
+      "benchmarks/phase-9/validate-fixtures.mjs": "1ac7b2dd2771af1ec4fd633e48952a04bf1acec8",
+      "benchmarks/phase-9/component-metrics.mjs": "c8138a919aa8b1b30ef44971dde91176500c0366",
+      "benchmarks/phase-9/budget.mjs": "fb1f31103519c4d80cfddc9ff46d77d8a6f7a4bc",
+      "benchmarks/phase-9/pins.mjs": "f41ceea3ac35c9d60dc829fad451bf7787820574",
+      "benchmarks/phase-9/no-skill.patch": "ccfc67bf092ec93312f8a337528db6865f47e8e5",
+      "benchmarks/phase-9/live-figma.json": "d763a353f63094e4d49ca1aa81f46a203cede249",
+      "benchmarks/phase-9/stale-row-metric.mjs": "c7f238c3044153778ada7f1c8aa079aae653cc36",
+      "benchmarks/phase-9/stale-row-metric.test.mjs": "5b68647b2c9ea5443f8300e5b9e49c3678f41fbe",
+      "benchmarks/tasks/T3/prompt.md": "2b5082e20e1ae9b5623f58beb817f2357cf6c546",
+      "benchmarks/tasks/T3/meta.json": "099110ad13d6d9a32822c974eec47bbd3c6f4413",
+      "benchmarks/tasks/T4/prompt.md": "60bd5bc0d379061aba363754e601f58ac7f78f8e",
+      "benchmarks/tasks/T4/meta.json": "6d144c18bc6f8b8c7970d1af245ad5c493c07225",
+      "scripts/lib/quality-checks.mjs": "9d416b38948bb6edd4b920a212b60b64d9691830"
+    },
+    "user": {
+      "claudeMd": "c51a033a0d710013",
+      "skills": "brandkit design-taste-frontend design-taste-frontend-v1 emil-design-eng frontend-design full-output-enforcement gpt-taste graft high-end-visual-design image-to-code imagegen-frontend-mobile imagegen-frontend-web industrial-brutalist-ui minimalist-ui redesign-existing-projects review-animations shadcn-ui stitch-design-taste ui-ux-pro-max web-design-guidelines",
+      "plugins": "figma@claude-plugins-official mattpocock-skills@claude-plugins-official superpowers@superpowers-dev vercel@claude-plugins-official",
+      "projectSettingsLocal": "4b1d7b73f45d3592"
+    }
+  },
   "labels": {
     "harness-v2": {
       "tree": "ab5a4ad74023c0c49b7a2e60823ee8177ac74a90",
@@ -148,6 +175,34 @@
       "figmaVersion": "lib:Atlas Design System v1@2026-07-06T03:42:12Z",
       "paths": {
         ".agents/skills/atlas-component": "e4047b07e067a22565e24a0d3bd7e2ffe24a6ecb",
+        ".agents/skills/atlas-verify": "edd3edb24044d9706a0cb095cca12706a281aeaa",
+        ".agents/skills/atlas-prototype": "df36c94ed6b3f35bced41f2f35f49808cb71c148",
+        ".agents/skills/atlas-figma-sync": "60637babf01461c7e4ad81aba04ea71d6d9d15ff",
+        "AGENTS.md": "39ad4a4268af8cfd5bb1e1746f2f47df1e5bfdbd",
+        "claude.md": "ea94cba64ff893ccd424c8153cb4057618c01e3f",
+        "scripts/atlas-verify.mjs": "1b7995166d577d61125e0cb892c40bbe24ba18c1",
+        "scripts/atlas-sync.mjs": "7d7ba3cc180f129e6b1d01c6ef6c77a8a5c75651",
+        "scripts/lib": "f3cd246f48c5d764147e9a95831105d50a7b8444",
+        "packages/governance/token-lint.mjs": "70c6187a31b1a624879bcb6b9bd97584fe66a228",
+        "atlas/metadata/Switch.json": "e9a1a59a6af33bff037f75d78d72557d96505a28",
+        "atlas/metadata/Badge.json": "20afa4c2c81280fcff5f267b7db3e0cf61381c8f",
+        "atlas/Switch.md": "9c1de21a79e7e01f714f112bdbf0209a93b2d36f",
+        "atlas/Badge.md": "a576a1931bc42d62929e621fb95eabcdc3a6b293",
+        "atlas/state": "271577a6e04c6d4e84b56a7a0acfc16fa20a288d",
+        "packages/ui-web/src/primitives/Switch": "e6cf8f980a4a6271529c36a9938c7711b3ba6dc8",
+        "packages/ui-web/src/primitives/Badge": "d5dab0023756efbd9ae2dd23d7a977e1fb8d9695",
+        "packages/ui-web/tests": "ca7f7a6747932c1cc78029b042a90c70fff20e19",
+        "packages/figma-sync/code-connect/Switch.figma.tsx": "3e30b6750053f4c8132d450ad6aadd92b5e08e07",
+        "packages/figma-sync/code-connect/Badge.figma.tsx": "6f364a3d016f449d7d7b7520cb8af69a0fe0fd19",
+        "packages/governance/contracts/Switch.contract.ts": "832fc5773aa97177bf2d3c380e622dd139de93e7",
+        "packages/governance/contracts/Badge.contract.ts": "b2f06033d6e9789be5449b649c123d7cfe8adde5"
+      }
+    },
+    "harness-v4-t3f2": {
+      "tree": "bd44b0de3836b9928e58ad0683aa331f4bd25b86",
+      "figmaVersion": "lib:Atlas Design System v1@2026-07-06T03:42:12Z",
+      "paths": {
+        ".agents/skills/atlas-component": "793d5e80a57441020d7203641d5401ac22049196",
         ".agents/skills/atlas-verify": "edd3edb24044d9706a0cb095cca12706a281aeaa",
         ".agents/skills/atlas-prototype": "df36c94ed6b3f35bced41f2f35f49808cb71c148",
         ".agents/skills/atlas-figma-sync": "60637babf01461c7e4ad81aba04ea71d6d9d15ff",
