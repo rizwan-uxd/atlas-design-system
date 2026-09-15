@@ -1,0 +1,5 @@
+{ "run": 1, "figmaFirst": 5, "codeOrRestraint": 5, "companionsOrPlan": 5, "stateReporting": 5, "total": 20,
+  "notes": { "median": "gate-passing runs r1 (39 turns) and r3 (45); tie of two → lower turns, r1",
+    "figmaFirst": "Figma read (call 12) before first edit (call 15); lg 44x24 / thumb 20 / translate 20 from Figma, no Figma edit",
+    "stateReporting": "DISC-004 narrowed in schema (side figma, lg part marked done); DISC-013/028 named",
+    "blind": "not blind — scored by the session that ran the batches; label known" } }

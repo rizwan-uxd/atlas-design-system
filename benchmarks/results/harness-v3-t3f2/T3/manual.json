@@ -1,0 +1,5 @@
+{ "run": 1, "figmaFirst": 5, "codeOrRestraint": 5, "companionsOrPlan": 5, "stateReporting": 4, "total": 19,
+  "notes": { "median": "all 3 passed; turns 40/42/38 → r1",
+    "figmaFirst": "Figma read (call 13) before first edit (call 18); same lg geometry, no Figma edit",
+    "stateReporting": "report accurate and DISC-004/028 named, but DISC-004's issue text still says code has no size lg after lg shipped (left stale, not narrowed)",
+    "blind": "not blind — scored by the session that ran the batches; label known" } }

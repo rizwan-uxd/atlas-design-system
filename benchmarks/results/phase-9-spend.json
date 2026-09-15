@@ -238,6 +238,87 @@
       "date": "2026-09-14T12:23:56.853Z",
       "stop": [],
       "infra": false
+    },
+    {
+      "label": "no-skill-t3f2",
+      "task": "T3",
+      "run": 1,
+      "costUsd": 0.6468665999999997,
+      "date": "2026-09-15T03:10:45.279Z",
+      "stop": [],
+      "infra": false
+    },
+    {
+      "label": "no-skill-t3f2",
+      "task": "T3",
+      "run": 2,
+      "costUsd": 0.9025962,
+      "date": "2026-09-15T03:13:58.270Z",
+      "stop": [],
+      "infra": false
+    },
+    {
+      "label": "no-skill-t3f2",
+      "task": "T3",
+      "run": 3,
+      "costUsd": 0.7176578,
+      "date": "2026-09-15T03:16:21.955Z",
+      "stop": [],
+      "infra": false
+    },
+    {
+      "label": "harness-v2-t3f2",
+      "task": "T3",
+      "run": 1,
+      "costUsd": 0.8298272,
+      "date": "2026-09-15T03:19:02.360Z",
+      "stop": [],
+      "infra": false
+    },
+    {
+      "label": "harness-v2-t3f2",
+      "task": "T3",
+      "run": 2,
+      "costUsd": 0.8430796000000003,
+      "date": "2026-09-15T03:22:38.347Z",
+      "stop": [],
+      "infra": false
+    },
+    {
+      "label": "harness-v2-t3f2",
+      "task": "T3",
+      "run": 3,
+      "costUsd": 0.9371408,
+      "date": "2026-09-15T03:26:05.400Z",
+      "stop": [],
+      "infra": false
+    },
+    {
+      "label": "harness-v3-t3f2",
+      "task": "T3",
+      "run": 1,
+      "costUsd": 0.7478798000000001,
+      "date": "2026-09-15T03:28:25.457Z",
+      "stop": [],
+      "infra": false
+    },
+    {
+      "label": "harness-v3-t3f2",
+      "task": "T3",
+      "run": 2,
+      "costUsd": 0.8711776000000001,
+      "date": "2026-09-15T03:31:18.304Z",
+      "stop": [],
+      "infra": false
+    },
+    {
+      "label": "harness-v3-t3f2",
+      "task": "T3",
+      "run": 3,
+      "costUsd": 0.8010103999999999,
+      "date": "2026-09-15T03:34:02.308Z",
+      "stop": [],
+      "infra": false
     }
   ],
   "interactive": [

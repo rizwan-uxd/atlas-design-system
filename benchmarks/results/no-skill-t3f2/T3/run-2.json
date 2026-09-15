@@ -1,0 +1,245 @@
+{
+  "model": "claude-sonnet-5",
+  "ok": true,
+  "error": null,
+  "turns": 36,
+  "durationS": 188,
+  "costUsd": 0.9025962,
+  "tokens": {
+    "input": 64,
+    "cacheWrite": 71733,
+    "cacheRead": 2370726,
+    "output": 14043,
+    "totalContext": 2442523
+  },
+  "tools": {
+    "Read": 4,
+    "Bash": 13,
+    "ToolSearch": 1,
+    "mcp__figma__get_metadata": 1,
+    "Skill": 1,
+    "mcp__figma__get_design_context": 1,
+    "mcp__figma__get_screenshot": 1,
+    "Edit": 9,
+    "Grep": 3
+  },
+  "toolCalls": 34,
+  "figmaCalls": 3,
+  "verifyRuns": 3,
+  "reworkEdits": 1,
+  "toolResultChars": {
+    "Read": 16771,
+    "Bash": 16436,
+    "ToolSearch": 289,
+    "mcp__figma__get_metadata": 3948,
+    "Skill": 43,
+    "mcp__figma__get_design_context": 1736,
+    "mcp__figma__get_screenshot": 563,
+    "Edit": 3102,
+    "Grep": 636
+  },
+  "skillsUsed": [
+    "figma:figma-design-to-code"
+  ],
+  "reads": {
+    "total": 4,
+    "unique": 3,
+    "offTask": 0,
+    "byCategory": {
+      "atlas-snapshot": 1,
+      "components": 3
+    },
+    "files": [
+      "atlas/index.md",
+      "packages/ui-web/src/primitives/Switch/Switch.tsx",
+      "packages/ui-web/src/primitives/Switch/Switch.module.css",
+      "packages/ui-web/src/primitives/Switch/Switch.module.css"
+    ]
+  },
+  "bashCmds": [
+    "cat \"/private/var/folders/mj/4bm9y0256pbc4jdsdqsm5zs00000gn/T/atlas-bench/no-skill-t3f2-T3-2/atlas/state/decisions.json\"",
+    "cat \"/private/var/folders/mj/4bm9y0256pbc4jdsdqsm5zs00000gn/T/atlas-bench/no-skill-t3f2-T3-2/atlas/Switch.md\" 2>/dev/null; echo \"---metadata---\"; cat \"/private/var/folders/mj/4bm9y0256pbc4jdsdqsm5zs00000gn/T/atlas-bench/no-skill-t3f2-T3-2/atlas/metadata/Switch.json\" 2>/dev/null; echo \"---discrepancies---\"; cat \"/private/var/folders/mj/4bm9y0256pbc4jdsdqsm5zs00000gn/T/atlas-bench/no-skill-t3f2-T3-2/atlas/state/discrepancies.json\" 2>/dev/null | grep -i -A5 -B5 switch",
+    "find \"/private/var/folders/mj/4bm9y0256pbc4jdsdqsm5zs00000gn/T/atlas-bench/no-skill-t3f2-T3-2/packages/ui-web/src/primitives/Switch\" -type f",
+    "curl -sL -o /tmp/switch_lg.png \"https://www.figma.com/api/mcp/asset/7540d0d3-2ae1-4535-8307-bda982ae277c.png\" && file /tmp/switch_lg.png",
+    "curl -sL -o /tmp/switch_lg.png \"https://www.figma.com/api/mcp/asset/7540d0d3-2ae1-4535-8307-bda982ae277c.png\"",
+    "grep -n \"spacing-2\\b\\|spacing-2:\" \"/private/var/folders/mj/4bm9y0256pbc4jdsdqsm5zs00000gn/T/atlas-bench/no-skill-t3f2-T3-2/packages/tokens/atlas.tokens.css\" | head -20",
+    "cd \"/private/var/folders/mj/4bm9y0256pbc4jdsdqsm5zs00000gn/T/atlas-bench/no-skill-t3f2-T3-2\" && npm run atlas:verify -- --scope \"packages/ui-web/src/primitives/Switch/**\" 2>&1 | tail -80",
+    "cd \"/private/var/folders/mj/4bm9y0256pbc4jdsdqsm5zs00000gn/T/atlas-bench/no-skill-t3f2-T3-2\" && cat packages/governance/contracts/Switch.contract.ts",
+    "cd \"/private/var/folders/mj/4bm9y0256pbc4jdsdqsm5zs00000gn/T/atlas-bench/no-skill-t3f2-T3-2\" && npm run atlas:sync 2>&1 | tail -60",
+    "cd \"/private/var/folders/mj/4bm9y0256pbc4jdsdqsm5zs00000gn/T/atlas-bench/no-skill-t3f2-T3-2\" && npm run atlas:verify -- --scope \"packages/ui-web/src/primitives/Switch/**\" 2>&1 | tail -80",
+    "cd \"/private/var/folders/mj/4bm9y0256pbc4jdsdqsm5zs00000gn/T/atlas-bench/no-skill-t3f2-T3-2\" && npm run atlas:verify 2>&1 | tail -80",
+    "cd \"/private/var/folders/mj/4bm9y0256pbc4jdsdqsm5zs00000gn/T/atlas-bench/no-skill-t3f2-T3-2\" && find packages/ui-web/src/primitives/Switch app -iname \"*switch*\" 2>/dev/null",
+    "cd \"/private/var/folders/mj/4bm9y0256pbc4jdsdqsm5zs00000gn/T/atlas-bench/no-skill-t3f2-T3-2\" && git status --short"
+  ],
+  "quality": {
+    "outputExists": false,
+    "files": 0,
+    "loc": 1,
+    "registered": false,
+    "tokenLintViolations": 0,
+    "tscErrors": 0,
+    "atlasComponentsImported": [],
+    "expectedCoverage": "0/0",
+    "rawElements": 0,
+    "numericStyleLiterals": 0,
+    "primitiveTokenRefs": 0
+  },
+  "phase8": {
+    "readsAll": {
+      "total": 13,
+      "unique": 10,
+      "viaBash": 6,
+      "files": [
+        "atlas/index.md",
+        "Bash:atlas/state/decisions.json",
+        "Bash:atlas/Switch.md",
+        "Bash:atlas/metadata/Switch.json",
+        "Bash:atlas/state/discrepancies.json",
+        "packages/ui-web/src/primitives/Switch/Switch.tsx",
+        "packages/ui-web/src/primitives/Switch/Switch.module.css",
+        "Bash:packages/tokens/atlas.tokens.css",
+        "packages/ui-web/src/primitives/Switch/Switch.module.css",
+        "Bash:packages/governance/contracts/Switch.contract.ts",
+        "Grep:app/page.tsx",
+        "Grep:app/page.tsx",
+        "Grep:app/page.tsx"
+      ]
+    },
+    "sourceOpened": {
+      "component-source": [
+        "packages/ui-web/src/primitives/Switch/Switch.tsx",
+        "packages/ui-web/src/primitives/Switch/Switch.module.css"
+      ],
+      "token-source": [
+        "packages/tokens/atlas.tokens.css"
+      ],
+      "verifier-internals": [
+        "packages/governance/contracts/Switch.contract.ts"
+      ]
+    },
+    "sourceOpenedCount": 4,
+    "verify": {
+      "runs": 3,
+      "failures": 2,
+      "firstPass": false,
+      "finalPass": true,
+      "calls": [
+        {
+          "cmd": "cd \"/private/var/folders/mj/4bm9y0256pbc4jdsdqsm5zs00000gn/T/atlas-bench/no-skill-t3f2-T3-2\" && npm run atlas:verify -- ",
+          "failed": true
+        },
+        {
+          "cmd": "cd \"/private/var/folders/mj/4bm9y0256pbc4jdsdqsm5zs00000gn/T/atlas-bench/no-skill-t3f2-T3-2\" && npm run atlas:verify -- ",
+          "failed": true
+        },
+        {
+          "cmd": "cd \"/private/var/folders/mj/4bm9y0256pbc4jdsdqsm5zs00000gn/T/atlas-bench/no-skill-t3f2-T3-2\" && npm run atlas:verify 2>&",
+          "failed": false
+        }
+      ]
+    },
+    "wasted": {
+      "duplicateReads": 2,
+      "unusedComponentReads": [
+        "atlas/Switch.md",
+        "atlas/metadata/Switch.json",
+        "packages/ui-web/src/primitives/Switch/Switch.tsx",
+        "packages/ui-web/src/primitives/Switch/Switch.module.css"
+      ],
+      "offTask": [],
+      "verifierInternals": [
+        "packages/governance/contracts/Switch.contract.ts"
+      ],
+      "failedToolCalls": 3,
+      "total": 10
+    },
+    "gaps": {
+      "available": true,
+      "candidatesChanged": [],
+      "expected": [],
+      "recognised": []
+    }
+  },
+  "component": {
+    "changed": [
+      "atlas/index.md",
+      "atlas/metadata/Switch.json",
+      "atlas/state/discrepancies.json",
+      "packages/governance/contracts/Switch.contract.ts",
+      "packages/ui-web/src/primitives/Switch/Switch.module.css",
+      "packages/ui-web/src/primitives/Switch/Switch.tsx"
+    ],
+    "outOfScope": [],
+    "forbiddenTouched": [],
+    "useFigmaAttempts": 0,
+    "figmaReads": [
+      "mcp__figma__get_metadata",
+      "mcp__figma__get_design_context",
+      "mcp__figma__get_screenshot"
+    ],
+    "permissionDenials": 2,
+    "unionBefore": [
+      "sm",
+      "md"
+    ],
+    "unionAfter": [
+      "sm",
+      "md",
+      "lg"
+    ],
+    "companions": {
+      "codeConnect": false,
+      "contract": true,
+      "test": false
+    },
+    "testsRan": true,
+    "testsPass": true,
+    "tscErrors": 0,
+    "stamped": false,
+    "discrepancies": {
+      "closed": [
+        "DISC-014"
+      ],
+      "added": [],
+      "modified": [
+        "DISC-014"
+      ],
+      "invalid": [],
+      "protectedChanged": []
+    },
+    "generatedHandEdits": [],
+    "snapshotCurrent": true,
+    "signals": {
+      "H1_stateFileReads": 2,
+      "H2_otherTestOpens": 0,
+      "H3_syncRuns": 1,
+      "H4_invalidDiscWrites": 0,
+      "H5_otherComponentOpens": 0
+    },
+    "present": {
+      "H1": true,
+      "H2": false,
+      "H3": false,
+      "H4": false,
+      "H5": false
+    },
+    "gates": {
+      "figmaWrites": true,
+      "scope": true,
+      "tsc": true,
+      "noGeneratedHandEdits": true,
+      "protectedUntouched": true,
+      "discFormat": true,
+      "notStopped": true,
+      "companions": false,
+      "tests": true,
+      "finalVerify": true,
+      "stamped": false,
+      "driftClosed": true,
+      "snapshotCurrent": true
+    },
+    "gatesPass": false,
+    "maxTurnsExit": false
+  },
+  "subtype": "success"
+}
