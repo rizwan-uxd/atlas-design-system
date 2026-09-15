@@ -280,6 +280,15 @@
       "issue": "Code has an `invalid` prop (aria-invalid + data-invalid, no styling) but Figma's Switch State property has no invalid value, so there is no approved visual treatment. Checkbox ships `invalid` the same way, undocumented — not a precedent.",
       "resolution": "undecided — design intent needed first: does an invalid Switch get a visual at all, and if so as a State value or an Invalid boolean (DEC-003)? Figma is not edited until that is decided; code then adds only the matching CSS.",
       "date": "2026-09-13"
+    },
+    {
+      "id": "DISC-029",
+      "component": "Switch",
+      "side": "closed",
+      "status": "closed",
+      "issue": "Size geometry mismatch — Figma (95:114): sm track 28×16 thumb 12, md 36×20 thumb 16, 2px inset · code: sm 32×18 thumb 14, md 40×24 thumb 20. Not detectable by sync (it compares size names only); found by phase 9 harness-v3 T3 run 2.",
+      "resolution": "Code: sm and md track, thumb and checked translate set to the Figma values with existing spacing tokens (2026-09-15). No Figma edit.",
+      "date": "2026-09-15"
     }
   ]
 }
