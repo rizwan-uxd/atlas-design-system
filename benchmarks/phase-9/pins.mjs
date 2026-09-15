@@ -21,6 +21,7 @@ const WS_PATHS = [".agents/skills/atlas-component", ".agents/skills/atlas-verify
 const TOOLING = ["benchmarks/run.sh", "benchmarks/analyze.mjs", "benchmarks/summarize.mjs", "benchmarks/rubric-component.md",
   "benchmarks/phase-9/validate-fixtures.mjs", "benchmarks/phase-9/component-metrics.mjs", "benchmarks/phase-9/budget.mjs",
   "benchmarks/phase-9/pins.mjs", "benchmarks/phase-9/no-skill.patch", "benchmarks/phase-9/live-figma.json",
+  "benchmarks/phase-9/stale-row-metric.mjs", "benchmarks/phase-9/stale-row-metric.test.mjs",
   "benchmarks/tasks/T3/prompt.md", "benchmarks/tasks/T3/meta.json", "benchmarks/tasks/T4/prompt.md", "benchmarks/tasks/T4/meta.json",
   "scripts/lib/quality-checks.mjs"]
 const settings = (() => { try { return JSON.parse(fs.readFileSync(path.join(os.homedir(), ".claude/settings.json"), "utf8")) } catch { return {} } })()

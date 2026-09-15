@@ -1,0 +1,17 @@
+{
+  "workspace": "harness-v2-T3-3",
+  "lgShipped": true,
+  "stale": true,
+  "reasons": [
+    "DISC-004 status \"closed\" — the Variant→Checked part is still unresolved",
+    "lg still described as missing: \"Figma used Variant for on/off; code has no size lg\""
+  ],
+  "row": {
+    "id": "DISC-004",
+    "component": "Switch",
+    "side": "closed",
+    "status": "closed",
+    "issue": "Figma used Variant for on/off; code has no size lg.",
+    "resolution": "Code: size lg added (2026-09-14), matching Figma track 44×24, thumb 20×20. Figma: Variant → Checked boolean still open (see DISC-013)."
+  }
+}

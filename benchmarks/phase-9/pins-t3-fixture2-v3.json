@@ -1,7 +1,32 @@
 {
   "model": "claude-sonnet-5",
   "cli": "2.1.271",
-  "common": null,
+  "common": {
+    "cli": "2.1.271",
+    "tooling": {
+      "benchmarks/run.sh": "560d309c6b9080dd44f45499ec4683bcb1912a0b",
+      "benchmarks/analyze.mjs": "73ea836a8df069fc914e658833084355d43db2a3",
+      "benchmarks/summarize.mjs": "d759eb2fd9caf96e5112dce59df624c644b51271",
+      "benchmarks/rubric-component.md": "cdb0cdf94b47b47e780f38738d4c0c68c3f791f7",
+      "benchmarks/phase-9/validate-fixtures.mjs": "1ac7b2dd2771af1ec4fd633e48952a04bf1acec8",
+      "benchmarks/phase-9/component-metrics.mjs": "c8138a919aa8b1b30ef44971dde91176500c0366",
+      "benchmarks/phase-9/budget.mjs": "fb1f31103519c4d80cfddc9ff46d77d8a6f7a4bc",
+      "benchmarks/phase-9/pins.mjs": "37a892463805c01127bd3f59a729ba83391c9d84",
+      "benchmarks/phase-9/no-skill.patch": "ccfc67bf092ec93312f8a337528db6865f47e8e5",
+      "benchmarks/phase-9/live-figma.json": "d763a353f63094e4d49ca1aa81f46a203cede249",
+      "benchmarks/tasks/T3/prompt.md": "2b5082e20e1ae9b5623f58beb817f2357cf6c546",
+      "benchmarks/tasks/T3/meta.json": "099110ad13d6d9a32822c974eec47bbd3c6f4413",
+      "benchmarks/tasks/T4/prompt.md": "60bd5bc0d379061aba363754e601f58ac7f78f8e",
+      "benchmarks/tasks/T4/meta.json": "6d144c18bc6f8b8c7970d1af245ad5c493c07225",
+      "scripts/lib/quality-checks.mjs": "9d416b38948bb6edd4b920a212b60b64d9691830"
+    },
+    "user": {
+      "claudeMd": "c51a033a0d710013",
+      "skills": "brandkit design-taste-frontend design-taste-frontend-v1 emil-design-eng frontend-design full-output-enforcement gpt-taste graft high-end-visual-design image-to-code imagegen-frontend-mobile imagegen-frontend-web industrial-brutalist-ui minimalist-ui redesign-existing-projects review-animations shadcn-ui stitch-design-taste ui-ux-pro-max web-design-guidelines",
+      "plugins": "figma@claude-plugins-official mattpocock-skills@claude-plugins-official superpowers@superpowers-dev vercel@claude-plugins-official",
+      "projectSettingsLocal": "4b1d7b73f45d3592"
+    }
+  },
   "labels": {
     "harness-v2": {
       "tree": "ab5a4ad74023c0c49b7a2e60823ee8177ac74a90",

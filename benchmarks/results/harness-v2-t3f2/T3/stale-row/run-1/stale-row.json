@@ -1,0 +1,14 @@
+{
+  "workspace": "harness-v2-t3f2-T3-1",
+  "lgShipped": true,
+  "stale": false,
+  "reasons": [],
+  "row": {
+    "id": "DISC-004",
+    "component": "Switch",
+    "side": "figma",
+    "status": "open",
+    "issue": "Figma used Variant for on/off (code has no SwitchVariant export, tracked separately as DISC-013). Size lg is now resolved — code added lg to SwitchSize (2026-09-15), matching Figma's existing sm/md/lg Size property; see closed DISC-014.",
+    "resolution": "Figma: Variant → Checked boolean, still open."
+  }
+}

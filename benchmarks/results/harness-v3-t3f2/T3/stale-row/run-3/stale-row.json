@@ -1,0 +1,16 @@
+{
+  "workspace": "harness-v3-t3f2-T3-3",
+  "lgShipped": true,
+  "stale": true,
+  "reasons": [
+    "lg still described as missing: \"Figma used Variant for on/off; code has no size lg\""
+  ],
+  "row": {
+    "id": "DISC-004",
+    "component": "Switch",
+    "side": "figma",
+    "status": "open",
+    "issue": "Figma used Variant for on/off; code has no size lg.",
+    "resolution": "Code: size lg added (2026-09-15). Still open: Figma Variant → Checked boolean."
+  }
+}
