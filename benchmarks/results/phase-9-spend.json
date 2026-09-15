@@ -1,5 +1,5 @@
 {
-  "cap": 40,
+  "cap": 42,
   "runs": [
     {
       "label": "harness-v2",
@@ -363,6 +363,17 @@
       "what": "harness-v4-t3f2 T3 run 2 operator-stopped at 19 tool calls (user-directed CLI check); no result event, cost estimated conservatively from usage (cache read 0.95M vs run 1 2.17M = $0.89)",
       "costUsd": 0.6,
       "date": "2026-09-15T07:10:33.445Z"
+    }
+  ],
+  "capHistory": [
+    {
+      "cap": 40,
+      "from": "2026-09-13"
+    },
+    {
+      "cap": 42,
+      "from": "2026-09-15",
+      "by": "user approval, maximum"
     }
   ]
 }

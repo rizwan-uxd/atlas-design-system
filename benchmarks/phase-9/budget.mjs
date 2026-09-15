@@ -8,7 +8,7 @@ import fs from "fs"; import path from "path"; import { fileURLToPath } from "url
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..")
 const FILE = path.join(ROOT, "benchmarks/results/phase-9-spend.json")
-const CAP = 40, FLOOR = 1.5, RUN_MAX = 2.5, REPLACEMENTS = 2
+const CAP = 42, FLOOR = 1.5, RUN_MAX = 2.5, REPLACEMENTS = 2
 const L = fs.existsSync(FILE) ? JSON.parse(fs.readFileSync(FILE, "utf8")) : { cap: CAP, runs: [], interactive: [] }
 const spent = () => [...L.runs, ...L.interactive].reduce((a, e) => a + (e.costUsd || 0), 0)
 const save = () => { fs.mkdirSync(path.dirname(FILE), { recursive: true }); fs.writeFileSync(FILE, JSON.stringify(L, null, 2) + "\n") }
