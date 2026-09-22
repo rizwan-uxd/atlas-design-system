@@ -356,7 +356,9 @@
       "stop": [
         "API/spend error: You've hit your monthly spend limit · raise it at claude.ai/settings/usage?from=cc_cli_limit_message · your session limit resets 12pm (Asia/Dubai)"
       ],
-      "infra": true
+      "infra": false,
+      "nonRun": true,
+      "note": "Non-run infrastructure interruption: the monthly spend limit stopped the agent after 3 turns ($0.13); no agent work was produced. Trace preserved at benchmarks/results/harness-v5-t3f2/T3/ (run-1.jsonl, trace-run-1.sha256). Reclassified on 2026-09-22 under user authorisation so it does not consume an infrastructure replacement."
     }
   ],
   "interactive": [

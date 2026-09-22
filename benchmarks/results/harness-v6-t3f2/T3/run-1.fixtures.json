@@ -1,0 +1,38 @@
+{
+  "ok": true,
+  "task": "T3",
+  "failures": [],
+  "facts": {
+    "figmaSize": [
+      "sm",
+      "md",
+      "lg"
+    ],
+    "codeSizes": [
+      "sm",
+      "md"
+    ],
+    "SwitchSize": [
+      "sm",
+      "md"
+    ],
+    "switchGeometry": {
+      "sm": {
+        "track": [
+          28,
+          16
+        ],
+        "thumb": 12,
+        "translate": 12
+      },
+      "md": {
+        "track": [
+          36,
+          20
+        ],
+        "thumb": 16,
+        "translate": 16
+      }
+    }
+  }
+}

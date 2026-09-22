@@ -253,14 +253,35 @@
         "packages/governance/contracts/Switch.contract.ts": "832fc5773aa97177bf2d3c380e622dd139de93e7",
         "packages/governance/contracts/Badge.contract.ts": "b2f06033d6e9789be5449b649c123d7cfe8adde5"
       }
+    },
+    "harness-v6-t3f2": {
+      "tree": "6c28995fc28ceefe58d73bbfac4cfa2fc899340d",
+      "figmaVersion": "lib:Atlas Design System v1@2026-07-06T03:42:12Z",
+      "paths": {
+        ".agents/skills/atlas-component": "9ab8e4de6eb20bbe33202d6be10acb072dbd5cc2",
+        ".agents/skills/atlas-verify": "edd3edb24044d9706a0cb095cca12706a281aeaa",
+        ".agents/skills/atlas-prototype": "df36c94ed6b3f35bced41f2f35f49808cb71c148",
+        ".agents/skills/atlas-figma-sync": "60637babf01461c7e4ad81aba04ea71d6d9d15ff",
+        "AGENTS.md": "39ad4a4268af8cfd5bb1e1746f2f47df1e5bfdbd",
+        "claude.md": "ea94cba64ff893ccd424c8153cb4057618c01e3f",
+        "scripts/atlas-verify.mjs": "1b7995166d577d61125e0cb892c40bbe24ba18c1",
+        "scripts/atlas-sync.mjs": "7d7ba3cc180f129e6b1d01c6ef6c77a8a5c75651",
+        "scripts/lib": "f3cd246f48c5d764147e9a95831105d50a7b8444",
+        "packages/governance/token-lint.mjs": "70c6187a31b1a624879bcb6b9bd97584fe66a228",
+        "atlas/metadata/Switch.json": "e9a1a59a6af33bff037f75d78d72557d96505a28",
+        "atlas/metadata/Badge.json": "20afa4c2c81280fcff5f267b7db3e0cf61381c8f",
+        "atlas/Switch.md": "9c1de21a79e7e01f714f112bdbf0209a93b2d36f",
+        "atlas/Badge.md": "a576a1931bc42d62929e621fb95eabcdc3a6b293",
+        "atlas/state": "271577a6e04c6d4e84b56a7a0acfc16fa20a288d",
+        "packages/ui-web/src/primitives/Switch": "e6cf8f980a4a6271529c36a9938c7711b3ba6dc8",
+        "packages/ui-web/src/primitives/Badge": "d5dab0023756efbd9ae2dd23d7a977e1fb8d9695",
+        "packages/ui-web/tests": "ca7f7a6747932c1cc78029b042a90c70fff20e19",
+        "packages/figma-sync/code-connect/Switch.figma.tsx": "3e30b6750053f4c8132d450ad6aadd92b5e08e07",
+        "packages/figma-sync/code-connect/Badge.figma.tsx": "6f364a3d016f449d7d7b7520cb8af69a0fe0fd19",
+        "packages/governance/contracts/Switch.contract.ts": "832fc5773aa97177bf2d3c380e622dd139de93e7",
+        "packages/governance/contracts/Badge.contract.ts": "b2f06033d6e9789be5449b649c123d7cfe8adde5"
+      }
     }
   },
-  "runtime": {
-    "component": {
-      "mcpServers": "claude.ai Firecrawl | claude.ai Gmail | claude.ai Google Calendar | claude.ai Google Drive | figma | figma-desktop | graft | plugin:vercel:vercel"
-    },
-    "prototype": {
-      "mcpServers": "claude.ai Firecrawl | claude.ai Gmail | claude.ai Google Calendar | claude.ai Google Drive | figma | figma-desktop | graft | plugin:vercel:vercel"
-    }
-  }
+  "runtime": {}
 }

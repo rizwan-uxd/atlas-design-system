@@ -165,3 +165,29 @@ run then re-synced "to confirm it writes 0 files".
 - **Policy (user, 2026-09-15):** no replacements or retries, and any API/spend stop leaves Phase 9 on HOLD. Run 1 is kept
   as-is and not scored. The trace sha256 is in `benchmarks/results/harness-v5-t3f2/T3/trace-run-1.sha256`.
 - **Nothing accepted or merged.** Spend: $29.90 / $42.
+
+## harness-v6-t3f2 (2026-09-22) — v5 restarted under a re-pinned runtime
+The v5 restart could not run as frozen: between the v5 freeze and the restart, the account runtime changed in two ways
+that the pins caught before any spend.
+
+- **Source: unchanged.** `56170dc`, exactly as v5. The `harness-v6-t3f2` label pin is byte-identical to
+  `harness-v5-t3f2` (tree `6c28995fc2`), so v6 is a runtime re-pin, not a new source. Tag `phase-9-v6-freeze`.
+- **Drift 1 — CLI.** The auto-updater moved the CLI to 2.1.274. Restored to the pinned 2.1.271; every v6 batch runs
+  with `DISABLE_AUTOUPDATER=1` so the pin holds for the chain.
+- **Drift 2 — MCP set.** A `claude.ai Claude Docs` connector was added to the account and could not be disconnected
+  (three attempts over 2026-09-17..22; the CLI cannot remove an account-level connector). It is therefore absorbed into
+  the v6 runtime pin. `pins.runtime.component` / `.prototype` were cleared so the first v6 run of each type re-records
+  the current set. The pinned value up to v5 was:
+  `claude.ai Firecrawl | claude.ai Gmail | claude.ai Google Calendar | claude.ai Google Drive | figma | figma-desktop | graft | plugin:vercel:vercel`
+- **Drift 3 — user skills (caught, removed, not absorbed).** An account-synced `~/.claude/skills/synced/` bucket appeared
+  on 2026-09-22 carrying `atlas-context` and `atlas-ui-system` — skills that supply Atlas tokens, specs and variant rules
+  directly. Left in place they would have contaminated every arm and voided the `no-skill` comparison. The bucket was
+  moved out before any run and `pins.common.user.skills` matches the pre-drift value unchanged.
+- **Comparability.** v6 differs from the fixture-2 baselines (`no-skill-t3f2`, `harness-v2-t3f2`, `harness-v3-t3f2`,
+  `harness-v4-t3f2`) by one extra MCP server *name* in the init list — no extra tools were offered to the agent. Re-running
+  those four arms to re-baseline would cost ~$10 of the $12.10 remaining under the $42 cap, so the delta is recorded here
+  as a known confound instead. Cross-version T3 comparisons carry this footnote.
+- **Ledger.** The v5 T3 run-1 spend-limit stop (3 turns, $0.13, no agent work produced) is reclassified `infra: false`,
+  `nonRun: true` with its reason, under user authorisation on 2026-09-22 — a non-run interruption, not a benchmark
+  replacement. Its trace and sha256 are preserved unchanged at `benchmarks/results/harness-v5-t3f2/T3/`. The replacement
+  counter reads 2/2; `budget.mjs` is untouched.
