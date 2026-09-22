@@ -386,6 +386,87 @@
       "date": "2026-09-22T13:29:04.736Z",
       "stop": [],
       "infra": false
+    },
+    {
+      "label": "harness-v7",
+      "task": "T4",
+      "run": 1,
+      "costUsd": 0.487076,
+      "date": "2026-09-22T13:59:20.065Z",
+      "stop": [],
+      "infra": false
+    },
+    {
+      "label": "harness-v7",
+      "task": "T4",
+      "run": 2,
+      "costUsd": 0.3677148,
+      "date": "2026-09-22T14:00:52.172Z",
+      "stop": [],
+      "infra": false
+    },
+    {
+      "label": "harness-v7",
+      "task": "T4",
+      "run": 3,
+      "costUsd": 0.32503440000000006,
+      "date": "2026-09-22T14:02:07.519Z",
+      "stop": [],
+      "infra": false
+    },
+    {
+      "label": "harness-v7",
+      "task": "T1",
+      "run": 1,
+      "costUsd": 0.7211780000000001,
+      "date": "2026-09-22T14:05:09.207Z",
+      "stop": [],
+      "infra": false
+    },
+    {
+      "label": "harness-v7",
+      "task": "T1",
+      "run": 2,
+      "costUsd": 0.8552638,
+      "date": "2026-09-22T14:08:18.960Z",
+      "stop": [],
+      "infra": false
+    },
+    {
+      "label": "harness-v7",
+      "task": "T1",
+      "run": 3,
+      "costUsd": 0.808921,
+      "date": "2026-09-22T14:11:19.894Z",
+      "stop": [],
+      "infra": false
+    },
+    {
+      "label": "harness-v7",
+      "task": "T2",
+      "run": 1,
+      "costUsd": 0.5272846,
+      "date": "2026-09-22T14:13:44.868Z",
+      "stop": [],
+      "infra": false
+    },
+    {
+      "label": "harness-v7",
+      "task": "T2",
+      "run": 2,
+      "costUsd": 0.5049294,
+      "date": "2026-09-22T14:15:20.420Z",
+      "stop": [],
+      "infra": false
+    },
+    {
+      "label": "harness-v7",
+      "task": "T2",
+      "run": 3,
+      "costUsd": 0.48743420000000015,
+      "date": "2026-09-22T14:17:01.050Z",
+      "stop": [],
+      "infra": false
     }
   ],
   "interactive": [

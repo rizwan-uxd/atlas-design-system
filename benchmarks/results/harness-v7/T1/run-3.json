@@ -1,0 +1,174 @@
+{
+  "model": "claude-sonnet-5",
+  "ok": true,
+  "error": null,
+  "turns": 38,
+  "durationS": 175,
+  "costUsd": 0.808921,
+  "tokens": {
+    "input": 42,
+    "cacheWrite": 78445,
+    "cacheRead": 1600970,
+    "output": 17373,
+    "totalContext": 1679457
+  },
+  "tools": {
+    "Skill": 2,
+    "Read": 17,
+    "Glob": 3,
+    "Grep": 1,
+    "Bash": 2,
+    "Write": 6,
+    "Edit": 4
+  },
+  "toolCalls": 35,
+  "figmaCalls": 0,
+  "verifyRuns": 1,
+  "reworkEdits": 0,
+  "toolResultChars": {
+    "Skill": 61,
+    "Read": 48044,
+    "Glob": 283,
+    "Grep": 51,
+    "Bash": 430,
+    "Write": 1326,
+    "Edit": 919
+  },
+  "skillsUsed": [
+    "atlas-prototype",
+    "atlas-verify"
+  ],
+  "reads": {
+    "total": 17,
+    "unique": 17,
+    "offTask": 0,
+    "byCategory": {
+      "atlas-snapshot": 10,
+      "skills": 2,
+      "prototype-shell": 4,
+      "prototype-examples": 1
+    },
+    "files": [
+      "atlas/index.md",
+      "atlas/Button.md",
+      "atlas/Input.md",
+      "atlas/Card.md",
+      "atlas/Dialog.md",
+      "atlas/Alert.md",
+      "atlas/Badge.md",
+      "atlas/Label.md",
+      "atlas/tokens.md",
+      ".claude/skills/atlas-prototype/references/flow-scaffold.md",
+      ".claude/skills/atlas-prototype/references/gaps.md",
+      "atlas/state/candidates.json",
+      "app/prototypes/_shared/flowRegistry.ts",
+      "app/prototypes/_shared/mockApi.ts",
+      "app/prototypes/tabby/steps/Success.tsx",
+      "app/prototypes/_shared/FlowShell.tsx",
+      "app/prototypes/_shared/useFlowState.ts"
+    ]
+  },
+  "bashCmds": [
+    "grep -l \"lucide-react\" package.json 2>/dev/null; grep -m1 \"lucide-react\" package.json",
+    "node scripts/atlas-verify.mjs --scope \"app/prototypes/send-money/**,app/prototypes/_shared/flowRegistry.ts,atlas/state/candidates.json\""
+  ],
+  "quality": {
+    "outputExists": true,
+    "files": 6,
+    "loc": 583,
+    "registered": true,
+    "tokenLintViolations": 0,
+    "tscErrors": 0,
+    "atlasComponentsImported": [
+      "Input",
+      "Label",
+      "Card",
+      "CardContent",
+      "Badge",
+      "Button",
+      "CardHeader",
+      "CardTitle",
+      "Dialog",
+      "DialogContent",
+      "DialogHeader",
+      "DialogTitle",
+      "DialogDescription",
+      "DialogBody",
+      "DialogFooter",
+      "DialogClose",
+      "Alert"
+    ],
+    "expectedCoverage": "7/7",
+    "rawElements": 0,
+    "numericStyleLiterals": 5,
+    "primitiveTokenRefs": 0
+  },
+  "phase8": {
+    "readsAll": {
+      "total": 19,
+      "unique": 18,
+      "viaBash": 2,
+      "files": [
+        "atlas/index.md",
+        "atlas/Button.md",
+        "atlas/Input.md",
+        "atlas/Card.md",
+        "atlas/Dialog.md",
+        "atlas/Alert.md",
+        "atlas/Badge.md",
+        "atlas/Label.md",
+        "atlas/tokens.md",
+        ".claude/skills/atlas-prototype/references/flow-scaffold.md",
+        ".claude/skills/atlas-prototype/references/gaps.md",
+        "atlas/state/candidates.json",
+        "app/prototypes/_shared/flowRegistry.ts",
+        "app/prototypes/_shared/mockApi.ts",
+        "Bash:package.json",
+        "Bash:package.json",
+        "app/prototypes/tabby/steps/Success.tsx",
+        "app/prototypes/_shared/FlowShell.tsx",
+        "app/prototypes/_shared/useFlowState.ts"
+      ]
+    },
+    "sourceOpened": {
+      "shared-internals": [
+        "app/prototypes/_shared/mockApi.ts",
+        "app/prototypes/_shared/FlowShell.tsx",
+        "app/prototypes/_shared/useFlowState.ts"
+      ],
+      "other-prototypes": [
+        "app/prototypes/tabby/steps/Success.tsx"
+      ]
+    },
+    "sourceOpenedCount": 4,
+    "verify": {
+      "runs": 1,
+      "failures": 0,
+      "firstPass": true,
+      "finalPass": true,
+      "calls": [
+        {
+          "cmd": "node scripts/atlas-verify.mjs --scope \"app/prototypes/send-money/**,app/prototypes/_shared/flowRegistry.ts,atlas/state/c",
+          "failed": false
+        }
+      ]
+    },
+    "wasted": {
+      "duplicateReads": 1,
+      "unusedComponentReads": [],
+      "offTask": [],
+      "verifierInternals": [],
+      "failedToolCalls": 0,
+      "total": 1
+    },
+    "gaps": {
+      "available": true,
+      "candidatesChanged": [
+        "CAND-002 ListRow"
+      ],
+      "expected": [],
+      "recognised": []
+    }
+  },
+  "subtype": "success"
+}

@@ -211,3 +211,44 @@ that the pins caught before any spend.
   no-overlap rule neither combined result accepts both, so the pair still cannot ship together.
 - **Stopped** before T4/T1/T2 per the standing instruction that a real agent correctness failure stops the chain.
   Spend $32.24 / $42.
+
+## harness-v7 (2026-09-22) — H3-only regression: T4, T1, T2 x3 → H3 survives
+**Source `44eacba` = `56170dc` with H6 (`1fd95aa`) reverted.** H3 revised only; the H6 partial-resolution row is gone
+from `companions.md` and SKILL.md step 6 reads "closed with a dated resolution" again. Branch `bench/phase-9-h3only`,
+label pin `harness-v7` (tree `d456c6b32f`). No re-baseline: every comparison below is against the existing `harness-v3`
+arm on the unchanged rubric and fixtures.
+
+| task | arm | cost (mean) | turns | coverage | tsc | token-lint | raw elements | primitive refs |
+|---|---|---|---|---|---|---|---|---|
+| T4 | harness-v3 | $0.50 | 22 / 16 / 25 | gates 3/3 | 0 | 0 | — | — |
+| T4 | **harness-v7** | **$0.40** | **23 / 13 / 11** | **gates 3/3** | 0 | 0 | — | — |
+| T1 | harness-v3 | $0.79 | 28 / 36 / 39 | 7/7, **6/7**, 7/7 | 0 | 0 | 0 | 0 |
+| T1 | **harness-v7** | $0.80 | 31 / 37 / 38 | **7/7 x3** | 0 | 0 | 0 | 0 |
+| T2 | harness-v3 | $0.47 | 22 / 24 / 25 | 5/6 x3 | 0 | 0 | 0 | 0 |
+| T2 | **harness-v7** | $0.51 | 24 / 26 / 26 | **6/6**, 5/6, 5/6 | 0 | 0 | 0 | 0 |
+
+- **T4 (component, H3's own path):** `H3_syncRuns` 0 in all three runs, H3 never present, gates 3/3, no out-of-scope
+  writes. Cheapest and shortest T4 arm recorded.
+- **T1 (prototype):** 7/7 coverage in all three runs; the `harness-v3` 6/7 run did not reproduce. H3 does not touch the
+  prototype path, so this is most likely run-to-run variance rather than a fix — the 6/7 signal is **not** explained,
+  only not observed again. Run 2 ran `atlas-verify` twice; no rework followed.
+- **T2 (prototype):** one run reached 6/6, the other two match `harness-v3` at 5/6. No degradation.
+- **H3 survives regression.** No errors, no max-turns exits, no permission denials, zero `tsc`/token-lint violations,
+  no raw elements and no primitive token refs in any of the nine runs.
+
+### Phase 9 verdicts
+- **H3 (revised): ACCEPTED.** T3 x3 on `harness-v6-t3f2` (one sync per run, zero redundant confirmation syncs, gates 3/3)
+  plus this T4/T1/T2 regression. Caveat on the evidence: the accepting T3 runs were measured on `56170dc`, which still
+  contained H6. The H3-only source `44eacba` has been regression-tested on T4/T1/T2 but **not** re-measured on T3.
+- **H6: FAILED / UNRESOLVED, deferred.** Evidence: `harness-v6-t3f2` T3 run 3 left `DISC-004` open and stale after `lg`
+  shipped, with the text still reading "Figma used Variant for on/off; code has no size lg" and "Code: add size lg"
+  (`benchmarks/results/harness-v6-t3f2/T3/stale-row/run-3/stale-row.json`). Runs 1 and 2 narrowed it correctly; H6's bar
+  is 0/3. Not revised, retried or combined with H3, per user instruction.
+- **`f10119c` / `8a5189b` (sync derives Variants/Sizes):** carried in every accepted source since v3; no separate verdict.
+
+### Runtime deviations during this chain
+- `~/.claude/skills/synced/` regenerated **four times** (17:22, 17:32, ~17:5x, 18:12), twice mid-batch. Every occurrence
+  was caught by `pins.mjs check` before the affected run started; the bucket was removed and the run re-issued with
+  `BENCH_ONLY`. All 12 runs verified clean: 128 skills in each init snapshot, no `atlas-context` or `atlas-ui-system`.
+- `claude.ai Claude Docs` remains in the MCP set (absorbed into the v6 runtime pin; see the v6 section).
+- CLI held at 2.1.271 throughout via `DISABLE_AUTOUPDATER=1`.
