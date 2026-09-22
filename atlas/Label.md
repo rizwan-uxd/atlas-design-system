@@ -6,8 +6,15 @@ Names a form control and extends its click target.
 **When to use** — above or beside every Input, Textarea, Checkbox, Switch and group of them.
 **When not to** — as a heading or as body copy.
 
+<!-- BEGIN:generated-structure -->
+
 ## Variants
-`default` stacked above the control · `inline` beside the control, for checkbox and switch rows.
+`default` stacked above the control · `inline` beside the control, for checkbox and switch rows
+
+## Sizes
+`sm` · `md` · `lg`
+
+<!-- END:generated-structure -->
 
 ## Do
 - Match `htmlFor` to the control's `id`; Checkbox and Switch already render their own label when given `label`.

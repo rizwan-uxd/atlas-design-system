@@ -6,9 +6,16 @@ Switches between sibling views inside one screen, without navigating.
 **When to use** — two to five peer views of the same subject; a segmented choice between named options.
 **When not to** — steps in a sequence (use a flow), or navigation between routes (NavBar).
 
+<!-- BEGIN:generated-structure -->
+
 ## Variants
-`underline` content sections · `pills` compact, on subtle surfaces · `enclosed` boxed.
-Figma names these `line` `pill` `segmented`; the code has not been renamed yet and `segmented` is a restyle, not just a rename (see `state/discrepancies.json`).
+`underline` content sections · `pills` compact, on subtle surfaces · `enclosed` boxed
+Figma: `line` · `pill` · `segmented` — differs from code (see `state/discrepancies.json`).
+
+## Sizes
+`sm` · `md` · `lg`
+
+<!-- END:generated-structure -->
 
 ## Composition
 `TabsRoot` + `TabsList` + `TabsTrigger` + `TabsPanel`, or the `Tabs` convenience wrapper with an `items` array.

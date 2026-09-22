@@ -6,9 +6,16 @@ Compact, non-interactive label for status, count or category.
 **When to use** — a status pill in a list row, a count on a tab, a category tag.
 **When not to** — as a button, or for a message that needs explanation (Alert).
 
+<!-- BEGIN:generated-structure -->
+
 ## Variants
-`default` `secondary` neutral labels · `success` `warning` `danger` `info` status tones · `outline` low-emphasis on coloured surfaces.
-Figma models tone and outline as separate properties (Variant + Appearance); the code still folds `outline` into `variant` (see `state/discrepancies.json`).
+`default` · `secondary` neutral labels · `success` · `warning` · `danger` · `info` status tones · `outline` low-emphasis on coloured surfaces
+Figma: `neutral` · `primary` · `success` · `warning` · `danger` · `info` — differs from code (see `state/discrepancies.json`).
+
+## Sizes
+`sm` · `md` · `lg`
+
+<!-- END:generated-structure -->
 
 ## Do
 - Keep the text to one or two words.

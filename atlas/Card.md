@@ -6,8 +6,16 @@ Groups related content on a raised or bordered surface.
 **When to use** — a settings group, a summary block, a selectable option, a list of related rows.
 **When not to** — as a generic div for spacing, or nested more than one level deep.
 
+<!-- BEGIN:generated-structure -->
+
 ## Variants
-`default` `elevated` shadowed, floats above the page · `outlined` border only · `filled` subtle background.
+`default` · `elevated` shadowed, floats above the page · `outlined` border only · `filled` subtle background
+Figma: `default` · `outlined` · `elevated` — differs from code (see `state/discrepancies.json`).
+
+## Sizes
+`sm` · `md` · `lg`
+
+<!-- END:generated-structure -->
 
 ## Slots
 `CardHeader` (with `leading` and `action`), `CardTitle`, `CardDescription`, `CardContent`, `CardFooter`.

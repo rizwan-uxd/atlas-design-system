@@ -60,4 +60,6 @@ The generator restamps these headers and keeps their bodies; edit only the rows 
 | `candidates.json` | the task promoted a candidate into a component | remove its entry. |
 | `decisions.json` | the user made a new design decision in this task | append `{ id: "DEC-NNN", topic, decision, date }`. Never record your own guess as a decision. |
 
-After editing state, `npm run atlas:sync` once more and confirm it writes 0 files on a second run.
+Sync after code, companion or generated-output changes — that post-code sync is the one whose output you
+check. If only a hand-written row in `atlas/state/*.json` is edited after it, don't run sync again: step 7's
+`design.snapshot-current` check verifies that state edit.

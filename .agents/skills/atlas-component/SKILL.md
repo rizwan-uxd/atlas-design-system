@@ -43,7 +43,11 @@ Skipping ahead to code is the mistake this skill exists to prevent.
    (required)**; it has the patterns, so don't open another component's companion files. Update all three: `figma.enum` maps list every Figma value; the contract asserts the
    new unions and prop shape; the test covers the variant × size matrix, states and axe.
 6. **Re-sync and state** — `npm run atlas:sync` again: code-derived `variants`/`sizes` update and
-   sync-detected discrepancies close themselves. Then update repo state by hand, per
+   sync-detected discrepancies close themselves. Run it after the last code or companion edit and read
+   its full output (no `| tail`/`| head`): the `written N file(s)` line near the top is the result.
+   Any later code, companion or generated-output change needs another sync. A hand edit to
+   `atlas/state/*.json` made after that sync does not — step 7's `design.snapshot-current` proves the
+   snapshot is still current. Then update repo state by hand, per
    `references/companions.md`: the `status.json` row, a repo-carried discrepancy closed with a dated
    resolution, a promoted candidate removed from `candidates.json`, and a new `decisions.json` entry
    only if the user made a decision in this task.

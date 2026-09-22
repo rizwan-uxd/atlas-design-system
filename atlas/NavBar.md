@@ -6,9 +6,16 @@ Top-level navigation bar: brand, primary links, actions.
 **When to use** — the persistent header of a desktop or responsive web layout.
 **When not to** — in-page view switching (Tabs), or a mobile bottom tab bar (that is a separate native pattern).
 
+<!-- BEGIN:generated-structure -->
+
 ## Variants
-`default` `transparent` over hero imagery · `elevated` shadowed on scroll.
-Figma names these `default | bordered | floating`; the sets do not match and `elevated ≈ floating` is unconfirmed (see `state/discrepancies.json`).
+`default` · `transparent` over hero imagery · `elevated` shadowed on scroll
+Figma: `default` · `bordered` · `floating` — differs from code (see `state/discrepancies.json`).
+
+## Sizes
+`sm` · `md` · `lg`
+
+<!-- END:generated-structure -->
 
 ## Do
 - Mark the current route with `active` on the link so it is announced, not just coloured.

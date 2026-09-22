@@ -91,16 +91,87 @@ Archive stale `docs/` plans, retire `atlas-context` + `atlas-ui-system`, re-run 
 - **Diet:** stale plans moved to `docs/_archive/` (root `ROADMAP.md`, `ATLAS-REPO-ANALYSIS.md`, `implementation/`, `sessions/`);
   `packages/ai-workflows/atlas-ui-skill` removed (no `atlas-context` leftovers remained). No re-run needed: all 6 harness-v2 runs read 0 off-task files.
 
-### Phase 9 — Benchmark and tighten the component workflow — ⏸ HOLD (2026-09-15)
-Approved 2026-09-13. Plan, pins, fixture gate, rubric, budget ($40 cap) and causal acceptance: `docs/PHASE-9-PROPOSAL.md`.
-v3 proposals: `docs/PHASE-9-V3-PROPOSALS.md`. Results and the HOLD rationale: `docs/PHASE-9-RESULTS.md`.
-- **Why HOLD:** the T3 fixture is defective. Switch `sm`/`md` code dimensions don't match Figma, and v3 T3 run 2 correctly
-  stopped on it. The v3 evidence is inconclusive, not PASS or FAIL.
-- **Nothing merged:** `f10119c`, H3 and H5 stay on `bench/phase-9-v3`.
-  - H3 and H5 improved their direct metrics but are not accepted (T3 correctness 2/3).
-- **Open:** T1 coverage 6/7 in harness-v3 run 2 is an unresolved regression signal.
-- **Restart:** reconcile Switch `sm`/`md` to Figma (a narrow Phase 2 prerequisite), build a new T3 fixture, then re-run T3
-  no-skill, v2 and v3. Older T3 runs are diagnostic only.
+### Phase 9 — Benchmark and tighten the component workflow — ✅ CLOSED (2026-09-22)
+Approved 2026-09-13. Plan, pins, fixture gate, rubric, budget and causal acceptance: `docs/PHASE-9-PROPOSAL.md`.
+v3 proposals: `docs/PHASE-9-V3-PROPOSALS.md`. **Full evidence trail and the closure record: `docs/PHASE-9-RESULTS.md`**
+(the closure record is its last section; everything above it is chronological and preserved, HOLD states included).
+Per-run metrics: `benchmarks/results/SUMMARY.md`. Rubric: `benchmarks/rubric-component.md` (unchanged).
+
+**Outcome**
+- **H3 (revised): ACCEPTED.** One full-output sync after code/companions; no re-sync after a state-only edit.
+- **H6: FAILED / DEFERRED.** Not revised, not retried.
+- **H3 and H6 cannot ship together.** They interact in both directions: v4 (`1fd95aa`) H3 fails 3/3 while H6 holds 0/3;
+  v6 (`56170dc`) H3 holds 0/3 while H6 fails 1/3. The no-overlap rule blocks accepting both from a combined arm, so H3
+  ships alone on `44eacba` (H6 reverted).
+- **H5: rejected** (source signal never reproduced in fixture-2 v2: template opens 0/3).
+- **H1: deferred** (overlaps H3). **H2 / H4: not reproduced.**
+- **`f10119c` / `8a5189b` remain dependencies of H3** — H3 has only ever been measured on top of the sync change that
+  derives `## Variants` / `## Sizes`. They ship together or not at all.
+
+**Evidence**
+- **v6 T3 ×3** (`harness-v6-t3f2`, source `56170dc`): H3 source signal **0/3**, all gates **3/3**, redundant confirmation
+  sync **0/3**, mean syncs **2.33 → 1.00**, `snapshotCurrent` and final verify 3/3.
+- **Rubric, v6 median run 1: A5 B5 C5 D5 = 20/20**, equal to `harness-v2-t3f2` r1 (A5 B5 C5 D5 = 20/20) — no criterion
+  lower, satisfying §8.3 step 3 on the accepting arm.
+- **H3-only regression** (`harness-v7`, source `44eacba`): T4, T1 and T2 ×3 each passed their stated automated gates —
+  T4 gates 3/3, T1 coverage 7/7 ×3, T2 6/6 · 5/6 · 5/6, with tsc, token-lint, raw elements and primitive token refs all 0
+  across the nine runs.
+- **Caveat, preserved explicitly: T3 was never re-run on the H3-only source `44eacba`.** The accepting T3 runs were on
+  `56170dc`, which still contained H6. This is a residual evidence caveat, **not an H3 failure** — H3's own criterion held
+  3/3 on T3 under `56170dc` and 3/3 on T4 under `44eacba`, and the H6 revert touches a rule that only adds a state-edit
+  step, not the sync rule H3 changes.
+
+**Decisions and learning**
+- **Rubric D resolved by choice D-3, not by rescoring.** The `harness-v3-t3f2` D 4 was measured against `53f31f3`
+  (`f10119c` + pre-revision H3 + H5) — a **rejected** source. §8.3 step 3 asks whether the arm being accepted regresses,
+  so it is evaluated on `harness-v6-t3f2`. **The old D 4 stays unchanged** as evidence against its rejected source: its
+  stale-`DISC-004` finding was real, and reversing a score to clear a gate would corrupt the record. Nothing in
+  `benchmarks/rubric-component.md` was edited.
+- **A–D for v6 were scored from preserved artifacts at zero spend** — the run-1 workspace diff, `run-1.jsonl` tool order
+  and final `result` event, and `T3/stale-row/run-1/stale-row.json`. A closure question that the existing artifacts can
+  answer never justifies a new run.
+- **The `claude.ai Claude Docs` MCP connector was accepted as a documented confound, not re-baselined.** It could not be
+  disconnected (account-level), so it was absorbed into the v6 runtime pin. v6/v7 differ from the four fixture-2 baselines
+  by one extra server *name* in the init list, with no extra tools offered. Re-baselining the four arms would have cost
+  ~$10 of the remaining budget to remove a confound that changes nothing an agent can call.
+- **Account-synced skills contaminate benchmark arms and must be removed and verified per run.** A
+  `~/.claude/skills/synced/` bucket carrying `atlas-context` and `atlas-ui-system` — the two skills Phase 8 retired —
+  regenerated four times during the v7 chain, twice mid-batch. Every occurrence was caught by `pins.mjs check` before the
+  affected run started; the bucket was removed and the run re-issued with `BENCH_ONLY`. All 12 runs verified clean
+  (128 skills per init snapshot, neither skill present). Left in place they supply Atlas tokens and variant rules directly
+  and would void the `no-skill` comparison. **Check this before any future benchmark run.**
+- **No further Phase 9 spend is justified.** Every acceptance bar is met or explicitly caveated, and the one open question
+  (T3 on `44eacba`) is a narrow residual that the T4 evidence already makes plausible.
+
+**Budget:** **$37.32 of the $42 cap; $4.68 remaining, intentionally preserved and not spent.** Cap history: $40 from
+2026-09-13, raised to $42 on 2026-09-15 by user approval as the stated maximum.
+
+**Source state at closure**
+- `main` @ `21101c9` — all Phase 9 evidence and docs.
+- H3-only source **`44eacba`** on `bench/phase-9-h3only` = `56170dc` with H6 (`1fd95aa`) reverted.
+- v6 freeze source **`56170dc`**, tag **`phase-9-v6-freeze`** (tree `6c28995fc2`); `harness-v7` is pinned by label only
+  (tree `d456c6b32f`) — **no v7 tag exists**.
+- H3's own commits: `4e968cd` (original, superseded) and `56170dc` (revised, accepted).
+  Sync dependency: `f10119c` / `8a5189b`. Switch parity `d0df523` is already on `main`.
+- **Nothing has been pushed as part of the shipping step, and nothing will be without explicit approval.**
+
+**Status**
+```
+PHASE 9:      CLOSED
+H3:           ACCEPTED — READY FOR INTEGRATION
+H6:           FAILED / DEFERRED
+BENCHMARKING: STOPPED
+BUDGET:       CLOSED / NO FURTHER SPEND PLANNED
+NEXT STEP:    INTEGRATE H3 INTO MAIN
+```
+
+**Do not merge `bench/phase-9-h3only` wholesale.** It predates the benchmark evidence: a merge would revert ~32,000 lines
+of Phase 9 results and docs, un-archive `docs/_archive/`, and **resurrect `packages/ai-workflows/atlas-ui-skill/`, the
+skill Phase 8 retired**. Integrate by cherry-picking the H3 source changes only (see the closure record's shipping
+recommendation).
+
+**Still open, inherited from Phase 9 (none blocks H3):** the unexplained fixture-1 T1 6/7 signal; the Badge/DISC-006
+fixture conflict (Phase 2, Badge); H6 itself.
 
 ## Execution
 Run in Claude Code via `docs/HANDOFF-CLAUDE-CODE.md` — one ready-to-paste prompt per phase (scope, files to read, constraints, done criteria). Figma MCP is configured in `.mcp.json`; only phases 2F, 3 and 5 need it.

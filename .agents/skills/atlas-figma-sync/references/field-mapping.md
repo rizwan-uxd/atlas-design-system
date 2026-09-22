@@ -17,10 +17,11 @@ What `scripts/atlas-sync.mjs` regenerates, from what, and how it decides somethi
 | `index.md` | all of the above, one row per component | |
 | `tokens.json` / `tokens.md` | `packages/tokens/atlas.tokens.css` | Figma MCP has no variable table (see `pull-file.md`) |
 | `<Name>.md` | the Figma description **if it reads as guidance**, else preserved | see below |
+| `<Name>.md` `## Variants` / `## Sizes` | `variants` / `sizes` above, plus a `Figma:` line when `figmaProperties` differs — between `generated-structure` markers, regenerated on every run, with or without a Figma description. A short hint after a value (`` `md` default ``) is carried forward | a missing Figma description stays a phase 3 gap |
 | `<Name>.md` `## API` block | `<Name>Props` and each subcomponent's `<Sub>Props` (own members, extended native element) — between `generated-api` markers, regenerated on every run | |
 
 `atlas/README.md`, `atlas/tokens.md` and preserved `<Name>.md` files keep their body; only the
-`<!-- GENERATED … -->` stamp on line 1 is rewritten.
+`<!-- GENERATED … -->` stamp on line 1 and the generated blocks are rewritten.
 
 ### The doc rule
 

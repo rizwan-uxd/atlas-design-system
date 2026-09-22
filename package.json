@@ -16,7 +16,8 @@
     "atlas:verify": "node scripts/atlas-verify.mjs",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "test:scripts": "node --test scripts/tests/atlas-sync.test.mjs"
   },
   "workspaces": [
     "packages/*"

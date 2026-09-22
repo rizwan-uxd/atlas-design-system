@@ -6,8 +6,13 @@ Applies a setting the moment it is toggled.
 **When to use** — preferences and settings that take effect immediately, with no save step.
 **When not to** — form values submitted later (Checkbox), or a choice between two named options (Tabs / segmented).
 
+<!-- BEGIN:generated-structure -->
+
 ## Sizes
-`sm` and `md`. Figma also defines `lg`; the code does not have it yet (see `state/discrepancies.json`).
+`sm` · `md`
+Figma: `sm` · `md` · `lg` — differs from code (see `state/discrepancies.json`).
+
+<!-- END:generated-structure -->
 
 ## Do
 - Use `label` and `description` props rather than composing your own row.

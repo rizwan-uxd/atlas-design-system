@@ -6,9 +6,17 @@ Interrupts the flow to ask for a decision or show focused content.
 **When to use** — confirming a destructive or irreversible action, a short focused form, a detail view that must not lose the page behind it.
 **When not to** — messages that need no decision (Alert), or long content that deserves a page.
 
+<!-- BEGIN:generated-structure -->
+
 ## Variants (presentation)
-`modal` centred · `sheet` slides from an edge · `drawer` docked panel. Sizes `sm` `md` `lg` `xl` `full`.
-Figma models `default | destructive` as Variant and presentation as a separate Type property; the code currently uses `variant` for presentation (see `state/discrepancies.json`).
+`modal` centred · `sheet` slides from an edge · `drawer` docked panel
+Figma: `default` · `destructive` — differs from code (see `state/discrepancies.json`).
+
+## Sizes
+`sm` · `md` · `lg` · `xl` · `full`
+Figma: `sm` · `md` · `lg` · `full` — differs from code (see `state/discrepancies.json`).
+
+<!-- END:generated-structure -->
 
 ## Slots
 `DialogTrigger`, `DialogContent`, `DialogHeader`, `DialogTitle`, `DialogDescription`, `DialogBody`, `DialogFooter`, `DialogClose`.

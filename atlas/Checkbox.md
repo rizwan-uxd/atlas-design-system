@@ -6,11 +6,15 @@ Independent on/off choice, or a tri-state parent of a group.
 **When to use** — opting into terms, multi-select lists, a "select all" parent row.
 **When not to** — an immediate setting that applies on toggle (Switch), or one-of-many (no Radio exists — log a candidate).
 
+<!-- BEGIN:generated-structure -->
+
 ## Variants
-`default` box plus label · `card` whole surface is the target, for selectable options. Figma draws `card` at `md` only.
+`default` box plus label · `card` whole surface is the target, for selectable options
 
 ## Sizes
-`sm` dense lists · `md` default · `lg` 24px box, touch-first screens.
+`sm` dense lists · `md` default · `lg` 24px box, touch-first screens
+
+<!-- END:generated-structure -->
 
 ## Do
 - Use `checked="indeterminate"` on a parent whose children are partly selected.

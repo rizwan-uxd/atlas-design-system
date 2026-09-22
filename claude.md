@@ -6,7 +6,7 @@
 
 ## Status
 Monorepo restructured; all 12 v1 components live in `packages/ui-web/src/` classified by tier, with a visual sandbox at `app/page.tsx` and coded prototypes under `app/prototypes/`.
-**Current work:** the AI upgrade in `docs/ATLAS-AI-UPGRADE-PLAN.md` — phases 0, 1, 2C (Checkbox), 4, 5, 6, 7 and 8 are done; **phase 9 is on HOLD** (`docs/PHASE-9-RESULTS.md`): the T3 fixture is defective. Next steps: reconcile Switch `sm`/`md` dimensions to Figma, build a new T3 fixture, then re-run T3. The phase 0 baseline and phase 8 results are in `benchmarks/results/SUMMARY.md`.
+**Current work:** the AI upgrade in `docs/ATLAS-AI-UPGRADE-PLAN.md` — phases 0, 1, 2C (Checkbox), 4, 5, 6, 7 and 8 are done; **phase 9 is CLOSED** (2026-09-22; closure record at the end of `docs/PHASE-9-RESULTS.md`): H3 revised ACCEPTED, H6 FAILED/DEFERRED, H5 rejected, spend $37.32 / $42. Nothing merged or pushed — H3 ships by cherry-picking four source changes from `bench/phase-9-h3only` (`44eacba`) onto `main`, not by merging the branch. The phase 0 baseline and phase 8 results are in `benchmarks/results/SUMMARY.md`.
 
 ## What this is
 A monorepo holding: the visual sandbox (Next.js 16, `app/page.tsx`), the web component library (`packages/ui-web/src/`), a React Native library (`packages/ui-native/`), design tokens (`packages/tokens/`), Figma sync (`packages/figma-sync/`), governance checks (`packages/governance/`), and the agent benchmark (`benchmarks/`).

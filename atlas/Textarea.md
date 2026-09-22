@@ -6,8 +6,16 @@ Multi-line text entry with optional character counter.
 **When to use** — notes, messages, descriptions, any input that can exceed one line.
 **When not to** — single-line values (Input), rich text or code (neither exists — log a candidate).
 
+<!-- BEGIN:generated-structure -->
+
 ## Variants
-`default` bordered · `filled` on subtle surfaces. Figma also defines `unstyled`; the code does not have it yet (see `state/discrepancies.json`).
+`default` bordered · `filled` on subtle surfaces
+Figma: `default` · `filled` · `unstyled` — differs from code (see `state/discrepancies.json`).
+
+## Sizes
+`sm` · `md` · `lg`
+
+<!-- END:generated-structure -->
 
 ## Do
 - Set `rows` or `autoGrow` so the field starts at the expected height.

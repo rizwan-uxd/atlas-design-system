@@ -6,11 +6,15 @@ Triggers an action. The only element that should look clickable and act on submi
 **When to use** — submitting a form, opening a dialog, confirming or cancelling, any action that changes state.
 **When not to** — navigating to another page or route (use a link; `variant="link"` styles a real anchor, it does not make a button navigate).
 
+<!-- BEGIN:generated-structure -->
+
 ## Variants
-`primary` one per view, the main action · `secondary` supporting action · `outline` low emphasis on a busy surface · `ghost` toolbars and icon-only controls · `destructive` deletes and irreversible actions · `link` inline in prose.
+`primary` one per view, the main action · `secondary` supporting action · `outline` low emphasis on a busy surface · `ghost` toolbars and icon-only controls · `destructive` deletes and irreversible actions · `link` inline in prose
 
 ## Sizes
-`sm` dense tables and toolbars · `md` default · `lg` primary call to action on mobile · `icon` square, icon only.
+`sm` dense tables and toolbars · `md` default · `lg` primary call to action on mobile · `icon` square, icon only
+
+<!-- END:generated-structure -->
 
 ## Do
 - Give `size="icon"` buttons an `aria-label` — there is no visible text.

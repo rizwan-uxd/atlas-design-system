@@ -425,6 +425,71 @@ const apiSection = (c) => [
   API_END,
 ].join("\n")
 
+// `## Variants` / `## Sizes` are structural facts, so they are always derived from code values and
+// Figma properties — never left as prose that goes stale when a value is added. A short hint written
+// after a value ("`md` default") is carried forward; a value that no longer exists drops out.
+const STRUCT_BEGIN = "<!-- BEGIN:generated-structure -->"
+const STRUCT_END = "<!-- END:generated-structure -->"
+const STRUCT_HEADING = /^## (Variants|Sizes)\b.*$/
+
+/**
+ * hints per value from the first sentence of an old section's first line: "`sm` dense lists · `md` default".
+ * Later sentences are drift notes ("Figma also defines `lg`…") and are never carried forward.
+ */
+function valueHints(line) {
+  const hints = {}
+  for (const m of (line ?? "").split(/\.(?:\s|$)/)[0].matchAll(/`([^`]+)`([^`·\n]*)/g)) {
+    const hint = m[2].trim().replace(/[,;:]$/, "").trim()
+    if (!(m[1] in hints)) hints[m[1]] = /^(and|or)?$/i.test(hint) || /^[,;:(]/.test(hint) ? "" : hint
+  }
+  return hints
+}
+
+/** old sections: { Variants: { heading, hints }, Sizes: … } read from the generated block or legacy prose */
+function oldStructure(body) {
+  const out = {}
+  const lines = body.split("\n")
+  for (let i = 0; i < lines.length; i++) {
+    const h = lines[i].match(STRUCT_HEADING)
+    if (!h) continue
+    const first = lines.slice(i + 1).find((l) => l.trim())
+    out[h[1]] = { heading: lines[i], hints: valueHints(first) }
+  }
+  return out
+}
+
+function structureSection(c, old = {}) {
+  const part = (key, codeValues, figmaValues) => {
+    if (!codeValues?.length) return []
+    const hints = old[key]?.hints ?? {}
+    const lines = ["", old[key]?.heading ?? `## ${key}`,
+      codeValues.map((v) => (hints[v] ? `\`${v}\` ${hints[v]}` : `\`${v}\``)).join(" · ")]
+    if (figmaValues && !setEq(figmaValues, codeValues)) {
+      lines.push(`Figma: ${figmaValues.map((v) => `\`${v}\``).join(" · ")} — differs from code (see \`state/discrepancies.json\`).`)
+    }
+    return lines
+  }
+  const props = c.figma?.properties ?? {}
+  return [STRUCT_BEGIN, ...part("Variants", c.variants, props.Variant), ...part("Sizes", c.sizes, props.Size), "", STRUCT_END].join("\n")
+}
+
+/** replace the generated block, or on first run swap the legacy prose sections for it in place */
+function upsertStructure(body, c) {
+  const old = oldStructure(body)
+  if (body.includes(STRUCT_BEGIN)) return upsertSection(body, STRUCT_BEGIN, STRUCT_END, structureSection(c, old))
+  const lines = body.split("\n")
+  const kept = []
+  let at = -1
+  for (let i = 0; i < lines.length; i++) {
+    if (!STRUCT_HEADING.test(lines[i])) { kept.push(lines[i]); continue }
+    if (at === -1) at = kept.length
+    while (i + 1 < lines.length && !/^(## |<!-- BEGIN|```)/.test(lines[i + 1])) i++
+  }
+  if (at === -1) at = Math.max(0, kept.findIndex((l) => /^(## |<!-- BEGIN)/.test(l)))
+  kept.splice(at, 0, structureSection(c, old), "")
+  return kept.join("\n")
+}
+
 const docsReplaced = []
 for (const c of comps) {
   const rel = `atlas/${c.name}.md`
@@ -443,19 +508,16 @@ for (const c of comps) {
       `# ${c.name}`,
       description,
       "",
-      "## Variants",
-      (c.variants ?? []).join(" · ") || "—",
-      "",
-      "## Sizes",
-      (c.sizes ?? []).join(" · ") || "—",
+      structureSection(c),
       "",
       apiSection(c),
       "",
     ].join("\n"))
   } else if (fs.existsSync(abs)) {
-    // no Figma description yet — keep the existing guidance, refresh the stamp and the API block
+    // no Figma description yet (a phase 3 gap) — keep the existing guidance; refresh the stamp,
+    // the derived Variants/Sizes block and the API block
     const body = read(abs).replace(/^<!-- GENERATED[^>]*-->/, `<!-- ${HEADER} -->`)
-    write(rel, upsertSection(body, API_BEGIN, API_END, apiSection(c)))
+    write(rel, upsertSection(upsertStructure(body, c), API_BEGIN, API_END, apiSection(c)))
   }
 }
 

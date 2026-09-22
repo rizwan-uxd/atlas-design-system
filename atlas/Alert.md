@@ -6,8 +6,17 @@ Inline message that explains status or feedback in place. Not a toast.
 **When to use** — form-level errors, an explanation above a step, a persistent notice in page flow.
 **When not to** — transient confirmations (no Toast exists — log a candidate), or a blocking decision (Dialog).
 
+<!-- BEGIN:generated-structure -->
+
 ## Variants
-`info` `success` `warning` `danger`. Figma also defines `neutral` and size `lg`; the code has neither yet (see `state/discrepancies.json`).
+`info` · `success` · `warning` · `danger`
+Figma: `info` · `success` · `warning` · `danger` · `neutral` — differs from code (see `state/discrepancies.json`).
+
+## Sizes
+`sm` · `md`
+Figma: `sm` · `md` · `lg` — differs from code (see `state/discrepancies.json`).
+
+<!-- END:generated-structure -->
 
 ## Do
 - Give at least a `title` or a `description`.

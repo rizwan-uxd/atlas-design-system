@@ -6,8 +6,15 @@ Single-line text entry. Pair with Label; never rely on placeholder as the label.
 **When to use** — one line of text, email, number, search, password.
 **When not to** — multi-line text (Textarea), choosing from a fixed set (no Select exists yet — log a candidate).
 
+<!-- BEGIN:generated-structure -->
+
 ## Variants
-`default` bordered, the standard field · `filled` on subtle or grouped surfaces · `unstyled` when the surrounding container owns the border (search bars, inline edit).
+`default` bordered, the standard field · `filled` on subtle or grouped surfaces · `unstyled` when the surrounding container owns the border (search bars, inline edit)
+
+## Sizes
+`sm` · `md` · `lg`
+
+<!-- END:generated-structure -->
 
 ## Do
 - Always render a Label with `htmlFor` matching the input `id`.
