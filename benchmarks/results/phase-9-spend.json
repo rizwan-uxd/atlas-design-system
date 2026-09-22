@@ -359,6 +359,33 @@
       "infra": false,
       "nonRun": true,
       "note": "Non-run infrastructure interruption: the monthly spend limit stopped the agent after 3 turns ($0.13); no agent work was produced. Trace preserved at benchmarks/results/harness-v5-t3f2/T3/ (run-1.jsonl, trace-run-1.sha256). Reclassified on 2026-09-22 under user authorisation so it does not consume an infrastructure replacement."
+    },
+    {
+      "label": "harness-v6-t3f2",
+      "task": "T3",
+      "run": 1,
+      "costUsd": 0.8495876,
+      "date": "2026-09-22T13:19:25.311Z",
+      "stop": [],
+      "infra": false
+    },
+    {
+      "label": "harness-v6-t3f2",
+      "task": "T3",
+      "run": 2,
+      "costUsd": 0.7664821999999999,
+      "date": "2026-09-22T13:23:25.983Z",
+      "stop": [],
+      "infra": false
+    },
+    {
+      "label": "harness-v6-t3f2",
+      "task": "T3",
+      "run": 3,
+      "costUsd": 0.7243400000000001,
+      "date": "2026-09-22T13:29:04.736Z",
+      "stop": [],
+      "infra": false
     }
   ],
   "interactive": [

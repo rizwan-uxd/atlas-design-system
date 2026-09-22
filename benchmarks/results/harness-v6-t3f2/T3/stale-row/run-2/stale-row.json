@@ -1,0 +1,15 @@
+{
+  "workspace": "harness-v6-t3f2-T3-2",
+  "lgShipped": true,
+  "stale": false,
+  "reasons": [],
+  "row": {
+    "id": "DISC-004",
+    "component": "Switch",
+    "side": "figma",
+    "status": "open",
+    "issue": "Figma used Variant for on/off.",
+    "resolution": "Figma: Variant → Checked boolean. Code: size lg added (2026-09-22).",
+    "date": "2026-09-22"
+  }
+}

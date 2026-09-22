@@ -191,3 +191,23 @@ that the pins caught before any spend.
   `nonRun: true` with its reason, under user authorisation on 2026-09-22 — a non-run interruption, not a benchmark
   replacement. Its trace and sha256 are preserved unchanged at `benchmarks/results/harness-v5-t3f2/T3/`. The replacement
   counter reads 2/2; `budget.mjs` is untouched.
+
+### harness-v6-t3f2 T3 x3 (2026-09-22) — H3 revised accepted, H6 fails 1/3 → stop
+| metric | harness-v4-t3f2 | harness-v6-t3f2 |
+|---|---|---|
+| cost (mean) | $0.86 | $0.78 |
+| turns | 41 / 41 / 37 | 35 / 36 / 33 |
+| `H3_syncRuns` | 2 / 3 / 2 | **1 / 1 / 1** |
+| H3 present (redundant sync) | 3/3 fail | **0/3 — accepted** |
+| gates | 3/3 pass | 3/3 pass |
+| stale `DISC-004` (H6) | 0/3 | **1/3 — run 3 stale** |
+
+- **H3 revised: accepted.** The `companions.md` line 63 conflict is gone. Every run syncs exactly once; no run re-syncs
+  "to confirm it writes 0 files". Cheaper and shorter than v4 as a side effect, not a target.
+- **H6: not accepted.** Run 3 closed `DISC-014` but never narrowed `DISC-004`, leaving two sentences that still describe
+  `lg` as missing after `lg` shipped: "Figma used Variant for on/off; code has no size lg" and "Code: add size lg".
+  Runs 1 and 2 narrowed it correctly. H6's criterion is 0/3, so 1/3 fails.
+- **The two changes interact in both directions.** v4: H3 fails, H6 holds 0/3. v6: H3 holds 0/3, H6 fails 1/3. Under the
+  no-overlap rule neither combined result accepts both, so the pair still cannot ship together.
+- **Stopped** before T4/T1/T2 per the standing instruction that a real agent correctness failure stops the chain.
+  Spend $32.24 / $42.

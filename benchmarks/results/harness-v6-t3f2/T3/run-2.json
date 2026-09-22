@@ -1,0 +1,247 @@
+{
+  "model": "claude-sonnet-5",
+  "ok": true,
+  "error": null,
+  "turns": 36,
+  "durationS": 235,
+  "costUsd": 0.7664821999999999,
+  "tokens": {
+    "input": 42,
+    "cacheWrite": 81721,
+    "cacheRead": 1647691,
+    "output": 10902,
+    "totalContext": 1729454
+  },
+  "tools": {
+    "Skill": 3,
+    "Read": 12,
+    "ToolSearch": 1,
+    "mcp__figma__get_metadata": 1,
+    "mcp__figma__get_design_context": 1,
+    "Grep": 1,
+    "Edit": 10,
+    "Bash": 3
+  },
+  "toolCalls": 32,
+  "figmaCalls": 2,
+  "verifyRuns": 2,
+  "reworkEdits": 2,
+  "toolResultChars": {
+    "Skill": 104,
+    "Read": 52492,
+    "ToolSearch": 142,
+    "mcp__figma__get_metadata": 3948,
+    "mcp__figma__get_design_context": 1740,
+    "Grep": 1431,
+    "Edit": 2532,
+    "Bash": 4259
+  },
+  "skillsUsed": [
+    "atlas-component",
+    "figma:figma-design-to-code",
+    "atlas-verify"
+  ],
+  "reads": {
+    "total": 12,
+    "unique": 12,
+    "offTask": 1,
+    "byCategory": {
+      "atlas-snapshot": 4,
+      "skills": 3,
+      "components": 3,
+      "other-platforms": 1,
+      "governance": 1
+    },
+    "files": [
+      "atlas/state/decisions.json",
+      "atlas/state/discrepancies.json",
+      "atlas/metadata/Switch.json",
+      ".claude/skills/atlas-component/references/figma-first.md",
+      ".claude/skills/atlas-component/references/code-rules.md",
+      ".claude/skills/atlas-component/references/companions.md",
+      "packages/ui-web/src/primitives/Switch/Switch.tsx",
+      "packages/ui-web/src/primitives/Switch/Switch.module.css",
+      "packages/figma-sync/code-connect/Switch.figma.tsx",
+      "packages/governance/contracts/Switch.contract.ts",
+      "packages/ui-web/tests/Switch.test.tsx",
+      "atlas/state/status.json"
+    ]
+  },
+  "bashCmds": [
+    "npx vitest run packages/ui-web/tests/Switch.test.tsx 2>&1 | tail -40",
+    "npm run atlas:sync 2>&1",
+    "node scripts/atlas-verify.mjs --scope \"packages/ui-web/src/primitives/Switch/**,packages/figma-sync/code-connect/Switch.figma.tsx,packages/governance/contracts/Switch.contract.ts,packages/ui-web/tests/Switch.test.tsx,atlas/**\" --stamp 2>&1"
+  ],
+  "quality": {
+    "outputExists": false,
+    "files": 0,
+    "loc": 1,
+    "registered": false,
+    "tokenLintViolations": 0,
+    "tscErrors": 0,
+    "atlasComponentsImported": [],
+    "expectedCoverage": "0/0",
+    "rawElements": 0,
+    "numericStyleLiterals": 0,
+    "primitiveTokenRefs": 0
+  },
+  "phase8": {
+    "readsAll": {
+      "total": 13,
+      "unique": 13,
+      "viaBash": 0,
+      "files": [
+        "atlas/state/decisions.json",
+        "atlas/state/discrepancies.json",
+        "atlas/metadata/Switch.json",
+        ".claude/skills/atlas-component/references/figma-first.md",
+        ".claude/skills/atlas-component/references/code-rules.md",
+        ".claude/skills/atlas-component/references/companions.md",
+        "packages/ui-web/src/primitives/Switch/Switch.tsx",
+        "packages/ui-web/src/primitives/Switch/Switch.module.css",
+        "Grep:packages/tokens/atlas.tokens.css",
+        "packages/figma-sync/code-connect/Switch.figma.tsx",
+        "packages/governance/contracts/Switch.contract.ts",
+        "packages/ui-web/tests/Switch.test.tsx",
+        "atlas/state/status.json"
+      ]
+    },
+    "sourceOpened": {
+      "component-source": [
+        "packages/ui-web/src/primitives/Switch/Switch.tsx",
+        "packages/ui-web/src/primitives/Switch/Switch.module.css"
+      ],
+      "token-source": [
+        "packages/tokens/atlas.tokens.css"
+      ],
+      "verifier-internals": [
+        "packages/governance/contracts/Switch.contract.ts"
+      ]
+    },
+    "sourceOpenedCount": 4,
+    "verify": {
+      "runs": 2,
+      "failures": 0,
+      "firstPass": true,
+      "finalPass": true,
+      "calls": [
+        {
+          "cmd": "npx vitest run packages/ui-web/tests/Switch.test.tsx 2>&1 | tail -40",
+          "failed": false
+        },
+        {
+          "cmd": "node scripts/atlas-verify.mjs --scope \"packages/ui-web/src/primitives/Switch/**,packages/figma-sync/code-connect/Switch.",
+          "failed": false
+        }
+      ]
+    },
+    "wasted": {
+      "duplicateReads": 0,
+      "unusedComponentReads": [
+        "atlas/metadata/Switch.json",
+        "packages/ui-web/src/primitives/Switch/Switch.tsx",
+        "packages/ui-web/src/primitives/Switch/Switch.module.css"
+      ],
+      "offTask": [
+        "packages/figma-sync/code-connect/Switch.figma.tsx"
+      ],
+      "verifierInternals": [
+        "packages/governance/contracts/Switch.contract.ts"
+      ],
+      "failedToolCalls": 0,
+      "total": 5
+    },
+    "gaps": {
+      "available": true,
+      "candidatesChanged": [],
+      "expected": [],
+      "recognised": []
+    }
+  },
+  "component": {
+    "changed": [
+      "atlas/Switch.md",
+      "atlas/index.md",
+      "atlas/metadata/Switch.json",
+      "atlas/state/discrepancies.json",
+      "atlas/state/status.json",
+      "packages/figma-sync/code-connect/Switch.figma.tsx",
+      "packages/governance/contracts/Switch.contract.ts",
+      "packages/ui-web/src/primitives/Switch/Switch.module.css",
+      "packages/ui-web/src/primitives/Switch/Switch.tsx",
+      "packages/ui-web/tests/Switch.test.tsx"
+    ],
+    "outOfScope": [],
+    "forbiddenTouched": [],
+    "useFigmaAttempts": 0,
+    "figmaReads": [
+      "mcp__figma__get_metadata",
+      "mcp__figma__get_design_context"
+    ],
+    "permissionDenials": 0,
+    "unionBefore": [
+      "sm",
+      "md"
+    ],
+    "unionAfter": [
+      "sm",
+      "md",
+      "lg"
+    ],
+    "companions": {
+      "codeConnect": true,
+      "contract": true,
+      "test": true
+    },
+    "testsRan": true,
+    "testsPass": true,
+    "tscErrors": 0,
+    "stamped": true,
+    "discrepancies": {
+      "closed": [
+        "DISC-014"
+      ],
+      "added": [],
+      "modified": [
+        "DISC-004",
+        "DISC-014"
+      ],
+      "invalid": [],
+      "protectedChanged": []
+    },
+    "generatedHandEdits": [],
+    "snapshotCurrent": true,
+    "signals": {
+      "H1_stateFileReads": 2,
+      "H2_otherTestOpens": 0,
+      "H3_syncRuns": 1,
+      "H4_invalidDiscWrites": 0,
+      "H5_otherComponentOpens": 0
+    },
+    "present": {
+      "H1": true,
+      "H2": false,
+      "H3": false,
+      "H4": false,
+      "H5": false
+    },
+    "gates": {
+      "figmaWrites": true,
+      "scope": true,
+      "tsc": true,
+      "noGeneratedHandEdits": true,
+      "protectedUntouched": true,
+      "discFormat": true,
+      "notStopped": true,
+      "companions": true,
+      "tests": true,
+      "finalVerify": true,
+      "stamped": true,
+      "driftClosed": true,
+      "snapshotCurrent": true
+    },
+    "gatesPass": true,
+    "maxTurnsExit": false
+  },
+  "subtype": "success"
+}
