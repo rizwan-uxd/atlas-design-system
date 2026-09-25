@@ -12,6 +12,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter }
 import { Badge } from "@atlas/ui-web/primitives/Badge/Badge"
 import { Avatar, AvatarGroup } from "@atlas/ui-web/primitives/Avatar/Avatar"
 import { Alert } from "@atlas/ui-web/compositions/Alert/Alert"
+import { ListItem, ListItemMedia, ListItemContent, ListItemTitle, ListItemDescription, ListItemActions } from "@atlas/ui-web/compositions/ListItem/ListItem"
 import { Dialog, DialogContent, DialogTrigger, DialogHeader, DialogTitle, DialogDescription, DialogBody, DialogFooter, DialogClose } from "@atlas/ui-web/compositions/Dialog/Dialog"
 import { Tabs } from "@atlas/ui-web/patterns/Tabs/Tabs"
 import {
@@ -895,6 +896,100 @@ export default function SandboxPage() {
                   <BreadcrumbItem><BreadcrumbPage>Breadcrumb</BreadcrumbPage></BreadcrumbItem>
                 </BreadcrumbList>
               </Breadcrumb>
+            </div>
+
+          </div>
+        </Section>
+
+        {/* ── LIST ITEM ── */}
+        <Section title="List Item">
+          <div style={{ display: "flex", flexDirection: "column", gap: "var(--atlas-spacing-6)", maxInlineSize: "var(--atlas-breakpoint-md)" }}>
+
+            {/* Variant × size — horizontal, tile media */}
+            {(["md", "sm"] as const).map(size => (
+              <div key={size}>
+                <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase" }}>Horizontal · {size}</p>
+                <div style={{ display: "flex", flexDirection: "column", gap: "var(--atlas-spacing-3)" }}>
+                  {(["default", "outline", "muted"] as const).map(variant => (
+                    <ListItem key={variant} variant={variant} size={size}>
+                      <ListItemMedia type="tile">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z" /></svg>
+                      </ListItemMedia>
+                      <ListItemContent>
+                        <ListItemTitle>Item Title ({variant})</ListItemTitle>
+                        <ListItemDescription>This is the item description text</ListItemDescription>
+                      </ListItemContent>
+                      <ListItemActions>
+                        <Button variant="outline" size="sm">Action</Button>
+                      </ListItemActions>
+                    </ListItem>
+                  ))}
+                </div>
+              </div>
+            ))}
+
+            {/* Media — avatar, avatar group, image, icon */}
+            <div>
+              <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase" }}>Media — avatar · avatar group · image · icon</p>
+              <div style={{ display: "flex", flexDirection: "column", gap: "var(--atlas-spacing-3)" }}>
+                <ListItem variant="outline">
+                  <ListItemMedia><Avatar alt="" initials="ER" /></ListItemMedia>
+                  <ListItemContent>
+                    <ListItemTitle>Evil Rabbit</ListItemTitle>
+                    <ListItemDescription>Last seen 5 months ago</ListItemDescription>
+                  </ListItemContent>
+                  <ListItemActions><Button variant="outline" size="sm">Invite</Button></ListItemActions>
+                </ListItem>
+                <ListItem variant="outline">
+                  <ListItemMedia>
+                    <AvatarGroup aria-label="Team members">
+                      <Avatar alt="Jane Cooper" initials="JC" />
+                      <Avatar alt="Dev Patel" initials="DP" />
+                    </AvatarGroup>
+                  </ListItemMedia>
+                  <ListItemContent>
+                    <ListItemTitle>No Team Members</ListItemTitle>
+                    <ListItemDescription>Invite your team to collaborate on this project.</ListItemDescription>
+                  </ListItemContent>
+                  <ListItemActions><Button variant="outline" size="sm">Invite</Button></ListItemActions>
+                </ListItem>
+                <ListItem variant="outline" size="sm">
+                  <ListItemMedia type="image"><img src="/globe.svg" alt="" /></ListItemMedia>
+                  <ListItemContent>
+                    <ListItemTitle>Midnight City Lights</ListItemTitle>
+                    <ListItemDescription>Neon Dreams</ListItemDescription>
+                  </ListItemContent>
+                </ListItem>
+                <ListItem variant="outline">
+                  <ListItemMedia type="icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z" /></svg>
+                  </ListItemMedia>
+                  <ListItemContent>
+                    <ListItemTitle>Visit our documentation</ListItemTitle>
+                    <ListItemDescription>Learn how to get started with our components.</ListItemDescription>
+                  </ListItemContent>
+                  <ListItemActions>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6" /></svg>
+                  </ListItemActions>
+                </ListItem>
+              </div>
+            </div>
+
+            {/* Vertical — image fills the width at 3:2 */}
+            <div>
+              <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase" }}>Vertical — outline · muted · default</p>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "var(--atlas-spacing-4)" }}>
+                {(["outline", "muted", "default"] as const).map(variant => (
+                  <ListItem key={variant} direction="vertical" variant={variant}>
+                    <ListItemMedia type="image"><img src="/globe.svg" alt="" /></ListItemMedia>
+                    <ListItemContent>
+                      <ListItemTitle>v0-1.5-sm</ListItemTitle>
+                      <ListItemDescription>Everyday tasks and UI generation.</ListItemDescription>
+                    </ListItemContent>
+                    <ListItemActions><Button variant="outline" size="sm">Action</Button></ListItemActions>
+                  </ListItem>
+                ))}
+              </div>
             </div>
 
           </div>

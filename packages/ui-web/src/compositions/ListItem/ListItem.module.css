@@ -1,0 +1,153 @@
+/* =================================================================
+   Atlas ListItem — component styles
+   All values reference semantic tokens only.
+   No hex literals. No primitive tokens. No magic numbers.
+   Logical properties throughout. No motion (presentational).
+   ================================================================= */
+
+/* ── Root — Figma: List Item (Direction × Variant × Size) ─────── */
+/*
+  Size map (Figma)         md                sm
+    padding-inline         spacing-3         spacing-3
+    padding-block          spacing-3         spacing-2
+    gap                    spacing-3         spacing-2
+    content gap            spacing-px        0
+    description            font-size-sm      font-size-xs
+  The item radius is radius-lg. Outline adds a 1px border; muted fills
+  with background-muted; default has no surface.
+*/
+
+.root {
+  --_item-padding-block: var(--atlas-spacing-3);
+  --_item-gap:           var(--atlas-spacing-3);
+  --_content-gap:        var(--atlas-spacing-px);
+  --_description-size:   var(--atlas-font-size-sm);
+  --_description-lh:     var(--atlas-line-height-normal);
+
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: var(--_item-gap);
+  padding-block: var(--_item-padding-block);
+  padding-inline: var(--atlas-spacing-3);
+  border-radius: var(--atlas-radius-lg);
+  font-family: var(--atlas-font-sans);
+}
+
+.root[data-size="sm"] {
+  --_item-padding-block: var(--atlas-spacing-2);
+  --_item-gap:           var(--atlas-spacing-2);
+  --_content-gap:        0;
+  --_description-size:   var(--atlas-font-size-xs);
+  --_description-lh:     var(--atlas-line-height-snug);
+}
+
+/* Vertical: media, text, action stacked; children start-aligned */
+.root[data-direction="vertical"] {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.root[data-variant="outline"] {
+  border: var(--atlas-border-width-1) solid var(--atlas-border);
+}
+
+.root[data-variant="muted"] {
+  background-color: var(--atlas-background-muted);
+}
+
+/* ── Media — Figma: List Item Media (Type × Size) ─────────────── */
+
+.media {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+}
+
+.media[data-type="icon"] {
+  inline-size: var(--atlas-icon-size-xs);
+  block-size: var(--atlas-icon-size-xs);
+  color: var(--atlas-foreground-muted);
+}
+
+.media[data-type="tile"] {
+  box-sizing: border-box;
+  inline-size: var(--atlas-spacing-8);
+  block-size: var(--atlas-spacing-8);
+  border: var(--atlas-border-width-1) solid var(--atlas-border);
+  border-radius: var(--atlas-radius-md);
+  background-color: var(--atlas-background-muted);
+  color: var(--atlas-foreground);
+}
+
+.media[data-type="icon"] > svg,
+.media[data-type="tile"] > svg {
+  inline-size: var(--atlas-icon-size-xs);
+  block-size: var(--atlas-icon-size-xs);
+}
+
+.media[data-type="image"] {
+  inline-size: var(--atlas-spacing-10);
+  block-size: var(--atlas-spacing-10);
+  border-radius: var(--atlas-radius-sm);
+  background-color: var(--atlas-background-muted);
+  overflow: hidden;
+}
+
+.root[data-size="sm"] .media[data-type="image"] {
+  inline-size: var(--atlas-spacing-6);
+  block-size: var(--atlas-spacing-6);
+}
+
+.media[data-type="image"] > img {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+
+/* Vertical image: fills the item width at 3:2 (Figma: vertical media) */
+.root[data-direction="vertical"] .media[data-type="image"] {
+  inline-size: 100%;
+  block-size: auto;
+  aspect-ratio: 3 / 2;
+}
+
+/* ── Content ──────────────────────────────────────────────────── */
+
+.content {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--_content-gap);
+  min-inline-size: 0;
+}
+
+.root[data-direction="vertical"] .content {
+  flex: none;
+  inline-size: 100%;
+}
+
+.title {
+  margin: 0;
+  font-size: var(--atlas-font-size-sm);
+  font-weight: var(--atlas-font-weight-medium);
+  line-height: var(--atlas-line-height-normal);
+  color: var(--atlas-foreground);
+}
+
+.description {
+  margin: 0;
+  font-size: var(--_description-size);
+  line-height: var(--_description-lh);
+  color: var(--atlas-foreground-muted);
+}
+
+/* ── Actions ──────────────────────────────────────────────────── */
+
+.actions {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: var(--atlas-spacing-0_5);
+}
