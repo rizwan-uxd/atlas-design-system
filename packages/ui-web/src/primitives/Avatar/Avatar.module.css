@@ -1,0 +1,208 @@
+/* =================================================================
+   Atlas Avatar — component styles
+   All values reference semantic tokens only.
+   No hex literals. No primitive tokens. No magic numbers.
+   ================================================================= */
+
+/* ── Size map (Figma: xs 20 · sm 24 · md 32 · lg 40 · xl 48) ───── */
+/*
+  --avatar-size        avatar box            spacing-5 | 6 | 8 | 10 | 12
+  --avatar-dot         status / badge dot    spacing-1_5 | 2 | 2 | 3 | 3
+  --avatar-badge-glyph plus glyph in badge   spacing-1_5 | 1_5 | 1_5 | 2 | 2
+  --avatar-glyph       person icon           spacing-2 | 3 | icon-size-xs | sm | md
+  --avatar-squircle    squircle radius       avatar-squircle-radius-{size}
+*/
+
+.root,
+.addButton {
+  --avatar-size: var(--atlas-spacing-8);
+  --avatar-dot: var(--atlas-spacing-2);
+  --avatar-badge-glyph: var(--atlas-spacing-1_5);
+  --avatar-glyph: var(--atlas-icon-size-xs);
+  --avatar-squircle: var(--atlas-avatar-squircle-radius-md);
+}
+
+.root[data-size="xs"],
+.addButton[data-size="xs"] {
+  --avatar-size: var(--atlas-spacing-5);
+  --avatar-dot: var(--atlas-spacing-1_5);
+  --avatar-badge-glyph: var(--atlas-spacing-1_5);
+  --avatar-glyph: var(--atlas-spacing-2);
+  --avatar-squircle: var(--atlas-avatar-squircle-radius-xs);
+}
+
+.root[data-size="sm"],
+.addButton[data-size="sm"] {
+  --avatar-size: var(--atlas-spacing-6);
+  --avatar-dot: var(--atlas-spacing-2);
+  --avatar-badge-glyph: var(--atlas-spacing-1_5);
+  --avatar-glyph: var(--atlas-spacing-3);
+  --avatar-squircle: var(--atlas-avatar-squircle-radius-sm);
+}
+
+.root[data-size="lg"],
+.addButton[data-size="lg"] {
+  --avatar-size: var(--atlas-spacing-10);
+  --avatar-dot: var(--atlas-spacing-3);
+  --avatar-badge-glyph: var(--atlas-spacing-2);
+  --avatar-glyph: var(--atlas-icon-size-sm);
+  --avatar-squircle: var(--atlas-avatar-squircle-radius-lg);
+}
+
+.root[data-size="xl"],
+.addButton[data-size="xl"] {
+  --avatar-size: var(--atlas-spacing-12);
+  --avatar-dot: var(--atlas-spacing-3);
+  --avatar-badge-glyph: var(--atlas-spacing-2);
+  --avatar-glyph: var(--atlas-icon-size-md);
+  --avatar-squircle: var(--atlas-avatar-squircle-radius-xl);
+}
+
+/* ── Root ─────────────────────────────────────────────────────── */
+
+.root {
+  position: relative;
+  display: inline-flex;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  inline-size: var(--avatar-size);
+  block-size: var(--avatar-size);
+  font-family: var(--atlas-font-sans);
+}
+
+/* ── Surface (clips image / fallback to the shape) ────────────── */
+
+.surface {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  inline-size: 100%;
+  block-size: 100%;
+  overflow: hidden;
+  border-radius: var(--atlas-radius-full);
+  background-color: var(--atlas-background-muted);
+  color: var(--atlas-foreground-muted);
+  font-size: var(--atlas-font-size-xs);
+  font-weight: var(--atlas-font-weight-medium);
+  line-height: var(--atlas-line-height-tight);
+  user-select: none;
+}
+
+.root[data-shape="squircle"] .surface {
+  border-radius: var(--avatar-squircle);
+}
+
+.image {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+
+/* ── Glyphs (inline SVG, stroke scales with the viewBox) ──────── */
+
+.glyph,
+.badgeGlyph {
+  display: inline-flex;
+}
+
+.glyph {
+  inline-size: var(--avatar-glyph);
+  block-size: var(--avatar-glyph);
+}
+
+.badgeGlyph {
+  inline-size: var(--avatar-badge-glyph);
+  block-size: var(--avatar-badge-glyph);
+}
+
+.svg {
+  inline-size: 100%;
+  block-size: 100%;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: var(--atlas-border-width-2);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ── Badge slot (status dot + badge icon share one corner) ────── */
+
+.badge {
+  position: absolute;
+  inset-inline-end: 0;
+  inset-block-end: 0;
+  inline-size: var(--avatar-dot);
+  block-size: var(--avatar-dot);
+}
+
+.badgeLayer {
+  position: absolute;
+  inset: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  border-radius: var(--atlas-radius-full);
+}
+
+.badgeIcon {
+  background-color: var(--atlas-primary);
+  color: var(--atlas-primary-foreground);
+  border: var(--atlas-border-width-1) solid var(--atlas-background);
+}
+
+.statusDot {
+  background-color: var(--atlas-success);
+  border: var(--atlas-border-width-2) solid var(--atlas-background);
+}
+
+/* ── AvatarGroup ──────────────────────────────────────────────── */
+
+.group {
+  display: inline-flex;
+  align-items: center;
+}
+
+.group > * + * {
+  margin-inline-start: var(--atlas-avatar-group-overlap);
+}
+
+.addButton {
+  position: relative;
+  display: inline-flex;
+  flex-shrink: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  border-radius: var(--atlas-radius-full);
+  color: inherit;
+  cursor: pointer;
+  transition: opacity var(--atlas-duration-fast) var(--atlas-easing-standard);
+}
+
+.addButton[data-shape="squircle"] {
+  border-radius: var(--avatar-squircle);
+}
+
+/* Touch target: grow the hit area to --atlas-touch-min without changing the visual size */
+.addButton::after {
+  content: "";
+  position: absolute;
+  inset: min(var(--atlas-spacing-0), calc((100% - var(--atlas-touch-min)) / 2));
+}
+
+.addButton:hover {
+  opacity: var(--atlas-opacity-hover);
+}
+
+.addButton:focus-visible {
+  outline: var(--atlas-border-width-2) solid var(--atlas-focus-ring);
+  outline-offset: var(--atlas-border-width-2);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .addButton {
+    transition: none;
+  }
+}
