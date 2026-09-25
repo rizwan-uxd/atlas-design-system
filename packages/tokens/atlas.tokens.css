@@ -235,6 +235,7 @@
   --atlas-border: var(--atlas-color-neutral-200);
   --atlas-border-strong: var(--atlas-color-neutral-300);
   --atlas-border-subtle: var(--atlas-color-neutral-100);
+  --atlas-border-inverse: var(--atlas-color-neutral-0);
   --atlas-foreground: var(--atlas-color-neutral-950);
   --atlas-foreground-muted: var(--atlas-color-neutral-600);
   --atlas-foreground-subtle: var(--atlas-color-neutral-500);
@@ -278,6 +279,7 @@
   --atlas-border: var(--atlas-color-neutral-800);
   --atlas-border-strong: var(--atlas-color-neutral-700);
   --atlas-border-subtle: var(--atlas-color-neutral-900);
+  --atlas-border-inverse: var(--atlas-color-neutral-0);
   --atlas-foreground: var(--atlas-color-neutral-50);
   --atlas-foreground-muted: var(--atlas-color-neutral-400);
   --atlas-foreground-subtle: var(--atlas-color-neutral-500);
@@ -359,6 +361,7 @@
   --color-border: var(--atlas-border);
   --color-border-strong: var(--atlas-border-strong);
   --color-border-subtle: var(--atlas-border-subtle);
+  --color-border-inverse: var(--atlas-border-inverse);
   --color-foreground: var(--atlas-foreground);
   --color-foreground-muted: var(--atlas-foreground-muted);
   --color-foreground-subtle: var(--atlas-foreground-subtle);

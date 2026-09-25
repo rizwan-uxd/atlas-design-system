@@ -20,5 +20,6 @@ One line per component. Read `atlas/<Name>.md` only for the components you will 
 | NavBar | layouts | `@atlas/ui-web/layouts/NavBar/NavBar` | default, transparent, elevated | sm, md, lg |
 | Avatar | primitives | `@atlas/ui-web/primitives/Avatar/Avatar` | — | xs, sm, md, lg, xl |
 | Breadcrumb | patterns | `@atlas/ui-web/patterns/Breadcrumb/Breadcrumb` | — | — |
+| Divider | primitives | `@atlas/ui-web/primitives/Divider/Divider` | — | — |
 
 No Table, Tooltip, Select, Radio or Toast exists. Compose gaps from primitives and log them in `state/candidates.json`.

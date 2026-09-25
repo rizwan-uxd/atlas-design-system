@@ -289,6 +289,19 @@
       "issue": "Size geometry mismatch — Figma (95:114): sm track 28×16 thumb 12, md 36×20 thumb 16, 2px inset · code: sm 32×18 thumb 14, md 40×24 thumb 20. Not detectable by sync (it compares size names only); found by phase 9 harness-v3 T3 run 2.",
       "resolution": "Code: sm and md track, thumb and checked translate set to the Figma values with existing spacing tokens (2026-09-15). No Figma edit.",
       "date": "2026-09-15"
+    },
+    {
+      "id": "DISC-030",
+      "component": "Divider",
+      "side": "figma",
+      "status": "closed",
+      "issue": "Component exists in code but was not found in the Figma pull.",
+      "resolution": "publish the component in Figma, or remove it from code",
+      "detectedBy": "sync:figma",
+      "firstSeen": "2026-09-25T11:17:22.425Z",
+      "lastSeen": "2026-09-25T11:17:22.425Z",
+      "closedAt": "2026-09-25T11:17:22.425Z",
+      "closedBy": "sync:figma"
     }
   ]
 }

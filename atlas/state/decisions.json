@@ -77,6 +77,12 @@
       "topic": "DropdownMenu added to v1.1",
       "decision": "DropdownMenu (ReUI node 42817:7410) is added as a sixth v1.1 web component, its own phase after Breadcrumb, with its own Figma and final approval gates. Adding @radix-ui/react-dropdown-menu is NOT yet approved; decide when the phase reaches code. Supersedes the 'exactly five' wording of DEC-009.",
       "date": "2026-09-25"
+    },
+    {
+      "id": "DEC-013",
+      "topic": "Divider design",
+      "decision": "Divider follows the ReUI Separator page (node 42834:6882): a flat 1px line, Orientation horizontal|vertical × Tone default|strong|subtle|inverse (border, border-strong, border-subtle, border-inverse). Divider and Separator are one component. New semantic token border-inverse aliases color/neutral/0 in Light and Dark (opaque, like foreground-on-brand; Figma variables cannot alias with alpha). Labelled and inset dividers are out of v1.1 (the reference draws neither). Meaningful divider = role=separator (hr for horizontal, aria-orientation=vertical for vertical); decorative = role=none. No states, no motion.",
+      "date": "2026-09-25"
     }
   ]
 }

@@ -1,0 +1,33 @@
+/* =================================================================
+   Atlas Divider — component styles
+   All values reference semantic tokens only.
+   ================================================================= */
+
+.divider {
+  display: block;
+  flex: none;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background-color: var(--atlas-border);
+}
+
+/* ── Orientation ───────────────────────────────────────────────── */
+
+.divider[data-orientation="horizontal"] {
+  inline-size: 100%;
+  block-size: var(--atlas-border-width-1);
+}
+
+.divider[data-orientation="vertical"] {
+  inline-size: var(--atlas-border-width-1);
+  block-size: auto;
+  align-self: stretch;
+}
+
+/* ── Tone ──────────────────────────────────────────────────────── */
+
+.divider[data-tone="strong"]  { background-color: var(--atlas-border-strong); }
+.divider[data-tone="subtle"]  { background-color: var(--atlas-border-subtle); }
+.divider[data-tone="inverse"] { background-color: var(--atlas-border-inverse); }
