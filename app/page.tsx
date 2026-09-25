@@ -19,6 +19,11 @@ import {
   Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbPage,
   BreadcrumbSeparator, BreadcrumbEllipsis, BreadcrumbDropdown,
 } from "@atlas/ui-web/patterns/Breadcrumb/Breadcrumb"
+import {
+  DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuCheckboxItem,
+  DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuLabel, DropdownMenuGroup, DropdownMenuSeparator,
+  DropdownMenuSub, DropdownMenuSubTrigger, DropdownMenuSubContent,
+} from "@atlas/ui-web/patterns/DropdownMenu/DropdownMenu"
 import { NavBar } from "@atlas/ui-web/layouts/NavBar/NavBar"
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
@@ -51,6 +56,9 @@ export default function SandboxPage() {
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [checkboxChecked, setCheckboxChecked] = useState<boolean | "indeterminate">(false)
   const [switchOn, setSwitchOn] = useState(false)
+  const [statusBar, setStatusBar] = useState(true)
+  const [activityBar, setActivityBar] = useState(false)
+  const [sortBy, setSortBy] = useState("name")
 
   const toggleTheme = () => {
     const next = !dark
@@ -870,12 +878,21 @@ export default function SandboxPage() {
 
             {/* Dropdown trigger (menu supplied by the caller) */}
             <div>
-              <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase" }}>Dropdown trigger (no menu component yet)</p>
+              <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase" }}>Dropdown trigger wired to a menu</p>
               <Breadcrumb separator="dot">
                 <BreadcrumbList>
                   <BreadcrumbItem><BreadcrumbLink href="#">Home</BreadcrumbLink></BreadcrumbItem>
                   <BreadcrumbSeparator />
-                  <BreadcrumbItem><BreadcrumbDropdown>Components</BreadcrumbDropdown></BreadcrumbItem>
+                  <BreadcrumbItem>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild><BreadcrumbDropdown>Components</BreadcrumbDropdown></DropdownMenuTrigger>
+                      <DropdownMenuContent>
+                        <DropdownMenuItem>Documentation</DropdownMenuItem>
+                        <DropdownMenuItem>Themes</DropdownMenuItem>
+                        <DropdownMenuItem>GitHub</DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </BreadcrumbItem>
                   <BreadcrumbSeparator />
                   <BreadcrumbItem><BreadcrumbPage>Breadcrumb</BreadcrumbPage></BreadcrumbItem>
                 </BreadcrumbList>
@@ -896,6 +913,85 @@ export default function SandboxPage() {
                   <BreadcrumbItem><BreadcrumbPage>Breadcrumb</BreadcrumbPage></BreadcrumbItem>
                 </BreadcrumbList>
               </Breadcrumb>
+            </div>
+
+          </div>
+        </Section>
+
+        {/* ── DROPDOWN MENU ── */}
+        <Section title="Dropdown Menu">
+          <div style={{ display: "flex", flexWrap: "wrap", alignItems: "flex-start", gap: "var(--atlas-spacing-8)" }}>
+
+            {/* Groups, label, shortcut, submenu, disabled, destructive */}
+            <div>
+              <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase" }}>Open below · label · groups · submenu</p>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild><Button variant="outline">My account</Button></DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                  <DropdownMenuGroup>
+                    <DropdownMenuItem>Profile</DropdownMenuItem>
+                    <DropdownMenuItem shortcut="⌘B">Billing</DropdownMenuItem>
+                    <DropdownMenuSub>
+                      <DropdownMenuSubTrigger>Team</DropdownMenuSubTrigger>
+                      <DropdownMenuSubContent>
+                        <DropdownMenuItem>Invite by email</DropdownMenuItem>
+                        <DropdownMenuItem>Invite by message</DropdownMenuItem>
+                        <DropdownMenuItem>Copy link</DropdownMenuItem>
+                      </DropdownMenuSubContent>
+                    </DropdownMenuSub>
+                  </DropdownMenuGroup>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuGroup>
+                    <DropdownMenuItem>Settings</DropdownMenuItem>
+                    <DropdownMenuItem disabled>Support</DropdownMenuItem>
+                    <DropdownMenuItem destructive>Log out</DropdownMenuItem>
+                  </DropdownMenuGroup>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+
+            {/* Opens above the trigger */}
+            <div>
+              <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase" }}>Open above the trigger</p>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild><Button variant="outline">Actions</Button></DropdownMenuTrigger>
+                <DropdownMenuContent side="top">
+                  <DropdownMenuItem>Duplicate</DropdownMenuItem>
+                  <DropdownMenuItem>Archive</DropdownMenuItem>
+                  <DropdownMenuItem destructive>Delete</DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+
+            {/* Checkbox rows */}
+            <div>
+              <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase" }}>Checkbox rows</p>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild><Button variant="outline">View</Button></DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuLabel>Appearance</DropdownMenuLabel>
+                  <DropdownMenuCheckboxItem checked={statusBar} onCheckedChange={setStatusBar}>Status bar</DropdownMenuCheckboxItem>
+                  <DropdownMenuCheckboxItem checked={activityBar} onCheckedChange={setActivityBar}>Activity bar</DropdownMenuCheckboxItem>
+                  <DropdownMenuCheckboxItem disabled>Panel</DropdownMenuCheckboxItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+
+            {/* Radio rows */}
+            <div>
+              <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase" }}>Radio rows</p>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild><Button variant="outline">Sort by: {sortBy}</Button></DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuLabel>Sort by</DropdownMenuLabel>
+                  <DropdownMenuRadioGroup value={sortBy} onValueChange={setSortBy}>
+                    <DropdownMenuRadioItem value="name">Name</DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value="date">Date</DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value="size">Size</DropdownMenuRadioItem>
+                  </DropdownMenuRadioGroup>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
 
           </div>

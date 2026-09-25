@@ -22,8 +22,9 @@
  *     (aria-current="page", not a link).
  *   - Separators are decorative (aria-hidden); the chevron mirrors in RTL.
  *   - BreadcrumbEllipsis is a <button> named "Show more" (override with `label`).
- *   - BreadcrumbDropdown is a trigger only: a <button aria-haspopup="menu"> whose menu the
- *     caller supplies. Atlas has no menu component yet.
+ *   - BreadcrumbDropdown is a trigger: a <button aria-haspopup="menu">. Wrap it in
+ *     <DropdownMenuTrigger asChild> (patterns/DropdownMenu) to open an Atlas menu; the trigger
+ *     supplies aria-expanded, so the `expanded` prop is only for a caller-managed menu.
  *   - Links are plain <a> elements.
  */
 
@@ -167,10 +168,10 @@ export function BreadcrumbEllipsis({ label = "Show more", className, ...rest }: 
 export function BreadcrumbDropdown({ expanded = false, className, children, ...rest }: BreadcrumbDropdownProps) {
   return (
     <button
-      {...rest}
       type="button"
       aria-haspopup="menu"
       aria-expanded={expanded}
+      {...rest}
       className={cx(styles.dropdown, className)}
     >
       {children}

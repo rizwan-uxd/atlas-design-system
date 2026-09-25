@@ -229,6 +229,7 @@
   --atlas-background: var(--atlas-color-neutral-0);
   --atlas-background-subtle: var(--atlas-color-neutral-50);
   --atlas-background-muted: var(--atlas-color-neutral-100);
+  --atlas-background-accent: var(--atlas-color-neutral-100);
   --atlas-surface: var(--atlas-color-neutral-0);
   --atlas-surface-raised: var(--atlas-color-neutral-0);
   --atlas-surface-overlay: var(--atlas-color-neutral-0);
@@ -273,6 +274,7 @@
   --atlas-background: var(--atlas-color-neutral-950);
   --atlas-background-subtle: var(--atlas-color-neutral-900);
   --atlas-background-muted: var(--atlas-color-neutral-800);
+  --atlas-background-accent: var(--atlas-color-neutral-700);
   --atlas-surface: var(--atlas-color-neutral-900);
   --atlas-surface-raised: var(--atlas-color-neutral-800);
   --atlas-surface-overlay: var(--atlas-color-neutral-800);
@@ -355,6 +357,7 @@
   --color-background: var(--atlas-background);
   --color-background-subtle: var(--atlas-background-subtle);
   --color-background-muted: var(--atlas-background-muted);
+  --color-background-accent: var(--atlas-background-accent);
   --color-surface: var(--atlas-surface);
   --color-surface-raised: var(--atlas-surface-raised);
   --color-surface-overlay: var(--atlas-surface-overlay);

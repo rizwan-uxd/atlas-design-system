@@ -1,0 +1,185 @@
+/* =================================================================
+   Atlas DropdownMenu — component styles
+   All values reference semantic tokens only.
+   No hex literals. No primitive tokens. No magic numbers.
+   ================================================================= */
+
+/* ── Panel ────────────────────────────────────────────────────── */
+
+.content {
+  position: fixed;
+  z-index: var(--atlas-z-dropdown);
+  box-sizing: border-box;
+  /* Figma: 224px wide (spacing-16 is 64px), never narrower than 128px */
+  inline-size: calc(var(--atlas-spacing-16) * 3.5);
+  min-inline-size: calc(var(--atlas-spacing-16) * 2);
+  max-inline-size: 100vw;
+  padding: var(--atlas-spacing-1);
+  background-color: var(--atlas-surface-overlay);
+  color: var(--atlas-foreground);
+  border: var(--atlas-border-width-1) solid var(--atlas-border);
+  border-radius: var(--atlas-radius-md);
+  box-shadow: var(--atlas-shadow-md);
+  font-family: var(--atlas-font-sans);
+  font-size: var(--atlas-font-size-sm);
+  font-weight: var(--atlas-font-weight-regular);
+  line-height: var(--atlas-line-height-normal);
+  outline: none;
+}
+
+/* The 4px gap off the trigger */
+.content[data-side="bottom"] {
+  margin-block-start: var(--atlas-spacing-1);
+}
+
+.content[data-side="top"] {
+  margin-block-end: var(--atlas-spacing-1);
+}
+
+/* Submenu: opens beside the parent panel, first row level with the trigger row */
+.content[data-side="inline-end"] {
+  margin-inline-start: var(--atlas-spacing-1);
+  margin-block-start: calc((var(--atlas-spacing-1) + var(--atlas-border-width-1)) * -1);
+  inline-size: calc(var(--atlas-spacing-16) * 2.5);
+}
+
+/* ── Rows ─────────────────────────────────────────────────────── */
+
+.item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--atlas-spacing-2);
+  padding-block: var(--atlas-spacing-1_5);
+  padding-inline: var(--atlas-spacing-2);
+  border-radius: var(--atlas-radius-sm);
+  color: var(--atlas-foreground);
+  cursor: default;
+  user-select: none;
+  outline: none;
+}
+
+/* Figma "focus": the highlighted row, whether reached by pointer or keyboard */
+.item:focus:not([data-disabled]),
+.item[data-state="open"]:not([data-disabled]) {
+  background-color: var(--atlas-background-accent);
+}
+
+.label {
+  flex: 1 1 0;
+  min-inline-size: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ── Destructive ──────────────────────────────────────────────── */
+
+.destructive,
+.destructive .icon {
+  color: var(--atlas-danger);
+}
+
+.destructive:focus:not([data-disabled]) {
+  background-color: var(--atlas-danger-subtle);
+}
+
+/* ── Disabled ─────────────────────────────────────────────────── */
+
+.item[data-disabled] {
+  opacity: var(--atlas-opacity-disabled);
+  pointer-events: none;
+}
+
+/* ── Slots: icon, shortcut, submenu chevron ───────────────────── */
+
+.icon,
+.chevron {
+  display: inline-flex;
+  flex: none;
+  color: var(--atlas-foreground-muted);
+}
+
+.icon > svg,
+.chevron > svg {
+  inline-size: var(--atlas-icon-size-xs);
+  block-size: var(--atlas-icon-size-xs);
+}
+
+.shortcut {
+  flex: none;
+  margin-inline-start: auto;
+  color: var(--atlas-foreground-muted);
+  font-size: var(--atlas-font-size-xs);
+  letter-spacing: var(--atlas-letter-spacing-wide);
+  white-space: nowrap;
+}
+
+.svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: var(--atlas-border-width-2);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Directional chevron mirrors in right-to-left layouts */
+[dir="rtl"] .mirror {
+  transform: scaleX(-1);
+}
+
+/* ── Checkbox and radio rows: indicator in a 32px start inset ─── */
+
+.inset {
+  padding-inline-start: var(--atlas-spacing-8);
+}
+
+.indicator {
+  position: absolute;
+  inset-inline-start: var(--atlas-spacing-2);
+  inset-block: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--atlas-icon-size-xs);
+  color: var(--atlas-foreground);
+}
+
+.indicator > svg {
+  inline-size: var(--atlas-icon-size-xs);
+  block-size: var(--atlas-icon-size-xs);
+}
+
+.dot {
+  inline-size: var(--atlas-spacing-2);
+  block-size: var(--atlas-spacing-2);
+  border-radius: var(--atlas-radius-full);
+  background-color: currentColor;
+}
+
+/* ── Label, group, separator ──────────────────────────────────── */
+
+.menuLabel {
+  padding-block: var(--atlas-spacing-1_5);
+  padding-inline: var(--atlas-spacing-2);
+  font-weight: var(--atlas-font-weight-medium);
+  color: var(--atlas-foreground);
+}
+
+.group {
+  display: block;
+}
+
+/* Full-width line: cancels the panel's inline padding */
+.separator {
+  margin-block: var(--atlas-spacing-1);
+  margin-inline: calc(var(--atlas-spacing-1) * -1);
+}
+
+/* Windows high-contrast mode drops background colours; keep the highlighted row visible */
+@media (forced-colors: active) {
+  .item:focus:not([data-disabled]),
+  .item[data-state="open"]:not([data-disabled]) {
+    outline: var(--atlas-border-width-2) solid;
+  }
+}
