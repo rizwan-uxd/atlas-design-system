@@ -23,6 +23,7 @@
     "Tabs": { "parity": "open", "figmaMetadata": "none", "code": "scaffolded", "verifiedAt": null },
     "NavBar": { "parity": "open", "figmaMetadata": "none", "code": "scaffolded", "verifiedAt": null },
     "Avatar": { "parity": "match", "figmaMetadata": "description-written", "code": "spec-complete", "verifiedAt": null },
-    "Breadcrumb": { "parity": "match", "figmaMetadata": "description-written", "code": "spec-complete", "verifiedAt": null }
+    "Breadcrumb": { "parity": "match", "figmaMetadata": "description-written", "code": "spec-complete", "verifiedAt": null },
+    "Divider": { "parity": "match", "figmaMetadata": "description-written", "code": "spec-complete", "verifiedAt": null }
   }
 }

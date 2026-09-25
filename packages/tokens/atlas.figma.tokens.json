@@ -139,6 +139,7 @@
         { "name": "border", "type": "COLOR", "values": { "Light": { "alias": "Atlas/Primitives:color/neutral/200" }, "Dark": { "alias": "Atlas/Primitives:color/neutral/800" } } },
         { "name": "border-strong", "type": "COLOR", "values": { "Light": { "alias": "Atlas/Primitives:color/neutral/300" }, "Dark": { "alias": "Atlas/Primitives:color/neutral/700" } } },
         { "name": "border-subtle", "type": "COLOR", "values": { "Light": { "alias": "Atlas/Primitives:color/neutral/100" }, "Dark": { "alias": "Atlas/Primitives:color/neutral/900" } } },
+        { "name": "border-inverse", "type": "COLOR", "values": { "Light": { "alias": "Atlas/Primitives:color/neutral/0" }, "Dark": { "alias": "Atlas/Primitives:color/neutral/0" } } },
         { "name": "foreground", "type": "COLOR", "values": { "Light": { "alias": "Atlas/Primitives:color/neutral/950" }, "Dark": { "alias": "Atlas/Primitives:color/neutral/50" } } },
         { "name": "foreground-muted", "type": "COLOR", "values": { "Light": { "alias": "Atlas/Primitives:color/neutral/600" }, "Dark": { "alias": "Atlas/Primitives:color/neutral/400" } } },
         { "name": "foreground-subtle", "type": "COLOR", "values": { "Light": { "alias": "Atlas/Primitives:color/neutral/500" }, "Dark": { "alias": "Atlas/Primitives:color/neutral/500" } } },
