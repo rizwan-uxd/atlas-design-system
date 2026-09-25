@@ -46,6 +46,8 @@ These cover ~80% of typical product screens: forms (Input/Label/Textarea/Checkbo
 
 Five web-only components are added, one at a time, each behind a Figma approval gate and a final approval gate: **Avatar** (primitives), **Divider** (primitives), **Breadcrumb** (patterns), **Timeline** (patterns), **DescriptionList** (compositions). Native parity is logged in `atlas/state/candidates.json`, not built. Semantic tokens these components need go into Figma foundations first, then `packages/tokens`, then the component. Recorded as DEC-009 (scope) and DEC-010 (Avatar design) in `atlas/state/decisions.json`.
 
+**Amended 2026-09-25:** **DropdownMenu** joins v1.1 as a sixth web component, built after Breadcrumb in its own phase with its own gates (DEC-012). Breadcrumb's Dropdown item ships as a trigger only until then (DEC-011). Adding `@radix-ui/react-dropdown-menu` is not yet approved.
+
 ---
 
 ## Deferred to v1.1+ (post-spec, post-build)
@@ -54,7 +56,7 @@ Foundations: IconButton · Radio · Select
 Display: Tag  
 Feedback: Toast · Tooltip · Skeleton · Progress · Spinner  
 Navigation: Pagination · Sidebar · Drawer/Sheet · BottomNav (extracted from NavBar)  
-Overlays: Popover · DropdownMenu · CommandPalette  
+Overlays: Popover · CommandPalette  
 Layout primitives: Container · Stack · Grid · Section · Spacer (likely shipped as utilities, not formal components)
 
 ---

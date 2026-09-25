@@ -14,6 +14,10 @@ import { Avatar, AvatarGroup } from "@atlas/ui-web/primitives/Avatar/Avatar"
 import { Alert } from "@atlas/ui-web/compositions/Alert/Alert"
 import { Dialog, DialogContent, DialogTrigger, DialogHeader, DialogTitle, DialogDescription, DialogBody, DialogFooter, DialogClose } from "@atlas/ui-web/compositions/Dialog/Dialog"
 import { Tabs } from "@atlas/ui-web/patterns/Tabs/Tabs"
+import {
+  Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbPage,
+  BreadcrumbSeparator, BreadcrumbEllipsis, BreadcrumbDropdown,
+} from "@atlas/ui-web/patterns/Breadcrumb/Breadcrumb"
 import { NavBar } from "@atlas/ui-web/layouts/NavBar/NavBar"
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
@@ -827,6 +831,70 @@ export default function SandboxPage() {
                   </DialogContent>
                 </Dialog>
               </Row>
+            </div>
+
+          </div>
+        </Section>
+
+        {/* ── BREADCRUMB ── */}
+        <Section title="Breadcrumb">
+          <div style={{ display: "flex", flexDirection: "column", gap: "var(--atlas-spacing-4)" }}>
+
+            {/* Basic + custom separator */}
+            <div>
+              <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase" }}>Basic · chevron</p>
+              <Breadcrumb>
+                <BreadcrumbList>
+                  <BreadcrumbItem><BreadcrumbLink href="#">Home</BreadcrumbLink></BreadcrumbItem>
+                  <BreadcrumbSeparator />
+                  <BreadcrumbItem><BreadcrumbLink href="#">Components</BreadcrumbLink></BreadcrumbItem>
+                  <BreadcrumbSeparator />
+                  <BreadcrumbItem><BreadcrumbPage>Breadcrumb</BreadcrumbPage></BreadcrumbItem>
+                </BreadcrumbList>
+              </Breadcrumb>
+            </div>
+
+            <div>
+              <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase" }}>Custom separator · dot</p>
+              <Breadcrumb separator="dot">
+                <BreadcrumbList>
+                  <BreadcrumbItem><BreadcrumbLink href="#">Home</BreadcrumbLink></BreadcrumbItem>
+                  <BreadcrumbSeparator />
+                  <BreadcrumbItem><BreadcrumbLink href="#">Components</BreadcrumbLink></BreadcrumbItem>
+                  <BreadcrumbSeparator />
+                  <BreadcrumbItem><BreadcrumbPage>Breadcrumb</BreadcrumbPage></BreadcrumbItem>
+                </BreadcrumbList>
+              </Breadcrumb>
+            </div>
+
+            {/* Dropdown trigger (menu supplied by the caller) */}
+            <div>
+              <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase" }}>Dropdown trigger (no menu component yet)</p>
+              <Breadcrumb separator="dot">
+                <BreadcrumbList>
+                  <BreadcrumbItem><BreadcrumbLink href="#">Home</BreadcrumbLink></BreadcrumbItem>
+                  <BreadcrumbSeparator />
+                  <BreadcrumbItem><BreadcrumbDropdown>Components</BreadcrumbDropdown></BreadcrumbItem>
+                  <BreadcrumbSeparator />
+                  <BreadcrumbItem><BreadcrumbPage>Breadcrumb</BreadcrumbPage></BreadcrumbItem>
+                </BreadcrumbList>
+              </Breadcrumb>
+            </div>
+
+            {/* Collapsed */}
+            <div>
+              <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase" }}>Collapsed (ellipsis button)</p>
+              <Breadcrumb>
+                <BreadcrumbList>
+                  <BreadcrumbItem><BreadcrumbLink href="#">Home</BreadcrumbLink></BreadcrumbItem>
+                  <BreadcrumbSeparator />
+                  <BreadcrumbItem><BreadcrumbEllipsis onClick={() => {}} /></BreadcrumbItem>
+                  <BreadcrumbSeparator />
+                  <BreadcrumbItem><BreadcrumbLink href="#">Components</BreadcrumbLink></BreadcrumbItem>
+                  <BreadcrumbSeparator />
+                  <BreadcrumbItem><BreadcrumbPage>Breadcrumb</BreadcrumbPage></BreadcrumbItem>
+                </BreadcrumbList>
+              </Breadcrumb>
             </div>
 
           </div>
