@@ -1,0 +1,142 @@
+/* =================================================================
+   Atlas Breadcrumb — component styles
+   All values reference semantic tokens only.
+   No hex literals. No primitive tokens. No magic numbers.
+   ================================================================= */
+
+/* ── Root + list ──────────────────────────────────────────────── */
+
+.root {
+  font-family: var(--atlas-font-sans);
+  font-size: var(--atlas-font-size-sm);
+  font-weight: var(--atlas-font-weight-regular);
+  line-height: var(--atlas-line-height-normal);
+}
+
+.list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--atlas-spacing-1_5);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  display: inline-flex;
+  align-items: center;
+}
+
+/* ── Shared interactive base ──────────────────────────────────── */
+
+.link,
+.page,
+.dropdown {
+  border-radius: var(--atlas-radius-sm);
+  text-decoration: none;
+}
+
+.link,
+.ellipsis,
+.dropdown {
+  transition: color var(--atlas-duration-fast) var(--atlas-easing-standard);
+}
+
+.link:focus-visible,
+.ellipsis:focus-visible,
+.dropdown:focus-visible {
+  outline: var(--atlas-border-width-2) solid var(--atlas-focus-ring);
+  outline-offset: 0;
+}
+
+/* ── Link ─────────────────────────────────────────────────────── */
+
+.link {
+  color: var(--atlas-primary);
+}
+
+.link:hover {
+  color: var(--atlas-foreground);
+}
+
+/* ── Current page ─────────────────────────────────────────────── */
+
+.page {
+  color: var(--atlas-foreground);
+}
+
+/* ── Separator ────────────────────────────────────────────────── */
+
+.separator {
+  display: inline-flex;
+  align-items: center;
+  color: var(--atlas-foreground-muted);
+}
+
+.separator > svg,
+.ellipsis > svg,
+.dropdown > svg {
+  inline-size: var(--atlas-icon-size-xs);
+  block-size: var(--atlas-icon-size-xs);
+}
+
+/* Directional chevron mirrors in right-to-left layouts */
+[dir="rtl"] .mirror {
+  transform: scaleX(-1);
+}
+
+.svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: var(--atlas-border-width-2);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ── Ellipsis + dropdown buttons ──────────────────────────────── */
+
+.ellipsis,
+.dropdown {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--atlas-foreground-muted);
+  font: inherit;
+  cursor: pointer;
+}
+
+.ellipsis {
+  justify-content: center;
+  inline-size: var(--atlas-spacing-6);
+  block-size: var(--atlas-spacing-6);
+  border-radius: var(--atlas-radius-md);
+}
+
+.ellipsis:focus-visible {
+  background-color: var(--atlas-background);
+}
+
+.dropdown {
+  gap: var(--atlas-spacing-1);
+}
+
+/* Touch target: grow the hit area to --atlas-touch-min without changing the visual size */
+.ellipsis::after,
+.dropdown::after {
+  content: "";
+  position: absolute;
+  inset-block: min(var(--atlas-spacing-0), calc((100% - var(--atlas-touch-min)) / 2));
+  inset-inline: min(var(--atlas-spacing-0), calc((100% - var(--atlas-touch-min)) / 2));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .link,
+  .ellipsis,
+  .dropdown {
+    transition: none;
+  }
+}
