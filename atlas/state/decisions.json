@@ -95,6 +95,18 @@
       "topic": "Code tokens added to Figma foundations",
       "decision": "Figma follows code where code already had a token Figma lacked: Atlas/Primitives gained spacing/9 (36), radius/base (8, radius/md now aliases it), font-weight/*, font-family/*, line-height/* (ratios), letter-spacing/* (em), duration/*, easing/*, each with WEB code syntax; and effect styles shadow/sm|md|lg|xl (light values — dark shadow values stay code-only, since effect styles have no modes). line-height, letter-spacing, duration and easing are hidden from pickers (scopes []) because Figma cannot bind them. Figma has layout/container/* (640–1536) that code does not define; it is unused and left as is.",
       "date": "2026-09-25"
+    },
+    {
+      "id": "DEC-016",
+      "topic": "DropdownMenu design and no external dependency",
+      "decision": "DropdownMenu follows the shadcn Community reference (node 114:21467, file LhQn47HBQtxfXbIvDdIgzV), replacing ReUI node 42817:7410 in DEC-012. Atlas is its own library, so no external dependency is added: @radix-ui/react-dropdown-menu is NOT installed and DEC-012's pending approval is closed. The menu is built with React and react-dom (portal, anchored placement, roving focus, typeahead, submenus). Tier patterns. Figma: Dropdown Menu Item (Type item|destructive|checkbox|radio × State default|focus|disabled), Dropdown Menu Label, Dropdown Menu (Groups 1–3, Show Label). Item radius is radius-sm (4px; the reference is 6px, which Atlas lacks). Row line-height 150% makes a row 33px. Disabled opacity is 0.5 set directly because Figma opacity variables are percentages. BreadcrumbDropdown is wired to the menu through DropdownMenuTrigger asChild, superseding the trigger-only rule in DEC-011. Sides are bottom|top as drawn; no collision flip, no motion. Contracts stay Avatar and Divider only.",
+      "date": "2026-09-25"
+    },
+    {
+      "id": "DEC-017",
+      "topic": "background-accent token added",
+      "decision": "New semantic token background-accent (Light color/neutral/100, Dark color/neutral/700), added to Figma foundations first, then to the code tokens. It is the highlighted-row fill for menus and lists. It exists because background-muted and surface-overlay are both neutral/800 in Dark, which hid the focused row in the DropdownMenu. Bound to the focus state of Dropdown Menu Item (item, checkbox, radio); destructive focus keeps danger-subtle. Closes CAND-012.",
+      "date": "2026-09-25"
     }
   ]
 }

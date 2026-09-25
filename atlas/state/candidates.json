@@ -46,20 +46,28 @@
       "note": "Web Breadcrumb shipped on feat/breadcrumb (v1.1). Native parity is logged here, not built."
     },
     {
-      "id": "CAND-008",
-      "name": "DropdownMenu",
-      "seenIn": ["packages/ui-web/src/patterns/Breadcrumb (BreadcrumbDropdown is trigger-only)"],
-      "composedFrom": "not yet attempted",
-      "occurrences": 1,
-      "note": "Approved as the next phase after Breadcrumb (ReUI node 42817:7410). Needs @radix-ui/react-dropdown-menu — dependency approval still pending."
-    },
-    {
       "id": "CAND-009",
       "name": "ListItem (Atlas/Mobile-Native)",
       "seenIn": ["docs/componentlist plan _25 sep.md"],
       "composedFrom": "not yet attempted",
       "occurrences": 0,
       "note": "Web ListItem shipped on feat/list-item (v1.1). Native parity is logged here, not built. It supersedes CAND-002 ListRow on web."
+    },
+    {
+      "id": "CAND-010",
+      "name": "DropdownMenu (Atlas/Mobile-Native)",
+      "seenIn": ["docs/HANDOFF-v1.1-next-session.md"],
+      "composedFrom": "not yet attempted",
+      "occurrences": 0,
+      "note": "Web DropdownMenu shipped on feat/dropdown-menu (v1.1, phase 6). Native parity is logged here, not built. It promotes CAND-008."
+    },
+    {
+      "id": "CAND-011",
+      "name": "Radio",
+      "seenIn": ["packages/ui-web/src/patterns/DropdownMenu (DropdownMenuRadioItem draws its own 8px dot)"],
+      "composedFrom": "inline dot indicator in DropdownMenuRadioItem",
+      "occurrences": 1,
+      "note": "Atlas has no Radio primitive; the menu radio row draws the dot itself. A standalone Radio is not built."
     }
   ]
 }
