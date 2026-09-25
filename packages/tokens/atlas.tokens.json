@@ -166,6 +166,24 @@
       "2xl":  { "$type": "dimension", "$value": "24px" },
       "full": { "$type": "dimension", "$value": "9999px" }
     },
+    "icon": {
+      "size": {
+        "xs": { "$type": "dimension", "$value": "16px" },
+        "sm": { "$type": "dimension", "$value": "20px" },
+        "md": { "$type": "dimension", "$value": "24px" },
+        "lg": { "$type": "dimension", "$value": "32px" }
+      }
+    },
+    "avatar": {
+      "squircle-radius": {
+        "xs": { "$type": "dimension", "$value": "{atlas.radius.md}" },
+        "sm": { "$type": "dimension", "$value": "{atlas.radius.md}" },
+        "md": { "$type": "dimension", "$value": "{atlas.radius.lg}" },
+        "lg": { "$type": "dimension", "$value": "{atlas.radius.lg}" },
+        "xl": { "$type": "dimension", "$value": "{atlas.radius.xl}" }
+      },
+      "group-overlap": { "$type": "dimension", "$value": "calc({atlas.spacing.2} * -1)" }
+    },
     "breakpoint": {
       "sm":  { "$type": "dimension", "$value": "640px" },
       "md":  { "$type": "dimension", "$value": "768px" },

@@ -10,6 +10,7 @@ import { Checkbox } from "@atlas/ui-web/primitives/Checkbox/Checkbox"
 import { Switch } from "@atlas/ui-web/primitives/Switch/Switch"
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@atlas/ui-web/compositions/Card/Card"
 import { Badge } from "@atlas/ui-web/primitives/Badge/Badge"
+import { Avatar, AvatarGroup } from "@atlas/ui-web/primitives/Avatar/Avatar"
 import { Alert } from "@atlas/ui-web/compositions/Alert/Alert"
 import { Dialog, DialogContent, DialogTrigger, DialogHeader, DialogTitle, DialogDescription, DialogBody, DialogFooter, DialogClose } from "@atlas/ui-web/compositions/Dialog/Dialog"
 import { Tabs } from "@atlas/ui-web/patterns/Tabs/Tabs"
@@ -530,6 +531,100 @@ export default function SandboxPage() {
                 <Badge disabled variant="success">Disabled success</Badge>
                 <Badge disabled variant="outline" intent="danger">Disabled outline</Badge>
                 <Badge disabled removable onRemove={() => {}}>Disabled removable</Badge>
+              </Row>
+            </div>
+
+          </div>
+        </Section>
+
+        {/* ── AVATAR ── */}
+        <Section title="Avatar">
+          <div style={{ display: "flex", flexDirection: "column", gap: "var(--atlas-spacing-4)" }}>
+
+            {/* Type × shape at md — image / initials / icon */}
+            <div>
+              <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase" }}>Type × shape (md)</p>
+              <Row>
+                <Avatar alt="Globe" src="/globe.svg" />
+                <Avatar alt="Jane Cooper" initials="JC" />
+                <Avatar alt="Jane Cooper" />
+                <Avatar alt="Globe" src="/globe.svg" shape="squircle" />
+                <Avatar alt="Jane Cooper" initials="JC" shape="squircle" />
+                <Avatar alt="Jane Cooper" shape="squircle" />
+              </Row>
+            </div>
+
+            {/* Sizes — xs 20 / sm 24 / md 32 / lg 40 / xl 48 */}
+            <div>
+              <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase" }}>Sizes (xs 20 · sm 24 · md 32 · lg 40 · xl 48)</p>
+              <Row>
+                {(["xs", "sm", "md", "lg", "xl"] as const).map(s => (
+                  <Avatar key={`c-${s}`} alt={`Jane Cooper ${s}`} initials="JC" size={s} />
+                ))}
+                {(["xs", "sm", "md", "lg", "xl"] as const).map(s => (
+                  <Avatar key={`s-${s}`} alt={`Jane Cooper ${s}`} initials="JC" size={s} shape="squircle" />
+                ))}
+              </Row>
+              <div style={{ marginBlockStart: "var(--atlas-spacing-3)" }}>
+                <Row>
+                  {(["xs", "sm", "md", "lg", "xl"] as const).map(s => (
+                    <Avatar key={`i-${s}`} alt={`Person ${s}`} size={s} />
+                  ))}
+                </Row>
+              </div>
+            </div>
+
+            {/* Status dot + badge icon */}
+            <div>
+              <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase" }}>Status dot · badge icon</p>
+              <Row>
+                {(["xs", "sm", "md", "lg", "xl"] as const).map(s => (
+                  <Avatar key={`st-${s}`} alt="Jane Cooper" initials="JC" size={s} showStatus statusLabel="Online" />
+                ))}
+                {(["xs", "sm", "md", "lg", "xl"] as const).map(s => (
+                  <Avatar key={`bi-${s}`} alt="Jane Cooper" initials="JC" size={s} showBadgeIcon />
+                ))}
+                <Avatar alt="Jane Cooper" initials="JC" shape="squircle" size="lg" showStatus statusLabel="Online" />
+              </Row>
+            </div>
+
+            {/* Fallback — a failed image falls back to initials, then the icon */}
+            <div>
+              <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase" }}>Failed image → initials → icon</p>
+              <Row>
+                <Avatar alt="Jane Cooper" src="/does-not-exist.jpg" initials="JC" size="lg" />
+                <Avatar alt="Jane Cooper" src="/does-not-exist.jpg" size="lg" />
+              </Row>
+            </div>
+
+            {/* Decorative avatar beside a visible name */}
+            <div>
+              <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase" }}>Decorative (alt=&quot;&quot;) beside a name</p>
+              <Row>
+                <Avatar alt="" initials="JD" />
+                <span style={{ fontSize: "var(--atlas-font-size-sm)" }}>John Doe</span>
+              </Row>
+            </div>
+
+            {/* Groups */}
+            <div>
+              <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase" }}>AvatarGroup · with add</p>
+              <Row>
+                <AvatarGroup aria-label="Project members">
+                  <Avatar alt="Jane Cooper" initials="JC" />
+                  <Avatar alt="Dev Patel" initials="DP" />
+                  <Avatar alt="Sam Lee" />
+                </AvatarGroup>
+                <AvatarGroup aria-label="Project members" showAdd onAdd={() => {}} addLabel="Invite member">
+                  <Avatar alt="Jane Cooper" initials="JC" />
+                  <Avatar alt="Dev Patel" initials="DP" />
+                  <Avatar alt="Sam Lee" />
+                </AvatarGroup>
+                <AvatarGroup aria-label="Project members" shape="squircle" size="lg" showAdd onAdd={() => {}}>
+                  <Avatar alt="Jane Cooper" initials="JC" />
+                  <Avatar alt="Dev Patel" initials="DP" />
+                  <Avatar alt="Sam Lee" />
+                </AvatarGroup>
               </Row>
             </div>
 

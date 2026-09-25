@@ -84,6 +84,20 @@
   --atlas-radius-2xl: 24px;
   --atlas-radius-full: 9999px;
 
+  /* ─────────────── Icon size ─────────────── */
+  --atlas-icon-size-xs: 16px;
+  --atlas-icon-size-sm: 20px;
+  --atlas-icon-size-md: 24px;
+  --atlas-icon-size-lg: 32px;
+
+  /* ─────────────── Avatar ─────────────── */
+  --atlas-avatar-squircle-radius-xs: var(--atlas-radius-md);
+  --atlas-avatar-squircle-radius-sm: var(--atlas-radius-md);
+  --atlas-avatar-squircle-radius-md: var(--atlas-radius-lg);
+  --atlas-avatar-squircle-radius-lg: var(--atlas-radius-lg);
+  --atlas-avatar-squircle-radius-xl: var(--atlas-radius-xl);
+  --atlas-avatar-group-overlap: calc(var(--atlas-spacing-2) * -1);
+
   /* ─────────────── Breakpoints ─────────────── */
   --atlas-breakpoint-sm: 640px;
   --atlas-breakpoint-md: 768px;

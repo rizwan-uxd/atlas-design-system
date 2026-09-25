@@ -42,12 +42,18 @@ These cover ~80% of typical product screens: forms (Input/Label/Textarea/Checkbo
 
 ---
 
+## v1.1 scope (decided 2026-09-24)
+
+Five web-only components are added, one at a time, each behind a Figma approval gate and a final approval gate: **Avatar** (primitives), **Divider** (primitives), **Breadcrumb** (patterns), **Timeline** (patterns), **DescriptionList** (compositions). Native parity is logged in `atlas/state/candidates.json`, not built. Semantic tokens these components need go into Figma foundations first, then `packages/tokens`, then the component. Recorded as DEC-009 (scope) and DEC-010 (Avatar design) in `atlas/state/decisions.json`.
+
+---
+
 ## Deferred to v1.1+ (post-spec, post-build)
 
 Foundations: IconButton · Radio · Select  
-Display: Avatar · Tag · Divider  
+Display: Tag  
 Feedback: Toast · Tooltip · Skeleton · Progress · Spinner  
-Navigation: Breadcrumb · Pagination · Sidebar · Drawer/Sheet · BottomNav (extracted from NavBar)  
+Navigation: Pagination · Sidebar · Drawer/Sheet · BottomNav (extracted from NavBar)  
 Overlays: Popover · DropdownMenu · CommandPalette  
 Layout primitives: Container · Stack · Grid · Section · Spacer (likely shipped as utilities, not formal components)
 

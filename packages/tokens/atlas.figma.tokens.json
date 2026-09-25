@@ -77,6 +77,10 @@
         { "name": "radius/xl", "type": "FLOAT", "values": { "Default": 16 } },
         { "name": "radius/2xl", "type": "FLOAT", "values": { "Default": 24 } },
         { "name": "radius/full", "type": "FLOAT", "values": { "Default": 9999 } },
+        { "name": "icon/size/xs", "type": "FLOAT", "values": { "Default": 16 } },
+        { "name": "icon/size/sm", "type": "FLOAT", "values": { "Default": 20 } },
+        { "name": "icon/size/md", "type": "FLOAT", "values": { "Default": 24 } },
+        { "name": "icon/size/lg", "type": "FLOAT", "values": { "Default": 32 } },
 
         { "name": "border-width/0", "type": "FLOAT", "values": { "Default": 0 } },
         { "name": "border-width/1", "type": "FLOAT", "values": { "Default": 1 } },
@@ -159,7 +163,13 @@
         { "name": "info-subtle", "type": "COLOR", "values": { "Light": { "alias": "Atlas/Primitives:color/info/50" }, "Dark": { "alias": "Atlas/Primitives:color/info/900" } } },
         { "name": "info-foreground", "type": "COLOR", "values": { "Light": { "alias": "Atlas/Primitives:color/neutral/0" }, "Dark": { "alias": "Atlas/Primitives:color/neutral/0" } } },
         { "name": "focus-ring", "type": "COLOR", "values": { "Light": { "alias": "Atlas/Primitives:color/brand/500" }, "Dark": { "alias": "Atlas/Primitives:color/brand/400" } } },
-        { "name": "overlay", "type": "COLOR", "values": { "Light": { "alias": "Atlas/Primitives:color/neutral/950" }, "Dark": { "alias": "Atlas/Primitives:color/neutral/1000" } } }
+        { "name": "overlay", "type": "COLOR", "values": { "Light": { "alias": "Atlas/Primitives:color/neutral/950" }, "Dark": { "alias": "Atlas/Primitives:color/neutral/1000" } } },
+        { "name": "avatar-squircle-radius-xs", "type": "FLOAT", "values": { "Light": { "alias": "Atlas/Primitives:radius/md" }, "Dark": { "alias": "Atlas/Primitives:radius/md" } } },
+        { "name": "avatar-squircle-radius-sm", "type": "FLOAT", "values": { "Light": { "alias": "Atlas/Primitives:radius/md" }, "Dark": { "alias": "Atlas/Primitives:radius/md" } } },
+        { "name": "avatar-squircle-radius-md", "type": "FLOAT", "values": { "Light": { "alias": "Atlas/Primitives:radius/lg" }, "Dark": { "alias": "Atlas/Primitives:radius/lg" } } },
+        { "name": "avatar-squircle-radius-lg", "type": "FLOAT", "values": { "Light": { "alias": "Atlas/Primitives:radius/lg" }, "Dark": { "alias": "Atlas/Primitives:radius/lg" } } },
+        { "name": "avatar-squircle-radius-xl", "type": "FLOAT", "values": { "Light": { "alias": "Atlas/Primitives:radius/xl" }, "Dark": { "alias": "Atlas/Primitives:radius/xl" } } },
+        { "name": "avatar-group-overlap", "type": "FLOAT", "values": { "Light": -8, "Dark": -8 } }
       ]
     },
     {
