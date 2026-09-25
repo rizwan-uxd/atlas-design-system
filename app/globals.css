@@ -1,5 +1,7 @@
 @import "../packages/tokens/atlas.tokens.css";
 @import "tailwindcss";
+/* Benchmark run logs contain class-name strings Tailwind cannot parse; they are not app source. */
+@source not "../benchmarks";
 
 /* ─────────────── Global reduced-motion safety net ─────────────── */
 /* Individual components declare their own targeted overrides.
