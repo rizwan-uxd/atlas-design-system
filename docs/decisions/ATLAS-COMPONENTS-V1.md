@@ -48,6 +48,8 @@ Five web-only components are added, one at a time, each behind a Figma approval 
 
 **Amended 2026-09-25:** **DropdownMenu** joins v1.1 as a sixth web component, built after Breadcrumb in its own phase with its own gates (DEC-012). Breadcrumb's Dropdown item ships as a trigger only until then (DEC-011). Adding `@radix-ui/react-dropdown-menu` is not yet approved.
 
+**Amended 2026-09-25:** the fifth component is **ListItem** (compositions), not DescriptionList — the ReUI Item is a media-object row, not a key-value list (DEC-014). Timeline is skipped for now.
+
 ---
 
 ## Deferred to v1.1+ (post-spec, post-build)
