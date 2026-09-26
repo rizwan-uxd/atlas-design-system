@@ -28,6 +28,7 @@
     "ListItem": { "parity": "match", "figmaMetadata": "description-written", "code": "spec-complete", "verifiedAt": null },
     "DropdownMenu": { "parity": "match", "figmaMetadata": "description-written", "code": "spec-complete", "verifiedAt": null },
     "Spinner": { "parity": "match", "figmaMetadata": "description-written", "code": "spec-complete", "verifiedAt": null },
-    "Skeleton": { "parity": "match", "figmaMetadata": "description-written", "code": "spec-complete", "verifiedAt": null }
+    "Skeleton": { "parity": "match", "figmaMetadata": "description-written", "code": "spec-complete", "verifiedAt": null },
+    "Image": { "parity": "match", "figmaMetadata": "description-written", "code": "spec-complete", "verifiedAt": null }
   }
 }
