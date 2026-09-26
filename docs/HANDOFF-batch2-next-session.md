@@ -1,6 +1,6 @@
 # Handoff: Atlas component batch 2, next session
 
-Written: 2026-09-26. Read this, `AGENTS.md` and `docs/componentlist plan _next6_2026-09-25.md` (section 10 is the progress log). Then start **Phase 5, Radio Group** (audit already done; confirm any leftover recommendations, then begin at the Figma page, step B). The user has already said to proceed in plan order, so no separate "start" is needed.
+Written: 2026-09-26. Read this, `AGENTS.md` and `docs/componentlist plan _next6_2026-09-25.md` (section 10 is the progress log). Then start **Phase 6, Slider** (audit already done; confirm any leftover recommendations, then begin at the Figma page, step B). The user has already said to proceed in plan order, so no separate "start" is needed.
 
 ## Token budget: use graft
 The user wants graft used to cut token and context cost. The repo is indexed (`graft/INDEX.md`, hooks print starting points). Prefer it over broad reads and greps:
@@ -12,7 +12,7 @@ The user wants graft used to cut token and context cost. The repo is indexed (`g
 The `mcp__graft__*` tools do the same (load them in one ToolSearch call). Graft covers repo code only, so Figma work still uses the Figma MCP. Per AGENTS.md section 7, do not re-read files already read, and skip `docs/` reads that do not change what you write. Close a reply with the one-line graft token tally when you used it.
 
 ## State
-`main` is local only (nothing pushed since `61dd2c7`). Working tree is clean after the docs commit that carries this file. Branches `feat/progress` and `feat/progress-wrapper` are merged and can be left or deleted.
+`main` is local only (nothing pushed since `61dd2c7`). Branches `feat/radio-group` is merged too. Working tree is clean after the docs commit that carries this file. Branches `feat/progress` and `feat/progress-wrapper` are merged and can be left or deleted.
 
 | Phase | Component | Status |
 |---|---|---|
@@ -20,10 +20,10 @@ The `mcp__graft__*` tools do the same (load them in one ToolSearch call). Graft 
 | 2 | Skeleton | merged `8a19d7d` (page `531:2`, set `531:5`) |
 | 3 | Image | merged `61eab54` (page `534:2`, set `534:35`) |
 | 4 | Progress | merged `7ee93b9` + wrapper fix `718ad7b` (page `538:2`; public set `Progress` `541:28`, internal bar set `.Progress / Bar` `538:7`) |
-| 5 | Radio Group | **next**. Audited, decisions given, not built |
-| 6 | Slider | audited, decisions given, not built |
+| 5 | Radio Group | merged (page `544:2`; sets `Radio Group` `545:98`, `Radio Group Item` `544:283`; DEC-022, CAND-018) |
+| 6 | Slider | **next**. Audited, decisions given, not built |
 
-Latest ids: DEC-021, CAND-017. Next new ones are DEC-022, CAND-018. Tests 312/312 at last run. Figma pages go after the last component page (currently Progress `538:2`).
+Latest ids: DEC-022, CAND-018. Next new ones are DEC-023, CAND-019. Tests 337/337 at last run. Figma pages go after the last component page (currently Radio Group `544:2`).
 
 ## Rules the user set (locked)
 1. **Audit findings are hypotheses.** Verify token, dimension, radius, colour, state and motion claims against `atlas.tokens.css` **and** the Atlas Figma variables before implementing. Add a token only for a real gap, Figma first, then `atlas.tokens.css`, `atlas.tokens.json`, `atlas.figma.tokens.json`. Reuse an existing token only when it is semantically equivalent (e.g. opacity/disabled was rejected for the Skeleton pulse).
@@ -84,3 +84,8 @@ Pattern that worked: internal set named `.Name / Part` (leading dot), a public w
 
 ## Files
 Plan: `docs/componentlist plan _next6_2026-09-25.md`. This handoff. Sibling handoff for the previous batch: `docs/HANDOFF-v1.1-next-session.md`.
+
+## Radio Group notes for Slider
+- `atlas-verify` a11y check flags `role="radiogroup"` without `onKeyDown` (false positive: native radios handle arrows). A custom slider does need key handlers, so it will not hit this.
+- Figma: a drop-shadow focus effect was clipped by the component frames; a separate absolute ellipse ring layer worked. A node `opacity` cannot bind to a 0 to 1 variable (it reads as percent), so set 0.5 numerically and say so in the usage panel.
+- Tests: `@testing-library/user-event` is not installed, use `fireEvent`. jsdom does not emulate native radio arrow movement or block clicks on disabled radios, so guard in code and check the keyboard in the browser.

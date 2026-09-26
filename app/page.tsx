@@ -14,6 +14,7 @@ import { Spinner } from "@atlas/ui-web/primitives/Spinner/Spinner"
 import { Skeleton } from "@atlas/ui-web/primitives/Skeleton/Skeleton"
 import { Image } from "@atlas/ui-web/primitives/Image/Image"
 import { Progress } from "@atlas/ui-web/primitives/Progress/Progress"
+import { RadioGroup, RadioGroupItem } from "@atlas/ui-web/primitives/RadioGroup/RadioGroup"
 import { Avatar, AvatarGroup } from "@atlas/ui-web/primitives/Avatar/Avatar"
 import { Alert } from "@atlas/ui-web/compositions/Alert/Alert"
 import { ListItem, ListItemMedia, ListItemContent, ListItemTitle, ListItemDescription, ListItemActions } from "@atlas/ui-web/compositions/ListItem/ListItem"
@@ -1263,6 +1264,76 @@ export default function SandboxPage() {
             <div dir="rtl">
               <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase" }}>RTL — indeterminate slides from the right</p>
               <Progress indeterminate aria-label="Loading (RTL)" />
+            </div>
+
+          </div>
+        </Section>
+
+        {/* ── RADIO GROUP ── */}
+        <Section title="Radio Group">
+          <div style={{ display: "flex", flexDirection: "column", gap: "var(--atlas-spacing-6)", maxInlineSize: "var(--atlas-breakpoint-md)" }}>
+
+            <div>
+              <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase" }}>Vertical — label and description</p>
+              <RadioGroup aria-label="Plan" defaultValue="pro">
+                <RadioGroupItem value="free" label="Free" description="For trying it out." />
+                <RadioGroupItem value="pro" label="Pro" description="For small teams." />
+                <RadioGroupItem value="team" label="Team" description="For larger organisations." />
+              </RadioGroup>
+            </div>
+
+            <div>
+              <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase" }}>Horizontal</p>
+              <RadioGroup aria-label="Billing" direction="horizontal" defaultValue="monthly">
+                <RadioGroupItem value="monthly" label="Monthly" />
+                <RadioGroupItem value="yearly" label="Yearly" />
+                <RadioGroupItem value="lifetime" label="Lifetime" />
+              </RadioGroup>
+            </div>
+
+            <div>
+              <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase" }}>Card</p>
+              <RadioGroup aria-label="Delivery" variant="card" defaultValue="standard">
+                <RadioGroupItem value="standard" label="Standard" description="3 to 5 working days." />
+                <RadioGroupItem value="express" label="Express" description="Next working day." />
+                <RadioGroupItem value="pickup" label="Pickup" description="Collect from a store." />
+              </RadioGroup>
+            </div>
+
+            <div>
+              <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase" }}>Sizes — sm 16 · md 20</p>
+              <div style={{ display: "flex", gap: "var(--atlas-spacing-8)", flexWrap: "wrap" }}>
+                <RadioGroup aria-label="Small" size="sm" defaultValue="a">
+                  <RadioGroupItem value="a" label="Small selected" />
+                  <RadioGroupItem value="b" label="Small" />
+                </RadioGroup>
+                <RadioGroup aria-label="Medium" size="md" defaultValue="a">
+                  <RadioGroupItem value="a" label="Medium selected" />
+                  <RadioGroupItem value="b" label="Medium" />
+                </RadioGroup>
+              </div>
+            </div>
+
+            <div>
+              <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase" }}>Invalid · disabled</p>
+              <div style={{ display: "flex", gap: "var(--atlas-spacing-8)", flexWrap: "wrap" }}>
+                <RadioGroup aria-label="Invalid" invalid defaultValue="b">
+                  <RadioGroupItem value="a" label="Invalid" />
+                  <RadioGroupItem value="b" label="Invalid selected" />
+                </RadioGroup>
+                <RadioGroup aria-label="Disabled" disabled defaultValue="b">
+                  <RadioGroupItem value="a" label="Disabled" />
+                  <RadioGroupItem value="b" label="Disabled selected" />
+                </RadioGroup>
+              </div>
+            </div>
+
+            <div dir="rtl">
+              <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase" }}>RTL</p>
+              <RadioGroup aria-label="RTL" variant="card" defaultValue="b">
+                <RadioGroupItem value="a" label="الخيار الأول" description="وصف قصير." />
+                <RadioGroupItem value="b" label="الخيار الثاني" description="وصف قصير." />
+              </RadioGroup>
             </div>
 
           </div>
