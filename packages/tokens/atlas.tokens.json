@@ -252,7 +252,8 @@
         "fast":    { "$type": "duration", "$value": "120ms" },
         "base":    { "$type": "duration", "$value": "200ms" },
         "slow":    { "$type": "duration", "$value": "320ms" },
-        "spin":    { "$type": "duration", "$value": "1000ms" }
+        "spin":    { "$type": "duration", "$value": "1000ms" },
+        "pulse":   { "$type": "duration", "$value": "2000ms" }
       },
       "easing": {
         "linear":     { "$type": "cubicBezier", "$value": [0, 0, 1, 1] },
@@ -343,7 +344,8 @@
     "opacity": {
       "disabled": { "$type": "number", "$value": 0.5 },
       "hover":    { "$type": "number", "$value": 0.9 },
-      "overlay":  { "$type": "number", "$value": 0.6 }
+      "overlay":  { "$type": "number", "$value": 0.6 },
+      "pulse":    { "$type": "number", "$value": 0.5 }
     }
   }
 }

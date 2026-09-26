@@ -1,0 +1,36 @@
+/* =================================================================
+   Atlas Skeleton — component styles
+   All values reference semantic tokens only.
+   ================================================================= */
+
+.skeleton {
+  display: block;
+  flex: none;
+  box-sizing: border-box;
+  background-color: var(--atlas-background-muted);
+  animation: pulse var(--atlas-duration-pulse) var(--atlas-easing-standard) infinite;
+}
+
+/* ── Shape ─────────────────────────────────────────────────────── */
+
+.skeleton[data-shape="rect"] {
+  inline-size: 100%;
+  block-size: var(--atlas-spacing-4);
+  border-radius: var(--atlas-radius-md);
+}
+
+.skeleton[data-shape="circle"] {
+  inline-size: var(--atlas-spacing-10);
+  block-size: var(--atlas-spacing-10);
+  border-radius: var(--atlas-radius-full);
+}
+
+/* ── Motion ────────────────────────────────────────────────────── */
+
+@keyframes pulse {
+  50% { opacity: var(--atlas-opacity-pulse); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton { animation: none; }
+}
