@@ -10,6 +10,7 @@ import { Checkbox } from "@atlas/ui-web/primitives/Checkbox/Checkbox"
 import { Switch } from "@atlas/ui-web/primitives/Switch/Switch"
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@atlas/ui-web/compositions/Card/Card"
 import { Badge } from "@atlas/ui-web/primitives/Badge/Badge"
+import { Spinner } from "@atlas/ui-web/primitives/Spinner/Spinner"
 import { Avatar, AvatarGroup } from "@atlas/ui-web/primitives/Avatar/Avatar"
 import { Alert } from "@atlas/ui-web/compositions/Alert/Alert"
 import { ListItem, ListItemMedia, ListItemContent, ListItemTitle, ListItemDescription, ListItemActions } from "@atlas/ui-web/compositions/ListItem/ListItem"
@@ -1085,6 +1086,34 @@ export default function SandboxPage() {
                     <ListItemActions><Button variant="outline" size="sm">Action</Button></ListItemActions>
                   </ListItem>
                 ))}
+              </div>
+            </div>
+
+          </div>
+        </Section>
+
+        {/* ── SPINNER ── */}
+        <Section title="Spinner">
+          <div style={{ display: "flex", flexDirection: "column", gap: "var(--atlas-spacing-6)" }}>
+
+            {(["default", "custom"] as const).map(variant => (
+              <div key={variant}>
+                <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase" }}>{variant} · xs sm md lg</p>
+                <div style={{ display: "flex", alignItems: "center", gap: "var(--atlas-spacing-5)" }}>
+                  {(["xs", "sm", "md", "lg"] as const).map(size => (
+                    <Spinner key={size} variant={variant} size={size} />
+                  ))}
+                </div>
+              </div>
+            ))}
+
+            <div>
+              <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase" }}>Inline — inherits text colour</p>
+              <div style={{ display: "flex", alignItems: "center", gap: "var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-sm)", color: "var(--atlas-foreground-muted)" }}>
+                <Spinner size="sm" /> Loading…
+              </div>
+              <div style={{ display: "flex", alignItems: "center", gap: "var(--atlas-spacing-2)", marginBlockStart: "var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-sm)", fontWeight: "var(--atlas-font-weight-medium)", color: "var(--atlas-danger)" }}>
+                <Spinner variant="custom" size="xs" label="Saving changes" /> Saving changes
               </div>
             </div>
 

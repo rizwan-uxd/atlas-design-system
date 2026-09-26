@@ -81,6 +81,10 @@
         { "name": "icon/size/sm", "type": "FLOAT", "values": { "Default": 20 } },
         { "name": "icon/size/md", "type": "FLOAT", "values": { "Default": 24 } },
         { "name": "icon/size/lg", "type": "FLOAT", "values": { "Default": 32 } },
+        { "name": "icon/stroke/xs", "type": "FLOAT", "values": { "Default": 1.5 } },
+        { "name": "icon/stroke/sm", "type": "FLOAT", "values": { "Default": 1.75 } },
+        { "name": "icon/stroke/md", "type": "FLOAT", "values": { "Default": 2 } },
+        { "name": "icon/stroke/lg", "type": "FLOAT", "values": { "Default": 2.25 } },
 
         { "name": "border-width/0", "type": "FLOAT", "values": { "Default": 0 } },
         { "name": "border-width/1", "type": "FLOAT", "values": { "Default": 1 } },

@@ -90,6 +90,12 @@
   --atlas-icon-size-md: 24px;
   --atlas-icon-size-lg: 32px;
 
+  /* ─────────────── Icon stroke (unitless, SVG stroke-width) ─────────────── */
+  --atlas-icon-stroke-xs: 1.5;
+  --atlas-icon-stroke-sm: 1.75;
+  --atlas-icon-stroke-md: 2;
+  --atlas-icon-stroke-lg: 2.25;
+
   /* ─────────────── Avatar ─────────────── */
   --atlas-avatar-squircle-radius-xs: var(--atlas-radius-md);
   --atlas-avatar-squircle-radius-sm: var(--atlas-radius-md);
@@ -161,6 +167,7 @@
   --atlas-duration-fast: 120ms;
   --atlas-duration-base: 200ms;
   --atlas-duration-slow: 320ms;
+  --atlas-duration-spin: 1000ms;
 
   --atlas-easing-linear: cubic-bezier(0, 0, 1, 1);
   --atlas-easing-standard: cubic-bezier(0.2, 0, 0, 1);
