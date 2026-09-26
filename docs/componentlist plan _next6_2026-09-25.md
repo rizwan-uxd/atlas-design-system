@@ -21,7 +21,7 @@ Reference nodes (from the user's list):
 |---|---|---|
 | 1 | Spinner | `42836:15305` |
 | 2 | Skeleton | `42836:14236` |
-| 3 | Image | on `feat/image`, awaiting Gate 2 | none (radius, background-muted, foreground-subtle, icon-size-lg, icon-stroke-lg and the Skeleton pulse tokens all exist) | one primitive with Ratio (ten values incl. auto, vs the reference's nine) x State (loaded, loading, error) instead of the reference's nine ratio-only variants; fit and radius are code props, not Figma variants; loaded variants use a token-bound stand-in scene; error icon stroke weight numeric (nested icon strokes cannot bind) |
+| 3 | Image | merged to `main` (`61eab54`) | none (radius, background-muted, foreground-subtle, icon-size-lg, icon-stroke-lg and the Skeleton pulse tokens all exist) | one primitive with Ratio (ten values incl. auto, vs the reference's nine) x State (loaded, loading, error) instead of the reference's nine ratio-only variants; fit and radius are code props, not Figma variants; loaded variants use a token-bound stand-in scene; error icon stroke weight numeric (nested icon strokes cannot bind) |
 | 3 | Image | `42732:27744` |
 | 4 | Progress | `42829:9378` |
 | 5 | Radio Group | `42830:1880` |
@@ -119,4 +119,4 @@ Rule (user, 2026-09-26): audit findings are hypotheses until verified against `a
 
 Verified for Skeleton against Figma and CSS: fill `background-muted`; radius `radius/md`, `radius/full`; spacing 4/8/16/24/32/40 exist (`spacing/1…10`); durations 0/120/200/320/1000 and easings exist, no pulse period.
 
-Next: Phase 3 Image (built, awaiting Gate 2), then Progress, Radio Group, Slider. Decisions already given for those three are in `docs/HANDOFF-batch2-next-session.md`.
+Next: Phase 4 Progress (audited, decisions given, not built), then Radio Group, Slider. Decisions already given for those three are in `docs/HANDOFF-batch2-next-session.md`.
