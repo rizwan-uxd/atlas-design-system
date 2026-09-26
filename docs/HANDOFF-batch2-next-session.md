@@ -1,6 +1,6 @@
 # Handoff: Atlas component batch 2, next session
 
-Written: 2026-09-26. Read this, `AGENTS.md` and `docs/componentlist plan _next6_2026-09-25.md` (section 10 is the progress log). Then start **Phase 4, Progress** (audit already done; begin at the Figma page, step B, after confirming the two leftover recommendations). The user has already said to proceed in plan order, so no separate "start" is needed.
+Written: 2026-09-26. Read this, `AGENTS.md` and `docs/componentlist plan _next6_2026-09-25.md` (section 10 is the progress log). Then start **Phase 5, Radio Group** (audit already done; confirm any leftover recommendations, then begin at the Figma page, step B). The user has already said to proceed in plan order, so no separate "start" is needed.
 
 ## Token budget: use graft
 The user wants graft used to cut token and context cost. The repo is indexed (`graft/INDEX.md`, hooks print starting points). Prefer it over broad reads and greps:
@@ -19,11 +19,11 @@ The `mcp__graft__*` tools do the same (load them in one ToolSearch call). Graft 
 | 1 | Spinner | merged `6e6fea8` (page `527:2`, set `527:63`) |
 | 2 | Skeleton | merged `8a19d7d` (page `531:2`, set `531:5`) |
 | 3 | Image | merged `61eab54` (page `534:2`, set `534:35`) |
-| 4 | Progress | **next**, reference node `42829:9378`. Audited, decisions given, not built |
-| 5 | Radio Group | audited, decisions given, not built |
+| 4 | Progress | merged (page `538:2`, set `538:7`) |
+| 5 | Radio Group | **next**. Audited, decisions given, not built |
 | 6 | Slider | audited, decisions given, not built |
 
-Latest ids: DEC-020, CAND-016. Next new ones are DEC-021, CAND-017. Tests 289/289 at last run. Figma pages go after the last component page (currently Image `534:2`).
+Latest ids: DEC-021, CAND-017. Next new ones are DEC-022, CAND-018. Tests 289/289 at last run. Figma pages go after the last component page (currently Image `534:2`).
 
 ## Rules the user set (locked)
 1. **Audit findings are hypotheses.** Verify token, dimension, radius, colour, state and motion claims against `atlas.tokens.css` **and** the Atlas Figma variables before implementing. Add a token only for a real gap, Figma first, then `atlas.tokens.css`, `atlas.tokens.json`, `atlas.figma.tokens.json`. Reuse an existing token only when it is semantically equivalent (e.g. opacity/disabled was rejected for the Skeleton pulse).

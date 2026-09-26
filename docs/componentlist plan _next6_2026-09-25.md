@@ -116,7 +116,8 @@ Rule (user, 2026-09-26): audit findings are hypotheses until verified against `a
 |---|---|---|---|---|
 | 1 | Spinner | merged to `main` (`6e6fea8`) | `duration/spin` 1000ms; code `icon-stroke-*` (already in Figma) | lowercase variants; sizes xs–lg beyond the single 16px |
 | 2 | Skeleton | merged to `main` (`8a19d7d`) | `duration/pulse` 2000ms, `opacity/pulse` 0.5 (Figma `530:2`, `530:3`; code too) | one primitive (`shape` rect \| circle) instead of the five Avatar/Card/Text/Form/Table variants, which are composed examples; existing opacity tokens (disabled .5, hover .9, overlay .6) checked and rejected on semantics |
+| 4 | Progress | merged to `main` (branch `feat/progress`; Figma page `538:2`, set `538:7`) | none (`spacing/1`, `radius/full`, `background-muted`, `primary`, `duration/base`, `duration/pulse`, `easing/standard`, `easing/linear` all exist; indeterminate slide reuses `duration/pulse`, DEC-021) | one 4px bar with Figma `State` determinate \| indeterminate instead of the 11 `Progress=` variants; no thumb (Slider owns it); fill `primary`, not black; `value`, `max`, label, value text and helper text are props or slots; optional `aria-valuetext`; Figma example fills are overlay rectangles because the Plugin API cannot resize a fill inside an instance |
 
 Verified for Skeleton against Figma and CSS: fill `background-muted`; radius `radius/md`, `radius/full`; spacing 4/8/16/24/32/40 exist (`spacing/1…10`); durations 0/120/200/320/1000 and easings exist, no pulse period.
 
-Next: Phase 4 Progress (audited, decisions given, not built), then Radio Group, Slider. Decisions already given for those three are in `docs/HANDOFF-batch2-next-session.md`.
+Next: Phase 5 Radio Group (audited, decisions given, not built), then Slider. Decisions already given for those two are in `docs/HANDOFF-batch2-next-session.md`.
