@@ -1,6 +1,6 @@
 # Handoff: Atlas component batch 2, next session
 
-Written: 2026-09-26. Read this, `AGENTS.md` and `docs/componentlist plan _next6_2026-09-25.md` (section 10 is the progress log). Then start **Phase 6, Slider** (audit already done; confirm any leftover recommendations, then begin at the Figma page, step B). The user has already said to proceed in plan order, so no separate "start" is needed.
+Written: 2026-09-26. Read this, `AGENTS.md` and `docs/componentlist plan _next6_2026-09-25.md` (section 10 is the progress log). Batch 2 is complete (phases 1 to 6). Ask the user what is next; open items are listed in section 10 of the plan doc. The user has already said to proceed in plan order, so no separate "start" is needed.
 
 ## Token budget: use graft
 The user wants graft used to cut token and context cost. The repo is indexed (`graft/INDEX.md`, hooks print starting points). Prefer it over broad reads and greps:
@@ -21,9 +21,9 @@ The `mcp__graft__*` tools do the same (load them in one ToolSearch call). Graft 
 | 3 | Image | merged `61eab54` (page `534:2`, set `534:35`) |
 | 4 | Progress | merged `7ee93b9` + wrapper fix `718ad7b` (page `538:2`; public set `Progress` `541:28`, internal bar set `.Progress / Bar` `538:7`) |
 | 5 | Radio Group | merged (page `544:2`; sets `Radio Group` `545:98`, `Radio Group Item` `544:283`; DEC-022, CAND-018) |
-| 6 | Slider | **next**. Audited, decisions given, not built |
+| 6 | Slider | merged (page `550:2`; sets `Slider` `550:241`, `.Slider / Bar` `550:96`, `.Slider / Toggle` `550:15`; DEC-023, CAND-019) |
 
-Latest ids: DEC-022, CAND-018. Next new ones are DEC-023, CAND-019. Tests 337/337 at last run. Figma pages go after the last component page (currently Radio Group `544:2`).
+Latest ids: DEC-023, CAND-019. Next new ones are DEC-024, CAND-020. Tests 373/373 at last run. Figma pages go after the last component page (currently Slider `550:2`).
 
 ## Rules the user set (locked)
 1. **Audit findings are hypotheses.** Verify token, dimension, radius, colour, state and motion claims against `atlas.tokens.css` **and** the Atlas Figma variables before implementing. Add a token only for a real gap, Figma first, then `atlas.tokens.css`, `atlas.tokens.json`, `atlas.figma.tokens.json`. Reuse an existing token only when it is semantically equivalent (e.g. opacity/disabled was rejected for the Skeleton pulse).
@@ -89,3 +89,8 @@ Plan: `docs/componentlist plan _next6_2026-09-25.md`. This handoff. Sibling hand
 - `atlas-verify` a11y check flags `role="radiogroup"` without `onKeyDown` (false positive: native radios handle arrows). A custom slider does need key handlers, so it will not hit this.
 - Figma: a drop-shadow focus effect was clipped by the component frames; a separate absolute ellipse ring layer worked. A node `opacity` cannot bind to a 0 to 1 variable (it reads as percent), so set 0.5 numerically and say so in the usage panel.
 - Tests: `@testing-library/user-event` is not installed, use `fireEvent`. jsdom does not emulate native radio arrow movement or block clicks on disabled radios, so guard in code and check the keyboard in the browser.
+
+## Slider notes
+- jsdom has no `PointerEvent`: tests dispatch `new MouseEvent("pointerdown", {clientX, button})` so coordinates survive. Mock `getBoundingClientRect` on the control.
+- Figma: an auto-layout frame clips its content by default, so a focus ring or halo outside a thumb is cut off; set `clipsContent = false` on the component, its instances and the example frames. Resizing an instance in the main component fixes its size and breaks FILL; set `layoutSizingHorizontal = 'FILL'` again. Use constraints `SCALE` on a fill container so thumbs stay proportional when a bar instance is resized.
+- The real-browser drag check works with `left_click_drag` once you take a screenshot to get viewport coordinates (the coordinate frame is scaled).

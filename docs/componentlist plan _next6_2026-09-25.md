@@ -25,6 +25,7 @@ Reference nodes (from the user's list):
 | 3 | Image | `42732:27744` |
 | 4 | Progress | `42829:9378` |
 | 5 | Radio Group | merged to `main` (branch `feat/radio-group`; Figma page `544:2`, sets `545:98` Radio Group and `544:283` Radio Group Item) | none (`spacing/2`, `spacing/0_5`, `radius/full`, `radius/md`, `primary-subtle`, `danger-foreground`, `focus-ring`, `opacity/disabled` all exist; DEC-022) | native `input type=radio`, compound `RadioGroup` + `RadioGroupItem`; Item set has 40 variants (Variant, Checked, Size, State) instead of the reference's 16; no right-side radio; no pressed state; group `Variant` added so the card group can be drawn; card border and fill follow Checkbox, not the reference's 10px radius; invalid is a danger ring with no red label; focus ring is a separate layer and disabled opacity is set by hand in Figma; closes CAND-011 |
+| 6 | Slider | merged to `main` (branch `feat/slider`; Figma page `550:2`, sets `550:241` Slider, `550:96` .Slider / Bar, `550:15` .Slider / Toggle) | none (`spacing/1`, `spacing/4`, `radius/full`, `background-muted`, `primary`, `primary-subtle`, `surface`, `shadow/sm`, `focus-ring`, `touch/min`, `duration/fast` all exist; DEC-023) | custom pointer-event slider (no Radix) with range and vertical, which the reference lacks (it draws horizontal single and range); the reference's 11 `Progress=` variants dropped (value, min, max, step are props); 16 thumb with a primary border and surface fill instead of the 12 grey-ring thumb; hover halo `primary-subtle`; Helper is one text, not two labels; focus ring is a separate layer and disabled opacity is set by hand in Figma |
 | 5 | Radio Group | `42830:1880` |
 | 6 | Slider | `42836:14404` |
 
@@ -121,4 +122,4 @@ Rule (user, 2026-09-26): audit findings are hypotheses until verified against `a
 
 Verified for Skeleton against Figma and CSS: fill `background-muted`; radius `radius/md`, `radius/full`; spacing 4/8/16/24/32/40 exist (`spacing/1…10`); durations 0/120/200/320/1000 and easings exist, no pulse period.
 
-Next: Phase 6 Slider (audited, decisions given, not built). Decisions already given for those two are in `docs/HANDOFF-batch2-next-session.md`.
+Batch 2 phases 1 to 6 are done. Open: the Image follow-up (audit not yet done at the time of the handoff; check the plan Q11) and the pre-existing `atlas-verify` NavBar failure. Decisions already given for those two are in `docs/HANDOFF-batch2-next-session.md`.

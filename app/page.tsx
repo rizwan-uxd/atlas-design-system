@@ -15,6 +15,7 @@ import { Skeleton } from "@atlas/ui-web/primitives/Skeleton/Skeleton"
 import { Image } from "@atlas/ui-web/primitives/Image/Image"
 import { Progress } from "@atlas/ui-web/primitives/Progress/Progress"
 import { RadioGroup, RadioGroupItem } from "@atlas/ui-web/primitives/RadioGroup/RadioGroup"
+import { Slider } from "@atlas/ui-web/primitives/Slider/Slider"
 import { Avatar, AvatarGroup } from "@atlas/ui-web/primitives/Avatar/Avatar"
 import { Alert } from "@atlas/ui-web/compositions/Alert/Alert"
 import { ListItem, ListItemMedia, ListItemContent, ListItemTitle, ListItemDescription, ListItemActions } from "@atlas/ui-web/compositions/ListItem/ListItem"
@@ -62,6 +63,8 @@ function Row({ children, wrap = true }: { children: React.ReactNode; wrap?: bool
 export default function SandboxPage() {
   const [dark, setDark] = useState(false)
   const [dialogOpen, setDialogOpen] = useState(false)
+  const [volume, setVolume] = useState(40)
+  const [price, setPrice] = useState<[number, number]>([30, 70])
   const [sheetOpen, setSheetOpen] = useState(false)
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [checkboxChecked, setCheckboxChecked] = useState<boolean | "indeterminate">(false)
@@ -1334,6 +1337,46 @@ export default function SandboxPage() {
                 <RadioGroupItem value="a" label="الخيار الأول" description="وصف قصير." />
                 <RadioGroupItem value="b" label="الخيار الثاني" description="وصف قصير." />
               </RadioGroup>
+            </div>
+
+          </div>
+        </Section>
+
+        {/* ── SLIDER ── */}
+        <Section title="Slider">
+          <div style={{ display: "flex", flexDirection: "column", gap: "var(--atlas-spacing-6)", maxInlineSize: "var(--atlas-breakpoint-md)" }}>
+
+            <div>
+              <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase" }}>Single — label, value and helper (controlled)</p>
+              <Slider label="Volume" valueLabel={volume} helperText="Drag, click the track or use the arrow keys." value={volume} onValueChange={(v) => setVolume(v as number)} />
+            </div>
+
+            <div>
+              <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase" }}>Range — two thumbs that cannot cross (controlled)</p>
+              <Slider range label="Price range" valueLabel={`${price[0]}, ${price[1]}`} helperText="Minimum and maximum." value={price} onValueChange={(v) => setPrice(v as [number, number])} />
+            </div>
+
+            <div>
+              <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase" }}>Leading and trailing · step 10</p>
+              <Slider label="Brightness" leading="0" trailing="100" step={10} defaultValue={50} getAriaValueText={(v) => `${v} percent`} />
+            </div>
+
+            <div>
+              <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase" }}>Vertical — single and range</p>
+              <div style={{ display: "flex", gap: "var(--atlas-spacing-12)" }}>
+                <Slider orientation="vertical" label="Level" defaultValue={50} />
+                <Slider orientation="vertical" range label="Range" defaultValue={[30, 70]} />
+              </div>
+            </div>
+
+            <div>
+              <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase" }}>Disabled</p>
+              <Slider range disabled label="Price range" valueLabel="30, 70" helperText="Not available on this plan." defaultValue={[30, 70]} />
+            </div>
+
+            <div dir="rtl">
+              <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase" }}>RTL — minimum on the right</p>
+              <Slider range aria-label="RTL range" defaultValue={[20, 60]} />
             </div>
 
           </div>

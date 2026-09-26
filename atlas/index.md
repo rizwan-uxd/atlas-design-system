@@ -27,6 +27,7 @@ One line per component. Read `atlas/<Name>.md` only for the components you will 
 | Progress | primitives | `@atlas/ui-web/primitives/Progress/Progress` | — | — |
 | RadioGroup | primitives | `@atlas/ui-web/primitives/RadioGroup/RadioGroup` | default, card | sm, md |
 | Skeleton | primitives | `@atlas/ui-web/primitives/Skeleton/Skeleton` | — | — |
+| Slider | primitives | `@atlas/ui-web/primitives/Slider/Slider` | — | — |
 | Spinner | primitives | `@atlas/ui-web/primitives/Spinner/Spinner` | default, custom | xs, sm, md, lg |
 
 No Table, Tooltip, Select, Radio or Toast exists. Compose gaps from primitives and log them in `state/candidates.json`.
