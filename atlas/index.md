@@ -25,6 +25,7 @@ One line per component. Read `atlas/<Name>.md` only for the components you will 
 | Image | primitives | `@atlas/ui-web/primitives/Image/Image` | — | — |
 | ListItem | compositions | `@atlas/ui-web/compositions/ListItem/ListItem` | default, outline, muted | sm, md |
 | Progress | primitives | `@atlas/ui-web/primitives/Progress/Progress` | — | — |
+| RadioGroup | primitives | `@atlas/ui-web/primitives/RadioGroup/RadioGroup` | default, card | sm, md |
 | Skeleton | primitives | `@atlas/ui-web/primitives/Skeleton/Skeleton` | — | — |
 | Spinner | primitives | `@atlas/ui-web/primitives/Spinner/Spinner` | default, custom | xs, sm, md, lg |
 

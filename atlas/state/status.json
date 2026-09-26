@@ -30,6 +30,7 @@
     "Spinner": { "parity": "match", "figmaMetadata": "description-written", "code": "spec-complete", "verifiedAt": null },
     "Skeleton": { "parity": "match", "figmaMetadata": "description-written", "code": "spec-complete", "verifiedAt": null },
     "Image": { "parity": "match", "figmaMetadata": "description-written", "code": "spec-complete", "verifiedAt": null },
-    "Progress": { "parity": "match", "figmaMetadata": "description-written", "code": "spec-complete", "verifiedAt": null }
+    "Progress": { "parity": "match", "figmaMetadata": "description-written", "code": "spec-complete", "verifiedAt": null },
+    "RadioGroup": { "parity": "match", "figmaMetadata": "description-written", "code": "spec-complete", "verifiedAt": null }
   }
 }

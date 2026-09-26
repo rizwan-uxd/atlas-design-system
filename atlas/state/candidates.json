@@ -62,14 +62,6 @@
       "note": "Web DropdownMenu shipped on feat/dropdown-menu (v1.1, phase 6). Native parity is logged here, not built. It promotes CAND-008."
     },
     {
-      "id": "CAND-011",
-      "name": "Radio",
-      "seenIn": ["packages/ui-web/src/patterns/DropdownMenu (DropdownMenuRadioItem draws its own 8px dot)"],
-      "composedFrom": "inline dot indicator in DropdownMenuRadioItem",
-      "occurrences": 1,
-      "note": "Atlas has no Radio primitive; the menu radio row draws the dot itself. A standalone Radio is not built."
-    },
-    {
       "id": "CAND-013",
       "name": "Spinner (Atlas/Mobile-Native)",
       "seenIn": ["docs/componentlist plan _next6_2026-09-25.md"],
@@ -108,6 +100,14 @@
       "composedFrom": "not yet attempted",
       "occurrences": 0,
       "note": "Web Progress shipped on feat/progress (batch 2, phase 4). Native parity is logged here, not built."
+    },
+    {
+      "id": "CAND-018",
+      "name": "RadioGroup (Atlas/Mobile-Native)",
+      "seenIn": ["docs/componentlist plan _next6_2026-09-25.md"],
+      "composedFrom": "not yet attempted",
+      "occurrences": 0,
+      "note": "Web RadioGroup shipped on feat/radio-group (batch 2, phase 5). Native parity is logged here, not built."
     }
   ]
 }

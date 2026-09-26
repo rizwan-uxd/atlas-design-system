@@ -24,6 +24,7 @@ Reference nodes (from the user's list):
 | 3 | Image | merged to `main` (`61eab54`) | none (radius, background-muted, foreground-subtle, icon-size-lg, icon-stroke-lg and the Skeleton pulse tokens all exist) | one primitive with Ratio (ten values incl. auto, vs the reference's nine) x State (loaded, loading, error) instead of the reference's nine ratio-only variants; fit and radius are code props, not Figma variants; loaded variants use a token-bound stand-in scene; error icon stroke weight numeric (nested icon strokes cannot bind) |
 | 3 | Image | `42732:27744` |
 | 4 | Progress | `42829:9378` |
+| 5 | Radio Group | merged to `main` (branch `feat/radio-group`; Figma page `544:2`, sets `545:98` Radio Group and `544:283` Radio Group Item) | none (`spacing/2`, `spacing/0_5`, `radius/full`, `radius/md`, `primary-subtle`, `danger-foreground`, `focus-ring`, `opacity/disabled` all exist; DEC-022) | native `input type=radio`, compound `RadioGroup` + `RadioGroupItem`; Item set has 40 variants (Variant, Checked, Size, State) instead of the reference's 16; no right-side radio; no pressed state; group `Variant` added so the card group can be drawn; card border and fill follow Checkbox, not the reference's 10px radius; invalid is a danger ring with no red label; focus ring is a separate layer and disabled opacity is set by hand in Figma; closes CAND-011 |
 | 5 | Radio Group | `42830:1880` |
 | 6 | Slider | `42836:14404` |
 
@@ -120,4 +121,4 @@ Rule (user, 2026-09-26): audit findings are hypotheses until verified against `a
 
 Verified for Skeleton against Figma and CSS: fill `background-muted`; radius `radius/md`, `radius/full`; spacing 4/8/16/24/32/40 exist (`spacing/1…10`); durations 0/120/200/320/1000 and easings exist, no pulse period.
 
-Next: Phase 5 Radio Group (audited, decisions given, not built), then Slider. Decisions already given for those two are in `docs/HANDOFF-batch2-next-session.md`.
+Next: Phase 6 Slider (audited, decisions given, not built). Decisions already given for those two are in `docs/HANDOFF-batch2-next-session.md`.

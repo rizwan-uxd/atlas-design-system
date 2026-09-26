@@ -1,0 +1,218 @@
+/* =================================================================
+   Atlas RadioGroup — component styles
+   Semantic tokens only. Logical properties throughout.
+   ================================================================= */
+
+/* ── Group ─────────────────────────────────────────────────────── */
+
+.group {
+  display: flex;
+  gap: var(--atlas-spacing-3);
+}
+
+.group[data-direction="vertical"] {
+  flex-direction: column;
+}
+
+.group[data-direction="horizontal"] {
+  flex-direction: row;
+  flex-wrap: wrap;
+  column-gap: var(--atlas-spacing-6);
+}
+
+.group[data-direction="horizontal"][data-variant="card"] {
+  column-gap: var(--atlas-spacing-3);
+}
+
+/* ── Item root (the label is the click target) ─────────────────── */
+
+.root {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--atlas-spacing-3);
+  cursor: pointer;
+}
+
+/* ── Radio (native input, appearance none) ─────────────────────── */
+/*
+  sm: 16px = --atlas-spacing-4, md: 20px = --atlas-spacing-5.
+  The dot is 8px = --atlas-spacing-2 at both sizes.
+  Radio is centred on the first text line: md 0, sm one half-step.
+*/
+
+.input {
+  appearance: none;
+  display: grid;
+  place-content: center;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  margin: 0;
+  border: var(--atlas-border-width-1) solid var(--atlas-border-strong);
+  border-radius: var(--atlas-radius-full);
+  background-color: var(--atlas-background);
+  /* dot colour */
+  color: var(--atlas-primary-foreground);
+  cursor: inherit;
+  transition:
+    background-color var(--atlas-duration-fast) var(--atlas-easing-standard),
+    border-color     var(--atlas-duration-fast) var(--atlas-easing-standard);
+}
+
+.input::before {
+  content: "";
+  inline-size: var(--atlas-spacing-2);
+  block-size: var(--atlas-spacing-2);
+  border-radius: var(--atlas-radius-full);
+  background-color: currentColor;
+  transform: scale(0);
+  transition: transform var(--atlas-duration-fast) var(--atlas-easing-standard);
+}
+
+.input:checked::before {
+  transform: scale(1);
+}
+
+.root[data-size="sm"] .input {
+  inline-size: var(--atlas-spacing-4);
+  block-size: var(--atlas-spacing-4);
+  margin-block: var(--atlas-spacing-0_5);
+}
+
+.root[data-size="md"] .input {
+  inline-size: var(--atlas-spacing-5);
+  block-size: var(--atlas-spacing-5);
+}
+
+/* ── Checked ───────────────────────────────────────────────────── */
+
+.input:checked {
+  background-color: var(--atlas-primary);
+  border-color: var(--atlas-primary);
+}
+
+/* ── Hover (web only) ──────────────────────────────────────────── */
+
+.root:hover .input:not(:disabled):not(:checked) {
+  background-color: var(--atlas-background-subtle);
+  border-color: var(--atlas-foreground);
+}
+
+.root:hover .input:not(:disabled):checked {
+  background-color: var(--atlas-primary-hover);
+  border-color: var(--atlas-primary-hover);
+}
+
+/* ── Focus-visible — ring on the radio only ────────────────────── */
+
+.input:focus-visible {
+  outline: var(--atlas-border-width-2) solid var(--atlas-focus-ring);
+  outline-offset: var(--atlas-spacing-0_5);
+}
+
+/* ── Invalid ───────────────────────────────────────────────────── */
+
+.input[aria-invalid="true"] {
+  border-color: var(--atlas-danger);
+}
+
+.root:hover .input[aria-invalid="true"]:not(:disabled):not(:checked) {
+  border-color: var(--atlas-danger);
+}
+
+.input[aria-invalid="true"]:checked {
+  background-color: var(--atlas-danger);
+  border-color: var(--atlas-danger);
+  color: var(--atlas-danger-foreground);
+}
+
+.root:hover .input[aria-invalid="true"]:not(:disabled):checked {
+  background-color: var(--atlas-danger-hover);
+  border-color: var(--atlas-danger-hover);
+}
+
+/* ── Disabled ──────────────────────────────────────────────────── */
+
+.root[data-disabled] {
+  opacity: var(--atlas-opacity-disabled);
+  cursor: not-allowed;
+}
+
+.input:disabled:not(:checked) {
+  background-color: var(--atlas-background-muted);
+  border-color: var(--atlas-border);
+}
+
+/* ── Label and description ─────────────────────────────────────── */
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--atlas-spacing-0_5);
+  min-inline-size: 0;
+}
+
+.label {
+  font-family: var(--atlas-font-sans);
+  font-size: var(--atlas-font-size-sm);
+  font-weight: var(--atlas-font-weight-semibold);
+  line-height: var(--atlas-line-height-normal);
+  color: var(--atlas-foreground);
+}
+
+.description {
+  font-family: var(--atlas-font-sans);
+  font-size: var(--atlas-font-size-xs);
+  line-height: var(--atlas-line-height-normal);
+  color: var(--atlas-foreground-muted);
+}
+
+/* ── Variant: card ─────────────────────────────────────────────── */
+/* Whole surface is the click target. Checked = primary border + subtle fill. */
+
+.root[data-variant="card"] {
+  box-sizing: border-box;
+  padding-block: var(--atlas-spacing-3);
+  padding-inline: var(--atlas-spacing-4);
+  border: var(--atlas-border-width-1) solid var(--atlas-border-strong);
+  border-radius: var(--atlas-radius-md);
+  background-color: var(--atlas-surface);
+  transition:
+    border-color     var(--atlas-duration-fast) var(--atlas-easing-standard),
+    background-color var(--atlas-duration-fast) var(--atlas-easing-standard);
+}
+
+.root[data-variant="card"][data-checked] {
+  border-color: var(--atlas-primary);
+  background-color: var(--atlas-primary-subtle);
+}
+
+.root[data-variant="card"][data-invalid] {
+  border-color: var(--atlas-danger);
+}
+
+.group[data-variant="card"][data-direction="vertical"] > .root {
+  inline-size: 100%;
+}
+
+/* Dark: primary-subtle sits too close to the page background, blend into the raised surface. */
+[data-theme="dark"] .root[data-variant="card"][data-checked] {
+  background-color: color-mix(in oklch, var(--atlas-primary) 15%, var(--atlas-surface-raised));
+}
+
+/* ── Touch target ──────────────────────────────────────────────── */
+
+@media (pointer: coarse) {
+  .root {
+    min-block-size: var(--atlas-touch-min);
+  }
+}
+
+/* ── Reduced motion ────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .input,
+  .input::before,
+  .root[data-variant="card"] {
+    transition: none;
+  }
+}
