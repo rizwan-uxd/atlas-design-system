@@ -108,6 +108,14 @@
       "composedFrom": "not yet attempted",
       "occurrences": 0,
       "note": "Web RadioGroup shipped on feat/radio-group (batch 2, phase 5). Native parity is logged here, not built."
+    },
+    {
+      "id": "CAND-019",
+      "name": "Slider (Atlas/Mobile-Native)",
+      "seenIn": ["docs/componentlist plan _next6_2026-09-25.md"],
+      "composedFrom": "not yet attempted",
+      "occurrences": 0,
+      "note": "Web Slider shipped on feat/slider (batch 2, phase 6). Native parity is logged here, not built."
     }
   ]
 }
