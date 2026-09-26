@@ -168,6 +168,7 @@
   --atlas-duration-base: 200ms;
   --atlas-duration-slow: 320ms;
   --atlas-duration-spin: 1000ms;
+  --atlas-duration-pulse: 2000ms;
 
   --atlas-easing-linear: cubic-bezier(0, 0, 1, 1);
   --atlas-easing-standard: cubic-bezier(0.2, 0, 0, 1);
@@ -225,6 +226,7 @@
   --atlas-opacity-disabled: 0.5;
   --atlas-opacity-hover: 0.9;
   --atlas-opacity-overlay: 0.6;
+  --atlas-opacity-pulse: 0.5;
 
   /* ─────────────── Shadow (light defaults) ─────────────── */
   --atlas-shadow-sm: 0 1px 2px 0 oklch(0 0 0 / 0.05);

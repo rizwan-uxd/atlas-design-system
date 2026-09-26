@@ -11,6 +11,7 @@ import { Switch } from "@atlas/ui-web/primitives/Switch/Switch"
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@atlas/ui-web/compositions/Card/Card"
 import { Badge } from "@atlas/ui-web/primitives/Badge/Badge"
 import { Spinner } from "@atlas/ui-web/primitives/Spinner/Spinner"
+import { Skeleton } from "@atlas/ui-web/primitives/Skeleton/Skeleton"
 import { Avatar, AvatarGroup } from "@atlas/ui-web/primitives/Avatar/Avatar"
 import { Alert } from "@atlas/ui-web/compositions/Alert/Alert"
 import { ListItem, ListItemMedia, ListItemContent, ListItemTitle, ListItemDescription, ListItemActions } from "@atlas/ui-web/compositions/ListItem/ListItem"
@@ -1114,6 +1115,56 @@ export default function SandboxPage() {
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: "var(--atlas-spacing-2)", marginBlockStart: "var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-sm)", fontWeight: "var(--atlas-font-weight-medium)", color: "var(--atlas-danger)" }}>
                 <Spinner variant="custom" size="xs" label="Saving changes" /> Saving changes
+              </div>
+            </div>
+
+          </div>
+        </Section>
+
+        {/* ── SKELETON ── */}
+        <Section title="Skeleton">
+          <div style={{ display: "flex", flexDirection: "column", gap: "var(--atlas-spacing-6)", maxInlineSize: "var(--atlas-breakpoint-md)" }}>
+
+            <div>
+              <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase" }}>Shape — rect · circle</p>
+              <div style={{ display: "flex", alignItems: "center", gap: "var(--atlas-spacing-4)" }}>
+                <Skeleton style={{ inlineSize: "10rem" }} />
+                <Skeleton shape="circle" />
+              </div>
+            </div>
+
+            <div>
+              <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase" }}>Avatar placeholder — aria-busy container</p>
+              <div role="group" aria-label="Loading profile" aria-busy="true" style={{ display: "flex", alignItems: "center", gap: "var(--atlas-spacing-4)" }}>
+                <Skeleton shape="circle" />
+                <div style={{ display: "flex", flexDirection: "column", gap: "var(--atlas-spacing-2)" }}>
+                  <Skeleton style={{ inlineSize: "9rem" }} />
+                  <Skeleton style={{ inlineSize: "6.5rem" }} />
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase" }}>Card placeholder</p>
+              <div role="group" aria-label="Loading card" aria-busy="true" style={{ display: "flex", flexDirection: "column", gap: "var(--atlas-spacing-6)" }}>
+                <Skeleton style={{ blockSize: "10rem" }} />
+                <div style={{ display: "flex", flexDirection: "column", gap: "var(--atlas-spacing-2)" }}>
+                  <Skeleton />
+                  <Skeleton style={{ inlineSize: "85%" }} />
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase" }}>Form placeholder</p>
+              <div role="group" aria-label="Loading form" aria-busy="true" style={{ display: "flex", flexDirection: "column", gap: "var(--atlas-spacing-4)" }}>
+                {[0, 1].map(i => (
+                  <div key={i} style={{ display: "flex", flexDirection: "column", gap: "var(--atlas-spacing-2)" }}>
+                    <Skeleton style={{ inlineSize: "5rem" }} />
+                    <Skeleton style={{ blockSize: "var(--atlas-spacing-8)" }} />
+                  </div>
+                ))}
+                <Skeleton style={{ inlineSize: "7.5rem", blockSize: "var(--atlas-spacing-8)" }} />
               </div>
             </div>
 

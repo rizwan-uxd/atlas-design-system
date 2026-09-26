@@ -103,6 +103,7 @@
         { "name": "opacity/disabled", "type": "FLOAT", "values": { "Default": 0.5 } },
         { "name": "opacity/hover", "type": "FLOAT", "values": { "Default": 0.9 } },
         { "name": "opacity/overlay", "type": "FLOAT", "values": { "Default": 0.6 } },
+        { "name": "opacity/pulse", "type": "FLOAT", "values": { "Default": 0.5 } },
 
         { "name": "breakpoint/sm", "type": "FLOAT", "values": { "Default": 640 } },
         { "name": "breakpoint/md", "type": "FLOAT", "values": { "Default": 768 } },
