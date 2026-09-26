@@ -2,8 +2,14 @@
 
 Written: 2026-09-26. Read this, `AGENTS.md` and `docs/componentlist plan _next6_2026-09-25.md` (section 10 is the progress log). Then start **Phase 3, Image, step A (audit)**. The user has already said to proceed in plan order, so no separate "start" is needed.
 
-## Token budget: do not use graft
-The user asked to spend fewer tokens and not use graft. The session hooks inject graft hints and a repo map on their own; ignore them. Do not call `graft ask/grep/callers/skeleton/map` or the `mcp__graft__*` tools. Read files directly with Read, and use Grep for a single fact. Do not change settings to disable the hooks unless the user asks. Also skip the design and taste skills; only the Atlas and Figma skills below apply.
+## Token budget: use graft
+The user wants graft used to cut token and context cost. The repo is indexed (`graft/INDEX.md`, hooks print starting points). Prefer it over broad reads and greps:
+- `graft ask "<task>" --source` to find and understand code (ranked, code inlined at file:line).
+- `graft grep "<literal>"` when you need every occurrence.
+- `graft skeleton <file>` for a file's API instead of reading it (about 10x cheaper).
+- `graft callers <symbol>` before changing a symbol.
+- Already know the file? Go straight to it and read only the span you need.
+The `mcp__graft__*` tools do the same (load them in one ToolSearch call). Graft covers repo code only, so Figma work still uses the Figma MCP. Per AGENTS.md section 7, do not re-read files already read, and skip `docs/` reads that do not change what you write. Close a reply with the one-line graft token tally when you used it.
 
 ## State
 `main` is local only (nothing pushed since `61dd2c7`). Working tree is clean after the docs commit that carries this file.
