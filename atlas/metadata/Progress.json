@@ -19,7 +19,7 @@
   ],
   "subcomponents": [],
   "tokensUsed": ["--atlas-background-muted", "--atlas-duration-base", "--atlas-duration-pulse", "--atlas-easing-linear", "--atlas-easing-standard", "--atlas-font-sans", "--atlas-font-weight-medium", "--atlas-font-weight-regular", "--atlas-foreground", "--atlas-foreground-muted", "--atlas-line-height-normal", "--atlas-primary", "--atlas-radius-full", "--atlas-spacing-1", "--atlas-spacing-2", "--atlas-text-body-sm", "--atlas-text-caption"],
-  "figmaNodeId": "538:7",
+  "figmaNodeId": "541:28",
   "figmaFileKey": "cKYhfaHLCoyMHi9nKr63Ig",
   "figmaProperties": { "State": ["determinate", "indeterminate"] },
   "syncedAt": "2026-09-26T02:54:30.058Z",
