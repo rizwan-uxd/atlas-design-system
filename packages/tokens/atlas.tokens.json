@@ -176,6 +176,12 @@
         "sm": { "$type": "dimension", "$value": "20px" },
         "md": { "$type": "dimension", "$value": "24px" },
         "lg": { "$type": "dimension", "$value": "32px" }
+      },
+      "stroke": {
+        "xs": { "$type": "number", "$value": 1.5 },
+        "sm": { "$type": "number", "$value": 1.75 },
+        "md": { "$type": "number", "$value": 2 },
+        "lg": { "$type": "number", "$value": 2.25 }
       }
     },
     "avatar": {
@@ -245,7 +251,8 @@
         "instant": { "$type": "duration", "$value": "0ms" },
         "fast":    { "$type": "duration", "$value": "120ms" },
         "base":    { "$type": "duration", "$value": "200ms" },
-        "slow":    { "$type": "duration", "$value": "320ms" }
+        "slow":    { "$type": "duration", "$value": "320ms" },
+        "spin":    { "$type": "duration", "$value": "1000ms" }
       },
       "easing": {
         "linear":     { "$type": "cubicBezier", "$value": [0, 0, 1, 1] },
