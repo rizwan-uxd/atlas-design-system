@@ -1,0 +1,94 @@
+/* =================================================================
+   Atlas Progress — component styles
+   All values reference semantic tokens only.
+   ================================================================= */
+
+.progress {
+  display: flex;
+  flex-direction: column;
+  gap: var(--atlas-spacing-2);
+  inline-size: 100%;
+  font-family: var(--atlas-font-sans);
+}
+
+/* ── Label row ─────────────────────────────────────────────────── */
+
+.header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--atlas-spacing-2);
+}
+
+.label {
+  font-size: var(--atlas-text-body-sm);
+  font-weight: var(--atlas-font-weight-medium);
+  line-height: var(--atlas-line-height-normal);
+  color: var(--atlas-foreground);
+}
+
+.value,
+.helper {
+  font-size: var(--atlas-text-caption);
+  font-weight: var(--atlas-font-weight-regular);
+  line-height: var(--atlas-line-height-normal);
+  color: var(--atlas-foreground-muted);
+}
+
+.value { margin-inline-start: auto; }
+
+/* ── Track and fill ────────────────────────────────────────────── */
+
+.track {
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+  inline-size: 100%;
+  block-size: var(--atlas-spacing-1);
+  border-radius: var(--atlas-radius-full);
+  background-color: var(--atlas-background-muted);
+}
+
+.fill {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  border-radius: var(--atlas-radius-full);
+  background-color: var(--atlas-primary);
+}
+
+.progress[data-state="determinate"] .fill {
+  inline-size: calc(var(--progress, 0) * 1%);
+  transition: inline-size var(--atlas-duration-base) var(--atlas-easing-standard);
+}
+
+/* ── Indeterminate ─────────────────────────────────────────────── */
+
+.progress[data-state="indeterminate"] .fill {
+  inline-size: 40%;
+  animation: slide var(--atlas-duration-pulse) var(--atlas-easing-linear) infinite;
+}
+
+[dir="rtl"] .progress[data-state="indeterminate"] .fill {
+  animation-name: slide-rtl;
+}
+
+@keyframes slide {
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(250%); }
+}
+
+@keyframes slide-rtl {
+  from { transform: translateX(100%); }
+  to   { transform: translateX(-250%); }
+}
+
+/* ── Reduced motion ────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .progress[data-state="determinate"] .fill { transition: none; }
+  .progress[data-state="indeterminate"] .fill {
+    animation: none;
+    inset-inline-start: 30%;
+  }
+}

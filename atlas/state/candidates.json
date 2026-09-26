@@ -100,6 +100,14 @@
       "composedFrom": "not yet attempted",
       "occurrences": 0,
       "note": "Web Image shipped on feat/image (batch 2, phase 3). Native parity is logged here, not built."
+    },
+    {
+      "id": "CAND-017",
+      "name": "Progress (Atlas/Mobile-Native)",
+      "seenIn": ["docs/componentlist plan _next6_2026-09-25.md"],
+      "composedFrom": "not yet attempted",
+      "occurrences": 0,
+      "note": "Web Progress shipped on feat/progress (batch 2, phase 4). Native parity is logged here, not built."
     }
   ]
 }

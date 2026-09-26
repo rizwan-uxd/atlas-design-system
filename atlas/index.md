@@ -24,6 +24,7 @@ One line per component. Read `atlas/<Name>.md` only for the components you will 
 | DropdownMenu | patterns | `@atlas/ui-web/patterns/DropdownMenu/DropdownMenu` | — | — |
 | Image | primitives | `@atlas/ui-web/primitives/Image/Image` | — | — |
 | ListItem | compositions | `@atlas/ui-web/compositions/ListItem/ListItem` | default, outline, muted | sm, md |
+| Progress | primitives | `@atlas/ui-web/primitives/Progress/Progress` | — | — |
 | Skeleton | primitives | `@atlas/ui-web/primitives/Skeleton/Skeleton` | — | — |
 | Spinner | primitives | `@atlas/ui-web/primitives/Spinner/Spinner` | default, custom | xs, sm, md, lg |
 
