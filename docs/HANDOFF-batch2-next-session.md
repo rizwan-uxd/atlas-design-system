@@ -12,18 +12,18 @@ The user wants graft used to cut token and context cost. The repo is indexed (`g
 The `mcp__graft__*` tools do the same (load them in one ToolSearch call). Graft covers repo code only, so Figma work still uses the Figma MCP. Per AGENTS.md section 7, do not re-read files already read, and skip `docs/` reads that do not change what you write. Close a reply with the one-line graft token tally when you used it.
 
 ## State
-`main` is local only (nothing pushed since `61dd2c7`). Working tree is clean after the docs commit that carries this file.
+`main` is local only (nothing pushed since `61dd2c7`). Working tree is clean after the docs commit that carries this file. Branches `feat/progress` and `feat/progress-wrapper` are merged and can be left or deleted.
 
 | Phase | Component | Status |
 |---|---|---|
 | 1 | Spinner | merged `6e6fea8` (page `527:2`, set `527:63`) |
 | 2 | Skeleton | merged `8a19d7d` (page `531:2`, set `531:5`) |
 | 3 | Image | merged `61eab54` (page `534:2`, set `534:35`) |
-| 4 | Progress | merged (page `538:2`, set `538:7`) |
+| 4 | Progress | merged `7ee93b9` + wrapper fix `718ad7b` (page `538:2`; public set `Progress` `541:28`, internal bar set `.Progress / Bar` `538:7`) |
 | 5 | Radio Group | **next**. Audited, decisions given, not built |
 | 6 | Slider | audited, decisions given, not built |
 
-Latest ids: DEC-021, CAND-017. Next new ones are DEC-022, CAND-018. Tests 289/289 at last run. Figma pages go after the last component page (currently Image `534:2`).
+Latest ids: DEC-021, CAND-017. Next new ones are DEC-022, CAND-018. Tests 312/312 at last run. Figma pages go after the last component page (currently Progress `538:2`).
 
 ## Rules the user set (locked)
 1. **Audit findings are hypotheses.** Verify token, dimension, radius, colour, state and motion claims against `atlas.tokens.css` **and** the Atlas Figma variables before implementing. Add a token only for a real gap, Figma first, then `atlas.tokens.css`, `atlas.tokens.json`, `atlas.figma.tokens.json`. Reuse an existing token only when it is semantically equivalent (e.g. opacity/disabled was rejected for the Skeleton pulse).
@@ -35,7 +35,7 @@ Latest ids: DEC-021, CAND-017. Next new ones are DEC-022, CAND-018. Tests 289/28
 ## Decisions already given (user, 2026-09-26)
 Skeleton is done: single primitive `Shape rect | circle`, composed examples, pulse tokens.
 
-**Progress** (plain `role="progressbar"`, no Radix)
+**Progress** (done; kept for reference. Plain `role="progressbar"`, no Radix)
 - Drop the thumb (Slider owns it). One 4px bar, default intent only.
 - `value`/`max` are props, not the reference's 11 `Progress=` variants.
 - Include indeterminate, but **draw it in Figma first**. Check existing tokens before adding a slide duration (spin is 1000ms, pulse 2000ms).
@@ -57,12 +57,21 @@ Skeleton is done: single primitive `Shape rect | circle`, composed examples, pul
 
 **Image** (Q11, from the plan): plain `<img>` wrapper: aspect ratio, `object-fit`, radius token, Skeleton loading state, error fallback slot. No `next/image`. Audit not yet done, so ask the user the usual questions after it.
 
+## Compound components in Figma (learned on Progress)
+The user checked the reference and expected the same component split. The reference had three sets: a `Progress` wrapper (label row, bar, helper), `.Progress / Bar` (11 variants) and `.Progress / Toggle` (the thumb). I first drew only the bar and left label, value and helper as code-only props, and the user caught it. **Rule for every remaining component: before Gate 1, list the reference's component sets and mirror each one that is not deliberately dropped. Say at Gate 1 which you dropped and why.** Radio Group (`RadioGroup` plus `RadioGroupItem`) and Slider (track, thumb) are the ones to check.
+Pattern that worked: internal set named `.Name / Part` (leading dot), a public wrapper set with a variant `State` plus BOOLEAN switches and TEXT properties (`set.addComponentProperty`, then `child.componentPropertyReferences = {visible, characters}`), and Code Connect, `pull.json` `nodeId` and the description all pointing at the public wrapper.
+
 ## Workflow (A to E), what worked
 - **A. Audit:** `Skill figma:figma-design-to-code`, then `mcp__figma__get_metadata` on the reference canvas node (in the ReUI file `BOJ49F6rceAmcCC70lSiav`, not Atlas), then `get_design_context` on the set node. Deferred tools load with `ToolSearch select:mcp__figma__...`. Post a mapping table, proposed tokens and numbered questions.
 - **B. Figma:** `Skill figma:figma-use` and `figma:figma-generate-library`, then `use_figma` on file `cKYhfaHLCoyMHi9nKr63Ig`. Follow the Spinner and Skeleton pages: component set at x=0, Examples Light at x = set width + 80, Examples Dark (explicit Semantic Dark mode `3:1`), Usage panel. Bind fills and radii to variables. Screenshot once, read it via `curl -o` into the scratchpad then Read.
 - **D. Code:** copy the pattern of `primitives/Spinner` and `primitives/Skeleton` (tsx, module.css, Code Connect, contract, test, sandbox section). Sync: add the component to `.atlas-pull/pull.json` (`nodeId`, `description`, `properties`), run `node scripts/atlas-sync.mjs --pull .atlas-pull/pull.json` twice (the second must write 0 files), then add the status row, a DEC and a CAND in `atlas/state/*.json`. Verify: `node scripts/atlas-verify.mjs --allow-new-component --allow-new-token --scope "<component globs>,atlas/**,packages/tokens/**,app/page.tsx"`. Browser check: `npm run dev` (port 3030), inspect computed styles, then stop the server.
 
 ## Gotchas learned
+- **Permissions:** `mcp__figma__use_figma` was denied by the auto-mode classifier as "Modify Shared Resources" until an allow rule was added to `.claude/settings.local.json` (`permissions.allow: ["mcp__figma__use_figma"]`). It is there now; if a write is denied again, do not work around it, tell the user.
+- **Instance children:** the Plugin API cannot resize or move a child inside an instance (`resize`/`x` silently ignored or throw "cannot be overridden"). For partial fills in examples, hide the instance's fill and overlay a rectangle, or set the child's `constraints` to SCALE in the component. Say so in the usage panel.
+- **CSS:** the Next build rewrites `:dir(rtl)` into a `:lang(ar, he, ...)` list, so it does not match `dir="rtl"` alone. Use `[dir="rtl"] .component` instead.
+- **Browser check:** `javascript_tool` is blocked from returning cookie or query-string data; return small JSON of computed styles only. Close the tab and `pkill -f "next dev"` afterwards.
+- **Sync order:** the second `atlas-sync` run must write 0 files; a hand edit to `atlas/state/*.json` afterwards is fine (`snapshot-current` covers it). `candidates.json` and `decisions.json` keep their formatting when appended with `json.dump(indent=2)`.
 - Reference node ids belong to the ReUI file. `get_design_context` on a canvas page node can fail ("nothing selected"); use the child set node id from `get_metadata`. `get_variable_defs` also needs the set node.
 - `search_design_system` does not find unpublished Atlas sets. Read a set's description with `use_figma` (`node.description`) and put it in the pull file. The output HTML-escapes apostrophes and quotes; write plain characters.
 - Nested icon vectors inside instances cannot bind `strokeWeight` to a variable in Figma (the binding does not resolve). Scale icons with `instance.rescale(n/24)`, not `resize`, then set stroke weights numerically and say so in the usage panel.
@@ -70,7 +79,7 @@ Skeleton is done: single primitive `Shape rect | circle`, composed examples, pul
 - Icons come from `Atlas/Icons` (page `322:106`), Lucide 24px symbols.
 - Figma property values are lowercase like other Atlas sets (Spinner Default/Custom was renamed at the user's request). Code unions must match Figma exactly (DEC-002).
 - `Edit` requires a prior `Read` of the file in the session; `sed -i` on macOS needs care.
-- `atlas-verify` has two pre-existing failures unrelated to any new component: `<NavBar variant="outline">` at `app/page.tsx:77` and (until the docs commit) the untracked plan doc. Because of them `--stamp` has not been run. Raise the NavBar one with the user rather than fixing it inside a component task.
+- `atlas-verify` has one pre-existing failure unrelated to any new component: `<NavBar variant="outline">` at `app/page.tsx:84` (the line drifts as sections are added), and 36 hardcoded-length warnings in the sandbox. Because of them `--stamp` has not been run. Raise the NavBar one with the user rather than fixing it inside a component task.
 - Figma tokens already present in Atlas: `icon/size/*`, `icon/stroke/*`, `duration/{instant,fast,base,slow,spin,pulse}`, `easing/*`, `opacity/{disabled,hover,overlay,pulse}`, `spacing/0…16`, `radius/*`, semantic `background`, `background-muted`, `foreground*`.
 
 ## Files
