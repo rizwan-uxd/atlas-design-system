@@ -13,6 +13,7 @@ import { Badge } from "@atlas/ui-web/primitives/Badge/Badge"
 import { Spinner } from "@atlas/ui-web/primitives/Spinner/Spinner"
 import { Skeleton } from "@atlas/ui-web/primitives/Skeleton/Skeleton"
 import { Image } from "@atlas/ui-web/primitives/Image/Image"
+import { Progress } from "@atlas/ui-web/primitives/Progress/Progress"
 import { Avatar, AvatarGroup } from "@atlas/ui-web/primitives/Avatar/Avatar"
 import { Alert } from "@atlas/ui-web/compositions/Alert/Alert"
 import { ListItem, ListItemMedia, ListItemContent, ListItemTitle, ListItemDescription, ListItemActions } from "@atlas/ui-web/compositions/ListItem/ListItem"
@@ -1226,6 +1227,42 @@ export default function SandboxPage() {
                   />
                 </div>
               </div>
+            </div>
+
+          </div>
+        </Section>
+
+        {/* ── PROGRESS ── */}
+        <Section title="Progress">
+          <div style={{ display: "flex", flexDirection: "column", gap: "var(--atlas-spacing-6)", maxInlineSize: "var(--atlas-breakpoint-md)" }}>
+
+            <div>
+              <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase" }}>Bar only — 0% · 50% · 100%</p>
+              <div style={{ display: "flex", flexDirection: "column", gap: "var(--atlas-spacing-3)" }}>
+                <Progress value={0} aria-label="Empty" />
+                <Progress value={50} aria-label="Half" />
+                <Progress value={100} aria-label="Full" />
+              </div>
+            </div>
+
+            <div>
+              <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase" }}>Label and value</p>
+              <Progress value={62} label="Uploading" valueLabel="62%" />
+            </div>
+
+            <div>
+              <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase" }}>Label, value and helper — custom max, aria-valuetext</p>
+              <Progress value={3} max={5} label="Step 3 of 5" valueLabel="60%" helperText="Almost there" aria-valuetext="3 of 5 steps" />
+            </div>
+
+            <div>
+              <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase" }}>Indeterminate</p>
+              <Progress indeterminate label="Preparing export" helperText="This can take a minute" />
+            </div>
+
+            <div dir="rtl">
+              <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase" }}>RTL — indeterminate slides from the right</p>
+              <Progress indeterminate aria-label="Loading (RTL)" />
             </div>
 
           </div>
