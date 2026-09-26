@@ -92,6 +92,14 @@
       "composedFrom": "not yet attempted",
       "occurrences": 0,
       "note": "Web Skeleton shipped on feat/skeleton (batch 2, phase 2). Native parity is logged here, not built."
+    },
+    {
+      "id": "CAND-016",
+      "name": "Image (Atlas/Mobile-Native)",
+      "seenIn": ["docs/componentlist plan _next6_2026-09-25.md"],
+      "composedFrom": "not yet attempted",
+      "occurrences": 0,
+      "note": "Web Image shipped on feat/image (batch 2, phase 3). Native parity is logged here, not built."
     }
   ]
 }

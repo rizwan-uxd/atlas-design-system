@@ -12,6 +12,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter }
 import { Badge } from "@atlas/ui-web/primitives/Badge/Badge"
 import { Spinner } from "@atlas/ui-web/primitives/Spinner/Spinner"
 import { Skeleton } from "@atlas/ui-web/primitives/Skeleton/Skeleton"
+import { Image } from "@atlas/ui-web/primitives/Image/Image"
 import { Avatar, AvatarGroup } from "@atlas/ui-web/primitives/Avatar/Avatar"
 import { Alert } from "@atlas/ui-web/compositions/Alert/Alert"
 import { ListItem, ListItemMedia, ListItemContent, ListItemTitle, ListItemDescription, ListItemActions } from "@atlas/ui-web/compositions/ListItem/ListItem"
@@ -27,6 +28,11 @@ import {
   DropdownMenuSub, DropdownMenuSubTrigger, DropdownMenuSubContent,
 } from "@atlas/ui-web/patterns/DropdownMenu/DropdownMenu"
 import { NavBar } from "@atlas/ui-web/layouts/NavBar/NavBar"
+
+// Demo picture: an inline SVG so the sandbox needs no network.
+const DEMO_IMAGE = "data:image/svg+xml;utf8," + encodeURIComponent(
+  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 200"><rect width="320" height="200" fill="#d0f1ff"/><circle cx="240" cy="50" r="22" fill="#dba300"/><ellipse cx="200" cy="200" rx="160" ry="70" fill="#d0f5dc"/><ellipse cx="80" cy="210" rx="130" ry="80" fill="#008a44"/></svg>'
+)
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
@@ -1165,6 +1171,60 @@ export default function SandboxPage() {
                   </div>
                 ))}
                 <Skeleton style={{ inlineSize: "7.5rem", blockSize: "var(--atlas-spacing-8)" }} />
+              </div>
+            </div>
+
+          </div>
+        </Section>
+
+        {/* ── IMAGE ── */}
+        <Section title="Image">
+          <div style={{ display: "flex", flexDirection: "column", gap: "var(--atlas-spacing-6)", maxInlineSize: "var(--atlas-breakpoint-md)" }}>
+
+            <div>
+              <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase" }}>Ratio — 1:1 · 4:3 · 3:2 · 16:9 · 16:10 · 9:16 · 3:4 · 2:3 · 4:5 · auto</p>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: "var(--atlas-spacing-4)" }}>
+                {(["1:1", "4:3", "3:2", "16:9", "16:10", "9:16", "3:4", "2:3", "4:5", "auto"] as const).map(ratio => (
+                  <div key={ratio} style={{ inlineSize: "7.5rem" }}>
+                    <Image src={DEMO_IMAGE} alt={`Sample scene, ${ratio}`} ratio={ratio} />
+                    <p style={{ margin: "var(--atlas-spacing-1) 0 0", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)" }}>{ratio}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase" }}>Radius — none · sm · md · lg · xl · full</p>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: "var(--atlas-spacing-4)" }}>
+                {(["none", "sm", "md", "lg", "xl", "full"] as const).map(radius => (
+                  <div key={radius} style={{ inlineSize: "5rem" }}>
+                    <Image src={DEMO_IMAGE} alt="" ratio="1:1" radius={radius} />
+                    <p style={{ margin: "var(--atlas-spacing-1) 0 0", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)" }}>{radius}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase" }}>Fit — cover · contain</p>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: "var(--atlas-spacing-4)" }}>
+                <div style={{ inlineSize: "10rem" }}><Image src={DEMO_IMAGE} alt="Cover fit" ratio="3:4" fit="cover" /></div>
+                <div style={{ inlineSize: "10rem" }}><Image src={DEMO_IMAGE} alt="Contain fit" ratio="3:4" fit="contain" /></div>
+              </div>
+            </div>
+
+            <div>
+              <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase" }}>State — error (default fallback) · error (custom fallback). Loading shows a Skeleton until onLoad.</p>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: "var(--atlas-spacing-4)" }}>
+                <div style={{ inlineSize: "10rem" }}><Image src="/atlas-sandbox-missing-a.jpg" alt="Missing picture" ratio="1:1" /></div>
+                <div style={{ inlineSize: "10rem" }}>
+                  <Image
+                    src="/atlas-sandbox-missing-b.jpg"
+                    alt="Missing picture"
+                    ratio="1:1"
+                    fallback={<div style={{ display: "flex", alignItems: "center", justifyContent: "center", blockSize: "100%", color: "var(--atlas-foreground-muted)", fontSize: "var(--atlas-font-size-xs)" }}>No photo</div>}
+                  />
+                </div>
               </div>
             </div>
 

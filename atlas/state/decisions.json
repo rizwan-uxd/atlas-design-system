@@ -119,6 +119,12 @@
       "topic": "Skeleton as a single primitive with pulse tokens",
       "decision": "Skeleton (primitives) follows ReUI node 42836:14236 but is one block with Shape rect | circle, not the reference's five Avatar/Card/Text/Form/Table variants; those are composed examples on the Figma page. Fill background-muted, radius radius/md (rect) and radius/full (circle), default 16 tall (spacing/4) and 40 for circle (spacing/10), no size property. Motion is a pulse: opacity 1 to opacity/pulse and back over duration/pulse with easing/standard, stopped under prefers-reduced-motion. New tokens verified missing in Atlas (durations were 0/120/200/320/1000 and opacities .5/.9/.6, with disabled semantically wrong), added Figma first then code: duration/pulse 2000ms, opacity/pulse 0.5. The block is aria-hidden with no role; the loading container sets aria-busy and owns any announcement. Image will reuse Skeleton for its loading state.",
       "date": "2026-09-26"
+    },
+    {
+      "id": "DEC-020",
+      "topic": "Image as a plain img wrapper reusing Skeleton",
+      "decision": "Image (primitives) follows ReUI node 42732:27744 (Aspect Ratio, nine fixed-width variants) as one primitive: Figma properties Ratio (1:1, 4:3, 3:2, 16:9, 16:10, 9:16, 3:4, 2:3, 4:5, auto) and State (loaded, loading, error), 12 variants (ten loaded ratios plus loading and error at 1:1). Fit (cover default, contain) and radius (none, sm, md default, lg, xl, full; radius tokens) are code props, not Figma variants; a fallback slot replaces the default error block (background-muted, Lucide image-off at icon/size/lg, foreground-subtle). Loading renders a Skeleton until onLoad and a cached image skips it. auto keeps natural size (Figma draws it 300x200; loading and error under auto use 3:2). alt is required in the type; an empty alt makes the default fallback aria-hidden. Plain img, not next/image. No new tokens: radius, background-muted, foreground-subtle, icon-size-lg, icon-stroke-lg and the Skeleton pulse tokens all exist. Figma loaded variants use a token-bound stand-in scene (info-muted, warning, success) because a page cannot embed a photo; the icon stroke weight is numeric because nested icon strokes cannot bind icon/stroke/lg.",
+      "date": "2026-09-26"
     }
   ]
 }

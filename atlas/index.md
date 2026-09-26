@@ -22,6 +22,7 @@ One line per component. Read `atlas/<Name>.md` only for the components you will 
 | Breadcrumb | patterns | `@atlas/ui-web/patterns/Breadcrumb/Breadcrumb` | — | — |
 | Divider | primitives | `@atlas/ui-web/primitives/Divider/Divider` | — | — |
 | DropdownMenu | patterns | `@atlas/ui-web/patterns/DropdownMenu/DropdownMenu` | — | — |
+| Image | primitives | `@atlas/ui-web/primitives/Image/Image` | — | — |
 | ListItem | compositions | `@atlas/ui-web/compositions/ListItem/ListItem` | default, outline, muted | sm, md |
 | Skeleton | primitives | `@atlas/ui-web/primitives/Skeleton/Skeleton` | — | — |
 | Spinner | primitives | `@atlas/ui-web/primitives/Spinner/Spinner` | default, custom | xs, sm, md, lg |

@@ -1,0 +1,94 @@
+/* =================================================================
+   Atlas Image — component styles
+   All values reference semantic tokens only.
+   ================================================================= */
+
+.image {
+  position: relative;
+  display: block;
+  box-sizing: border-box;
+  inline-size: 100%;
+  overflow: hidden;
+  border-radius: var(--atlas-radius-md);
+  background-color: var(--atlas-background-muted);
+}
+
+/* ── Ratio ─────────────────────────────────────────────────────── */
+
+.image[data-ratio="1:1"]   { aspect-ratio: 1 / 1; }
+.image[data-ratio="4:3"]   { aspect-ratio: 4 / 3; }
+.image[data-ratio="3:2"]   { aspect-ratio: 3 / 2; }
+.image[data-ratio="16:9"]  { aspect-ratio: 16 / 9; }
+.image[data-ratio="16:10"] { aspect-ratio: 16 / 10; }
+.image[data-ratio="9:16"]  { aspect-ratio: 9 / 16; }
+.image[data-ratio="3:4"]   { aspect-ratio: 3 / 4; }
+.image[data-ratio="2:3"]   { aspect-ratio: 2 / 3; }
+.image[data-ratio="4:5"]   { aspect-ratio: 4 / 5; }
+
+/* ── Radius ────────────────────────────────────────────────────── */
+
+.image[data-radius="none"] { border-radius: var(--atlas-radius-none); }
+.image[data-radius="sm"]   { border-radius: var(--atlas-radius-sm); }
+.image[data-radius="md"]   { border-radius: var(--atlas-radius-md); }
+.image[data-radius="lg"]   { border-radius: var(--atlas-radius-lg); }
+.image[data-radius="xl"]   { border-radius: var(--atlas-radius-xl); }
+.image[data-radius="full"] { border-radius: var(--atlas-radius-full); }
+
+/* ── Picture ───────────────────────────────────────────────────── */
+
+.img {
+  display: block;
+  inline-size: 100%;
+}
+
+/* auto: natural height. Every other ratio: the picture fills the box. */
+.image:not([data-ratio="auto"]) .img {
+  block-size: 100%;
+}
+
+.image[data-fit="cover"] .img   { object-fit: cover; }
+.image[data-fit="contain"] .img { object-fit: contain; }
+
+/* The picture stays in the DOM while loading so it can load; it is hidden until it does. */
+.image[data-state="loading"] .img {
+  position: absolute;
+  inset: 0;
+  block-size: 100%;
+  opacity: 0;
+}
+
+/* ── Loading ───────────────────────────────────────────────────── */
+
+.image[data-state="loading"][data-ratio="auto"] {
+  aspect-ratio: 3 / 2;
+}
+
+.image .skeleton {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  border-radius: 0;
+}
+
+/* ── Error ─────────────────────────────────────────────────────── */
+
+.image[data-state="error"][data-ratio="auto"] {
+  aspect-ratio: 3 / 2;
+}
+
+.fallback {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--atlas-foreground-subtle);
+  background-color: var(--atlas-background-muted);
+}
+
+.icon {
+  inline-size: var(--atlas-icon-size-lg);
+  block-size: var(--atlas-icon-size-lg);
+  stroke-width: var(--atlas-icon-stroke-lg);
+}
