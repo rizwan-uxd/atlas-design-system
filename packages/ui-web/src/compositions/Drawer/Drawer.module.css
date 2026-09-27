@@ -1,0 +1,117 @@
+/* =================================================================
+   Atlas Drawer — component styles
+   Lifted from Dialog.module.css's shipped .overlay / .content / .drawer
+   rules (Dialog kept those internal, undocumented in Figma; Drawer is
+   the Figma-designed, standalone home for that visual language now).
+   All values reference semantic tokens only.
+   ================================================================= */
+
+/* ── Overlay ──────────────────────────────────────────────────── */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--atlas-z-overlay);
+  background-color: color-mix(in oklch, var(--atlas-overlay) 65%, transparent);
+}
+
+.overlay[data-state="open"] {
+  animation: overlayShow var(--atlas-duration-fast) var(--atlas-easing-standard);
+}
+
+.overlay[data-state="closed"] {
+  animation: overlayHide var(--atlas-duration-fast) var(--atlas-easing-exit);
+}
+
+@keyframes overlayShow {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes overlayHide {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+/* ── Content base ─────────────────────────────────────────────── */
+
+.content {
+  --_pad: var(--atlas-spacing-6);        /* overridden by size variants */
+  --_max-w: var(--atlas-dialog-md);      /* overridden by size variants; md is the default, as in Dialog */
+
+  position: fixed;
+  z-index: var(--atlas-z-modal);
+  background-color: var(--atlas-surface-overlay);
+  border: var(--atlas-border-width-1) solid var(--atlas-border);
+  box-shadow: var(--atlas-shadow-xl);
+  font-family: var(--atlas-font-sans);
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - var(--atlas-spacing-8) * 2);
+  overflow: auto;
+  outline: none; /* focus ring suppressed; Radix manages focus trap */
+
+  inset-block: 0;
+  width: min(var(--_max-w), 100vw);
+  max-height: 100vh;
+  border-radius: 0;
+  padding-block-start: var(--atlas-safe-top);
+}
+
+/* ── Size tokens ──────────────────────────────────────────────── */
+
+.sm  { --_pad: var(--atlas-spacing-4); --_max-w: var(--atlas-dialog-sm); }
+/* .md is the default (--_pad: spacing-6, --_max-w: atlas-dialog-md) */
+.lg  { --_pad: var(--atlas-spacing-6); --_max-w: var(--atlas-dialog-lg); }
+.xl  { --_pad: var(--atlas-spacing-8); --_max-w: var(--atlas-dialog-xl); }
+.full { --_pad: var(--atlas-spacing-6); --_max-w: 100vw; }
+
+/* ── Side ─────────────────────────────────────────────────────── */
+/*
+  data-side="start" | "end". The flush edge (against the viewport) stays
+  square; the free edge gets the hinge-corner radius (Figma Drawer, node
+  577:24 — Side=start rounds the end/right edge, Side=end rounds the
+  start/left edge).
+*/
+
+.content[data-side="end"] {
+  inset-inline-end: 0;
+  border-start-start-radius: var(--atlas-radius-lg);
+  border-end-start-radius: var(--atlas-radius-lg);
+}
+
+.content[data-side="start"] {
+  inset-inline-start: 0;
+  border-start-end-radius: var(--atlas-radius-lg);
+  border-end-end-radius: var(--atlas-radius-lg);
+}
+
+.content[data-side="end"][data-state="open"] {
+  animation: drawerEndShow var(--atlas-duration-base) var(--atlas-easing-emphasized);
+}
+
+.content[data-side="end"][data-state="closed"] {
+  animation: drawerEndHide var(--atlas-duration-base) var(--atlas-easing-exit);
+}
+
+.content[data-side="start"][data-state="open"] {
+  animation: drawerStartShow var(--atlas-duration-base) var(--atlas-easing-emphasized);
+}
+
+.content[data-side="start"][data-state="closed"] {
+  animation: drawerStartHide var(--atlas-duration-base) var(--atlas-easing-exit);
+}
+
+@keyframes drawerEndShow   { from { opacity: 0; transform: translateX(100%); } to { opacity: 1; transform: translateX(0); } }
+@keyframes drawerEndHide   { from { opacity: 1; transform: translateX(0); } to { opacity: 0; transform: translateX(100%); } }
+@keyframes drawerStartShow { from { opacity: 0; transform: translateX(-100%); } to { opacity: 1; transform: translateX(0); } }
+@keyframes drawerStartHide { from { opacity: 1; transform: translateX(0); } to { opacity: 0; transform: translateX(-100%); } }
+
+/* ── Reduced motion ───────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .overlay,
+  .content {
+    animation: none !important;
+  }
+}

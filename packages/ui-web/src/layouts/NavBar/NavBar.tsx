@@ -24,7 +24,7 @@
  */
 
 import React, { useState, useEffect, useRef, useCallback } from "react"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from "@atlas/ui-web/compositions/Dialog/Dialog"
+import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerClose } from "@atlas/ui-web/compositions/Drawer/Drawer"
 import styles from "./NavBar.module.css"
 
 /* ── Helpers ────────────────────────────────────────────────────── */
@@ -190,22 +190,21 @@ export function NavBar({
 
       {/* Mobile drawer */}
       {links && links.length > 0 && (
-        <Dialog open={drawerOpen} onOpenChange={setDrawerOpen}>
-          <DialogContent
-            variant="drawer"
+        <Drawer open={drawerOpen} onOpenChange={setDrawerOpen}>
+          <DrawerContent
             size="sm"
             side="start"
             id="mobile-nav-drawer"
           >
-            <DialogHeader>
-              <DialogTitle>{brand ?? "Menu"}</DialogTitle>
-            </DialogHeader>
+            <DrawerHeader>
+              <DrawerTitle>{brand ?? "Menu"}</DrawerTitle>
+            </DrawerHeader>
 
             <nav aria-label="Mobile primary">
               <ul className={styles.drawerLinks}>
                 {links.map((link, i) => (
                   <li key={i}>
-                    <DialogClose asChild>
+                    <DrawerClose asChild>
                       <a
                         href={link.href ?? "#"}
                         className={styles.drawerLink}
@@ -221,13 +220,13 @@ export function NavBar({
                           <span aria-hidden="true">{link.badge}</span>
                         )}
                       </a>
-                    </DialogClose>
+                    </DrawerClose>
                   </li>
                 ))}
               </ul>
             </nav>
-          </DialogContent>
-        </Dialog>
+          </DrawerContent>
+        </Drawer>
       )}
     </>
   )

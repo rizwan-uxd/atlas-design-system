@@ -20,6 +20,7 @@ import { Avatar, AvatarGroup } from "@atlas/ui-web/primitives/Avatar/Avatar"
 import { Alert } from "@atlas/ui-web/compositions/Alert/Alert"
 import { ListItem, ListItemMedia, ListItemContent, ListItemTitle, ListItemDescription, ListItemActions } from "@atlas/ui-web/compositions/ListItem/ListItem"
 import { Dialog, DialogContent, DialogTrigger, DialogHeader, DialogTitle, DialogDescription, DialogBody, DialogFooter, DialogClose } from "@atlas/ui-web/compositions/Dialog/Dialog"
+import { Drawer, DrawerContent, DrawerTrigger, DrawerHeader, DrawerTitle, DrawerDescription, DrawerBody, DrawerFooter, DrawerClose } from "@atlas/ui-web/compositions/Drawer/Drawer"
 import { Tabs } from "@atlas/ui-web/patterns/Tabs/Tabs"
 import {
   Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbPage,
@@ -819,20 +820,20 @@ export default function SandboxPage() {
               </Row>
             </div>
 
-            {/* Drawer variant */}
+            {/* Drawer — standalone component, compositions/Drawer/Drawer */}
             <div>
               <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase", letterSpacing: "0.06em" }}>Drawer — slides from inline-end (RTL-safe)</p>
               <Row>
-                <Dialog open={drawerOpen} onOpenChange={setDrawerOpen}>
-                  <DialogTrigger asChild>
+                <Drawer open={drawerOpen} onOpenChange={setDrawerOpen}>
+                  <DrawerTrigger asChild>
                     <Button variant="outline">Open drawer</Button>
-                  </DialogTrigger>
-                  <DialogContent variant="drawer" size="sm" side="end">
-                    <DialogHeader>
-                      <DialogTitle>Filter options</DialogTitle>
-                      <DialogDescription>Adjust filters for your results.</DialogDescription>
-                    </DialogHeader>
-                    <DialogBody>
+                  </DrawerTrigger>
+                  <DrawerContent size="sm" side="end">
+                    <DrawerHeader>
+                      <DrawerTitle>Filter options</DrawerTitle>
+                      <DrawerDescription>Adjust filters for your results.</DrawerDescription>
+                    </DrawerHeader>
+                    <DrawerBody>
                       <div style={{ display: "flex", flexDirection: "column", gap: "var(--atlas-spacing-4)" }}>
                         <div>
                           <Label htmlFor="dr-status">Status</Label>
@@ -848,13 +849,13 @@ export default function SandboxPage() {
                         </div>
                         <Switch label="Active only" />
                       </div>
-                    </DialogBody>
-                    <DialogFooter justify="between">
-                      <DialogClose asChild><Button variant="ghost">Reset</Button></DialogClose>
-                      <DialogClose asChild><Button>Apply</Button></DialogClose>
-                    </DialogFooter>
-                  </DialogContent>
-                </Dialog>
+                    </DrawerBody>
+                    <DrawerFooter justify="between">
+                      <DrawerClose asChild><Button variant="ghost">Reset</Button></DrawerClose>
+                      <DrawerClose asChild><Button>Apply</Button></DrawerClose>
+                    </DrawerFooter>
+                  </DrawerContent>
+                </Drawer>
               </Row>
             </div>
 
