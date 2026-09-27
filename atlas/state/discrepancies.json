@@ -64,10 +64,10 @@
     {
       "id": "DISC-008",
       "component": "Dialog",
-      "side": "both",
-      "status": "open",
+      "side": "closed",
+      "status": "closed",
       "issue": "Two different axes — Figma Variant = intent, code variant = presentation.",
-      "resolution": "Figma: keep Variant default|destructive, add Type = modal|sheet|drawer, add size xl. Code: variant→type, new variant = default|destructive."
+      "resolution": "Rescoped 2026-09-27 per docs/componentlist plan _dashboard-gaps_2026-09-27.md §4: sheet/drawer presentations split out as standalone Sheet (DEC-028) and Drawer (DEC-027) components, not a Dialog axis. Closed 2026-09-27 (A3): Figma Variant stays default|destructive (unchanged) with Size xl added; code's DialogVariant narrowed from modal|sheet|drawer to default|destructive (semantic marker via data-variant, no built-in recolor). DISC-020/021/022 closed by sync."
     },
     {
       "id": "DISC-009",
@@ -192,34 +192,40 @@
       "id": "DISC-020",
       "component": "Dialog",
       "side": "code",
-      "status": "open",
+      "status": "closed",
       "issue": "Code Connect maps Variant value(s) default that DialogVariant does not export.",
       "resolution": "add default to DialogVariant, or fix the Code Connect enum",
       "detectedBy": "sync:code-connect",
       "firstSeen": "2026-09-12T00:00:00.000Z",
-      "lastSeen": "2026-09-27T13:00:00.000Z"
+      "lastSeen": "2026-09-27T13:00:00.000Z",
+      "closedAt": "2026-09-27T13:00:00.000Z",
+      "closedBy": "sync:code-connect"
     },
     {
       "id": "DISC-021",
       "component": "Dialog",
       "side": "both",
-      "status": "open",
+      "status": "closed",
       "issue": "Variant mismatch — Figma: default, destructive · code: modal, sheet, drawer.",
       "resolution": "add default, destructive to DialogVariant; add Variant modal, sheet, drawer in Figma",
       "detectedBy": "sync:figma",
       "firstSeen": "2026-09-12T00:00:00.000Z",
-      "lastSeen": "2026-09-27T13:00:00.000Z"
+      "lastSeen": "2026-09-27T13:00:00.000Z",
+      "closedAt": "2026-09-27T13:00:00.000Z",
+      "closedBy": "sync:figma"
     },
     {
       "id": "DISC-022",
       "component": "Dialog",
       "side": "figma",
-      "status": "open",
+      "status": "closed",
       "issue": "Size mismatch — Figma: sm, md, lg, full · code: sm, md, lg, xl, full.",
       "resolution": "add Size xl in Figma",
       "detectedBy": "sync:figma",
       "firstSeen": "2026-09-12T00:00:00.000Z",
-      "lastSeen": "2026-09-27T13:00:00.000Z"
+      "lastSeen": "2026-09-27T13:00:00.000Z",
+      "closedAt": "2026-09-27T13:00:00.000Z",
+      "closedBy": "sync:figma"
     },
     {
       "id": "DISC-023",

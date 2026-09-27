@@ -1,7 +1,7 @@
 "use client"
 
 /**
- * Atlas Dialog — modal / sheet / drawer surface
+ * Atlas Dialog — centered modal surface
  *
  * Powered by @radix-ui/react-dialog for:
  *   - focus trap (Tab / Shift+Tab cycles inside content)
@@ -10,13 +10,18 @@
  *   - aria-modal, aria-labelledby, aria-describedby wiring
  *   - click-outside dismiss via onInteractOutside
  *
- * Variants:  modal (default) | sheet | drawer
+ * Variant is a semantic marker only (matches Figma `Variant`); it carries no
+ * built-in recolor — style the confirm action yourself (see Code Connect).
+ * Variants:  default | destructive
  * Sizes:     sm | md | lg | xl | full
+ *
+ * For an edge-anchored panel use the standalone Sheet or Drawer components
+ * instead — Dialog only ever renders the centered presentation.
  *
  * Compound API:
  *   <Dialog open onOpenChange={...}>
  *     <DialogTrigger asChild><Button>Open</Button></DialogTrigger>
- *     <DialogContent variant="modal" size="md">
+ *     <DialogContent variant="default" size="md">
  *       <DialogHeader>
  *         <DialogTitle>…</DialogTitle>
  *         <DialogDescription>…</DialogDescription>
@@ -52,9 +57,8 @@ function cx(...classes: (string | false | null | undefined)[]): string {
 
 /* ── Types ──────────────────────────────────────────────────────── */
 
-export type DialogVariant = "modal" | "sheet" | "drawer"
+export type DialogVariant = "default" | "destructive"
 export type DialogSize    = "sm" | "md" | "lg" | "xl" | "full"
-export type DialogSide    = "start" | "end"
 
 /* ── Dialog root ────────────────────────────────────────────────── */
 /*
@@ -106,16 +110,15 @@ export function DialogTrigger({ asChild = true, children }: DialogTriggerProps) 
 
 /* ── DialogContent ──────────────────────────────────────────────── */
 /*
- * Renders: Portal → Overlay → Content surface.
- * Variant / size classes applied here.
- * Sheet gets the drag handle at the top.
+ * Renders: Portal → Overlay → Content surface (centered modal only).
+ * `variant` is a semantic marker (data-variant) — no built-in recolor.
+ * Size classes applied here.
  */
 
 export interface DialogContentProps {
+  /** Semantic marker only (matches Figma `Variant`) — style the confirm action yourself */
   variant?:             DialogVariant
   size?:                DialogSize
-  /** Drawer only: which edge to slide from */
-  side?:                DialogSide
   id?:                  string
   closeOnEscape?:       boolean
   closeOnOverlayClick?: boolean
@@ -124,9 +127,8 @@ export interface DialogContentProps {
 }
 
 export function DialogContent({
-  variant             = "modal",
+  variant             = "default",
   size                = "md",
-  side                = "end",
   id,
   closeOnEscape       = true,
   closeOnOverlayClick = true,
@@ -135,7 +137,7 @@ export function DialogContent({
 }: DialogContentProps) {
   const contentClasses = cx(
     styles.content,
-    styles[variant],
+    styles.modal,
     size !== "md" && styles[size],
     className,
   )
@@ -149,17 +151,10 @@ export function DialogContent({
       <RadixDialog.Content
         id={id}
         className={contentClasses}
-        data-side={variant === "drawer" ? side : undefined}
+        data-variant={variant}
         onEscapeKeyDown={(e) => { if (!closeOnEscape) e.preventDefault() }}
         onInteractOutside={(e) => { if (!closeOnOverlayClick) e.preventDefault() }}
       >
-        {/* Drag handle — sheet only; visual affordance only (FIX BUG-037 + BUG-066)
-             Not interactive: close is via header × button or swipe gesture.
-             aria-hidden prevents screen readers from announcing the decoration. */}
-        {variant === "sheet" && (
-          <div className={styles.dragHandle} aria-hidden="true" />
-        )}
-
         {children}
       </RadixDialog.Content>
     </RadixDialog.Portal>

@@ -9,12 +9,10 @@ Interrupts the flow to ask for a decision or show focused content.
 <!-- BEGIN:generated-structure -->
 
 ## Variants (presentation)
-`modal` centred · `sheet` slides from an edge · `drawer` docked panel
-Figma: `default` · `destructive` — differs from code (see `state/discrepancies.json`).
+`default` · `destructive`
 
 ## Sizes
 `sm` · `md` · `lg` · `xl` · `full`
-Figma: `sm` · `md` · `lg` · `full` — differs from code (see `state/discrepancies.json`).
 
 <!-- END:generated-structure -->
 
@@ -60,7 +58,6 @@ import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, Dialog
 - ref: not forwarded — `ref` does not type-check; reach the element by `id`
 - `variant?: DialogVariant`
 - `size?: DialogSize`
-- `side?: DialogSide`
 - `id?: string`
 - `closeOnEscape?: boolean`
 - `closeOnOverlayClick?: boolean`

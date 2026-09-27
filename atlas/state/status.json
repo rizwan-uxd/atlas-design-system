@@ -19,7 +19,7 @@
     "Badge": { "parity": "open", "figmaMetadata": "none", "code": "scaffolded", "verifiedAt": null },
     "Alert": { "parity": "open", "figmaMetadata": "none", "code": "scaffolded", "verifiedAt": null },
     "Card": { "parity": "open", "figmaMetadata": "none", "code": "scaffolded", "verifiedAt": null },
-    "Dialog": { "parity": "open", "figmaMetadata": "none", "code": "scaffolded", "verifiedAt": null },
+    "Dialog": { "parity": "match", "figmaMetadata": "none", "code": "scaffolded", "verifiedAt": null },
     "Tabs": { "parity": "open", "figmaMetadata": "none", "code": "scaffolded", "verifiedAt": null },
     "NavBar": { "parity": "match", "figmaMetadata": "none", "code": "scaffolded", "verifiedAt": null },
     "Avatar": { "parity": "match", "figmaMetadata": "description-written", "code": "spec-complete", "verifiedAt": null },
