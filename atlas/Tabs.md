@@ -9,8 +9,7 @@ Switches between sibling views inside one screen, without navigating.
 <!-- BEGIN:generated-structure -->
 
 ## Variants
-`underline` content sections · `pills` compact, on subtle surfaces · `enclosed` boxed
-Figma: `line` · `pill` · `segmented` — differs from code (see `state/discrepancies.json`).
+`line` · `pill` · `segmented`
 
 ## Sizes
 `sm` · `md` · `lg`

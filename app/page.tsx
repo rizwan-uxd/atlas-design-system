@@ -1392,7 +1392,7 @@ export default function SandboxPage() {
           <div style={{ display: "flex", flexDirection: "column", gap: "var(--atlas-spacing-8)" }}>
 
             {/* 3 variants — md size */}
-            {(["underline", "pills", "enclosed"] as const).map(variant => (
+            {(["line", "pill", "segmented"] as const).map(variant => (
               <div key={variant}>
                 <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
                   {variant} · md · arrow keys · disabled tab skipped
@@ -1409,17 +1409,17 @@ export default function SandboxPage() {
               </div>
             ))}
 
-            {/* Sizes — underline */}
+            {/* Sizes — line */}
             <div>
               <p style={{ margin: "0 0 var(--atlas-spacing-3)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
-                Sizes — sm / md / lg (underline)
+                Sizes — sm / md / lg (line)
               </p>
               <div style={{ display: "flex", flexDirection: "column", gap: "var(--atlas-spacing-6)" }}>
                 {(["sm", "md", "lg"] as const).map(size => (
                   <div key={size}>
                     <p style={{ margin: "0 0 var(--atlas-spacing-1)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-subtle)" }}>{size}</p>
                     <Tabs
-                      variant="underline"
+                      variant="line"
                       size={size}
                       items={[
                         { id: `sz-${size}-a`, label: "First", content: <p style={{ margin: 0, fontSize: "var(--atlas-font-size-sm)", color: "var(--atlas-foreground-muted)" }}>Size {size} — First panel</p> },
@@ -1435,10 +1435,10 @@ export default function SandboxPage() {
             {/* With icon + badge in trigger */}
             <div>
               <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
-                Leading icon · trailing badge (pills)
+                Leading icon · trailing badge (pill)
               </p>
               <Tabs
-                variant="pills"
+                variant="pill"
                 items={[
                   {
                     id: "ib-inbox",
@@ -1466,10 +1466,10 @@ export default function SandboxPage() {
             {/* Manual activation mode */}
             <div>
               <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
-                Manual activation (enclosed) — arrow keys move focus, Enter/Space activates
+                Manual activation (segmented) — arrow keys move focus, Enter/Space activates
               </p>
               <Tabs
-                variant="enclosed"
+                variant="segmented"
                 activationMode="manual"
                 items={[
                   { id: "man-a", label: "Design", content: <p style={{ margin: 0, fontSize: "var(--atlas-font-size-sm)", color: "var(--atlas-foreground-muted)" }}>Design panel — press Enter or Space to activate a focused tab</p> },

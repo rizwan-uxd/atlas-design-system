@@ -5,10 +5,7 @@ import { Tabs } from "@atlas/ui-web/patterns/Tabs/Tabs"
  * Atlas Tabs — Code Connect
  * Figma node: 146:54
  *
- * Figma variant → React variant mapping:
- *   line      → "underline"
- *   pill      → "pills"
- *   segmented → "enclosed"
+ * Figma variant names now match React exactly (line | pill | segmented).
  */
 figma.connect(
   Tabs,
@@ -16,9 +13,9 @@ figma.connect(
   {
     props: {
       variant: figma.enum("Variant", {
-        line:      "underline",
-        pill:      "pills",
-        segmented: "enclosed",
+        line:      "line",
+        pill:      "pill",
+        segmented: "segmented",
       }),
       size: figma.enum("Size", {
         sm: "sm",

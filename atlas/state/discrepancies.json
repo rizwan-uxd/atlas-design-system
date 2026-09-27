@@ -72,10 +72,10 @@
     {
       "id": "DISC-009",
       "component": "Tabs",
-      "side": "code",
-      "status": "open",
+      "side": "closed",
+      "status": "closed",
       "issue": "Different names: underline/pills/enclosed vs line/pill/segmented; segmented is a restyle.",
-      "resolution": "rename to line|pill|segmented and restyle segmented — needs a visual decision"
+      "resolution": "Closed 2026-09-27 (A4): confirmed via Figma node inspection (145:117/119/123, segmented trigger) that segmented is a restyle, not a pure rename — 3 token deviations from code's enclosed: hover background-subtle→background-muted, selected background→surface (diverges from code in dark mode), corner radius radius-md-minus-a-step→flat radius-md. line/pill confirmed as pure renames (no fill deltas vs underline/pills). TabsVariant renamed line|pill|segmented; app/page.tsx call sites and Code Connect updated. DISC-023/024 closed by sync."
     },
     {
       "id": "DISC-010",
@@ -231,23 +231,27 @@
       "id": "DISC-023",
       "component": "Tabs",
       "side": "code",
-      "status": "open",
+      "status": "closed",
       "issue": "Code Connect maps Variant value(s) line, pill, segmented that TabsVariant does not export.",
       "resolution": "add line, pill, segmented to TabsVariant, or fix the Code Connect enum",
       "detectedBy": "sync:code-connect",
       "firstSeen": "2026-09-12T00:00:00.000Z",
-      "lastSeen": "2026-09-27T13:00:00.000Z"
+      "lastSeen": "2026-09-27T13:00:00.000Z",
+      "closedAt": "2026-09-27T13:00:00.000Z",
+      "closedBy": "sync:code-connect"
     },
     {
       "id": "DISC-024",
       "component": "Tabs",
       "side": "both",
-      "status": "open",
+      "status": "closed",
       "issue": "Variant mismatch — Figma: line, pill, segmented · code: underline, pills, enclosed.",
       "resolution": "add line, pill, segmented to TabsVariant; add Variant underline, pills, enclosed in Figma",
       "detectedBy": "sync:figma",
       "firstSeen": "2026-09-12T00:00:00.000Z",
-      "lastSeen": "2026-09-27T13:00:00.000Z"
+      "lastSeen": "2026-09-27T13:00:00.000Z",
+      "closedAt": "2026-09-27T13:00:00.000Z",
+      "closedBy": "sync:figma"
     },
     {
       "id": "DISC-025",
