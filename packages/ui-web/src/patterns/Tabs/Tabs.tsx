@@ -12,14 +12,14 @@
  *   - aria-selected per trigger
  *   - Automatic (focus = activate) or manual (Enter/Space) activation
  *
- * Variants:  underline (default) | pills | enclosed
+ * Variants:  line (default) | pill | segmented
  * Sizes:     sm | md | lg
  *
  * Two usage patterns:
  *
  * 1. Array API (shorthand):
  *   <Tabs
- *     variant="underline" size="md"
+ *     variant="line" size="md"
  *     items={[
  *       { id: "one", label: "Overview", content: <p>…</p> },
  *       { id: "two", label: "Details",  content: <p>…</p>, badge: <Badge>3</Badge> },
@@ -27,7 +27,7 @@
  *   />
  *
  * 2. Compound API (full control):
- *   <Tabs.Root variant="underline" size="md" defaultValue="one">
+ *   <Tabs.Root variant="line" size="md" defaultValue="one">
  *     <Tabs.List aria-label="Account settings">
  *       <Tabs.Trigger value="one">Overview</Tabs.Trigger>
  *       <Tabs.Trigger value="two" badge={<Badge>3</Badge>}>Details</Tabs.Trigger>
@@ -51,7 +51,7 @@ function cx(...classes: (string | false | null | undefined)[]): string {
 
 /* ── Types ──────────────────────────────────────────────────────── */
 
-export type TabsVariant = "underline" | "pills" | "enclosed"
+export type TabsVariant = "line" | "pill" | "segmented"
 export type TabsSize    = "sm" | "md" | "lg"
 
 export interface TabItem {
@@ -81,7 +81,7 @@ export interface TabsRootProps {
 }
 
 export function TabsRoot({
-  variant        = "underline",
+  variant        = "line",
   size           = "md",
   value,
   defaultValue,
@@ -257,7 +257,7 @@ export interface TabsProps extends TabsRootProps {
 }
 
 function TabsBase({
-  variant        = "underline",
+  variant        = "line",
   size           = "md",
   items,
   value,

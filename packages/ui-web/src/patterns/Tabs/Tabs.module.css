@@ -43,15 +43,15 @@
   display: none;
 }
 
-/* Underline list */
-.underline .list {
+/* Line list */
+.line .list {
   position: relative; /* FIX BUG-039: anchor for ::after indicator */
   border-block-end: var(--atlas-border-width-1) solid var(--atlas-border);
   gap: 0;
 }
 
 /* FIX BUG-039: sliding underline indicator via CSS custom properties set by JS */
-.underline .list::after {
+.line .list::after {
   content: "";
   position: absolute;
   inset-block-end: calc(-1 * var(--atlas-border-width-1)); /* overlap list border */
@@ -67,13 +67,13 @@
   pointer-events: none;
 }
 
-/* Pills list */
-.pills .list {
+/* Pill list */
+.pill .list {
   gap: var(--atlas-spacing-1);
 }
 
-/* Enclosed list */
-.enclosed .list {
+/* Segmented list */
+.segmented .list {
   background-color: var(--atlas-background-muted);
   border-radius: var(--atlas-radius-md);
   padding: var(--atlas-spacing-1);
@@ -131,78 +131,81 @@
   }
 }
 
-/* ── Underline variant triggers ───────────────────────────────── */
+/* ── Line variant triggers ────────────────────────────────────── */
 /*
   FIX BUG-039: active border-block-end-color set to transparent — the
   sliding ::after indicator on .list handles the active underline.
 */
 
-.underline .trigger {
+.line .trigger {
   color: var(--atlas-foreground-muted);
   border-block-end: var(--atlas-border-width-2) solid transparent;
   margin-block-end: calc(-1 * var(--atlas-border-width-1));
   border-radius: 0;
 }
 
-.underline .trigger:hover:not([data-disabled]) {
+.line .trigger:hover:not([data-disabled]) {
   color: var(--atlas-foreground);
 }
 
 /* FIX BUG-042: :active pressed state */
-.underline .trigger:active:not([data-disabled]) {
+.line .trigger:active:not([data-disabled]) {
   color: var(--atlas-foreground);
 }
 
-.underline .trigger[data-state="active"] {
+.line .trigger[data-state="active"] {
   color: var(--atlas-foreground);
   border-block-end-color: transparent; /* indicator ::after handles this */
   font-weight: var(--atlas-font-weight-semibold);
 }
 
-/* ── Pills variant triggers ───────────────────────────────────── */
+/* ── Pill variant triggers ────────────────────────────────────── */
 
-.pills .trigger {
+.pill .trigger {
   color: var(--atlas-foreground-muted);
   border-radius: var(--atlas-radius-md);
 }
 
-.pills .trigger:hover:not([data-disabled]) {
+.pill .trigger:hover:not([data-disabled]) {
   background-color: var(--atlas-background-subtle);
   color: var(--atlas-foreground);
 }
 
 /* FIX BUG-042: :active pressed state */
-.pills .trigger:active:not([data-disabled]) {
+.pill .trigger:active:not([data-disabled]) {
   background-color: var(--atlas-background-subtle);
   color: var(--atlas-foreground);
 }
 
-.pills .trigger[data-state="active"] {
+.pill .trigger[data-state="active"] {
   background-color: var(--atlas-primary);
   color: var(--atlas-primary-foreground);
 }
 
-/* ── Enclosed variant triggers ────────────────────────────────── */
+/* ── Segmented variant triggers ───────────────────────────────── */
+/* Figma segmented trigger: flat radius-md (not radius-md minus a step),
+   hover = background-muted, selected = surface (diverges from background
+   in dark mode) — verified against the Figma node during the A4 audit. */
 
-.enclosed .trigger {
+.segmented .trigger {
   color: var(--atlas-foreground-muted);
-  border-radius: calc(var(--atlas-radius-md) - var(--atlas-spacing-0_5));
+  border-radius: var(--atlas-radius-md);
   flex: 1;
 }
 
-.enclosed .trigger:hover:not([data-disabled]) {
-  background-color: var(--atlas-background-subtle);
+.segmented .trigger:hover:not([data-disabled]) {
+  background-color: var(--atlas-background-muted);
   color: var(--atlas-foreground);
 }
 
 /* FIX BUG-042: :active pressed state */
-.enclosed .trigger:active:not([data-disabled]) {
-  background-color: var(--atlas-background-subtle);
+.segmented .trigger:active:not([data-disabled]) {
+  background-color: var(--atlas-background-muted);
   color: var(--atlas-foreground);
 }
 
-.enclosed .trigger[data-state="active"] {
-  background-color: var(--atlas-background);
+.segmented .trigger[data-state="active"] {
+  background-color: var(--atlas-surface);
   color: var(--atlas-foreground);
   box-shadow: var(--atlas-shadow-sm);
 }
@@ -234,7 +237,7 @@
     transition: none;
   }
   /* Instant indicator jump under reduced motion */
-  .underline .list::after {
+  .line .list::after {
     transition: none;
   }
 }
