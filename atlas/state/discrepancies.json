@@ -16,10 +16,10 @@
     {
       "id": "DISC-002",
       "component": "Textarea",
-      "side": "code",
-      "status": "open",
+      "side": "closed",
+      "status": "closed",
       "issue": "Figma has Variant `unstyled`; code has only default and filled.",
-      "resolution": "add `unstyled` to TextareaVariant"
+      "resolution": "Closed 2026-09-27 (A8): code-only fix, Figma already had unstyled. TextareaVariant +unstyled. Modeled directly off Figma's per-state rendering (not assumed from Input's existing unstyled, which differs): transparent bg, no border at rest; a full 1px border (not Input's bottom-only) appears on focus (primary) and error (danger), no separate outline ring — the border is the sole focus indicator, matching Input's 'no ring for unstyled' principle. Disabled stays transparent."
     },
     {
       "id": "DISC-003",
@@ -100,12 +100,14 @@
       "id": "DISC-012",
       "component": "Textarea",
       "side": "code",
-      "status": "open",
+      "status": "closed",
       "issue": "Variant mismatch — Figma: default, filled, unstyled · code: default, filled.",
       "resolution": "add unstyled to TextareaVariant",
       "detectedBy": "sync:figma",
       "firstSeen": "2026-09-12T00:00:00.000Z",
-      "lastSeen": "2026-09-27T17:00:00.000Z"
+      "lastSeen": "2026-09-27T17:00:00.000Z",
+      "closedAt": "2026-09-27T17:00:00.000Z",
+      "closedBy": "sync:figma"
     },
     {
       "id": "DISC-013",

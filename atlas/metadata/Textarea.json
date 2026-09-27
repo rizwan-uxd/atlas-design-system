@@ -3,7 +3,7 @@
   "name": "Textarea",
   "tier": "primitives",
   "import": "@atlas/ui-web/primitives/Textarea/Textarea",
-  "variants": ["default", "filled"],
+  "variants": ["default", "filled", "unstyled"],
   "sizes": ["sm", "md", "lg"],
   "props": [
     { "name": "variant", "required": false, "type": "TextareaVariant" },

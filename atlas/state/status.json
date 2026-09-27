@@ -13,7 +13,7 @@
     "Button": { "parity": "match", "figmaMetadata": "none", "code": "scaffolded", "verifiedAt": null },
     "Input": { "parity": "match", "figmaMetadata": "none", "code": "scaffolded", "verifiedAt": null },
     "Label": { "parity": "open", "figmaMetadata": "none", "code": "scaffolded", "verifiedAt": null },
-    "Textarea": { "parity": "open", "figmaMetadata": "none", "code": "scaffolded", "verifiedAt": null },
+    "Textarea": { "parity": "match", "figmaMetadata": "none", "code": "scaffolded", "verifiedAt": null },
     "Checkbox": { "parity": "code-applied", "figmaMetadata": "description-written", "code": "scaffolded", "verifiedAt": null },
     "Switch": { "parity": "match", "figmaMetadata": "none", "code": "scaffolded", "verifiedAt": "2026-09-15T03:06:01.319Z" },
     "Badge": { "parity": "match", "figmaMetadata": "none", "code": "scaffolded", "verifiedAt": null },

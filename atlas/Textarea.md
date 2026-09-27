@@ -9,8 +9,7 @@ Multi-line text entry with optional character counter.
 <!-- BEGIN:generated-structure -->
 
 ## Variants
-`default` bordered · `filled` on subtle surfaces
-Figma: `default` · `filled` · `unstyled` — differs from code (see `state/discrepancies.json`).
+`default` bordered · `filled` on subtle surfaces · `unstyled`
 
 ## Sizes
 `sm` · `md` · `lg`

@@ -141,6 +141,37 @@
   background-color: var(--atlas-background-muted);
 }
 
+/* ── Variant: unstyled ────────────────────────────────────────── */
+/*
+  No background, no visible border at rest. A full 1px border appears
+  only on focus/error — the border IS the focus indicator, no separate
+  outline ring (per Figma; the border width is reserved at rest via a
+  transparent border so it doesn't shift layout when it appears).
+*/
+
+.unstyled .textarea {
+  background-color: transparent;
+  border-color: transparent;
+  border-radius: var(--atlas-radius-none);
+}
+
+.unstyled .textarea:hover:not(:disabled):not([readonly]):not([aria-invalid="true"]) {
+  border-color: transparent;
+}
+
+.unstyled .textarea:focus-visible {
+  outline: none;
+  border-color: var(--atlas-primary);
+}
+
+.unstyled .textarea[aria-invalid="true"] {
+  border-color: var(--atlas-danger);
+}
+
+.unstyled .textarea:disabled {
+  background-color: transparent;
+}
+
 /* ── Character counter ────────────────────────────────────────── */
 
 .counter {
