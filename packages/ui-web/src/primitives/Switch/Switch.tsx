@@ -3,7 +3,7 @@
 /**
  * Atlas Switch — canonical reference component
  *
- * Sizes:   sm | md
+ * Sizes:   sm | md | lg
  * States:  default · hover · focus-visible · active · disabled
  *
  * Accessibility:
@@ -14,9 +14,8 @@
  *   - aria-required="true" when required=true
  *   - aria-disabled="true" when disabled (keeps focus target; pointer-events
  *     suppressed via CSS so mouse clicks are blocked)
- *   - aria-invalid="true" when invalid prop is set. Figma's State property has
- *     no "invalid" value for Switch, so this is announced to AT but carries no
- *     visual treatment yet — open design decision, see DISC-028.
+ *   - aria-invalid="true" when invalid prop is set, with a matching danger-ring
+ *     visual (Figma `Invalid` boolean property, DISC-028)
  *   - Focus ring via CSS :focus-visible; never suppressed
  *   - Dev-mode warning fires when no accessible name is detectable
  *
@@ -28,7 +27,7 @@ import styles from "./Switch.module.css"
 
 /* ── Types ──────────────────────────────────────────────────── */
 
-export type SwitchSize = "sm" | "md"
+export type SwitchSize = "sm" | "md" | "lg"
 
 export interface SwitchProps
   extends Omit<
@@ -40,7 +39,7 @@ export interface SwitchProps
   defaultChecked?: boolean
   onCheckedChange?: (checked: boolean) => void
   disabled?: boolean
-  /** Sets aria-invalid; no visual treatment yet (no Figma State=invalid) */
+  /** Sets aria-invalid and shows a danger-toned ring (Figma `Invalid` boolean) */
   invalid?: boolean
   /** Shows a visible label linked via aria-labelledby */
   label?: React.ReactNode
