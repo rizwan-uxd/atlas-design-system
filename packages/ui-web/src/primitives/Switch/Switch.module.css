@@ -88,6 +88,15 @@
   outline-offset: var(--atlas-spacing-0_5);
 }
 
+/* ── Invalid (Figma `Invalid` boolean property, DISC-028) ───────── */
+/* Danger-toned ring, matching Figma's outset ring on the track.
+   Suppressed under :focus-visible so the focus ring always wins. */
+
+.track[data-invalid]:not(:focus-visible) {
+  outline: var(--atlas-border-width-2) solid var(--atlas-danger);
+  outline-offset: var(--atlas-spacing-0_5);
+}
+
 /* ── Touch target expansion (BUG-060) ────────────────────────── */
 /*
   The visual track is 18px (sm) or 24px (md) — both below the 44px
@@ -107,16 +116,19 @@
 
 /* ── Sizes ────────────────────────────────────────────────────── */
 /*
-  Spec (Figma Switch 95:114, 2026-09-15):
+  Spec (Figma Switch 95:114, 2026-09-27, DISC-014):
     sm: 28 × 16 px   thumb: 12 × 12 px   checked translate: 12 px
     md: 36 × 20 px   thumb: 16 × 16 px   checked translate: 16 px
+    lg: 44 × 24 px   thumb: 20 × 20 px   checked translate: 20 px
 
   Token map:
     28 px = spacing-6(24) + spacing-1(4) = calc  (sm track width)
     --atlas-spacing-4      = 16 px  (sm track height; md thumb; md checked translate)
     --atlas-spacing-3      = 12 px  (sm thumb; sm checked translate)
     --atlas-spacing-9      = 36 px  (md track width)
-    --atlas-spacing-5      = 20 px  (md track height)
+    --atlas-spacing-5      = 20 px  (md track height; lg thumb; lg checked translate)
+    44 px = spacing-10(40) + spacing-1(4) = calc  (lg track width)
+    --atlas-spacing-6      = 24 px  (lg track height)
     --atlas-spacing-0_5    = 2 px   (inset on each side)
 */
 
@@ -128,6 +140,11 @@
 .md {
   width: var(--atlas-spacing-9);  /* 36 px */
   height: var(--atlas-spacing-5); /* 20 px */
+}
+
+.lg {
+  width: calc(var(--atlas-spacing-10) + var(--atlas-spacing-1)); /* 44 px */
+  height: var(--atlas-spacing-6);                                /* 24 px */
 }
 
 /* ── Thumb ────────────────────────────────────────────────────── */
@@ -163,6 +180,11 @@
   height: var(--atlas-spacing-4); /* 16 px */
 }
 
+.lg .thumb {
+  width: var(--atlas-spacing-5);  /* 20 px */
+  height: var(--atlas-spacing-5); /* 20 px */
+}
+
 /*
   Checked — slide thumb toward inline-end.
   translate = track-width − thumb-width − 2×inset
@@ -177,6 +199,10 @@
   transform: translateX(var(--atlas-spacing-4));
 }
 
+.lg[data-state="checked"] .thumb {
+  transform: translateX(var(--atlas-spacing-5));
+}
+
 /* RTL — negate the translate */
 [dir="rtl"] .sm[data-state="checked"] .thumb {
   transform: translateX(calc(-1 * var(--atlas-spacing-3)));
@@ -184,6 +210,10 @@
 
 [dir="rtl"] .md[data-state="checked"] .thumb {
   transform: translateX(calc(-1 * var(--atlas-spacing-4)));
+}
+
+[dir="rtl"] .lg[data-state="checked"] .thumb {
+  transform: translateX(calc(-1 * var(--atlas-spacing-5)));
 }
 
 /* ── Reduced motion ───────────────────────────────────────────── */

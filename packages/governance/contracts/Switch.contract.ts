@@ -5,7 +5,7 @@
 import type { SwitchProps, SwitchSize } from "@atlas/ui-web/primitives/Switch/Switch"
 import type React from "react"
 
-type AssertSwitchSize = SwitchSize extends "sm" | "md"
+type AssertSwitchSize = SwitchSize extends "sm" | "md" | "lg"
   ? true : false
 const _s: AssertSwitchSize = true; void _s
 

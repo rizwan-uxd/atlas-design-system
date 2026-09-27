@@ -366,6 +366,7 @@ export default function SandboxPage() {
             <Row>
               <Switch size="sm" label="Small switch" />
               <Switch size="md" label="Medium switch" />
+              <Switch size="lg" label="Large switch" />
             </Row>
             <Switch
               checked={switchOn}
@@ -374,6 +375,8 @@ export default function SandboxPage() {
               description="Toggle to enable or disable push notifications"
             />
             <Switch disabled label="Disabled switch" />
+            <Switch invalid label="Invalid switch" description="Required setting" />
+            <Switch invalid defaultChecked label="Invalid switch (checked)" />
           </div>
         </Section>
 

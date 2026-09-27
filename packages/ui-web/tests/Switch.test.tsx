@@ -3,7 +3,7 @@
  *
  * Coverage:
  *   1. Renders default, role=switch + aria-checked
- *   2. Size matrix — sm, md
+ *   2. Size matrix — sm, md, lg
  *   3. Keyboard activation — Space and Enter toggle; click toggles
  *   4. Focus-visible ring on the track
  *   5. Disabled state — blocks interaction, aria-disabled set
@@ -22,7 +22,7 @@ import { Switch, type SwitchSize } from "@atlas/ui-web/primitives/Switch/Switch"
 
 // ─── Fixtures ──────────────────────────────────────────────────────────────
 
-const SIZES: SwitchSize[] = ["sm", "md"]
+const SIZES: SwitchSize[] = ["sm", "md", "lg"]
 
 // ─── 1. Default render ─────────────────────────────────────────────────────
 
@@ -125,6 +125,16 @@ describe("Switch — invalid state", () => {
   it("does not set aria-invalid by default", () => {
     render(<Switch label="Wi-Fi" />)
     expect(screen.getByRole("switch")).not.toHaveAttribute("aria-invalid")
+  })
+
+  it("sets data-invalid when invalid", () => {
+    render(<Switch label="Wi-Fi" invalid />)
+    expect(screen.getByRole("switch")).toHaveAttribute("data-invalid", "true")
+  })
+
+  it("does not set data-invalid by default", () => {
+    render(<Switch label="Wi-Fi" />)
+    expect(screen.getByRole("switch")).not.toHaveAttribute("data-invalid")
   })
 })
 
