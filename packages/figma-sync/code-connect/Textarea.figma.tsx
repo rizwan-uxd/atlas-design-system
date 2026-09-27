@@ -6,7 +6,7 @@ figma.connect(
   "https://www.figma.com/design/cKYhfaHLCoyMHi9nKr63Ig/Atlas-Design-System?node-id=66-24",
   {
     props: {
-      variant:  figma.enum("Variant", { default: "default", filled: "filled" }),
+      variant:  figma.enum("Variant", { default: "default", filled: "filled", unstyled: "unstyled" }),
       size:     figma.enum("Size",    { sm: "sm", md: "md", lg: "lg" }),
       invalid:  figma.enum("State",   { error: true }),
       disabled: figma.enum("State",   { disabled: true }),

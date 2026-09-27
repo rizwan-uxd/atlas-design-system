@@ -3,7 +3,7 @@
 /**
  * Atlas Textarea — multi-line text entry
  *
- * Variants:  default | filled
+ * Variants:  default | filled | unstyled
  * Sizes:     sm | md | lg
  * States:    default · hover · focus-visible · disabled · readonly · error
  *
@@ -24,7 +24,7 @@ import styles from "./Textarea.module.css"
 
 /* ── Types ──────────────────────────────────────────────────── */
 
-export type TextareaVariant = "default" | "filled"
+export type TextareaVariant = "default" | "filled" | "unstyled"
 export type TextareaSize = "sm" | "md" | "lg"
 export type TextareaResize = "none" | "vertical" | "both"
 

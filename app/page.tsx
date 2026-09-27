@@ -296,6 +296,14 @@ export default function SandboxPage() {
                 <Textarea id="ta5" autoGrow maxRows={6} placeholder="Grows as you type…" />
               </div>
             </div>
+
+            {/* Unstyled — no chrome at rest, border appears only on focus/error */}
+            <div>
+              <Label htmlFor="ta6">Unstyled (border only on focus/error)</Label>
+              <div style={{ marginTop: "var(--atlas-spacing-1)" }}>
+                <Textarea id="ta6" variant="unstyled" placeholder="No chrome until focused…" />
+              </div>
+            </div>
           </div>
         </Section>
 

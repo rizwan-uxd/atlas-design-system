@@ -9,7 +9,7 @@ One line per component. Read `atlas/<Name>.md` only for the components you will 
 | Button | primitives | `@atlas/ui-web/primitives/Button/Button` | primary, secondary, outline, ghost, destructive, link | xs, sm, md, lg |
 | Input | primitives | `@atlas/ui-web/primitives/Input/Input` | default, filled, unstyled | sm, md, lg |
 | Label | primitives | `@atlas/ui-web/primitives/Label/Label` | default, inline | sm, md, lg |
-| Textarea | primitives | `@atlas/ui-web/primitives/Textarea/Textarea` | default, filled | sm, md, lg |
+| Textarea | primitives | `@atlas/ui-web/primitives/Textarea/Textarea` | default, filled, unstyled | sm, md, lg |
 | Checkbox | primitives | `@atlas/ui-web/primitives/Checkbox/Checkbox` | default, card | sm, md, lg |
 | Switch | primitives | `@atlas/ui-web/primitives/Switch/Switch` | — | sm, md, lg |
 | Badge | primitives | `@atlas/ui-web/primitives/Badge/Badge` | neutral, primary, success, warning, danger, info | sm, md, lg |

@@ -4,7 +4,7 @@
 
 import type { TextareaProps, TextareaVariant, TextareaSize, TextareaResize } from "@atlas/ui-web/primitives/Textarea/Textarea"
 
-type AssertTextareaVariant = TextareaVariant extends "default" | "filled"
+type AssertTextareaVariant = TextareaVariant extends "default" | "filled" | "unstyled"
   ? true : false
 const _v: AssertTextareaVariant = true; void _v
 
