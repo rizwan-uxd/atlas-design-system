@@ -6,11 +6,11 @@ import { Button } from "@atlas/ui-web/primitives/Button/Button"
  * Atlas NavBar — Code Connect
  * Figma node: 148:306
  *
- * Figma variant → React variant mapping:
- *   default  → "default"
- *   bordered → "default"   (bordered is a Figma presentation detail;
- *                            code controls border via CSS token)
- *   floating → "elevated"  (floating uses the elevated surface token)
+ * Figma variant → React variant mapping (DISC-010/025/026, 2026-09-27):
+ *   default     → "default"
+ *   bordered    → "bordered"
+ *   floating    → "floating"
+ *   transparent → "transparent"
  */
 figma.connect(
   NavBar,
@@ -18,9 +18,10 @@ figma.connect(
   {
     props: {
       variant: figma.enum("Variant", {
-        default:  "default",
-        bordered: "default",
-        floating: "elevated",
+        default:     "default",
+        bordered:    "bordered",
+        floating:    "floating",
+        transparent: "transparent",
       }),
       size: figma.enum("Size", {
         sm: "sm",
