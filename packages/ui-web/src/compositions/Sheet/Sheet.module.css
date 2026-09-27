@@ -1,0 +1,183 @@
+/* =================================================================
+   Atlas Sheet — component styles
+   Lifted from Dialog.module.css's shipped .overlay / .content / .sheet
+   rules (Dialog kept those internal, undocumented in Figma; Sheet is
+   the Figma-designed, standalone home for that visual language now,
+   extended from bottom-only to all 4 edges).
+   All values reference semantic tokens only.
+   ================================================================= */
+
+/* ── Overlay ──────────────────────────────────────────────────── */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--atlas-z-overlay);
+  background-color: color-mix(in oklch, var(--atlas-overlay) 65%, transparent);
+}
+
+.overlay[data-state="open"] {
+  animation: overlayShow var(--atlas-duration-fast) var(--atlas-easing-standard);
+}
+
+.overlay[data-state="closed"] {
+  animation: overlayHide var(--atlas-duration-fast) var(--atlas-easing-exit);
+}
+
+@keyframes overlayShow {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes overlayHide {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+/* ── Content base ─────────────────────────────────────────────── */
+
+.content {
+  --_pad: var(--atlas-spacing-6);        /* overridden by size variants, start/end only */
+  --_max-w: var(--atlas-dialog-md);      /* overridden by size variants, start/end only */
+
+  position: fixed;
+  z-index: var(--atlas-z-modal);
+  background-color: var(--atlas-surface-overlay);
+  border: var(--atlas-border-width-1) solid var(--atlas-border);
+  box-shadow: var(--atlas-shadow-xl);
+  font-family: var(--atlas-font-sans);
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+  outline: none; /* focus ring suppressed; Radix manages focus trap */
+}
+
+/* ── Size tokens (start/end only) ─────────────────────────────── */
+
+.sm  { --_pad: var(--atlas-spacing-4); --_max-w: var(--atlas-dialog-sm); }
+/* .md is the default (--_pad: spacing-6, --_max-w: atlas-dialog-md) */
+.lg  { --_pad: var(--atlas-spacing-6); --_max-w: var(--atlas-dialog-lg); }
+.xl  { --_pad: var(--atlas-spacing-8); --_max-w: var(--atlas-dialog-xl); }
+.full { --_pad: var(--atlas-spacing-6); --_max-w: 100vw; }
+
+/* ── Bottom / Top — full inline width, block-anchored ─────────── */
+/*
+  FIX BUG-036: physical left/right/bottom → logical inset-inline/inset-block-*
+  FIX BUG-071: safe-area padding for iOS home indicator / status bar
+*/
+
+.content[data-side="bottom"],
+.content[data-side="top"] {
+  inset-inline: 0;
+  width: 100%;
+  max-width: 100%;
+  max-height: 85vh;
+}
+
+.content[data-side="bottom"] {
+  inset-block-end: 0;
+  border-radius: var(--atlas-radius-lg) var(--atlas-radius-lg) 0 0;
+  padding-block-end: var(--atlas-safe-bottom); /* FIX BUG-071 */
+}
+
+.content[data-side="top"] {
+  inset-block-start: 0;
+  border-radius: 0 0 var(--atlas-radius-lg) var(--atlas-radius-lg);
+  padding-block-start: var(--atlas-safe-top);
+}
+
+.content[data-side="bottom"][data-state="open"] {
+  animation: sheetBottomShow var(--atlas-duration-base) var(--atlas-easing-emphasized);
+}
+
+.content[data-side="bottom"][data-state="closed"] {
+  animation: sheetBottomHide var(--atlas-duration-base) var(--atlas-easing-exit);
+}
+
+.content[data-side="top"][data-state="open"] {
+  animation: sheetTopShow var(--atlas-duration-base) var(--atlas-easing-emphasized);
+}
+
+.content[data-side="top"][data-state="closed"] {
+  animation: sheetTopHide var(--atlas-duration-base) var(--atlas-easing-exit);
+}
+
+@keyframes sheetBottomShow { from { opacity: 0; transform: translateY(100%); } to { opacity: 1; transform: translateY(0); } }
+@keyframes sheetBottomHide { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(100%); } }
+@keyframes sheetTopShow    { from { opacity: 0; transform: translateY(-100%); } to { opacity: 1; transform: translateY(0); } }
+@keyframes sheetTopHide    { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(-100%); } }
+
+/* ── Start / End — full block height, inline-anchored ─────────── */
+/*
+  Same geometry as Drawer (data-side="start" | "end"): the flush edge
+  (against the viewport) stays square, the free edge gets the hinge-corner
+  radius. FIX BUG-062: physical top/bottom → logical inset-block-*.
+  FIX BUG-072: safe-area padding for device status bar / home indicator.
+*/
+
+.content[data-side="start"],
+.content[data-side="end"] {
+  inset-block: 0;
+  width: min(var(--_max-w), 100vw);
+  max-height: 100vh;
+  padding-block-start: var(--atlas-safe-top);
+}
+
+.content[data-side="end"] {
+  inset-inline-end: 0;
+  border-start-start-radius: var(--atlas-radius-lg);
+  border-end-start-radius: var(--atlas-radius-lg);
+  padding-inline-end: var(--atlas-safe-inline-end);
+}
+
+.content[data-side="start"] {
+  inset-inline-start: 0;
+  border-start-end-radius: var(--atlas-radius-lg);
+  border-end-end-radius: var(--atlas-radius-lg);
+  padding-inline-start: var(--atlas-safe-inline-start);
+}
+
+.content[data-side="end"][data-state="open"] {
+  animation: sheetEndShow var(--atlas-duration-base) var(--atlas-easing-emphasized);
+}
+
+.content[data-side="end"][data-state="closed"] {
+  animation: sheetEndHide var(--atlas-duration-base) var(--atlas-easing-exit);
+}
+
+.content[data-side="start"][data-state="open"] {
+  animation: sheetStartShow var(--atlas-duration-base) var(--atlas-easing-emphasized);
+}
+
+.content[data-side="start"][data-state="closed"] {
+  animation: sheetStartHide var(--atlas-duration-base) var(--atlas-easing-exit);
+}
+
+@keyframes sheetEndShow   { from { opacity: 0; transform: translateX(100%); } to { opacity: 1; transform: translateX(0); } }
+@keyframes sheetEndHide   { from { opacity: 1; transform: translateX(0); } to { opacity: 0; transform: translateX(100%); } }
+@keyframes sheetStartShow { from { opacity: 0; transform: translateX(-100%); } to { opacity: 1; transform: translateX(0); } }
+@keyframes sheetStartHide { from { opacity: 1; transform: translateX(0); } to { opacity: 0; transform: translateX(-100%); } }
+
+/* ── Reduced motion ───────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .overlay,
+  .content {
+    animation: none !important;
+  }
+}
+
+/* ── Drag handle (bottom only) ─────────────────────────────────── */
+/*
+  36px wide × 4px tall pill centred at top of the sheet.
+  Visual affordance only — no interactive role (BUG-037/BUG-066 precedent).
+*/
+
+.dragHandle {
+  width: var(--atlas-spacing-9);   /* 36px */
+  height: var(--atlas-spacing-1);  /* 4px */
+  border-radius: var(--atlas-radius-full);
+  background-color: var(--atlas-border-strong);
+  margin: var(--atlas-spacing-2) auto 0;
+  flex-shrink: 0;
+}
