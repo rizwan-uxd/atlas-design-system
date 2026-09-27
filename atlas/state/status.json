@@ -33,6 +33,7 @@
     "Progress": { "parity": "match", "figmaMetadata": "description-written", "code": "spec-complete", "verifiedAt": null },
     "RadioGroup": { "parity": "match", "figmaMetadata": "description-written", "code": "spec-complete", "verifiedAt": null },
     "Slider": { "parity": "match", "figmaMetadata": "description-written", "code": "spec-complete", "verifiedAt": null },
-    "Drawer": { "parity": "match", "figmaMetadata": "description-written", "code": "spec-complete", "verifiedAt": null }
+    "Drawer": { "parity": "match", "figmaMetadata": "description-written", "code": "spec-complete", "verifiedAt": null },
+    "Sheet": { "parity": "match", "figmaMetadata": "description-written", "code": "spec-complete", "verifiedAt": null }
   }
 }

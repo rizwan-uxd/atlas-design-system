@@ -21,6 +21,7 @@ import { Alert } from "@atlas/ui-web/compositions/Alert/Alert"
 import { ListItem, ListItemMedia, ListItemContent, ListItemTitle, ListItemDescription, ListItemActions } from "@atlas/ui-web/compositions/ListItem/ListItem"
 import { Dialog, DialogContent, DialogTrigger, DialogHeader, DialogTitle, DialogDescription, DialogBody, DialogFooter, DialogClose } from "@atlas/ui-web/compositions/Dialog/Dialog"
 import { Drawer, DrawerContent, DrawerTrigger, DrawerHeader, DrawerTitle, DrawerDescription, DrawerBody, DrawerFooter, DrawerClose } from "@atlas/ui-web/compositions/Drawer/Drawer"
+import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle, SheetDescription, SheetBody, SheetFooter, SheetClose } from "@atlas/ui-web/compositions/Sheet/Sheet"
 import { Tabs } from "@atlas/ui-web/patterns/Tabs/Tabs"
 import {
   Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbPage,
@@ -793,30 +794,30 @@ export default function SandboxPage() {
               </Row>
             </div>
 
-            {/* Sheet variant */}
+            {/* Sheet — standalone component, compositions/Sheet/Sheet */}
             <div>
               <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase", letterSpacing: "0.06em" }}>Sheet — slides up from bottom · drag handle closes</p>
               <Row>
-                <Dialog open={sheetOpen} onOpenChange={setSheetOpen}>
-                  <DialogTrigger asChild>
+                <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
+                  <SheetTrigger asChild>
                     <Button variant="outline">Open sheet</Button>
-                  </DialogTrigger>
-                  <DialogContent variant="sheet">
-                    <DialogHeader>
-                      <DialogTitle>Sheet title</DialogTitle>
-                      <DialogDescription>Slides up from the bottom. Tap the handle or press Esc to dismiss.</DialogDescription>
-                    </DialogHeader>
-                    <DialogBody>
+                  </SheetTrigger>
+                  <SheetContent side="bottom">
+                    <SheetHeader>
+                      <SheetTitle>Sheet title</SheetTitle>
+                      <SheetDescription>Slides up from the bottom. Tap the handle or press Esc to dismiss.</SheetDescription>
+                    </SheetHeader>
+                    <SheetBody>
                       <p style={{ margin: 0, fontSize: "var(--atlas-font-size-sm)", color: "var(--atlas-foreground-muted)", lineHeight: 1.6 }}>
                         Sheet content goes here. Typically used for mobile-first interactions — filter panels, share menus, or action menus. The drag handle at the top can be tapped to dismiss.
                       </p>
-                    </DialogBody>
-                    <DialogFooter>
-                      <DialogClose asChild><Button variant="outline">Dismiss</Button></DialogClose>
-                      <DialogClose asChild><Button>Confirm</Button></DialogClose>
-                    </DialogFooter>
-                  </DialogContent>
-                </Dialog>
+                    </SheetBody>
+                    <SheetFooter>
+                      <SheetClose asChild><Button variant="outline">Dismiss</Button></SheetClose>
+                      <SheetClose asChild><Button>Confirm</Button></SheetClose>
+                    </SheetFooter>
+                  </SheetContent>
+                </Sheet>
               </Row>
             </div>
 
