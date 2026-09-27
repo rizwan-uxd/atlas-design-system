@@ -3,7 +3,7 @@
 /**
  * Atlas NavBar — top app bar (web) + mobile-native shell
  *
- * Web variants:  default | transparent | elevated
+ * Web variants:  default | transparent | bordered | floating
  * Web sizes:     sm (48px) | md (64px) | lg (80px)
  *
  * Layout zones:
@@ -35,7 +35,7 @@ function cx(...classes: (string | false | null | undefined)[]): string {
 
 /* ── Types ──────────────────────────────────────────────────────── */
 
-export type NavBarVariant = "default" | "transparent" | "elevated"
+export type NavBarVariant = "default" | "transparent" | "bordered" | "floating"
 export type NavBarSize    = "sm" | "md" | "lg"
 
 export interface NavLink {

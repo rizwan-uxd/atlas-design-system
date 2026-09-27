@@ -1480,6 +1480,32 @@ export default function SandboxPage() {
           </div>
         </Section>
 
+        {/* ── NAVBAR ── */}
+        <Section title="NavBar">
+          <div style={{ display: "flex", flexDirection: "column", gap: "var(--atlas-spacing-6)" }}>
+            <p style={{ margin: 0, fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)" }}>
+              default · transparent · bordered · floating (DISC-010/025/026) — shown detached from the live page header above.
+            </p>
+            {(["default", "bordered", "floating", "transparent"] as const).map(variant => (
+              <div key={variant} style={{ background: variant === "transparent" ? "var(--atlas-background-subtle)" : undefined, padding: variant === "transparent" ? "var(--atlas-spacing-4)" : 0 }}>
+                <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+                  {variant}
+                </p>
+                <NavBar
+                  variant={variant}
+                  brand="Atlas"
+                  links={[
+                    { label: "Products", active: true },
+                    { label: "Docs" },
+                    { label: "Pricing" },
+                  ]}
+                  actions={<Button size="sm">Sign in</Button>}
+                />
+              </div>
+            ))}
+          </div>
+        </Section>
+
       </div>
     </div>
   )

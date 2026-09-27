@@ -36,20 +36,37 @@
 .lg { --_h: calc(var(--atlas-spacing-10) * 2); }   /* 80px */
 
 /* ── Variants ─────────────────────────────────────────────────── */
+/*
+  Spec (Figma NavBar 148:306, DISC-010/025/026, 2026-09-27):
+    default:     surface fill, no border, no shadow, radius-sm
+    bordered:    surface fill, border-subtle bottom border, radius-sm
+    floating:    surface-raised fill, shadow-lg, radius-xl, no border
+    transparent: no fill, no border, no shadow, radius-sm (code addition, no Figma fill drawn)
+  `default` was previously code's only bare-ish variant but carried a border; that border moved to
+  the new `bordered` value to match what Figma actually draws for "default" (no border at all).
+*/
 
 .default {
-  background-color: var(--atlas-background);
-  border-block-end: var(--atlas-border-width-1) solid var(--atlas-border);
+  background-color: var(--atlas-surface);
+  border-radius: var(--atlas-radius-sm);
+}
+
+.bordered {
+  background-color: var(--atlas-surface);
+  border-block-end: var(--atlas-border-width-1) solid var(--atlas-border-subtle);
+  border-radius: var(--atlas-radius-sm);
 }
 
 .transparent {
   background-color: transparent;
   border-block-end: none;
+  border-radius: var(--atlas-radius-sm);
 }
 
-.elevated {
-  background-color: var(--atlas-background);
-  box-shadow: var(--atlas-shadow-md);
+.floating {
+  background-color: var(--atlas-surface-raised);
+  box-shadow: var(--atlas-shadow-lg);
+  border-radius: var(--atlas-radius-xl);
 }
 
 /* ── Inner layout ─────────────────────────────────────────────── */
@@ -261,8 +278,8 @@
 */
 
 .transparent.scrolled {
-  background-color: var(--atlas-background);
-  border-block-end: var(--atlas-border-width-1) solid var(--atlas-border);
+  background-color: var(--atlas-surface);
+  border-block-end: var(--atlas-border-width-1) solid var(--atlas-border-subtle);
   box-shadow: var(--atlas-shadow-sm);
 }
 
@@ -336,12 +353,13 @@
   min-height: calc(var(--atlas-spacing-16) + var(--atlas-safe-top));      /* 64px */
 }
 
-/* Variant overrides */
+/* Variant overrides — mobile-native anatomy, no linked Figma node; renamed to match
+   NavBarVariant (DISC-010/025/026) but visual treatment is unchanged from before the rename. */
 .navbarHeader.transparent {
   background-color: transparent;
   border-block-end: none;
 }
-.navbarHeader.elevated {
+.navbarHeader.floating {
   background-color: var(--atlas-background);
   box-shadow: var(--atlas-shadow-md);
   border-block-end: none;
