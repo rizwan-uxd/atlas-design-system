@@ -11,9 +11,10 @@ figma.connect(
         success: "success",
         warning: "warning",
         danger:  "danger",
+        neutral: "neutral",
       }),
-      size:        figma.enum("Size",  { sm: "sm", md: "md" }),
-      dismissible: figma.enum("State", { dismissible: true }),
+      size:        figma.enum("Size", { sm: "sm", md: "md", lg: "lg" }),
+      dismissible: figma.boolean("Dismissible"),
     },
     example: ({ variant, size, dismissible }) => (
       <Alert

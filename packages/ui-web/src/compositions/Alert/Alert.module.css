@@ -43,6 +43,10 @@
   --_pad: var(--atlas-spacing-3);
 }
 
+.lg {
+  --_pad: var(--atlas-spacing-5);
+}
+
 /* ── Variants ─────────────────────────────────────────────────── */
 /*
   FIX BUG-031: border-color now uses --atlas-{intent}-muted (100-level tint)
@@ -76,6 +80,14 @@
   background-color: var(--atlas-danger-subtle);
   border-color: var(--atlas-danger-muted);  /* was: var(--atlas-danger) */
   color: var(--atlas-danger);
+}
+
+/* Figma's neutral tone has no accent color — background-muted/border-subtle only */
+.neutral {
+  --_accent: var(--atlas-foreground-muted);
+  background-color: var(--atlas-background-muted);
+  border-color: var(--atlas-border-subtle);
+  color: var(--atlas-foreground);
 }
 
 /* ── Icon slot ────────────────────────────────────────────────── */
@@ -112,6 +124,10 @@
   font-size: var(--atlas-text-body-sm);
 }
 
+.lg .title {
+  font-size: var(--atlas-font-size-lg);
+}
+
 /* ── Description ──────────────────────────────────────────────── */
 
 .description {
@@ -123,6 +139,10 @@
 
 .sm .description {
   font-size: var(--atlas-text-caption);
+}
+
+.lg .description {
+  font-size: var(--atlas-text-body);
 }
 
 .title + .description {
