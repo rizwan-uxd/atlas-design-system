@@ -667,12 +667,13 @@ export default function SandboxPage() {
         <Section title="Alert">
           <div style={{ display: "flex", flexDirection: "column", gap: "var(--atlas-spacing-4)" }}>
 
-            {/* All 4 variants — md size with title + description */}
-            <p style={{ margin: 0, fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase", letterSpacing: "0.06em" }}>4 variants (md, title + description)</p>
+            {/* All 5 variants — md size with title + description */}
+            <p style={{ margin: 0, fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase", letterSpacing: "0.06em" }}>5 variants (md, title + description)</p>
             <Alert variant="info" title="Info" description="Here's some helpful context you might want to know." />
             <Alert variant="success" title="Success" description="Your changes have been saved successfully." />
             <Alert variant="warning" title="Warning" description="This action may have unintended side effects." />
             <Alert variant="danger" title="Error" description="Something went wrong. Please try again or contact support." />
+            <Alert variant="neutral" title="Note" description="A neutral message with no particular urgency." />
 
             {/* Description only (no title) */}
             <p style={{ margin: "var(--atlas-spacing-2) 0 0", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase", letterSpacing: "0.06em" }}>Description only (no title)</p>
@@ -706,10 +707,11 @@ export default function SandboxPage() {
               actions={<Button size="sm" variant="outline">Learn more</Button>}
             />
 
-            {/* sm size */}
-            <p style={{ margin: "var(--atlas-spacing-2) 0 0", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase", letterSpacing: "0.06em" }}>sm size</p>
+            {/* sm / lg sizes */}
+            <p style={{ margin: "var(--atlas-spacing-2) 0 0", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase", letterSpacing: "0.06em" }}>sm / lg sizes</p>
             <Alert size="sm" variant="info" title="Compact info" description="Small padding, smaller type." />
             <Alert size="sm" variant="success" description="Saved." dismissible onDismiss={() => {}} />
+            <Alert size="lg" variant="warning" title="Large alert" description="More padding, larger type — for high-visibility placements." dismissible onDismiss={() => {}} />
 
             {/* hideIcon + icon override */}
             <p style={{ margin: "var(--atlas-spacing-2) 0 0", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase", letterSpacing: "0.06em" }}>hideIcon / icon override</p>

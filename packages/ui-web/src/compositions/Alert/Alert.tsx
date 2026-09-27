@@ -3,8 +3,8 @@
 /**
  * Atlas Alert — inline status/feedback message
  *
- * Variants:  info | success | warning | danger
- * Sizes:     sm | md
+ * Variants:  info | success | warning | danger | neutral
+ * Sizes:     sm | md | lg
  *
  * Anatomy:
  *   [accent bar] [icon] [body: title · description · actions] [dismiss ×]
@@ -31,8 +31,8 @@ import styles from "./Alert.module.css"
 
 /* ── Types ──────────────────────────────────────────────────────── */
 
-export type AlertVariant = "info" | "success" | "warning" | "danger"
-export type AlertSize    = "sm" | "md"
+export type AlertVariant = "info" | "success" | "warning" | "danger" | "neutral"
+export type AlertSize    = "sm" | "md" | "lg"
 
 export interface AlertProps {
   variant?:     AlertVariant
@@ -78,6 +78,7 @@ const DEFAULT_ICONS: Record<AlertVariant, string> = {
   success: "✓",
   warning: "⚠",
   danger:  "⊗",
+  neutral: "●",
 }
 
 /* ── Component ──────────────────────────────────────────────────── */
