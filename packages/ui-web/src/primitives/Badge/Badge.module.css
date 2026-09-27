@@ -15,7 +15,7 @@
   font-weight: var(--atlas-font-weight-medium);
   white-space: nowrap;
   line-height: var(--atlas-line-height-tight); /* FIX BUG-025: was line-height: 1 */
-  border: var(--atlas-border-width-1) solid transparent; /* reserves space; overridden per variant */
+  border: var(--atlas-border-width-1) solid transparent; /* reserves space; overridden by .outline */
   box-sizing: border-box;
 }
 
@@ -53,51 +53,55 @@
   font-size: var(--atlas-text-body-sm); /* font-size-sm = 14px */
 }
 
-/* ── Variants ─────────────────────────────────────────────────── */
+/* ── Variants — filled (default appearance) ──────────────────────
+   Matches Figma: tone variants use the -subtle background with the
+   base tone color as text, same pattern as Alert. Neutral/primary are
+   unchanged from Figma's own default/primary token binding.
+*/
 
-.default {
+.neutral {
   background-color: var(--atlas-background-muted);
   color: var(--atlas-foreground);
 }
 
-.secondary {
-  background-color: var(--atlas-background-subtle);
-  color: var(--atlas-foreground);
+.primary {
+  background-color: var(--atlas-primary);
+  color: var(--atlas-primary-foreground);
 }
 
-/* FIX BUG-021: use --atlas-{intent}-foreground per spec; not --atlas-{intent} */
 .success {
   background-color: var(--atlas-success-subtle);
-  color: var(--atlas-success-foreground);
+  color: var(--atlas-success);
 }
 
 .warning {
   background-color: var(--atlas-warning-subtle);
-  color: var(--atlas-warning-foreground);
+  color: var(--atlas-warning);
 }
 
 .danger {
   background-color: var(--atlas-danger-subtle);
-  color: var(--atlas-danger-foreground);
+  color: var(--atlas-danger);
 }
 
 .info {
   background-color: var(--atlas-info-subtle);
-  color: var(--atlas-info-foreground);
+  color: var(--atlas-info);
 }
 
-/* Outline — transparent bg, border = intent or border-strong */
+/* ── Outline appearance — transparent bg, tone border + text ───── */
+
 .outline {
   background-color: transparent;
-  color: var(--atlas-foreground);
   border-color: var(--atlas-border-strong);
+  color: var(--atlas-foreground);
 }
 
-/* Outline with intent — border and text adopt the intent color */
-.outline.intentSuccess { color: var(--atlas-success); border-color: var(--atlas-success); }
-.outline.intentWarning { color: var(--atlas-warning); border-color: var(--atlas-warning); }
-.outline.intentDanger  { color: var(--atlas-danger);  border-color: var(--atlas-danger);  }
-.outline.intentInfo    { color: var(--atlas-info);    border-color: var(--atlas-info);    }
+.outline.primary { background-color: transparent; border-color: var(--atlas-primary); color: var(--atlas-primary); }
+.outline.success { background-color: transparent; border-color: var(--atlas-success); color: var(--atlas-success); }
+.outline.warning { background-color: transparent; border-color: var(--atlas-warning); color: var(--atlas-warning); }
+.outline.danger  { background-color: transparent; border-color: var(--atlas-danger);  color: var(--atlas-danger);  }
+.outline.info    { background-color: transparent; border-color: var(--atlas-info);    color: var(--atlas-info);    }
 
 /* ── Interactive hover states — FIX BUG-023 ───────────────────── */
 /*
@@ -117,8 +121,8 @@
   outline-offset: var(--atlas-spacing-0_5);
 }
 
-.badge.default[data-interactive]:hover   { background-color: var(--atlas-background-subtle); }
-.badge.secondary[data-interactive]:hover { background-color: var(--atlas-background-muted); }
+.badge.neutral[data-interactive]:hover   { background-color: var(--atlas-background-subtle); }
+.badge.primary[data-interactive]:hover   { background-color: var(--atlas-primary-hover); }
 .badge.success[data-interactive]:hover   { background-color: var(--atlas-success-muted); }
 .badge.warning[data-interactive]:hover   { background-color: var(--atlas-warning-muted); }
 .badge.danger[data-interactive]:hover    { background-color: var(--atlas-danger-muted); }
