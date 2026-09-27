@@ -29,9 +29,12 @@
 }
 
 
-/* BUG-063: Button sm (32px) touch-target expansion on coarse-pointer devices */
+/* BUG-063: Button xs (24px) and sm (32px) touch-target expansion on coarse-pointer devices */
 @media (pointer: coarse) {
+  .xs,
   .sm { min-height: var(--atlas-touch-min); }
+  .xs.icon,
+  .sm.icon { min-width: var(--atlas-touch-min); }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -138,6 +141,13 @@
 /* ── Sizes ────────────────────────────────────────────── */
 /* padding-inline = logical shorthand for padding-inline-start + padding-inline-end */
 
+.xs {
+  height: var(--atlas-spacing-6);         /* 24px */
+  padding-inline: var(--atlas-spacing-2); /* 8px */
+  gap: var(--atlas-spacing-1);            /* 4px */
+  font-size: var(--atlas-font-size-xs);
+}
+
 .sm {
   height: var(--atlas-spacing-8);         /* 32px */
   padding-inline: var(--atlas-spacing-3); /* 12px */
@@ -157,7 +167,7 @@
 }
 
 /* icon — layout modifier only; zero padding; width is driven by the size compound rule below.
-   Compose via size + iconOnly: e.g. size="sm" iconOnly / size="icon" (legacy md alias).
+   Compose via size + iconOnly: e.g. size="sm" iconOnly.
    The height is already set by the .sm / .md / .lg size class. */
 .icon {
   padding: 0;
@@ -165,6 +175,7 @@
 }
 
 /* Size-specific widths for icon-only buttons (match each size's height) */
+.xs.icon { width: var(--atlas-spacing-6); }   /* 24px */
 .sm.icon { width: var(--atlas-spacing-8); }   /* 32px */
 .md.icon { width: var(--atlas-spacing-10); }  /* 40px */
 .lg.icon { width: var(--atlas-spacing-12); }  /* 48px */

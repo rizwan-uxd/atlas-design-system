@@ -3,7 +3,8 @@
  *
  * Coverage:
  *   1. Renders default variant without crashing
- *   2. Variant × Size matrix — all 24 combinations render a <button>
+ *   2. Variant × Size × iconOnly matrix — all 48 combinations render a <button>
+ *      (xs is 24px, one class per size; iconOnly adds a square modifier)
  *   3. Loading state — aria-busy + aria-disabled set correctly
  *   4. Disabled state — aria-disabled set, onClick not fired
  *   5. iconOnly — warns in dev when aria-label is missing (skipped in prod)
@@ -33,7 +34,7 @@ const VARIANTS: ButtonVariant[] = [
   "link",
 ]
 
-const SIZES: ButtonSize[] = ["sm", "md", "lg", "icon"]
+const SIZES: ButtonSize[] = ["xs", "sm", "md", "lg"]
 
 // ─── 1. Default render ─────────────────────────────────────────────────────
 
@@ -57,21 +58,24 @@ describe("Button — default render", () => {
 describe("Button — variant × size matrix", () => {
   for (const variant of VARIANTS) {
     for (const size of SIZES) {
-      it(`renders variant="${variant}" size="${size}"`, () => {
-        const label = `${variant} ${size}`
-        render(
-          <Button
-            variant={variant}
-            size={size}
-            aria-label={size === "icon" ? label : undefined}
-          >
-            {size !== "icon" ? label : undefined}
-          </Button>
-        )
-        // A <button> must be present regardless of variant/size
-        const btn = document.querySelector("button")
-        expect(btn).toBeTruthy()
-      })
+      for (const iconOnly of [false, true]) {
+        it(`renders variant="${variant}" size="${size}" iconOnly=${iconOnly}`, () => {
+          const label = `${variant} ${size}`
+          render(
+            <Button
+              variant={variant}
+              size={size}
+              iconOnly={iconOnly}
+              aria-label={iconOnly ? label : undefined}
+            >
+              {iconOnly ? "✕" : label}
+            </Button>
+          )
+          // A <button> must be present regardless of variant/size
+          const btn = document.querySelector("button")
+          expect(btn).toBeTruthy()
+        })
+      }
     }
   }
 })

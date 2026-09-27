@@ -4,13 +4,13 @@
  * Atlas Button — canonical reference component
  *
  * Variants:  primary | secondary | outline | ghost | destructive | link
- * Sizes:     sm | md | lg | icon
+ * Sizes:     xs | sm | md | lg   (+ iconOnly for the square icon button)
  * States:    default · hover · focus-visible · active · disabled · loading
  *
  * Accessibility:
  *   - aria-busy="true" when loading (async in progress)
  *   - aria-disabled="true" when disabled or loading
- *   - aria-label required by caller when size="icon"
+ *   - aria-label required by caller when iconOnly
  *   - Focus ring via CSS :focus-visible; never suppressed
  *
  * Logical properties and prefers-reduced-motion handled in Button.module.css.
@@ -30,22 +30,21 @@ export type ButtonVariant =
   | "destructive"
   | "link"
 
-export type ButtonSize = "sm" | "md" | "lg" | "icon"
+export type ButtonSize = "xs" | "sm" | "md" | "lg"
 
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant
   /**
    * Size of the button.
-   * - `sm | md | lg` — named heights (32 / 40 / 48 px).
-   * - `icon` — legacy alias for `md` + `iconOnly`. Kept for back-compat.
-   *   Prefer explicit `size="md" iconOnly` for new callers.
+   * Named heights: `xs` 24 · `sm` 32 · `md` 40 · `lg` 48 px.
    */
   size?: ButtonSize
   /**
    * When true, collapses padding to zero and clamps width = height so the
    * button becomes a square icon-only control.
-   * Composes with `size` — e.g. `size="lg" iconOnly` gives a 48 × 48 button.
+   * Composes with `size` — e.g. `size="lg" iconOnly` gives a 48 × 48 button,
+   * `size="xs" iconOnly` a 24 × 24 one (Figma `Icon only=true`).
    * Requires `aria-label` or `aria-labelledby` (dev-mode warning fired if absent).
    */
   iconOnly?: boolean
@@ -87,17 +86,8 @@ export function Button({
 }: ButtonProps) {
   const Comp = (asChild ? Slot : "button") as React.ElementType
 
-  /*
-   * BUG-005 fix: resolve effective size and icon-only modifier independently.
-   *
-   * `size="icon"` is a legacy alias: it maps to `md` height + square layout.
-   * New callers should use `size="sm|md|lg" iconOnly` for composable control.
-   *
-   * effectiveSize — always one of sm | md | lg; drives the height/padding class.
-   * isIconOnly    — when true, applies the .icon modifier (padding:0, width=height).
-   */
-  const effectiveSize: "sm" | "md" | "lg" = size === "icon" ? "md" : size
-  const isIconOnly = size === "icon" || iconOnly
+  /* iconOnly applies the .icon modifier (padding:0, width=height) on top of the size class. */
+  const isIconOnly = iconOnly
 
   /*
    * BUG-006 fix: fire a dev-mode warning when an icon-only button has no
@@ -110,7 +100,7 @@ export function Button({
     !rest["aria-labelledby"]
   ) {
     console.warn(
-      "[Atlas Button] Icon-only buttons (size='icon' or iconOnly=true) require " +
+      "[Atlas Button] Icon-only buttons (iconOnly=true) require " +
       "an aria-label or aria-labelledby prop for screen reader accessibility.",
     )
   }
@@ -123,7 +113,7 @@ export function Button({
   const classes = cx(
     styles.btn,
     styles[variant],
-    variant !== "link" ? styles[effectiveSize] : undefined,
+    variant !== "link" ? styles[size] : undefined,
     isIconOnly ? styles.icon : undefined,
     className,
   )

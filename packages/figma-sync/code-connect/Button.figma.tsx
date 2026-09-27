@@ -20,18 +20,24 @@ figma.connect(
         link:        "link",
       }),
       size: figma.enum("Size", {
+        xs:   "xs",
         sm:   "sm",
         md:   "md",
         lg:   "lg",
-        icon: "icon",
       }),
+      iconOnly:     figma.boolean("Icon only"),
+      leadingIcon:  figma.boolean("Leading icon",  { true: figma.instance("Leading icon slot"),  false: undefined }),
+      trailingIcon: figma.boolean("Trailing icon", { true: figma.instance("Trailing icon slot"), false: undefined }),
       loading:  figma.enum("State", { loading: true }),
       disabled: figma.enum("State", { disabled: true }),
     },
-    example: ({ variant, size, loading, disabled }) => (
+    example: ({ variant, size, iconOnly, leadingIcon, trailingIcon, loading, disabled }) => (
       <Button
         variant={variant}
         size={size}
+        iconOnly={iconOnly}
+        leadingIcon={leadingIcon}
+        trailingIcon={trailingIcon}
         loading={loading}
         disabled={disabled}
       >

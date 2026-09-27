@@ -131,7 +131,7 @@ export default function SandboxPage() {
               <Button size="sm">Small</Button>
               <Button size="md">Medium</Button>
               <Button size="lg">Large</Button>
-              <Button size="icon" aria-label="Upload">⬆</Button>
+              <Button iconOnly aria-label="Upload">⬆</Button>
             </Row>
             <Row>
               <Button loading>Loading</Button>

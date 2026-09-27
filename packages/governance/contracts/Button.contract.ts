@@ -19,7 +19,7 @@ type AssertButtonVariant = ButtonVariant extends
 const _v: AssertButtonVariant = true; void _v
 
 // Size union must contain exactly these values
-type AssertButtonSize = ButtonSize extends "sm" | "md" | "lg" | "icon"
+type AssertButtonSize = ButtonSize extends "xs" | "sm" | "md" | "lg"
   ? true : false
 const _s: AssertButtonSize = true; void _s
 
