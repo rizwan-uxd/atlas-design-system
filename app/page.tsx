@@ -476,11 +476,11 @@ export default function SandboxPage() {
         <Section title="Badge">
           <div style={{ display: "flex", flexDirection: "column", gap: "var(--atlas-spacing-4)" }}>
 
-            {/* All 7 variants — md size */}
+            {/* All 6 variants — md size, filled */}
             <div>
-              <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase", letterSpacing: "0.06em" }}>7 variants (md)</p>
+              <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase", letterSpacing: "0.06em" }}>6 variants (md, default appearance)</p>
               <Row>
-                {(["default", "secondary", "success", "warning", "danger", "info", "outline"] as const).map(v => (
+                {(["neutral", "primary", "success", "warning", "danger", "info"] as const).map(v => (
                   <Badge key={v} variant={v}>{v}</Badge>
                 ))}
               </Row>
@@ -490,23 +490,24 @@ export default function SandboxPage() {
             <div>
               <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase", letterSpacing: "0.06em" }}>Sizes</p>
               <Row>
-                <Badge size="sm" variant="default">sm — 18px</Badge>
-                <Badge size="md" variant="default">md — 22px</Badge>
-                <Badge size="lg" variant="default">lg — 26px</Badge>
+                <Badge size="sm" variant="neutral">sm — 18px</Badge>
+                <Badge size="md" variant="neutral">md — 22px</Badge>
+                <Badge size="lg" variant="neutral">lg — 26px</Badge>
                 <Badge size="sm" variant="success">sm success</Badge>
                 <Badge size="lg" variant="danger">lg danger</Badge>
               </Row>
             </div>
 
-            {/* Outline variant with all intents */}
+            {/* Outline appearance — all variants */}
             <div>
-              <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase", letterSpacing: "0.06em" }}>Outline + intent</p>
+              <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase", letterSpacing: "0.06em" }}>Outline appearance</p>
               <Row>
-                <Badge variant="outline">outline (default)</Badge>
-                <Badge variant="outline" intent="success">outline success</Badge>
-                <Badge variant="outline" intent="warning">outline warning</Badge>
-                <Badge variant="outline" intent="danger">outline danger</Badge>
-                <Badge variant="outline" intent="info">outline info</Badge>
+                <Badge appearance="outline">outline neutral</Badge>
+                <Badge appearance="outline" variant="primary">outline primary</Badge>
+                <Badge appearance="outline" variant="success">outline success</Badge>
+                <Badge appearance="outline" variant="warning">outline warning</Badge>
+                <Badge appearance="outline" variant="danger">outline danger</Badge>
+                <Badge appearance="outline" variant="info">outline info</Badge>
               </Row>
             </div>
 
@@ -514,7 +515,7 @@ export default function SandboxPage() {
             <div>
               <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase", letterSpacing: "0.06em" }}>Dot indicator (inherits variant fg)</p>
               <Row>
-                <Badge variant="default" dot>Default</Badge>
+                <Badge variant="neutral" dot>Neutral</Badge>
                 <Badge variant="success" dot>Success</Badge>
                 <Badge variant="warning" dot>Warning</Badge>
                 <Badge variant="danger" dot>Danger</Badge>
@@ -536,10 +537,10 @@ export default function SandboxPage() {
             <div>
               <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase", letterSpacing: "0.06em" }}>Removable (× fires callback)</p>
               <Row>
-                <Badge variant="default" removable onRemove={() => alert("removed: default")}>Default</Badge>
+                <Badge variant="neutral" removable onRemove={() => alert("removed: neutral")}>Neutral</Badge>
                 <Badge variant="success" removable onRemove={() => alert("removed: success")}>Success</Badge>
                 <Badge variant="danger" removable onRemove={() => alert("removed: danger")}>Danger</Badge>
-                <Badge variant="outline" intent="info" removable onRemove={() => alert("removed: outline info")}>Outline info</Badge>
+                <Badge appearance="outline" variant="info" removable onRemove={() => alert("removed: outline info")}>Outline info</Badge>
               </Row>
             </div>
 
@@ -547,9 +548,9 @@ export default function SandboxPage() {
             <div>
               <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase", letterSpacing: "0.06em" }}>Square (radius-sm instead of full)</p>
               <Row>
-                <Badge square>Default square</Badge>
+                <Badge square>Neutral square</Badge>
                 <Badge square variant="success">Success square</Badge>
-                <Badge square variant="outline">Outline square</Badge>
+                <Badge square appearance="outline">Outline square</Badge>
                 <Badge square variant="danger" size="lg">Large square</Badge>
               </Row>
             </div>
@@ -558,9 +559,9 @@ export default function SandboxPage() {
             <div>
               <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase", letterSpacing: "0.06em" }}>Disabled (opacity-disabled, non-interactive)</p>
               <Row>
-                <Badge disabled>Disabled default</Badge>
+                <Badge disabled>Disabled neutral</Badge>
                 <Badge disabled variant="success">Disabled success</Badge>
-                <Badge disabled variant="outline" intent="danger">Disabled outline</Badge>
+                <Badge disabled appearance="outline" variant="danger">Disabled outline</Badge>
                 <Badge disabled removable onRemove={() => {}}>Disabled removable</Badge>
               </Row>
             </div>

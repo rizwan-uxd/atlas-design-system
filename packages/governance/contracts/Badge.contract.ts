@@ -2,26 +2,26 @@
  * Atlas Badge — API contract v1
  */
 
-import type { BadgeProps, BadgeVariant, BadgeSize, BadgeIntent } from "@atlas/ui-web/primitives/Badge/Badge"
+import type { BadgeProps, BadgeVariant, BadgeAppearance, BadgeSize } from "@atlas/ui-web/primitives/Badge/Badge"
 import type React from "react"
 
 type AssertBadgeVariant = BadgeVariant extends
-  | "default" | "secondary" | "success" | "warning" | "danger" | "info" | "outline"
+  | "neutral" | "primary" | "success" | "warning" | "danger" | "info"
   ? true : false
 const _v: AssertBadgeVariant = true; void _v
+
+type AssertBadgeAppearance = BadgeAppearance extends "default" | "outline"
+  ? true : false
+const _a: AssertBadgeAppearance = true; void _a
 
 type AssertBadgeSize = BadgeSize extends "sm" | "md" | "lg"
   ? true : false
 const _s: AssertBadgeSize = true; void _s
 
-type AssertBadgeIntent = BadgeIntent extends "default" | "success" | "warning" | "danger" | "info"
-  ? true : false
-const _i: AssertBadgeIntent = true; void _i
-
 type AssertBadgeShape = {
   variant?:      BadgeVariant
+  appearance?:   BadgeAppearance
   size?:         BadgeSize
-  intent?:       BadgeIntent
   square?:       boolean
   dot?:          boolean
   leadingIcon?:  React.ReactNode

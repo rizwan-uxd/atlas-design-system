@@ -83,7 +83,7 @@ export default function PrototypesIndex() {
                     }}
                   >
                     {flow.exercises.map((c) => (
-                      <Badge key={c} size="sm" variant="secondary">
+                      <Badge key={c} size="sm" variant="neutral">
                         {c}
                       </Badge>
                     ))}

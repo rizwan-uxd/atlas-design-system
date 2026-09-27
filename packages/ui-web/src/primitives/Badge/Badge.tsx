@@ -3,9 +3,10 @@
 /**
  * Atlas Badge — compact label for status, count, or category
  *
- * Variants:  default | secondary | success | warning | danger | info | outline
- * Sizes:     sm | md | lg
- * States:    default · hover (interactive only) · focus-visible (interactive only) · disabled
+ * Variants:    neutral | primary | success | warning | danger | info
+ * Appearances: default (filled) | outline
+ * Sizes:       sm | md | lg
+ * States:      default · hover (interactive only) · focus-visible (interactive only) · disabled
  *
  * Slots:
  *   dot          — 6px status circle at inline-start (color = currentColor)
@@ -26,18 +27,15 @@ import styles from "./Badge.module.css"
 
 /* ── Types ──────────────────────────────────────────────────────── */
 
-export type BadgeVariant = "default" | "secondary" | "success" | "warning" | "danger" | "info" | "outline"
-export type BadgeSize    = "sm" | "md" | "lg"
-export type BadgeIntent  = "default" | "success" | "warning" | "danger" | "info"
+export type BadgeVariant    = "neutral" | "primary" | "success" | "warning" | "danger" | "info"
+export type BadgeAppearance = "default" | "outline"
+export type BadgeSize       = "sm" | "md" | "lg"
 
 export interface BadgeProps {
   variant?:      BadgeVariant
+  /** default = filled (tone background); outline = transparent with a tone border */
+  appearance?:   BadgeAppearance
   size?:         BadgeSize
-  /**
-   * Only used with `variant="outline"`.
-   * Colors the border and text to match the intent semantic color.
-   */
-  intent?:       BadgeIntent
   /** Uses --atlas-radius-sm instead of radius-full */
   square?:       boolean
   /** Leading 6px status dot; color inherits from variant foreground */
@@ -74,9 +72,9 @@ function cx(...classes: (string | false | null | undefined)[]): string {
 /* ── Component ──────────────────────────────────────────────────── */
 
 export function Badge({
-  variant     = "default",
+  variant     = "neutral",
+  appearance  = "default",
   size        = "md",
-  intent      = "default",
   square      = false,
   dot         = false,
   leadingIcon,
@@ -89,21 +87,15 @@ export function Badge({
   className,
   children,
 }: BadgeProps) {
-  /* Intent class only applies on outline variant */
-  const intentClass =
-    variant === "outline" && intent !== "default"
-      ? styles[`intent${intent.charAt(0).toUpperCase()}${intent.slice(1)}` as keyof typeof styles]
-      : undefined
-
   const isInteractive = Boolean(onClick)
 
   const classes = cx(
     styles.badge,
     styles[variant],
     styles[size],
+    appearance === "outline" && styles.outline,
     square   && styles.square,
     disabled && styles.disabled,
-    intentClass,
     className,
   )
 

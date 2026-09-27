@@ -7,18 +7,19 @@ figma.connect(
   {
     props: {
       variant: figma.enum("Variant", {
-        neutral: "default",
-        primary: "secondary",
+        neutral: "neutral",
+        primary: "primary",
         success: "success",
         warning: "warning",
         danger:  "danger",
         info:    "info",
       }),
-      size:     figma.enum("Size",  { sm: "sm", md: "md", lg: "lg" }),
-      disabled: figma.enum("State", { disabled: true }),
+      appearance: figma.enum("Appearance", { default: "default", outline: "outline" }),
+      size:       figma.enum("Size",  { sm: "sm", md: "md", lg: "lg" }),
+      disabled:   figma.enum("State", { disabled: true }),
     },
-    example: ({ variant, size, disabled }) => (
-      <Badge variant={variant} size={size} disabled={disabled}>
+    example: ({ variant, appearance, size, disabled }) => (
+      <Badge variant={variant} appearance={appearance} size={size} disabled={disabled}>
         Label
       </Badge>
     ),
