@@ -129,113 +129,13 @@
   }
 }
 
-/* ── Sheet variant ────────────────────────────────────────────── */
-/*
-  Bottom-anchored, full width, top corners rounded only.
-  FIX BUG-036: physical left/right/bottom → logical inset-inline/inset-block-end
-  FIX BUG-071: safe-area padding for iOS home indicator
-*/
-
-.sheet {
-  inset-inline: 0;          /* FIX BUG-036: was left: 0; right: 0 */
-  inset-block-end: 0;       /* FIX BUG-036: was bottom: 0 */
-  width: 100%;
-  max-width: 100%;
-  max-height: 85vh;
-  border-radius: var(--atlas-radius-lg) var(--atlas-radius-lg) 0 0;
-  padding-block-end: var(--atlas-safe-bottom); /* FIX BUG-071 */
-}
-
-.sheet[data-state="open"] {
-  animation: sheetShow var(--atlas-duration-base) var(--atlas-easing-emphasized);
-}
-
-.sheet[data-state="closed"] {
-  animation: sheetHide var(--atlas-duration-base) var(--atlas-easing-exit);
-}
-
-@keyframes sheetShow {
-  from { opacity: 0; transform: translateY(100%); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes sheetHide {
-  from { opacity: 1; transform: translateY(0); }
-  to   { opacity: 0; transform: translateY(100%); }
-}
-
-/* ── Drawer variant ───────────────────────────────────────────── */
-/*
-  Side-panel. data-side="start" | "end".
-  FIX BUG-036/BUG-062: physical top/bottom/left/right → logical inset-block/inset-inline-*
-  FIX BUG-072: safe-area padding for device status bar
-*/
-
-.drawer {
-  inset-block: 0;            /* FIX BUG-062: was top: 0; bottom: 0 */
-  width: min(var(--_max-w), 100vw);
-  max-height: 100vh;
-  border-radius: 0;
-  padding-block-start: var(--atlas-safe-top); /* FIX BUG-072 */
-}
-
-.drawer[data-side="end"] {
-  inset-inline-end: 0;        /* FIX BUG-036: was right: 0 */
-  border-start-start-radius: var(--atlas-radius-lg);
-  border-end-start-radius: var(--atlas-radius-lg);
-}
-
-.drawer[data-side="start"] {
-  inset-inline-start: 0;      /* FIX BUG-036: was left: 0 */
-  border-start-end-radius: var(--atlas-radius-lg);
-  border-end-end-radius: var(--atlas-radius-lg);
-}
-
-.drawer[data-side="end"][data-state="open"] {
-  animation: drawerEndShow var(--atlas-duration-base) var(--atlas-easing-emphasized);
-}
-
-.drawer[data-side="end"][data-state="closed"] {
-  animation: drawerEndHide var(--atlas-duration-base) var(--atlas-easing-exit);
-}
-
-.drawer[data-side="start"][data-state="open"] {
-  animation: drawerStartShow var(--atlas-duration-base) var(--atlas-easing-emphasized);
-}
-
-.drawer[data-side="start"][data-state="closed"] {
-  animation: drawerStartHide var(--atlas-duration-base) var(--atlas-easing-exit);
-}
-
-@keyframes drawerEndShow   { from { opacity: 0; transform: translateX(100%); } to { opacity: 1; transform: translateX(0); } }
-@keyframes drawerEndHide   { from { opacity: 1; transform: translateX(0); } to { opacity: 0; transform: translateX(100%); } }
-@keyframes drawerStartShow { from { opacity: 0; transform: translateX(-100%); } to { opacity: 1; transform: translateX(0); } }
-@keyframes drawerStartHide { from { opacity: 1; transform: translateX(0); } to { opacity: 0; transform: translateX(-100%); } }
-
 /* ── Reduced motion ───────────────────────────────────────────── */
 
 @media (prefers-reduced-motion: reduce) {
   .overlay,
-  .modal,
-  .sheet,
-  .drawer {
+  .modal {
     animation: none !important;
   }
-}
-
-/* ── Drag handle (sheet only) ─────────────────────────────────── */
-/*
-  36px wide × 4px tall pill centred at top of sheet.
-  Visual affordance only — no interactive role (BUG-037/BUG-066 fixed in Dialog.tsx).
-*/
-
-.dragHandle {
-  width: var(--atlas-spacing-9);   /* 36px */
-  height: var(--atlas-spacing-1);  /* 4px */
-  border-radius: var(--atlas-radius-full);
-  background-color: var(--atlas-border-strong);
-  margin: var(--atlas-spacing-2) auto 0;
-  flex-shrink: 0;
 }
 
 /* ── Header ───────────────────────────────────────────────────── */

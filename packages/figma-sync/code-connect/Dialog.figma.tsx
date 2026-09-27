@@ -7,15 +7,16 @@ figma.connect(
   "https://www.figma.com/design/cKYhfaHLCoyMHi9nKr63Ig/Atlas-Design-System?node-id=136-174",
   {
     props: {
+      variant:        figma.enum("Variant", { default: "default", destructive: "destructive" }),
       confirmVariant: figma.enum("Variant", { default: "primary", destructive: "destructive" }),
-      size:           figma.enum("Size",    { sm: "sm", md: "md", lg: "lg" }),
+      size:           figma.enum("Size",    { sm: "sm", md: "md", lg: "lg", xl: "xl" }),
     },
-    example: ({ confirmVariant, size }) => (
+    example: ({ variant, confirmVariant, size }) => (
       <Dialog>
         <DialogTrigger asChild>
           <Button>Open dialog</Button>
         </DialogTrigger>
-        <DialogContent size={size}>
+        <DialogContent variant={variant} size={size}>
           <DialogHeader>
             <DialogTitle>Dialog title</DialogTitle>
             <DialogDescription>Supporting description text.</DialogDescription>

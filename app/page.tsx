@@ -730,7 +730,7 @@ export default function SandboxPage() {
                   <DialogTrigger asChild>
                     <Button>Open modal</Button>
                   </DialogTrigger>
-                  <DialogContent variant="modal" size="md">
+                  <DialogContent variant="destructive" size="md">
                     <DialogHeader>
                       <DialogTitle>Confirm action</DialogTitle>
                       <DialogDescription>This will permanently delete the item. This action cannot be undone.</DialogDescription>
@@ -754,7 +754,7 @@ export default function SandboxPage() {
                   <DialogTrigger asChild>
                     <Button variant="outline">Modal sm</Button>
                   </DialogTrigger>
-                  <DialogContent variant="modal" size="sm">
+                  <DialogContent size="sm">
                     <DialogHeader>
                       <DialogTitle>Small dialog</DialogTitle>
                       <DialogDescription>Max-width 400px. Good for confirmations.</DialogDescription>
@@ -774,7 +774,7 @@ export default function SandboxPage() {
                   <DialogTrigger asChild>
                     <Button variant="outline">Modal lg</Button>
                   </DialogTrigger>
-                  <DialogContent variant="modal" size="lg">
+                  <DialogContent size="lg">
                     <DialogHeader>
                       <DialogTitle>Large dialog</DialogTitle>
                       <DialogDescription>Max-width 720px for complex content.</DialogDescription>

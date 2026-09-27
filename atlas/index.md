@@ -15,7 +15,7 @@ One line per component. Read `atlas/<Name>.md` only for the components you will 
 | Badge | primitives | `@atlas/ui-web/primitives/Badge/Badge` | default, secondary, success, warning, danger, info, outline | sm, md, lg |
 | Alert | compositions | `@atlas/ui-web/compositions/Alert/Alert` | info, success, warning, danger | sm, md |
 | Card | compositions | `@atlas/ui-web/compositions/Card/Card` | default, elevated, outlined, filled | sm, md, lg |
-| Dialog | compositions | `@atlas/ui-web/compositions/Dialog/Dialog` | modal, sheet, drawer | sm, md, lg, xl, full |
+| Dialog | compositions | `@atlas/ui-web/compositions/Dialog/Dialog` | default, destructive | sm, md, lg, xl, full |
 | Tabs | patterns | `@atlas/ui-web/patterns/Tabs/Tabs` | underline, pills, enclosed | sm, md, lg |
 | NavBar | layouts | `@atlas/ui-web/layouts/NavBar/NavBar` | default, transparent, bordered, floating | sm, md, lg |
 | Avatar | primitives | `@atlas/ui-web/primitives/Avatar/Avatar` | — | xs, sm, md, lg, xl |
