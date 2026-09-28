@@ -32,6 +32,7 @@ const ORDER = [
 const LAYOUT_GROUPS = {
   "Typography families and letter spacing": ["font-sans", "font-arabic", "font-mono", "letter-spacing-"],
   "Layout grid": ["breakpoint-", "container-", "columns", "gutter", "margin"],
+  "Content width": ["content-width-"],
   "Dialog widths": ["dialog-"],
   "Safe area": ["safe-"],
   "Z-index": ["z-"],

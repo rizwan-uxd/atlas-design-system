@@ -106,6 +106,31 @@ const literalProp = (attrs, prop) => {
   const m = attrs.match(new RegExp(`(?:^|\\s)${prop}=(?:"([^"]*)"|'([^']*)'|\\{\\s*["'\`]([^"'\`]*)["'\`]\\s*\\})`))
   return m ? m[1] ?? m[2] ?? m[3] : undefined
 }
+// jsxTags' depth scan must keep reading through a JSX-valued prop (e.g. actions={<div>...</div>})
+// to find the root tag's real end, but that leaves nested descendants' own literal props (e.g. the
+// inner <Button variant="outline">) inside `attrs` too. Blank out each top-level {...} expression
+// that contains a JSX tag before scanning for the root's own props, so a descendant's variant/size
+// is never misattributed to the root component.
+const blankNestedJsx = (attrs) => {
+  let out = "", i = 0
+  while (i < attrs.length) {
+    if (attrs[i] === "{") {
+      let depth = 1, j = i + 1, quote = null
+      for (; j < attrs.length && depth > 0; j++) {
+        const c = attrs[j]
+        if (quote) { if (c === quote) quote = null }
+        else if (c === '"' || c === "'" || c === "`") quote = c
+        else if (c === "{") depth++
+        else if (c === "}") depth--
+      }
+      out += /<[A-Za-z/]/.test(attrs.slice(i, j)) ? " " : attrs.slice(i, j)
+      i = j
+    } else {
+      out += attrs[i]; i++
+    }
+  }
+  return out
+}
 
 // ─── design ──────────────────────────────────────────────────────────────────
 
@@ -137,7 +162,7 @@ check("design", "variants-sizes", () => {
     const m = metadata[u.component]
     if (!m || !(u.exported === u.component || u.exported === `${u.component}Root`)) continue
     for (const tag of jsxTags(src, u.local)) for (const [prop, allowed] of [["variant", m.variants], ["size", m.sizes]]) {
-      const value = literalProp(tag.attrs, prop)
+      const value = literalProp(blankNestedJsx(tag.attrs), prop)
       if (value !== undefined && allowed?.length && !allowed.includes(value))
         fails.push(`${file}:${tag.line} <${u.local} ${prop}="${value}"> — ${u.component} ${prop}s are ${allowed.join(" | ")}`)
     }
