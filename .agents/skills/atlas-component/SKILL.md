@@ -58,6 +58,22 @@ Skipping ahead to code is the mistake this skill exists to prevent.
 8. **Report** — the Figma change (or "none, code-only" and why), files changed, discrepancies
    closed/opened, state rows updated, Figma MCP escalations, and the verify summary line.
 
+## Approval gates — the default flow, never wait to be reminded
+Every new component, and every change that edits Figma, runs these four gates. The user has asked for
+this once; do not make them restate it.
+1. **Gate 1 — Figma plan.** Before any write: one message with the Figma objects and properties, the
+   token binding per fill/text/radius/spacing, the tier, the code plan, and every gap that has no Atlas
+   token (name it and propose the nearest existing token; never invent one). Scope and taste questions
+   go in one `AskUserQuestion` call beforehand. Stop and wait for approval.
+2. **Gate 2 — Figma built.** Apply the approved edit, read back with `get_metadata`, take one screenshot,
+   and show the result (node ids, property values, Light and Dark). Stop and wait for approval before code.
+3. **Gate 3 — Code checked.** Code, Code Connect, contract, test, `atlas:sync`, then `atlas:verify`.
+   Report the real verify output. Stop; do not commit.
+4. **Gate 4 — Final approval.** Only after a yes: `--stamp` verify, then commit the component's files
+   alone (never the user's unrelated dirty files). Push only when asked.
+Figma is the source of truth at every gate: a disagreement found later goes back to Figma first.
+A new component also needs the user's explicit request (AGENTS.md §4) and a Figma design.
+
 ## Rules
 - Figma and code disagree → Figma wins. Never "fix" drift by changing only code to match your guess.
 - An ambiguous design rule stops the task: name the missing decision (AGENTS.md §6).

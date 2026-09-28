@@ -1,0 +1,121 @@
+/* =================================================================
+   Atlas Bubble — component styles
+   Semantic tokens only. Logical properties throughout. No motion.
+   ================================================================= */
+
+/* ── Base ─────────────────────────────────────────────────────── */
+
+.bubble {
+  position: relative;
+  box-sizing: border-box;
+  inline-size: fit-content;
+  max-inline-size: min(100%, var(--atlas-content-width-md));
+  padding-block: var(--atlas-spacing-2);
+  padding-inline: var(--atlas-spacing-3);
+  border: var(--atlas-border-width-0) solid transparent;
+  border-radius: var(--atlas-radius-2xl);
+  font-family: var(--atlas-font-sans);
+  font-size: var(--atlas-text-body-sm);
+  font-weight: var(--atlas-font-weight-regular);
+  line-height: var(--atlas-line-height-normal);
+  overflow-wrap: anywhere;
+}
+
+/* Room for the reaction chip that hangs below the bottom edge */
+.bubble:has(> .reactions) {
+  margin-block-end: var(--atlas-spacing-4);
+}
+
+/* ── Align ────────────────────────────────────────────────────── */
+
+.start {
+  margin-inline-end: auto;
+}
+
+.end {
+  margin-inline-start: auto;
+}
+
+/* ── Variants ─────────────────────────────────────────────────── */
+
+.primary {
+  background: var(--atlas-primary);
+  color: var(--atlas-primary-foreground);
+}
+
+.secondary {
+  background: var(--atlas-background-muted);
+  color: var(--atlas-foreground);
+}
+
+.muted {
+  background: var(--atlas-background-subtle);
+  color: var(--atlas-foreground);
+}
+
+.tinted {
+  background: var(--atlas-primary-subtle);
+  color: var(--atlas-foreground);
+}
+
+.outline {
+  background: transparent;
+  color: var(--atlas-foreground);
+  border-color: var(--atlas-border);
+  border-width: var(--atlas-border-width-1);
+}
+
+.destructive {
+  background: var(--atlas-danger-subtle);
+  color: var(--atlas-danger);
+}
+
+/* ── asChild: the bubble is a link or button ──────────────────── */
+
+.interactive {
+  display: block;
+  cursor: pointer;
+  text-align: start;
+  text-decoration: none;
+  appearance: none;
+}
+
+.interactive:focus-visible {
+  outline: var(--atlas-border-width-2) solid var(--atlas-focus-ring);
+  outline-offset: var(--atlas-spacing-0_5);
+}
+
+/* ── Group ────────────────────────────────────────────────────── */
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--atlas-spacing-1);
+}
+
+/* ── Reactions ────────────────────────────────────────────────── */
+/* Hangs on the bottom edge, inset from the sender's side (Figma: 12 in, 8 up from the edge) */
+
+.reactions {
+  position: absolute;
+  inset-block-start: calc(100% - var(--atlas-spacing-2));
+  inset-inline-end: var(--atlas-spacing-3);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--atlas-spacing-1);
+  padding-block: var(--atlas-spacing-0_5);
+  padding-inline: var(--atlas-spacing-1_5);
+  border: var(--atlas-border-width-2) solid var(--atlas-surface);
+  border-radius: var(--atlas-radius-full);
+  background: var(--atlas-background-muted);
+  color: var(--atlas-foreground);
+  font-family: var(--atlas-font-sans);
+  font-size: var(--atlas-text-body-sm);
+  line-height: var(--atlas-line-height-normal);
+  white-space: nowrap;
+}
+
+.end > .reactions {
+  inset-inline-end: auto;
+  inset-inline-start: var(--atlas-spacing-3);
+}
