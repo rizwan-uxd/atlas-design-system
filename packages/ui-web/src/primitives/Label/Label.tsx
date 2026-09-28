@@ -2,7 +2,7 @@
  * Atlas Label — form-field label
  *
  * Variants:  default | inline
- * Sizes:     sm | md | lg   (mirror the linked control's size)
+ * Sizes:     sm 12 | md 14 | lg 16   (mirror the linked control's size)
  * States:    default · disabled · error (invalid)
  *
  * Anatomy slots:
@@ -25,7 +25,7 @@ import styles from "./Label.module.css"
 export type LabelVariant = "default" | "inline"
 export type LabelSize = "sm" | "md" | "lg"
 
-export interface LabelProps extends React.LabelHTMLAttributes<HTMLLabelElement> {
+export interface LabelProps extends React.ComponentProps<"label"> {
   variant?: LabelVariant
   size?: LabelSize
   required?: boolean

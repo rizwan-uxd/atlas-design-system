@@ -11,7 +11,7 @@
   align-items: baseline;
   gap: var(--atlas-spacing-1);
   font-family: var(--atlas-font-sans);
-  font-weight: var(--atlas-font-weight-medium);
+  font-weight: var(--atlas-font-weight-semibold); /* Figma: SemiBold at every size */
   color: var(--atlas-foreground);
   line-height: var(--atlas-line-height-normal); /* 1.5 — BUG-009 fix: was magic number 1.4 */
   cursor: pointer;
@@ -31,14 +31,14 @@
 
 /* ── Sizes ────────────────────────────────────────────────────── */
 /*
-  Mirrors the control it labels:
-    sm → text-sm (14px)
-    md → text-body-sm (14px alias)
+  Mirrors the control it labels (Figma Size: sm 12 · md 14 · lg 16):
+    sm → font-size-xs (12px)
+    md → text-body-sm (14px)
     lg → text-body (16px)
 */
 
 .sm {
-  font-size: var(--atlas-font-size-sm);
+  font-size: var(--atlas-font-size-xs);
 }
 
 .md {
