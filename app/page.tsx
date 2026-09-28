@@ -16,6 +16,7 @@ import { Image } from "@atlas/ui-web/primitives/Image/Image"
 import { Progress } from "@atlas/ui-web/primitives/Progress/Progress"
 import { RadioGroup, RadioGroupItem } from "@atlas/ui-web/primitives/RadioGroup/RadioGroup"
 import { Slider } from "@atlas/ui-web/primitives/Slider/Slider"
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue, SelectGroup, SelectLabel, SelectSeparator } from "@atlas/ui-web/primitives/Select/Select"
 import { Avatar, AvatarGroup } from "@atlas/ui-web/primitives/Avatar/Avatar"
 import { Alert } from "@atlas/ui-web/compositions/Alert/Alert"
 import { ListItem, ListItemMedia, ListItemContent, ListItemTitle, ListItemDescription, ListItemActions } from "@atlas/ui-web/compositions/ListItem/ListItem"
@@ -79,6 +80,7 @@ export default function SandboxPage() {
   const [sortBy, setSortBy] = useState("name")
   const [billingExpanded, setBillingExpanded] = useState(true)
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
+  const [selectValue, setSelectValue] = useState("")
 
   const toggleTheme = () => {
     const next = !dark
@@ -1031,6 +1033,85 @@ export default function SandboxPage() {
           </div>
         </Section>
 
+        {/* ── SELECT ── */}
+        <Section title="Select">
+          <div style={{ display: "flex", flexWrap: "wrap", alignItems: "flex-start", gap: "var(--atlas-spacing-8)" }}>
+
+            {/* Sizes */}
+            <div style={{ display: "flex", flexDirection: "column", gap: "var(--atlas-spacing-3)", minInlineSize: 200 }}>
+              <p style={{ margin: 0, fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase" }}>Sizes · sm / md</p>
+              {(["sm", "md"] as const).map(size => (
+                <Select key={size}>
+                  <SelectTrigger size={size} aria-label={`${size} select`}>
+                    <SelectValue placeholder={`Size ${size}`} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="daily">Daily</SelectItem>
+                    <SelectItem value="weekly">Weekly</SelectItem>
+                    <SelectItem value="monthly">Monthly</SelectItem>
+                  </SelectContent>
+                </Select>
+              ))}
+            </div>
+
+            {/* Controlled with groups */}
+            <div style={{ display: "flex", flexDirection: "column", gap: "var(--atlas-spacing-3)", minInlineSize: 200 }}>
+              <p style={{ margin: 0, fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase" }}>Controlled · groups · separator</p>
+              <Select value={selectValue} onValueChange={setSelectValue}>
+                <SelectTrigger aria-label="Frequency">
+                  <SelectValue placeholder="Select frequency" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>Common</SelectLabel>
+                    <SelectItem value="daily">Daily</SelectItem>
+                    <SelectItem value="weekly">Weekly</SelectItem>
+                    <SelectItem value="monthly">Monthly</SelectItem>
+                  </SelectGroup>
+                  <SelectSeparator />
+                  <SelectGroup>
+                    <SelectLabel>Other</SelectLabel>
+                    <SelectItem value="quarterly">Quarterly</SelectItem>
+                    <SelectItem value="yearly">Yearly</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+              <p style={{ margin: 0, fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)" }}>Value: {selectValue || "(none)"}</p>
+            </div>
+
+            {/* States */}
+            <div style={{ display: "flex", flexDirection: "column", gap: "var(--atlas-spacing-3)", minInlineSize: 200 }}>
+              <p style={{ margin: 0, fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase" }}>States · disabled · invalid</p>
+              <Select disabled>
+                <SelectTrigger aria-label="Disabled select">
+                  <SelectValue placeholder="Disabled" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="x">X</SelectItem>
+                </SelectContent>
+              </Select>
+              <Select>
+                <SelectTrigger invalid aria-label="Invalid select">
+                  <SelectValue placeholder="Invalid" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="x">X</SelectItem>
+                </SelectContent>
+              </Select>
+              <Select>
+                <SelectTrigger aria-label="With disabled item">
+                  <SelectValue placeholder="Disabled item" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="active">Active</SelectItem>
+                  <SelectItem value="archived" disabled>Archived</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+          </div>
+        </Section>
+
         {/* ── LIST ITEM ── */}
         <Section title="List Item">
           <div style={{ display: "flex", flexDirection: "column", gap: "var(--atlas-spacing-6)", maxInlineSize: "var(--atlas-breakpoint-md)" }}>
@@ -1593,7 +1674,7 @@ export default function SandboxPage() {
           </p>
           <div style={{ display: "flex", gap: "var(--atlas-spacing-8)" }}>
             {/* Expanded */}
-            <div style={{ height: "26rem", borderRadius: "var(--atlas-radius-lg)", overflow: "hidden", border: "1px solid var(--atlas-border)" }}>
+            <div style={{ height: "calc(var(--atlas-spacing-16) * 6.5)", borderRadius: "var(--atlas-radius-lg)", overflow: "hidden", border: "1px solid var(--atlas-border)" }}>
               <Sidebar collapsed={sidebarCollapsed} onCollapsedChange={setSidebarCollapsed}>
                 <SidebarHeader>
                   <Avatar size="sm" initials="AT" />
