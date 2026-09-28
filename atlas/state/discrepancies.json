@@ -422,6 +422,19 @@
       "lastSeen": "2026-09-28T08:58:48.647Z",
       "closedAt": "2026-09-28T13:44:06.000Z",
       "closedBy": "sync:figma"
+    },
+    {
+      "id": "DISC-038",
+      "component": "ButtonGroup",
+      "side": "figma",
+      "status": "closed",
+      "issue": "Code has Variant outline, secondary, ghost; Figma has no Variant property.",
+      "resolution": "add the Variant property in Figma, or drop ButtonGroupVariant",
+      "detectedBy": "sync:figma",
+      "firstSeen": "2026-09-28T15:36:02.000Z",
+      "lastSeen": "2026-09-28T15:16:45.000Z",
+      "closedAt": "2026-09-28T15:16:45.000Z",
+      "closedBy": "sync:figma"
     }
   ]
 }

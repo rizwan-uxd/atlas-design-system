@@ -21,6 +21,7 @@ One line per component. Read `atlas/<Name>.md` only for the components you will 
 | Avatar | primitives | `@atlas/ui-web/primitives/Avatar/Avatar` | — | xs, sm, md, lg, xl |
 | Breadcrumb | patterns | `@atlas/ui-web/patterns/Breadcrumb/Breadcrumb` | — | — |
 | Bubble | primitives | `@atlas/ui-web/primitives/Bubble/Bubble` | primary, secondary, muted, tinted, outline, destructive | — |
+| ButtonGroup | compositions | `@atlas/ui-web/compositions/ButtonGroup/ButtonGroup` | — | sm, md, lg |
 | Chart | compositions | `@atlas/ui-web/compositions/Chart/Chart` | — | — |
 | Divider | primitives | `@atlas/ui-web/primitives/Divider/Divider` | — | — |
 | Drawer | compositions | `@atlas/ui-web/compositions/Drawer/Drawer` | — | sm, md, lg, xl, full |

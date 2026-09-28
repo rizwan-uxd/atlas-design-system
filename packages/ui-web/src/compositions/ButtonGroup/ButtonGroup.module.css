@@ -1,0 +1,69 @@
+/* =========================================================
+   Atlas ButtonGroup — component styles
+   Semantic tokens only. Logical properties throughout (RTL-safe).
+   Items are Atlas Buttons; this file only joins them: it squares the
+   inner corners and drops the inner-facing border so one border sits
+   between two items. Colour, focus ring, disabled and motion stay in
+   Button.module.css.
+   ========================================================= */
+
+.group {
+  display: inline-flex;
+  gap: var(--atlas-spacing-0);
+}
+
+.group[data-orientation="horizontal"] {
+  flex-direction: row;
+  align-items: center;
+}
+
+.group[data-orientation="vertical"] {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+/* Ghost items are never joined; keep them apart. */
+.group[data-spaced] {
+  gap: var(--atlas-spacing-1);
+}
+
+/* Attribute selectors lift these above Button's single-class rules. */
+.item[data-position="left"] {
+  border-start-end-radius: var(--atlas-radius-none);
+  border-end-end-radius: var(--atlas-radius-none);
+  border-inline-end-width: var(--atlas-border-width-0);
+}
+
+.item[data-position="right"] {
+  border-start-start-radius: var(--atlas-radius-none);
+  border-end-start-radius: var(--atlas-radius-none);
+}
+
+.item[data-position="top"] {
+  border-end-start-radius: var(--atlas-radius-none);
+  border-end-end-radius: var(--atlas-radius-none);
+  border-block-end-width: var(--atlas-border-width-0);
+}
+
+.item[data-position="bottom"] {
+  border-start-start-radius: var(--atlas-radius-none);
+  border-start-end-radius: var(--atlas-radius-none);
+}
+
+.item[data-position="middle"] {
+  border-radius: var(--atlas-radius-none);
+  border-inline-end-width: var(--atlas-border-width-0);
+}
+
+/* `middle` is one Figma value for both orientations: in a column the
+   dropped edge is the block-end one, not the inline-end one. */
+.group[data-orientation="vertical"] .item[data-position="middle"] {
+  border-inline-end-width: var(--atlas-border-width-1);
+  border-block-end-width: var(--atlas-border-width-0);
+}
+
+/* A focused item is raised so a neighbour never covers its focus ring. */
+.item:focus-visible {
+  position: relative;
+  z-index: 1;
+}

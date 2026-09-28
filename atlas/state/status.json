@@ -40,6 +40,7 @@
     "Select": { "parity": "match", "figmaMetadata": "description-written", "code": "spec-complete", "verifiedAt": "2026-09-28T09:27:13.753Z" },
     "Tooltip": { "parity": "match", "figmaMetadata": "description-written", "code": "spec-complete", "verifiedAt": null },
     "Bubble": { "parity": "match", "figmaMetadata": "description-written", "code": "spec-complete", "verifiedAt": "2026-09-28T15:03:32.892Z" },
-    "Chart": { "parity": "match", "figmaMetadata": "description-written", "code": "spec-complete", "verifiedAt": "2026-09-28T15:19:51.747Z" }
+    "Chart": { "parity": "match", "figmaMetadata": "description-written", "code": "spec-complete", "verifiedAt": "2026-09-28T15:19:51.747Z" },
+    "ButtonGroup": { "parity": "match", "figmaMetadata": "description-written", "code": "spec-complete", "verifiedAt": "2026-09-28T15:39:28.831Z" }
   }
 }
