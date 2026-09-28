@@ -116,3 +116,17 @@
     transition: none;
   }
 }
+
+/* ── Collapsed sidebar — hide text, badge, chevron ───────────────── */
+
+:global([data-collapsed]) .label,
+:global([data-collapsed]) .badge,
+:global([data-collapsed]) .chevron {
+  display: none;
+}
+
+:global([data-collapsed]) .root,
+:global([data-collapsed]) .child {
+  justify-content: center;
+  padding-inline: var(--atlas-spacing-2);
+}

@@ -1,0 +1,118 @@
+/* ── Root ─────────────────────────────────────────────────────────── */
+
+.root {
+  display: flex;
+  flex-direction: column;
+  inline-size: var(--atlas-content-width-xs);
+  block-size: 100%;
+  background-color: var(--atlas-surface);
+  border-inline-end: var(--atlas-border-width-1) solid var(--atlas-border);
+  overflow: hidden;
+  transition: inline-size var(--atlas-duration-base) var(--atlas-easing-standard);
+}
+
+.collapsed {
+  inline-size: 3.5rem; /* 56px — icon rail */
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .root {
+    transition: none;
+  }
+}
+
+/* ── Header ──────────────────────────────────────────────────────── */
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: var(--atlas-spacing-2);
+  padding-block: var(--atlas-spacing-4);
+  padding-inline: var(--atlas-spacing-4);
+  flex-shrink: 0;
+}
+
+.headerCollapsed {
+  flex-direction: column;
+  align-items: center;
+  padding-inline: var(--atlas-spacing-2);
+}
+
+/* ── Body ────────────────────────────────────────────────────────── */
+
+.body {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-inline: var(--atlas-spacing-2);
+}
+
+/* ── Section ─────────────────────────────────────────────────────── */
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--atlas-spacing-0_5);
+  padding-block: var(--atlas-spacing-2);
+}
+
+.sectionLabel {
+  display: block;
+  padding-inline-start: var(--atlas-spacing-3);
+  padding-block-end: var(--atlas-spacing-1);
+  font-size: var(--atlas-font-size-xs);
+  font-weight: var(--atlas-font-weight-medium);
+  letter-spacing: var(--atlas-letter-spacing-wide);
+  text-transform: uppercase;
+  color: var(--atlas-foreground-subtle);
+  user-select: none;
+}
+
+/* ── Footer ──────────────────────────────────────────────────────── */
+
+.footer {
+  display: flex;
+  align-items: center;
+  gap: var(--atlas-spacing-2);
+  padding-block: var(--atlas-spacing-4);
+  padding-inline: var(--atlas-spacing-4);
+  flex-shrink: 0;
+  border-block-start: var(--atlas-border-width-1) solid var(--atlas-border);
+}
+
+.footerCollapsed {
+  flex-direction: column;
+  align-items: center;
+  padding-inline: var(--atlas-spacing-2);
+}
+
+/* ── Collapse toggle ─────────────────────────────────────────────── */
+
+.collapseToggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  inline-size: var(--atlas-spacing-8);
+  block-size: var(--atlas-spacing-8);
+  border: none;
+  border-radius: var(--atlas-radius-md);
+  background: none;
+  color: var(--atlas-foreground-muted);
+  cursor: pointer;
+}
+
+.collapseToggle:hover {
+  background-color: var(--atlas-background-hovered);
+}
+
+.collapseToggle:focus-visible {
+  outline: var(--atlas-border-width-2) solid var(--atlas-focus-ring);
+  outline-offset: var(--atlas-spacing-0_5);
+}
+
+.collapseIcon {
+  inline-size: var(--atlas-icon-size-xs);
+  block-size: var(--atlas-icon-size-xs);
+}
+

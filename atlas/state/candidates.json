@@ -116,6 +116,15 @@
       "composedFrom": "not yet attempted",
       "occurrences": 0,
       "note": "Web Slider shipped on feat/slider (batch 2, phase 6). Native parity is logged here, not built."
+    },
+    {
+      "id": "CAND-022",
+      "name": "Sidebar",
+      "seenIn": ["docs/componentlist plan _dashboard-gaps_2026-09-27.md"],
+      "composedFrom": "SidebarMenuRow, Avatar, Drawer (mobile), SidebarCollapseToggle (built-in)",
+      "occurrences": 1,
+      "note": "Promoted to layouts/Sidebar/ in batch 3 B2 (feat/sidebar). Figma component set 620:52 with Collapsed boolean. References: Stripe dashboard (expanded), Grok (collapsed rail).",
+      "promoted": true
     }
   ]
 }
