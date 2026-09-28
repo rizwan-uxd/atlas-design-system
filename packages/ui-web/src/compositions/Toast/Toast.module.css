@@ -1,0 +1,168 @@
+/* =================================================================
+   Atlas Toast — component styles
+   All values reference semantic tokens only.
+   No hex literals. No primitive tokens. No magic numbers.
+   Layout is a grid so title / description stack in the middle column
+   while the icon, action and close stay centred beside them.
+   ================================================================= */
+
+/* ── Viewport ────────────────────────────────────────────────── */
+
+.viewport {
+  position: fixed;
+  z-index: var(--atlas-z-toast);
+  inset-block-end: 0;
+  inset-inline-end: 0;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--atlas-spacing-3);
+  inline-size: 100%;
+  max-inline-size: calc(var(--atlas-content-width-md) + var(--atlas-spacing-8));
+  padding: var(--atlas-spacing-4);
+  margin: 0;
+  list-style: none;
+  outline: none;
+}
+
+/* ── Root ────────────────────────────────────────────────────── */
+
+.root {
+  --_fill: var(--atlas-surface-raised);
+  --_border: var(--atlas-border);
+  --_icon: var(--atlas-foreground-muted);
+
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
+  grid-template-rows: auto auto;
+  align-items: center;
+  inline-size: 100%;
+  max-inline-size: var(--atlas-content-width-md);
+  padding: var(--atlas-spacing-4);
+  font-family: var(--atlas-font-sans);
+  color: var(--atlas-foreground);
+  background-color: var(--_fill);
+  border: var(--atlas-border-width-1) solid var(--_border);
+  border-radius: var(--atlas-radius-2xl);
+  box-shadow: var(--atlas-shadow-lg);
+}
+
+.root[data-variant="success"] {
+  --_fill: var(--atlas-success-subtle);
+  --_border: var(--atlas-success-muted);
+  --_icon: var(--atlas-success);
+}
+
+.root[data-variant="danger"] {
+  --_fill: var(--atlas-danger-subtle);
+  --_border: var(--atlas-danger-muted);
+  --_icon: var(--atlas-danger);
+}
+
+/* ── Parts ───────────────────────────────────────────────────── */
+
+.icon {
+  grid-column: 1;
+  grid-row: 1 / span 2;
+  display: inline-flex;
+  margin-inline-end: var(--atlas-spacing-3);
+  color: var(--_icon);
+}
+
+.title {
+  grid-column: 2;
+  grid-row: 1;
+  margin: 0;
+  font-size: var(--atlas-font-size-sm);
+  font-weight: var(--atlas-font-weight-medium);
+  line-height: var(--atlas-line-height-normal);
+  color: var(--atlas-foreground);
+  overflow-wrap: anywhere;
+}
+
+.description {
+  grid-column: 2;
+  grid-row: 2;
+  margin: 0;
+  margin-block-start: var(--atlas-spacing-1);
+  font-size: var(--atlas-font-size-xs);
+  font-weight: var(--atlas-font-weight-regular);
+  line-height: var(--atlas-line-height-snug);
+  color: var(--atlas-foreground-muted);
+  overflow-wrap: anywhere;
+}
+
+/* A description with no title still sits in the first row. */
+.root:not(:has(.title)) .description {
+  grid-row: 1;
+  margin-block-start: 0;
+}
+
+.action {
+  grid-column: 3;
+  grid-row: 1 / span 2;
+  margin-inline-start: var(--atlas-spacing-3);
+}
+
+.close {
+  grid-column: 4;
+  grid-row: 1 / span 2;
+  margin-inline-start: var(--atlas-spacing-3);
+}
+
+/* With no action the close button takes the third column's place. */
+.root:not(:has(.action)) .close {
+  grid-column: 3 / span 2;
+}
+
+/* ── Motion ──────────────────────────────────────────────────── */
+/* Swipe follows the inline end; Radix exposes the pointer offset as a variable. */
+
+.root[data-state="open"] {
+  animation: toast-in var(--atlas-duration-base) var(--atlas-easing-standard);
+}
+
+.root[data-state="closed"] {
+  animation: toast-out var(--atlas-duration-fast) var(--atlas-easing-exit);
+}
+
+.root[data-swipe="move"] {
+  transform: translateX(var(--radix-toast-swipe-move-x));
+}
+
+.root[data-swipe="cancel"] {
+  transform: translateX(0);
+  transition: transform var(--atlas-duration-fast) var(--atlas-easing-standard);
+}
+
+.root[data-swipe="end"] {
+  animation: toast-swipe-out var(--atlas-duration-fast) var(--atlas-easing-exit);
+}
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translateY(var(--atlas-spacing-2)); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes toast-out {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+@keyframes toast-swipe-out {
+  from { transform: translateX(var(--radix-toast-swipe-end-x)); opacity: 1; }
+  to   { transform: translateX(calc(var(--radix-toast-swipe-end-x) + var(--atlas-spacing-8))); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .root[data-state="open"],
+  .root[data-state="closed"],
+  .root[data-swipe="end"] {
+    animation: none;
+  }
+
+  .root[data-swipe="cancel"] {
+    transition: none;
+  }
+}
