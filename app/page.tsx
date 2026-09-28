@@ -1521,6 +1521,27 @@ export default function SandboxPage() {
                 />
               </div>
             ))}
+
+            <p style={{ margin: "var(--atlas-spacing-4) 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase", letterSpacing: "var(--atlas-letter-spacing-wide)" }}>
+              dashboard mode (breadcrumb + search)
+            </p>
+            <NavBar
+              variant="bordered"
+              brand="Atlas"
+              breadcrumb={
+                <Breadcrumb>
+                  <BreadcrumbList>
+                    <BreadcrumbItem><BreadcrumbLink href="#">Home</BreadcrumbLink></BreadcrumbItem>
+                    <BreadcrumbSeparator />
+                    <BreadcrumbItem><BreadcrumbLink href="#">Dashboard</BreadcrumbLink></BreadcrumbItem>
+                    <BreadcrumbSeparator />
+                    <BreadcrumbItem><BreadcrumbPage>Analytics</BreadcrumbPage></BreadcrumbItem>
+                  </BreadcrumbList>
+                </Breadcrumb>
+              }
+              search={<Input placeholder="Search..." style={{ width: "var(--atlas-content-width-xs)" }} />}
+              actions={<Avatar size="sm" initials="RU" />}
+            />
           </div>
         </Section>
 

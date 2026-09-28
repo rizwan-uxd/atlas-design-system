@@ -1,6 +1,7 @@
 import figma from "@figma/code-connect"
 import { NavBar } from "@atlas/ui-web/layouts/NavBar/NavBar"
 import { Button } from "@atlas/ui-web/primitives/Button/Button"
+import { Input } from "@atlas/ui-web/primitives/Input/Input"
 
 /**
  * Atlas NavBar — Code Connect
@@ -11,6 +12,8 @@ import { Button } from "@atlas/ui-web/primitives/Button/Button"
  *   bordered    → "bordered"
  *   floating    → "floating"
  *   transparent → "transparent"
+ *
+ * Dashboard mode (B3, 2026-09-28): breadcrumb + search ReactNode slots.
  */
 figma.connect(
   NavBar,
@@ -30,10 +33,17 @@ figma.connect(
       }),
     },
     example: ({ variant, size }) => (
+      /* Marketing: links + actions; Dashboard: breadcrumb + search + actions */
       <NavBar
         variant={variant}
         size={size}
-        brand={<span>Atlas</span>}
+        brand="Atlas"
+        links={[
+          { label: "Products", href: "/products" },
+          { label: "Docs", href: "/docs" },
+        ]}
+        breadcrumb={<>{/* Breadcrumb — omit links when using */}</>}
+        search={<Input placeholder="Search..." />}
         actions={<Button size="sm">Sign in</Button>}
       />
     ),

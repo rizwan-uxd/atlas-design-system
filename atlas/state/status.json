@@ -21,7 +21,7 @@
     "Card": { "parity": "open", "figmaMetadata": "none", "code": "scaffolded", "verifiedAt": null },
     "Dialog": { "parity": "match", "figmaMetadata": "none", "code": "scaffolded", "verifiedAt": null },
     "Tabs": { "parity": "match", "figmaMetadata": "none", "code": "scaffolded", "verifiedAt": null },
-    "NavBar": { "parity": "match", "figmaMetadata": "none", "code": "scaffolded", "verifiedAt": null },
+    "NavBar": { "parity": "match", "figmaMetadata": "description-written", "code": "scaffolded", "verifiedAt": "2026-09-28T05:30:00.000Z" },
     "Avatar": { "parity": "match", "figmaMetadata": "description-written", "code": "spec-complete", "verifiedAt": null },
     "Breadcrumb": { "parity": "match", "figmaMetadata": "description-written", "code": "spec-complete", "verifiedAt": null },
     "Divider": { "parity": "match", "figmaMetadata": "description-written", "code": "spec-complete", "verifiedAt": null },

@@ -19,6 +19,8 @@ type AssertNavBarShape = {
   brand?:        React.ReactNode
   brandHref?:    string
   links?:        NavLink[]
+  breadcrumb?:   React.ReactNode
+  search?:       React.ReactNode
   actions?:      React.ReactNode
   hideOnScroll?: boolean
   className?:    string
