@@ -191,6 +191,12 @@
       "topic": "New content-width primitive scale (xs/sm/md/lg): app/page.tsx had no matching token for demo-block max-widths",
       "decision": "Sandbox audit (via atlas-verify's atlas-components hardcoded-length check, widened to app/page.tsx by this task) found 5 raw `maxWidth` pixel literals (240, 280, 400×2, 880) with no existing Atlas token to snap to — `--atlas-container-*` (640–1536px) is a page-breakpoint scale, an order of magnitude too large for a compact demo column or form. Per the user's explicit instruction (no hardcoded raw values), added a new primitive scale rather than reusing a wrong-fit token: `layout/content-width/xs|sm|md|lg` = 240|280|400|880, created in Figma `Atlas/Primitives` first (scope `WIDTH_HEIGHT`, matching `layout/container/*`'s own convention exactly), then mirrored to `packages/tokens/atlas.tokens.css` (`--atlas-content-width-{xs,sm,md,lg}`), `atlas.tokens.json` and `atlas.figma.tokens.json`. `scripts/atlas-sync.mjs`'s `LAYOUT_GROUPS` gained a `content-width-` entry so `atlas/tokens.md`/`tokens.json` list it. Values were chosen to exactly match the 4 distinct widths already in use (not rounded to a cleaner step) so no sandbox layout visibly shifted. Also snapped 23 hardcoded `letterSpacing: 0.06em/0.08em` occurrences in `app/page.tsx` to the existing `--atlas-letter-spacing-wide` (0.02em, a real value change to those labels' tracking — user chose this over adding new letter-spacing tokens) and 10 odd `fontSize` literals (13, 24, 0.75em, 0.875em) to the nearest existing `--atlas-font-size-*` step.",
       "date": "2026-09-28"
+    },
+    {
+      "id": "DEC-032",
+      "topic": "Sidebar shell: collapsed state, mobile, and CSS approach",
+      "decision": "B2 Sidebar shell uses a CSS data-attribute approach for the collapsed rail state: the Sidebar root sets `data-collapsed` on the `<aside>` element, and SidebarMenuRow's CSS module uses `:global([data-collapsed])` descendant selectors to hide `.label`, `.badge`, `.chevron` and center the icon — no React context needed for the visual collapse. Expanded width uses `--atlas-content-width-xs` (240px). Collapsed rail is 56px (3.5rem). Mobile/narrow viewport reuses the existing Drawer component (mobile web only, not native). References: Stripe dashboard (expanded layout, sections, footer), Grok (collapsed icon rail). Figma component set `620:52` with Collapsed boolean property and Light/Dark example frames.",
+      "date": "2026-09-28"
     }
   ]
 }
