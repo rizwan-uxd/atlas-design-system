@@ -1,0 +1,102 @@
+/* =================================================================
+   Atlas Tooltip — component styles
+   All values reference semantic tokens only.
+   No hex literals. No primitive tokens. No magic numbers.
+   Fill = foreground, text = background, so it inverts in dark mode.
+   ================================================================= */
+
+.content {
+  --tooltip-arrow-size: calc(var(--atlas-spacing-2) + var(--atlas-spacing-0_5));
+
+  position: relative;
+  z-index: var(--atlas-z-tooltip);
+  box-sizing: border-box;
+  max-inline-size: var(--atlas-content-width-sm);
+  padding-block: var(--atlas-spacing-1_5);
+  padding-inline: var(--atlas-spacing-3);
+  font-family: var(--atlas-font-sans);
+  font-size: var(--atlas-font-size-xs);
+  font-weight: var(--atlas-font-weight-regular);
+  line-height: var(--atlas-line-height-snug);
+  color: var(--atlas-background);
+  background-color: var(--atlas-foreground);
+  border-radius: var(--atlas-radius-md);
+  overflow-wrap: break-word;
+  user-select: none;
+  transform-origin: var(--radix-tooltip-content-transform-origin);
+}
+
+/* ── Arrow ───────────────────────────────────────────────────── */
+/* Rotated square centred on the edge facing the trigger. Radix reports the
+   physical side after collision handling, so left/right map to logical
+   insets per direction. */
+
+.content::after {
+  content: "";
+  position: absolute;
+  inline-size: var(--tooltip-arrow-size);
+  block-size: var(--tooltip-arrow-size);
+  background-color: var(--atlas-foreground);
+  border-radius: var(--atlas-radius-sm);
+  transform: rotate(45deg);
+  pointer-events: none;
+}
+
+.content[data-side="top"]::after {
+  inset-block-end: calc(var(--tooltip-arrow-size) / -2 + var(--atlas-spacing-px));
+  inset-inline-start: calc(50% - var(--tooltip-arrow-size) / 2);
+}
+
+.content[data-side="bottom"]::after {
+  inset-block-start: calc(var(--tooltip-arrow-size) / -2 + var(--atlas-spacing-px));
+  inset-inline-start: calc(50% - var(--tooltip-arrow-size) / 2);
+}
+
+.content[data-side="left"]::after {
+  inset-inline-end: calc(var(--tooltip-arrow-size) / -2 + var(--atlas-spacing-px));
+  inset-block-start: calc(50% - var(--tooltip-arrow-size) / 2);
+}
+
+.content[data-side="right"]::after {
+  inset-inline-start: calc(var(--tooltip-arrow-size) / -2 + var(--atlas-spacing-px));
+  inset-block-start: calc(50% - var(--tooltip-arrow-size) / 2);
+}
+
+.content[data-side="left"]:dir(rtl)::after {
+  inset-inline-end: auto;
+  inset-inline-start: calc(var(--tooltip-arrow-size) / -2 + var(--atlas-spacing-px));
+}
+
+.content[data-side="right"]:dir(rtl)::after {
+  inset-inline-start: auto;
+  inset-inline-end: calc(var(--tooltip-arrow-size) / -2 + var(--atlas-spacing-px));
+}
+
+/* ── Motion ──────────────────────────────────────────────────── */
+
+.content[data-state="delayed-open"],
+.content[data-state="instant-open"] {
+  animation: tooltip-in var(--atlas-duration-fast) var(--atlas-easing-standard);
+}
+
+.content[data-state="closed"] {
+  animation: tooltip-out var(--atlas-duration-fast) var(--atlas-easing-exit);
+}
+
+@keyframes tooltip-in {
+  from { opacity: 0; transform: scale(0.96); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes tooltip-out {
+  from { opacity: 1; transform: scale(1); }
+  to   { opacity: 0; transform: scale(0.96); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .content[data-state="delayed-open"],
+  .content[data-state="instant-open"],
+  .content[data-state="closed"] {
+    animation: none;
+  }
+}
