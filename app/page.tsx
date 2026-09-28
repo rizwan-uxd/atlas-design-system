@@ -34,6 +34,7 @@ import {
   DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuLabel, DropdownMenuGroup, DropdownMenuSeparator,
   DropdownMenuSub, DropdownMenuSubTrigger, DropdownMenuSubContent,
 } from "@atlas/ui-web/patterns/DropdownMenu/DropdownMenu"
+import { Chart, ChartHeader, ChartTitle, ChartDescription, ChartStats, ChartStat, ChartContent, ChartBar, ChartLegend, ChartLegendItem } from "@atlas/ui-web/compositions/Chart/Chart"
 import { NavBar } from "@atlas/ui-web/layouts/NavBar/NavBar"
 import { SidebarMenuRow, SidebarMenuRowChild } from "@atlas/ui-web/primitives/SidebarMenuRow/SidebarMenuRow"
 import { Sidebar, SidebarHeader, SidebarBody, SidebarSection, SidebarFooter, SidebarCollapseToggle } from "@atlas/ui-web/layouts/Sidebar/Sidebar"
@@ -43,6 +44,16 @@ import { House, CreditCard, Receipt, Clock, Settings, Archive, Folder, ChevronRi
 const DEMO_IMAGE = "data:image/svg+xml;utf8," + encodeURIComponent(
   '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 200"><rect width="320" height="200" fill="#d0f1ff"/><circle cx="240" cy="50" r="22" fill="#dba300"/><ellipse cx="200" cy="200" rx="160" ry="70" fill="#d0f5dc"/><ellipse cx="80" cy="210" rx="130" ry="80" fill="#008a44"/></svg>'
 )
+
+const CHART_ROWS = Array.from({ length: 90 }, (_, i) => {
+  const d = new Date(2024, 3, 1 + i)
+  return {
+    date: d.toLocaleDateString("en-US", { month: "short", day: "numeric" }),
+    desktop: 120 + ((i * 37) % 90) + (i % 7) * 8,
+    mobile: 90 + ((i * 53) % 110) + (i % 5) * 10,
+  }
+})
+const CHART_TOTALS = { desktop: "24,828", mobile: "25,010" }
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
@@ -69,6 +80,7 @@ function Row({ children, wrap = true }: { children: React.ReactNode; wrap?: bool
 
 export default function SandboxPage() {
   const [dark, setDark] = useState(false)
+  const [chartSeries, setChartSeries] = useState<"desktop" | "mobile">("desktop")
   const [dialogOpen, setDialogOpen] = useState(false)
   const [volume, setVolume] = useState(40)
   const [price, setPrice] = useState<[number, number]>([30, 70])
@@ -1148,6 +1160,39 @@ export default function SandboxPage() {
 
             </div>
           </TooltipProvider>
+        </Section>
+
+        <Section title="Chart">
+          <div style={{ display: "flex", flexDirection: "column", gap: "var(--atlas-spacing-6)", maxInlineSize: "var(--atlas-content-width-lg)" }}>
+            <Chart>
+              <ChartHeader
+                stats={
+                  <ChartStats aria-label="Series">
+                    {(["desktop", "mobile"] as const).map((k) => (
+                      <ChartStat key={k} label={k === "desktop" ? "Desktop" : "Mobile"} value={CHART_TOTALS[k]} selected={chartSeries === k} onClick={() => setChartSeries(k)} />
+                    ))}
+                  </ChartStats>
+                }
+              >
+                <ChartTitle>Bar Chart - Interactive</ChartTitle>
+                <ChartDescription>Showing total visitors for the last 3 months</ChartDescription>
+              </ChartHeader>
+              <ChartContent>
+                <ChartBar aria-label={`${chartSeries} visitors per day, last 3 months`} data={CHART_ROWS} xKey="date" dataKey={chartSeries} label={chartSeries === "desktop" ? "Desktop" : "Mobile"} />
+                <ChartLegend><ChartLegendItem>{chartSeries === "desktop" ? "Desktop" : "Mobile"}</ChartLegendItem></ChartLegend>
+              </ChartContent>
+            </Chart>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(var(--atlas-content-width-sm), 1fr))", gap: "var(--atlas-spacing-6)" }}>
+              <Chart state="loading">
+                <ChartHeader><ChartTitle>Visitors</ChartTitle><ChartDescription>Loading data</ChartDescription></ChartHeader>
+                <ChartContent />
+              </Chart>
+              <Chart state="empty">
+                <ChartHeader><ChartTitle>Visitors</ChartTitle><ChartDescription>No results in this range</ChartDescription></ChartHeader>
+                <ChartContent />
+              </Chart>
+            </div>
+          </div>
         </Section>
 
         {/* ── LIST ITEM ── */}
