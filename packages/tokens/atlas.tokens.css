@@ -130,6 +130,12 @@
   --atlas-container-xl: 1280px;
   --atlas-container-2xl: 1536px;
 
+  /* General-purpose content/demo max-width scale — not a page breakpoint (see container/* above) */
+  --atlas-content-width-xs: 240px;
+  --atlas-content-width-sm: 280px;
+  --atlas-content-width-md: 400px;
+  --atlas-content-width-lg: 880px;
+
   /* Active layout tokens — mobile-first defaults; uplifted in @media below */
   --atlas-columns: var(--atlas-columns-mobile);
   --atlas-gutter: var(--atlas-gutter-mobile);
@@ -239,6 +245,7 @@
   --atlas-background-subtle: var(--atlas-color-neutral-50);
   --atlas-background-muted: var(--atlas-color-neutral-100);
   --atlas-background-accent: var(--atlas-color-neutral-100);
+  --atlas-background-hovered: var(--atlas-color-neutral-50);
   --atlas-surface: var(--atlas-color-neutral-0);
   --atlas-surface-raised: var(--atlas-color-neutral-0);
   --atlas-surface-overlay: var(--atlas-color-neutral-0);
@@ -284,6 +291,7 @@
   --atlas-background-subtle: var(--atlas-color-neutral-900);
   --atlas-background-muted: var(--atlas-color-neutral-800);
   --atlas-background-accent: var(--atlas-color-neutral-700);
+  --atlas-background-hovered: var(--atlas-color-neutral-700);
   --atlas-surface: var(--atlas-color-neutral-900);
   --atlas-surface-raised: var(--atlas-color-neutral-800);
   --atlas-surface-overlay: var(--atlas-color-neutral-800);

@@ -33,6 +33,7 @@ import {
   DropdownMenuSub, DropdownMenuSubTrigger, DropdownMenuSubContent,
 } from "@atlas/ui-web/patterns/DropdownMenu/DropdownMenu"
 import { NavBar } from "@atlas/ui-web/layouts/NavBar/NavBar"
+import { SidebarMenuRow, SidebarMenuRowChild } from "@atlas/ui-web/primitives/SidebarMenuRow/SidebarMenuRow"
 
 // Demo picture: an inline SVG so the sandbox needs no network.
 const DEMO_IMAGE = "data:image/svg+xml;utf8," + encodeURIComponent(
@@ -43,7 +44,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
   return (
     <section style={{ display: "flex", flexDirection: "column", gap: "var(--atlas-spacing-4)" }}>
       <div style={{
-        fontSize: "var(--atlas-font-size-xs)", fontWeight: 700, letterSpacing: "0.08em",
+        fontSize: "var(--atlas-font-size-xs)", fontWeight: 700, letterSpacing: "var(--atlas-letter-spacing-wide)",
         textTransform: "uppercase", color: "var(--atlas-foreground-muted)",
         borderBottom: "1px solid var(--atlas-border)", paddingBottom: "var(--atlas-spacing-2)",
       }}>
@@ -74,6 +75,7 @@ export default function SandboxPage() {
   const [statusBar, setStatusBar] = useState(true)
   const [activityBar, setActivityBar] = useState(false)
   const [sortBy, setSortBy] = useState("name")
+  const [billingExpanded, setBillingExpanded] = useState(true)
 
   const toggleTheme = () => {
     const next = !dark
@@ -106,7 +108,7 @@ export default function SandboxPage() {
         }
       />
 
-      <div style={{ maxWidth: 880, margin: "0 auto", padding: "var(--atlas-spacing-10) var(--atlas-spacing-6)", display: "flex", flexDirection: "column", gap: "var(--atlas-spacing-12)" }}>
+      <div style={{ maxWidth: "var(--atlas-content-width-lg)", margin: "0 auto", padding: "var(--atlas-spacing-10) var(--atlas-spacing-6)", display: "flex", flexDirection: "column", gap: "var(--atlas-spacing-12)" }}>
 
         {/* Header */}
         <div>
@@ -147,7 +149,7 @@ export default function SandboxPage() {
 
         {/* ── INPUT ── */}
         <Section title="Input">
-          <div style={{ display: "flex", flexDirection: "column", gap: "var(--atlas-spacing-3)", maxWidth: 400 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: "var(--atlas-spacing-3)", maxWidth: "var(--atlas-content-width-md)" }}>
             <div>
               <Label htmlFor="i1">Default input (md)</Label>
               <div style={{ marginTop: "var(--atlas-spacing-1)" }}>
@@ -190,7 +192,7 @@ export default function SandboxPage() {
             <div>
               <Label htmlFor="i4">With icons</Label>
               <div style={{ marginTop: "var(--atlas-spacing-1)" }}>
-                <Input id="i4" leadingIcon={<span style={{ fontSize: 13 }}>🔍</span>} trailingIcon={<span style={{ fontSize: 13 }}>✕</span>} placeholder="Search…" />
+                <Input id="i4" leadingIcon={<span style={{ fontSize: "var(--atlas-font-size-xs)" }}>🔍</span>} trailingIcon={<span style={{ fontSize: "var(--atlas-font-size-xs)" }}>✕</span>} placeholder="Search…" />
               </div>
             </div>
             <div>
@@ -235,13 +237,13 @@ export default function SandboxPage() {
           {/* Inline variant beside an Input */}
           <div style={{ display: "flex", alignItems: "center", gap: "var(--atlas-spacing-3)" }}>
             <Label variant="inline" htmlFor="l-inline">Inline label</Label>
-            <Input id="l-inline" placeholder="Sits level with label" style={{ maxWidth: 240 }} />
+            <Input id="l-inline" placeholder="Sits level with label" style={{ maxWidth: "var(--atlas-content-width-xs)" }} />
           </div>
         </Section>
 
         {/* ── TEXTAREA ── */}
         <Section title="Textarea">
-          <div style={{ display: "flex", flexDirection: "column", gap: "var(--atlas-spacing-4)", maxWidth: 400 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: "var(--atlas-spacing-4)", maxWidth: "var(--atlas-content-width-md)" }}>
             {/* Sizes */}
             <div>
               <Label htmlFor="ta-sm">Small (80px min-height)</Label>
@@ -429,7 +431,7 @@ export default function SandboxPage() {
           {/* Leading visual + action slot */}
           <Card>
             <CardHeader
-              leading={<span style={{ fontSize: 24 }}>🖼️</span>}
+              leading={<span style={{ fontSize: "var(--atlas-font-size-2xl)" }}>🖼️</span>}
               action={<Button size="sm" variant="ghost">⋯</Button>}
             >
               <CardTitle>With leading &amp; action</CardTitle>
@@ -486,7 +488,7 @@ export default function SandboxPage() {
 
             {/* All 6 variants — md size, filled */}
             <div>
-              <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase", letterSpacing: "0.06em" }}>6 variants (md, default appearance)</p>
+              <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase", letterSpacing: "var(--atlas-letter-spacing-wide)" }}>6 variants (md, default appearance)</p>
               <Row>
                 {(["neutral", "primary", "success", "warning", "danger", "info"] as const).map(v => (
                   <Badge key={v} variant={v}>{v}</Badge>
@@ -496,7 +498,7 @@ export default function SandboxPage() {
 
             {/* Sizes — sm / md / lg */}
             <div>
-              <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase", letterSpacing: "0.06em" }}>Sizes</p>
+              <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase", letterSpacing: "var(--atlas-letter-spacing-wide)" }}>Sizes</p>
               <Row>
                 <Badge size="sm" variant="neutral">sm — 18px</Badge>
                 <Badge size="md" variant="neutral">md — 22px</Badge>
@@ -508,7 +510,7 @@ export default function SandboxPage() {
 
             {/* Outline appearance — all variants */}
             <div>
-              <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase", letterSpacing: "0.06em" }}>Outline appearance</p>
+              <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase", letterSpacing: "var(--atlas-letter-spacing-wide)" }}>Outline appearance</p>
               <Row>
                 <Badge appearance="outline">outline neutral</Badge>
                 <Badge appearance="outline" variant="primary">outline primary</Badge>
@@ -521,7 +523,7 @@ export default function SandboxPage() {
 
             {/* Dot indicator */}
             <div>
-              <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase", letterSpacing: "0.06em" }}>Dot indicator (inherits variant fg)</p>
+              <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase", letterSpacing: "var(--atlas-letter-spacing-wide)" }}>Dot indicator (inherits variant fg)</p>
               <Row>
                 <Badge variant="neutral" dot>Neutral</Badge>
                 <Badge variant="success" dot>Success</Badge>
@@ -533,17 +535,17 @@ export default function SandboxPage() {
 
             {/* Icon slots */}
             <div>
-              <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase", letterSpacing: "0.06em" }}>Icon slots</p>
+              <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase", letterSpacing: "var(--atlas-letter-spacing-wide)" }}>Icon slots</p>
               <Row>
-                <Badge variant="info" leadingIcon={<span style={{ fontSize: "0.75em" }}>ℹ</span>}>Leading icon</Badge>
-                <Badge variant="success" trailingIcon={<span style={{ fontSize: "0.75em" }}>✓</span>}>Trailing icon</Badge>
-                <Badge variant="warning" leadingIcon={<span style={{ fontSize: "0.75em" }}>⚠</span>} trailingIcon={<span style={{ fontSize: "0.75em" }}>!</span>}>Both icons</Badge>
+                <Badge variant="info" leadingIcon={<span style={{ fontSize: "var(--atlas-font-size-xs)" }}>ℹ</span>}>Leading icon</Badge>
+                <Badge variant="success" trailingIcon={<span style={{ fontSize: "var(--atlas-font-size-xs)" }}>✓</span>}>Trailing icon</Badge>
+                <Badge variant="warning" leadingIcon={<span style={{ fontSize: "var(--atlas-font-size-xs)" }}>⚠</span>} trailingIcon={<span style={{ fontSize: "var(--atlas-font-size-xs)" }}>!</span>}>Both icons</Badge>
               </Row>
             </div>
 
             {/* Removable */}
             <div>
-              <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase", letterSpacing: "0.06em" }}>Removable (× fires callback)</p>
+              <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase", letterSpacing: "var(--atlas-letter-spacing-wide)" }}>Removable (× fires callback)</p>
               <Row>
                 <Badge variant="neutral" removable onRemove={() => alert("removed: neutral")}>Neutral</Badge>
                 <Badge variant="success" removable onRemove={() => alert("removed: success")}>Success</Badge>
@@ -554,7 +556,7 @@ export default function SandboxPage() {
 
             {/* Square prop */}
             <div>
-              <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase", letterSpacing: "0.06em" }}>Square (radius-sm instead of full)</p>
+              <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase", letterSpacing: "var(--atlas-letter-spacing-wide)" }}>Square (radius-sm instead of full)</p>
               <Row>
                 <Badge square>Neutral square</Badge>
                 <Badge square variant="success">Success square</Badge>
@@ -565,7 +567,7 @@ export default function SandboxPage() {
 
             {/* Disabled */}
             <div>
-              <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase", letterSpacing: "0.06em" }}>Disabled (opacity-disabled, non-interactive)</p>
+              <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase", letterSpacing: "var(--atlas-letter-spacing-wide)" }}>Disabled (opacity-disabled, non-interactive)</p>
               <Row>
                 <Badge disabled>Disabled neutral</Badge>
                 <Badge disabled variant="success">Disabled success</Badge>
@@ -676,7 +678,7 @@ export default function SandboxPage() {
           <div style={{ display: "flex", flexDirection: "column", gap: "var(--atlas-spacing-4)" }}>
 
             {/* All 5 variants — md size with title + description */}
-            <p style={{ margin: 0, fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase", letterSpacing: "0.06em" }}>5 variants (md, title + description)</p>
+            <p style={{ margin: 0, fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase", letterSpacing: "var(--atlas-letter-spacing-wide)" }}>5 variants (md, title + description)</p>
             <Alert variant="info" title="Info" description="Here's some helpful context you might want to know." />
             <Alert variant="success" title="Success" description="Your changes have been saved successfully." />
             <Alert variant="warning" title="Warning" description="This action may have unintended side effects." />
@@ -684,17 +686,17 @@ export default function SandboxPage() {
             <Alert variant="neutral" title="Note" description="A neutral message with no particular urgency." />
 
             {/* Description only (no title) */}
-            <p style={{ margin: "var(--atlas-spacing-2) 0 0", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase", letterSpacing: "0.06em" }}>Description only (no title)</p>
+            <p style={{ margin: "var(--atlas-spacing-2) 0 0", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase", letterSpacing: "var(--atlas-letter-spacing-wide)" }}>Description only (no title)</p>
             <Alert variant="info" description="Your session will expire in 5 minutes. Save your work." />
             <Alert variant="danger" description="Failed to connect to the server." />
 
             {/* Dismissible */}
-            <p style={{ margin: "var(--atlas-spacing-2) 0 0", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase", letterSpacing: "0.06em" }}>Dismissible (× has 44px touch target)</p>
+            <p style={{ margin: "var(--atlas-spacing-2) 0 0", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase", letterSpacing: "var(--atlas-letter-spacing-wide)" }}>Dismissible (× has 44px touch target)</p>
             <Alert variant="success" title="File uploaded" description="Your file has been processed and is ready." dismissible onDismiss={() => alert("dismissed")} />
             <Alert variant="warning" title="Storage almost full" description="You're using 90% of your storage quota." dismissible onDismiss={() => alert("dismissed")} />
 
             {/* With actions slot */}
-            <p style={{ margin: "var(--atlas-spacing-2) 0 0", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase", letterSpacing: "0.06em" }}>With actions</p>
+            <p style={{ margin: "var(--atlas-spacing-2) 0 0", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase", letterSpacing: "var(--atlas-letter-spacing-wide)" }}>With actions</p>
             <Alert
               variant="warning"
               title="Unsaved changes"
@@ -716,13 +718,13 @@ export default function SandboxPage() {
             />
 
             {/* sm / lg sizes */}
-            <p style={{ margin: "var(--atlas-spacing-2) 0 0", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase", letterSpacing: "0.06em" }}>sm / lg sizes</p>
+            <p style={{ margin: "var(--atlas-spacing-2) 0 0", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase", letterSpacing: "var(--atlas-letter-spacing-wide)" }}>sm / lg sizes</p>
             <Alert size="sm" variant="info" title="Compact info" description="Small padding, smaller type." />
             <Alert size="sm" variant="success" description="Saved." dismissible onDismiss={() => {}} />
             <Alert size="lg" variant="warning" title="Large alert" description="More padding, larger type — for high-visibility placements." dismissible onDismiss={() => {}} />
 
             {/* hideIcon + icon override */}
-            <p style={{ margin: "var(--atlas-spacing-2) 0 0", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase", letterSpacing: "0.06em" }}>hideIcon / icon override</p>
+            <p style={{ margin: "var(--atlas-spacing-2) 0 0", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase", letterSpacing: "var(--atlas-letter-spacing-wide)" }}>hideIcon / icon override</p>
             <Alert variant="info" title="No icon" description="Icon hidden via hideIcon prop." hideIcon />
             <Alert variant="success" icon={<span>🎉</span>} title="Custom icon" description="Overrides the default check with a custom node." />
 
@@ -735,7 +737,7 @@ export default function SandboxPage() {
 
             {/* Modal — default */}
             <div>
-              <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase", letterSpacing: "0.06em" }}>Modal (md) — focus trap · Esc · scroll lock · overlay click</p>
+              <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase", letterSpacing: "var(--atlas-letter-spacing-wide)" }}>Modal (md) — focus trap · Esc · scroll lock · overlay click</p>
               <Row>
                 <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
                   <DialogTrigger asChild>
@@ -807,7 +809,7 @@ export default function SandboxPage() {
 
             {/* Sheet — standalone component, compositions/Sheet/Sheet */}
             <div>
-              <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase", letterSpacing: "0.06em" }}>Sheet — slides up from bottom · drag handle closes</p>
+              <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase", letterSpacing: "var(--atlas-letter-spacing-wide)" }}>Sheet — slides up from bottom · drag handle closes</p>
               <Row>
                 <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
                   <SheetTrigger asChild>
@@ -834,7 +836,7 @@ export default function SandboxPage() {
 
             {/* Drawer — standalone component, compositions/Drawer/Drawer */}
             <div>
-              <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase", letterSpacing: "0.06em" }}>Drawer — slides from inline-end (RTL-safe)</p>
+              <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase", letterSpacing: "var(--atlas-letter-spacing-wide)" }}>Drawer — slides from inline-end (RTL-safe)</p>
               <Row>
                 <Drawer open={drawerOpen} onOpenChange={setDrawerOpen}>
                   <DrawerTrigger asChild>
@@ -1405,7 +1407,7 @@ export default function SandboxPage() {
             {/* 3 variants — md size */}
             {(["line", "pill", "segmented"] as const).map(variant => (
               <div key={variant}>
-                <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+                <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase", letterSpacing: "var(--atlas-letter-spacing-wide)" }}>
                   {variant} · md · arrow keys · disabled tab skipped
                 </p>
                 <Tabs
@@ -1422,7 +1424,7 @@ export default function SandboxPage() {
 
             {/* Sizes — line */}
             <div>
-              <p style={{ margin: "0 0 var(--atlas-spacing-3)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+              <p style={{ margin: "0 0 var(--atlas-spacing-3)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase", letterSpacing: "var(--atlas-letter-spacing-wide)" }}>
                 Sizes — sm / md / lg (line)
               </p>
               <div style={{ display: "flex", flexDirection: "column", gap: "var(--atlas-spacing-6)" }}>
@@ -1445,7 +1447,7 @@ export default function SandboxPage() {
 
             {/* With icon + badge in trigger */}
             <div>
-              <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+              <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase", letterSpacing: "var(--atlas-letter-spacing-wide)" }}>
                 Leading icon · trailing badge (pill)
               </p>
               <Tabs
@@ -1454,20 +1456,20 @@ export default function SandboxPage() {
                   {
                     id: "ib-inbox",
                     label: "Inbox",
-                    icon: <span style={{ fontSize: "0.875em" }}>📥</span>,
+                    icon: <span style={{ fontSize: "var(--atlas-font-size-sm)" }}>📥</span>,
                     badge: <Badge size="sm" variant="danger">4</Badge>,
                     content: <p style={{ margin: 0, fontSize: "var(--atlas-font-size-sm)", color: "var(--atlas-foreground-muted)" }}>Inbox — 4 unread messages</p>,
                   },
                   {
                     id: "ib-sent",
                     label: "Sent",
-                    icon: <span style={{ fontSize: "0.875em" }}>📤</span>,
+                    icon: <span style={{ fontSize: "var(--atlas-font-size-sm)" }}>📤</span>,
                     content: <p style={{ margin: 0, fontSize: "var(--atlas-font-size-sm)", color: "var(--atlas-foreground-muted)" }}>Sent items</p>,
                   },
                   {
                     id: "ib-archived",
                     label: "Archived",
-                    icon: <span style={{ fontSize: "0.875em" }}>🗄️</span>,
+                    icon: <span style={{ fontSize: "var(--atlas-font-size-sm)" }}>🗄️</span>,
                     content: <p style={{ margin: 0, fontSize: "var(--atlas-font-size-sm)", color: "var(--atlas-foreground-muted)" }}>Archived messages</p>,
                   },
                 ]}
@@ -1476,7 +1478,7 @@ export default function SandboxPage() {
 
             {/* Manual activation mode */}
             <div>
-              <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+              <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase", letterSpacing: "var(--atlas-letter-spacing-wide)" }}>
                 Manual activation (segmented) — arrow keys move focus, Enter/Space activates
               </p>
               <Tabs
@@ -1501,7 +1503,7 @@ export default function SandboxPage() {
             </p>
             {(["default", "bordered", "floating", "transparent"] as const).map(variant => (
               <div key={variant} style={{ background: variant === "transparent" ? "var(--atlas-background-subtle)" : undefined, padding: variant === "transparent" ? "var(--atlas-spacing-4)" : 0 }}>
-                <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+                <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase", letterSpacing: "var(--atlas-letter-spacing-wide)" }}>
                   {variant}
                 </p>
                 <NavBar
@@ -1516,6 +1518,46 @@ export default function SandboxPage() {
                 />
               </div>
             ))}
+          </div>
+        </Section>
+
+        {/* ── SIDEBAR MENU ROW ── */}
+        <Section title="Sidebar Menu Row">
+          <p style={{ margin: "0 0 var(--atlas-spacing-4)", fontSize: "var(--atlas-font-size-sm)", color: "var(--atlas-foreground-muted)" }}>
+            Dashboard sidebar row — reference: Stripe (default/active/expandable rows) + Grok (expanded child disclosure).
+            Full composed example lives in Figma on the &quot;Usage &amp; Examples&quot; page.
+          </p>
+          <div
+            style={{
+              display: "flex", flexDirection: "column", gap: "var(--atlas-spacing-1)",
+              maxWidth: "var(--atlas-content-width-sm)", padding: "var(--atlas-spacing-4)", borderRadius: "var(--atlas-radius-lg)",
+              backgroundColor: "var(--atlas-surface)", border: "1px solid var(--atlas-border)",
+            }}
+          >
+            <SidebarMenuRow icon={<svg viewBox="0 0 24 24"><path d="M3 12 12 3l9 9M5 10v10h14V10" /></svg>} active>
+              Home
+            </SidebarMenuRow>
+            <SidebarMenuRow icon={<svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2" /></svg>}>
+              Balances
+            </SidebarMenuRow>
+            <SidebarMenuRow
+              icon={<svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h10" /></svg>}
+              hasChildren
+              expanded={billingExpanded}
+              onClick={() => setBillingExpanded((v) => !v)}
+            >
+              Billing
+            </SidebarMenuRow>
+            {billingExpanded && (
+              <div style={{ display: "flex", flexDirection: "column", gap: "var(--atlas-spacing-1)" }}>
+                <SidebarMenuRowChild active>Overview</SidebarMenuRowChild>
+                <SidebarMenuRowChild>Invoices</SidebarMenuRowChild>
+                <SidebarMenuRowChild badge={<Badge size="sm">2</Badge>}>Subscriptions</SidebarMenuRowChild>
+              </div>
+            )}
+            <SidebarMenuRow icon={<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" /><path d="M12 8v4l3 2" /></svg>} disabled>
+              Archived
+            </SidebarMenuRow>
           </div>
         </Section>
 
