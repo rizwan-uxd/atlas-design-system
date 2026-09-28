@@ -1,0 +1,115 @@
+/* =================================================================
+   Atlas Table — component styles
+   All values reference semantic tokens only.
+   No hex literals. No primitive tokens. No magic numbers.
+   The outer border and radius sit on the table box, so a caption below it
+   stays outside the border (as Figma draws it). Row fills are painted on the
+   cells so the corner radius clips them; row dividers are bottom borders on
+   the cells (the last body row has none).
+   ================================================================= */
+
+.wrapper {
+  box-sizing: border-box;
+  inline-size: 100%;
+  overflow-x: auto;
+}
+
+.wrapper:focus-visible {
+  outline: var(--atlas-border-width-2) solid var(--atlas-focus-ring);
+  outline-offset: calc(var(--atlas-border-width-2) * -1);
+}
+
+.table {
+  inline-size: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: var(--atlas-border-width-1) solid var(--atlas-border);
+  border-radius: var(--atlas-radius-md);
+  font-family: var(--atlas-font-sans);
+  font-size: var(--atlas-font-size-sm);
+  color: var(--atlas-foreground);
+  caption-side: bottom;
+}
+
+/* ── Rows ────────────────────────────────────────────────────── */
+
+.row:hover > * {
+  background-color: var(--atlas-background-subtle);
+}
+
+.row[data-state="selected"] > * {
+  background-color: var(--atlas-background-muted);
+}
+
+.row > th,
+.row > td {
+  border-block-end: var(--atlas-border-width-1) solid var(--atlas-border);
+}
+
+.body > .row:last-child > td {
+  border-block-end: 0;
+}
+
+/* Header rows are not interactive, so they never take the hover fill. */
+.header .row:hover > * {
+  background-color: transparent;
+}
+
+/* Round the four outer corners of the grid so the fills follow the border. */
+.header > .row:first-child > :first-child { border-start-start-radius: var(--atlas-radius-md); }
+.header > .row:first-child > :last-child  { border-start-end-radius: var(--atlas-radius-md); }
+.body > .row:last-child > :first-child    { border-end-start-radius: var(--atlas-radius-md); }
+.body > .row:last-child > :last-child     { border-end-end-radius: var(--atlas-radius-md); }
+
+/* ── Head ────────────────────────────────────────────────────── */
+
+.head {
+  box-sizing: border-box;
+  block-size: var(--atlas-spacing-10);
+  padding-inline: var(--atlas-spacing-2);
+  font-weight: var(--atlas-font-weight-medium);
+  line-height: var(--atlas-line-height-normal);
+  text-align: start;
+  vertical-align: middle;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.head[data-align="end"] {
+  text-align: end;
+}
+
+/* A sort button in an end-aligned head pushes to the inline end. */
+.head[data-align="end"] > button {
+  margin-inline-start: auto;
+}
+
+/* ── Cell ────────────────────────────────────────────────────── */
+
+.cell {
+  box-sizing: border-box;
+  padding: var(--atlas-spacing-2);
+  font-weight: var(--atlas-font-weight-regular);
+  line-height: var(--atlas-line-height-normal);
+  text-align: start;
+  vertical-align: middle;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cell[data-align="end"] {
+  text-align: end;
+}
+
+/* ── Caption ─────────────────────────────────────────────────── */
+
+.caption {
+  padding-block: var(--atlas-spacing-4);
+  font-size: var(--atlas-font-size-sm);
+  font-weight: var(--atlas-font-weight-regular);
+  line-height: var(--atlas-line-height-normal);
+  color: var(--atlas-foreground-muted);
+  text-align: start;
+}
