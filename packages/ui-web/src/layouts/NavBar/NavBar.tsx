@@ -7,7 +7,8 @@
  * Web sizes:     sm (48px) | md (64px) | lg (80px)
  *
  * Layout zones:
- *   [brand]  [desktop nav links]  ──────────  [actions]  [hamburger]
+ *   Marketing: [brand]  [desktop nav links]  ──────────  [actions]  [hamburger]
+ *   Dashboard: [brand]  [breadcrumb]  [search]  ──────────  [actions]
  *
  * Responsive behaviour:
  *   ≥ 768px (md): desktop links visible, hamburger hidden  — FIX BUG-043
@@ -60,8 +61,12 @@ export interface NavBarProps {
    * FIX BUG-068
    */
   brandHref?:    string
-  /** Navigation links */
+  /** Navigation links (marketing mode) */
   links?:        NavLink[]
+  /** Breadcrumb slot (dashboard mode) */
+  breadcrumb?:   React.ReactNode
+  /** Search slot (dashboard mode) */
+  search?:       React.ReactNode
   /** Right-side action slot — buttons, avatar, etc. */
   actions?:      React.ReactNode
   /**
@@ -82,6 +87,8 @@ export function NavBar({
   brand,
   brandHref,
   links,
+  breadcrumb,
+  search,
   actions,
   hideOnScroll  = false,
   className,
@@ -162,6 +169,14 @@ export function NavBar({
                   ))}
                 </ul>
               </nav>
+            )}
+
+            {breadcrumb && (
+              <div className={styles.breadcrumb}>{breadcrumb}</div>
+            )}
+
+            {search && (
+              <div className={styles.search}>{search}</div>
             )}
           </div>
 

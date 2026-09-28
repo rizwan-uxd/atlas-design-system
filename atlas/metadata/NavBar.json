@@ -11,6 +11,8 @@
     { "name": "brand", "required": false, "type": "React.ReactNode" },
     { "name": "brandHref", "required": false, "type": "string" },
     { "name": "links", "required": false, "type": "NavLink[]" },
+    { "name": "breadcrumb", "required": false, "type": "React.ReactNode" },
+    { "name": "search", "required": false, "type": "React.ReactNode" },
     { "name": "actions", "required": false, "type": "React.ReactNode" },
     { "name": "hideOnScroll", "required": false, "type": "boolean" },
     { "name": "className", "required": false, "type": "string" },

@@ -197,6 +197,12 @@
       "topic": "Sidebar shell: collapsed state, mobile, and CSS approach",
       "decision": "B2 Sidebar shell uses a CSS data-attribute approach for the collapsed rail state: the Sidebar root sets `data-collapsed` on the `<aside>` element, and SidebarMenuRow's CSS module uses `:global([data-collapsed])` descendant selectors to hide `.label`, `.badge`, `.chevron` and center the icon — no React context needed for the visual collapse. Expanded width uses `--atlas-content-width-xs` (240px). Collapsed rail is 56px (3.5rem). Mobile/narrow viewport reuses the existing Drawer component (mobile web only, not native). References: Stripe dashboard (expanded layout, sections, footer), Grok (collapsed icon rail). Figma component set `620:52` with Collapsed boolean property and Light/Dark example frames.",
       "date": "2026-09-28"
+    },
+    {
+      "id": "DEC-033",
+      "topic": "NavBar dashboard mode: breadcrumb + search slots, examples only in Figma (no Layout variant)",
+      "decision": "NavBar (layouts) B3 Top App Bar upgrade adds two ReactNode slots — breadcrumb and search — for dashboard/app-bar usage, keeping the existing marketing layout (brand + links + actions) intact. No new Figma Layout variant property: the 48-variant explosion (Layout × Variant × Size × State) was rejected as too bloated; instead, example instances (Dashboard Light + Dashboard Dark sections) and an updated component set description with usage code show the dashboard pattern. Primary consumers are AI agents building prototypes, not human designers inspecting Figma variants, which justified examples over a variant axis. The slots render conditionally: breadcrumb after links, search with margin-inline-start auto. Dashboard mode is brand + breadcrumb + search + actions (no links, no hamburger). Both slots coexist with links if provided. No new tokens.",
+      "date": "2026-09-28"
     }
   ]
 }

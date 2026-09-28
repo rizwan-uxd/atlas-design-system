@@ -3,11 +3,14 @@
  *
  * Coverage:
  *   1. Renders <header> with brand and primary nav
- *   2. Variant matrix — default, transparent, bordered, floating (DISC-010/025/026)
+ *   2. Variant matrix — default, transparent, bordered, floating
  *   3. Size matrix — sm, md, lg
  *   4. Active link gets aria-current="page"
  *   5. Hamburger — visible when links present, opens the mobile drawer
- *   6. axe accessibility check per variant
+ *   6. Breadcrumb slot renders content
+ *   7. Search slot renders content
+ *   8. Dashboard mode — breadcrumb + search without links
+ *   9. axe accessibility check per variant
  *
  * Pattern: packages/ui-web/tests/Button.test.tsx
  */
@@ -90,7 +93,77 @@ describe("NavBar — hamburger", () => {
   })
 })
 
-// ─── 6. axe accessibility ───────────────────────────────────────────────
+// ─── 6. Breadcrumb slot ─────────────────────────────────────────────────
+
+describe("NavBar — breadcrumb slot", () => {
+  it("renders breadcrumb content when provided", () => {
+    render(
+      <NavBar
+        brand="Atlas"
+        breadcrumb={<nav aria-label="Breadcrumb"><span>Home / Dashboard</span></nav>}
+      />
+    )
+    expect(screen.getByRole("navigation", { name: /breadcrumb/i })).toBeInTheDocument()
+    expect(screen.getByText("Home / Dashboard")).toBeInTheDocument()
+  })
+
+  it("does not render breadcrumb wrapper when not provided", () => {
+    const { container } = render(<NavBar brand="Atlas" />)
+    expect(container.querySelector("[class*=breadcrumb]")).not.toBeInTheDocument()
+  })
+})
+
+// ─── 7. Search slot ─────────────────────────────────────────────────────
+
+describe("NavBar — search slot", () => {
+  it("renders search content when provided", () => {
+    render(
+      <NavBar
+        brand="Atlas"
+        search={<input type="search" aria-label="Search" placeholder="Search..." />}
+      />
+    )
+    expect(screen.getByRole("searchbox", { name: /search/i })).toBeInTheDocument()
+  })
+
+  it("does not render search wrapper when not provided", () => {
+    const { container } = render(<NavBar brand="Atlas" />)
+    expect(container.querySelector("[class*=search]")).not.toBeInTheDocument()
+  })
+})
+
+// ─── 8. Dashboard mode (breadcrumb + search, no links) ──────────────────
+
+describe("NavBar — dashboard mode", () => {
+  it("renders breadcrumb + search + actions without links or hamburger", () => {
+    render(
+      <NavBar
+        brand="Atlas"
+        breadcrumb={<span>Home / Analytics</span>}
+        search={<input type="search" aria-label="Search" />}
+        actions={<button type="button">Profile</button>}
+      />
+    )
+    expect(screen.getByText("Home / Analytics")).toBeInTheDocument()
+    expect(screen.getByRole("searchbox")).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: "Profile" })).toBeInTheDocument()
+    expect(screen.queryByRole("button", { name: /open menu/i })).not.toBeInTheDocument()
+  })
+
+  it("can coexist with links if both provided", () => {
+    render(
+      <NavBar
+        brand="Atlas"
+        links={LINKS}
+        breadcrumb={<span>Home</span>}
+      />
+    )
+    expect(screen.getByText("Home")).toBeInTheDocument()
+    expect(screen.getByRole("navigation", { name: /primary/i })).toBeInTheDocument()
+  })
+})
+
+// ─── 9. axe accessibility ───────────────────────────────────────────────
 
 describe("NavBar — a11y (axe)", () => {
   for (const variant of VARIANTS) {
@@ -101,4 +174,16 @@ describe("NavBar — a11y (axe)", () => {
       expect(await axe(container)).toHaveNoViolations()
     })
   }
+
+  it("passes axe in dashboard mode", async () => {
+    const { container } = render(
+      <NavBar
+        brand="Atlas"
+        breadcrumb={<nav aria-label="Breadcrumb"><span>Home / Dashboard</span></nav>}
+        search={<input type="search" aria-label="Search" />}
+        actions={<button type="button">Profile</button>}
+      />
+    )
+    expect(await axe(container)).toHaveNoViolations()
+  })
 })
