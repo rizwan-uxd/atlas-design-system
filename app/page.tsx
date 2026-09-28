@@ -35,6 +35,7 @@ import {
 import { NavBar } from "@atlas/ui-web/layouts/NavBar/NavBar"
 import { SidebarMenuRow, SidebarMenuRowChild } from "@atlas/ui-web/primitives/SidebarMenuRow/SidebarMenuRow"
 import { Sidebar, SidebarHeader, SidebarBody, SidebarSection, SidebarFooter, SidebarCollapseToggle } from "@atlas/ui-web/layouts/Sidebar/Sidebar"
+import { House, CreditCard, Receipt, Clock, Settings, Archive } from "lucide-react"
 
 // Demo picture: an inline SVG so the sandbox needs no network.
 const DEMO_IMAGE = "data:image/svg+xml;utf8," + encodeURIComponent(
@@ -1536,14 +1537,14 @@ export default function SandboxPage() {
               backgroundColor: "var(--atlas-surface)", border: "1px solid var(--atlas-border)",
             }}
           >
-            <SidebarMenuRow icon={<svg viewBox="0 0 24 24"><path d="M3 12 12 3l9 9M5 10v10h14V10" /></svg>} active>
+            <SidebarMenuRow icon={<House />} active>
               Home
             </SidebarMenuRow>
-            <SidebarMenuRow icon={<svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2" /></svg>}>
+            <SidebarMenuRow icon={<CreditCard />}>
               Balances
             </SidebarMenuRow>
             <SidebarMenuRow
-              icon={<svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h10" /></svg>}
+              icon={<Receipt />}
               hasChildren
               expanded={billingExpanded}
               onClick={() => setBillingExpanded((v) => !v)}
@@ -1557,7 +1558,7 @@ export default function SandboxPage() {
                 <SidebarMenuRowChild badge={<Badge size="sm">2</Badge>}>Subscriptions</SidebarMenuRowChild>
               </div>
             )}
-            <SidebarMenuRow icon={<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" /><path d="M12 8v4l3 2" /></svg>} disabled>
+            <SidebarMenuRow icon={<Archive />} disabled>
               Archived
             </SidebarMenuRow>
           </div>
@@ -1579,13 +1580,13 @@ export default function SandboxPage() {
                 </SidebarHeader>
                 <SidebarBody>
                   <SidebarSection label="Main">
-                    <SidebarMenuRow icon={<svg viewBox="0 0 24 24"><path d="M3 12 12 3l9 9M5 10v10h14V10" /></svg>} active>Home</SidebarMenuRow>
-                    <SidebarMenuRow icon={<svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2" /></svg>}>Balances</SidebarMenuRow>
-                    <SidebarMenuRow icon={<svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h10" /></svg>}>Transactions</SidebarMenuRow>
+                    <SidebarMenuRow icon={<House />} active>Home</SidebarMenuRow>
+                    <SidebarMenuRow icon={<CreditCard />}>Balances</SidebarMenuRow>
+                    <SidebarMenuRow icon={<Receipt />}>Transactions</SidebarMenuRow>
                   </SidebarSection>
                   <SidebarSection label="Settings">
-                    <SidebarMenuRow icon={<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" /><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83" /></svg>}>Preferences</SidebarMenuRow>
-                    <SidebarMenuRow icon={<svg viewBox="0 0 24 24"><path d="M12 12m-9 0a9 9 0 1 0 18 0 9 9 0 1 0-18 0M12 8v4l3 2" /></svg>} disabled>Archived</SidebarMenuRow>
+                    <SidebarMenuRow icon={<Settings />}>Preferences</SidebarMenuRow>
+                    <SidebarMenuRow icon={<Clock />} disabled>Archived</SidebarMenuRow>
                   </SidebarSection>
                 </SidebarBody>
                 <SidebarFooter>
