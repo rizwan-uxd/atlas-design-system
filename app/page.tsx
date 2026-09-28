@@ -17,6 +17,7 @@ import { Progress } from "@atlas/ui-web/primitives/Progress/Progress"
 import { RadioGroup, RadioGroupItem } from "@atlas/ui-web/primitives/RadioGroup/RadioGroup"
 import { Slider } from "@atlas/ui-web/primitives/Slider/Slider"
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue, SelectGroup, SelectLabel, SelectSeparator } from "@atlas/ui-web/primitives/Select/Select"
+import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from "@atlas/ui-web/primitives/Tooltip/Tooltip"
 import { Avatar, AvatarGroup } from "@atlas/ui-web/primitives/Avatar/Avatar"
 import { Alert } from "@atlas/ui-web/compositions/Alert/Alert"
 import { ListItem, ListItemMedia, ListItemContent, ListItemTitle, ListItemDescription, ListItemActions } from "@atlas/ui-web/compositions/ListItem/ListItem"
@@ -1110,6 +1111,43 @@ export default function SandboxPage() {
             </div>
 
           </div>
+        </Section>
+
+        {/* ── TOOLTIP ── */}
+        <Section title="Tooltip">
+          <TooltipProvider>
+            <div style={{ display: "flex", flexWrap: "wrap", alignItems: "flex-start", gap: "var(--atlas-spacing-8)" }}>
+
+              {/* Sides */}
+              <div style={{ display: "flex", flexDirection: "column", gap: "var(--atlas-spacing-3)" }}>
+                <p style={{ margin: 0, fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase" }}>Sides · top / bottom / start / end</p>
+                <div style={{ display: "flex", gap: "var(--atlas-spacing-3)", paddingBlock: "var(--atlas-spacing-8)", paddingInline: "var(--atlas-spacing-16)" }}>
+                  {(["top", "bottom", "start", "end"] as const).map(side => (
+                    <Tooltip key={side}>
+                      <TooltipTrigger asChild>
+                        <Button variant="outline">{side}</Button>
+                      </TooltipTrigger>
+                      <TooltipContent side={side}>Add to library</TooltipContent>
+                    </Tooltip>
+                  ))}
+                </div>
+              </div>
+
+              {/* Disabled trigger needs a focusable wrapper */}
+              <div style={{ display: "flex", flexDirection: "column", gap: "var(--atlas-spacing-3)" }}>
+                <p style={{ margin: 0, fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase" }}>Disabled control · focusable wrapper</p>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <span tabIndex={0} style={{ display: "inline-flex" }}>
+                      <Button variant="outline" disabled style={{ pointerEvents: "none" }}>Unavailable</Button>
+                    </span>
+                  </TooltipTrigger>
+                  <TooltipContent>You need edit access</TooltipContent>
+                </Tooltip>
+              </div>
+
+            </div>
+          </TooltipProvider>
         </Section>
 
         {/* ── LIST ITEM ── */}
