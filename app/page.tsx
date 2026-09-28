@@ -35,7 +35,7 @@ import {
 import { NavBar } from "@atlas/ui-web/layouts/NavBar/NavBar"
 import { SidebarMenuRow, SidebarMenuRowChild } from "@atlas/ui-web/primitives/SidebarMenuRow/SidebarMenuRow"
 import { Sidebar, SidebarHeader, SidebarBody, SidebarSection, SidebarFooter, SidebarCollapseToggle } from "@atlas/ui-web/layouts/Sidebar/Sidebar"
-import { House, CreditCard, Receipt, Clock, Settings, Archive } from "lucide-react"
+import { House, CreditCard, Receipt, Clock, Settings, Archive, Folder, ChevronRight } from "lucide-react"
 
 // Demo picture: an inline SVG so the sandbox needs no network.
 const DEMO_IMAGE = "data:image/svg+xml;utf8," + encodeURIComponent(
@@ -1043,7 +1043,7 @@ export default function SandboxPage() {
                   {(["default", "outline", "muted"] as const).map(variant => (
                     <ListItem key={variant} variant={variant} size={size}>
                       <ListItemMedia type="tile">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z" /></svg>
+                        <Folder aria-hidden="true" />
                       </ListItemMedia>
                       <ListItemContent>
                         <ListItemTitle>Item Title ({variant})</ListItemTitle>
@@ -1092,14 +1092,14 @@ export default function SandboxPage() {
                 </ListItem>
                 <ListItem variant="outline">
                   <ListItemMedia type="icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z" /></svg>
+                    <Folder aria-hidden="true" />
                   </ListItemMedia>
                   <ListItemContent>
                     <ListItemTitle>Visit our documentation</ListItemTitle>
                     <ListItemDescription>Learn how to get started with our components.</ListItemDescription>
                   </ListItemContent>
                   <ListItemActions>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6" /></svg>
+                    <ChevronRight size={16} aria-hidden="true" />
                   </ListItemActions>
                 </ListItem>
               </div>
