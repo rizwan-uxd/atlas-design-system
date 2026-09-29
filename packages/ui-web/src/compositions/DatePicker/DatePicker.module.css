@@ -136,6 +136,21 @@
   stroke-width: 1.5;
 }
 
+/* ── DatePickerNaturalInput ──────────────────────────────────── */
+
+.naturalWrapper {
+  display: block;
+  width: 100%;
+}
+
+.naturalPreview {
+  margin-block-start: var(--atlas-spacing-1);
+  margin-block-end: 0;
+  font-family: var(--atlas-font-sans);
+  font-size: var(--atlas-font-size-xs);
+  color: var(--atlas-foreground-muted);
+}
+
 /* ── Content (panel) ─────────────────────────────────────────── */
 
 .content {

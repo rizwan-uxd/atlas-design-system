@@ -134,14 +134,6 @@
       "composedFrom": "Input type=\"time\" paired next to DatePicker — the reference's own \"Time\" field is a plain text input, not a custom dropdown/scroll picker, and native type=\"time\" gives full keyboard support for free",
       "occurrences": 1,
       "note": "Resolved as a composition (user, 2026-09-29): not built as a component. Documented in atlas/DatePicker.md's DO/CODE sections and an Examples — Date + Time Figma frame (694:927, no new component set)."
-    },
-    {
-      "id": "CAND-028",
-      "name": "DatePicker — Natural Language Picker",
-      "seenIn": ["shadcn-ui reference (Natural Language Picker example), gap analysis 2026-09-29"],
-      "composedFrom": "not yet attempted",
-      "occurrences": 0,
-      "note": "Free-text field ('in 2 days') parsed live into a date. Blocked on chrono-node, a new npm dependency AGENTS.md §4/§7 requires explicit user approval for before it is added. Needs a new trigger variant in Figma too."
     }
   ]
 }

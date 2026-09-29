@@ -7,7 +7,9 @@
  *             range-start · range-middle · range-end) · Date Picker Calendar (single month) ·
  *             Date Picker Calendar (range) (shared nav, two months) ·
  *             Date Picker Calendar (dropdown) (Month/Year Select dropdowns instead of the text
- *             label, single mode only — <DatePickerContent captionLayout="dropdown" />)
+ *             label, single mode only — <DatePickerContent captionLayout="dropdown" />) ·
+ *             Examples — Input, Examples — Natural Language (DatePickerInput,
+ *             DatePickerNaturalInput — Input compositions, no new Figma component set)
  * Sizes:      one size (Figma draws no Size variant)
  * States:     Trigger — default · hover · focus · open · disabled · invalid
  *             Date cell — default · hover · selected · today · outside-month · disabled ·
@@ -40,6 +42,14 @@
  *     <DatePickerContent />
  *   </DatePicker>
  *
+ * DatePickerNaturalInput is a free-text alternative — chrono-node parses phrases like "in 2
+ * days" or "next Friday" live for a preview line, commits on blur/Enter, and opens the panel
+ * on focus as a persistent visual reference:
+ *   <DatePicker value={date} onValueChange={setDate}>
+ *     <DatePickerNaturalInput />
+ *     <DatePickerContent />
+ *   </DatePicker>
+ *
  * Accessibility (APG date picker grid pattern):
  *   - Trigger: aria-haspopup="dialog", aria-expanded, formatted date/range or placeholder text.
  *   - Panel: role="dialog" aria-label="Choose date"/"Choose date range", portalled to <body>.
@@ -61,6 +71,7 @@
 import React from "react"
 import { createPortal } from "react-dom"
 import { Calendar as CalendarGlyph, ChevronDown, ChevronLeft, ChevronRight } from "lucide-react"
+import * as chrono from "chrono-node"
 import { Input } from "../../primitives/Input/Input"
 import styles from "./DatePicker.module.css"
 
@@ -551,6 +562,119 @@ export function DatePickerInput({ parseDate = defaultParseDate, formatDate = def
       >
         <CalendarGlyph aria-hidden="true" />
       </button>
+    </div>
+  )
+}
+
+/* ── DatePickerNaturalInput (free-text, parsed via chrono-node) ─── */
+
+function defaultParseNaturalText(text: string): Date | undefined {
+  const parsed = chrono.parseDate(text)
+  return parsed ?? undefined
+}
+
+function defaultRenderPreview(date: Date | undefined): React.ReactNode {
+  if (!date) return null
+  return `Selected: ${defaultFormatDate(date)}`
+}
+
+export interface DatePickerNaturalInputProps extends Omit<React.ComponentProps<typeof Input>, "value" | "defaultValue"> {
+  /** Parses free text ("in 2 days", "next Friday") into a Date. Defaults to chrono-node's
+      parseDate. Returns undefined for text chrono cannot resolve to a date. */
+  parseText?: (text: string) => Date | undefined
+  /** Renders a live preview below the field as the text changes — chrono re-parses on every
+      keystroke so the preview always reflects the current text, independent of commit. Return
+      null to render nothing. Defaults to "Selected: {formatted date}". */
+  renderPreview?: (date: Date | undefined) => React.ReactNode
+}
+
+/** A free-text alternative to DatePickerTrigger: types a phrase, chrono-node parses it live for
+    the preview line, and the parsed date commits on blur or Enter — the same commit timing as
+    DatePickerInput, so only the preview text is live, not the calendar's selected cell. Opens
+    the panel on focus for a persistent visual reference while typing (matches the reference);
+    the panel's own outside-pointer-press and Escape handling close it as usual. */
+export function DatePickerNaturalInput({
+  parseText = defaultParseNaturalText,
+  renderPreview = defaultRenderPreview,
+  placeholder = "e.g. \"in 2 days\", \"next Friday\"",
+  invalid,
+  onChange,
+  onBlur,
+  onKeyDown,
+  onFocus,
+  className,
+  ...rest
+}: DatePickerNaturalInputProps) {
+  const ctx = useDatePicker("DatePickerNaturalInput")
+  const wrapperRef = React.useRef<HTMLDivElement | null>(null)
+  const [text, setText] = React.useState("")
+  const [parseError, setParseError] = React.useState(false)
+  const preview = React.useMemo(() => (text.trim() ? parseText(text) : undefined), [text, parseText])
+  /** Guards against a focus/reopen loop: onSelect refocuses the trigger element after a commit
+      (shared behaviour with every other trigger type), but here the trigger's own onFocus
+      reopens the panel — without this guard that reopen steals focus to the dialog, which
+      blurs this field and fires a second, spurious commit. Set right before onSelect, consumed
+      by the very next focus event (the synchronous refocus), so a genuine later focus (tabbing
+      back in) is unaffected. */
+  const justCommittedRef = React.useRef(false)
+
+  React.useEffect(() => {
+    const inputEl = wrapperRef.current?.querySelector("input")
+    if (inputEl) ctx.triggerRef.current = inputEl
+  }, [ctx.triggerRef])
+
+  const commit = () => {
+    const trimmed = text.trim()
+    if (!trimmed) {
+      setParseError(false)
+      return
+    }
+    const parsed = parseText(trimmed)
+    if (!parsed) {
+      setParseError(true)
+      return
+    }
+    setParseError(false)
+    justCommittedRef.current = true
+    ctx.onSelect(parsed)
+  }
+
+  return (
+    <div ref={wrapperRef} className={cx(styles.naturalWrapper, className)}>
+      <Input
+        {...rest}
+        value={text}
+        placeholder={placeholder}
+        invalid={parseError || invalid}
+        onChange={(event) => {
+          onChange?.(event)
+          setParseError(false)
+          setText(event.target.value)
+        }}
+        onFocus={(event) => {
+          onFocus?.(event)
+          if (justCommittedRef.current) {
+            justCommittedRef.current = false
+            return
+          }
+          ctx.focusIntent.current = "content"
+          ctx.setOpen(true)
+        }}
+        onBlur={(event) => {
+          onBlur?.(event)
+          commit()
+        }}
+        onKeyDown={(event) => {
+          onKeyDown?.(event)
+          if (event.key === "Enter") {
+            event.preventDefault()
+            commit()
+          } else if (event.key === "Escape" && ctx.open) {
+            ctx.setOpen(false)
+          }
+        }}
+      />
+      {renderPreview(preview) != null && <p className={styles.naturalPreview}>{renderPreview(preview)}</p>}
     </div>
   )
 }

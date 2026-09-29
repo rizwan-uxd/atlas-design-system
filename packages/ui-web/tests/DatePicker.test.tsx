@@ -12,14 +12,17 @@
  *   8. Dropdown caption — Month/Year <select>s replace the text label and navigate the month
  *   8b. DatePickerInput — typed field commits on Enter, invalid text keeps aria-invalid and
  *       the typed text, trailing button opens the panel
- *   9. axe accessibility check for single/range triggers, DatePickerInput, and open panels
+ *   8c. DatePickerNaturalInput — chrono-node live preview (uncommitted), commits on Enter,
+ *       invalid text keeps aria-invalid and the typed text, focus opens the panel
+ *   9. axe accessibility check for single/range triggers, DatePickerInput,
+ *      DatePickerNaturalInput, and open panels
  */
 
 import React from "react"
 import { describe, it, expect, vi, afterEach } from "vitest"
 import { render, screen, fireEvent, within, cleanup } from "@testing-library/react"
 import { axe } from "jest-axe"
-import { DatePicker, DatePickerTrigger, DatePickerInput, DatePickerContent } from "@atlas/ui-web/compositions/DatePicker/DatePicker"
+import { DatePicker, DatePickerTrigger, DatePickerInput, DatePickerNaturalInput, DatePickerContent } from "@atlas/ui-web/compositions/DatePicker/DatePicker"
 
 const FIXED_TODAY = new Date(2026, 1, 10) // Feb 10, 2026
 
@@ -294,6 +297,71 @@ describe("DatePicker — DatePickerInput", () => {
   })
 })
 
+// ─── 8c. DatePickerNaturalInput ─────────────────────────────────────────────
+
+describe("DatePicker — DatePickerNaturalInput", () => {
+  it("shows a live preview as text changes, without committing", () => {
+    const onValueChange = vi.fn()
+    render(
+      <DatePicker onValueChange={onValueChange}>
+        <DatePickerNaturalInput />
+        <DatePickerContent />
+      </DatePicker>,
+    )
+    const field = screen.getByRole("textbox")
+    fireEvent.change(field, { target: { value: "march 15, 2027" } })
+    expect(screen.getByText(/selected: march 15, 2027/i)).toBeInTheDocument()
+    expect(onValueChange).not.toHaveBeenCalled()
+  })
+
+  it("commits the parsed date on Enter", () => {
+    const onValueChange = vi.fn()
+    render(
+      <DatePicker onValueChange={onValueChange}>
+        <DatePickerNaturalInput />
+        <DatePickerContent />
+      </DatePicker>,
+    )
+    const field = screen.getByRole("textbox")
+    fireEvent.change(field, { target: { value: "march 15, 2027" } })
+    fireEvent.keyDown(field, { key: "Enter" })
+    expect(onValueChange).toHaveBeenCalledTimes(1)
+    const committed = onValueChange.mock.calls[0][0] as Date
+    expect(committed.getFullYear()).toBe(2027)
+    expect(committed.getMonth()).toBe(2)
+    expect(committed.getDate()).toBe(15)
+    // The typed phrase stays in the field — natural-language text isn't reformatted.
+    expect(field).toHaveValue("march 15, 2027")
+  })
+
+  it("sets aria-invalid on unparseable text without discarding it", () => {
+    const onValueChange = vi.fn()
+    render(
+      <DatePicker onValueChange={onValueChange}>
+        <DatePickerNaturalInput />
+        <DatePickerContent />
+      </DatePicker>,
+    )
+    const field = screen.getByRole("textbox")
+    fireEvent.change(field, { target: { value: "gibberish text" } })
+    fireEvent.blur(field)
+    expect(field).toHaveAttribute("aria-invalid", "true")
+    expect(field).toHaveValue("gibberish text")
+    expect(onValueChange).not.toHaveBeenCalled()
+  })
+
+  it("opens the panel on focus", () => {
+    render(
+      <DatePicker>
+        <DatePickerNaturalInput />
+        <DatePickerContent />
+      </DatePicker>,
+    )
+    fireEvent.focus(screen.getByRole("textbox"))
+    expect(screen.getByRole("dialog")).toBeInTheDocument()
+  })
+})
+
 // ─── 9. axe accessibility ────────────────────────────────────────────────────
 
 describe("DatePicker — a11y (axe)", () => {
@@ -345,6 +413,19 @@ describe("DatePicker — a11y (axe)", () => {
     // component contract — it fires here only because the test has no <main>/app shell
     // around a bare <input>, not because DatePickerInput itself is inaccessible.
     const results = await axe(document.body, { rules: { region: { enabled: false } } })
+    expect(results).toHaveNoViolations()
+  })
+
+  it("passes axe for DatePickerNaturalInput, closed and with a preview shown", async () => {
+    const { container } = render(
+      <DatePicker>
+        <DatePickerNaturalInput />
+        <DatePickerContent />
+      </DatePicker>,
+    )
+    expect((await axe(container)).violations).toHaveLength(0)
+    fireEvent.change(screen.getByRole("textbox"), { target: { value: "march 15, 2027" } })
+    const results = await axe(container)
     expect(results).toHaveNoViolations()
   })
 })
