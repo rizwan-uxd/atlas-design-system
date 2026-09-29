@@ -1,0 +1,420 @@
+/* =================================================================
+   Atlas DatePicker — component styles
+   All values reference semantic tokens only.
+   No hex literals. No primitive tokens. No magic numbers.
+   ================================================================= */
+
+/* ── Trigger ─────────────────────────────────────────────────── */
+
+.trigger {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--atlas-spacing-2);
+  width: 100%;
+  box-sizing: border-box;
+  height: var(--atlas-spacing-10);
+  padding-inline: var(--atlas-spacing-3);
+  font-family: var(--atlas-font-sans);
+  font-size: var(--atlas-font-size-sm);
+  color: var(--atlas-foreground);
+  background-color: var(--atlas-background);
+  border: var(--atlas-border-width-1) solid var(--atlas-border);
+  border-radius: var(--atlas-radius-lg);
+  outline: none;
+  cursor: default;
+  text-align: start;
+  transition:
+    border-color     var(--atlas-duration-fast) var(--atlas-easing-standard),
+    background-color var(--atlas-duration-fast) var(--atlas-easing-standard);
+}
+
+.trigger:hover:not(:disabled):not([aria-invalid="true"]) {
+  border-color: var(--atlas-border-strong);
+}
+
+.trigger:focus-visible {
+  border-color: var(--atlas-primary);
+  outline: var(--atlas-border-width-2) solid var(--atlas-focus-ring);
+  outline-offset: var(--atlas-spacing-0_5);
+}
+
+.trigger:disabled {
+  background-color: var(--atlas-background-muted);
+  color: var(--atlas-foreground-disabled);
+  cursor: not-allowed;
+  opacity: var(--atlas-opacity-disabled);
+}
+
+.trigger[aria-invalid="true"] {
+  border-color: var(--atlas-danger);
+}
+
+.trigger[aria-invalid="true"]:focus-visible {
+  border-color: var(--atlas-danger);
+  outline-color: var(--atlas-focus-ring);
+}
+
+.trigger[aria-expanded="true"] {
+  border-color: var(--atlas-primary);
+}
+
+.icon {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--atlas-foreground-muted);
+}
+
+.icon > svg {
+  inline-size: var(--atlas-icon-size-xs);
+  block-size: var(--atlas-icon-size-xs);
+  stroke-width: 1.5;
+}
+
+.value {
+  flex: 1 1 0;
+  min-inline-size: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: start;
+}
+
+.placeholder {
+  color: var(--atlas-foreground-muted);
+}
+
+/* ── DatePickerInput ─────────────────────────────────────────── */
+
+.inputWrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: stretch;
+  width: 100%;
+}
+
+.inputField {
+  width: 100%;
+  /* Reserves space for .inputTrailingButton, which overlays the field rather than using
+     Input's own trailingIcon slot (see the comment on .inputTrailingButton below). */
+  padding-inline-end: calc(var(--atlas-spacing-6) + var(--atlas-spacing-2)) !important;
+}
+
+/* Real trailing control (not Input's trailingIcon slot, which the Input component wraps in
+   aria-hidden — decorative-only by that component's contract, not a place for a focusable
+   button). Positioned to overlap the field's trailing inset instead. */
+.inputTrailingButton {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-end: var(--atlas-spacing-1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--atlas-spacing-6);
+  color: var(--atlas-foreground-muted);
+  background: none;
+  border: none;
+  border-radius: var(--atlas-radius-sm);
+  cursor: default;
+  transition: background-color var(--atlas-duration-fast) var(--atlas-easing-standard);
+}
+
+.inputTrailingButton:hover {
+  background-color: var(--atlas-background-subtle);
+}
+
+.inputTrailingButton:focus-visible {
+  outline: var(--atlas-border-width-2) solid var(--atlas-focus-ring);
+  outline-offset: var(--atlas-spacing-0_5);
+}
+
+.inputTrailingButton > svg {
+  inline-size: var(--atlas-icon-size-xs);
+  block-size: var(--atlas-icon-size-xs);
+  stroke-width: 1.5;
+}
+
+/* ── DatePickerNaturalInput ──────────────────────────────────── */
+
+.naturalWrapper {
+  display: block;
+  width: 100%;
+}
+
+.naturalPreview {
+  margin-block-start: var(--atlas-spacing-1);
+  margin-block-end: 0;
+  font-family: var(--atlas-font-sans);
+  font-size: var(--atlas-font-size-xs);
+  color: var(--atlas-foreground-muted);
+}
+
+/* ── Content (panel) ─────────────────────────────────────────── */
+
+.content {
+  position: fixed;
+  z-index: var(--atlas-z-popover);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--atlas-spacing-4);
+  padding: var(--atlas-spacing-2);
+  background-color: var(--atlas-surface-overlay);
+  color: var(--atlas-foreground);
+  border: var(--atlas-border-width-1) solid var(--atlas-border);
+  border-radius: var(--atlas-radius-lg);
+  box-shadow: var(--atlas-shadow-md);
+  font-family: var(--atlas-font-sans);
+  outline: none;
+}
+
+.content[data-side="bottom"] {
+  margin-block-start: var(--atlas-spacing-1);
+}
+
+.content[data-side="top"] {
+  margin-block-end: var(--atlas-spacing-1);
+}
+
+/* ── Header (month nav) ──────────────────────────────────────── */
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: var(--atlas-spacing-2);
+}
+
+.navButton {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: calc(var(--atlas-spacing-6) + var(--atlas-spacing-0_5) * 2);
+  height: calc(var(--atlas-spacing-6) + var(--atlas-spacing-0_5) * 2);
+  padding: 0;
+  color: var(--atlas-foreground);
+  background: none;
+  border: none;
+  border-radius: var(--atlas-radius-sm);
+  cursor: default;
+  transition: background-color var(--atlas-duration-fast) var(--atlas-easing-standard);
+}
+
+.navButton:hover {
+  background-color: var(--atlas-background-subtle);
+}
+
+.navButton:focus-visible {
+  outline: var(--atlas-border-width-2) solid var(--atlas-focus-ring);
+  outline-offset: var(--atlas-spacing-0_5);
+}
+
+.navButton > svg {
+  inline-size: var(--atlas-icon-size-xs);
+  block-size: var(--atlas-icon-size-xs);
+  stroke-width: 1.5;
+}
+
+.monthLabel {
+  flex: 1 1 0;
+  min-inline-size: 0;
+  text-align: center;
+  font-size: var(--atlas-font-size-sm);
+  font-weight: var(--atlas-font-weight-medium);
+  color: var(--atlas-foreground);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ── Dropdown caption (captionLayout="dropdown") ──────────────── */
+
+.captionField {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  flex: 1 1 0;
+  min-inline-size: 0;
+}
+
+.captionSelect {
+  width: 100%;
+  box-sizing: border-box;
+  appearance: none;
+  height: calc(var(--atlas-spacing-6) + var(--atlas-spacing-0_5) * 2);
+  padding-inline-start: var(--atlas-spacing-2);
+  padding-inline-end: var(--atlas-spacing-6);
+  font-family: var(--atlas-font-sans);
+  font-size: var(--atlas-font-size-sm);
+  color: var(--atlas-foreground);
+  background-color: var(--atlas-background);
+  border: var(--atlas-border-width-1) solid var(--atlas-border);
+  border-radius: var(--atlas-radius-lg);
+  outline: none;
+  cursor: default;
+  transition: border-color var(--atlas-duration-fast) var(--atlas-easing-standard);
+}
+
+.captionSelect:hover:not(:disabled) {
+  border-color: var(--atlas-border-strong);
+}
+
+.captionSelect:focus-visible {
+  border-color: var(--atlas-primary);
+  outline: var(--atlas-border-width-2) solid var(--atlas-focus-ring);
+  outline-offset: var(--atlas-spacing-0_5);
+}
+
+.captionChevron {
+  position: absolute;
+  inset-inline-end: var(--atlas-spacing-2);
+  pointer-events: none;
+  color: var(--atlas-foreground-muted);
+  inline-size: var(--atlas-icon-size-xs);
+  block-size: var(--atlas-icon-size-xs);
+  stroke-width: 1.5;
+}
+
+/* ── Grids ───────────────────────────────────────────────────── */
+
+.grids {
+  display: flex;
+  gap: var(--atlas-spacing-6);
+}
+
+.grid {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.weekday {
+  width: calc(var(--atlas-spacing-6) + var(--atlas-spacing-0_5) * 2);
+  height: calc(var(--atlas-spacing-4) + var(--atlas-spacing-0_5));
+  font-weight: var(--atlas-font-weight-regular);
+  font-size: var(--atlas-font-size-xs);
+  color: var(--atlas-foreground-muted);
+  text-align: center;
+}
+
+.blankCell {
+  width: calc(var(--atlas-spacing-6) + var(--atlas-spacing-0_5) * 2);
+  height: calc(var(--atlas-spacing-6) + var(--atlas-spacing-0_5) * 2);
+}
+
+/* ── Date cell ───────────────────────────────────────────────── */
+
+.date {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: calc(var(--atlas-spacing-6) + var(--atlas-spacing-0_5) * 2);
+  height: calc(var(--atlas-spacing-6) + var(--atlas-spacing-0_5) * 2);
+  margin-block-start: var(--atlas-spacing-2);
+  font-family: var(--atlas-font-sans);
+  font-size: var(--atlas-font-size-sm);
+  color: var(--atlas-foreground);
+  background: none;
+  border: none;
+  border-radius: var(--atlas-radius-lg);
+  cursor: default;
+  outline: none;
+}
+
+.date:hover:not([data-disabled]):not([data-selected]):not([data-range]) {
+  background-color: var(--atlas-background-subtle);
+}
+
+.date:focus-visible {
+  outline: var(--atlas-border-width-2) solid var(--atlas-focus-ring);
+  outline-offset: var(--atlas-spacing-0_5);
+}
+
+.date[data-outside] {
+  color: var(--atlas-foreground-subtle);
+}
+
+.date[data-today] {
+  border: var(--atlas-border-width-1) solid var(--atlas-border-strong);
+}
+
+.date[data-selected] {
+  background-color: var(--atlas-primary);
+  color: var(--atlas-primary-foreground);
+}
+
+.date[data-disabled] {
+  color: var(--atlas-foreground-disabled);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* ── Range states ────────────────────────────────────────────── */
+/* Middle days form a seamless band: flat on both sides by default, re-rounded only
+   at the edge of the highlighted run within each row (row-wrap resets the shape). */
+
+.date[data-range] {
+  border-radius: var(--atlas-radius-none);
+  background-color: var(--atlas-primary-subtle);
+  color: var(--atlas-foreground);
+}
+
+.date[data-range="start"],
+.date[data-range="end"] {
+  background-color: var(--atlas-primary);
+  color: var(--atlas-primary-foreground);
+}
+
+.date[data-range-row-start] {
+  border-start-start-radius: var(--atlas-radius-lg);
+  border-end-start-radius: var(--atlas-radius-lg);
+}
+
+.date[data-range-row-end] {
+  border-start-end-radius: var(--atlas-radius-lg);
+  border-end-end-radius: var(--atlas-radius-lg);
+}
+
+/* ── Touch target on coarse pointer ──────────────────────────── */
+
+@media (pointer: coarse) {
+  .navButton,
+  .date {
+    min-width: var(--atlas-touch-min);
+    min-height: var(--atlas-touch-min);
+  }
+}
+
+/* ── High contrast ───────────────────────────────────────────── */
+
+@media (forced-colors: active) {
+  .trigger:focus-visible,
+  .navButton:focus-visible,
+  .captionSelect:focus-visible,
+  .date:focus-visible {
+    outline: var(--atlas-border-width-2) solid;
+  }
+
+  .date[data-selected],
+  .date[data-range="start"],
+  .date[data-range="end"] {
+    outline: var(--atlas-border-width-2) solid;
+  }
+}
+
+/* ── Reduced motion ──────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .trigger {
+    transition: none;
+  }
+
+  .navButton {
+    transition: none;
+  }
+
+  .captionSelect {
+    transition: none;
+  }
+}
