@@ -130,10 +130,10 @@
     {
       "id": "CAND-027",
       "name": "TimePicker",
-      "seenIn": ["shadcn-ui reference (Time Picker example), gap analysis 2026-09-29"],
-      "composedFrom": "not yet attempted",
-      "occurrences": 0,
-      "note": "A paired hh:mm control for combined datetime selection. Recommended as its own component composed alongside DatePicker, not a DatePicker mode — needs its own Figma component and a user decision to scope it in."
+      "seenIn": ["shadcn-ui reference (Time Picker example), gap analysis 2026-09-29", "atlas/DatePicker.md CODE section"],
+      "composedFrom": "Input type=\"time\" paired next to DatePicker — the reference's own \"Time\" field is a plain text input, not a custom dropdown/scroll picker, and native type=\"time\" gives full keyboard support for free",
+      "occurrences": 1,
+      "note": "Resolved as a composition (user, 2026-09-29): not built as a component. Documented in atlas/DatePicker.md's DO/CODE sections and an Examples — Date + Time Figma frame (694:927, no new component set)."
     },
     {
       "id": "CAND-028",

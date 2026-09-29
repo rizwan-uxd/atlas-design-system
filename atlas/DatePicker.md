@@ -16,12 +16,12 @@ USE WHEN
 
 DON'T USE WHEN
 • Only a month or year is needed — use Select instead
-• A time component is also needed — pair with a separate time control (not built in v1)
 
 DO
 • Always show a placeholder that names the expected value ("Pick a date" / "Pick a range")
 • Close the calendar and return focus to the trigger once the selection is complete
 • Mark today's cell distinctly from the selected cell(s)
+• For a combined date + time value, pair DatePicker with a plain Input type="time" next to it — not a custom time picker (see CODE below); the browser's native time UI gives full keyboard support for free
 
 DON'T
 • Reuse Select's popover for the calendar — dates need a grid, not a list
@@ -63,6 +63,16 @@ import { DatePicker, DatePickerTrigger, DatePickerContent } from '@atlas/ui-web'
   <DatePickerInput placeholder="Pick a date" />
   <DatePickerContent />
 </DatePicker>
+
+// Date + time: compose with a plain Input, not a custom time picker (CAND-027 — resolved
+// as a composition, no new component)
+<div style={{ display: "flex", gap: "var(--atlas-spacing-6)" }}>
+  <DatePicker value={date} onValueChange={setDate}>
+    <DatePickerTrigger placeholder="Pick a date" />
+    <DatePickerContent />
+  </DatePicker>
+  <Input type="time" aria-label="Time" value={time} onChange={(e) => setTime(e.target.value)} />
+</div>
 
 <!-- BEGIN:generated-api -->
 

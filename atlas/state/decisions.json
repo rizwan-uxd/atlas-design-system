@@ -263,6 +263,12 @@
       "topic": "DatePicker: Input variant via new DatePickerInput subcomponent (promotes CAND-026)",
       "decision": "Adds DatePickerInput as a typed alternative to DatePickerTrigger — pairs Input (md) with a real, focusable trailing calendar button. Figma: no new component set; Input already has no Icon variant in Figma (icon slots are code-only, matching Input's existing convention), so this is documented as an 'Examples — Input' frame (692:654) composing an Input instance with a calendar icon overlapping its trailing edge, not a new formal Date Picker trigger variant. Code: the trailing button is a real sibling element positioned over the field's trailing inset, not passed through Input's trailingIcon prop — that slot wraps its content in aria-hidden (decorative-only by Input's existing contract, e.g. a loading spinner), which would hide an interactive control from assistive tech. Input does not forward a ref (repo convention, 'reach it by id'), so DatePickerInput finds the underlying <input> via a wrapper-div query on mount and uses that as both the panel's anchor and the focus-restore target. Typed text commits on blur or Enter via a caller-overridable parseDate (default: new Date(text), documented as locale-fragile); unparseable text sets aria-invalid and keeps what was typed rather than discarding it. Works in both modes via the existing mode-agnostic ctx.onSelect dispatcher; in range mode the field only ever shows/sets the range's start (documented — DatePickerTrigger + formatRange is the range-display path).",
       "date": "2026-09-29"
+    },
+    {
+      "id": "DEC-044",
+      "topic": "DatePicker: Time Picker resolved as composition, not a component (resolves CAND-027)",
+      "decision": "The shadcn reference's 'Time Picker' variant pairs its Date field with a plain text input (\"10:30:00\"), not a custom dropdown/scroll picker — re-reading the reference changed the original plan (a candidate TimePicker component) to: compose Input type=\"time\" next to DatePicker (user, 2026-09-29). No new component, no new DatePicker prop or mode. Figma: no new component set — an Examples — Date + Time frame (694:927) on the Date Picker page shows the pairing, composed from the existing Date Picker trigger, Date Picker Calendar and Input (md) instances. Documented in atlas/DatePicker.md's DO and CODE sections.",
+      "date": "2026-09-29"
     }
   ]
 }
