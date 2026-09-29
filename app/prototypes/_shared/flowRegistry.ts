@@ -15,21 +15,4 @@ export type FlowMeta = {
   status?: "in-progress" | "stable" | "experimental"
 }
 
-export const flows: FlowMeta[] = [
-  {
-    slug: "tabby",
-    name: "Tabby — iOS onboarding",
-    description:
-      "Multi-step onboarding clone: splash, country picker, marketing carousel, phone + OTP, PIN, trust device, privacy, and a stores home.",
-    exercises: ["Button", "Input", "Label", "Card", "Dialog", "Alert", "Badge"],
-    status: "in-progress",
-  },
-  {
-    slug: "wise-home",
-    name: "Wise — Home screen",
-    description:
-      "Mobile banking home screen: balance cards, transaction feed, promotional interest card, and bottom tab navigation — based on the Wise app design.",
-    exercises: ["Button", "Card", "NavBar", "Badge"],
-    status: "stable",
-  },
-]
+export const flows: FlowMeta[] = []

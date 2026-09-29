@@ -1,7 +1,7 @@
 # Flow scaffold
 
 Everything a new flow needs from `app/prototypes/_shared/`. Read this instead of opening
-`tabby/` or `wise-home/`.
+an existing flow.
 
 ## Files
 ```

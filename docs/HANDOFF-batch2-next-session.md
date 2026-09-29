@@ -83,7 +83,7 @@ Pattern that worked: internal set named `.Name / Part` (leading dot), a public w
 - Figma tokens already present in Atlas: `icon/size/*`, `icon/stroke/*`, `duration/{instant,fast,base,slow,spin,pulse}`, `easing/*`, `opacity/{disabled,hover,overlay,pulse}`, `spacing/0…16`, `radius/*`, semantic `background`, `background-muted`, `foreground*`.
 
 ## Files
-Plan: `docs/componentlist plan _next6_2026-09-25.md`. This handoff. Sibling handoff for the previous batch: `docs/HANDOFF-v1.1-next-session.md`.
+Plan: `docs/componentlist plan _next6_2026-09-25.md`. This handoff.
 
 ## Radio Group notes for Slider
 - `atlas-verify` a11y check flags `role="radiogroup"` without `onKeyDown` (false positive: native radios handle arrows). A custom slider does need key handlers, so it will not hit this.

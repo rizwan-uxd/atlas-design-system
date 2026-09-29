@@ -1,6 +1,6 @@
 # Component task rubric (phase 9 · T3, T4 · 4 criteria × 1–5 = /20)
 
-Approved 2026-09-13 (`docs/PHASE-9-PROPOSAL.md` §8.2). Separate from the prototype rubric (`rubric.md`).
+Approved 2026-09-13 (`docs/HARNESS.md` §3). Separate from the prototype rubric (`rubric.md`).
 
 - Score the **median run** of each label × task (median by turns among runs that passed every automated gate; tie → lower cost).
 - Use the anchors below. A **2 or 4** means "between anchors" and needs a one-line note.

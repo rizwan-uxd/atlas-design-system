@@ -35,7 +35,7 @@ header. Edit the `candidates` array only; leave `_generated`, `syncedAt` and `fi
 
 **Existing candidate** (same name or same job) — add the prototype to `seenIn`, `occurrences + 1`:
 ```json
-"seenIn": ["app/prototypes/send-money (benchmark T1)", "app/prototypes/wise-home", "app/prototypes/<slug>"],
+"seenIn": ["app/prototypes/send-money (benchmark T1)", "app/prototypes/<slug>"],
 "occurrences": 4,
 ```
 
