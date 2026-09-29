@@ -5,17 +5,20 @@
  *   1. Renders the trigger with placeholder text by default
  *   2. Opens the panel on click; closes and restores focus on Escape
  *   3. Single mode — selecting a date closes the panel and updates the trigger text
- *   4. Keyboard grid navigation — ArrowRight moves focus, Enter selects
+ *   4. Keyboard grid navigation — ArrowRight moves focus, Enter selects; Shift+PageUp jumps a
+ *      full year and lands on a rendered, focusable date (regression test, see DEC-047)
  *   5. Disabled — trigger cannot open the panel
  *   6. Invalid — sets aria-invalid on the trigger
  *   7. Range mode — two clicks commit an ordered [start, end] range and update trigger text
  *   8. Dropdown caption — Month/Year <select>s replace the text label and navigate the month
  *   8b. DatePickerInput — typed field commits on Enter, invalid text keeps aria-invalid and
  *       the typed text, trailing button opens the panel, a blur-commit does not refocus the
- *       field (regression test for a real focus-trap bug: see DEC-046)
+ *       field (DEC-046), and a later grid selection still resyncs the field after a prior
+ *       failed parse (DEC-047)
  *   8c. DatePickerNaturalInput — chrono-node live preview (uncommitted), commits on Enter,
  *       invalid text keeps aria-invalid and the typed text, focus opens the panel, a
- *       blur-commit does not refocus the field (same DEC-046 fix)
+ *       blur-commit does not refocus the field (DEC-046), and grid click / Escape close the
+ *       panel and keep it closed instead of onFocus reopening it (DEC-047)
  *   9. axe accessibility check for single/range triggers, DatePickerInput,
  *      DatePickerNaturalInput, and open panels
  */
@@ -130,6 +133,22 @@ describe("DatePicker — keyboard navigation", () => {
     fireEvent.keyDown(grid, { key: "Enter" })
     expect(onValueChange).toHaveBeenCalledTimes(1)
     expect((onValueChange.mock.calls[0][0] as Date).getDate()).toBe(11)
+  })
+
+  it("Shift+PageUp jumps a full year and lands the roving-focus cell on a rendered, focusable date (bug: the visible month only shifted by one)", () => {
+    render(
+      <DatePicker defaultValue={FIXED_TODAY}>
+        <DatePickerTrigger />
+        <DatePickerContent />
+      </DatePicker>,
+    )
+    fireEvent.click(screen.getByRole("button", { name: /february 10, 2026/i }))
+    const grid = screen.getByRole("dialog").querySelector('[role="grid"]')!.parentElement as HTMLElement
+    fireEvent.keyDown(grid, { key: "PageUp", shiftKey: true })
+    const target = document.querySelector('[data-date="2025-02-10"]') as HTMLElement | null
+    expect(target).toBeTruthy()
+    expect(target).toHaveFocus()
+    expect(within(screen.getByRole("dialog")).getByText("February 2025")).toBeInTheDocument()
   })
 })
 
@@ -318,6 +337,24 @@ describe("DatePicker — DatePickerInput", () => {
     fireEvent.click(screen.getByRole("button", { name: /open calendar/i }))
     expect(screen.getByRole("dialog")).toBeInTheDocument()
   })
+
+  it("resyncs to a later grid selection even after a failed parse (bug: an invalid commit permanently blocked resync)", () => {
+    render(
+      <DatePicker defaultValue={FIXED_TODAY}>
+        <DatePickerInput placeholder="Pick a date" />
+        <DatePickerContent />
+      </DatePicker>,
+    )
+    const field = screen.getByRole("textbox") as HTMLInputElement
+    fireEvent.change(field, { target: { value: "garbage" } })
+    fireEvent.blur(field)
+    expect(field).toHaveValue("garbage") // still preserved, per the existing invalid-text contract
+
+    fireEvent.click(screen.getByRole("button", { name: /open calendar/i }))
+    const cell = document.querySelector('[data-date="2026-02-20"]') as HTMLElement
+    fireEvent.click(cell)
+    expect(field).toHaveValue("February 20, 2026")
+  })
 })
 
 // ─── 8c. DatePickerNaturalInput ─────────────────────────────────────────────
@@ -399,6 +436,33 @@ describe("DatePicker — DatePickerNaturalInput", () => {
     )
     fireEvent.focus(screen.getByRole("textbox"))
     expect(screen.getByRole("dialog")).toBeInTheDocument()
+  })
+
+  it("closes on grid click and stays closed (bug: onFocus was reopening it, since the guard only covered its own commit)", () => {
+    render(
+      <DatePicker defaultValue={new Date(2026, 1, 10)}>
+        <DatePickerNaturalInput />
+        <DatePickerContent />
+      </DatePicker>,
+    )
+    fireEvent.focus(screen.getByRole("textbox"))
+    expect(screen.getByRole("dialog")).toBeInTheDocument()
+    const cell = document.querySelector('[data-date="2026-02-15"]') as HTMLElement
+    fireEvent.click(cell)
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument()
+  })
+
+  it("closes on Escape and stays closed", () => {
+    render(
+      <DatePicker defaultValue={new Date(2026, 1, 10)}>
+        <DatePickerNaturalInput />
+        <DatePickerContent />
+      </DatePicker>,
+    )
+    fireEvent.focus(screen.getByRole("textbox"))
+    const dialog = screen.getByRole("dialog")
+    fireEvent.keyDown(dialog, { key: "Escape" })
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument()
   })
 })
 

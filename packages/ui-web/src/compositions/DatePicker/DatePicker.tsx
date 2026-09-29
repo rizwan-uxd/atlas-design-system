@@ -251,6 +251,12 @@ interface DatePickerContextValue {
   contentId: string
   /** Where focus goes when the panel opens: the selected date, today, or the panel itself. */
   focusIntent: React.MutableRefObject<"selected" | "today" | "content">
+  /** Set right before any programmatic `triggerRef.current.focus()` call the picker itself makes
+      to restore focus (a commit's restoreFocus, or Escape/outside-close). Consumed by a trigger
+      type whose own onFocus would otherwise reopen the panel (DatePickerNaturalInput) — without
+      this, restoring focus after a grid selection or Escape re-triggers that onFocus and reopens
+      the panel that just closed. */
+  suppressNextFocusOpen: React.MutableRefObject<boolean>
 }
 
 const DatePickerContext = React.createContext<DatePickerContextValue | null>(null)
@@ -296,6 +302,7 @@ export function DatePicker(props: DatePickerProps) {
 
   const triggerRef = React.useRef<HTMLElement | null>(null)
   const focusIntent = React.useRef<"selected" | "today" | "content">("selected")
+  const suppressNextFocusOpen = React.useRef(false)
   const baseId = React.useId()
 
   const setOpen = React.useCallback(
@@ -312,7 +319,10 @@ export function DatePicker(props: DatePickerProps) {
       if (!controlledSingle) setInnerSingle(date)
       singleProps.onValueChange?.(date)
       setOpenRaw(false)
-      if (restoreFocus) triggerRef.current?.focus()
+      if (restoreFocus) {
+        suppressNextFocusOpen.current = true
+        triggerRef.current?.focus()
+      }
     },
     [controlledSingle, singleProps.onValueChange],
   )
@@ -328,7 +338,10 @@ export function DatePicker(props: DatePickerProps) {
       rangeProps.onValueChange?.(next)
       setDraftStart(null)
       setOpenRaw(false)
-      if (restoreFocus) triggerRef.current?.focus()
+      if (restoreFocus) {
+        suppressNextFocusOpen.current = true
+        triggerRef.current?.focus()
+      }
     },
     [draftStart, controlledRange, rangeProps.onValueChange],
   )
@@ -350,6 +363,7 @@ export function DatePicker(props: DatePickerProps) {
       triggerId: `${baseId}-trigger`,
       contentId: `${baseId}-dialog`,
       focusIntent,
+      suppressNextFocusOpen,
     }),
     [mode, open, setOpen, value, draftStart, onSelect, min, max, disabled, baseId],
   )
@@ -499,12 +513,20 @@ export function DatePickerInput({ parseDate = defaultParseDate, formatDate = def
   const [text, setText] = React.useState(() => (anchor ? formatDate(anchor) : ""))
   const [dirty, setDirty] = React.useState(false)
   const [parseError, setParseError] = React.useState(false)
+  const lastAnchorTimeRef = React.useRef(anchor?.getTime())
 
   React.useEffect(() => {
-    if (dirty) return
+    const anchorTime = anchor?.getTime()
+    // `dirty` blocks resync so an in-progress edit (including invalid text left visible on a
+    // failed commit, which never clears dirty — see the CODE comment on the failure branch
+    // below) isn't clobbered. But that guard must not survive a genuinely NEW committed value
+    // (e.g. picking a date from the grid after a bad blur-commit) — otherwise the field is
+    // permanently stuck showing stale/invalid text even though the picker's real value moved on.
+    if (dirty && anchorTime === lastAnchorTimeRef.current) return
+    lastAnchorTimeRef.current = anchorTime
     setText(anchor ? formatDate(anchor) : "")
     setParseError(false)
-    // Only re-sync from the committed value while the field isn't being actively edited.
+    setDirty(false)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [anchor, dirty])
 
@@ -524,6 +546,10 @@ export function DatePickerInput({ parseDate = defaultParseDate, formatDate = def
     }
     const parsed = parseDate(trimmed)
     if (!parsed) {
+      // Deliberately leaves `dirty` true — the resync effect above must keep showing this
+      // invalid text (not silently replace it with the last good value) until either the user
+      // fixes it or a new value is committed elsewhere, which that effect's anchor-time check
+      // detects independently of `dirty`.
       setParseError(true)
       return
     }
@@ -623,13 +649,6 @@ export function DatePickerNaturalInput({
   const [text, setText] = React.useState("")
   const [parseError, setParseError] = React.useState(false)
   const preview = React.useMemo(() => (text.trim() ? parseText(text) : undefined), [text, parseText])
-  /** Guards against a focus/reopen loop: onSelect refocuses the trigger element after a commit
-      (shared behaviour with every other trigger type), but here the trigger's own onFocus
-      reopens the panel — without this guard that reopen steals focus to the dialog, which
-      blurs this field and fires a second, spurious commit. Set right before onSelect, consumed
-      by the very next focus event (the synchronous refocus), so a genuine later focus (tabbing
-      back in) is unaffected. */
-  const justCommittedRef = React.useRef(false)
 
   React.useEffect(() => {
     const inputEl = wrapperRef.current?.querySelector("input")
@@ -648,7 +667,6 @@ export function DatePickerNaturalInput({
       return
     }
     setParseError(false)
-    if (restoreFocus) justCommittedRef.current = true
     ctx.onSelect(parsed, restoreFocus)
   }
 
@@ -666,8 +684,12 @@ export function DatePickerNaturalInput({
         }}
         onFocus={(event) => {
           onFocus?.(event)
-          if (justCommittedRef.current) {
-            justCommittedRef.current = false
+          // Consumes the guard set by any restore-focus path (a commit's restoreFocus, or
+          // Escape/outside-close) — without it, that programmatic refocus would trigger this
+          // very handler and reopen the panel that just closed. A genuine focus (tabbing or
+          // clicking into the field) falls through and opens it, as intended.
+          if (ctx.suppressNextFocusOpen.current) {
+            ctx.suppressNextFocusOpen.current = false
             return
           }
           ctx.focusIntent.current = "content"
@@ -800,6 +822,7 @@ export function DatePickerContent({ side = "bottom", captionLayout = "label", ye
 
   const closeAndRestoreFocus = () => {
     ctx.setOpen(false)
+    ctx.suppressNextFocusOpen.current = true
     ctx.triggerRef.current?.focus()
   }
 
@@ -811,8 +834,11 @@ export function DatePickerContent({ side = "bottom", captionLayout = "label", ye
     const lastVisible = isRange ? addMonths(month, 1) : month
     const beforeFirst = d.getFullYear() < firstVisible.getFullYear() || (d.getFullYear() === firstVisible.getFullYear() && d.getMonth() < firstVisible.getMonth())
     const afterLast = d.getFullYear() > lastVisible.getFullYear() || (d.getFullYear() === lastVisible.getFullYear() && d.getMonth() > lastVisible.getMonth())
-    if (beforeFirst) setMonth(addMonths(month, -1))
-    else if (afterLast) setMonth(addMonths(month, 1))
+    // Jump straight to the month that makes `d` visible — not just ±1 — so a multi-month leap
+    // (Shift+PageUp/PageDown moves a full year) doesn't leave focusedDate outside the rendered
+    // grid, where pendingFocusRef's DOM lookup finds nothing and silently does nothing.
+    if (beforeFirst) setMonth(new Date(d.getFullYear(), d.getMonth(), 1))
+    else if (afterLast) setMonth(isRange ? addMonths(d, -1) : new Date(d.getFullYear(), d.getMonth(), 1))
     pendingFocusRef.current = toISODate(d)
   }
 
