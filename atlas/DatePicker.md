@@ -37,6 +37,7 @@ PROPERTIES
 • DatePickerContent yearRange: [number, number] — the dropdown caption's Year <select> range, defaults to 100 years back to 10 forward
 • DatePickerInput parseDate/formatDate: parses typed text to a Date (default: new Date(text)) and formats the committed value back into the field; unparseable text sets aria-invalid without discarding what was typed
 • DatePickerNaturalInput parseText/renderPreview: parses free text via chrono-node (default) live, on every keystroke, for the preview line only — the field itself commits on blur/Enter like DatePickerInput, and keeps the typed phrase rather than reformatting it; unparseable text sets aria-invalid
+• DatePickerInput and DatePickerNaturalInput do not refocus themselves after a blur-commit (unlike every other commit path, which restores focus to the trigger) — refocusing a field from inside its own blur handler fights the browser's pending focus change and traps Tab-away/click-away (DEC-046)
 
 TOKENS
 • Trigger: background, border / primary (focus, open) / danger (invalid), radius/lg, spacing/3 padding

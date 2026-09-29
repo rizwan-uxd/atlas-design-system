@@ -50,6 +50,12 @@
  *     <DatePickerContent />
  *   </DatePicker>
  *
+ * DatePickerInput and DatePickerNaturalInput commit on their own blur without refocusing
+ * themselves afterward (unlike every other commit path, which does restore focus to the
+ * trigger) — see ctx.onSelect's restoreFocus parameter. Calling .focus() on an element from
+ * inside its own blur handler fights the browser's pending focus change and traps focus in
+ * the field, breaking Tab-away and click-away (DEC-046).
+ *
  * Accessibility (APG date picker grid pattern):
  *   - Trigger: aria-haspopup="dialog", aria-expanded, formatted date/range or placeholder text.
  *   - Panel: role="dialog" aria-label="Choose date"/"Choose date range", portalled to <body>.
@@ -231,7 +237,12 @@ interface DatePickerContextValue {
   value: Date | DatePickerRange | undefined
   /** Range mode only: the first-picked date, while waiting for the second click. */
   draftStart: Date | null
-  onSelect: (date: Date) => void
+  /** `restoreFocus` (default true) moves focus back to the trigger after committing — correct
+      when the commit came from the calendar grid (a different element had focus). DatePickerInput
+      and DatePickerNaturalInput pass false from their own blur handler: focusing the trigger
+      from inside its own blur handler fights the browser's pending focus change (Tab-away,
+      click-away) and snaps focus back into the field instead of letting it move on. */
+  onSelect: (date: Date, restoreFocus?: boolean) => void
   min: Date | undefined
   max: Date | undefined
   disabled: boolean
@@ -297,17 +308,17 @@ export function DatePicker(props: DatePickerProps) {
   )
 
   const onSelectSingle = React.useCallback(
-    (date: Date) => {
+    (date: Date, restoreFocus = true) => {
       if (!controlledSingle) setInnerSingle(date)
       singleProps.onValueChange?.(date)
       setOpenRaw(false)
-      triggerRef.current?.focus()
+      if (restoreFocus) triggerRef.current?.focus()
     },
     [controlledSingle, singleProps.onValueChange],
   )
 
   const onSelectRangeDay = React.useCallback(
-    (date: Date) => {
+    (date: Date, restoreFocus = true) => {
       if (draftStart == null) {
         setDraftStart(date)
         return
@@ -317,7 +328,7 @@ export function DatePicker(props: DatePickerProps) {
       rangeProps.onValueChange?.(next)
       setDraftStart(null)
       setOpenRaw(false)
-      triggerRef.current?.focus()
+      if (restoreFocus) triggerRef.current?.focus()
     },
     [draftStart, controlledRange, rangeProps.onValueChange],
   )
@@ -504,7 +515,7 @@ export function DatePickerInput({ parseDate = defaultParseDate, formatDate = def
     if (inputEl) ctx.triggerRef.current = inputEl
   }, [ctx.triggerRef])
 
-  const commit = () => {
+  const commit = (restoreFocus: boolean) => {
     const trimmed = text.trim()
     if (!trimmed) {
       setParseError(false)
@@ -518,7 +529,7 @@ export function DatePickerInput({ parseDate = defaultParseDate, formatDate = def
     }
     setParseError(false)
     setDirty(false)
-    ctx.onSelect(parsed)
+    ctx.onSelect(parsed, restoreFocus)
   }
 
   return (
@@ -536,13 +547,15 @@ export function DatePickerInput({ parseDate = defaultParseDate, formatDate = def
         }}
         onBlur={(event) => {
           onBlur?.(event)
-          commit()
+          // Don't refocus this same field from inside its own blur handler — that fights
+          // the browser's pending focus change (Tab-away, click-away) and traps focus here.
+          commit(false)
         }}
         onKeyDown={(event) => {
           onKeyDown?.(event)
           if (event.key === "Enter") {
             event.preventDefault()
-            commit()
+            commit(true)
           } else if (event.key === "Escape" && ctx.open) {
             ctx.setOpen(false)
           }
@@ -623,7 +636,7 @@ export function DatePickerNaturalInput({
     if (inputEl) ctx.triggerRef.current = inputEl
   }, [ctx.triggerRef])
 
-  const commit = () => {
+  const commit = (restoreFocus: boolean) => {
     const trimmed = text.trim()
     if (!trimmed) {
       setParseError(false)
@@ -635,8 +648,8 @@ export function DatePickerNaturalInput({
       return
     }
     setParseError(false)
-    justCommittedRef.current = true
-    ctx.onSelect(parsed)
+    if (restoreFocus) justCommittedRef.current = true
+    ctx.onSelect(parsed, restoreFocus)
   }
 
   return (
@@ -662,13 +675,15 @@ export function DatePickerNaturalInput({
         }}
         onBlur={(event) => {
           onBlur?.(event)
-          commit()
+          // Don't refocus this same field from inside its own blur handler — that fights
+          // the browser's pending focus change (Tab-away, click-away) and traps focus here.
+          commit(false)
         }}
         onKeyDown={(event) => {
           onKeyDown?.(event)
           if (event.key === "Enter") {
             event.preventDefault()
-            commit()
+            commit(true)
           } else if (event.key === "Escape" && ctx.open) {
             ctx.setOpen(false)
           }

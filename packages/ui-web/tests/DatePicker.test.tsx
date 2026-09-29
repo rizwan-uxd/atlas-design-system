@@ -11,9 +11,11 @@
  *   7. Range mode — two clicks commit an ordered [start, end] range and update trigger text
  *   8. Dropdown caption — Month/Year <select>s replace the text label and navigate the month
  *   8b. DatePickerInput — typed field commits on Enter, invalid text keeps aria-invalid and
- *       the typed text, trailing button opens the panel
+ *       the typed text, trailing button opens the panel, a blur-commit does not refocus the
+ *       field (regression test for a real focus-trap bug: see DEC-046)
  *   8c. DatePickerNaturalInput — chrono-node live preview (uncommitted), commits on Enter,
- *       invalid text keeps aria-invalid and the typed text, focus opens the panel
+ *       invalid text keeps aria-invalid and the typed text, focus opens the panel, a
+ *       blur-commit does not refocus the field (same DEC-046 fix)
  *   9. axe accessibility check for single/range triggers, DatePickerInput,
  *      DatePickerNaturalInput, and open panels
  */
@@ -285,6 +287,27 @@ describe("DatePicker — DatePickerInput", () => {
     expect(onValueChange).not.toHaveBeenCalled()
   })
 
+  it("does not refocus the field after a blur-commit (bug: was trapping Tab-away/click-away)", () => {
+    // jsdom's fireEvent.blur doesn't itself move document.activeElement (no native focus-transfer
+    // model), so the regression is verified by spying on .focus() instead of activeElement: before
+    // the fix, ctx.onSelect called triggerRef.current.focus() unconditionally, which — from inside
+    // this same field's own blur handler — fights the browser's pending focus change in real
+    // browsers and snaps focus back into the field.
+    const onValueChange = vi.fn()
+    render(
+      <DatePicker onValueChange={onValueChange}>
+        <DatePickerInput placeholder="Pick a date" />
+        <DatePickerContent />
+      </DatePicker>,
+    )
+    const field = screen.getByRole("textbox") as HTMLInputElement
+    const focusSpy = vi.spyOn(field, "focus")
+    fireEvent.change(field, { target: { value: "2026-03-15" } })
+    fireEvent.blur(field)
+    expect(onValueChange).toHaveBeenCalledTimes(1)
+    expect(focusSpy).not.toHaveBeenCalled()
+  })
+
   it("opens the panel via the trailing calendar button", () => {
     render(
       <DatePicker>
@@ -348,6 +371,23 @@ describe("DatePicker — DatePickerNaturalInput", () => {
     expect(field).toHaveAttribute("aria-invalid", "true")
     expect(field).toHaveValue("gibberish text")
     expect(onValueChange).not.toHaveBeenCalled()
+  })
+
+  it("does not refocus the field after a blur-commit (bug: was trapping Tab-away/click-away)", () => {
+    // See the DatePickerInput test above for why this asserts a .focus() spy, not activeElement.
+    const onValueChange = vi.fn()
+    render(
+      <DatePicker onValueChange={onValueChange}>
+        <DatePickerNaturalInput />
+        <DatePickerContent />
+      </DatePicker>,
+    )
+    const field = screen.getByRole("textbox") as HTMLInputElement
+    const focusSpy = vi.spyOn(field, "focus")
+    fireEvent.change(field, { target: { value: "march 15, 2027" } })
+    fireEvent.blur(field)
+    expect(onValueChange).toHaveBeenCalledTimes(1)
+    expect(focusSpy).not.toHaveBeenCalled()
   })
 
   it("opens the panel on focus", () => {
