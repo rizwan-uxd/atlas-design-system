@@ -9,7 +9,8 @@
  *   5. Disabled — trigger cannot open the panel
  *   6. Invalid — sets aria-invalid on the trigger
  *   7. Range mode — two clicks commit an ordered [start, end] range and update trigger text
- *   8. axe accessibility check for single and range triggers + open panels
+ *   8. Dropdown caption — Month/Year <select>s replace the text label and navigate the month
+ *   9. axe accessibility check for single and range triggers + open panels
  */
 
 import React from "react"
@@ -193,7 +194,44 @@ describe("DatePicker — range mode", () => {
   })
 })
 
-// ─── 8. axe accessibility ────────────────────────────────────────────────────
+// ─── 8. Dropdown caption ─────────────────────────────────────────────────────
+
+describe("DatePicker — dropdown caption", () => {
+  it("shows Month/Year selects instead of the text label, and navigates the month", () => {
+    render(
+      <DatePicker defaultValue={FIXED_TODAY}>
+        <DatePickerTrigger />
+        <DatePickerContent captionLayout="dropdown" />
+      </DatePicker>,
+    )
+    fireEvent.click(screen.getByRole("button", { name: /february 10, 2026/i }))
+    const dialog = screen.getByRole("dialog")
+    const monthSelect = within(dialog).getByRole("combobox", { name: "Month" }) as HTMLSelectElement
+    const yearSelect = within(dialog).getByRole("combobox", { name: "Year" }) as HTMLSelectElement
+    expect(monthSelect.value).toBe("1") // February = index 1
+    expect(yearSelect.value).toBe("2026")
+    expect(within(dialog).queryByText("February 2026")).not.toBeInTheDocument()
+
+    fireEvent.change(monthSelect, { target: { value: "4" } }) // May
+    expect((within(dialog).getByRole("combobox", { name: "Month" }) as HTMLSelectElement).value).toBe("4")
+    expect(document.querySelector('[data-date="2026-05-01"]')).toBeTruthy()
+  })
+
+  it("ignores captionLayout=\"dropdown\" in range mode and keeps the text label", () => {
+    render(
+      <DatePicker mode="range" defaultValue={[FIXED_TODAY, undefined]}>
+        <DatePickerTrigger placeholder="Pick a range" />
+        <DatePickerContent captionLayout="dropdown" />
+      </DatePicker>,
+    )
+    fireEvent.click(screen.getByRole("button", { name: /feb 10, 2026/i }))
+    const dialog = screen.getByRole("dialog")
+    expect(within(dialog).getByText("February 2026")).toBeInTheDocument()
+    expect(within(dialog).queryByRole("combobox", { name: "Month" })).not.toBeInTheDocument()
+  })
+})
+
+// ─── 9. axe accessibility ────────────────────────────────────────────────────
 
 describe("DatePicker — a11y (axe)", () => {
   it("passes axe for the closed single trigger", async () => {

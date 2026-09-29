@@ -11,6 +11,7 @@ USE WHEN
 • A single date must be picked from a full calendar view (birthdate, due date, booking date)
 • A date range must be picked (mode="range": check-in/check-out, reporting windows)
 • The exact day matters more than quick relative entry (unlike a text "in 3 days" field)
+• Long-range navigation matters more than month-by-month browsing (birthdates) — pair with `<DatePickerContent captionLayout="dropdown" />` for Month/Year selects instead of arrow nav
 
 DON'T USE WHEN
 • Only a month or year is needed — use Select instead
@@ -31,6 +32,8 @@ PROPERTIES
 • Trigger State: default | hover | focus | open | disabled | invalid
 • Date cell State: default | hover | selected | today | outside-month | disabled | range-start | range-middle | range-end
 • Placeholder: boolean — whether the trigger shows placeholder text or a formatted value
+• DatePickerContent captionLayout: "label" (default) | "dropdown" — single mode only, range mode ignores it and stays "label"
+• DatePickerContent yearRange: [number, number] — the dropdown caption's Year <select> range, defaults to 100 years back to 10 forward
 
 TOKENS
 • Trigger: background, border / primary (focus, open) / danger (invalid), radius/lg, spacing/3 padding
@@ -48,6 +51,11 @@ import { DatePicker, DatePickerTrigger, DatePickerContent } from '@atlas/ui-web'
 <DatePicker mode="range" value={range} onValueChange={setRange}>
   <DatePickerTrigger placeholder="Pick a range" />
   <DatePickerContent />
+</DatePicker>
+
+<DatePicker value={dob} onValueChange={setDob}>
+  <DatePickerTrigger placeholder="Select a date" />
+  <DatePickerContent captionLayout="dropdown" />
 </DatePicker>
 
 <!-- BEGIN:generated-api -->
@@ -72,4 +80,6 @@ import { DatePicker, DatePickerTrigger, DatePickerContent } from "@atlas/ui-web/
 **DatePickerContent**
 - ref: forwarded
 - `side?: DatePickerSide`
+- `captionLayout?: "label" | "dropdown"`
+- `yearRange?: [number, number]`
 <!-- END:generated-api -->

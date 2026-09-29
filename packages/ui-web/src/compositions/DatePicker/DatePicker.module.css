@@ -164,6 +164,54 @@
   white-space: nowrap;
 }
 
+/* ── Dropdown caption (captionLayout="dropdown") ──────────────── */
+
+.captionField {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  flex: 1 1 0;
+  min-inline-size: 0;
+}
+
+.captionSelect {
+  width: 100%;
+  box-sizing: border-box;
+  appearance: none;
+  height: calc(var(--atlas-spacing-6) + var(--atlas-spacing-0_5) * 2);
+  padding-inline-start: var(--atlas-spacing-2);
+  padding-inline-end: var(--atlas-spacing-6);
+  font-family: var(--atlas-font-sans);
+  font-size: var(--atlas-font-size-sm);
+  color: var(--atlas-foreground);
+  background-color: var(--atlas-background);
+  border: var(--atlas-border-width-1) solid var(--atlas-border);
+  border-radius: var(--atlas-radius-lg);
+  outline: none;
+  cursor: default;
+  transition: border-color var(--atlas-duration-fast) var(--atlas-easing-standard);
+}
+
+.captionSelect:hover:not(:disabled) {
+  border-color: var(--atlas-border-strong);
+}
+
+.captionSelect:focus-visible {
+  border-color: var(--atlas-primary);
+  outline: var(--atlas-border-width-2) solid var(--atlas-focus-ring);
+  outline-offset: var(--atlas-spacing-0_5);
+}
+
+.captionChevron {
+  position: absolute;
+  inset-inline-end: var(--atlas-spacing-2);
+  pointer-events: none;
+  color: var(--atlas-foreground-muted);
+  inline-size: var(--atlas-icon-size-xs);
+  block-size: var(--atlas-icon-size-xs);
+  stroke-width: 1.5;
+}
+
 /* ── Grids ───────────────────────────────────────────────────── */
 
 .grids {
@@ -278,6 +326,7 @@
 @media (forced-colors: active) {
   .trigger:focus-visible,
   .navButton:focus-visible,
+  .captionSelect:focus-visible,
   .date:focus-visible {
     outline: var(--atlas-border-width-2) solid;
   }
@@ -297,6 +346,10 @@
   }
 
   .navButton {
+    transition: none;
+  }
+
+  .captionSelect {
     transition: none;
   }
 }

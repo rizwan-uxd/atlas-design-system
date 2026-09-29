@@ -48,6 +48,9 @@ type AssertTriggerShape = {
 type _CheckTriggerProps = AssertTriggerShape extends Pick<DatePickerTriggerProps, keyof AssertTriggerShape & keyof DatePickerTriggerProps> ? true : never
 const _t: _CheckTriggerProps = true; void _t
 
-type AssertContentShape = { side?: DatePickerSide }
+type AssertCaptionLayout = NonNullable<DatePickerContentProps["captionLayout"]> extends "label" | "dropdown" ? true : false
+const _cl: AssertCaptionLayout = true; void _cl
+
+type AssertContentShape = { side?: DatePickerSide; captionLayout?: "label" | "dropdown"; yearRange?: [number, number] }
 type _CheckContentProps = AssertContentShape extends Pick<DatePickerContentProps, keyof AssertContentShape & keyof DatePickerContentProps> ? true : never
 const _c: _CheckContentProps = true; void _c

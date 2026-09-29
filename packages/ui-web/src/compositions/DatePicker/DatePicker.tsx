@@ -5,7 +5,9 @@
  *
  * Figma:      Date Picker (State × Placeholder) · .Date Picker / Date (day cell states, incl.
  *             range-start · range-middle · range-end) · Date Picker Calendar (single month) ·
- *             Date Picker Calendar (range) (shared nav, two months)
+ *             Date Picker Calendar (range) (shared nav, two months) ·
+ *             Date Picker Calendar (dropdown) (Month/Year Select dropdowns instead of the text
+ *             label, single mode only — <DatePickerContent captionLayout="dropdown" />)
  * Sizes:      one size (Figma draws no Size variant)
  * States:     Trigger — default · hover · focus · open · disabled · invalid
  *             Date cell — default · hover · selected · today · outside-month · disabled ·
@@ -51,7 +53,7 @@
 
 import React from "react"
 import { createPortal } from "react-dom"
-import { Calendar as CalendarGlyph, ChevronLeft, ChevronRight } from "lucide-react"
+import { Calendar as CalendarGlyph, ChevronDown, ChevronLeft, ChevronRight } from "lucide-react"
 import styles from "./DatePicker.module.css"
 
 /* ── Types ──────────────────────────────────────────────────────── */
@@ -106,6 +108,13 @@ export interface DatePickerTriggerProps extends Omit<React.ComponentProps<"butto
 
 export interface DatePickerContentProps extends React.ComponentProps<"div"> {
   side?: DatePickerSide
+  /** "label" (default) shows "Month Year" text with prev/next arrows, matching Figma's plain
+      header. "dropdown" swaps it for Month/Year <select> dropdowns for fast long-range
+      navigation (birthdates) — single mode only; range mode ignores this and stays "label". */
+  captionLayout?: "label" | "dropdown"
+  /** [min, max] year for the dropdown caption's year <select>. Defaults to 100 years back
+      to 10 years forward from today. */
+  yearRange?: [number, number]
 }
 
 /* ── Helpers ────────────────────────────────────────────────────── */
@@ -120,6 +129,7 @@ function setRef<T>(ref: React.Ref<T> | undefined, value: T | null) {
 }
 
 const WEEKDAYS = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"]
+const MONTH_NAMES = Array.from({ length: 12 }, (_, i) => new Date(2000, i, 1).toLocaleDateString(undefined, { month: "long" }))
 
 function isSameDay(a: Date, b: Date): boolean {
   return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate()
@@ -432,7 +442,7 @@ export function DatePickerTrigger({
 
 /* ── DatePickerContent (panel: header + weekdays + grid) ───────── */
 
-export function DatePickerContent({ side = "bottom", className, onKeyDown, ref, ...rest }: DatePickerContentProps) {
+export function DatePickerContent({ side = "bottom", captionLayout = "label", yearRange, className, onKeyDown, ref, ...rest }: DatePickerContentProps) {
   const ctx = useDatePicker("DatePickerContent")
   const contentRef = React.useRef<HTMLDivElement | null>(null)
   const [mounted, setMounted] = React.useState(false)
@@ -441,6 +451,14 @@ export function DatePickerContent({ side = "bottom", className, onKeyDown, ref, 
   const [month, setMonth] = React.useState(() => primaryDate(ctx) ?? today)
   const [focusedDate, setFocusedDate] = React.useState(() => primaryDate(ctx) ?? today)
   const isRange = ctx.mode === "range"
+  /** Dropdown caption is a single-month header layout; range's shared two-month nav keeps "label". */
+  const useDropdownCaption = captionLayout === "dropdown" && !isRange
+  const [yearMin, yearMax] = yearRange ?? [today.getFullYear() - 100, today.getFullYear() + 10]
+  const yearOptions = React.useMemo(() => {
+    const years: number[] = []
+    for (let y = yearMax; y >= yearMin; y--) years.push(y)
+    return years
+  }, [yearMin, yearMax])
   /** Set by `focusDate` (arrow/page navigation) — moved to a ref instead of requestAnimationFrame
       so the DOM .focus() call runs deterministically after the month/focusedDate state that may
       remount the target cell has committed, not on the next paint. */
@@ -603,10 +621,11 @@ export function DatePickerContent({ side = "bottom", className, onKeyDown, ref, 
     return null
   }
 
-  function renderMonthTable(monthDate: Date, headingId: string) {
+  function renderMonthTable(monthDate: Date, heading: { id: string } | { label: string }) {
     const weeks = buildWeeks(monthDate)
+    const headingProps = "id" in heading ? { "aria-labelledby": heading.id } : { "aria-label": heading.label }
     return (
-      <table className={styles.grid} role="grid" aria-labelledby={headingId}>
+      <table className={styles.grid} role="grid" {...headingProps}>
         <thead>
           <tr role="row">
             {WEEKDAYS.map((d, i) => (
@@ -698,21 +717,58 @@ export function DatePickerContent({ side = "bottom", className, onKeyDown, ref, 
         <button type="button" className={styles.navButton} aria-label="Previous month" onClick={() => setMonth((m) => addMonths(m, -1))}>
           <ChevronLeft />
         </button>
-        <span id={monthLabelId} className={styles.monthLabel} aria-live="polite">
-          {month.toLocaleDateString(undefined, { month: "long", year: "numeric" })}
-        </span>
-        {isRange && (
-          <span id={monthLabelId2} className={styles.monthLabel} aria-live="polite">
-            {secondMonth.toLocaleDateString(undefined, { month: "long", year: "numeric" })}
-          </span>
+        {useDropdownCaption ? (
+          <>
+            <span className={styles.captionField}>
+              <select
+                className={styles.captionSelect}
+                aria-label="Month"
+                value={month.getMonth()}
+                onChange={(event) => setMonth(new Date(month.getFullYear(), Number(event.target.value), 1))}
+              >
+                {MONTH_NAMES.map((name, i) => (
+                  <option key={i} value={i}>
+                    {name}
+                  </option>
+                ))}
+              </select>
+              <ChevronDown className={styles.captionChevron} aria-hidden="true" />
+            </span>
+            <span className={styles.captionField}>
+              <select
+                className={styles.captionSelect}
+                aria-label="Year"
+                value={month.getFullYear()}
+                onChange={(event) => setMonth(new Date(Number(event.target.value), month.getMonth(), 1))}
+              >
+                {yearOptions.map((y) => (
+                  <option key={y} value={y}>
+                    {y}
+                  </option>
+                ))}
+              </select>
+              <ChevronDown className={styles.captionChevron} aria-hidden="true" />
+            </span>
+          </>
+        ) : (
+          <>
+            <span id={monthLabelId} className={styles.monthLabel} aria-live="polite">
+              {month.toLocaleDateString(undefined, { month: "long", year: "numeric" })}
+            </span>
+            {isRange && (
+              <span id={monthLabelId2} className={styles.monthLabel} aria-live="polite">
+                {secondMonth.toLocaleDateString(undefined, { month: "long", year: "numeric" })}
+              </span>
+            )}
+          </>
         )}
         <button type="button" className={styles.navButton} aria-label="Next month" onClick={() => setMonth((m) => addMonths(m, 1))}>
           <ChevronRight />
         </button>
       </div>
       <div className={styles.grids}>
-        {renderMonthTable(month, monthLabelId)}
-        {isRange && renderMonthTable(secondMonth, monthLabelId2)}
+        {renderMonthTable(month, useDropdownCaption ? { label: month.toLocaleDateString(undefined, { month: "long", year: "numeric" }) } : { id: monthLabelId })}
+        {isRange && renderMonthTable(secondMonth, { id: monthLabelId2 })}
       </div>
     </div>,
     document.body,
