@@ -7,13 +7,14 @@
  *   3. Arrow-key roving focus (automatic activation) and manual activation mode.
  *   4. Disabled tab is skipped by arrow navigation.
  *   5. axe accessibility check per variant.
+ *   6. Vertical orientation: aria-orientation, Up/Down roving focus.
  */
 
 import React from "react"
 import { describe, it, expect } from "vitest"
 import { render, screen, fireEvent, waitFor } from "@testing-library/react"
 import { axe } from "jest-axe"
-import { Tabs, type TabsVariant, type TabsSize } from "@atlas/ui-web/patterns/Tabs/Tabs"
+import { Tabs, type TabsVariant, type TabsSize, type TabsOrientation } from "@atlas/ui-web/patterns/Tabs/Tabs"
 
 const items = [
   { id: "one",   label: "Overview" },
@@ -22,8 +23,21 @@ const items = [
   { id: "four",  label: "Extra" },
 ].map((item) => ({ ...item, content: <p>{item.label} panel</p> }))
 
-function Basic(props: { variant?: TabsVariant; size?: TabsSize; activationMode?: "automatic" | "manual" }) {
-  return <Tabs variant={props.variant} size={props.size} activationMode={props.activationMode} items={items} />
+function Basic(props: {
+  variant?: TabsVariant
+  size?: TabsSize
+  orientation?: TabsOrientation
+  activationMode?: "automatic" | "manual"
+}) {
+  return (
+    <Tabs
+      variant={props.variant}
+      size={props.size}
+      orientation={props.orientation}
+      activationMode={props.activationMode}
+      items={items}
+    />
+  )
 }
 
 // ─── 1. Array API ───────────────────────────────────────────────────────────
@@ -45,7 +59,7 @@ describe("Tabs array API", () => {
 // ─── 2. Variant × size ──────────────────────────────────────────────────────
 
 describe("Tabs variant", () => {
-  it.each<TabsVariant>(["line", "pill", "segmented"])("renders variant=%s without error", (variant) => {
+  it.each<TabsVariant>(["line", "pill", "segmented", "outline"])("renders variant=%s without error", (variant) => {
     render(<Basic variant={variant} />)
     expect(screen.getAllByRole("tab")).toHaveLength(4)
   })
@@ -91,11 +105,38 @@ describe("Tabs keyboard activation", () => {
   })
 })
 
-// ─── 4. Accessibility ───────────────────────────────────────────────────────
+// ─── 4. Orientation ─────────────────────────────────────────────────────────
+
+describe("Tabs orientation", () => {
+  it("defaults to horizontal — no aria-orientation override needed", () => {
+    render(<Basic />)
+    const tablist = screen.getByRole("tablist")
+    expect(tablist).toHaveAttribute("aria-orientation", "horizontal")
+  })
+
+  it("vertical: sets aria-orientation and roves focus with Up/Down", async () => {
+    render(<Basic orientation="vertical" />)
+    const tablist = screen.getByRole("tablist")
+    expect(tablist).toHaveAttribute("aria-orientation", "vertical")
+
+    const overview = screen.getByRole("tab", { name: "Overview" })
+    overview.focus()
+    fireEvent.keyDown(overview, { key: "ArrowDown" })
+    await waitFor(() => expect(screen.getByRole("tab", { name: "Details" })).toHaveFocus())
+    expect(screen.getByRole("tab", { name: "Details" })).toHaveAttribute("aria-selected", "true")
+  })
+})
+
+// ─── 5. Accessibility ───────────────────────────────────────────────────────
 
 describe("Tabs accessibility", () => {
-  it.each<TabsVariant>(["line", "pill", "segmented"])("has no axe violations, variant=%s", async (variant) => {
+  it.each<TabsVariant>(["line", "pill", "segmented", "outline"])("has no axe violations, variant=%s", async (variant) => {
     const { container } = render(<Basic variant={variant} />)
+    expect(await axe(container)).toHaveNoViolations()
+  })
+
+  it("has no axe violations, orientation=vertical", async () => {
+    const { container } = render(<Basic orientation="vertical" />)
     expect(await axe(container)).toHaveNoViolations()
   })
 })

@@ -80,6 +80,22 @@
   gap: var(--atlas-spacing-1);
 }
 
+/* Outline list — same per-trigger treatment as segmented (surface + shadow-sm on
+   selected) but with no track background/padding, matching the shadcn reference's
+   "Default" style */
+.outline .list {
+  gap: var(--atlas-spacing-1);
+}
+
+/* ── Vertical orientation (layout-only — no Figma variant) ──────────────── */
+/* Radix sets data-orientation on List/Trigger from TabsRoot's orientation prop */
+
+.list[data-orientation="vertical"] {
+  flex-direction: column;
+  overflow-x: visible;
+  overflow-y: auto;
+}
+
 /* ── Trigger base ─────────────────────────────────────────────── */
 
 .trigger {
@@ -159,6 +175,30 @@
   font-weight: var(--atlas-font-weight-semibold);
 }
 
+/* Vertical: the underline becomes an inline-start rail (RTL-safe via logical props) */
+
+.line .list[data-orientation="vertical"] {
+  border-block-end: none;
+  border-inline-start: var(--atlas-border-width-1) solid var(--atlas-border);
+}
+
+.line .list[data-orientation="vertical"]::after {
+  inset-block-end: auto;
+  inset-block-start: 0;
+  inset-inline-start: calc(-1 * var(--atlas-border-width-1));
+  width: var(--atlas-border-width-2);
+  height: var(--_ind-h, 0px);
+  transform: translateY(var(--_ind-y, 0px));
+}
+
+.line .list[data-orientation="vertical"] .trigger {
+  border-block-end: none;
+  border-inline-start: var(--atlas-border-width-2) solid transparent;
+  margin-block-end: 0;
+  margin-inline-start: calc(-1 * var(--atlas-border-width-1));
+  justify-content: flex-start;
+}
+
 /* ── Pill variant triggers ────────────────────────────────────── */
 
 .pill .trigger {
@@ -210,6 +250,30 @@
   box-shadow: var(--atlas-shadow-sm);
 }
 
+/* ── Outline variant triggers ──────────────────────────────────────────── */
+/* Figma outline trigger: identical to segmented's per-trigger states, minus
+   the track (no background-muted fill on hover, no wrapping .list background) —
+   verified against the shadcn reference's "Default" style during this task. */
+
+.outline .trigger {
+  color: var(--atlas-foreground-muted);
+  border-radius: var(--atlas-radius-md);
+}
+
+.outline .trigger:hover:not([data-disabled]) {
+  color: var(--atlas-foreground);
+}
+
+.outline .trigger:active:not([data-disabled]) {
+  color: var(--atlas-foreground);
+}
+
+.outline .trigger[data-state="active"] {
+  background-color: var(--atlas-surface);
+  color: var(--atlas-foreground);
+  box-shadow: var(--atlas-shadow-sm);
+}
+
 /* ── Trigger icon slot ────────────────────────────────────────── */
 
 .icon {
@@ -236,7 +300,7 @@
   .trigger {
     transition: none;
   }
-  /* Instant indicator jump under reduced motion */
+  /* Instant indicator jump under reduced motion (horizontal and vertical) */
   .line .list::after {
     transition: none;
   }

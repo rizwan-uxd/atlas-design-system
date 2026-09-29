@@ -12,8 +12,10 @@
  *   - aria-selected per trigger
  *   - Automatic (focus = activate) or manual (Enter/Space) activation
  *
- * Variants:  line (default) | pill | segmented
- * Sizes:     sm | md | lg
+ * Variants:    line (default) | pill | segmented | outline
+ * Sizes:       sm | md | lg
+ * Orientation: horizontal (default) | vertical — layout-only, no Figma variant;
+ *              Radix swaps arrow-key handling to Up/Down automatically.
  *
  * Two usage patterns:
  *
@@ -51,8 +53,9 @@ function cx(...classes: (string | false | null | undefined)[]): string {
 
 /* ── Types ──────────────────────────────────────────────────────── */
 
-export type TabsVariant = "line" | "pill" | "segmented"
-export type TabsSize    = "sm" | "md" | "lg"
+export type TabsVariant     = "line" | "pill" | "segmented" | "outline"
+export type TabsSize        = "sm" | "md" | "lg"
+export type TabsOrientation = "horizontal" | "vertical"
 
 export interface TabItem {
   id:        string
@@ -70,6 +73,13 @@ export interface TabItem {
 export interface TabsRootProps {
   variant?:        TabsVariant
   size?:           TabsSize
+  /**
+   * Layout axis — horizontal (default) or vertical.
+   * Layout-only: no Figma variant (see the Examples — Vertical frame on the
+   * Tabs page). Radix swaps roving focus to Up/Down and sets data-orientation
+   * on List/Trigger, which the CSS module reads.
+   */
+  orientation?:    TabsOrientation
   /** Controlled active value */
   value?:          string
   /** Uncontrolled default — falls back to first item when used in array API */
@@ -83,6 +93,7 @@ export interface TabsRootProps {
 export function TabsRoot({
   variant        = "line",
   size           = "md",
+  orientation    = "horizontal",
   value,
   defaultValue,
   onValueChange,
@@ -100,6 +111,7 @@ export function TabsRoot({
   return (
     <RadixTabs.Root
       className={rootClasses}
+      orientation={orientation}
       value={value}
       defaultValue={defaultValue}
       onValueChange={onValueChange}
@@ -138,9 +150,15 @@ export function TabsList({
     if (!active) return
     const listRect = list.getBoundingClientRect()
     const activeRect = active.getBoundingClientRect()
-    /* scrollLeft accounts for lists that have scrolled horizontally */
-    list.style.setProperty("--_ind-x", `${activeRect.left - listRect.left + list.scrollLeft}px`)
-    list.style.setProperty("--_ind-w", `${activeRect.width}px`)
+    if (list.getAttribute("data-orientation") === "vertical") {
+      /* scrollTop accounts for lists that have scrolled vertically */
+      list.style.setProperty("--_ind-y", `${activeRect.top - listRect.top + list.scrollTop}px`)
+      list.style.setProperty("--_ind-h", `${activeRect.height}px`)
+    } else {
+      /* scrollLeft accounts for lists that have scrolled horizontally */
+      list.style.setProperty("--_ind-x", `${activeRect.left - listRect.left + list.scrollLeft}px`)
+      list.style.setProperty("--_ind-w", `${activeRect.width}px`)
+    }
   }, [])
 
   /* Run once on mount to set initial indicator position.
@@ -259,6 +277,7 @@ export interface TabsProps extends TabsRootProps {
 function TabsBase({
   variant        = "line",
   size           = "md",
+  orientation    = "horizontal",
   items,
   value,
   defaultValue,
@@ -277,6 +296,7 @@ function TabsBase({
     <TabsRoot
       variant={variant}
       size={size}
+      orientation={orientation}
       value={resolvedValue}
       defaultValue={resolvedDefaultValue}
       onValueChange={handleChange}

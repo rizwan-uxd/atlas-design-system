@@ -1571,8 +1571,8 @@ export default function SandboxPage() {
         <Section title="Tabs">
           <div style={{ display: "flex", flexDirection: "column", gap: "var(--atlas-spacing-8)" }}>
 
-            {/* 3 variants — md size */}
-            {(["line", "pill", "segmented"] as const).map(variant => (
+            {/* 4 variants — md size */}
+            {(["line", "pill", "segmented", "outline"] as const).map(variant => (
               <div key={variant}>
                 <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase", letterSpacing: "var(--atlas-letter-spacing-wide)" }}>
                   {variant} · md · arrow keys · disabled tab skipped
@@ -1655,6 +1655,22 @@ export default function SandboxPage() {
                   { id: "man-a", label: "Design", content: <p style={{ margin: 0, fontSize: "var(--atlas-font-size-sm)", color: "var(--atlas-foreground-muted)" }}>Design panel — press Enter or Space to activate a focused tab</p> },
                   { id: "man-b", label: "Develop", content: <p style={{ margin: 0, fontSize: "var(--atlas-font-size-sm)", color: "var(--atlas-foreground-muted)" }}>Develop panel</p> },
                   { id: "man-c", label: "Review", content: <p style={{ margin: 0, fontSize: "var(--atlas-font-size-sm)", color: "var(--atlas-foreground-muted)" }}>Review panel</p> },
+                ]}
+              />
+            </div>
+
+            {/* Vertical orientation — layout-only, no Figma variant */}
+            <div>
+              <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase", letterSpacing: "var(--atlas-letter-spacing-wide)" }}>
+                Vertical orientation (pill) — arrow keys move Up/Down
+              </p>
+              <Tabs
+                variant="pill"
+                orientation="vertical"
+                items={[
+                  { id: "v-account",       label: "Account",       content: <p style={{ margin: 0, fontSize: "var(--atlas-font-size-sm)", color: "var(--atlas-foreground-muted)" }}>Account panel</p> },
+                  { id: "v-password",      label: "Password",      content: <p style={{ margin: 0, fontSize: "var(--atlas-font-size-sm)", color: "var(--atlas-foreground-muted)" }}>Password panel</p> },
+                  { id: "v-notifications", label: "Notifications", content: <p style={{ margin: 0, fontSize: "var(--atlas-font-size-sm)", color: "var(--atlas-foreground-muted)" }}>Notifications panel</p> },
                 ]}
               />
             </div>
