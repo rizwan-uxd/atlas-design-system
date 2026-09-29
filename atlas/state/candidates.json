@@ -128,14 +128,6 @@
       "note": "Follow-up to Table (DEC-040). Toolbar (filter Input, Columns menu), sortable heads, row selection, selected count and Previous/Next pagination on @tanstack/react-table (user, 2026-09-28). The Figma Table page carries the composed example; a DataTable needs its own Figma design and approval first."
     },
     {
-      "id": "CAND-026",
-      "name": "DatePicker — Input variant",
-      "seenIn": ["shadcn-ui reference (Input example), gap analysis 2026-09-29"],
-      "composedFrom": "not yet attempted",
-      "occurrences": 0,
-      "note": "Typed date entry (Atlas Input) beside/instead of the button trigger, with a calendar-icon toggle and parse/validate-on-blur. Needs a new trigger composition in Figma before code."
-    },
-    {
       "id": "CAND-027",
       "name": "TimePicker",
       "seenIn": ["shadcn-ui reference (Time Picker example), gap analysis 2026-09-29"],

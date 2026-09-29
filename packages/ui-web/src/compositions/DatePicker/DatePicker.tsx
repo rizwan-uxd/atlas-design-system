@@ -33,6 +33,13 @@
  * is chosen. In range mode, a grid's outside-month cells are blank (not the adjacent month's
  * numbers) so the two months never show duplicate, ambiguously-clickable dates.
  *
+ * DatePickerInput is a typed alternative to DatePickerTrigger — an Input paired with a trailing
+ * calendar button, for when the exact typed value matters as much as picking from the grid:
+ *   <DatePicker value={date} onValueChange={setDate}>
+ *     <DatePickerInput placeholder="Pick a date" />
+ *     <DatePickerContent />
+ *   </DatePicker>
+ *
  * Accessibility (APG date picker grid pattern):
  *   - Trigger: aria-haspopup="dialog", aria-expanded, formatted date/range or placeholder text.
  *   - Panel: role="dialog" aria-label="Choose date"/"Choose date range", portalled to <body>.
@@ -54,6 +61,7 @@
 import React from "react"
 import { createPortal } from "react-dom"
 import { Calendar as CalendarGlyph, ChevronDown, ChevronLeft, ChevronRight } from "lucide-react"
+import { Input } from "../../primitives/Input/Input"
 import styles from "./DatePicker.module.css"
 
 /* ── Types ──────────────────────────────────────────────────────── */
@@ -437,6 +445,113 @@ export function DatePickerTrigger({
       )}
       <span className={cx(styles.value, showsPlaceholder && styles.placeholder)}>{text}</span>
     </button>
+  )
+}
+
+/* ── DatePickerInput (typed alternative to DatePickerTrigger) ──── */
+
+function defaultParseDate(text: string): Date | undefined {
+  const trimmed = text.trim()
+  if (!trimmed) return undefined
+  const parsed = new Date(trimmed)
+  return Number.isNaN(parsed.getTime()) ? undefined : parsed
+}
+
+export interface DatePickerInputProps extends Omit<React.ComponentProps<typeof Input>, "value" | "defaultValue" | "trailingIcon"> {
+  /** Parses typed text into a Date. Defaults to `new Date(text)`, locale-fragile — override for
+      a stricter/locale-aware parse. Returns undefined for unparseable text. */
+  parseDate?: (text: string) => Date | undefined
+  /** Formats the selected date into the field's text. Defaults to a long localized date. In
+      range mode this only shows the range's start — use DatePickerTrigger + formatRange for a
+      full range display; DatePickerInput is a single-value field by design. */
+  formatDate?: (date: Date) => string
+}
+
+/** Pairs an Input with the calendar: type a date directly, or open the panel via the trailing
+    calendar button. Commits on blur or Enter; unparseable text sets aria-invalid without being
+    discarded, so the caller can fix a typo instead of losing it. */
+export function DatePickerInput({ parseDate = defaultParseDate, formatDate = defaultFormatDate, placeholder = "Pick a date", invalid, onChange, onBlur, onKeyDown, className, ...rest }: DatePickerInputProps) {
+  const ctx = useDatePicker("DatePickerInput")
+  const wrapperRef = React.useRef<HTMLDivElement | null>(null)
+  const anchor = primaryDate(ctx)
+  const [text, setText] = React.useState(() => (anchor ? formatDate(anchor) : ""))
+  const [dirty, setDirty] = React.useState(false)
+  const [parseError, setParseError] = React.useState(false)
+
+  React.useEffect(() => {
+    if (dirty) return
+    setText(anchor ? formatDate(anchor) : "")
+    setParseError(false)
+    // Only re-sync from the committed value while the field isn't being actively edited.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [anchor, dirty])
+
+  React.useEffect(() => {
+    // Input does not forward a ref (repo convention: reach it by id/DOM query), so the trigger
+    // anchor and focus-restore target are the underlying <input>, found once after mount.
+    const inputEl = wrapperRef.current?.querySelector("input")
+    if (inputEl) ctx.triggerRef.current = inputEl
+  }, [ctx.triggerRef])
+
+  const commit = () => {
+    const trimmed = text.trim()
+    if (!trimmed) {
+      setParseError(false)
+      setDirty(false)
+      return
+    }
+    const parsed = parseDate(trimmed)
+    if (!parsed) {
+      setParseError(true)
+      return
+    }
+    setParseError(false)
+    setDirty(false)
+    ctx.onSelect(parsed)
+  }
+
+  return (
+    <div ref={wrapperRef} className={styles.inputWrapper}>
+      <Input
+        {...rest}
+        value={text}
+        placeholder={placeholder}
+        invalid={parseError || invalid}
+        className={cx(styles.inputField, className)}
+        onChange={(event) => {
+          onChange?.(event)
+          setDirty(true)
+          setText(event.target.value)
+        }}
+        onBlur={(event) => {
+          onBlur?.(event)
+          commit()
+        }}
+        onKeyDown={(event) => {
+          onKeyDown?.(event)
+          if (event.key === "Enter") {
+            event.preventDefault()
+            commit()
+          } else if (event.key === "Escape" && ctx.open) {
+            ctx.setOpen(false)
+          }
+        }}
+      />
+      <button
+        type="button"
+        className={styles.inputTrailingButton}
+        aria-label="Open calendar"
+        aria-haspopup="dialog"
+        aria-expanded={ctx.open}
+        aria-controls={ctx.open ? ctx.contentId : undefined}
+        onClick={() => {
+          ctx.focusIntent.current = anchor ? "selected" : "today"
+          ctx.setOpen(!ctx.open)
+        }}
+      >
+        <CalendarGlyph aria-hidden="true" />
+      </button>
+    </div>
   )
 }
 

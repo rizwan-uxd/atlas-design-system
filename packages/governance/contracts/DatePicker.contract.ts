@@ -1,5 +1,5 @@
 import type { ReactNode } from "react"
-import type { DatePickerProps, DatePickerTriggerProps, DatePickerContentProps, DatePickerRange, DatePickerMode, DatePickerSide } from "@atlas/ui-web/compositions/DatePicker/DatePicker"
+import type { DatePickerProps, DatePickerTriggerProps, DatePickerInputProps, DatePickerContentProps, DatePickerRange, DatePickerMode, DatePickerSide } from "@atlas/ui-web/compositions/DatePicker/DatePicker"
 
 type AssertMode = DatePickerMode extends "single" | "range" ? true : false
 const _m: AssertMode = true; void _m
@@ -47,6 +47,15 @@ type AssertTriggerShape = {
 }
 type _CheckTriggerProps = AssertTriggerShape extends Pick<DatePickerTriggerProps, keyof AssertTriggerShape & keyof DatePickerTriggerProps> ? true : never
 const _t: _CheckTriggerProps = true; void _t
+
+type AssertInputShape = {
+  parseDate?: (text: string) => Date | undefined
+  formatDate?: (date: Date) => string
+  placeholder?: string
+  invalid?: boolean
+}
+type _CheckInputProps = AssertInputShape extends Pick<DatePickerInputProps, keyof AssertInputShape & keyof DatePickerInputProps> ? true : never
+const _ip: _CheckInputProps = true; void _ip
 
 type AssertCaptionLayout = NonNullable<DatePickerContentProps["captionLayout"]> extends "label" | "dropdown" ? true : false
 const _cl: AssertCaptionLayout = true; void _cl

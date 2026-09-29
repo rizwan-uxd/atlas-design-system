@@ -86,6 +86,56 @@
   color: var(--atlas-foreground-muted);
 }
 
+/* ── DatePickerInput ─────────────────────────────────────────── */
+
+.inputWrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: stretch;
+  width: 100%;
+}
+
+.inputField {
+  width: 100%;
+  /* Reserves space for .inputTrailingButton, which overlays the field rather than using
+     Input's own trailingIcon slot (see the comment on .inputTrailingButton below). */
+  padding-inline-end: calc(var(--atlas-spacing-6) + var(--atlas-spacing-2)) !important;
+}
+
+/* Real trailing control (not Input's trailingIcon slot, which the Input component wraps in
+   aria-hidden — decorative-only by that component's contract, not a place for a focusable
+   button). Positioned to overlap the field's trailing inset instead. */
+.inputTrailingButton {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-end: var(--atlas-spacing-1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--atlas-spacing-6);
+  color: var(--atlas-foreground-muted);
+  background: none;
+  border: none;
+  border-radius: var(--atlas-radius-sm);
+  cursor: default;
+  transition: background-color var(--atlas-duration-fast) var(--atlas-easing-standard);
+}
+
+.inputTrailingButton:hover {
+  background-color: var(--atlas-background-subtle);
+}
+
+.inputTrailingButton:focus-visible {
+  outline: var(--atlas-border-width-2) solid var(--atlas-focus-ring);
+  outline-offset: var(--atlas-spacing-0_5);
+}
+
+.inputTrailingButton > svg {
+  inline-size: var(--atlas-icon-size-xs);
+  block-size: var(--atlas-icon-size-xs);
+  stroke-width: 1.5;
+}
+
 /* ── Content (panel) ─────────────────────────────────────────── */
 
 .content {

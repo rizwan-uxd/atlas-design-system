@@ -10,16 +10,23 @@
  *   6. Invalid — sets aria-invalid on the trigger
  *   7. Range mode — two clicks commit an ordered [start, end] range and update trigger text
  *   8. Dropdown caption — Month/Year <select>s replace the text label and navigate the month
- *   9. axe accessibility check for single and range triggers + open panels
+ *   8b. DatePickerInput — typed field commits on Enter, invalid text keeps aria-invalid and
+ *       the typed text, trailing button opens the panel
+ *   9. axe accessibility check for single/range triggers, DatePickerInput, and open panels
  */
 
 import React from "react"
-import { describe, it, expect, vi } from "vitest"
-import { render, screen, fireEvent, within } from "@testing-library/react"
+import { describe, it, expect, vi, afterEach } from "vitest"
+import { render, screen, fireEvent, within, cleanup } from "@testing-library/react"
 import { axe } from "jest-axe"
-import { DatePicker, DatePickerTrigger, DatePickerContent } from "@atlas/ui-web/compositions/DatePicker/DatePicker"
+import { DatePicker, DatePickerTrigger, DatePickerInput, DatePickerContent } from "@atlas/ui-web/compositions/DatePicker/DatePicker"
 
 const FIXED_TODAY = new Date(2026, 1, 10) // Feb 10, 2026
+
+// DatePickerContent portals to document.body, outside RTL's per-test container — without
+// explicit cleanup, portaled dialogs from every render() accumulate across the whole file,
+// making the axe(document.body) checks below order-dependent (see Tooltip.test.tsx).
+afterEach(() => cleanup())
 
 // ─── 1. Default render ─────────────────────────────────────────────────────
 
@@ -231,6 +238,62 @@ describe("DatePicker — dropdown caption", () => {
   })
 })
 
+// ─── 8b. DatePickerInput ────────────────────────────────────────────────────
+
+describe("DatePicker — DatePickerInput", () => {
+  it("shows the formatted date as the field's text", () => {
+    render(
+      <DatePicker defaultValue={FIXED_TODAY}>
+        <DatePickerInput />
+        <DatePickerContent />
+      </DatePicker>,
+    )
+    expect(screen.getByRole("textbox")).toHaveValue("February 10, 2026")
+  })
+
+  it("commits a typed date on Enter and calls onValueChange", () => {
+    const onValueChange = vi.fn()
+    render(
+      <DatePicker onValueChange={onValueChange}>
+        <DatePickerInput placeholder="Pick a date" />
+        <DatePickerContent />
+      </DatePicker>,
+    )
+    const field = screen.getByRole("textbox")
+    fireEvent.change(field, { target: { value: "2026-03-15" } })
+    fireEvent.keyDown(field, { key: "Enter" })
+    expect(onValueChange).toHaveBeenCalledTimes(1)
+    expect((onValueChange.mock.calls[0][0] as Date).getDate()).toBe(15)
+  })
+
+  it("sets aria-invalid on unparseable text without discarding it", () => {
+    const onValueChange = vi.fn()
+    render(
+      <DatePicker onValueChange={onValueChange}>
+        <DatePickerInput placeholder="Pick a date" />
+        <DatePickerContent />
+      </DatePicker>,
+    )
+    const field = screen.getByRole("textbox")
+    fireEvent.change(field, { target: { value: "not a date" } })
+    fireEvent.blur(field)
+    expect(field).toHaveAttribute("aria-invalid", "true")
+    expect(field).toHaveValue("not a date")
+    expect(onValueChange).not.toHaveBeenCalled()
+  })
+
+  it("opens the panel via the trailing calendar button", () => {
+    render(
+      <DatePicker>
+        <DatePickerInput placeholder="Pick a date" />
+        <DatePickerContent />
+      </DatePicker>,
+    )
+    fireEvent.click(screen.getByRole("button", { name: /open calendar/i }))
+    expect(screen.getByRole("dialog")).toBeInTheDocument()
+  })
+})
+
 // ─── 9. axe accessibility ────────────────────────────────────────────────────
 
 describe("DatePicker — a11y (axe)", () => {
@@ -266,6 +329,22 @@ describe("DatePicker — a11y (axe)", () => {
     )
     fireEvent.click(screen.getByRole("button", { name: /feb 10, 2026/i }))
     const results = await axe(document.body)
+    expect(results).toHaveNoViolations()
+  })
+
+  it("passes axe for DatePickerInput, closed and open", async () => {
+    const { container } = render(
+      <DatePicker defaultValue={FIXED_TODAY}>
+        <DatePickerInput placeholder="Pick a date" />
+        <DatePickerContent />
+      </DatePicker>,
+    )
+    expect((await axe(container)).violations).toHaveLength(0)
+    fireEvent.click(screen.getByRole("button", { name: /open calendar/i }))
+    // "region" (all page content must be in a landmark) is a page-layout rule, not a
+    // component contract — it fires here only because the test has no <main>/app shell
+    // around a bare <input>, not because DatePickerInput itself is inaccessible.
+    const results = await axe(document.body, { rules: { region: { enabled: false } } })
     expect(results).toHaveNoViolations()
   })
 })

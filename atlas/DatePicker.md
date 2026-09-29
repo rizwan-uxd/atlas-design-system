@@ -12,10 +12,10 @@ USE WHEN
 • A date range must be picked (mode="range": check-in/check-out, reporting windows)
 • The exact day matters more than quick relative entry (unlike a text "in 3 days" field)
 • Long-range navigation matters more than month-by-month browsing (birthdates) — pair with `<DatePickerContent captionLayout="dropdown" />` for Month/Year selects instead of arrow nav
+• The typed value matters as much as picking from the grid, or the field needs to validate/echo exactly what was entered — use `<DatePickerInput />` instead of `<DatePickerTrigger />`
 
 DON'T USE WHEN
 • Only a month or year is needed — use Select instead
-• The date is naturally typed (ISO strings, freeform search) — use Input instead
 • A time component is also needed — pair with a separate time control (not built in v1)
 
 DO
@@ -34,6 +34,7 @@ PROPERTIES
 • Placeholder: boolean — whether the trigger shows placeholder text or a formatted value
 • DatePickerContent captionLayout: "label" (default) | "dropdown" — single mode only, range mode ignores it and stays "label"
 • DatePickerContent yearRange: [number, number] — the dropdown caption's Year <select> range, defaults to 100 years back to 10 forward
+• DatePickerInput parseDate/formatDate: parses typed text to a Date (default: new Date(text)) and formats the committed value back into the field; unparseable text sets aria-invalid without discarding what was typed
 
 TOKENS
 • Trigger: background, border / primary (focus, open) / danger (invalid), radius/lg, spacing/3 padding
@@ -58,11 +59,16 @@ import { DatePicker, DatePickerTrigger, DatePickerContent } from '@atlas/ui-web'
   <DatePickerContent captionLayout="dropdown" />
 </DatePicker>
 
+<DatePicker value={date} onValueChange={setDate}>
+  <DatePickerInput placeholder="Pick a date" />
+  <DatePickerContent />
+</DatePicker>
+
 <!-- BEGIN:generated-api -->
 
 ## API
 ```tsx
-import { DatePicker, DatePickerTrigger, DatePickerContent } from "@atlas/ui-web/compositions/DatePicker/DatePicker"
+import { DatePicker, DatePickerTrigger, DatePickerInput, DatePickerContent } from "@atlas/ui-web/compositions/DatePicker/DatePicker"
 ```
 
 **DatePicker**
@@ -76,6 +82,11 @@ import { DatePicker, DatePickerTrigger, DatePickerContent } from "@atlas/ui-web/
 - `formatDate?: (date: Date) => string`
 - `formatRange?: (range: DatePickerRange) => string`
 - `icon?: boolean | React.ReactNode`
+
+**DatePickerInput**
+- ref: forwarded
+- `parseDate?: (text: string) => Date | undefined`
+- `formatDate?: (date: Date) => string`
 
 **DatePickerContent**
 - ref: forwarded

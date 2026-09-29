@@ -6,7 +6,8 @@ import { DatePicker, DatePickerTrigger, DatePickerContent } from "@atlas/ui-web/
  * Figma nodes: 680:56 (Date Picker, State × Placeholder) · 680:29 (.Date Picker / Date, day
  * cell states incl. range-start/middle/end) · 680:146 (Date Picker Calendar) · 688:391
  * (Date Picker Calendar (range)) · 691:592 (Date Picker Calendar (dropdown), Month/Year
- * Select captions — DatePickerContent captionLayout="dropdown").
+ * Select captions — DatePickerContent captionLayout="dropdown") · 692:654 (Examples — Input,
+ * an Input instance with a trailing calendar icon — DatePickerInput).
  *
  * The first node-id (680:56, the trigger) is what atlas-sync reads. The cell and calendar
  * pieces are Figma-side composition detail — DatePickerContent renders the whole panel
