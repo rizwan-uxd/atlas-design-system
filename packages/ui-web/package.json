@@ -9,6 +9,7 @@
     "./*": "./src/*"
   },
   "peerDependencies": {
+    "@radix-ui/react-alert-dialog": ">=1",
     "@radix-ui/react-checkbox": ">=1",
     "@radix-ui/react-dialog": ">=1",
     "@radix-ui/react-tabs": ">=1",

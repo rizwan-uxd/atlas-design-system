@@ -12,7 +12,7 @@
   "tokensUsed": ["--atlas-background-muted", "--atlas-duration-pulse", "--atlas-easing-standard", "--atlas-opacity-pulse", "--atlas-radius-full", "--atlas-radius-md", "--atlas-spacing-10", "--atlas-spacing-4"],
   "figmaNodeId": "531:5",
   "figmaFileKey": "cKYhfaHLCoyMHi9nKr63Ig",
-  "figmaProperties": { "Shape": ["rect", "circle"] },
+  "figmaProperties": null,
   "syncedAt": "2026-09-29T00:00:00.000Z",
   "figmaVersion": "lib:Atlas Design System v1@2026-07-06T03:42:12Z",
   "source": "figma-synced"

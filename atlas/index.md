@@ -18,6 +18,7 @@ One line per component. Read `atlas/<Name>.md` only for the components you will 
 | Dialog | compositions | `@atlas/ui-web/compositions/Dialog/Dialog` | default, destructive | sm, md, lg, xl, full |
 | Tabs | patterns | `@atlas/ui-web/patterns/Tabs/Tabs` | line, pill, segmented | sm, md, lg |
 | NavBar | layouts | `@atlas/ui-web/layouts/NavBar/NavBar` | default, transparent, bordered, floating | sm, md, lg |
+| AlertDialog | compositions | `@atlas/ui-web/compositions/AlertDialog/AlertDialog` | default, destructive | sm, md, lg |
 | Avatar | primitives | `@atlas/ui-web/primitives/Avatar/Avatar` | — | xs, sm, md, lg, xl |
 | Breadcrumb | patterns | `@atlas/ui-web/patterns/Breadcrumb/Breadcrumb` | — | — |
 | Bubble | primitives | `@atlas/ui-web/primitives/Bubble/Bubble` | primary, secondary, muted, tinted, outline, destructive | — |

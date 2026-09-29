@@ -14,7 +14,7 @@
   "tokensUsed": ["--atlas-duration-spin", "--atlas-easing-linear", "--atlas-icon-size-lg", "--atlas-icon-size-md", "--atlas-icon-size-sm", "--atlas-icon-size-xs", "--atlas-icon-stroke-lg", "--atlas-icon-stroke-md", "--atlas-icon-stroke-sm", "--atlas-icon-stroke-xs"],
   "figmaNodeId": "527:63",
   "figmaFileKey": "cKYhfaHLCoyMHi9nKr63Ig",
-  "figmaProperties": { "Variant": ["default", "custom"], "Size": ["xs", "sm", "md", "lg"] },
+  "figmaProperties": null,
   "syncedAt": "2026-09-29T00:00:00.000Z",
   "figmaVersion": "lib:Atlas Design System v1@2026-07-06T03:42:12Z",
   "source": "figma-synced"

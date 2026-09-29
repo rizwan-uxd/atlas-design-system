@@ -10,7 +10,7 @@
   "tokensUsed": ["--atlas-background", "--atlas-content-width-sm", "--atlas-duration-fast", "--atlas-easing-exit", "--atlas-easing-standard", "--atlas-font-sans", "--atlas-font-size-xs", "--atlas-font-weight-regular", "--atlas-foreground", "--atlas-line-height-snug", "--atlas-radius-md", "--atlas-radius-sm", "--atlas-spacing-0_5", "--atlas-spacing-1_5", "--atlas-spacing-2", "--atlas-spacing-3", "--atlas-spacing-px", "--atlas-z-tooltip"],
   "figmaNodeId": "645:397",
   "figmaFileKey": "cKYhfaHLCoyMHi9nKr63Ig",
-  "figmaProperties": { "Side": ["bottom", "top", "start", "end"] },
+  "figmaProperties": null,
   "syncedAt": "2026-09-29T00:00:00.000Z",
   "figmaVersion": "lib:Atlas Design System v1@2026-07-06T03:42:12Z",
   "source": "figma-synced"

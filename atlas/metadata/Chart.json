@@ -12,7 +12,7 @@
   "tokensUsed": ["--atlas-background-muted", "--atlas-border", "--atlas-border-subtle", "--atlas-border-width-1", "--atlas-border-width-2", "--atlas-focus-ring", "--atlas-font-sans", "--atlas-font-size-3xl", "--atlas-font-size-xs", "--atlas-font-weight-regular", "--atlas-font-weight-semibold", "--atlas-foreground", "--atlas-foreground-muted", "--atlas-line-height-normal", "--atlas-line-height-tight", "--atlas-primary", "--atlas-radius-md", "--atlas-radius-sm", "--atlas-radius-xl", "--atlas-shadow-sm", "--atlas-spacing-1", "--atlas-spacing-16", "--atlas-spacing-1_5", "--atlas-spacing-2", "--atlas-spacing-3", "--atlas-spacing-4", "--atlas-spacing-6", "--atlas-spacing-8", "--atlas-surface", "--atlas-surface-raised", "--atlas-text-body-sm"],
   "figmaNodeId": "660:247",
   "figmaFileKey": "cKYhfaHLCoyMHi9nKr63Ig",
-  "figmaProperties": { "State": ["default", "loading", "empty"] },
+  "figmaProperties": null,
   "syncedAt": "2026-09-29T00:00:00.000Z",
   "figmaVersion": "lib:Atlas Design System v1@2026-07-06T03:42:12Z",
   "source": "figma-synced"

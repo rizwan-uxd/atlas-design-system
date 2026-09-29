@@ -20,6 +20,7 @@
     "Alert": { "parity": "match", "figmaMetadata": "none", "code": "scaffolded", "verifiedAt": null },
     "Card": { "parity": "open", "figmaMetadata": "none", "code": "scaffolded", "verifiedAt": null },
     "Dialog": { "parity": "match", "figmaMetadata": "none", "code": "scaffolded", "verifiedAt": null },
+    "AlertDialog": { "parity": "match", "figmaMetadata": "description-written", "code": "spec-complete", "verifiedAt": "2026-09-29T10:49:00.540Z" },
     "Tabs": { "parity": "match", "figmaMetadata": "none", "code": "scaffolded", "verifiedAt": null },
     "NavBar": { "parity": "match", "figmaMetadata": "description-written", "code": "scaffolded", "verifiedAt": "2026-09-28T05:30:00.000Z" },
     "Avatar": { "parity": "match", "figmaMetadata": "description-written", "code": "spec-complete", "verifiedAt": null },

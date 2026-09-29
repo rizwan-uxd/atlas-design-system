@@ -1,0 +1,136 @@
+/* =================================================================
+   Atlas AlertDialog — component styles
+   Reuses Dialog's box/typography tokens (see Dialog.module.css) for
+   visual consistency, but is its own module — never imports Dialog.
+   All values reference semantic tokens only.
+   No hex literals. No primitive tokens. No magic numbers.
+   ================================================================= */
+
+/* ── Overlay ──────────────────────────────────────────────────── */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--atlas-z-overlay);
+  background-color: color-mix(in oklch, var(--atlas-overlay) 65%, transparent);
+}
+
+.overlay[data-state="open"] {
+  animation: overlayShow var(--atlas-duration-fast) var(--atlas-easing-standard);
+}
+
+.overlay[data-state="closed"] {
+  animation: overlayHide var(--atlas-duration-fast) var(--atlas-easing-exit);
+}
+
+@keyframes overlayShow {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes overlayHide {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+/* ── Content ──────────────────────────────────────────────────── */
+
+.content {
+  --_pad: var(--atlas-spacing-6);        /* overridden by size variants */
+  --_max-w: var(--atlas-dialog-md);      /* overridden by size variants */
+
+  position: fixed;
+  z-index: var(--atlas-z-modal);
+  inset-block-start: 50%;
+  inset-inline-start: 50%;
+  transform: translate(-50%, -50%);
+  width: min(var(--_max-w), calc(100vw - var(--atlas-spacing-8) * 2));
+  background-color: var(--atlas-surface-overlay);
+  border: var(--atlas-border-width-1) solid var(--atlas-border);
+  border-radius: var(--atlas-radius-lg);
+  box-shadow: var(--atlas-shadow-xl);
+  font-family: var(--atlas-font-sans);
+  display: flex;
+  flex-direction: column;
+  gap: var(--atlas-spacing-1);
+  padding: var(--_pad);
+  max-height: calc(100vh - var(--atlas-spacing-8) * 2);
+  overflow: auto;
+  outline: none; /* focus ring suppressed; Radix manages focus trap */
+}
+
+.content[data-state="open"] {
+  animation: contentShow var(--atlas-duration-base) var(--atlas-easing-emphasized);
+}
+
+.content[data-state="closed"] {
+  animation: contentHide var(--atlas-duration-base) var(--atlas-easing-exit);
+}
+
+@keyframes contentShow {
+  from { opacity: 0; transform: translate(-50%, -50%) scale(0.96); }
+  to   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+
+@keyframes contentHide {
+  from { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  to   { opacity: 0; transform: translate(-50%, -50%) scale(0.96); }
+}
+
+/* ── Sizes ────────────────────────────────────────────────────── */
+
+.sm { --_pad: var(--atlas-spacing-4); --_max-w: var(--atlas-dialog-sm); }
+/* md is the default (--_pad: spacing-6, --_max-w: atlas-dialog-md) */
+.lg { --_pad: var(--atlas-spacing-6); --_max-w: var(--atlas-dialog-lg); }
+
+/* ── Responsive — < 640px: bottom sheet geometry (matches Dialog) ── */
+
+@media (max-width: 639px) {
+  .content {
+    inset-block-start: auto;
+    inset-block-end: 0;
+    inset-inline: 0;
+    transform: none;
+    width: 100%;
+    max-width: 100%;
+    border-radius: var(--atlas-radius-lg) var(--atlas-radius-lg) 0 0;
+    max-height: 85vh;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .overlay,
+  .content {
+    animation: none !important;
+  }
+}
+
+/* ── Title ────────────────────────────────────────────────────── */
+
+.title {
+  margin: 0;
+  font-size: var(--atlas-text-h3);
+  font-weight: var(--atlas-font-weight-semibold);
+  line-height: var(--atlas-line-height-tight);
+  color: var(--atlas-foreground);
+}
+
+/* ── Description ──────────────────────────────────────────────── */
+
+.description {
+  margin: 0;
+  margin-block-start: var(--atlas-spacing-1);
+  font-size: var(--atlas-text-body-sm);
+  line-height: var(--atlas-line-height-normal);
+  color: var(--atlas-foreground-muted);
+}
+
+/* ── Footer ───────────────────────────────────────────────────── */
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--atlas-spacing-3);
+  margin-block-start: var(--atlas-spacing-3);
+}

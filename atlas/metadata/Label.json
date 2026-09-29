@@ -18,7 +18,7 @@
   "tokensUsed": ["--atlas-danger", "--atlas-font-sans", "--atlas-font-size-xs", "--atlas-font-weight-regular", "--atlas-font-weight-semibold", "--atlas-foreground", "--atlas-foreground-disabled", "--atlas-foreground-muted", "--atlas-line-height-normal", "--atlas-spacing-1", "--atlas-spacing-1_5", "--atlas-text-body", "--atlas-text-body-sm"],
   "figmaNodeId": "50:48",
   "figmaFileKey": "cKYhfaHLCoyMHi9nKr63Ig",
-  "figmaProperties": { "Variant": ["default", "inline"], "Size": ["sm", "md", "lg"], "State": ["default", "disabled", "error"] },
+  "figmaProperties": null,
   "syncedAt": "2026-09-29T00:00:00.000Z",
   "figmaVersion": "lib:Atlas Design System v1@2026-07-06T03:42:12Z",
   "source": "figma-synced"

@@ -14,7 +14,7 @@
   "tokensUsed": ["--atlas-border-width-0", "--atlas-border-width-1", "--atlas-radius-none", "--atlas-spacing-0", "--atlas-spacing-1"],
   "figmaNodeId": "666:5817",
   "figmaFileKey": "cKYhfaHLCoyMHi9nKr63Ig",
-  "figmaProperties": { "Orientation": ["horizontal", "vertical"], "Size": ["sm", "md", "lg"] },
+  "figmaProperties": null,
   "syncedAt": "2026-09-29T00:00:00.000Z",
   "figmaVersion": "lib:Atlas Design System v1@2026-07-06T03:42:12Z",
   "source": "figma-synced"

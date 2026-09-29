@@ -22,7 +22,7 @@
   "tokensUsed": ["--atlas-background", "--atlas-background-subtle", "--atlas-border", "--atlas-border-subtle", "--atlas-border-width-1", "--atlas-border-width-2", "--atlas-duration-fast", "--atlas-duration-normal", "--atlas-easing-standard", "--atlas-focus-ring", "--atlas-font-sans", "--atlas-font-size-xs", "--atlas-font-weight-bold", "--atlas-font-weight-medium", "--atlas-font-weight-semibold", "--atlas-foreground", "--atlas-foreground-disabled", "--atlas-foreground-muted", "--atlas-line-height-tight", "--atlas-primary", "--atlas-radius-full", "--atlas-radius-md", "--atlas-radius-sm", "--atlas-radius-xl", "--atlas-safe-bottom", "--atlas-safe-top", "--atlas-shadow-lg", "--atlas-shadow-md", "--atlas-shadow-sm", "--atlas-spacing-0_5", "--atlas-spacing-1", "--atlas-spacing-10", "--atlas-spacing-12", "--atlas-spacing-16", "--atlas-spacing-2", "--atlas-spacing-3", "--atlas-spacing-4", "--atlas-spacing-6", "--atlas-spacing-8", "--atlas-surface", "--atlas-surface-raised", "--atlas-text-body", "--atlas-text-body-sm", "--atlas-text-h4", "--atlas-touch-min", "--atlas-z-sticky"],
   "figmaNodeId": "148:306",
   "figmaFileKey": "cKYhfaHLCoyMHi9nKr63Ig",
-  "figmaProperties": { "Variant": ["default", "bordered", "floating", "transparent"], "Size": ["sm", "md", "lg"], "State": ["default", "disabled"] },
+  "figmaProperties": null,
   "syncedAt": "2026-09-29T00:00:00.000Z",
   "figmaVersion": "lib:Atlas Design System v1@2026-07-06T03:42:12Z",
   "source": "figma-synced"

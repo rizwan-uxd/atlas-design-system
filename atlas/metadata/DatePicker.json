@@ -10,7 +10,7 @@
   "tokensUsed": ["--atlas-background", "--atlas-background-muted", "--atlas-background-subtle", "--atlas-border", "--atlas-border-strong", "--atlas-border-width-1", "--atlas-border-width-2", "--atlas-danger", "--atlas-duration-fast", "--atlas-easing-standard", "--atlas-focus-ring", "--atlas-font-sans", "--atlas-font-size-sm", "--atlas-font-size-xs", "--atlas-font-weight-medium", "--atlas-font-weight-regular", "--atlas-foreground", "--atlas-foreground-disabled", "--atlas-foreground-muted", "--atlas-foreground-subtle", "--atlas-icon-size-xs", "--atlas-opacity-disabled", "--atlas-primary", "--atlas-primary-foreground", "--atlas-primary-subtle", "--atlas-radius-lg", "--atlas-radius-none", "--atlas-radius-sm", "--atlas-shadow-md", "--atlas-spacing-0_5", "--atlas-spacing-1", "--atlas-spacing-10", "--atlas-spacing-2", "--atlas-spacing-3", "--atlas-spacing-4", "--atlas-spacing-6", "--atlas-surface-overlay", "--atlas-touch-min", "--atlas-z-popover"],
   "figmaNodeId": "680:56",
   "figmaFileKey": "cKYhfaHLCoyMHi9nKr63Ig",
-  "figmaProperties": { "State": ["default", "hover", "focus", "open", "disabled", "invalid"], "Placeholder": ["true", "false"] },
+  "figmaProperties": null,
   "syncedAt": "2026-09-29T00:00:00.000Z",
   "figmaVersion": "lib:Atlas Design System v1@2026-07-06T03:42:12Z",
   "source": "figma-synced"
