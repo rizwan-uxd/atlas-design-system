@@ -80,6 +80,7 @@ Skills are **authored** in `.agents/skills/<name>/` (`SKILL.md` + `references/`)
 | Refresh the snapshot from Figma | `atlas-figma-sync` skill + `scripts/atlas-sync.mjs` |
 | Check work before reporting done | `atlas-verify` skill + `scripts/atlas-verify.mjs` (`npm run atlas:verify -- --scope "<globs>"`) |
 | QA audit of a component | `docs/audits/QA-REPORT.md` only — never a new per-session file. Append the bug log (BUG-NNN: guard, location, description, fix) and the checklist, then update the Summary, Component Results and Session Progress tables. |
+| User says "can we find animated icon for this" | Animated icon library (itshover) — see §11 |
 | Measure agent cost or quality | `benchmarks/run.sh <label> <task> <reps> <model>`, then score with `benchmarks/rubric.md` |
 
 ## 10. Git
@@ -87,3 +88,12 @@ Commit only when the task is complete and verified; never commit broken code.
 QA sessions: `git add -A` → `git commit -m "qa(<component>): QA-<NN> audit — <N> bugs filed"` → `git push origin main` immediately (on rejection: `git pull --rebase origin main`, then push).
 
 If the project folder is unreachable, **stop and say so.** Never silently fall back to another location.
+
+## 11. Animated icons (itshover)
+Only on the explicit phrase "can we find animated icon for this". Never add animated icons unprompted; static icons stay `lucide-react`.
+
+- Source: https://itshover.com — registry item `https://itshover.com/r/<name>-icon.json`.
+- Location: `packages/ui-web/src/icons/animated/` (shared `types.ts` + one `<name>-icon.tsx` each). Depends on `motion`.
+- Find the icon that fits the context, fetch its registry JSON with `curl -sL`, write its `files` into the folder (do not run `shadcn add` — no `components.json`), and reuse the existing `types.ts`.
+- Icons expose `startAnimation`/`stopAnimation` via ref and animate on hover; trigger them from the parent control's hover/focus when the icon sits inside a button.
+- Installed: `plug-connected-icon`.
