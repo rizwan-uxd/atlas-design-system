@@ -80,7 +80,7 @@ Skills are **authored** in `.agents/skills/<name>/` (`SKILL.md` + `references/`)
 | Refresh the snapshot from Figma | `atlas-figma-sync` skill + `scripts/atlas-sync.mjs` |
 | Check work before reporting done | `atlas-verify` skill + `scripts/atlas-verify.mjs` (`npm run atlas:verify -- --scope "<globs>"`) |
 | QA audit of a component | `docs/audits/QA-REPORT.md` only — never a new per-session file. Append the bug log (BUG-NNN: guard, location, description, fix) and the checklist, then update the Summary, Component Results and Session Progress tables. |
-| User says "can we find animated icon for this" | Animated icon library (itshover) — see §11 |
+| User asks to add or find an animated icon | Animated icon library (itshover) — see §11 |
 | Measure agent cost or quality | `benchmarks/run.sh <label> <task> <reps> <model>`, then score with `benchmarks/rubric.md` |
 
 ## 10. Git
@@ -94,8 +94,8 @@ One motion engine: `motion/react`. No second animation library, and no registry 
 
 - `packages/ui-web/src/motion/` — `MotionProvider` (mounted in `app/layout.tsx`, wraps `MotionConfig reducedMotion="user"`), `motion-tokens.ts` (reads `--atlas-duration-*`, `--atlas-easing-*`, `--atlas-opacity-pulse`), `motion-presets.ts`. Durations and easings come from these; never write a literal in an icon.
 - `packages/ui-web/src/animated-icons/` — `<AnimatedIcon name size tone trigger state disabled />`, the registry, and one file per icon in `icons/`. Consumers never touch `motion.svg`.
-- Add an icon only on the explicit phrase "can we find animated icon for this". Author it as an `AnimatedIconDefinition` (24×24 outline, `data-part` for movable parts, `data-draw` for drawn paths), add its name to `AnimatedIconName`, and register it. Outside libraries (itshover.com, animate-ui.com) are visual reference only.
+- Add an icon when the user asks for one (no fixed phrase needed). Author it as an `AnimatedIconDefinition` (24×24 outline, `data-part` for movable parts, `data-draw` for drawn paths), add its name to `AnimatedIconName`, and register it. Outside libraries (itshover.com, animate-ui.com) are visual reference only.
 - Parent-driven playback: `trigger="hover" | "press" | "focus"` listens on the nearest interactive ancestor; otherwise use the ref handle (`startAnimation` / `stopAnimation`).
 - Static icons stay `lucide-react`.
-- Installed: check, x, search, settings, download, upload, refresh, bell, plug-connected.
+- Installed: check, x, search, settings, download, upload, refresh, bell, plug-connected, panel-left-open.
 - Motion tokens are CSS-first: change the CSS, then `tests/motion.test.ts` fails until `defaultMotionTokens` matches.
