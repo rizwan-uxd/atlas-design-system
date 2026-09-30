@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useRef, useState } from "react"
 import Link from "next/link"
 import { Button } from "@atlas/ui-web/primitives/Button/Button"
 import { Input } from "@atlas/ui-web/primitives/Input/Input"
@@ -38,6 +38,8 @@ import { Chart, ChartHeader, ChartTitle, ChartDescription, ChartStats, ChartStat
 import { NavBar } from "@atlas/ui-web/layouts/NavBar/NavBar"
 import { SidebarMenuRow, SidebarMenuRowChild } from "@atlas/ui-web/primitives/SidebarMenuRow/SidebarMenuRow"
 import { Sidebar, SidebarHeader, SidebarBody, SidebarSection, SidebarFooter, SidebarCollapseToggle } from "@atlas/ui-web/layouts/Sidebar/Sidebar"
+import { MotionConfig } from "motion/react"
+import { AnimatedIcon, animatedIconNames, type AnimatedIconHandle, type AnimatedIconState } from "@atlas/ui-web/animated-icons"
 import { House, CreditCard, Receipt, Clock, Settings, Archive, Folder, ChevronRight } from "lucide-react"
 
 // Demo picture: an inline SVG so the sandbox needs no network.
@@ -1798,7 +1800,125 @@ export default function SandboxPage() {
           </div>
         </Section>
 
+        {/* ── MOTION LAB ── */}
+        <Section title="Motion Lab — AnimatedIcon">
+          <MotionLab />
+        </Section>
+
       </div>
     </div>
+  )
+}
+
+const LAB_LABEL = { margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase" } as const
+const LAB_ROW = { display: "flex", flexWrap: "wrap", alignItems: "center", gap: "var(--atlas-spacing-5)" } as const
+
+function MotionLab() {
+  const handle = useRef<AnimatedIconHandle>(null)
+  const [state, setState] = useState<AnimatedIconState>("idle")
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: "var(--atlas-spacing-6)" }}>
+      <div>
+        <p style={LAB_LABEL}>Idle — every icon at rest, xs sm md lg</p>
+        <div style={LAB_ROW}>
+          {animatedIconNames.map(name => (
+            <AnimatedIcon key={name} name={name} label={name} />
+          ))}
+          {(["xs", "sm", "md", "lg"] as const).map(size => (
+            <AnimatedIcon key={size} name="bell" size={size} />
+          ))}
+        </div>
+      </div>
+
+      <div>
+        <p style={LAB_LABEL}>Hover — trigger hover on the icon</p>
+        <div style={LAB_ROW}>
+          {animatedIconNames.map(name => (
+            <AnimatedIcon key={name} name={name} trigger="hover" size="lg" tone="muted" />
+          ))}
+        </div>
+      </div>
+
+      <div>
+        <p style={LAB_LABEL}>Press — trigger press</p>
+        <div style={LAB_ROW}>
+          {animatedIconNames.map(name => (
+            <AnimatedIcon key={name} name={name} trigger="press" size="lg" />
+          ))}
+        </div>
+      </div>
+
+      <div>
+        <p style={LAB_LABEL}>Parent-driven — icon inside a Button, no wiring (trigger hover)</p>
+        <div style={LAB_ROW}>
+          <Button variant="secondary"><AnimatedIcon name="download" size="sm" trigger="hover" /> Download</Button>
+          <Button variant="secondary"><AnimatedIcon name="upload" size="sm" trigger="focus" /> Upload (focus)</Button>
+          <Button variant="secondary" onMouseEnter={() => handle.current?.startAnimation()} onMouseLeave={() => handle.current?.stopAnimation()}>
+            <AnimatedIcon ref={handle} name="settings" size="sm" /> Ref handle
+          </Button>
+        </div>
+      </div>
+
+      <div>
+        <p style={LAB_LABEL}>Appear — remount to replay</p>
+        <div style={LAB_ROW}>
+          <AppearReplay />
+        </div>
+      </div>
+
+      <div>
+        <p style={LAB_LABEL}>Loading · Success · Error · Disabled — state prop</p>
+        <div style={LAB_ROW}>
+          <AnimatedIcon name="refresh" trigger="loop" state="loading" size="lg" />
+          <AnimatedIcon name="settings" trigger="loop" size="lg" tone="info" />
+          <AnimatedIcon name="bell" trigger="loop" size="lg" tone="warning" />
+          <AnimatedIcon name="check" state="success" tone="success" size="lg" />
+          <AnimatedIcon name="x" state="error" tone="danger" size="lg" />
+          <AnimatedIcon name="search" disabled size="lg" />
+          <AnimatedIcon name="bell" state="disabled" size="lg" />
+        </div>
+        <div style={{ ...LAB_ROW, marginBlockStart: "var(--atlas-spacing-3)" }}>
+          {(["idle", "loading", "success", "error", "disabled"] as const).map(s => (
+            <Button key={s} size="sm" variant={state === s ? "primary" : "secondary"} onClick={() => setState(s)}>{s}</Button>
+          ))}
+          <AnimatedIcon name="download" state={state} tone={state === "success" ? "success" : state === "error" ? "danger" : "default"} size="lg" />
+        </div>
+      </div>
+
+      <div>
+        <p style={LAB_LABEL}>Tone</p>
+        <div style={LAB_ROW}>
+          {(["default", "muted", "success", "warning", "danger", "info"] as const).map(tone => (
+            <AnimatedIcon key={tone} name="check" tone={tone} trigger="hover" size="lg" />
+          ))}
+        </div>
+      </div>
+
+      <div>
+        <p style={LAB_LABEL}>Reduced motion — forced with MotionConfig reducedMotion always: static end state, appear is an opacity fade</p>
+        <MotionConfig reducedMotion="always">
+          <div style={LAB_ROW}>
+            <AppearReplay />
+            <AnimatedIcon name="refresh" trigger="loop" state="loading" size="lg" />
+            {animatedIconNames.map(name => (
+              <AnimatedIcon key={name} name={name} trigger="hover" size="lg" tone="muted" />
+            ))}
+          </div>
+        </MotionConfig>
+      </div>
+    </div>
+  )
+}
+
+function AppearReplay() {
+  const [run, setRun] = useState(0)
+  return (
+    <>
+      {animatedIconNames.map(name => (
+        <AnimatedIcon key={`${run}-${name}`} name={name} trigger="appear" size="lg" />
+      ))}
+      <Button size="sm" variant="secondary" onClick={() => setRun(r => r + 1)}>Replay</Button>
+    </>
   )
 }

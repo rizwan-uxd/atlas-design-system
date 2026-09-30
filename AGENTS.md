@@ -89,11 +89,13 @@ QA sessions: `git add -A` → `git commit -m "qa(<component>): QA-<NN> audit —
 
 If the project folder is unreachable, **stop and say so.** Never silently fall back to another location.
 
-## 11. Animated icons (itshover)
-Only on the explicit phrase "can we find animated icon for this". Never add animated icons unprompted; static icons stay `lucide-react`.
+## 11. Motion and animated icons
+One motion engine: `motion/react`. No second animation library, and no registry components (Animate UI, itshover, shadcn) pasted in as-is.
 
-- Source: https://itshover.com — registry item `https://itshover.com/r/<name>-icon.json`.
-- Location: `packages/ui-web/src/icons/animated/` (shared `types.ts` + one `<name>-icon.tsx` each). Depends on `motion`.
-- Find the icon that fits the context, fetch its registry JSON with `curl -sL`, write its `files` into the folder (do not run `shadcn add` — no `components.json`), and reuse the existing `types.ts`.
-- Icons expose `startAnimation`/`stopAnimation` via ref and animate on hover; trigger them from the parent control's hover/focus when the icon sits inside a button.
-- Installed: `plug-connected-icon`.
+- `packages/ui-web/src/motion/` — `MotionProvider` (mounted in `app/layout.tsx`, wraps `MotionConfig reducedMotion="user"`), `motion-tokens.ts` (reads `--atlas-duration-*`, `--atlas-easing-*`, `--atlas-opacity-pulse`), `motion-presets.ts`. Durations and easings come from these; never write a literal in an icon.
+- `packages/ui-web/src/animated-icons/` — `<AnimatedIcon name size tone trigger state disabled />`, the registry, and one file per icon in `icons/`. Consumers never touch `motion.svg`.
+- Add an icon only on the explicit phrase "can we find animated icon for this". Author it as an `AnimatedIconDefinition` (24×24 outline, `data-part` for movable parts, `data-draw` for drawn paths), add its name to `AnimatedIconName`, and register it. Outside libraries (itshover.com, animate-ui.com) are visual reference only.
+- Parent-driven playback: `trigger="hover" | "press" | "focus"` listens on the nearest interactive ancestor; otherwise use the ref handle (`startAnimation` / `stopAnimation`).
+- Static icons stay `lucide-react`.
+- Installed: check, x, search, settings, download, upload, refresh, bell, plug-connected.
+- Motion tokens are CSS-first: change the CSS, then `tests/motion.test.ts` fails until `defaultMotionTokens` matches.

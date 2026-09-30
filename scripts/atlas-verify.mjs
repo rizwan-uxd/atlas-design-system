@@ -73,11 +73,16 @@ const TOKEN_CSS = "packages/tokens/atlas.tokens.css"
 const definedTokens = (css) => new Set([...css.matchAll(/(--atlas-[\w-]+)\s*:/g)].map((m) => m[1]))
 const tokens = exists(TOKEN_CSS) ? definedTokens(read(TOKEN_CSS)) : new Set()
 
+// Library modules that are infrastructure, not Figma components. They need no atlas/metadata entry —
+// unless one is added there, which registers it as a component again.
+const NON_COMPONENT_MODULES = new Set(["motion", "animated-icons"])
+
 // Atlas components used by a file: import path @atlas/ui-web/<tier>/<Name>/<Name> → local names.
 const atlasUsage = (src) => {
   const used = []
   for (const m of src.matchAll(ATLAS_IMPORT)) {
     const name = m[2].split("/").pop()
+    if (NON_COMPONENT_MODULES.has(m[2].split("/")[2]) && !metadata[name]) continue
     for (const part of m[1].split(",").map((s) => s.trim()).filter(Boolean)) {
       const [exported, local = exported] = part.split(/\s+as\s+/)
       used.push({ component: name, exported, local })

@@ -74,6 +74,7 @@ The snapshot was first synced from Figma on 2026-09-12 (`figmaVersion` `lib:Atla
 - Token prefix `--atlas-*`; dark mode via `data-theme="dark"` on `<html>`
 - Radix installed: `@radix-ui/react-checkbox`, `@radix-ui/react-dialog`, `@radix-ui/react-tabs`
 - Dev server runs on port 3030
+- Motion layer: `packages/ui-web/src/motion/` + `animated-icons/` (utility modules, not Figma components; skipped by `atlas:verify`). `--atlas-easing-emphasized` and `--atlas-easing-exit` exist in the CSS/JSON tokens but are not yet in `atlas.figma.tokens.json`, so they may still need adding to Figma variables.
 
 ## Baseline (phase 0, sonnet, 3 runs each)
 | task | context tok | turns | reads | coverage | manual /20 |

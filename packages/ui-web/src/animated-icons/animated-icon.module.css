@@ -1,0 +1,42 @@
+/* =================================================================
+   Atlas AnimatedIcon — styles
+   Size, stroke, tone and disabled state only. All values reference semantic tokens.
+   Motion lives in the icon definitions and reads the motion tokens.
+   ================================================================= */
+
+.icon {
+  --icon-size: var(--atlas-icon-size-md);
+  --icon-stroke: var(--atlas-icon-stroke-md);
+
+  display: block;
+  flex: none;
+  box-sizing: border-box;
+  inline-size: var(--icon-size);
+  block-size: var(--icon-size);
+  stroke-width: var(--icon-stroke);
+  color: inherit;
+  /* Moving parts (bell swing, arrow travel) may leave the 24×24 box. */
+  overflow: visible;
+}
+
+/* ── Size ──────────────────────────────────────────────────────── */
+
+.icon[data-size="xs"] { --icon-size: var(--atlas-icon-size-xs); --icon-stroke: var(--atlas-icon-stroke-xs); }
+.icon[data-size="sm"] { --icon-size: var(--atlas-icon-size-sm); --icon-stroke: var(--atlas-icon-stroke-sm); }
+.icon[data-size="md"] { --icon-size: var(--atlas-icon-size-md); --icon-stroke: var(--atlas-icon-stroke-md); }
+.icon[data-size="lg"] { --icon-size: var(--atlas-icon-size-lg); --icon-stroke: var(--atlas-icon-stroke-lg); }
+
+/* ── Tone ──────────────────────────────────────────────────────── */
+
+.icon[data-tone="muted"]   { color: var(--atlas-foreground-muted); }
+.icon[data-tone="success"] { color: var(--atlas-success); }
+.icon[data-tone="warning"] { color: var(--atlas-warning); }
+.icon[data-tone="danger"]  { color: var(--atlas-danger); }
+.icon[data-tone="info"]    { color: var(--atlas-info); }
+
+/* ── Disabled ──────────────────────────────────────────────────── */
+
+.icon[data-disabled="true"] {
+  color: var(--atlas-foreground-disabled);
+  opacity: var(--atlas-opacity-disabled);
+}
