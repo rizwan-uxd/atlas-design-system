@@ -9,12 +9,13 @@
  *   4. Disabled state — aria-disabled set, onClick not fired
  *   5. iconOnly — warns in dev when aria-label is missing (skipped in prod)
  *   6. axe accessibility check on each variant
+ *   7. AnimatedIcon in the icon slots — plays from the button, not while disabled or loading
  *
  * Pattern: copy this file to test other components (~15 min each).
  */
 
 import React from "react"
-import { describe, it, expect, vi } from "vitest"
+import { describe, it, expect, vi, beforeEach } from "vitest"
 import { render, screen, fireEvent } from "@testing-library/react"
 import { axe } from "jest-axe"
 import {
@@ -22,6 +23,24 @@ import {
   type ButtonVariant,
   type ButtonSize,
 } from "@atlas/ui-web/primitives/Button/Button"
+import { AnimatedIcon } from "@atlas/ui-web/animated-icons"
+
+// Passes motion through unchanged, but records every scoped animate() call an icon makes.
+const animateSpy = vi.hoisted(() => vi.fn())
+vi.mock("motion/react", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("motion/react")>()
+  return {
+    ...actual,
+    useAnimate: () => {
+      const [scope, animate] = actual.useAnimate()
+      const spied = ((...args: Parameters<typeof animate>) => {
+        animateSpy(...args)
+        return animate(...args)
+      }) as typeof animate
+      return [scope, spied] as [typeof scope, typeof animate]
+    },
+  }
+})
 
 // ─── Fixtures ──────────────────────────────────────────────────────────────
 
@@ -153,4 +172,67 @@ describe("Button — a11y (axe)", () => {
       expect(results).toHaveNoViolations()
     })
   }
+})
+
+// ─── 7. AnimatedIcon in the icon slots ─────────────────────────────────────
+
+describe("Button — AnimatedIcon in icon slots", () => {
+  beforeEach(() => animateSpy.mockClear())
+
+  it("plays a leading icon when the button is hovered", () => {
+    render(
+      <Button leadingIcon={<AnimatedIcon name="download" trigger="hover" />}>Download</Button>
+    )
+    fireEvent.pointerEnter(screen.getByRole("button"))
+    expect(animateSpy).toHaveBeenCalled()
+  })
+
+  it("plays a trailing icon when the button is hovered", () => {
+    render(
+      <Button trailingIcon={<AnimatedIcon name="upload" trigger="hover" />}>Upload</Button>
+    )
+    fireEvent.pointerEnter(screen.getByRole("button"))
+    expect(animateSpy).toHaveBeenCalled()
+  })
+
+  it("plays an icon-only button's icon on hover", () => {
+    render(
+      <Button iconOnly aria-label="Settings" leadingIcon={<AnimatedIcon name="settings" trigger="hover" />} />
+    )
+    fireEvent.pointerEnter(screen.getByRole("button", { name: "Settings" }))
+    expect(animateSpy).toHaveBeenCalled()
+  })
+
+  it("does not play while the button is disabled", () => {
+    render(
+      <Button disabled leadingIcon={<AnimatedIcon name="download" trigger="hover" />}>Download</Button>
+    )
+    fireEvent.pointerEnter(screen.getByRole("button"))
+    expect(animateSpy).not.toHaveBeenCalled()
+  })
+
+  it("does not play a trailing icon while the button is loading", () => {
+    render(
+      <Button loading trailingIcon={<AnimatedIcon name="upload" trigger="hover" />}>Upload</Button>
+    )
+    fireEvent.pointerEnter(screen.getByRole("button"))
+    expect(animateSpy).not.toHaveBeenCalled()
+  })
+
+  it("replaces a leading icon with the spinner while loading", () => {
+    const { container } = render(
+      <Button loading leadingIcon={<AnimatedIcon name="download" trigger="hover" />}>Download</Button>
+    )
+    expect(container.querySelector("svg[data-icon]")).toBeNull()
+  })
+
+  it("passes axe with a labelled and a decorative animated icon", async () => {
+    const { container } = render(
+      <div>
+        <Button leadingIcon={<AnimatedIcon name="download" trigger="hover" />}>Download</Button>
+        <Button iconOnly aria-label="Refresh" leadingIcon={<AnimatedIcon name="refresh" trigger="hover" />} />
+      </div>
+    )
+    expect(await axe(container)).toHaveNoViolations()
+  })
 })
