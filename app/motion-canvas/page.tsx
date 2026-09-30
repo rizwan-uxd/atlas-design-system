@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, type ReactNode } from "react"
+import { useRef, useState, type ReactNode } from "react"
 import Link from "next/link"
 import { AnimatedIcon } from "@atlas/ui-web/animated-icons"
 import { usePrefersReducedMotion } from "@atlas/ui-web/motion"
@@ -9,6 +9,7 @@ import { Button } from "@atlas/ui-web/primitives/Button/Button"
 import { Badge, type BadgeVariant } from "@atlas/ui-web/primitives/Badge/Badge"
 import { Avatar, AvatarGroup } from "@atlas/ui-web/primitives/Avatar/Avatar"
 import { CodeBlock } from "@atlas/ui-web/compositions/CodeBlock/CodeBlock"
+import { ScrollProgress } from "@atlas/ui-web/primitives/ScrollProgress/ScrollProgress"
 
 /* Motion Canvas — a study board, not production UI.
    Entries record what to adopt, adapt or reject before anything enters the library.
@@ -50,6 +51,34 @@ const icon = (props: AnimatedIconProps) =>
   function IconPreview(replay: number) {
     return <AnimatedIcon key={replay} size="lg" {...props} />
   }
+
+/** Scrollable panel with a container-scope ScrollProgress along its top edge. */
+function ScrollProgressDemo() {
+  const panel = useRef<HTMLDivElement>(null)
+  return (
+    <div style={{ position: "relative", inlineSize: "100%", maxInlineSize: "24rem" }}>
+      <ScrollProgress scope="container" target={panel} aria-label="Reading progress" />
+      <div
+        ref={panel}
+        tabIndex={0}
+        aria-label="Scrollable article"
+        style={{
+          blockSize: "8rem",
+          overflowY: "auto",
+          padding: "var(--atlas-spacing-3)",
+          fontSize: "var(--atlas-font-size-sm)",
+          color: "var(--atlas-foreground-muted)",
+        }}
+      >
+        {Array.from({ length: 12 }, (_, i) => (
+          <p key={i} style={{ margin: "0 0 var(--atlas-spacing-3)" }}>
+            Paragraph {i + 1}. Scroll this panel and watch the bar above follow it.
+          </p>
+        ))}
+      </div>
+    </div>
+  )
+}
 
 const sections: Section[] = [
   {
@@ -454,6 +483,18 @@ const sections: Section[] = [
     blurb:
       "Visual reference only, from animate-ui.com docs (Icons, Primitives, Components). Nothing installed, no registry code copied. The Accessibility guide page could not be fetched, so its guidance is unverified here.",
     entries: [
+      {
+        name: "Primitive: Scroll Progress",
+        useCase: "Reading position through a long page or scrollable panel",
+        stateExplained: "How far through the content the reader is",
+        trigger: "scroll",
+        motion: "fill follows scroll position, eased with duration/fast",
+        a11y: "Decorative by default; with an aria-label it is a progressbar updated in 5% steps. Reduced motion removes the ease.",
+        decision: "adopt",
+        status: "built",
+        wrapper: '<ScrollProgress scope="container" target={ref} aria-label="Reading progress" />',
+        preview: () => <ScrollProgressDemo />,
+      },
       {
         name: "Primitive: Code Block (typing)",
         useCase: "Show a short snippet being written, e.g. onboarding or docs hero",

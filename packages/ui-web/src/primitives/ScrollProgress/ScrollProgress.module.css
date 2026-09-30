@@ -1,0 +1,72 @@
+/*
+  ScrollProgress — tokens
+  --scroll   0–1 scrolled fraction, set inline by the component
+*/
+
+.track {
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+  background-color: var(--atlas-background-muted);
+  border-radius: var(--atlas-radius-full);
+}
+
+/* ── Orientation ──────────────────────────────────────────────── */
+
+.track[data-orientation="horizontal"] {
+  inline-size: 100%;
+  block-size: var(--atlas-spacing-1);
+}
+
+.track[data-orientation="vertical"] {
+  inline-size: var(--atlas-spacing-1);
+  block-size: 100%;
+}
+
+/* ── Scope ────────────────────────────────────────────────────── */
+
+/* Page: a flat strip pinned to the viewport edge, above sticky content. */
+.track[data-scope="page"] {
+  position: fixed;
+  z-index: var(--atlas-z-sticky);
+  border-radius: var(--atlas-radius-none);
+}
+
+.track[data-scope="page"][data-orientation="horizontal"] {
+  inset-block-start: 0;
+  inset-inline: 0;
+}
+
+.track[data-scope="page"][data-orientation="vertical"] {
+  inset-block: 0;
+  inset-inline-end: 0;
+  block-size: auto;
+}
+
+/* ── Fill ─────────────────────────────────────────────────────── */
+
+.fill {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  background-color: var(--atlas-primary);
+  border-radius: inherit;
+}
+
+.track[data-orientation="horizontal"] .fill {
+  block-size: 100%;
+  inline-size: calc(var(--scroll, 0) * 100%);
+  transition: inline-size var(--atlas-duration-fast) var(--atlas-easing-standard);
+}
+
+.track[data-orientation="vertical"] .fill {
+  inline-size: 100%;
+  block-size: calc(var(--scroll, 0) * 100%);
+  transition: block-size var(--atlas-duration-fast) var(--atlas-easing-standard);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fill {
+    transition: none !important;
+  }
+}
