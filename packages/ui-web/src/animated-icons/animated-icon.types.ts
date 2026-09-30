@@ -13,6 +13,7 @@ export type AnimatedIconName =
   | "refresh"
   | "bell"
   | "plug-connected"
+  | "panel-left-open"
 
 /** Icon size: 16, 20, 24 or 32px (icon-size tokens; stroke follows the icon-stroke tokens). */
 export type AnimatedIconSize = "xs" | "sm" | "md" | "lg"

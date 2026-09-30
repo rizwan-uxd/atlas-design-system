@@ -40,7 +40,7 @@ const icon = (container: HTMLElement) => container.querySelector("svg") as SVGSV
 describe("AnimatedIcon — registry", () => {
   it("registers the eight v1 icons and the migrated plug", () => {
     expect(animatedIconNames).toEqual(
-      expect.arrayContaining(["check", "x", "search", "settings", "download", "upload", "refresh", "bell", "plug-connected"]),
+      expect.arrayContaining(["check", "x", "search", "settings", "download", "upload", "refresh", "bell", "plug-connected", "panel-left-open"]),
     )
   })
 

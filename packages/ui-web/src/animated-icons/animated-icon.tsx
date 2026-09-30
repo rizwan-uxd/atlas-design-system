@@ -3,7 +3,7 @@
 /**
  * Atlas AnimatedIcon — an outline icon that animates from motion tokens.
  *
- * Icons: check | x | search | settings | download | upload | refresh | bell | plug-connected
+ * Icons: check | x | search | settings | download | upload | refresh | bell | plug-connected | panel-left-open
  * Sizes: xs 16 | sm 20 | md 24 | lg 32 (icon-size tokens; stroke follows icon-stroke tokens)
  * Tone: default (inherits text colour) | muted | success | warning | danger | info
  * Trigger (when it plays): manual | appear | hover | press | focus | loop

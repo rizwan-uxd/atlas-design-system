@@ -4,6 +4,7 @@ import type { AnimatedIconDefinition, AnimatedIconName } from "./animated-icon.t
 import { bellIcon } from "./icons/bell"
 import { checkIcon } from "./icons/check"
 import { downloadIcon } from "./icons/download"
+import { panelLeftOpenIcon } from "./icons/panel-left-open"
 import { plugConnectedIcon } from "./icons/plug-connected"
 import { refreshIcon } from "./icons/refresh"
 import { searchIcon } from "./icons/search"
@@ -22,6 +23,7 @@ export const animatedIconRegistry: Record<AnimatedIconName, AnimatedIconDefiniti
   refresh: refreshIcon,
   bell: bellIcon,
   "plug-connected": plugConnectedIcon,
+  "panel-left-open": panelLeftOpenIcon,
 }
 
 export const animatedIconNames = Object.keys(animatedIconRegistry) as AnimatedIconName[]
