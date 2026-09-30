@@ -7,6 +7,7 @@ import type {
   AvatarGroupProps,
   AvatarShape,
   AvatarSize,
+  AvatarGroupVariant,
 } from "@atlas/ui-web/primitives/Avatar/Avatar"
 import type React from "react"
 
@@ -34,7 +35,11 @@ type _CheckAvatarProps = AssertAvatarPropsShape extends Pick<AvatarProps, keyof 
   ? true : never
 const _p: _CheckAvatarProps = true; void _p
 
+type AssertAvatarGroupVariant = AvatarGroupVariant extends "default" | "animated" ? true : false
+const _gv: AssertAvatarGroupVariant = true; void _gv
+
 type AssertAvatarGroupShape = {
+  variant?:  AvatarGroupVariant
   size?:     AvatarSize
   shape?:    AvatarShape
   showAdd?:  boolean

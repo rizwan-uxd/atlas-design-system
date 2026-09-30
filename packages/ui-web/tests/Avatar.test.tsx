@@ -13,7 +13,7 @@
  */
 
 import React from "react"
-import { describe, it, expect, vi } from "vitest"
+import { describe, it, expect, vi, beforeAll } from "vitest"
 import { render, screen, fireEvent } from "@testing-library/react"
 import { axe } from "jest-axe"
 import {
@@ -22,6 +22,15 @@ import {
   type AvatarShape,
   type AvatarSize,
 } from "@atlas/ui-web/primitives/Avatar/Avatar"
+
+beforeAll(() => {
+  // Radix Popper (animated group tooltip) measures with ResizeObserver, which jsdom lacks.
+  globalThis.ResizeObserver ??= class {
+    observe() {}
+    unobserve() {}
+    disconnect() {}
+  }
+})
 
 // ─── Fixtures ──────────────────────────────────────────────────────────────
 
@@ -258,6 +267,72 @@ describe("AvatarGroup", () => {
     )
     expect(warn).toHaveBeenCalledWith(expect.stringContaining("[Atlas AvatarGroup]"))
     warn.mockRestore()
+  })
+})
+
+// ─── 5b. AvatarGroup variant="animated" ────────────────────────────────────
+
+describe('AvatarGroup — variant="animated"', () => {
+  function Animated(props: { size?: AvatarSize; shape?: AvatarShape } = {}) {
+    return (
+      <AvatarGroup variant="animated" aria-label="Project members" {...props}>
+        <Avatar alt="Jane Cooper" initials="JC" />
+        <Avatar alt="Dev Patel" initials="DP" />
+        <Avatar alt="" initials="XX" />
+      </AvatarGroup>
+    )
+  }
+
+  it("makes members with an alt focusable, and skips decorative ones", () => {
+    const { container } = render(<Animated />)
+    expect(container.querySelectorAll('[tabindex="0"]')).toHaveLength(2)
+  })
+
+  it("shows the member's alt in a tooltip on focus and hides it on blur", () => {
+    const { container } = render(<Animated />)
+    const first = container.querySelector<HTMLElement>('[tabindex="0"]')!
+    fireEvent.focus(first)
+    expect(screen.getByRole("tooltip")).toHaveTextContent("Jane Cooper")
+    fireEvent.blur(first)
+    expect(screen.queryByRole("tooltip")).not.toBeInTheDocument()
+  })
+
+  it("default variant adds no tab stops and no tooltip", () => {
+    const { container } = render(
+      <AvatarGroup aria-label="Project members">
+        <Avatar alt="Jane Cooper" initials="JC" />
+      </AvatarGroup>
+    )
+    expect(container.querySelectorAll('[tabindex="0"]')).toHaveLength(0)
+  })
+
+  it.each(SHAPES.flatMap((shape) => SIZES.map((size) => [shape, size] as const)))(
+    "member carries shape=%s size=%s",
+    (shape, size) => {
+      const { container } = render(<Animated shape={shape} size={size} />)
+      const member = container.querySelector('[tabindex="0"]')!
+      expect(member).toHaveAttribute("data-shape", shape)
+      expect(member).toHaveAttribute("data-size", size)
+    }
+  )
+
+  it("keeps the add button working", () => {
+    const onAdd = vi.fn()
+    render(
+      <AvatarGroup variant="animated" aria-label="Project members" showAdd onAdd={onAdd}>
+        <Avatar alt="Jane Cooper" initials="JC" />
+      </AvatarGroup>
+    )
+    fireEvent.click(screen.getByRole("button", { name: "Add member" }))
+    expect(onAdd).toHaveBeenCalledTimes(1)
+  })
+
+  it("has no axe violations per shape", async () => {
+    for (const shape of SHAPES) {
+      const { container, unmount } = render(<Animated shape={shape} />)
+      expect(await axe(container)).toHaveNoViolations()
+      unmount()
+    }
   })
 })
 

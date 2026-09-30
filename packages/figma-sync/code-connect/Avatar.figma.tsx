@@ -40,12 +40,13 @@ figma.connect(
   "https://www.figma.com/design/cKYhfaHLCoyMHi9nKr63Ig/Atlas-Design-System?node-id=488-452",
   {
     props: {
+      variant: figma.enum("Variant", { default: "default", animated: "animated" }),
       size: figma.enum("Size", { xs: "xs", sm: "sm", md: "md", lg: "lg", xl: "xl" }),
       shape: figma.enum("Shape", { circle: "circle", squircle: "squircle" }),
       showAdd: figma.boolean("Show add avatar"),
     },
-    example: ({ size, shape, showAdd }) => (
-      <AvatarGroup size={size} shape={shape} showAdd={showAdd} aria-label="Project members">
+    example: ({ variant, size, shape, showAdd }) => (
+      <AvatarGroup variant={variant} size={size} shape={shape} showAdd={showAdd} aria-label="Project members">
         <Avatar alt="Jane Cooper" initials="JC" />
         <Avatar alt="Dev Patel" initials="DP" />
         <Avatar alt="Sam Lee" initials="SL" />

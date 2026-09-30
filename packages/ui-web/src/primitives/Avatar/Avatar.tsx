@@ -15,6 +15,9 @@
  *   showBadgeIcon  — plus badge at the same corner (`badgeIcon` swaps the glyph)
  *
  * Subcomponent: AvatarGroup — overlapping stack; `showAdd` appends a plus avatar button.
+ *   Figma:    Variant (default | animated) × Size × Shape
+ *   variant="animated" makes each member with a non-empty `alt` focusable: hover or keyboard focus lifts
+ *   it forward out of the overlap and a Tooltip shows its `alt`. Reduced motion drops the lift only.
  *
  * Accessibility:
  *   - `alt` is the accessible name. Informative avatar → meaningful alt; decorative avatar beside a
@@ -22,15 +25,18 @@
  *   - A failed image falls back to initials, then the icon; the accessible name does not change.
  *   - The status dot is never colour-only: `statusLabel` is appended to the accessible name.
  *   - AvatarGroup renders role="group"; give it an aria-label. The add avatar is a <button>.
+ *   - Animated members are tab stops; the Tooltip (role="tooltip") describes them on hover and focus.
  */
 
 import React from "react"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../Tooltip/Tooltip"
 import styles from "./Avatar.module.css"
 
 /* ── Types ──────────────────────────────────────────────────────── */
 
 export type AvatarShape = "circle" | "squircle"
 export type AvatarSize  = "xs" | "sm" | "md" | "lg" | "xl"
+export type AvatarGroupVariant = "default" | "animated"
 
 export interface AvatarProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, "children" | "role"> {
   shape?:           AvatarShape
@@ -56,6 +62,8 @@ export interface AvatarProps extends Omit<React.HTMLAttributes<HTMLSpanElement>,
 }
 
 export interface AvatarGroupProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "role"> {
+  /** `animated` lifts the hovered or focused member and shows its `alt` in a tooltip. */
+  variant?:   AvatarGroupVariant
   size?:      AvatarSize
   shape?:     AvatarShape
   /** Appends a trailing plus avatar button. */
@@ -178,6 +186,7 @@ export function Avatar({
 /* ── AvatarGroup ────────────────────────────────────────────────── */
 
 export function AvatarGroup({
+  variant  = "default",
   size     = "md",
   shape    = "circle",
   showAdd  = false,
@@ -198,7 +207,26 @@ export function AvatarGroup({
   return (
     <AvatarGroupContext.Provider value={{ size, shape }}>
       <div {...rest} role="group" className={cx(styles.group, className)}>
-        {children}
+        {variant === "animated" ? (
+          <TooltipProvider>
+            {React.Children.map(children, (child) => {
+              const alt = React.isValidElement<AvatarProps>(child) ? child.props.alt : undefined
+              if (!alt) return child
+              return (
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <span className={styles.member} data-size={size} data-shape={shape} tabIndex={0}>
+                      {child}
+                    </span>
+                  </TooltipTrigger>
+                  <TooltipContent side="top">{alt}</TooltipContent>
+                </Tooltip>
+              )
+            })}
+          </TooltipProvider>
+        ) : (
+          children
+        )}
         {showAdd && (
           <button
             type="button"

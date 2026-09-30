@@ -14,7 +14,8 @@
 */
 
 .root,
-.addButton {
+.addButton,
+.member {
   --avatar-size: var(--atlas-spacing-8);
   --avatar-dot: var(--atlas-spacing-2);
   --avatar-badge-glyph: var(--atlas-spacing-1_5);
@@ -23,7 +24,8 @@
 }
 
 .root[data-size="xs"],
-.addButton[data-size="xs"] {
+.addButton[data-size="xs"],
+.member[data-size="xs"] {
   --avatar-size: var(--atlas-spacing-5);
   --avatar-dot: var(--atlas-spacing-1_5);
   --avatar-badge-glyph: var(--atlas-spacing-1_5);
@@ -32,7 +34,8 @@
 }
 
 .root[data-size="sm"],
-.addButton[data-size="sm"] {
+.addButton[data-size="sm"],
+.member[data-size="sm"] {
   --avatar-size: var(--atlas-spacing-6);
   --avatar-dot: var(--atlas-spacing-2);
   --avatar-badge-glyph: var(--atlas-spacing-1_5);
@@ -41,7 +44,8 @@
 }
 
 .root[data-size="lg"],
-.addButton[data-size="lg"] {
+.addButton[data-size="lg"],
+.member[data-size="lg"] {
   --avatar-size: var(--atlas-spacing-10);
   --avatar-dot: var(--atlas-spacing-3);
   --avatar-badge-glyph: var(--atlas-spacing-2);
@@ -50,7 +54,8 @@
 }
 
 .root[data-size="xl"],
-.addButton[data-size="xl"] {
+.addButton[data-size="xl"],
+.member[data-size="xl"] {
   --avatar-size: var(--atlas-spacing-12);
   --avatar-dot: var(--atlas-spacing-3);
   --avatar-badge-glyph: var(--atlas-spacing-2);
@@ -204,5 +209,43 @@
 @media (prefers-reduced-motion: reduce) {
   .addButton {
     transition: none;
+  }
+}
+
+/* ── AvatarGroup variant="animated" ───────────────────────────── */
+
+/* Wraps each member: the hover/focus target and the tooltip trigger. */
+.member {
+  position: relative;
+  display: inline-flex;
+  flex-shrink: 0;
+  border-radius: var(--atlas-radius-full);
+  transition: transform var(--atlas-duration-base) var(--atlas-easing-emphasized);
+}
+
+.member[data-shape="squircle"] {
+  border-radius: var(--avatar-squircle);
+}
+
+/* The member under the pointer or focus comes forward out of the overlap. */
+.member:hover,
+.member:focus-visible {
+  z-index: 1;
+  transform: translateY(calc(-1 * var(--atlas-spacing-1)));
+}
+
+.member:focus-visible {
+  outline: var(--atlas-border-width-2) solid var(--atlas-focus-ring);
+  outline-offset: var(--atlas-border-width-2);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .member {
+    transition: none;
+  }
+
+  .member:hover,
+  .member:focus-visible {
+    transform: none;
   }
 }
