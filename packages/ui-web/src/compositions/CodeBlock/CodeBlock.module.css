@@ -1,0 +1,151 @@
+/*
+  CodeBlock — tokens
+  --code-font-size    sm font-size-xs · md font-size-sm · lg font-size-base
+  --code-pad          sm spacing-3 · md spacing-4 · lg spacing-5
+*/
+
+.root {
+  --code-font-size: var(--atlas-font-size-sm);
+  --code-pad: var(--atlas-spacing-4);
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-inline-size: 0;
+  background-color: var(--atlas-surface);
+  border: var(--atlas-border-width-1) solid var(--atlas-border);
+  border-radius: var(--atlas-radius-lg);
+  color: var(--atlas-foreground);
+  overflow: hidden;
+}
+
+.root[data-size="sm"] {
+  --code-font-size: var(--atlas-font-size-xs);
+  --code-pad: var(--atlas-spacing-3);
+}
+
+.root[data-size="lg"] {
+  --code-font-size: var(--atlas-font-size-base);
+  --code-pad: var(--atlas-spacing-5);
+}
+
+/* ── Header ───────────────────────────────────────────────────── */
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--atlas-spacing-2);
+  padding-block: var(--atlas-spacing-2);
+  padding-inline: var(--atlas-spacing-3);
+  border-block-end: var(--atlas-border-width-1) solid var(--atlas-border-subtle);
+}
+
+.label {
+  min-inline-size: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--atlas-foreground-muted);
+  font-family: var(--atlas-font-sans);
+  font-size: var(--atlas-font-size-xs);
+  font-weight: var(--atlas-font-weight-medium);
+  line-height: var(--atlas-line-height-relaxed);
+}
+
+.root[data-size="lg"] .label {
+  font-size: var(--atlas-font-size-sm);
+}
+
+.floating {
+  position: absolute;
+  inset-block-start: var(--atlas-spacing-2);
+  inset-inline-end: var(--atlas-spacing-2);
+  z-index: 1;
+}
+
+.glyph {
+  inline-size: var(--atlas-icon-size-xs);
+  block-size: var(--atlas-icon-size-xs);
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ── Body ─────────────────────────────────────────────────────── */
+
+.body {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--atlas-spacing-4);
+  padding: var(--code-pad);
+  font-family: var(--atlas-font-mono);
+  font-size: var(--code-font-size);
+  line-height: var(--atlas-line-height-relaxed);
+}
+
+.numbers {
+  flex-shrink: 0;
+  white-space: pre;
+  text-align: end;
+  color: var(--atlas-foreground-subtle);
+  user-select: none;
+}
+
+.scroll {
+  flex: 1 1 auto;
+  min-inline-size: 0;
+  margin: 0;
+  overflow-x: auto;
+  font: inherit;
+  white-space: pre;
+  tab-size: 2;
+}
+
+.scroll:focus-visible {
+  outline: var(--atlas-border-width-2) solid var(--atlas-focus-ring);
+  outline-offset: var(--atlas-border-width-2);
+  border-radius: var(--atlas-radius-sm);
+}
+
+.scroll code {
+  font: inherit;
+}
+
+/* ── Typing cursor ────────────────────────────────────────────── */
+
+.cursor {
+  display: inline-block;
+  inline-size: var(--atlas-border-width-2);
+  block-size: 1.2em;
+  margin-inline-start: 1px;
+  vertical-align: text-bottom;
+  background-color: var(--atlas-foreground);
+  animation: blink var(--atlas-duration-pulse) steps(1, end) infinite;
+}
+
+@keyframes blink {
+  50% { opacity: var(--atlas-opacity-pulse); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cursor {
+    animation: none;
+  }
+}
+
+/* ── Assistive only ───────────────────────────────────────────── */
+
+.srOnly {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}

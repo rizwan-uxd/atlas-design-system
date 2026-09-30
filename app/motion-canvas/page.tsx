@@ -8,6 +8,7 @@ import type { AnimatedIconProps } from "@atlas/ui-web/animated-icons"
 import { Button } from "@atlas/ui-web/primitives/Button/Button"
 import { Badge, type BadgeVariant } from "@atlas/ui-web/primitives/Badge/Badge"
 import { Avatar, AvatarGroup } from "@atlas/ui-web/primitives/Avatar/Avatar"
+import { CodeBlock } from "@atlas/ui-web/compositions/CodeBlock/CodeBlock"
 
 /* Motion Canvas — a study board, not production UI.
    Entries record what to adopt, adapt or reject before anything enters the library.
@@ -453,6 +454,29 @@ const sections: Section[] = [
     blurb:
       "Visual reference only, from animate-ui.com docs (Icons, Primitives, Components). Nothing installed, no registry code copied. The Accessibility guide page could not be fetched, so its guidance is unverified here.",
     entries: [
+      {
+        name: "Primitive: Code Block (typing)",
+        useCase: "Show a short snippet being written, e.g. onboarding or docs hero",
+        stateExplained: "The code is being written, then complete",
+        trigger: "mount, replay",
+        motion: "characters revealed over duration (default 5000ms) with a blinking cursor",
+        a11y: "Full code is exposed to assistive tech from the start; reduced motion shows it at once with no cursor.",
+        decision: "adopt",
+        status: "built",
+        wrapper: '<CodeBlock variant="typing" filename="greet.ts" code={snippet} />',
+        preview: (replay) => (
+          <div style={{ inlineSize: "100%", maxInlineSize: "32rem" }}>
+            <CodeBlock
+              key={replay}
+              variant="typing"
+              filename="greet.ts"
+              showLineNumbers
+              duration={3000}
+              code={'const greeting = "Hello, Atlas"\nfunction greet(name: string) {\n  return `${greeting}, ${name}`\n}'}
+            />
+          </div>
+        ),
+      },
       {
         name: "Primitive: Avatar Group (animated)",
         useCase: "Overlapping people stack; identify one member",
