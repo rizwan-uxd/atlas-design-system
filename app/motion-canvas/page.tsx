@@ -10,6 +10,7 @@ import { Badge, type BadgeVariant } from "@atlas/ui-web/primitives/Badge/Badge"
 import { Avatar, AvatarGroup } from "@atlas/ui-web/primitives/Avatar/Avatar"
 import { CodeBlock } from "@atlas/ui-web/compositions/CodeBlock/CodeBlock"
 import { ScrollProgress } from "@atlas/ui-web/primitives/ScrollProgress/ScrollProgress"
+import { Tabs } from "@atlas/ui-web/patterns/Tabs/Tabs"
 
 /* Motion Canvas — a study board, not production UI.
    Entries record what to adopt, adapt or reject before anything enters the library.
@@ -483,6 +484,30 @@ const sections: Section[] = [
     blurb:
       "Visual reference only, from animate-ui.com docs (Icons, Primitives, Components). Nothing installed, no registry code copied. The Accessibility guide page could not be fetched, so its guidance is unverified here.",
     entries: [
+      {
+        name: "Primitive: Tabs (animated)",
+        useCase: "Switching between sibling panels of the same shape",
+        stateExplained: "Which tab is active, and that the visible panel changed",
+        trigger: "tab change",
+        motion: "highlight slides to the new trigger; incoming panel fades in and rises",
+        a11y: "Radix roles and keyboard unchanged. Reduced motion: highlight jumps, panel appears at once. Panels keep the same shape, so height does not animate.",
+        decision: "adopt",
+        status: "built",
+        wrapper: '<Tabs animated variant="pill" items={items} />',
+        preview: () => (
+          <div style={{ inlineSize: "100%", maxInlineSize: "24rem" }}>
+            <Tabs
+              animated
+              variant="pill"
+              items={[
+                { id: "one", label: "Overview", content: <p style={{ margin: 0 }}>Overview panel</p> },
+                { id: "two", label: "Details", content: <p style={{ margin: 0 }}>Details panel</p> },
+                { id: "three", label: "Activity", content: <p style={{ margin: 0 }}>Activity panel</p> },
+              ]}
+            />
+          </div>
+        ),
+      },
       {
         name: "Primitive: Scroll Progress",
         useCase: "Reading position through a long page or scrollable panel",

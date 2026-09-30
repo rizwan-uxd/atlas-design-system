@@ -8,6 +8,8 @@ import { Tabs } from "@atlas/ui-web/patterns/Tabs/Tabs"
  * Figma variant names now match React exactly (line | pill | segmented | outline).
  * Icon/Badge are per-trigger booleans on the Figma node (a single tab item);
  * demoed here on the first item of the representative Tabs shell.
+ * Animated is a boolean on the Figma node that mirrors the `animated` prop; it changes no drawn state
+ * (the motion is documented on the Animated components page).
  * orientation is a code-only prop — no Figma property (see the Examples —
  * Vertical frame on the Tabs page).
  */
@@ -27,13 +29,15 @@ figma.connect(
         md: "md",
         lg: "lg",
       }),
+      animated: figma.boolean("Animated"),
       icon:  figma.boolean("Icon",  { true: figma.instance("Icon slot"), false: undefined }),
       badge: figma.boolean("Badge", { true: figma.instance("Badge"),     false: undefined }),
     },
-    example: ({ variant, size, icon, badge }) => (
+    example: ({ variant, size, animated, icon, badge }) => (
       <Tabs
         variant={variant}
         size={size}
+        animated={animated}
         items={[
           { id: "tab1", label: "Tab 1", icon, badge, content: <p>Content for tab 1</p> },
           { id: "tab2", label: "Tab 2", content: <p>Content for tab 2</p> },

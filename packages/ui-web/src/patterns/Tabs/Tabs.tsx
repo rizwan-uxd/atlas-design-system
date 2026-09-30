@@ -16,6 +16,11 @@
  * Sizes:       sm | md | lg
  * Orientation: horizontal (default) | vertical — layout-only, no Figma variant;
  *              Radix swaps arrow-key handling to Up/Down automatically.
+ * Animated:    `animated` (boolean, default off; Figma boolean `Animated`, no drawn state changes).
+ *              The highlight behind the selected trigger slides between triggers (pill, segmented, outline;
+ *              line already slides its underline) and the incoming panel fades in and rises by spacing-1.
+ *              duration-base + easing-emphasized; reduced motion switches both off. Panels keep the same
+ *              shape across tabs, so the container height does not animate.
  *
  * Two usage patterns:
  *
@@ -41,7 +46,7 @@
  * Token compliance: all values via semantic tokens in Tabs.module.css.
  */
 
-import React, { useRef, useEffect, useLayoutEffect, useCallback } from "react"
+import React, { useRef, useState, useEffect, useLayoutEffect, useCallback } from "react"
 import * as RadixTabs from "@radix-ui/react-tabs"
 import styles from "./Tabs.module.css"
 
@@ -80,6 +85,11 @@ export interface TabsRootProps {
    * on List/Trigger, which the CSS module reads.
    */
   orientation?:    TabsOrientation
+  /**
+   * Animates tab changes: the highlight slides between triggers (pill, segmented, outline) and the
+   * incoming panel fades in and rises. Off by default; reduced motion switches it off.
+   */
+  animated?:       boolean
   /** Controlled active value */
   value?:          string
   /** Uncontrolled default — falls back to first item when used in array API */
@@ -94,6 +104,7 @@ export function TabsRoot({
   variant        = "line",
   size           = "md",
   orientation    = "horizontal",
+  animated       = false,
   value,
   defaultValue,
   onValueChange,
@@ -105,8 +116,16 @@ export function TabsRoot({
     styles.root,
     styles[variant],
     size !== "md" && styles[size],
+    animated && styles.animated,
     className,
   )
+
+  /* The panel transition only plays after the user changes tab, never on first render. */
+  const [changed, setChanged] = useState(false)
+  const handleValueChange = (next: string) => {
+    if (animated) setChanged(true)
+    onValueChange?.(next)
+  }
 
   return (
     <RadixTabs.Root
@@ -114,8 +133,9 @@ export function TabsRoot({
       orientation={orientation}
       value={value}
       defaultValue={defaultValue}
-      onValueChange={onValueChange}
+      onValueChange={handleValueChange}
       activationMode={activationMode}
+      data-changed={animated && changed ? "" : undefined}
     >
       {children}
     </RadixTabs.Root>
@@ -148,6 +168,8 @@ export function TabsList({
     if (!list) return
     const active = list.querySelector<HTMLElement>('[data-state="active"]')
     if (!active) return
+    /* Marks the indicator as measured; the animated highlight only takes over from the trigger fill after this. */
+    list.setAttribute("data-ready", "")
     const listRect = list.getBoundingClientRect()
     const activeRect = active.getBoundingClientRect()
     if (list.getAttribute("data-orientation") === "vertical") {
@@ -278,6 +300,7 @@ function TabsBase({
   variant        = "line",
   size           = "md",
   orientation    = "horizontal",
+  animated       = false,
   items,
   value,
   defaultValue,
@@ -297,6 +320,7 @@ function TabsBase({
       variant={variant}
       size={size}
       orientation={orientation}
+      animated={animated}
       value={resolvedValue}
       defaultValue={resolvedDefaultValue}
       onValueChange={handleChange}

@@ -8,9 +8,12 @@
  *   4. Disabled tab is skipped by arrow navigation.
  *   5. axe accessibility check per variant.
  *   6. Vertical orientation: aria-orientation, Up/Down roving focus.
+ *   7. animated: off by default, marks the list as measured, panel transition only after a change,
+ *      reduced motion, axe.
  */
 
 import React from "react"
+import { readFileSync } from "node:fs"
 import { describe, it, expect } from "vitest"
 import { render, screen, fireEvent, waitFor } from "@testing-library/react"
 import { axe } from "jest-axe"
@@ -27,6 +30,7 @@ function Basic(props: {
   variant?: TabsVariant
   size?: TabsSize
   orientation?: TabsOrientation
+  animated?: boolean
   activationMode?: "automatic" | "manual"
 }) {
   return (
@@ -34,6 +38,7 @@ function Basic(props: {
       variant={props.variant}
       size={props.size}
       orientation={props.orientation}
+      animated={props.animated}
       activationMode={props.activationMode}
       items={items}
     />
@@ -137,6 +142,67 @@ describe("Tabs accessibility", () => {
 
   it("has no axe violations, orientation=vertical", async () => {
     const { container } = render(<Basic orientation="vertical" />)
+    expect(await axe(container)).toHaveNoViolations()
+  })
+})
+
+// ─── 7. animated ────────────────────────────────────────────────────────────
+
+describe("Tabs animated", () => {
+  const rootOf = (container: HTMLElement) => container.firstElementChild as HTMLElement
+
+  it("is off by default", () => {
+    const { container } = render(<Basic variant="pill" />)
+    expect(rootOf(container).className).not.toMatch(/animated/)
+    expect(rootOf(container)).not.toHaveAttribute("data-changed")
+  })
+
+  it.each<TabsVariant>(["line", "pill", "segmented", "outline"])("animated adds its class, variant=%s", (variant) => {
+    const { container } = render(<Basic variant={variant} animated />)
+    expect(rootOf(container).className).toMatch(/animated/)
+  })
+
+  it("marks the list as measured so the highlight can take over from the trigger fill", () => {
+    render(<Basic variant="pill" animated />)
+    expect(screen.getByRole("tablist")).toHaveAttribute("data-ready")
+  })
+
+  it("plays the panel transition only after the tab changes, not on first render", async () => {
+    const { container } = render(<Basic variant="pill" animated activationMode="manual" />)
+    expect(rootOf(container)).not.toHaveAttribute("data-changed")
+    const details = screen.getByRole("tab", { name: "Details" })
+    details.focus()
+    fireEvent.keyDown(details, { key: "Enter" })
+    await waitFor(() => expect(details).toHaveAttribute("aria-selected", "true"))
+    expect(rootOf(container)).toHaveAttribute("data-changed")
+  })
+
+  it("never sets data-changed when animated is off", async () => {
+    const { container } = render(<Basic variant="pill" activationMode="manual" />)
+    const details = screen.getByRole("tab", { name: "Details" })
+    details.focus()
+    fireEvent.keyDown(details, { key: "Enter" })
+    await waitFor(() => expect(details).toHaveAttribute("aria-selected", "true"))
+    expect(rootOf(container)).not.toHaveAttribute("data-changed")
+  })
+
+  it("keeps roving focus and selection semantics when animated", async () => {
+    render(<Basic variant="segmented" animated />)
+    const overview = screen.getByRole("tab", { name: "Overview" })
+    overview.focus()
+    fireEvent.keyDown(overview, { key: "ArrowRight" })
+    await waitFor(() => expect(screen.getByRole("tab", { name: "Details" })).toHaveAttribute("aria-selected", "true"))
+  })
+
+  it("switches the slide and the panel transition off under prefers-reduced-motion", () => {
+    const css = readFileSync("packages/ui-web/src/patterns/Tabs/Tabs.module.css", "utf8")
+    const block = css.slice(css.lastIndexOf("@media (prefers-reduced-motion: reduce)"))
+    expect(block).toContain(".animated:is(.pill, .segmented, .outline) .list::after")
+    expect(block).toContain("animation: none")
+  })
+
+  it.each<TabsVariant>(["line", "pill", "segmented", "outline"])("has no axe violations, animated variant=%s", async (variant) => {
+    const { container } = render(<Basic variant={variant} animated />)
     expect(await axe(container)).toHaveNoViolations()
   })
 })

@@ -20,6 +20,7 @@ type AssertTabsRootShape = {
   variant?:        TabsVariant
   size?:           TabsSize
   orientation?:    TabsOrientation
+  animated?:       boolean
   value?:          string
   defaultValue?:   string
   onValueChange?:  (value: string) => void

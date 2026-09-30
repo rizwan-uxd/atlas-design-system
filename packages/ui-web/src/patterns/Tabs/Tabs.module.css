@@ -294,6 +294,100 @@
   display: none;
 }
 
+/* ── Animated (animated prop) ───────────────────────────────────── */
+/*
+  Off by default. The selected fill of pill, segmented and outline moves from the trigger to a highlight
+  on the list that slides between triggers using the --_ind-* position set by TabsList. `line` already
+  slides its underline. The highlight only takes over once TabsList has measured (data-ready), so
+  server-rendered and first-paint markup keeps the plain trigger fill.
+*/
+
+.animated .list {
+  position: relative;
+}
+
+.animated .trigger {
+  position: relative;
+  z-index: 1;
+}
+
+.animated:is(.pill, .segmented, .outline) .list::after {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset-block: 0;
+  inset-inline-start: 0;
+  width: var(--_ind-w, 0px);
+  transform: translateX(var(--_ind-x, 0px));
+  border-radius: var(--atlas-radius-md);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    transform var(--atlas-duration-base) var(--atlas-easing-emphasized),
+    width     var(--atlas-duration-base) var(--atlas-easing-emphasized);
+}
+
+.animated:is(.pill, .segmented, .outline) .list[data-ready]::after {
+  opacity: 1;
+}
+
+.animated.segmented .list::after {
+  inset-block: var(--atlas-spacing-1);
+}
+
+.animated.pill .list::after {
+  background-color: var(--atlas-primary);
+}
+
+.animated:is(.segmented, .outline) .list::after {
+  background-color: var(--atlas-surface);
+  box-shadow: var(--atlas-shadow-sm);
+}
+
+/* The highlight paints the selected fill; the trigger keeps only its text colour. */
+.animated:is(.pill, .segmented, .outline) .list[data-ready] .trigger[data-state="active"] {
+  background-color: transparent;
+  box-shadow: none;
+}
+
+.animated.pill .list[data-ready] .trigger[data-state="active"] {
+  color: var(--atlas-primary-foreground);
+}
+
+.animated:is(.segmented, .outline) .list[data-ready] .trigger[data-state="active"] {
+  color: var(--atlas-foreground);
+}
+
+/* Vertical: the highlight tracks height and offset instead of width and offset. */
+.animated:is(.pill, .segmented, .outline) .list[data-orientation="vertical"]::after {
+  inset-block: 0;
+  inset-inline: 0;
+  width: auto;
+  height: var(--_ind-h, 0px);
+  transform: translateY(var(--_ind-y, 0px));
+  transition:
+    transform var(--atlas-duration-base) var(--atlas-easing-emphasized),
+    height    var(--atlas-duration-base) var(--atlas-easing-emphasized);
+}
+
+.animated.segmented .list[data-orientation="vertical"]::after {
+  inset-inline: var(--atlas-spacing-1);
+  inset-block-start: 0;
+  inset-block-end: auto;
+}
+
+/* Incoming panel: fades in and rises by spacing-1 — only after the user changes tab. */
+.animated[data-changed] .panel[data-state="active"] {
+  animation: panel-in var(--atlas-duration-base) var(--atlas-easing-emphasized);
+}
+
+@keyframes panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(var(--atlas-spacing-1));
+  }
+}
+
 /* ── Reduced motion ───────────────────────────────────────────── */
 
 @media (prefers-reduced-motion: reduce) {
@@ -303,5 +397,11 @@
   /* Instant indicator jump under reduced motion (horizontal and vertical) */
   .line .list::after {
     transition: none;
+  }
+  .animated:is(.pill, .segmented, .outline) .list::after {
+    transition: none;
+  }
+  .animated[data-changed] .panel[data-state="active"] {
+    animation: none;
   }
 }
