@@ -53,6 +53,23 @@ const icon = (props: AnimatedIconProps) =>
     return <AnimatedIcon key={replay} size="lg" {...props} />
   }
 
+
+/** Pressed-state toggle owned by an icon-only Button, which carries aria-pressed. Remounts on replay. */
+const toggleIcon = (name: AnimatedIconProps["name"], label: string, momentary = false) =>
+  function ToggleIconPreview(replay: number) {
+    return <ToggleIconButton key={replay} name={name} label={label} momentary={momentary} />
+  }
+
+/** Momentary icons (skip) replay on every click and carry no pressed state, so no aria-pressed. */
+function ToggleIconButton({ name, label, momentary }: { name: AnimatedIconProps["name"]; label: string; momentary: boolean }) {
+  const [pressed, setPressed] = useState(false)
+  return (
+    <Button iconOnly variant="secondary" size="lg" aria-label={label} aria-pressed={momentary ? undefined : pressed} onClick={() => setPressed((p) => !p)}>
+      <AnimatedIcon name={name} trigger="toggle" pressed={pressed} size="lg" />
+    </Button>
+  )
+}
+
 /** Scrollable panel with a container-scope ScrollProgress along its top edge. */
 function ScrollProgressDemo() {
   const panel = useRef<HTMLDivElement>(null)
@@ -246,6 +263,134 @@ const sections: Section[] = [
         a11y: "Dismissible; no infinite loop; hint text is readable without the pulse.",
         decision: "undecided",
         status: "not built",
+      },
+    ],
+  },
+  {
+    id: "media",
+    title: "Media (useanimations)",
+    blurb:
+      "Ten Media icons from useanimations.com, rebuilt from the source Lottie timelines on the Atlas engine. Click the icon to toggle; press Replay to reset. Figma: page Atlas/Animatedicons.",
+    entries: [
+      {
+        name: "airplay (loop)",
+        stateExplained: "Casting or connecting is in progress",
+        useCase: "Cast / screen-mirror button while connecting",
+        trigger: "loop (state=loading or trigger=loop)",
+        motion: "1 s loop (spin token = 30 source frames): arrow bobs twice while the monitor outline shortens to 5–95%, then rests. Source: useanimations airplay-001.",
+        a11y: "Loops only while the state is real; label the button (Connecting…). Reduced motion shows the static glyph.",
+        decision: "adopt",
+        status: "built",
+        wrapper: '<AnimatedIcon name="airplay" trigger="loop" />',
+        preview: icon({ name: "airplay", trigger: "loop" }),
+      },
+      {
+        name: "Volume",
+        stateExplained: "Sound on or muted",
+        useCase: "Mute toggle",
+        trigger: "toggle (click), alternates forward / reverse",
+        motion: "Speaker and waves slide 5 px, waves collapse in sequence, slash draws. 1 s (spin token; source 29/30 s). Source: volume-001.",
+        a11y: "The button owns aria-pressed and the label; the icon is decorative. Under reduced motion the icon jumps to its end pose.",
+        decision: "adopt",
+        status: "built",
+        wrapper: '<Button iconOnly aria-label="Mute" aria-pressed={pressed} onClick={toggle}><AnimatedIcon name="volume" trigger="toggle" pressed={pressed} /></Button>',
+        preview: toggleIcon("volume", "Mute"),
+      },
+      {
+        name: "Microphone",
+        stateExplained: "Microphone live or muted",
+        useCase: "Mute microphone",
+        trigger: "toggle (click), alternates forward / reverse",
+        motion: "Slash draws across the mic. 0.80 s from source frames (24/30), no matching token. Source: mic-on-off-001.",
+        a11y: "The button owns aria-pressed and the label; the icon is decorative. Under reduced motion the icon jumps to its end pose.",
+        decision: "adopt",
+        status: "built",
+        wrapper: '<Button iconOnly aria-label="Microphone" aria-pressed={pressed} onClick={toggle}><AnimatedIcon name="mic" trigger="toggle" pressed={pressed} /></Button>',
+        preview: toggleIcon("mic", "Microphone"),
+      },
+      {
+        name: "Microphone V2",
+        stateExplained: "Microphone live or muted",
+        useCase: "Mute microphone",
+        trigger: "toggle (click), alternates forward / reverse",
+        motion: "As mic, and the body also shrinks to 90% over 10 frames and stays. 0.80 s from source frames. Source: mic-on-off-002.",
+        a11y: "The button owns aria-pressed and the label; the icon is decorative. Under reduced motion the icon jumps to its end pose.",
+        decision: "adopt",
+        status: "built",
+        wrapper: '<Button iconOnly aria-label="Microphone V2" aria-pressed={pressed} onClick={toggle}><AnimatedIcon name="mic-v2" trigger="toggle" pressed={pressed} /></Button>',
+        preview: toggleIcon("mic-v2", "Microphone V2"),
+      },
+      {
+        name: "Video",
+        stateExplained: "Camera on or off",
+        useCase: "Camera toggle",
+        trigger: "toggle (click), alternates forward / reverse",
+        motion: "Slash draws across the camera. 0.50 s from source frames (15/30). Source: video-on-off-001.",
+        a11y: "The button owns aria-pressed and the label; the icon is decorative. Under reduced motion the icon jumps to its end pose.",
+        decision: "adopt",
+        status: "built",
+        wrapper: '<Button iconOnly aria-label="Video" aria-pressed={pressed} onClick={toggle}><AnimatedIcon name="video" trigger="toggle" pressed={pressed} /></Button>',
+        preview: toggleIcon("video", "Video"),
+      },
+      {
+        name: "Video V2",
+        stateExplained: "Camera on or off",
+        useCase: "Camera toggle",
+        trigger: "toggle (click), alternates forward / reverse",
+        motion: "As video, and the camera also shrinks to 90% and stays. 0.50 s from source frames. Source: video-on-off-002.",
+        a11y: "The button owns aria-pressed and the label; the icon is decorative. Under reduced motion the icon jumps to its end pose.",
+        decision: "adopt",
+        status: "built",
+        wrapper: '<Button iconOnly aria-label="Video V2" aria-pressed={pressed} onClick={toggle}><AnimatedIcon name="video-v2" trigger="toggle" pressed={pressed} /></Button>',
+        preview: toggleIcon("video-v2", "Video V2"),
+      },
+      {
+        name: "Play/Pause circle",
+        stateExplained: "Playing or paused",
+        useCase: "Media play / pause",
+        trigger: "toggle (click), alternates forward / reverse",
+        motion: "Right bar bends into the play triangle while the left bar stretches to 120%. 0.23 s from source frames (7/30). Source: play-pause-circle.",
+        a11y: "The button owns aria-pressed and the label; the icon is decorative. Under reduced motion the icon jumps to its end pose.",
+        decision: "adopt",
+        status: "built",
+        wrapper: '<Button iconOnly aria-label="Play/Pause circle" aria-pressed={pressed} onClick={toggle}><AnimatedIcon name="play-pause-circle" trigger="toggle" pressed={pressed} /></Button>',
+        preview: toggleIcon("play-pause-circle", "Play/Pause circle"),
+      },
+      {
+        name: "Play/Pause",
+        stateExplained: "Playing or paused",
+        useCase: "Media play / pause",
+        trigger: "toggle (click), alternates forward / reverse",
+        motion: "Left bar morphs into a triangle while the right bar scales to 0 and fades. 0.23 s from source frames. Source: play-pause.",
+        a11y: "The button owns aria-pressed and the label; the icon is decorative. Under reduced motion the icon jumps to its end pose.",
+        decision: "adopt",
+        status: "built",
+        wrapper: '<Button iconOnly aria-label="Play/Pause" aria-pressed={pressed} onClick={toggle}><AnimatedIcon name="play-pause" trigger="toggle" pressed={pressed} /></Button>',
+        preview: toggleIcon("play-pause", "Play/Pause"),
+      },
+      {
+        name: "Skip back",
+        stateExplained: "A skip just happened (no lasting state)",
+        useCase: "Previous track",
+        trigger: "click: restarts forward from frame 0 every time, even mid-flight; never reverses (source: playSegments([0, 60], true))",
+        motion: "Triangle exits and is wiped out, bar travels 16 px and back, a new triangle is wiped in, then the last frame holds. 2 s (pulse token; source 59/30 s). Source: skip-back.",
+        a11y: "A plain button with a label (no aria-pressed: there is no pressed state). The icon is decorative. Under reduced motion it jumps to its end pose.",
+        decision: "adopt",
+        status: "built",
+        wrapper: '<Button iconOnly aria-label="Skip back" onClick={() => setCount((n) => n + 1)}><AnimatedIcon name="skip-back" trigger="toggle" pressed={count % 2 === 1} /></Button>',
+        preview: toggleIcon("skip-back", "Skip back", true),
+      },
+      {
+        name: "Skip forward",
+        stateExplained: "A skip just happened (no lasting state)",
+        useCase: "Next track",
+        trigger: "click: restarts forward from frame 0 every time, even mid-flight; never reverses (source: playSegments([0, 60], true))",
+        motion: "Mirror of skip back. Source quirk kept: the returning triangle ends at 95.7% scale, not 100%. 2 s (pulse token). Source: skip-forward.",
+        a11y: "A plain button with a label (no aria-pressed: there is no pressed state). The icon is decorative. Under reduced motion it jumps to its end pose.",
+        decision: "adopt",
+        status: "built",
+        wrapper: '<Button iconOnly aria-label="Skip forward" onClick={() => setCount((n) => n + 1)}><AnimatedIcon name="skip-forward" trigger="toggle" pressed={count % 2 === 1} /></Button>',
+        preview: toggleIcon("skip-forward", "Skip forward", true),
       },
     ],
   },

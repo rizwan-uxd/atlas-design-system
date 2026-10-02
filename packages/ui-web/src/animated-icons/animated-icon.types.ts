@@ -14,6 +14,16 @@ export type AnimatedIconName =
   | "bell"
   | "plug-connected"
   | "panel-left-open"
+  | "airplay"
+  | "volume"
+  | "mic"
+  | "mic-v2"
+  | "video"
+  | "video-v2"
+  | "play-pause-circle"
+  | "play-pause"
+  | "skip-back"
+  | "skip-forward"
 
 /** Icon size: 16, 20, 24 or 32px (icon-size tokens; stroke follows the icon-stroke tokens). */
 export type AnimatedIconSize = "xs" | "sm" | "md" | "lg"
@@ -28,8 +38,11 @@ export type AnimatedIconTone = "default" | "muted" | "success" | "warning" | "da
  * - `hover` / `press` / `focus`  from the nearest interactive ancestor (button, link, tab, menu
  *   item, label), or the icon itself when it has none
  * - `loop`    continuously while mounted
+ * - `toggle`  follows the controlled `pressed` prop: false → true plays the icon's toggle timeline
+ *             forward, true → false plays it back, and a change mid-flight reverses from the current
+ *             frame. Momentary icons (skip) instead restart forward on every change. The icon stays decorative; the parent control owns `aria-pressed`.
  */
-export type AnimatedIconTrigger = "manual" | "appear" | "hover" | "press" | "focus" | "loop"
+export type AnimatedIconTrigger = "manual" | "appear" | "hover" | "press" | "focus" | "loop" | "toggle"
 
 /**
  * What the icon is communicating, independent of when it animates.
@@ -78,6 +91,11 @@ export interface AnimatedIconProps extends Omit<SVGProps<SVGSVGElement>, Reserve
   disabled?: boolean
   /** Accessible name. Without it the icon is decorative (`aria-hidden`). */
   label?: string
+  /**
+   * Controlled toggle position, used with `trigger="toggle"`. The parent control flips it (and sets
+   * `aria-pressed`); the icon animates between the two poses. Ignored for other triggers.
+   */
+  pressed?: boolean
 }
 
 // ─── Icon authoring contract ─────────────────────────────────────────────────
@@ -107,7 +125,8 @@ export type IconAnimation = (ctx: IconMotionContext) => void
  * the size token.
  */
 export interface AnimatedIconDefinition {
-  glyph: ReactNode
+  /** The resting (unpressed) glyph. A function receives an id unique to the instance, for masks. */
+  glyph: ReactNode | ((id: string) => ReactNode)
   appear: IconAnimation
   hover: IconAnimation
   /** Falls back to a small scale-down. */
@@ -116,4 +135,26 @@ export interface AnimatedIconDefinition {
   loop?: IconAnimation
   /** Falls back to a scale pop. */
   success?: IconAnimation
+  /** Frame-driven pose for `trigger="toggle"`. */
+  toggle?: IconToggle
+}
+
+/**
+ * A two-pose timeline played by `trigger="toggle"`. Playback runs frame 0 → `frames − 1`
+ * (pressed) or back (unpressed). `render` writes the pose for a frame into the svg with plain DOM
+ * writes (see `timeline.ts`); parts are found by `data-track`, not `data-part`, so the engine's
+ * rest reset never touches them.
+ */
+export interface IconToggle {
+  /** Length of the source timeline in frames at `SOURCE_FPS`. */
+  frames: number
+  /** Seconds for a full run. Defaults to the source timing; return a token duration when one closely matches. */
+  duration?: (presets: MotionPresets) => number
+  render: (root: SVGSVGElement, frame: number) => void
+  /**
+   * Momentary icons never reverse. Every change of `pressed` restarts the timeline from frame 0,
+   * even mid-flight, and holds the last frame (the source calls `playSegments([0, N], true)` on
+   * each click). Parents flip `pressed` on every click to replay.
+   */
+  momentary?: boolean
 }
