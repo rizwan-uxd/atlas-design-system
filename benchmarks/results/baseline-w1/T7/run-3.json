@@ -1,0 +1,200 @@
+{
+  "model": "claude-sonnet-5-5",
+  "ok": true,
+  "error": null,
+  "turns": 21,
+  "durationS": 74,
+  "costUsd": 0.40675759999999994,
+  "tokens": {
+    "input": 14,
+    "cacheWrite": 58482,
+    "cacheRead": 408508,
+    "output": 9110,
+    "totalContext": 467004
+  },
+  "tools": {
+    "Skill": 1,
+    "Read": 12,
+    "Glob": 1,
+    "Write": 3,
+    "Edit": 1,
+    "Bash": 1
+  },
+  "toolCalls": 19,
+  "figmaCalls": 0,
+  "verifyRuns": 1,
+  "reworkEdits": 0,
+  "toolResultChars": {
+    "Skill": 32,
+    "Read": 32386,
+    "Glob": 14,
+    "Write": 673,
+    "Edit": 230,
+    "Bash": 592
+  },
+  "skillsUsed": [
+    "atlas-prototype"
+  ],
+  "reads": {
+    "total": 12,
+    "unique": 12,
+    "offTask": 0,
+    "byCategory": {
+      "atlas-snapshot": 10,
+      "skills": 1,
+      "prototype-shell": 1
+    },
+    "files": [
+      "atlas/index.md",
+      ".claude/skills/atlas-prototype/references/flow-scaffold.md",
+      "atlas/Chart.md",
+      "atlas/Card.md",
+      "atlas/ListItem.md",
+      "atlas/Skeleton.md",
+      "atlas/Alert.md",
+      "atlas/Tabs.md",
+      "atlas/Button.md",
+      "atlas/tokens.md",
+      "atlas/Badge.md",
+      "app/prototypes/_shared/flowRegistry.ts"
+    ]
+  },
+  "bashCmds": [
+    "npm run atlas:verify -- --scope \"app/prototypes/dashboard-summary/**,app/prototypes/_shared/flowRegistry.ts\" 2>&1 | tail -40"
+  ],
+  "quality": {
+    "outputExists": true,
+    "files": 3,
+    "loc": 344,
+    "registered": true,
+    "tokenLintViolations": 0,
+    "tscErrors": 0,
+    "atlasComponentsImported": [
+      "Alert",
+      "Badge",
+      "Button",
+      "Card",
+      "CardContent",
+      "CardDescription",
+      "CardHeader",
+      "CardTitle",
+      "Chart",
+      "ChartBar",
+      "ChartContent",
+      "ChartDescription",
+      "ChartHeader",
+      "ChartTitle",
+      "ListItem",
+      "ListItemActions",
+      "ListItemContent",
+      "ListItemDescription",
+      "ListItemTitle",
+      "Skeleton",
+      "TabsList",
+      "TabsRoot",
+      "TabsTrigger"
+    ],
+    "expectedCoverage": "7/7",
+    "rawElements": 0,
+    "numericStyleLiterals": 8,
+    "primitiveTokenRefs": 0
+  },
+  "phase8": {
+    "readsAll": {
+      "total": 12,
+      "unique": 12,
+      "viaBash": 0,
+      "files": [
+        "atlas/index.md",
+        ".claude/skills/atlas-prototype/references/flow-scaffold.md",
+        "atlas/Chart.md",
+        "atlas/Card.md",
+        "atlas/ListItem.md",
+        "atlas/Skeleton.md",
+        "atlas/Alert.md",
+        "atlas/Tabs.md",
+        "atlas/Button.md",
+        "atlas/tokens.md",
+        "atlas/Badge.md",
+        "app/prototypes/_shared/flowRegistry.ts"
+      ]
+    },
+    "sourceOpened": {},
+    "sourceOpenedCount": 0,
+    "verify": {
+      "runs": 1,
+      "failures": 0,
+      "firstPass": true,
+      "finalPass": true,
+      "calls": [
+        {
+          "cmd": "npm run atlas:verify -- --scope \"app/prototypes/dashboard-summary/**,app/prototypes/_shared/flowRegistry.ts\" 2>&1 | tail",
+          "failed": false
+        }
+      ]
+    },
+    "wasted": {
+      "duplicateReads": 0,
+      "unusedComponentReads": [],
+      "offTask": [],
+      "verifierInternals": [],
+      "failedToolCalls": 0,
+      "total": 0
+    },
+    "gaps": {
+      "available": true,
+      "candidatesChanged": [],
+      "expected": [],
+      "recognised": []
+    }
+  },
+  "w1": {
+    "tokenAccuracy": {
+      "value": 1,
+      "valid": 41,
+      "invalid": 0,
+      "primitive": 0,
+      "hardcoded": 0
+    },
+    "componentAccuracy": {
+      "value": 1,
+      "covered": 7,
+      "expected": 7,
+      "rawElements": 0
+    },
+    "a11yPass": true,
+    "deprecatedUsage": 0,
+    "humanCorrections": {
+      "available": false
+    },
+    "patternAdherence": {
+      "pattern": "dashboard",
+      "score": 2,
+      "passed": 5,
+      "total": 5,
+      "results": [
+        {
+          "id": "change-as-badge",
+          "pass": true
+        },
+        {
+          "id": "error-with-retry",
+          "pass": true
+        },
+        {
+          "id": "loading-skeleton",
+          "pass": true
+        },
+        {
+          "id": "chart-accessible-name",
+          "pass": true
+        },
+        {
+          "id": "error-is-alert-danger",
+          "pass": true
+        }
+      ]
+    }
+  },
+  "subtype": "success"
+}

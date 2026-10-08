@@ -1,0 +1,192 @@
+{
+  "model": "claude-sonnet-5-5",
+  "ok": true,
+  "error": null,
+  "turns": 21,
+  "durationS": 113,
+  "costUsd": 0.4763258,
+  "tokens": {
+    "input": 16,
+    "cacheWrite": 59758,
+    "cacheRead": 476509,
+    "output": 14196,
+    "totalContext": 536283
+  },
+  "tools": {
+    "Skill": 1,
+    "Read": 9,
+    "Glob": 1,
+    "Bash": 2,
+    "Write": 4,
+    "Edit": 1,
+    "Grep": 1
+  },
+  "toolCalls": 19,
+  "figmaCalls": 0,
+  "verifyRuns": 2,
+  "reworkEdits": 5,
+  "toolResultChars": {
+    "Skill": 32,
+    "Read": 23601,
+    "Glob": 14,
+    "Bash": 623,
+    "Write": 895,
+    "Edit": 230,
+    "Grep": 260
+  },
+  "skillsUsed": [
+    "atlas-prototype"
+  ],
+  "reads": {
+    "total": 9,
+    "unique": 9,
+    "offTask": 0,
+    "byCategory": {
+      "atlas-snapshot": 7,
+      "skills": 1,
+      "prototype-shell": 1
+    },
+    "files": [
+      "atlas/index.md",
+      ".claude/skills/atlas-prototype/references/flow-scaffold.md",
+      "atlas/Button.md",
+      "atlas/Input.md",
+      "atlas/Label.md",
+      "atlas/Alert.md",
+      "atlas/tokens.md",
+      "atlas/Switch.md",
+      "app/prototypes/_shared/flowRegistry.ts"
+    ]
+  },
+  "bashCmds": [
+    "cd app/prototypes && mkdir -p payment-error/steps && cat > payment-error/schema.ts <<'EOF'\nexport type FailureKind = \"declined\" | \"timeout\"\n\nexport type PaymentData = {\n  cardNumber: string\n  expiry: string\n  cvc: string\n  /** Prototype control: fail with a network timeout instead of a card decline */\n  simulateTimeout: boolean\n  failure: FailureKind | null\n}\n\nexport const PAYMENT_INITIAL: PaymentData = {\n  cardNumber: \"\",\n  expiry: \"\",\n  cvc: \"\",\n  simulateTimeout: false,\n  failure: null,\n}\n\nexport const PAYMENT_STEPS = [\"payment\", \"failure\"] as const\n\nexport const ORDER_TOTAL = \"$84.50\"\n\nexport type PaymentStepProps = {\n  data: PaymentData\n  patch: (p: Partial<PaymentData>) => void\n  next: () => void\n  back: () => void\n  goTo: (i: number) => void\n}\nEOF\ncat > payment-error/page.tsx <<'EOF'\n\"use client\"\n\nimport { FlowShell } from \"../_shared/FlowShell\"\nimport { useFlowState } from \"../_shared/useFlowState\"\nimport { PAYMENT_INITIAL, PAYMENT_STEPS, PaymentData } from \"./schema\"\nimport { Payment } from \"./steps/Payment\"\nimport { Failure } from \"./steps/Failure\"\n\nexport default function PaymentErrorPage() {\n  const flow = useFlowState<PaymentData>({ totalSteps: PAYMENT_STEPS.length, initialData: PAYMENT_INITIAL })\n  const props = { data: flow.data, patch: flow.patch, next: flow.next, back: flow.back, goTo: flow.goTo }\n  const key = PAYMENT_STEPS[flow.step]\n  return (\n    <FlowShell\n      title=\"Payment error\"\n      step={flow.step}\n      totalSteps={PAYMENT_STEPS.length}\n      onReset={flow.reset}\n      phoneBackground=\"var(--atlas-background)\"\n    >\n      {key === \"payment\" && <Payment {...props} />}\n      {key === \"failure\" && <Failure {...props} />}\n    </FlowShell>\n  )\n}\nEOF\ncat > payment-error/steps/Payment.tsx <<'EOF'\n\"use client\"\n\nimport { useState } from \"react\"\nimport { Button } from \"@atlas/ui-web/primitives/Button/Button\"\nimport { Input } from \"@atlas/ui-web/primitives/Input/Input\"\nimport { Label } from \"@atlas/ui-web/primitives/Label/Label\"\nimport { Switch } from \"@atlas/ui-web/primitives/Switch/Switch\"\nimport { mockSubmit } from \"../../_shared/mockApi\"\nimport { ORDER_TOTAL, type PaymentStepProps } from \"../schema\"\n\nconst digits = (v: string) => v.replace(/\\D/g, \"\")\nconst formatCard = (v: string) => digits(v).slice(0, 16).replace(/(.{4})/g, \"$1 \").trim()\nconst formatExpiry = (v: string) => {\n  const d = digits(v).slice(0, 4)\n  return d.length > 2 ? `${d.slice(0, 2)}/${d.slice(2)}` : d\n}\n\ntype Errors = { cardNumber?: string; expiry?: string; cvc?: string }\n\nfunction validate(d: { cardNumber: string; expiry: string; cvc: string }): Errors {\n  const errors: Errors = {}\n  if (digits(d.cardNumber).length !== 16) errors.cardNumber = \"Enter the 16-digit card number.\"\n  const month = Number(d.expiry.slice(0, 2))\n  if (d.expiry.length !== 5 || month < 1 || month > 12) errors.expiry = \"Enter a valid expiry, MM/YY.\"\n  if (digits(d.cvc).length < 3) errors.cvc = \"Enter the 3-digit security code.\"\n  return errors\n}\n\nconst column: React.CSSProperties = { display: \"flex\", flexDirection: \"column\", gap: \"var(--atlas-spacing-2)\" }\n\nexport function Payment({ data, patch, next }: PaymentStepProps) {\n  const [busy, setBusy] = useState(false)\n  const [errors, setErrors] = useState<Errors>({})\n\n  const submit = async (e: React.FormEvent) => {\n    e.preventDefault()\n    const found = validate(data)\n    setErrors(found)\n    if (Object.keys(found).length > 0) return\n    setBusy(true)\n    const kind = data.simulateTimeout ? \"timeout\" : \"declined\"\n    try {\n      await mockSubmit(data, {\n        delayMs: data.simulateTimeout ? 3000 : 1500,\n        failRate: 1,\n        errorMessage: kind,\n      })\n    } catch {\n      patch({ failure: kind })\n      setBusy(false)\n      next()\n    }\n  }\n\n  return (\n    <form\n      onSubmit={submit}\n      noValidate\n      aria-busy={busy}\n      style={{\n        display: \"flex\",\n        flexDirection: \"column\",\n        gap: \"var(--atlas-spacing-5)\",\n        paddingInline: \"var(--atlas-spacing-4)\",\n        paddingBlock: \"var(--atlas-spacing-4)\",\n      }}\n    >\n      <h1\n        style={{\n          margin: 0,\n          fontSize: \"var(--atlas-text-h2)\",\n          fontWeight: \"var(--atlas-font-weight-semibold)\",\n          lineHeight: \"var(--atlas-line-height-tight)\",\n          color: \"var(--atlas-foreground)\",\n        }}\n      >\n        Payment\n      </h1>\n\n      <div style={column}>\n        <Label htmlFor=\"pe-card\" required size=\"md\">Card number</Label>\n        <Input\n          id=\"pe-card\"\n          size=\"lg\"\n          inputMode=\"numeric\"\n          autoComplete=\"cc-number\"\n          placeholder=\"1234 5678 9012 3456\"\n          value={data.cardNumber}\n          invalid={!!errors.cardNumber}\n          aria-describedby={errors.cardNumber ? \"pe-card-err\" : undefined}\n          disabled={busy}\n          onChange={(e) => patch({ cardNumber: formatCard(e.target.value) })}\n        />\n        {errors.cardNumber && <FieldError id=\"pe-card-err\">{errors.cardNumber}</FieldError>}\n      </div>\n\n      <div style={{ display: \"flex\", gap: \"var(--atlas-spacing-3)\" }}>\n        <div style={{ ...column, flex: 1 }}>\n          <Label htmlFor=\"pe-expiry\" required size=\"md\">Expiry</Label>\n          <Input\n            id=\"pe-expiry\"\n            size=\"lg\"\n            inputMode=\"numeric\"\n            autoComplete=\"cc-exp\"\n            placeholder=\"MM/YY\"\n            value={data.expiry}\n            invalid={!!errors.expiry}\n            aria-describedby={errors.expiry ? \"pe-expiry-err\" : undefined}\n            disabled={busy}\n            onChange={(e) => patch({ expiry: formatExpiry(e.target.value) })}\n          />\n          {errors.expiry && <FieldError id=\"pe-expiry-err\">{errors.expiry}</FieldError>}\n        </div>\n        <div style={{ ...column, flex: 1 }}>\n          <Label htmlFor=\"pe-cvc\" required size=\"md\">CVC</Label>\n          <Input\n            id=\"pe-cvc\"\n            size=\"lg\"\n            inputMode=\"numeric\"\n            autoComplete=\"cc-csc\"\n            placeholder=\"123\"\n            value={data.cvc}\n            invalid={!!errors.cvc}\n            aria-describedby={errors.cvc ? \"pe-cvc-err\" : undefined}\n            disabled={busy}\n            onChange={(e) => patch({ cvc: digits(e.target.value).slice(0, 4) })}\n          />\n          {errors.cvc && <FieldError id=\"pe-cvc-err\">{errors.cvc}</FieldError>}\n        </div>\n      </div>\n\n      <div\n        style={{\n          display: \"flex\",\n          justifyContent: \"space-between\",\n          alignItems: \"baseline\",\n          paddingBlock: \"var(--atlas-spacing-3)\",\n          borderBlockStart: \"var(--atlas-border-width-1) solid var(--atlas-border-subtle)\",\n        }}\n      >\n        <span style={{ fontSize: \"var(--atlas-text-body)\", color: \"var(--atlas-foreground-muted)\" }}>Order total</span>\n        <span\n          style={{\n            fontSize: \"var(--atlas-text-h3)\",\n            fontWeight: \"var(--atlas-font-weight-semibold)\",\n            color: \"var(--atlas-foreground)\",\n          }}\n        >\n          {ORDER_TOTAL}\n        </span>\n      </div>\n\n      <Button type=\"submit\" variant=\"primary\" size=\"lg\" loading={busy} style={{ inlineSize: \"100%\" }}>\n        {busy ? \"Processing…\" : \"Pay now\"}\n      </Button>\n\n      <div\n        style={{\n          paddingBlockStart: \"var(--atlas-spacing-3)\",\n          borderBlockStart: \"var(--atlas-border-width-1) dashed var(--atlas-border)\",\n        }}\n      >\n        <Switch\n          size=\"sm\"\n          label=\"Simulate network timeout\"\n          description=\"Prototype control. Off: the card is declined.\"\n          checked={data.simulateTimeout}\n          disabled={busy}\n          onCheckedChange={(simulateTimeout) => patch({ simulateTimeout })}\n        />\n      </div>\n    </form>\n  )\n}\n\nfunction FieldError({ id, children }: { id: string; children: React.ReactNode }) {\n  return (\n    <span id={id} style={{ fontSize: \"var(--atlas-text-caption)\", color: \"var(--atlas-danger)\" }}>\n      {children}\n    </span>\n  )\n}\nEOF\ncat > payment-error/steps/Failure.tsx <<'EOF'\n\"use client\"\n\nimport { Alert } from \"@atlas/ui-web/compositions/Alert/Alert\"\nimport { Button } from \"@atlas/ui-web/primitives/Button/Button\"\nimport { ORDER_TOTAL, type PaymentStepProps } from \"../schema\"\n\nconst COPY = {\n  declined: {\n    title: \"Your card was declined\",\n    description:\n      \"Your bank didn't approve this payment. You haven't been charged. Check the details below, try another card, or contact your bank.\",\n  },\n  timeout: {\n    title: \"We couldn't reach the payment service\",\n    description:\n      \"The request timed out, so we don't know if the payment went through. Wait a moment, then try again. If you see a charge, contact support before retrying.\",\n  },\n} as const\n\nexport function Failure({ data, patch, goTo }: PaymentStepProps) {\n  const kind = data.failure ?? \"declined\"\n  const copy = COPY[kind]\n  const last4 = data.cardNumber.replace(/\\D/g, \"\").slice(-4)\n\n  const retry = () => goTo(0)\n  const useDifferentCard = () => {\n    patch({ cardNumber: \"\", expiry: \"\", cvc: \"\", failure: null })\n    goTo(0)\n  }\n\n  const primary =\n    kind === \"timeout\"\n      ? { label: \"Try again\", onClick: retry }\n      : { label: \"Use a different card\", onClick: useDifferentCard }\n  const secondary =\n    kind === \"timeout\"\n      ? { label: \"Use a different card\", onClick: useDifferentCard }\n      : { label: \"Try again\", onClick: retry }\n\n  return (\n    <div\n      style={{\n        display: \"flex\",\n        flexDirection: \"column\",\n        gap: \"var(--atlas-spacing-5)\",\n        paddingInline: \"var(--atlas-spacing-4)\",\n        paddingBlock: \"var(--atlas-spacing-4)\",\n      }}\n    >\n      <div role=\"alert\">\n        <Alert variant=\"danger\" title={copy.title} description={copy.description} />\n      </div>\n\n      <dl\n        style={{\n          margin: 0,\n          display: \"grid\",\n          gridTemplateColumns: \"auto 1fr\",\n          columnGap: \"var(--atlas-spacing-4)\",\n          rowGap: \"var(--atlas-spacing-2)\",\n          fontSize: \"var(--atlas-text-body-sm)\",\n          color: \"var(--atlas-foreground)\",\n        }}\n      >\n        <dt style={{ color: \"var(--atlas-foreground-muted)\" }}>Card</dt>\n        <dd style={{ margin: 0, textAlign: \"end\" }}>{last4 ? `Ending in ${last4}` : \"Not entered\"}</dd>\n        <dt style={{ color: \"var(--atlas-foreground-muted)\" }}>Expiry</dt>\n        <dd style={{ margin: 0, textAlign: \"end\" }}>{data.expiry || \"—\"}</dd>\n        <dt style={{ color: \"var(--atlas-foreground-muted)\" }}>Order total</dt>\n        <dd style={{ margin: 0, textAlign: \"end\", fontWeight: \"var(--atlas-font-weight-semibold)\" }}>{ORDER_TOTAL}</dd>\n      </dl>\n\n      <div style={{ display: \"flex\", flexDirection: \"column\", gap: \"var(--atlas-spacing-3)\" }}>\n        <Button variant=\"primary\" size=\"lg\" onClick={primary.onClick} style={{ inlineSize: \"100%\" }}>\n          {primary.label}\n        </Button>\n        <Button variant=\"secondary\" size=\"lg\" onClick={secondary.onClick} style={{ inlineSize: \"100%\" }}>\n          {secondary.label}\n        </Button>\n        <Button asChild variant=\"ghost\" size=\"md\">\n          <a href=\"mailto:support@example.com?subject=Payment%20problem\">Contact support</a>\n        </Button>\n      </div>\n    </div>\n  )\n}\nEOF\npython3 - <<'EOF'\np='_shared/flowRegistry.ts'\ns=open(p).read().replace(\"export const flows: FlowMeta[] = []\",\"\"\"export const flows: FlowMeta[] = [\n  {\n    slug: \"payment-error\",\n    name: \"Payment error\",\n    description: \"Mobile checkout payment that fails with a card decline or a simulated network timeout, with recovery paths for each.\",\n    exercises: [\"Button\", \"Input\", \"Label\", \"Switch\", \"Alert\"],\n    status: \"in-progress\",\n  },\n]\"\"\")\nopen(p,'w').write(s)\nEOF\ncat _shared/mockApi.ts | head -40; cd ../..; npm run atlas:verify -- --scope \"app/prototypes/payment-error/**,app/prototypes/_shared/flowRegistry.ts\" 2>&1 | tail -40",
+    "npm run atlas:verify -- --scope \"app/prototypes/payment-error/**,app/prototypes/_shared/flowRegistry.ts\" 2>&1 | tail -40"
+  ],
+  "quality": {
+    "outputExists": true,
+    "files": 4,
+    "loc": 327,
+    "registered": true,
+    "tokenLintViolations": 0,
+    "tscErrors": 0,
+    "atlasComponentsImported": [
+      "Button",
+      "Input",
+      "Label",
+      "Switch",
+      "Alert"
+    ],
+    "expectedCoverage": "4/4",
+    "rawElements": 0,
+    "numericStyleLiterals": 4,
+    "primitiveTokenRefs": 0
+  },
+  "phase8": {
+    "readsAll": {
+      "total": 10,
+      "unique": 10,
+      "viaBash": 0,
+      "files": [
+        "atlas/index.md",
+        ".claude/skills/atlas-prototype/references/flow-scaffold.md",
+        "atlas/Button.md",
+        "atlas/Input.md",
+        "atlas/Label.md",
+        "atlas/Alert.md",
+        "atlas/tokens.md",
+        "atlas/Switch.md",
+        "app/prototypes/_shared/flowRegistry.ts",
+        "Grep:app/prototypes/_shared/mockApi.ts"
+      ]
+    },
+    "sourceOpened": {
+      "shared-internals": [
+        "app/prototypes/_shared/mockApi.ts"
+      ]
+    },
+    "sourceOpenedCount": 1,
+    "verify": {
+      "runs": 2,
+      "failures": 1,
+      "firstPass": false,
+      "finalPass": true,
+      "calls": [
+        {
+          "cmd": "cd app/prototypes && mkdir -p payment-error/steps && cat > payment-error/schema.ts <<'EOF'\nexport type FailureKind = \"de",
+          "failed": true
+        },
+        {
+          "cmd": "npm run atlas:verify -- --scope \"app/prototypes/payment-error/**,app/prototypes/_shared/flowRegistry.ts\" 2>&1 | tail -40",
+          "failed": false
+        }
+      ]
+    },
+    "wasted": {
+      "duplicateReads": 0,
+      "unusedComponentReads": [],
+      "offTask": [],
+      "verifierInternals": [],
+      "failedToolCalls": 0,
+      "total": 0
+    },
+    "gaps": {
+      "available": true,
+      "candidatesChanged": [],
+      "expected": [],
+      "recognised": []
+    }
+  },
+  "w1": {
+    "tokenAccuracy": {
+      "value": 1,
+      "valid": 35,
+      "invalid": 0,
+      "primitive": 0,
+      "hardcoded": 0
+    },
+    "componentAccuracy": {
+      "value": 1,
+      "covered": 4,
+      "expected": 4,
+      "rawElements": 0
+    },
+    "a11yPass": true,
+    "deprecatedUsage": 0,
+    "humanCorrections": {
+      "available": false
+    },
+    "patternAdherence": {
+      "pattern": "error-recovery",
+      "score": 2,
+      "passed": 6,
+      "total": 6,
+      "results": [
+        {
+          "id": "alert-danger",
+          "pass": true
+        },
+        {
+          "id": "retry-action",
+          "pass": true
+        },
+        {
+          "id": "loading-on-submit",
+          "pass": true
+        },
+        {
+          "id": "alternate-path",
+          "pass": true
+        },
+        {
+          "id": "failure-announced",
+          "pass": true
+        },
+        {
+          "id": "timeout-distinct",
+          "pass": true
+        }
+      ]
+    }
+  },
+  "subtype": "success"
+}

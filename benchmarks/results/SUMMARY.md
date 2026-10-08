@@ -27,6 +27,11 @@ Correctness first — a label only wins if these are equal or better. Lower is b
 | T2 | harness-v2 | 3 | 3/3 | 3/3 | 5/6 5/6 5/6 | 0 | 0 | 0 | 16 (run 3) | 3/3 | 24.33 (23–25) | 0.51 (0.47–0.58) | 880.8k (753.9k–1.06M) | 942.2k (813.7k–1.12M) | 8912 (7515–10.8k) | 21.33 (20–22) | 101 (79–121) | 12.67 (12–13) | 0.33 (0–1) | 0.33 (0–1) | 0.33 (0–1) | 2/3 | 1 | 3/3 |
 | T2 | harness-v3 | 3 | 3/3 | 3/3 | 5/6 5/6 5/6 | 0 | 0 | 0 | – | 3/3 | 23.67 (22–25) | 0.47 (0.44–0.51) | 812.5k (727.3k–898.9k) | 871.0k (784.5k–959.3k) | 7386 (6604–8756) | 20.67 (19–22) | 95.33 (85–112) | 11.67 (11–12) | 0 | 0 | 0 | 3/3 | 0.67 (0–1) | 3/3 |
 | T2 | harness-v7 | 3 | 3/3 | 3/3 | 6/6 5/6 5/6 | 0 | 0 | 0 | – | 3/3 | 25.33 (24–26) | 0.51 (0.49–0.53) | 868.2k (833.3k–931.3k) | 930.2k (894.1k–993.3k) | 8397 (7001–10.5k) | 22.33 (21–23) | 96 (90–103) | 12.67 (12–13) | 0 | 0.67 (0–1) | 0 | 3/3 | 0.67 (0–1) | 3/3 |
+| T5 | baseline-w1 | 3 | 3/3 | 3/3 | 2/2 2/2 2/2 | 0 | 0 | 0 | – | 3/3 | 19.67 (18–21) | 0.38 (0.37–0.39) | 409.4k (406.3k–414.1k) | 466.8k (462.8k–472.1k) | 7035 (6494–7332) | 17.67 (16–19) | 96.33 (65–126) | 10 | 0 | 0 | 0 | 3/3 | 0 | 3/3 logged any |
+| T6 | baseline-w1 | 3 | 3/3 | 3/3 | 8/8 8/8 8/8 | 0 | 0 | 0 | – | 3/3 | 25.33 (25–26) | 0.48 (0.47–0.49) | 506.0k (495.1k–512.7k) | 573.2k (562.0k–579.7k) | 11.2k (10.7k–12.0k) | 23.33 (23–24) | 151 (97–256) | 14.67 (14–15) | 0 | 0 | 0 | 3/3 | 0.33 (0–1) | 3/3 logged any |
+| T7 | baseline-w1 | 3 | 3/3 | 3/3 | 7/7 7/7 7/7 | 0 | 0 | 0 | – | 3/3 | 23.33 (21–26) | 0.44 (0.41–0.47) | 555.8k (408.5k–651.4k) | 614.5k (467.0k–711.7k) | 9149 (8339–9997) | 21.33 (19–24) | 90.33 (74–120) | 12.33 (12–13) | 0 | 0 | 0 | 3/3 | 0.33 (0–1) | 0/3 logged any |
+| T8 | baseline-w1 | 3 | 3/3 | 3/3 | 5/6 5/6 5/6 | 0 | 0 | 0 | – | 3/3 | 23.67 (22–26) | 0.49 (0.46–0.54) | 614.3k (485.2k–808.4k) | 674.9k (545.7k–870.8k) | 12.6k (12.2k–13.3k) | 21.67 (20–24) | 100 (87–116) | 11.67 (10–14) | 1.33 (0–4) | 0 | 0.67 (0–1) | 1/3 | 2 (1–4) | 0/3 logged any |
+| T9 | baseline-w1 | 3 | 3/3 | 3/3 | 4/4 4/4 4/4 | 0 | 0 | 0 | – | 3/3 | 21.33 (20–23) | 0.45 (0.41–0.48) | 499.7k (466.4k–556.1k) | 557.3k (521.8k–613.9k) | 11.5k (9158–14.2k) | 19.33 (18–21) | 121 (113–125) | 9.67 (9–10) | 0 | 0.33 (0–1) | 1 (0–2) | 1/3 | 0 | 0/3 logged any |
 
 ## Phase 9 — component tasks, mean (min–max) across runs
 
@@ -48,3 +53,21 @@ signal is present] — a hypothesis reproduces at ≥2/3 in harness-v2. Effort c
 | T4 | harness-v3 | 3 | 3/3 | 3/3 | 0 | 3/3 | 3/3 | 0 | 3/3 | 0/3 | 3/3 | – | 2 [3/3] | 0 [0/3] | 0 [0/3] | 0 [0/3] | 0 [0/3] | 21 (16–25) | 0.50 (0.38–0.64) | 722.2k (318.1k–1.13M) | 13 (12–15) | 2 (0–5) | 0/3 |
 | T4 | harness-v7 | 3 | 3/3 | 3/3 | 0 | 3/3 | 3/3 | 0 | 3/3 | 0/3 | 3/3 | – | 2 [3/3] | 0 [0/3] | 0 [0/3] | 0 [0/3] | 0 [0/3] | 15.67 (11–23) | 0.39 (0.33–0.49) | 491.7k (311.1k–781.8k) | 10.67 (7–16) | 0 | 0/3 |
 | T4 | no-skill | 3 | 3/3 | 0/3 | 0 | 0/3 | 3/3 | 0 | 1/3 | 0/3 | 0/3 | – | 2.33 (2–3) [3/3] | 0 [0/3] | 1 [0/3] | 0 [0/3] | 3.33 (0–7) [2/3] | 53.33 (38–72) | 1.31 (1.11–1.60) | 3.27M (2.51M–4.23M) | 26.33 (16–35) | 0.33 (0–1) | 0/3 |
+
+## Wave 1 — AI-readiness metrics, mean (min–max) across runs
+
+Computed by `analyze.mjs` from the output and the run log; nothing is estimated.
+- **token accuracy**: semantic `--atlas-*` refs that exist, divided by those plus undefined refs, primitive refs and hardcoded colours or lengths.
+- **component accuracy**: expected Atlas components imported, as a fraction (`meta.expectedComponents`).
+- **pattern adherence**: per-task deterministic checks in `meta.w1.patternChecks`: 0 none hold, 1 some hold, 2 all hold.
+- **a11y pass / deprecated usage**: atlas-verify's `a11y` and `deprecated-usage` checks on the run's changes (count of runs passing; mean violations).
+- **audit recall / precision** (T10): seeded violations found; cited lines that are real. **migrated** (T11): all deprecated values replaced, content kept.
+- **human corrections**: the harness is headless, so this is unavailable. `reworkEdits` (agent edits after its first verify) is the nearest signal and is in each run JSON.
+
+| task | label | runs | completed | token accuracy | component accuracy | pattern adherence 0–2 | raw els | a11y pass | deprecated usage | audit recall / precision | migrated | turns | cost $ | manual /20 | human corrections |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| T5 | baseline-w1 | 3 | 3/3 | 1 | 1 | 2 | 0 | 3/3 | 0 | – | – | 19.67 (18–21) | 0.38 (0.37–0.39) | – | unavailable |
+| T6 | baseline-w1 | 3 | 3/3 | 1 | 1 | 2 | 0 | 3/3 | 0 | – | – | 25.33 (25–26) | 0.48 (0.47–0.49) | – | unavailable |
+| T7 | baseline-w1 | 3 | 3/3 | 1 | 1 | 2 | 0 | 3/3 | 0 | – | – | 23.33 (21–26) | 0.44 (0.41–0.47) | – | unavailable |
+| T8 | baseline-w1 | 3 | 3/3 | 1 | 0.83 | 2 | 0 | 3/3 | 0 | – | – | 23.67 (22–26) | 0.49 (0.46–0.54) | – | unavailable |
+| T9 | baseline-w1 | 3 | 3/3 | 1 | 1 | 2 | 0 | 3/3 | 0 | – | – | 21.33 (20–23) | 0.45 (0.41–0.48) | – | unavailable |

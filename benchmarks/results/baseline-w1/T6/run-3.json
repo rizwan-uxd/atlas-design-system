@@ -1,0 +1,216 @@
+{
+  "model": "claude-sonnet-5-5",
+  "ok": true,
+  "error": null,
+  "turns": 26,
+  "durationS": 256,
+  "costUsd": 0.47318420000000005,
+  "tokens": {
+    "input": 16,
+    "cacheWrite": 66905,
+    "cacheRead": 495111,
+    "output": 10651,
+    "totalContext": 562032
+  },
+  "tools": {
+    "Skill": 1,
+    "Read": 15,
+    "Bash": 2,
+    "Glob": 1,
+    "Write": 3,
+    "Edit": 2
+  },
+  "toolCalls": 24,
+  "figmaCalls": 0,
+  "verifyRuns": 1,
+  "reworkEdits": 0,
+  "toolResultChars": {
+    "Skill": 32,
+    "Read": 46689,
+    "Bash": 657,
+    "Glob": 14,
+    "Write": 677,
+    "Edit": 449
+  },
+  "skillsUsed": [
+    "atlas-prototype"
+  ],
+  "reads": {
+    "total": 15,
+    "unique": 15,
+    "offTask": 0,
+    "byCategory": {
+      "atlas-snapshot": 12,
+      "skills": 2,
+      "prototype-shell": 1
+    },
+    "files": [
+      "atlas/index.md",
+      ".claude/skills/atlas-prototype/references/flow-scaffold.md",
+      ".claude/skills/atlas-prototype/references/gaps.md",
+      "atlas/tokens.md",
+      "atlas/Table.md",
+      "atlas/Checkbox.md",
+      "atlas/Input.md",
+      "atlas/Select.md",
+      "atlas/Badge.md",
+      "atlas/AlertDialog.md",
+      "atlas/Skeleton.md",
+      "atlas/Button.md",
+      "atlas/Tabs.md",
+      "atlas/state/candidates.json",
+      "app/prototypes/_shared/flowRegistry.ts"
+    ]
+  },
+  "bashCmds": [
+    "cd atlas && for n in Table Checkbox Input Select Badge Button AlertDialog Skeleton; do echo \"=== $n\"; sed -n '/## API/,$p' $n.md | head -80; done; ls ../app/prototypes; cat state/candidates.json | head -50",
+    "npm run atlas:verify -- --scope \"app/prototypes/invoices-table/**,app/prototypes/_shared/flowRegistry.ts,atlas/state/candidates.json\" 2>&1 | tail -40"
+  ],
+  "quality": {
+    "outputExists": true,
+    "files": 3,
+    "loc": 402,
+    "registered": true,
+    "tokenLintViolations": 0,
+    "tscErrors": 0,
+    "atlasComponentsImported": [
+      "Button",
+      "Input",
+      "Checkbox",
+      "Badge",
+      "Skeleton",
+      "Select",
+      "SelectTrigger",
+      "SelectValue",
+      "SelectContent",
+      "SelectItem",
+      "Table",
+      "TableHeader",
+      "TableBody",
+      "TableRow",
+      "TableHead",
+      "TableCell",
+      "AlertDialog",
+      "AlertDialogContent",
+      "AlertDialogTitle",
+      "AlertDialogDescription",
+      "AlertDialogFooter",
+      "AlertDialogCancel",
+      "AlertDialogAction",
+      "TabsRoot",
+      "TabsList",
+      "TabsTrigger"
+    ],
+    "expectedCoverage": "8/8",
+    "rawElements": 0,
+    "numericStyleLiterals": 12,
+    "primitiveTokenRefs": 0
+  },
+  "phase8": {
+    "readsAll": {
+      "total": 15,
+      "unique": 15,
+      "viaBash": 0,
+      "files": [
+        "atlas/index.md",
+        ".claude/skills/atlas-prototype/references/flow-scaffold.md",
+        ".claude/skills/atlas-prototype/references/gaps.md",
+        "atlas/tokens.md",
+        "atlas/Table.md",
+        "atlas/Checkbox.md",
+        "atlas/Input.md",
+        "atlas/Select.md",
+        "atlas/Badge.md",
+        "atlas/AlertDialog.md",
+        "atlas/Skeleton.md",
+        "atlas/Button.md",
+        "atlas/Tabs.md",
+        "atlas/state/candidates.json",
+        "app/prototypes/_shared/flowRegistry.ts"
+      ]
+    },
+    "sourceOpened": {},
+    "sourceOpenedCount": 0,
+    "verify": {
+      "runs": 1,
+      "failures": 0,
+      "firstPass": true,
+      "finalPass": true,
+      "calls": [
+        {
+          "cmd": "npm run atlas:verify -- --scope \"app/prototypes/invoices-table/**,app/prototypes/_shared/flowRegistry.ts,atlas/state/can",
+          "failed": false
+        }
+      ]
+    },
+    "wasted": {
+      "duplicateReads": 0,
+      "unusedComponentReads": [],
+      "offTask": [],
+      "verifierInternals": [],
+      "failedToolCalls": 1,
+      "total": 1
+    },
+    "gaps": {
+      "available": true,
+      "candidatesChanged": [
+        "CAND-024 DataTable"
+      ],
+      "expected": [],
+      "recognised": []
+    }
+  },
+  "w1": {
+    "tokenAccuracy": {
+      "value": 1,
+      "valid": 34,
+      "invalid": 0,
+      "primitive": 0,
+      "hardcoded": 0
+    },
+    "componentAccuracy": {
+      "value": 1,
+      "covered": 8,
+      "expected": 8,
+      "rawElements": 0
+    },
+    "a11yPass": true,
+    "deprecatedUsage": 0,
+    "humanCorrections": {
+      "available": false
+    },
+    "patternAdherence": {
+      "pattern": "data-table",
+      "score": 2,
+      "passed": 6,
+      "total": 6,
+      "results": [
+        {
+          "id": "select-all-indeterminate",
+          "pass": true
+        },
+        {
+          "id": "selected-count",
+          "pass": true
+        },
+        {
+          "id": "destructive-confirmed",
+          "pass": true
+        },
+        {
+          "id": "loading-skeleton",
+          "pass": true
+        },
+        {
+          "id": "no-match-state",
+          "pass": true
+        },
+        {
+          "id": "labelled-controls",
+          "pass": true
+        }
+      ]
+    }
+  },
+  "subtype": "success"
+}
