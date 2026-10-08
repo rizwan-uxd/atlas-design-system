@@ -1,0 +1,15 @@
+{
+  "slug": "onboarding",
+  "expectedComponents": ["Input", "Label", "Select", "Switch", "RadioGroup", "Button"],
+  "w1": {
+    "pattern": "form",
+    "patternChecks": [
+      { "id": "progress-shown", "type": "absent", "pattern": "showProgress=\\{false\\}" },
+      { "id": "skip-optional-step", "type": "match", "pattern": "\\bskip\\b", "flags": "i" },
+      { "id": "invalid-state", "type": "match", "pattern": "aria-invalid|invalid=|state=\"invalid\"" },
+      { "id": "error-text", "type": "match", "pattern": "required|enter your|is invalid", "flags": "i" },
+      { "id": "labelled-fields", "type": "match", "pattern": "<Label" },
+      { "id": "back-navigation", "type": "match", "pattern": "\\bback\\b", "flags": "i" }
+    ]
+  }
+}

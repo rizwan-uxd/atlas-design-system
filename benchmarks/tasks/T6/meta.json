@@ -1,0 +1,15 @@
+{
+  "slug": "invoices-table",
+  "expectedComponents": ["Table", "Checkbox", "Select", "Input", "Button", "AlertDialog", "Badge", "Skeleton"],
+  "w1": {
+    "pattern": "data-table",
+    "patternChecks": [
+      { "id": "select-all-indeterminate", "type": "match", "pattern": "indeterminate" },
+      { "id": "selected-count", "type": "match", "pattern": "\\bselected\\b", "flags": "i" },
+      { "id": "destructive-confirmed", "type": "match", "pattern": "<AlertDialog|<Dialog" },
+      { "id": "loading-skeleton", "type": "match", "pattern": "<Skeleton" },
+      { "id": "no-match-state", "type": "match", "pattern": "no (results|invoices|matches)|nothing (matches|found)", "flags": "i" },
+      { "id": "labelled-controls", "type": "match", "pattern": "aria-label|<Label" }
+    ]
+  }
+}

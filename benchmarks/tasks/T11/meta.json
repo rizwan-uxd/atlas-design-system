@@ -1,0 +1,13 @@
+{
+  "type": "prototype",
+  "slug": "legacy-fixture",
+  "expectedComponents": ["Alert", "Button"],
+  "fixtureSync": true,
+  "w1": {
+    "migration": {
+      "file": "LegacyScreen.tsx",
+      "removed": ["variant=\"neutral\"", "variant=\"link\""],
+      "expected": [{ "pattern": "variant=\"info\"", "min": 1 }, { "pattern": "variant=\"ghost\"", "min": 2 }]
+    }
+  }
+}

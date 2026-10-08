@@ -1,0 +1,15 @@
+{
+  "slug": "payment-error",
+  "expectedComponents": ["Input", "Label", "Button", "Alert"],
+  "w1": {
+    "pattern": "error-recovery",
+    "patternChecks": [
+      { "id": "alert-danger", "type": "match", "pattern": "<Alert[^>]*variant=\"danger\"" },
+      { "id": "retry-action", "type": "match", "pattern": "try again|retry", "flags": "i" },
+      { "id": "loading-on-submit", "type": "match", "pattern": "loading=|isSubmitting|submitting", "flags": "i" },
+      { "id": "alternate-path", "type": "match", "pattern": "different card|another card|contact support|support", "flags": "i" },
+      { "id": "failure-announced", "type": "match", "pattern": "role=\"alert\"|aria-live|\\.focus\\(" },
+      { "id": "timeout-distinct", "type": "match", "pattern": "time(d)? ?out|network|connection", "flags": "i" }
+    ]
+  }
+}

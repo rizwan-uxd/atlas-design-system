@@ -1,0 +1,1 @@
+app/prototypes/legacy-fixture/LegacyScreen.tsx uses Atlas assets that have since been deprecated. Migrate it to the current assets, following the Atlas deprecation registry. Keep the screen's behaviour and content the same. When you're done, make sure atlas-verify passes for your changes.

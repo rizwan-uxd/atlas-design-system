@@ -1,0 +1,13 @@
+{
+  "slug": "empty-state",
+  "expectedComponents": ["Input", "Button"],
+  "w1": {
+    "pattern": "empty-state",
+    "patternChecks": [
+      { "id": "recovery-action", "type": "match", "pattern": "clear (the )?(search|filter)|show all|back to (all|the) (projects|list)", "flags": "i" },
+      { "id": "announced", "type": "match", "pattern": "role=\"status\"|aria-live" },
+      { "id": "decorative-icon-hidden", "type": "match", "pattern": "aria-hidden" },
+      { "id": "no-destructive", "type": "absent", "pattern": "variant=\"destructive\"" }
+    ]
+  }
+}

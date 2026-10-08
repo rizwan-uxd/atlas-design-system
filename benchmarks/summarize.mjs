@@ -8,7 +8,7 @@ const big = x => x >= 1e6 ? (x / 1e6).toFixed(2) + "M" : x >= 1e4 ? (x / 1e3).to
 const mr = (a, f = fmt) => { const s = nums(a); if (!s.length) return "–"; const m = s.reduce((p, c) => p + c, 0) / s.length; const lo = Math.min(...s), hi = Math.max(...s); return lo === hi ? f(m) : `${f(m)} (${f(lo)}–${f(hi)})` }
 const count = (runs, f) => `${runs.filter(f).length}/${runs.length}`
 
-const rows = [], compRows = []
+const rows = [], compRows = [], w1Rows = []
 for (const label of fs.readdirSync(dir).filter(d => fs.statSync(path.join(dir, d)).isDirectory()))
   for (const task of fs.readdirSync(path.join(dir, label)).filter(d => fs.statSync(path.join(dir, label, d)).isDirectory())) {
     const tdir = path.join(dir, label, task)
@@ -17,6 +17,20 @@ for (const label of fs.readdirSync(dir).filter(d => fs.statSync(path.join(dir, d
     let manual = null; try { manual = JSON.parse(fs.readFileSync(path.join(tdir, "manual.json"), "utf8")) } catch {}
     const p8 = runs.every(r => r.phase8)
     const P = f => p8 ? runs.map(f) : []
+    if (runs.every(r => r.w1)) {
+      const W = f => runs.map(r => f(r.w1))
+      const share = (name, f) => { const hits = W(f).filter(v => v !== null && v !== undefined); return hits.length ? count(runs, r => f(r.w1) === true) : "–" }
+      w1Rows.push({ label, task, cells: [
+        runs.length, count(runs, r => r.ok),
+        mr(W(w => w.tokenAccuracy?.value)), mr(W(w => w.componentAccuracy?.value)),
+        W(w => w.patternAdherence?.score).some(v => v !== undefined) ? mr(W(w => w.patternAdherence?.score)) : "–",
+        mr(runs.map(r => r.quality.rawElements)), share("a11y", w => w.a11yPass), mr(W(w => w.deprecatedUsage)),
+        W(w => w.audit?.recall).some(v => v !== undefined) ? `${mr(W(w => w.audit?.recall))} / prec ${mr(W(w => w.audit?.precision))}` : "–",
+        W(w => w.migration?.migrated).some(v => v !== undefined) ? count(runs, r => r.w1.migration?.migrated === true) : "–",
+        mr(runs.map(r => r.turns)), mr(runs.map(r => r.costUsd)),
+        manual ? `${manual.total ?? "–"} (run ${manual.run})` : "–", "unavailable",
+      ] })
+    }
     if (runs.every(r => r.component)) {
       const C = f => runs.map(r => f(r.component))
       const sig = k => `${mr(C(c => c.signals[k]))} [${C(c => c.present[k.slice(0, 2)]).filter(Boolean).length}/${runs.length}]`
@@ -55,6 +69,8 @@ const H = ["runs", "completed", "registered", "coverage", "lint", "tsc", "raw el
 const CH = ["runs", "completed", "all gates", "figma writes", "stop decision ok", "tests", "tsc", "verify ok", "stamped", "in scope", "manual /20",
   "H1 state-file reads [runs]", "H2 other tests [runs]", "H3 sync runs [runs over limit]", "H4 invalid DISC [runs]", "H5 other components [runs]",
   "turns", "cost $", "cache read", "files opened", "figma reads", "max-turns exits"]
+const WH = ["runs", "completed", "token accuracy", "component accuracy", "pattern adherence 0–2", "raw els", "a11y pass", "deprecated usage",
+  "audit recall / precision", "migrated", "turns", "cost $", "manual /20", "human corrections"]
 const table = (rs, h = H) => `| task | label | ${h.join(" | ")} |\n|${["", "", ...h].map(() => "---").join("|")}|\n` +
   rs.sort((a, b) => a.task.localeCompare(b.task) || a.label.localeCompare(b.label)).map(r => `| ${r.task} | ${r.label} | ${r.cells.join(" | ")} |`).join("\n")
 
@@ -77,5 +93,17 @@ Gates first (proposal §8.1); a count is runs passing. H columns are the §5B so
 signal is present] — a hypothesis reproduces at ≥2/3 in harness-v2. Effort columns are reported, not used for acceptance.
 
 ${table(compRows, CH)}
+` : ""}${w1Rows.length ? `
+## Wave 1 — AI-readiness metrics, mean (min–max) across runs
+
+Computed by \`analyze.mjs\` from the output and the run log; nothing is estimated.
+- **token accuracy**: semantic \`--atlas-*\` refs that exist, divided by those plus undefined refs, primitive refs and hardcoded colours or lengths.
+- **component accuracy**: expected Atlas components imported, as a fraction (\`meta.expectedComponents\`).
+- **pattern adherence**: per-task deterministic checks in \`meta.w1.patternChecks\`: 0 none hold, 1 some hold, 2 all hold.
+- **a11y pass / deprecated usage**: atlas-verify's \`a11y\` and \`deprecated-usage\` checks on the run's changes (count of runs passing; mean violations).
+- **audit recall / precision** (T10): seeded violations found; cited lines that are real. **migrated** (T11): all deprecated values replaced, content kept.
+- **human corrections**: the harness is headless, so this is unavailable. \`reworkEdits\` (agent edits after its first verify) is the nearest signal and is in each run JSON.
+
+${table(w1Rows, WH)}
 ` : ""}`
 fs.writeFileSync(path.join(dir, "SUMMARY.md"), md)
