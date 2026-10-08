@@ -3,7 +3,7 @@
  * atlas-verify — check work before reporting it done.
  *
  * Three groups, each a pass/fail line plus its mismatches:
- *   design  snapshot current · variants/sizes used vs atlas/metadata · tokens exist and are semantic
+ *   design  snapshot current · variants/sizes used vs atlas/metadata · no new use of a deprecated asset · tokens exist and are semantic
  *   code    token-lint · tsc · tests · Atlas components over raw controls · basic a11y · prototype registered
  *   scope   diff stays inside --scope · no new tokens · no new components
  *
@@ -171,6 +171,44 @@ check("design", "variants-sizes", () => {
       if (value !== undefined && allowed?.length && !allowed.includes(value))
         fails.push(`${file}:${tag.line} <${u.local} ${prop}="${value}"> — ${u.component} ${prop}s are ${allowed.join(" | ")}`)
     }
+  }
+  return verdict(fails)
+})
+
+// Deprecated assets (packages/governance/deprecations.json). A changed file fails only for a use it adds:
+// a use already present in the file at --base is historical and is migrated when its owner chooses.
+const DEPRECATIONS_FILE = "packages/governance/deprecations.json"
+const deprecations = exists(DEPRECATIONS_FILE) ? (JSON.parse(read(DEPRECATIONS_FILE)).entries ?? []) : []
+const deprecatedUses = (src) => {
+  const hits = []
+  const add = (d, line, what) => hits.push({ key: `${d.name}|${what}`, line,
+    msg: `${what} — ${d.kind} ${d.name} is deprecated since ${d.since}, removed in ${d.removeIn}; use ${d.replacement}. ${d.migration}` })
+  for (const d of deprecations) {
+    if (d.kind === "token") {
+      for (const m of src.matchAll(new RegExp(`${d.name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(?![\\w-])`, "g")))
+        if (!/^\s*:/.test(src.slice(m.index + d.name.length, m.index + d.name.length + 8))) add(d, lineOf(src, m.index), `uses ${d.name}`)
+    }
+  }
+  for (const u of atlasUsage(src)) {
+    for (const d of deprecations) {
+      if (d.kind === "component" && u.component === d.name && (u.exported === d.name || u.exported.startsWith(d.name)))
+        add(d, lineOf(src, src.indexOf(u.exported)), `imports ${u.exported}`)
+      if (d.kind === "variant" && d.name.startsWith(`${u.component}.`) && (u.exported === u.component || u.exported === `${u.component}Root`)) {
+        const variant = d.name.slice(u.component.length + 1)
+        for (const tag of jsxTags(src, u.local))
+          if (literalProp(blankNestedJsx(tag.attrs), "variant") === variant) add(d, tag.line, `<${u.local} variant="${variant}">`)
+      }
+    }
+  }
+  return hits
+}
+
+check("design", "deprecated-usage", () => {
+  const fails = []
+  for (const { file, src } of sources) {
+    const old = sh(`git show ${BASE}:${file}`, ROOT)
+    const before = new Set(old.ok ? deprecatedUses(old.out).map((h) => h.key) : [])
+    for (const h of deprecatedUses(src)) if (!before.has(h.key)) fails.push(`${file}:${h.line} ${h.msg}`)
   }
   return verdict(fails)
 })

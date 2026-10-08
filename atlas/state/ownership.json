@@ -1,0 +1,13 @@
+{
+  "_generated": "GENERATED — do not hand-edit. copied from packages/governance/ownership.json by atlas-figma-sync.",
+  "source": "packages/governance/ownership.json",
+  "owners": { "design-system": "@rizwan-uxd", "tokens": "@rizwan-uxd", "components": "@rizwan-uxd", "docs": "@rizwan-uxd", "ai-context": "@rizwan-uxd" },
+  "paths": {
+    "design-system": ["AGENTS.md", "claude.md", "packages/governance/"],
+    "tokens": ["packages/tokens/"],
+    "components": ["packages/ui-web/", "packages/ui-native/", "packages/figma-sync/"],
+    "docs": ["docs/"],
+    "ai-context": ["atlas/", ".agents/", "scripts/", "benchmarks/"]
+  },
+  "componentOwners": {}
+}

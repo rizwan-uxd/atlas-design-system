@@ -265,6 +265,23 @@ const figmaVersion = pull ? (pull.figmaVersion ?? null) : null
 const source = pull ? "figma-synced" : "repo-derived"
 const HEADER = stamp(source, syncedAt, figmaVersion)
 
+/* ── governance (authored in packages/governance) ───────── */
+
+const GOV = path.join(ROOT, "packages/governance")
+const readGov = (name, fallback) => (fs.existsSync(path.join(GOV, name)) ? JSON.parse(read(path.join(GOV, name))) : fallback)
+const ownership = readGov("ownership.json", { owners: {}, componentOwners: {} })
+const deprecations = (readGov("deprecations.json", { entries: [] }).entries ?? [])
+const depDetail = ({ since, removeIn, replacement, migration }) => ({ since, removeIn, replacement, migration })
+/** deprecation of a whole component, or null */
+const deprecationOf = (name) => {
+  const e = deprecations.find((d) => d.kind === "component" && d.name === name)
+  return e ? depDetail(e) : null
+}
+/** deprecated variants of a component: { variant, ...detail }[] */
+const deprecatedVariantsOf = (name) =>
+  deprecations.filter((d) => d.kind === "variant" && d.name.startsWith(`${name}.`))
+    .map((d) => ({ variant: d.name.slice(name.length + 1), ...depDetail(d) }))
+
 const comps = components().map((c) => {
   const src = read(c.tsx)
   const { nodeId, enums } = codeConnect(c.name)
@@ -360,6 +377,10 @@ for (const c of comps) {
     _generated: HEADER,
     name: c.name,
     tier: c.tier,
+    status: deprecationOf(c.name) ? "deprecated" : "stable",
+    deprecated: deprecationOf(c.name),
+    ...(deprecatedVariantsOf(c.name).length ? { deprecatedVariants: deprecatedVariantsOf(c.name) } : {}),
+    ...(ownership.componentOwners?.[c.name] ? { owner: ownership.componentOwners[c.name] } : {}),
     import: `@atlas/ui-web/${c.tier}/${c.name}/${c.name}`,
     variants: c.variants ?? [],
     sizes: c.sizes ?? [],
@@ -392,6 +413,10 @@ write("atlas/index.md", [
     `| ${c.name} | ${c.tier} | \`@atlas/ui-web/${c.tier}/${c.name}/${c.name}\` | ${(c.variants ?? []).join(", ") || "—"} | ${(c.sizes ?? []).join(", ") || "—"} |`),
   "",
   `No ${missing.slice(0, -1).join(", ")} or ${missing.at(-1)} exists. Compose gaps from primitives and log them in \`state/candidates.json\`.`,
+  "",
+  deprecations.length
+    ? `Deprecated (do not use; use the replacement): ${deprecations.map((d) => `\`${d.name}\` → ${d.replacement}`).join(" · ")}. Details in \`state/deprecations.json\`.`
+    : "Deprecated: none. Never introduce a deprecated asset; the registry is `state/deprecations.json`. Owners: `state/ownership.json`.",
   "",
 ].join("\n"))
 
@@ -600,6 +625,18 @@ for (const e of existing) {
 write("atlas/state/discrepancies.json", compactJson({
   ...disc, _generated: HEADER, syncedAt, figmaVersion, discrepancies: existing,
 }))
+
+/* ── state/ownership.json, state/deprecations.json (copied from packages/governance) ── */
+
+const govState = (name, body) => write(`atlas/state/${name}.json`, compactJson({
+  _generated: `GENERATED — do not hand-edit. copied from packages/governance/${name}.json by atlas-figma-sync.`,
+  ...body,
+}))
+{
+  const { _note: _o, ...own } = ownership
+  govState("ownership", { source: "packages/governance/ownership.json", ...own })
+  govState("deprecations", { source: "packages/governance/deprecations.json", entries: deprecations })
+}
 
 /* ── state stamps ───────────────────────────────────────── */
 

@@ -1,0 +1,18 @@
+{
+  "_note": "Authored source. atlas-sync copies it to atlas/state/ownership.json. Owners come from repo evidence only: every commit is by one maintainer and the origin remote is github.com/rizwan-uxd/atlas-design-system. Add a separate owner only when a real second owner exists.",
+  "owners": {
+    "design-system": "@rizwan-uxd",
+    "tokens": "@rizwan-uxd",
+    "components": "@rizwan-uxd",
+    "docs": "@rizwan-uxd",
+    "ai-context": "@rizwan-uxd"
+  },
+  "paths": {
+    "design-system": ["AGENTS.md", "claude.md", "packages/governance/"],
+    "tokens": ["packages/tokens/"],
+    "components": ["packages/ui-web/", "packages/ui-native/", "packages/figma-sync/"],
+    "docs": ["docs/"],
+    "ai-context": ["atlas/", ".agents/", "scripts/", "benchmarks/"]
+  },
+  "componentOwners": {}
+}

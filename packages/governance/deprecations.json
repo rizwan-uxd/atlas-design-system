@@ -1,0 +1,4 @@
+{
+  "_note": "Authored source. atlas-sync copies it to atlas/state/deprecations.json and stamps each component's atlas/metadata/<Name>.json. kind is component, variant or token. name is `Button` (component), `Button.link` (variant) or `--atlas-x` (token). since and removeIn are release versions. replacement and migration are required. atlas-verify fails a changed file that adds a use of a listed asset. Empty is valid: nothing is deprecated today.",
+  "entries": []
+}

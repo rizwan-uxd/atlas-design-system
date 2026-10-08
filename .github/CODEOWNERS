@@ -1,0 +1,11 @@
+# Mirrors packages/governance/ownership.json. Owner evidence: git history and origin remote.
+*                          @rizwan-uxd
+/packages/tokens/          @rizwan-uxd
+/packages/ui-web/          @rizwan-uxd
+/packages/ui-native/       @rizwan-uxd
+/packages/figma-sync/      @rizwan-uxd
+/packages/governance/      @rizwan-uxd
+/atlas/                    @rizwan-uxd
+/.agents/                  @rizwan-uxd
+/scripts/                  @rizwan-uxd
+/docs/                     @rizwan-uxd

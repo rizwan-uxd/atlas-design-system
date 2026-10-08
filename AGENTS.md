@@ -40,6 +40,7 @@ Prefer one targeted read over a sweep, Grep over Read when you need a single fac
 - **Never add a new component or a new token** on your own initiative. A gap is composed locally from primitives and logged in `atlas/state/candidates.json`.
 - Prototypes never modify the library. Library changes never happen inside a prototype task.
 - Write web components into their tier: `primitives/` (Button, Input, Label, Textarea, Checkbox, Switch, Badge), `compositions/` (Alert, Card, Dialog), `patterns/` (Tabs), `layouts/` (NavBar) — all under `packages/ui-web/src/<tier>/<Name>/`. Native: `packages/ui-native/components/<Name>/`.
+- Never introduce a deprecated Atlas asset (`atlas/state/deprecations.json`, `deprecated` in `atlas/metadata/<Name>.json`). When one has a documented replacement, use the replacement and follow its migration note. `atlas-verify` fails new uses.
 - Edit existing files in place. No duplicate or parallel implementations, no `/outputs`, no session scratch folders in the repo.
 
 ## 5. Execution loop

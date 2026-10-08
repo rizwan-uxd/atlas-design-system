@@ -17,7 +17,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
-    "test:scripts": "node --test scripts/tests/atlas-sync.test.mjs"
+    "test:scripts": "node --test scripts/tests/*.test.mjs"
   },
   "workspaces": [
     "packages/*"

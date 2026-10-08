@@ -12,9 +12,9 @@ import { fileURLToPath } from "node:url"
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..")
 const INPUTS = ["scripts", "packages/ui-web/src", "packages/figma-sync/code-connect", "packages/tokens", "atlas"]
 
-function copyInputs() {
+function copyInputs(...extra) {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), "atlas-sync-test-"))
-  for (const rel of INPUTS) fs.cpSync(path.join(REPO, rel), path.join(dir, rel), { recursive: true })
+  for (const rel of [...INPUTS, ...extra]) fs.cpSync(path.join(REPO, rel), path.join(dir, rel), { recursive: true })
   return dir
 }
 const sync = (dir) => execFileSync("node", [path.join(dir, "scripts/atlas-sync.mjs")], { encoding: "utf8" })
@@ -34,16 +34,16 @@ test("Sizes follow a metadata change in a doc without a Figma description, and a
     fs.writeFileSync(doc, at === -1 ? md : md.slice(0, at) + legacy + md.slice(md.indexOf("<!-- END:generated-structure -->") + 32))
 
     const src = fs.readFileSync(tsx, "utf8")
-    assert.match(src, /export type SwitchSize = "sm" \| "md"\n/)
-    fs.writeFileSync(tsx, src.replace(/export type SwitchSize = "sm" \| "md"\n/, 'export type SwitchSize = "sm" | "md" | "lg"\n'))
+    assert.match(src, /export type SwitchSize = "sm" \| "md" \| "lg"\n/)
+    fs.writeFileSync(tsx, src.replace(/export type SwitchSize = "sm" \| "md" \| "lg"\n/, 'export type SwitchSize = "sm" | "md" | "lg" | "xl"\n'))
 
     const first = sync(dir)
     assert.ok(writtenCount(first) > 0)
-    assert.deepEqual(JSON.parse(fs.readFileSync(path.join(dir, "atlas/metadata/Switch.json"), "utf8")).sizes, ["sm", "md", "lg"])
+    assert.deepEqual(JSON.parse(fs.readFileSync(path.join(dir, "atlas/metadata/Switch.json"), "utf8")).sizes, ["sm", "md", "lg", "xl"])
 
     const out = fs.readFileSync(doc, "utf8")
     assert.equal(out.match(/^## Sizes/gm).length, 1, "legacy section replaced, not duplicated")
-    assert.match(block(out), /## Sizes\n`sm` · `md` · `lg`\n/)
+    assert.match(block(out), /## Sizes\n`sm` · `md` · `lg` · `xl`\n/)
     assert.doesNotMatch(out, /does not have it yet/)
     assert.doesNotMatch(block(out), /Figma: .*differs/, "code and Figma sizes now agree")
 
@@ -60,14 +60,61 @@ test("per-value hints survive and a removed value drops out", () => {
     const tsx = path.join(dir, "packages/ui-web/src/primitives/Button/Button.tsx")
     const src = fs.readFileSync(tsx, "utf8")
     const union = src.match(/export type ButtonSize = [^\n]+/)[0]
-    assert.match(union, /"icon"/)
-    fs.writeFileSync(tsx, src.replace(union, union.replace(/ \| "icon"|"icon" \| /, "")))
+    assert.match(union, /"xs"/)
+    fs.writeFileSync(tsx, src.replace(union, union.replace(/"xs" \| /, "")))
 
     sync(dir)
     const sizes = block(fs.readFileSync(path.join(dir, "atlas/Button.md"), "utf8")).match(/## Sizes\n([^\n]+)/)[1]
     assert.match(sizes, /`md` default/)
-    assert.doesNotMatch(sizes, /`icon`/)
+    assert.doesNotMatch(sizes, /`xs`/)
     assert.equal(writtenCount(sync(dir)), 0)
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+// ─── governance: lifecycle, ownership, deprecations ──────────────────────────
+
+const readJson = (dir, rel) => JSON.parse(fs.readFileSync(path.join(dir, rel), "utf8"))
+const setDeprecations = (dir, entries) =>
+  fs.writeFileSync(path.join(dir, "packages/governance/deprecations.json"), JSON.stringify({ entries }))
+
+test("empty deprecation registry: every component is stable, index says none, state files exist", () => {
+  const dir = copyInputs("packages/governance")
+  try {
+    sync(dir)
+    const button = readJson(dir, "atlas/metadata/Button.json")
+    assert.equal(button.status, "stable")
+    assert.equal(button.deprecated, null)
+    assert.equal("owner" in button, false, "no per-component owner unless one is authored")
+    assert.equal("deprecatedVariants" in button, false)
+    assert.deepEqual(readJson(dir, "atlas/state/deprecations.json").entries, [])
+    assert.equal(readJson(dir, "atlas/state/ownership.json").owners["design-system"], "@rizwan-uxd")
+    assert.match(fs.readFileSync(path.join(dir, "atlas/index.md"), "utf8"), /Deprecated: none/)
+    assert.equal(writtenCount(sync(dir)), 0, "second sync writes zero files")
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+test("populated registry stamps component and variant deprecations and lists them in the index", () => {
+  const dir = copyInputs("packages/governance")
+  try {
+    const detail = { since: "1.1.0", removeIn: "2.0.0", replacement: "x", migration: "Use x." }
+    setDeprecations(dir, [
+      { kind: "component", name: "Badge", ...detail },
+      { kind: "variant", name: "Button.link", ...detail },
+    ])
+    sync(dir)
+    const badge = readJson(dir, "atlas/metadata/Badge.json")
+    assert.equal(badge.status, "deprecated")
+    assert.deepEqual(badge.deprecated, detail)
+    const button = readJson(dir, "atlas/metadata/Button.json")
+    assert.equal(button.status, "stable")
+    assert.deepEqual(button.deprecatedVariants, [{ variant: "link", ...detail }])
+    assert.match(fs.readFileSync(path.join(dir, "atlas/index.md"), "utf8"), /Deprecated \(do not use.*`Badge`.*`Button.link`/)
+    assert.equal(readJson(dir, "atlas/state/deprecations.json").entries.length, 2)
+    assert.equal(writtenCount(sync(dir)), 0, "second sync writes zero files")
   } finally {
     fs.rmSync(dir, { recursive: true, force: true })
   }
