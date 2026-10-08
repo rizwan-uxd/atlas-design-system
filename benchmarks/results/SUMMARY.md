@@ -64,10 +64,10 @@ Computed by `analyze.mjs` from the output and the run log; nothing is estimated.
 - **audit recall / precision** (T10): seeded violations found; cited lines that are real. **migrated** (T11): all deprecated values replaced, content kept.
 - **human corrections**: the harness is headless, so this is unavailable. `reworkEdits` (agent edits after its first verify) is the nearest signal and is in each run JSON.
 
-| task | label | runs | completed | token accuracy | component accuracy | pattern adherence 0–2 | raw els | a11y pass | deprecated usage | audit recall / precision | migrated | turns | cost $ | manual /20 | human corrections |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| T5 | baseline-w1 | 3 | 3/3 | 1 | 1 | 2 | 0 | 3/3 | 0 | – | – | 19.67 (18–21) | 0.38 (0.37–0.39) | – | unavailable |
-| T6 | baseline-w1 | 3 | 3/3 | 1 | 1 | 2 | 0 | 3/3 | 0 | – | – | 25.33 (25–26) | 0.48 (0.47–0.49) | – | unavailable |
-| T7 | baseline-w1 | 3 | 3/3 | 1 | 1 | 2 | 0 | 3/3 | 0 | – | – | 23.33 (21–26) | 0.44 (0.41–0.47) | – | unavailable |
-| T8 | baseline-w1 | 3 | 3/3 | 1 | 0.83 | 2 | 0 | 3/3 | 0 | – | – | 23.67 (22–26) | 0.49 (0.46–0.54) | – | unavailable |
-| T9 | baseline-w1 | 3 | 3/3 | 1 | 1 | 2 | 0 | 3/3 | 0 | – | – | 21.33 (20–23) | 0.45 (0.41–0.48) | – | unavailable |
+| task | label | runs | completed | token accuracy | component accuracy | pattern adherence 0–2 (loose) | pattern adherence strict (fraction) | raw els | a11y pass | deprecated usage | audit recall / precision | migrated | turns | cost $ | manual /20 | human corrections |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| T5 | baseline-w1 | 3 | 3/3 | 1 | 1 | 2 | 0.87 (0.80–1) | 0 | 3/3 | 0 | – | – | 19.67 (18–21) | 0.38 (0.37–0.39) | – | unavailable |
+| T6 | baseline-w1 | 3 | 3/3 | 1 | 1 | 2 | 0.90 | 0 | 3/3 | 0 | – | – | 25.33 (25–26) | 0.48 (0.47–0.49) | – | unavailable |
+| T7 | baseline-w1 | 3 | 3/3 | 1 | 1 | 2 | 0.89 (0.83–1) | 0 | 3/3 | 0 | – | – | 23.33 (21–26) | 0.44 (0.41–0.47) | – | unavailable |
+| T8 | baseline-w1 | 3 | 3/3 | 1 | 0.83 | 2 | 0.92 (0.88–1) | 0 | 3/3 | 0 | – | – | 23.67 (22–26) | 0.49 (0.46–0.54) | – | unavailable |
+| T9 | baseline-w1 | 3 | 3/3 | 1 | 1 | 2 | 0.41 (0.22–0.56) | 0 | 3/3 | 0 | – | – | 21.33 (20–23) | 0.45 (0.41–0.48) | – | unavailable |

@@ -194,6 +194,44 @@
           "pass": true
         }
       ]
+    },
+    "patternStrict": {
+      "passed": 5,
+      "total": 6,
+      "fraction": 0.833,
+      "results": [
+        {
+          "id": "error-alert-actions",
+          "rule": "Failure is a danger Alert with recovery in the actions slot",
+          "pass": true
+        },
+        {
+          "id": "alert-not-dismissible",
+          "rule": "Failure Alert is not dismissible",
+          "pass": true
+        },
+        {
+          "id": "retry-loading",
+          "rule": "Retry shows loading on the Button",
+          "pass": false
+        },
+        {
+          "id": "loading-busy",
+          "rule": "Loading region sets aria-busy",
+          "pass": true
+        },
+        {
+          "id": "chart-named",
+          "rule": "Chart has an accessible name",
+          "pass": true
+        },
+        {
+          "id": "no-duplicate-live-region",
+          "rule": "No extra live region on the Alert",
+          "pass": true
+        }
+      ],
+      "rescored": true
     }
   },
   "subtype": "success"

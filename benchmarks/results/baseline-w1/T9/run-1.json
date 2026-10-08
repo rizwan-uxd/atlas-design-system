@@ -178,6 +178,59 @@
           "pass": true
         }
       ]
+    },
+    "patternStrict": {
+      "passed": 2,
+      "total": 9,
+      "fraction": 0.222,
+      "results": [
+        {
+          "id": "decline-primary-change",
+          "rule": "Declined: primary action changes the card",
+          "pass": false
+        },
+        {
+          "id": "timeout-primary-retry",
+          "rule": "Timeout: primary action is Try again",
+          "pass": false
+        },
+        {
+          "id": "retry-loading",
+          "rule": "Retry shows loading on the Button",
+          "pass": true
+        },
+        {
+          "id": "alert-actions-slot",
+          "rule": "Recovery lives in the Alert actions slot",
+          "pass": false
+        },
+        {
+          "id": "alert-not-dismissible",
+          "rule": "Failure Alert is not dismissible",
+          "pass": false
+        },
+        {
+          "id": "no-oops",
+          "rule": "No \"Oops\" or \"Something went wrong\"",
+          "pass": true
+        },
+        {
+          "id": "charge-status",
+          "rule": "Says whether the user was charged",
+          "pass": false
+        },
+        {
+          "id": "no-duplicate-live-region",
+          "rule": "No second live region (Alert danger is role=alert)",
+          "pass": false
+        },
+        {
+          "id": "support-secondary",
+          "rule": "Contact support is not primary",
+          "pass": false
+        }
+      ],
+      "rescored": true
     }
   },
   "subtype": "success"

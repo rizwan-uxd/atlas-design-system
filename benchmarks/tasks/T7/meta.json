@@ -1,14 +1,81 @@
 {
   "slug": "dashboard-summary",
-  "expectedComponents": ["Card", "Badge", "Chart", "ListItem", "Alert", "Button", "Skeleton"],
+  "expectedComponents": [
+    "Card",
+    "Badge",
+    "Chart",
+    "ListItem",
+    "Alert",
+    "Button",
+    "Skeleton"
+  ],
   "w1": {
     "pattern": "dashboard",
     "patternChecks": [
-      { "id": "change-as-badge", "type": "match", "pattern": "<Badge" },
-      { "id": "error-with-retry", "type": "match", "pattern": "retry|try again", "flags": "i" },
-      { "id": "loading-skeleton", "type": "match", "pattern": "<Skeleton" },
-      { "id": "chart-accessible-name", "type": "match", "pattern": "aria-label|aria-labelledby|<figcaption|role=\"img\"" },
-      { "id": "error-is-alert-danger", "type": "match", "pattern": "<Alert[^>]*variant=\"danger\"" }
+      {
+        "id": "change-as-badge",
+        "type": "match",
+        "pattern": "<Badge"
+      },
+      {
+        "id": "error-with-retry",
+        "type": "match",
+        "pattern": "retry|try again",
+        "flags": "i"
+      },
+      {
+        "id": "loading-skeleton",
+        "type": "match",
+        "pattern": "<Skeleton"
+      },
+      {
+        "id": "chart-accessible-name",
+        "type": "match",
+        "pattern": "aria-label|aria-labelledby|<figcaption|role=\"img\""
+      },
+      {
+        "id": "error-is-alert-danger",
+        "type": "match",
+        "pattern": "<Alert[^>]*variant=\"danger\""
+      }
+    ],
+    "strictChecks": [
+      {
+        "id": "error-alert-actions",
+        "rule": "Failure is a danger Alert with recovery in the actions slot",
+        "type": "match",
+        "pattern": "<Alert[^>]*variant=\"danger\"[\\s\\S]{0,500}actions="
+      },
+      {
+        "id": "alert-not-dismissible",
+        "rule": "Failure Alert is not dismissible",
+        "type": "absent",
+        "pattern": "<Alert[^>]*dismissible"
+      },
+      {
+        "id": "retry-loading",
+        "rule": "Retry shows loading on the Button",
+        "type": "match",
+        "pattern": "<Button[^>]*\\bloading="
+      },
+      {
+        "id": "loading-busy",
+        "rule": "Loading region sets aria-busy",
+        "type": "match",
+        "pattern": "aria-busy"
+      },
+      {
+        "id": "chart-named",
+        "rule": "Chart has an accessible name",
+        "type": "match",
+        "pattern": "aria-label|aria-labelledby|<figcaption|role=\"img\""
+      },
+      {
+        "id": "no-duplicate-live-region",
+        "rule": "No extra live region on the Alert",
+        "type": "absent",
+        "pattern": "<Alert[^>]*(role=|aria-live)"
+      }
     ]
   }
 }

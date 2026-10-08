@@ -175,6 +175,39 @@
           "pass": true
         }
       ]
+    },
+    "patternStrict": {
+      "passed": 5,
+      "total": 5,
+      "fraction": 1,
+      "results": [
+        {
+          "id": "status-region",
+          "rule": "Message wrapped in role=\"status\"",
+          "pass": true
+        },
+        {
+          "id": "statement-title",
+          "rule": "Title states the situation (\"No results…\", \"No projects…\")",
+          "pass": true
+        },
+        {
+          "id": "clear-action",
+          "rule": "No-results action clears the search or filters",
+          "pass": true
+        },
+        {
+          "id": "not-in-card",
+          "rule": "Empty state is not placed in a Card",
+          "pass": true
+        },
+        {
+          "id": "no-animated-icon",
+          "rule": "Decorative icon is a static lucide icon, not AnimatedIcon",
+          "pass": true
+        }
+      ],
+      "rescored": true
     }
   },
   "subtype": "success"

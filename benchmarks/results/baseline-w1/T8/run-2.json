@@ -187,6 +187,54 @@
           "pass": true
         }
       ]
+    },
+    "patternStrict": {
+      "passed": 7,
+      "total": 8,
+      "fraction": 0.875,
+      "results": [
+        {
+          "id": "label-required-prop",
+          "rule": "Required fields use Label required",
+          "pass": true
+        },
+        {
+          "id": "no-typed-asterisk",
+          "rule": "No typed asterisk in a label",
+          "pass": true
+        },
+        {
+          "id": "invalid-prop",
+          "rule": "Invalid fields set invalid",
+          "pass": true
+        },
+        {
+          "id": "describedby",
+          "rule": "Error text wired by aria-describedby",
+          "pass": true
+        },
+        {
+          "id": "skip-ghost",
+          "rule": "Skip is a ghost Button",
+          "pass": true
+        },
+        {
+          "id": "label-htmlfor",
+          "rule": "Labels use htmlFor",
+          "pass": true
+        },
+        {
+          "id": "no-raw-form-controls",
+          "rule": "No raw select or radio input",
+          "pass": true
+        },
+        {
+          "id": "no-per-field-alert",
+          "rule": "No Alert for field errors",
+          "pass": false
+        }
+      ],
+      "rescored": true
     }
   },
   "subtype": "success"

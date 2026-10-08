@@ -1,15 +1,100 @@
 {
   "slug": "onboarding",
-  "expectedComponents": ["Input", "Label", "Select", "Switch", "RadioGroup", "Button"],
+  "expectedComponents": [
+    "Input",
+    "Label",
+    "Select",
+    "Switch",
+    "RadioGroup",
+    "Button"
+  ],
   "w1": {
     "pattern": "form",
     "patternChecks": [
-      { "id": "progress-shown", "type": "absent", "pattern": "showProgress=\\{false\\}" },
-      { "id": "skip-optional-step", "type": "match", "pattern": "\\bskip\\b", "flags": "i" },
-      { "id": "invalid-state", "type": "match", "pattern": "aria-invalid|invalid=|state=\"invalid\"" },
-      { "id": "error-text", "type": "match", "pattern": "required|enter your|is invalid", "flags": "i" },
-      { "id": "labelled-fields", "type": "match", "pattern": "<Label" },
-      { "id": "back-navigation", "type": "match", "pattern": "\\bback\\b", "flags": "i" }
+      {
+        "id": "progress-shown",
+        "type": "absent",
+        "pattern": "showProgress=\\{false\\}"
+      },
+      {
+        "id": "skip-optional-step",
+        "type": "match",
+        "pattern": "\\bskip\\b",
+        "flags": "i"
+      },
+      {
+        "id": "invalid-state",
+        "type": "match",
+        "pattern": "aria-invalid|invalid=|state=\"invalid\""
+      },
+      {
+        "id": "error-text",
+        "type": "match",
+        "pattern": "required|enter your|is invalid",
+        "flags": "i"
+      },
+      {
+        "id": "labelled-fields",
+        "type": "match",
+        "pattern": "<Label"
+      },
+      {
+        "id": "back-navigation",
+        "type": "match",
+        "pattern": "\\bback\\b",
+        "flags": "i"
+      }
+    ],
+    "strictChecks": [
+      {
+        "id": "label-required-prop",
+        "rule": "Required fields use Label required",
+        "type": "match",
+        "pattern": "<Label[^>]*\\brequired\\b"
+      },
+      {
+        "id": "no-typed-asterisk",
+        "rule": "No typed asterisk in a label",
+        "type": "absent",
+        "pattern": "(>|[\"'`])\\s*\\*\\s*(<|[\"'`])|[A-Za-z] \\*\\s*<"
+      },
+      {
+        "id": "invalid-prop",
+        "rule": "Invalid fields set invalid",
+        "type": "match",
+        "pattern": "\\binvalid="
+      },
+      {
+        "id": "describedby",
+        "rule": "Error text wired by aria-describedby",
+        "type": "match",
+        "pattern": "aria-describedby="
+      },
+      {
+        "id": "skip-ghost",
+        "rule": "Skip is a ghost Button",
+        "type": "match",
+        "pattern": "<Button[^>]*variant=\"ghost\"[^>]*>\\s*Skip",
+        "flags": "i"
+      },
+      {
+        "id": "label-htmlfor",
+        "rule": "Labels use htmlFor",
+        "type": "match",
+        "pattern": "<Label[^>]*htmlFor="
+      },
+      {
+        "id": "no-raw-form-controls",
+        "rule": "No raw select or radio input",
+        "type": "absent",
+        "pattern": "<select[\\s>]|type=\"radio\""
+      },
+      {
+        "id": "no-per-field-alert",
+        "rule": "No Alert for field errors",
+        "type": "absent",
+        "pattern": "<Alert[\\s>]"
+      }
     ]
   }
 }

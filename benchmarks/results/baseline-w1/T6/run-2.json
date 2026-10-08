@@ -211,6 +211,64 @@
           "pass": true
         }
       ]
+    },
+    "patternStrict": {
+      "passed": 9,
+      "total": 10,
+      "fraction": 0.9,
+      "results": [
+        {
+          "id": "indeterminate",
+          "rule": "Select-all uses indeterminate for a partial selection",
+          "pass": true
+        },
+        {
+          "id": "row-label",
+          "rule": "Row checkbox label names the row (interpolated aria-label)",
+          "pass": true
+        },
+        {
+          "id": "select-all-label",
+          "rule": "Select-all checkbox is labelled",
+          "pass": true
+        },
+        {
+          "id": "row-selected-prop",
+          "rule": "Selected rows set TableRow selected",
+          "pass": true
+        },
+        {
+          "id": "count-live",
+          "rule": "Selected count announced (aria-live polite)",
+          "pass": true
+        },
+        {
+          "id": "destructive-alertdialog",
+          "rule": "Delete confirms in AlertDialog variant=destructive",
+          "pass": true
+        },
+        {
+          "id": "dialog-names-count",
+          "rule": "Confirmation title includes the count",
+          "pass": true
+        },
+        {
+          "id": "numeric-align-end",
+          "rule": "Numeric column aligned end",
+          "pass": true
+        },
+        {
+          "id": "table-named",
+          "rule": "Table is named (aria-label or caption)",
+          "pass": false
+        },
+        {
+          "id": "loading-busy",
+          "rule": "Loading region sets aria-busy",
+          "pass": true
+        }
+      ],
+      "rescored": true
     }
   },
   "subtype": "success"

@@ -24,6 +24,7 @@ for (const label of fs.readdirSync(dir).filter(d => fs.statSync(path.join(dir, d
         runs.length, count(runs, r => r.ok),
         mr(W(w => w.tokenAccuracy?.value)), mr(W(w => w.componentAccuracy?.value)),
         W(w => w.patternAdherence?.score).some(v => v !== undefined) ? mr(W(w => w.patternAdherence?.score)) : "–",
+        W(w => w.patternStrict?.fraction).some(v => v !== undefined && v !== null) ? mr(W(w => w.patternStrict?.fraction)) : "–",
         mr(runs.map(r => r.quality.rawElements)), share("a11y", w => w.a11yPass), mr(W(w => w.deprecatedUsage)),
         W(w => w.audit?.recall).some(v => v !== undefined) ? `${mr(W(w => w.audit?.recall))} / prec ${mr(W(w => w.audit?.precision))}` : "–",
         W(w => w.migration?.migrated).some(v => v !== undefined) ? count(runs, r => r.w1.migration?.migrated === true) : "–",
@@ -69,7 +70,7 @@ const H = ["runs", "completed", "registered", "coverage", "lint", "tsc", "raw el
 const CH = ["runs", "completed", "all gates", "figma writes", "stop decision ok", "tests", "tsc", "verify ok", "stamped", "in scope", "manual /20",
   "H1 state-file reads [runs]", "H2 other tests [runs]", "H3 sync runs [runs over limit]", "H4 invalid DISC [runs]", "H5 other components [runs]",
   "turns", "cost $", "cache read", "files opened", "figma reads", "max-turns exits"]
-const WH = ["runs", "completed", "token accuracy", "component accuracy", "pattern adherence 0–2", "raw els", "a11y pass", "deprecated usage",
+const WH = ["runs", "completed", "token accuracy", "component accuracy", "pattern adherence 0–2 (loose)", "pattern adherence strict (fraction)", "raw els", "a11y pass", "deprecated usage",
   "audit recall / precision", "migrated", "turns", "cost $", "manual /20", "human corrections"]
 const table = (rs, h = H) => `| task | label | ${h.join(" | ")} |\n|${["", "", ...h].map(() => "---").join("|")}|\n` +
   rs.sort((a, b) => a.task.localeCompare(b.task) || a.label.localeCompare(b.label)).map(r => `| ${r.task} | ${r.label} | ${r.cells.join(" | ")} |`).join("\n")

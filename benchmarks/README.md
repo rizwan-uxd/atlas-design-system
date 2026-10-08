@@ -43,3 +43,6 @@ Metrics come from `w1` in each `run-N.json` (`analyze.mjs`), computed from the o
 ```bash
 benchmarks/run.sh baseline-w1 T5 3 sonnet   # repeat for T6..T9 (T10, T11 optional)
 ```
+
+### Strict pattern checks (added after `baseline-w1`)
+The first `patternChecks` were presence checks and the baseline passed all of them, so they cannot show a gain. `strictChecks` in each task's `meta.json` encode individual Decision rules and Anti-patterns from `packages/governance/patterns/` (for example: after a card decline the primary action changes the card, not "Try again"). They were written after the baseline ran and are derived from the pattern docs, so they measure adherence to the patterns by definition. Both arms use the same scorer: `node benchmarks/rescore.mjs baseline-w1 T5 T6 T7 T8 T9` added `w1.patternStrict` to the saved baseline runs (it needs their workspaces under `$TMPDIR/atlas-bench/`). T7 has no dashboard pattern; its strict checks come from the error-recovery rules and it serves as a control for the dashboard layout.

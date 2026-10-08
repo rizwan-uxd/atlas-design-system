@@ -2,6 +2,7 @@
 // analyze.mjs <run.jsonl> <workspace> <meta.json> [candidates-before.json]  → JSON metrics on stdout
 import fs from "fs"; import path from "path"
 import { sh, atlasImports, coverage, rawElements, numericStyleLiterals, primitiveTokenRefs, lengthLiterals, PRIMITIVE_TOKEN_REF, tokenLintViolations, tscErrors, registered } from "../scripts/lib/quality-checks.mjs"
+import { scoreStrict } from "./lib/strict.mjs"
 import { componentMetrics } from "./phase-9/component-metrics.mjs"
 const [log, ws, metaPath] = process.argv.slice(2)
 const meta = JSON.parse(fs.readFileSync(metaPath, "utf8"))
@@ -218,6 +219,8 @@ const w1 = (() => {
     // 0 = no check holds, 1 = some hold, 2 = all hold
     out.patternAdherence = { pattern: cfg.pattern, score: passed === results.length ? 2 : passed === 0 ? 0 : 1, passed, total: results.length, results }
   }
+
+  if (cfg.strictChecks) out.patternStrict = scoreStrict(src, cfg.strictChecks)
 
   if (cfg.audit) {
     const text = result?.result || ""
