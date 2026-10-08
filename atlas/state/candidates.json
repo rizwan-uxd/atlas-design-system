@@ -122,7 +122,7 @@
     {
       "id": "CAND-024",
       "name": "DataTable",
-      "seenIn": ["docs (Table reference, shadcn Data Table example)"],
+      "seenIn": ["docs (Table reference, shadcn Data Table example)", "packages/governance/patterns/data-table.md (composed in the pattern example)"],
       "composedFrom": "Table primitives + Input + Button + Checkbox + DropdownMenu, composed by hand",
       "occurrences": 0,
       "note": "Follow-up to Table (DEC-040). Toolbar (filter Input, Columns menu), sortable heads, row selection, selected count and Previous/Next pagination on @tanstack/react-table (user, 2026-09-28). The Figma Table page carries the composed example; a DataTable needs its own Figma design and approval first."
@@ -150,6 +150,30 @@
       "composedFrom": "not yet attempted",
       "occurrences": 0,
       "note": "Web ScrollProgress shipped (primitives/ScrollProgress). Native parity is logged here, not built (user, 2026-09-30)."
+    },
+    {
+      "id": "CAND-030",
+      "name": "EmptyState",
+      "seenIn": ["packages/governance/patterns/empty-state.md", "benchmarks/tasks/T5 (baseline-w1 runs composed their own)"],
+      "composedFrom": "centred stack of an aria-hidden lucide icon, a heading, a line of muted text and a Button, inside role=\"status\"",
+      "occurrences": 1,
+      "note": "Found while writing the empty-state pattern. A component would fix the structure, the status announcement and the first-use / no-results split. It needs its own Figma design and approval first (Wave 1 builds none)."
+    },
+    {
+      "id": "CAND-031",
+      "name": "Pagination",
+      "seenIn": ["packages/governance/patterns/data-table.md"],
+      "composedFrom": "not yet attempted",
+      "occurrences": 0,
+      "note": "Table has no pagination (its header says so) and the data-table pattern has to tell agents to paginate. CAND-024 mentions Previous/Next as part of a DataTable; this entry covers it standalone."
+    },
+    {
+      "id": "CAND-032",
+      "name": "Field (Label + control + help + error wiring)",
+      "seenIn": ["packages/governance/patterns/form.md"],
+      "composedFrom": "Label + Input with a hand-wired error paragraph and aria-describedby",
+      "occurrences": 0,
+      "note": "The form pattern asks for a Label with htmlFor, invalid, and error text wired by aria-describedby on every field. Atlas has no component that owns that wiring, so each screen repeats it. Not built."
     }
   ]
 }

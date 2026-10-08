@@ -19,6 +19,7 @@ tokens or Figma, and it never reads `docs/`.
 2. `atlas/<Name>.md` — **only** for each component you will render. Its generated `## API` block has
    the import line, every own prop with its type, the native element it extends, whether `ref` is
    forwarded, and each subcomponent's props — the source adds nothing, so don't open it.
+2b. **Pattern** — if the request matches a pattern listed in `atlas/index.md` (form, empty state, data table, error recovery, settings), read `atlas/patterns/<slug>.md` before choosing components. Follow its Decision rules and Anti-patterns; its example is type-checked.
 3. `atlas/tokens.md` — **required before you write the first `var(--atlas-…)`** in a style. Every token
    name you write must appear there; never guess a name from a pattern (`font-weight-normal` does not
    exist — it is `font-weight-regular`). Skip it only if no screen has an inline style.

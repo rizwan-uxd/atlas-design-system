@@ -64,7 +64,7 @@ function write(rel, content) {
   const abs = path.join(ROOT, rel)
   const before = fs.existsSync(abs) ? read(abs) : null
   if (before === content) return
-  if (!CHECK) fs.writeFileSync(abs, content)
+  if (!CHECK) { fs.mkdirSync(path.dirname(abs), { recursive: true }); fs.writeFileSync(abs, content) }
   written.push(rel)
 }
 
@@ -397,6 +397,67 @@ for (const c of comps) {
   write(`atlas/metadata/${c.name}.json`, compactJson(json))
 }
 
+/* ── patterns (authored in packages/governance/patterns) ── */
+
+const PATTERNS_SRC = path.join(GOV, "patterns")
+const REQUIRED_SECTIONS = ["Use when", "Don't use when", "Decision rules", "Components and variants", "Layout and density",
+  "Hierarchy and composition", "Responsive behavior", "States", "Accessibility", "Anti-patterns", "Example"]
+const patternErrors = []
+const patterns = fs.existsSync(PATTERNS_SRC)
+  ? fs.readdirSync(PATTERNS_SRC).filter((f) => f.endsWith(".md")).sort().map((file) => {
+      const slug = file.replace(/\.md$/, "")
+      const raw = read(path.join(PATTERNS_SRC, file))
+      const fm = raw.match(/^---\n([\s\S]*?)\n---\n/)
+      const summary = fm?.[1].match(/^summary:\s*(.+)$/m)?.[1].trim()
+      const body = raw.replace(/^---\n[\s\S]*?\n---\n/, "")
+      const title = body.match(/^# (.+)$/m)?.[1]
+      const err = (m) => patternErrors.push(`patterns/${file}: ${m}`)
+      if (!summary) err("front matter needs `summary:`")
+      if (!title) err("needs a `# Title` heading")
+      const sections = new Map()
+      let cur = null
+      for (const line of body.split("\n")) {
+        const h = line.match(/^## (.+)$/)
+        if (h) { cur = h[1].trim(); sections.set(cur, []) } else if (cur) sections.get(cur).push(line)
+      }
+      for (const name of REQUIRED_SECTIONS) {
+        if (!sections.has(name)) err(`missing section "## ${name}"`)
+        else if (!sections.get(name).some((l) => l.trim())) err(`section "## ${name}" is empty`)
+      }
+      // every component, variant and size named under "Components and variants" must exist in the library
+      for (const line of sections.get("Components and variants") ?? []) {
+        const m = line.match(/^- `(\w+)`(.*)$/)
+        if (!m) { if (line.trim()) err(`unparseable line under Components and variants: ${line.trim()}`); continue }
+        const comp = comps.find((c) => c.name === m[1])
+        if (!comp) { err(`component ${m[1]} does not exist in packages/ui-web/src`); continue }
+        for (const [, kind, vals] of m[2].matchAll(/(variant|size):\s*((?:`[\w-]+`(?:,\s*)?)+)/g)) {
+          const allowed = kind === "variant" ? comp.variants : comp.sizes
+          for (const v of [...vals.matchAll(/`([\w-]+)`/g)].map((x) => x[1]))
+            if (!allowed?.includes(v)) err(`${m[1]} has no ${kind} \`${v}\` (${allowed?.join(", ") || "none"})`)
+        }
+      }
+      // the example is a real .tsx file that tsc compiles; the generated doc embeds it
+      const exFile = path.join(PATTERNS_SRC, "examples", `${slug}.example.tsx`)
+      let example = null
+      if (!body.includes("{{example}}")) err("Example section needs the {{example}} marker")
+      if (!fs.existsSync(exFile)) err(`missing examples/${slug}.example.tsx`)
+      else example = read(exFile).trimEnd()
+      return { slug, file, title, summary, body, example }
+    })
+  : []
+if (patternErrors.length) {
+  console.error(`✗ pattern validation failed:\n${patternErrors.map((e) => `  ${e}`).join("\n")}`)
+  process.exit(1)
+}
+for (const p of patterns) {
+  write(`atlas/patterns/${p.slug}.md`, [
+    `<!-- ${HEADER} Source: packages/governance/patterns/${p.file}. -->`,
+    "",
+    p.body.replace("{{example}}", "```tsx\n" + p.example + "\n```").trim(),
+    "",
+  ].join("\n"))
+}
+
 /* ── index.md ───────────────────────────────────────────── */
 
 const missing = ["Avatar", "Table", "Tooltip", "Select", "Radio", "Toast"].filter((n) => !comps.some((c) => c.name === n))
@@ -414,6 +475,16 @@ write("atlas/index.md", [
   "",
   `No ${missing.slice(0, -1).join(", ")} or ${missing.at(-1)} exists. Compose gaps from primitives and log them in \`state/candidates.json\`.`,
   "",
+  ...(patterns.length ? [
+    "## Patterns",
+    "",
+    "Composition rules for common screens. When a request matches one, read `atlas/patterns/<slug>.md` before choosing components.",
+    "",
+    "| Pattern | File | Use for |",
+    "|---|---|---|",
+    ...patterns.map((p) => `| ${p.title} | \`atlas/patterns/${p.slug}.md\` | ${p.summary} |`),
+    "",
+  ] : []),
   deprecations.length
     ? `Deprecated (do not use; use the replacement): ${deprecations.map((d) => `\`${d.name}\` → ${d.replacement}`).join(" · ")}. Details in \`state/deprecations.json\`.`
     : "Deprecated: none. Never introduce a deprecated asset; the registry is `state/deprecations.json`. Owners: `state/ownership.json`.",

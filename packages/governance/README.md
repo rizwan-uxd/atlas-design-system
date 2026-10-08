@@ -9,6 +9,7 @@ Design-system governance: what exists, who owns it, what is retired, and the che
 | `token-lint.mjs` | Fails on hardcoded colour literals in `packages/ui-web/src` and `app/`. Run `npm run token-lint`; CI runs it. |
 | `contracts/<Name>.contract.ts` | Compile-time guard for each component's props, variants and sizes. A breaking change updates the contract in the same commit. |
 | `ownership.json` | Owners per area (design-system, tokens, components, docs, ai-context) and optional per-component owners. Mirrored by `.github/CODEOWNERS`. |
+| `patterns/<slug>.md` + `patterns/examples/<slug>.example.tsx` | Authored product patterns (form, empty state, data table, error recovery, settings). `atlas-sync` validates every named component, variant and size, embeds the example (compiled by `tsc`) and writes `atlas/patterns/<slug>.md` plus a Patterns table in `atlas/index.md`. Required sections are listed in `scripts/atlas-sync.mjs` (`REQUIRED_SECTIONS`). |
 | `deprecations.json` | Registry of deprecated components, variants and tokens with `since`, `removeIn`, `replacement`, `migration`. Empty today. |
 
 ## How the pieces reach agents

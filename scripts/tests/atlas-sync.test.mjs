@@ -119,3 +119,45 @@ test("populated registry stamps component and variant deprecations and lists the
     fs.rmSync(dir, { recursive: true, force: true })
   }
 })
+
+// ─── patterns ────────────────────────────────────────────────────────────────
+
+const syncFails = (dir) => {
+  try { sync(dir); return null } catch (e) { return `${e.stdout ?? ""}${e.stderr ?? ""}` }
+}
+const patternFile = (dir) => path.join(dir, "packages/governance/patterns/form.md")
+
+test("every authored pattern is generated with its example embedded, listed in the index, and a second sync writes nothing", () => {
+  const dir = copyInputs("packages/governance")
+  try {
+    sync(dir)
+    const slugs = ["data-table", "empty-state", "error-recovery", "form", "settings"]
+    const index = fs.readFileSync(path.join(dir, "atlas/index.md"), "utf8")
+    for (const slug of slugs) {
+      const doc = fs.readFileSync(path.join(dir, `atlas/patterns/${slug}.md`), "utf8")
+      assert.match(doc, /^<!-- GENERATED/)
+      assert.match(doc, /## Decision rules/)
+      assert.match(doc, /```tsx\n[\s\S]+```/, `${slug}: example embedded`)
+      assert.doesNotMatch(doc, /\{\{example\}\}/)
+      assert.ok(index.includes(`atlas/patterns/${slug}.md`), `${slug} listed in index`)
+    }
+    assert.equal(writtenCount(sync(dir)), 0, "second sync writes zero files")
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+test("a pattern naming a component, variant or size that does not exist fails the sync", () => {
+  const dir = copyInputs("packages/governance")
+  try {
+    const original = fs.readFileSync(patternFile(dir), "utf8")
+    fs.writeFileSync(patternFile(dir), original.replace("- `Label` variant:", "- `Stepper` variant: `default` · size: `md`\n- `Label` variant:"))
+    assert.match(syncFails(dir), /component Stepper does not exist/)
+    fs.writeFileSync(patternFile(dir), original.replace("- `Button` variant: `primary`, `ghost`", "- `Button` variant: `primary`, `sparkly`"))
+    assert.match(syncFails(dir), /Button has no variant `sparkly`/)
+    fs.writeFileSync(patternFile(dir), original.replace("## Decision rules\n", "## Rules\n"))
+    assert.match(syncFails(dir), /missing section "## Decision rules"/)
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true })
+  }
+})

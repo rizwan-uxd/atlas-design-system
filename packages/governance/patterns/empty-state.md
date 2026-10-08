@@ -1,0 +1,60 @@
+---
+summary: Tell the user why a list or screen has no content and what to do next (first use, no results, cleared).
+---
+# Empty state
+
+## Use when
+- A list, table or screen has no items to show and the user can act: create the first one, or change what they searched for.
+
+## Don't use when
+- Content failed to load. That is the Error recovery pattern (an `Alert` with Retry), not an empty state.
+- Content is still loading. Use `Skeleton` (known layout) or `Spinner`.
+- A short transient confirmation is needed. Use `Toast`.
+
+## Decision rules
+- Name the cause first. Pick exactly one of:
+  - First use (nothing exists yet): say what the thing is in one line, make creating it the single `primary` Button.
+  - No results (filters or search exclude everything, items exist): say nothing matches, make clearing the search or filters the primary action (`Button variant="outline"` or `primary` if it is the only action). Do not offer "create" as the main action.
+  - Cleared (user removed the last item): confirm briefly, offer undo or create.
+- Never show an empty state for an error or while loading.
+- At most one primary action. A secondary link or `ghost` Button is allowed for help.
+- Keep the search field visible in the no-results state so the user can edit the query. Hide it in first use (nothing to search).
+- There is no EmptyState component. Compose it locally from tokens and `Button`; log the gap in `atlas/state/candidates.json`. Do not build it in the library.
+- Icons are decorative: use a `lucide-react` icon with `aria-hidden`, never an animated icon.
+
+## Components and variants
+- `Button` variant: `primary`, `outline`, `ghost` · size: `md`
+- `Input` variant: `default` · size: `md`
+- `Tabs` variant: `segmented` · size: `sm`
+
+## Layout and density
+- Centre horizontally in the content area, title, one-line description, then the action. Space with `--atlas-spacing-3` between lines and `--atlas-spacing-6` before the action.
+- Keep it inside the same container the list would occupy so the page does not jump.
+- Do not put the empty state in a Card (it would nest a surface inside the page surface).
+
+## Hierarchy and composition
+- Title (`--atlas-text-h3`, `foreground`) → description (`foreground-muted`, `--atlas-text-body-sm`) → action.
+- Write the title as a statement, not a question ("No projects yet", "No results for “alpha”").
+
+## Responsive behavior
+- Same structure on every width. Constrain the description to a readable width; the action never wraps below the description on a phone.
+
+## States
+- first-use · no-results · cleared. Each is its own state with its own wording and action.
+- loading: show `Skeleton` first so the empty state never flashes.
+- error: not this pattern.
+
+## Accessibility
+- Wrap the message in `role="status"` so a state change from list to empty is announced politely.
+- Decorative icon `aria-hidden`. The action is a real `Button`.
+- Do not move focus on a no-results change; keep it in the search field.
+
+## Anti-patterns
+- Showing "No data" with no reason or action.
+- "Create" as the main action of a no-results state.
+- An empty state for a failed request.
+- A different layout per screen for the same situation.
+- Using a Toast or an Alert as the empty state.
+
+## Example
+{{example}}
