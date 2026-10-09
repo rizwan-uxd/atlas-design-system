@@ -1,0 +1,66 @@
+{
+  "packages/ui-web/src/compositions/CodeBlock/CodeBlock.tsx": {
+    "react-hooks/set-state-in-effect": {
+      "count": 1
+    }
+  },
+  "packages/ui-web/src/compositions/DatePicker/DatePicker.tsx": {
+    "react-hooks/immutability": {
+      "count": 14
+    },
+    "react-hooks/preserve-manual-memoization": {
+      "count": 1
+    },
+    "react-hooks/set-state-in-effect": {
+      "count": 2
+    }
+  },
+  "packages/ui-web/src/compositions/ListItem/ListItem.tsx": {
+    "@typescript-eslint/no-empty-object-type": {
+      "count": 4
+    }
+  },
+  "packages/ui-web/src/layouts/Sidebar/Sidebar.tsx": {
+    "@typescript-eslint/no-empty-object-type": {
+      "count": 1
+    }
+  },
+  "packages/ui-web/src/patterns/Breadcrumb/Breadcrumb.tsx": {
+    "@typescript-eslint/no-empty-object-type": {
+      "count": 5
+    }
+  },
+  "packages/ui-web/src/patterns/DropdownMenu/DropdownMenu.tsx": {
+    "@typescript-eslint/no-empty-object-type": {
+      "count": 5
+    },
+    "react-hooks/immutability": {
+      "count": 10
+    },
+    "react-hooks/preserve-manual-memoization": {
+      "count": 1
+    },
+    "react-hooks/set-state-in-effect": {
+      "count": 1
+    }
+  },
+  "packages/ui-web/src/primitives/Bubble/Bubble.tsx": {
+    "@typescript-eslint/no-empty-object-type": {
+      "count": 2
+    }
+  },
+  "packages/ui-web/src/primitives/Select/Select.tsx": {
+    "@typescript-eslint/no-empty-object-type": {
+      "count": 3
+    },
+    "react-hooks/immutability": {
+      "count": 6
+    },
+    "react-hooks/preserve-manual-memoization": {
+      "count": 1
+    },
+    "react-hooks/set-state-in-effect": {
+      "count": 1
+    }
+  }
+}

@@ -57,8 +57,10 @@ jobs:
           node-version: 20
           cache: npm
       - run: npm ci --legacy-peer-deps
-      - run: npx eslint packages/ui-web/src/ --ext .ts,.tsx --max-warnings=0
-        continue-on-error: true   # flip to false once eslint config is tuned
+      # Blocking ratchet: existing errors are recorded in eslint-suppressions.json and the 7 current
+      # warnings are capped, so only new problems fail. Fixing one makes its suppression stale and
+      # fails the run until `npx eslint packages/ui-web/src --prune-suppressions` is committed.
+      - run: npx eslint packages/ui-web/src/ --ext .ts,.tsx --max-warnings=7
 
   # ─── Token build (drift check) ─────────────────────────────────────────────
   tokens-build:
