@@ -1,0 +1,249 @@
+{
+  "model": "claude-sonnet-5-5",
+  "ok": true,
+  "error": null,
+  "turns": 22,
+  "durationS": 107,
+  "costUsd": 0.5474332,
+  "tokens": {
+    "input": 20,
+    "cacheWrite": 66425,
+    "cacheRead": 652866,
+    "output": 15112,
+    "totalContext": 719311
+  },
+  "tools": {
+    "Skill": 1,
+    "Read": 11,
+    "Bash": 3,
+    "Write": 4,
+    "Edit": 1
+  },
+  "toolCalls": 20,
+  "figmaCalls": 0,
+  "verifyRuns": 2,
+  "reworkEdits": 5,
+  "toolResultChars": {
+    "Skill": 32,
+    "Read": 38034,
+    "Bash": 626,
+    "Write": 892,
+    "Edit": 230
+  },
+  "skillsUsed": [
+    "atlas-prototype"
+  ],
+  "reads": {
+    "total": 11,
+    "unique": 11,
+    "offTask": 0,
+    "byCategory": {
+      "atlas-snapshot": 9,
+      "skills": 1,
+      "prototype-shell": 1
+    },
+    "files": [
+      "atlas/index.md",
+      ".claude/skills/atlas-prototype/references/flow-scaffold.md",
+      "atlas/patterns/error-recovery.md",
+      "atlas/patterns/form.md",
+      "atlas/Alert.md",
+      "atlas/Input.md",
+      "atlas/Label.md",
+      "atlas/Button.md",
+      "atlas/tokens.md",
+      "app/prototypes/_shared/flowRegistry.ts",
+      "atlas/Tabs.md"
+    ]
+  },
+  "bashCmds": [
+    "mkdir -p app/prototypes/payment-error/steps && cat > app/prototypes/payment-error/schema.ts <<'EOF'\nexport type Scenario = \"declined\" | \"timeout\"\n\nexport type PaymentData = {\n  cardNumber: string\n  expiry: string\n  cvc: string\n  scenario: Scenario\n}\n\nexport const PAYMENT_INITIAL: PaymentData = {\n  cardNumber: \"4242 4242 4242 4242\",\n  expiry: \"08/29\",\n  cvc: \"123\",\n  scenario: \"declined\",\n}\n\nexport const ORDER_TOTAL = \"$84.50\"\n\nexport const PAYMENT_STEPS = [\"payment\", \"done\"] as const\n\nexport type PaymentStepProps = {\n  data: PaymentData\n  patch: (p: Partial<PaymentData>) => void\n  next: () => void\n  back: () => void\n  goTo: (i: number) => void\n}\nEOF\ncat > app/prototypes/payment-error/page.tsx <<'EOF'\n\"use client\"\n\nimport { FlowShell } from \"../_shared/FlowShell\"\nimport { useFlowState } from \"../_shared/useFlowState\"\nimport { PAYMENT_INITIAL, PAYMENT_STEPS, type PaymentData } from \"./schema\"\nimport { Payment } from \"./steps/Payment\"\nimport { Done } from \"./steps/Done\"\n\nexport default function PaymentErrorPage() {\n  const flow = useFlowState<PaymentData>({ totalSteps: PAYMENT_STEPS.length, initialData: PAYMENT_INITIAL })\n  const props = { data: flow.data, patch: flow.patch, next: flow.next, back: flow.back, goTo: flow.goTo }\n  const key = PAYMENT_STEPS[flow.step]\n  return (\n    <FlowShell\n      title=\"Payment\"\n      step={flow.step}\n      totalSteps={PAYMENT_STEPS.length}\n      onReset={flow.reset}\n      phoneBackground=\"var(--atlas-background)\"\n    >\n      {key === \"payment\" && <Payment {...props} />}\n      {key === \"done\" && <Done {...props} />}\n    </FlowShell>\n  )\n}\nEOF\ncat > app/prototypes/payment-error/steps/Done.tsx <<'EOF'\n\"use client\"\n\nimport { Alert } from \"@atlas/ui-web/compositions/Alert/Alert\"\nimport { Button } from \"@atlas/ui-web/primitives/Button/Button\"\nimport { ORDER_TOTAL, type PaymentStepProps } from \"../schema\"\n\nexport function Done({ goTo }: PaymentStepProps) {\n  return (\n    <div style={{ display: \"flex\", flexDirection: \"column\", gap: \"var(--atlas-spacing-4)\", paddingInline: \"var(--atlas-spacing-4)\", paddingBlock: \"var(--atlas-spacing-4)\" }}>\n      <Alert variant=\"success\" title=\"Payment complete\" description={`${ORDER_TOTAL} was charged. A receipt is on its way to your email.`} />\n      <Button variant=\"outline\" size=\"lg\" onClick={() => goTo(0)}>Back to payment</Button>\n    </div>\n  )\n}\nEOF\ncat > app/prototypes/payment-error/steps/Payment.tsx <<'EOF'\n\"use client\"\n\nimport { useRef, useState } from \"react\"\nimport { Alert } from \"@atlas/ui-web/compositions/Alert/Alert\"\nimport { Button } from \"@atlas/ui-web/primitives/Button/Button\"\nimport { Input } from \"@atlas/ui-web/primitives/Input/Input\"\nimport { Label } from \"@atlas/ui-web/primitives/Label/Label\"\nimport { TabsRoot, TabsList, TabsTrigger } from \"@atlas/ui-web/patterns/Tabs/Tabs\"\nimport { mockSubmit } from \"../../_shared/mockApi\"\nimport { ORDER_TOTAL, type PaymentStepProps, type Scenario } from \"../schema\"\n\ntype Errors = { cardNumber?: string; expiry?: string; cvc?: string }\n\nconst FIELD_ORDER = [\"cardNumber\", \"expiry\", \"cvc\"] as const\nconst FIELD_IDS = { cardNumber: \"pe-card\", expiry: \"pe-expiry\", cvc: \"pe-cvc\" } as const\n\nconst formatCard = (v: string) => v.replace(/\\D/g, \"\").slice(0, 16).replace(/(.{4})/g, \"$1 \").trim()\nconst formatExpiry = (v: string) => {\n  const d = v.replace(/\\D/g, \"\").slice(0, 4)\n  return d.length > 2 ? `${d.slice(0, 2)}/${d.slice(2)}` : d\n}\n\nfunction validate(card: string, expiry: string, cvc: string): Errors {\n  const e: Errors = {}\n  if (card.replace(/\\D/g, \"\").length !== 16) e.cardNumber = \"Enter the 16 digits on the front of your card.\"\n  const m = /^(\\d{2})\\/(\\d{2})$/.exec(expiry)\n  if (!m || +m[1] < 1 || +m[1] > 12) e.expiry = \"Enter the expiry as MM/YY.\"\n  if (!/^\\d{3,4}$/.test(cvc)) e.cvc = \"Enter the 3 or 4 digit security code.\"\n  return e\n}\n\nconst focusById = (id: string, select = false) => {\n  const el = document.getElementById(id) as HTMLInputElement | null\n  el?.focus()\n  if (select) el?.select()\n}\n\nconst errorText = { color: \"var(--atlas-danger)\", fontSize: \"var(--atlas-text-caption)\", marginBlockStart: \"var(--atlas-spacing-1)\" } as const\n\nexport function Payment({ data, patch, next }: PaymentStepProps) {\n  const [busy, setBusy] = useState(false)\n  const [retrying, setRetrying] = useState(false)\n  const [failure, setFailure] = useState<Scenario | null>(null)\n  const [errors, setErrors] = useState<Errors>({})\n  const [supportShown, setSupportShown] = useState(false)\n  // Mock server memory: a declined card keeps declining; a timeout clears on the next attempt.\n  const declinedCard = useRef<string | null>(null)\n  const timedOut = useRef(false)\n\n  const attempt = async (viaRetry = false) => {\n    const found = validate(data.cardNumber, data.expiry, data.cvc)\n    setErrors(found)\n    const firstBad = FIELD_ORDER.find((k) => found[k])\n    if (firstBad) { focusById(FIELD_IDS[firstBad]); return }\n\n    setBusy(true); setRetrying(viaRetry); setFailure(null); setSupportShown(false)\n    try {\n      const timeout = data.scenario === \"timeout\"\n      await mockSubmit(data, { delayMs: timeout ? 2400 : 1400 })\n      if (timeout) {\n        if (!timedOut.current) { timedOut.current = true; throw new Error(\"timeout\") }\n      } else if (declinedCard.current === data.cardNumber) {\n        throw new Error(\"declined\")\n      } else if (declinedCard.current === null) {\n        declinedCard.current = data.cardNumber\n        throw new Error(\"declined\")\n      }\n      next()\n    } catch (e) {\n      setFailure((e as Error).message === \"timeout\" ? \"timeout\" : \"declined\")\n    } finally {\n      setBusy(false); setRetrying(false)\n    }\n  }\n\n  const changeScenario = (value: string) => {\n    patch({ scenario: value as Scenario })\n    timedOut.current = false\n    declinedCard.current = null\n    setFailure(null)\n    setSupportShown(false)\n  }\n\n  const changeCard = () => {\n    setFailure(null)\n    focusById(FIELD_IDS.cardNumber, true)\n  }\n\n  const supportAction = (\n    <Button size=\"sm\" variant=\"ghost\" onClick={() => setSupportShown(true)}>Contact support</Button>\n  )\n\n  return (\n    <form\n      noValidate\n      onSubmit={(e) => { e.preventDefault(); if (!busy) void attempt() }}\n      style={{ display: \"flex\", flexDirection: \"column\", gap: \"var(--atlas-spacing-4)\", paddingInline: \"var(--atlas-spacing-4)\", paddingBlock: \"var(--atlas-spacing-4)\" }}\n    >\n      <div>\n        <h1 style={{ margin: 0, fontSize: \"var(--atlas-text-h2)\", fontWeight: \"var(--atlas-font-weight-semibold)\", color: \"var(--atlas-foreground)\" }}>Pay for your order</h1>\n        <p style={{ margin: 0, marginBlockStart: \"var(--atlas-spacing-1)\", fontSize: \"var(--atlas-text-body-sm)\", color: \"var(--atlas-foreground-muted)\" }}>Enter your card details to finish checking out.</p>\n      </div>\n\n      <div style={{ display: \"flex\", justifyContent: \"space-between\", alignItems: \"baseline\", paddingBlock: \"var(--atlas-spacing-3)\", borderBlock: \"var(--atlas-border-width-1) solid var(--atlas-border-subtle)\" }}>\n        <span style={{ fontSize: \"var(--atlas-text-body-sm)\", color: \"var(--atlas-foreground-muted)\" }}>Order total</span>\n        <span style={{ fontSize: \"var(--atlas-text-h3)\", fontWeight: \"var(--atlas-font-weight-semibold)\", color: \"var(--atlas-foreground)\" }}>{ORDER_TOTAL}</span>\n      </div>\n\n      <div>\n        <Label htmlFor={FIELD_IDS.cardNumber} required invalid={!!errors.cardNumber}>Card number</Label>\n        <Input id={FIELD_IDS.cardNumber} inputMode=\"numeric\" autoComplete=\"cc-number\" placeholder=\"1234 5678 9012 3456\"\n          value={data.cardNumber} invalid={!!errors.cardNumber}\n          aria-describedby={errors.cardNumber ? \"pe-card-error\" : undefined}\n          onChange={(e) => { patch({ cardNumber: formatCard(e.target.value) }); setErrors((p) => ({ ...p, cardNumber: undefined })) }} />\n        {errors.cardNumber && <p id=\"pe-card-error\" style={errorText}>{errors.cardNumber}</p>}\n      </div>\n\n      <div style={{ display: \"grid\", gridTemplateColumns: \"1fr 1fr\", gap: \"var(--atlas-spacing-4)\" }}>\n        <div>\n          <Label htmlFor={FIELD_IDS.expiry} required invalid={!!errors.expiry}>Expiry</Label>\n          <Input id={FIELD_IDS.expiry} inputMode=\"numeric\" autoComplete=\"cc-exp\" placeholder=\"MM/YY\"\n            value={data.expiry} invalid={!!errors.expiry}\n            aria-describedby={errors.expiry ? \"pe-expiry-error\" : undefined}\n            onChange={(e) => { patch({ expiry: formatExpiry(e.target.value) }); setErrors((p) => ({ ...p, expiry: undefined })) }} />\n          {errors.expiry && <p id=\"pe-expiry-error\" style={errorText}>{errors.expiry}</p>}\n        </div>\n        <div>\n          <Label htmlFor={FIELD_IDS.cvc} required invalid={!!errors.cvc}>CVC</Label>\n          <Input id={FIELD_IDS.cvc} inputMode=\"numeric\" autoComplete=\"cc-csc\" placeholder=\"123\"\n            value={data.cvc} invalid={!!errors.cvc}\n            aria-describedby={errors.cvc ? \"pe-cvc-error\" : undefined}\n            onChange={(e) => { patch({ cvc: e.target.value.replace(/\\D/g, \"\").slice(0, 4) }); setErrors((p) => ({ ...p, cvc: undefined })) }} />\n          {errors.cvc && <p id=\"pe-cvc-error\" style={errorText}>{errors.cvc}</p>}\n        </div>\n      </div>\n\n      {failure === \"declined\" && (\n        <Alert variant=\"danger\" title=\"Your card was declined\"\n          description=\"You haven't been charged. Use a different card, or contact your bank. Your details are still here.\"\n          actions={<>\n            <Button type=\"button\" size=\"sm\" variant=\"primary\" onClick={changeCard}>Use a different card</Button>\n            {supportAction}\n          </>} />\n      )}\n      {failure === \"timeout\" && (\n        <Alert variant=\"danger\" title=\"The payment timed out\"\n          description=\"We couldn't confirm it went through, so check your email before paying again. Your details are saved; try again in a moment.\"\n          actions={<>\n            <Button type=\"button\" size=\"sm\" variant=\"primary\" loading={retrying} onClick={() => void attempt(true)}>Try again</Button>\n            {supportAction}\n          </>} />\n      )}\n      {supportShown && (\n        <Alert variant=\"info\" title=\"Support is here to help\"\n          description=\"Email support@example.com or call 0800 000 000. Have your order number ready.\" />\n      )}\n\n      <Button type=\"submit\" variant=\"primary\" size=\"lg\" loading={busy && !retrying}>Pay {ORDER_TOTAL} now</Button>\n\n      <div style={{ display: \"flex\", flexDirection: \"column\", gap: \"var(--atlas-spacing-2)\", paddingBlockStart: \"var(--atlas-spacing-2)\", borderBlockStart: \"var(--atlas-border-width-1) solid var(--atlas-border-subtle)\" }}>\n        <span id=\"pe-sim-label\" style={{ fontSize: \"var(--atlas-text-caption)\", color: \"var(--atlas-foreground-muted)\" }}>Prototype: simulate failure</span>\n        <TabsRoot variant=\"segmented\" size=\"sm\" value={data.scenario} onValueChange={changeScenario}>\n          <TabsList aria-label=\"Simulate failure\">\n            <TabsTrigger value=\"declined\">Card declined</TabsTrigger>\n            <TabsTrigger value=\"timeout\">Network timeout</TabsTrigger>\n          </TabsList>\n        </TabsRoot>\n      </div>\n    </form>\n  )\n}\nEOF\npython3 - <<'EOF'\np='app/prototypes/_shared/flowRegistry.ts'\ns=open(p).read()\ns=s.replace(\"export const flows: FlowMeta[] = []\",\"\"\"export const flows: FlowMeta[] = [\n  {\n    slug: \"payment-error\",\n    name: \"Payment error\",\n    description: \"Mobile checkout payment that fails with a card decline or a network timeout, keeps the entered details and offers recovery.\",\n    exercises: [\"Alert\", \"Button\", \"Input\", \"Label\", \"Tabs\"],\n    status: \"in-progress\",\n  },\n]\"\"\")\nopen(p,'w').write(s)\nEOF\nsed -i '' 's/<span id=\"pe-sim-label\" /<span /' app/prototypes/payment-error/steps/Payment.tsx\nnpm run atlas:verify -- --scope \"app/prototypes/payment-error/**,app/prototypes/_shared/flowRegistry.ts\" 2>&1 | tail -30",
+    "mkdir -p app/prototypes/payment-error/steps && ls app/prototypes/payment-error",
+    "npm run atlas:verify -- --scope \"app/prototypes/payment-error/**,app/prototypes/_shared/flowRegistry.ts\" 2>&1 | tail -40"
+  ],
+  "quality": {
+    "outputExists": true,
+    "files": 4,
+    "loc": 246,
+    "registered": true,
+    "tokenLintViolations": 0,
+    "tscErrors": 0,
+    "atlasComponentsImported": [
+      "Alert",
+      "Button",
+      "Input",
+      "Label",
+      "TabsRoot",
+      "TabsList",
+      "TabsTrigger"
+    ],
+    "expectedCoverage": "4/4",
+    "rawElements": 0,
+    "numericStyleLiterals": 2,
+    "primitiveTokenRefs": 0
+  },
+  "phase8": {
+    "readsAll": {
+      "total": 17,
+      "unique": 15,
+      "viaBash": 6,
+      "files": [
+        "atlas/index.md",
+        ".claude/skills/atlas-prototype/references/flow-scaffold.md",
+        "atlas/patterns/error-recovery.md",
+        "atlas/patterns/form.md",
+        "atlas/Alert.md",
+        "atlas/Input.md",
+        "atlas/Label.md",
+        "atlas/Button.md",
+        "atlas/tokens.md",
+        "app/prototypes/_shared/flowRegistry.ts",
+        "atlas/Tabs.md",
+        "Bash:app/prototypes/payment-error/schema.ts",
+        "Bash:app/prototypes/payment-error/page.tsx",
+        "Bash:app/prototypes/payment-error/steps/Done.tsx",
+        "Bash:app/prototypes/payment-error/steps/Payment.tsx",
+        "Bash:app/prototypes/_shared/flowRegistry.ts",
+        "Bash:app/prototypes/payment-error/steps/Payment.tsx"
+      ]
+    },
+    "sourceOpened": {},
+    "sourceOpenedCount": 0,
+    "verify": {
+      "runs": 2,
+      "failures": 1,
+      "firstPass": false,
+      "finalPass": true,
+      "calls": [
+        {
+          "cmd": "mkdir -p app/prototypes/payment-error/steps && cat > app/prototypes/payment-error/schema.ts <<'EOF'\nexport type Scenario",
+          "failed": true
+        },
+        {
+          "cmd": "npm run atlas:verify -- --scope \"app/prototypes/payment-error/**,app/prototypes/_shared/flowRegistry.ts\" 2>&1 | tail -40",
+          "failed": false
+        }
+      ]
+    },
+    "wasted": {
+      "duplicateReads": 1,
+      "unusedComponentReads": [],
+      "offTask": [],
+      "verifierInternals": [],
+      "failedToolCalls": 0,
+      "total": 1
+    },
+    "gaps": {
+      "available": true,
+      "candidatesChanged": [],
+      "expected": [],
+      "recognised": []
+    }
+  },
+  "w1": {
+    "tokenAccuracy": {
+      "value": 1,
+      "valid": 29,
+      "invalid": 0,
+      "primitive": 0,
+      "hardcoded": 0
+    },
+    "componentAccuracy": {
+      "value": 1,
+      "covered": 4,
+      "expected": 4,
+      "rawElements": 0
+    },
+    "a11yPass": true,
+    "deprecatedUsage": 0,
+    "humanCorrections": {
+      "available": false
+    },
+    "patternAdherence": {
+      "pattern": "error-recovery",
+      "score": 2,
+      "passed": 6,
+      "total": 6,
+      "results": [
+        {
+          "id": "alert-danger",
+          "pass": true
+        },
+        {
+          "id": "retry-action",
+          "pass": true
+        },
+        {
+          "id": "loading-on-submit",
+          "pass": true
+        },
+        {
+          "id": "alternate-path",
+          "pass": true
+        },
+        {
+          "id": "failure-announced",
+          "pass": true
+        },
+        {
+          "id": "timeout-distinct",
+          "pass": true
+        }
+      ]
+    },
+    "patternStrict": {
+      "passed": 9,
+      "total": 9,
+      "fraction": 1,
+      "results": [
+        {
+          "id": "decline-primary-change",
+          "rule": "Declined: primary action changes the card",
+          "pass": true
+        },
+        {
+          "id": "timeout-primary-retry",
+          "rule": "Timeout: primary action is Try again",
+          "pass": true
+        },
+        {
+          "id": "retry-loading",
+          "rule": "Retry shows loading on the Button",
+          "pass": true
+        },
+        {
+          "id": "alert-actions-slot",
+          "rule": "Recovery lives in the Alert actions slot",
+          "pass": true
+        },
+        {
+          "id": "alert-not-dismissible",
+          "rule": "Failure Alert is not dismissible",
+          "pass": true
+        },
+        {
+          "id": "no-oops",
+          "rule": "No \"Oops\" or \"Something went wrong\"",
+          "pass": true
+        },
+        {
+          "id": "charge-status",
+          "rule": "Says whether the user was charged",
+          "pass": true
+        },
+        {
+          "id": "no-duplicate-live-region",
+          "rule": "No second live region (Alert danger is role=alert)",
+          "pass": true
+        },
+        {
+          "id": "support-secondary",
+          "rule": "Contact support is not primary",
+          "pass": true
+        }
+      ],
+      "rescored": true
+    }
+  },
+  "subtype": "success"
+}

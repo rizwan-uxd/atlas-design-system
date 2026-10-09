@@ -1,0 +1,236 @@
+{
+  "model": "claude-sonnet-5-5",
+  "ok": true,
+  "error": null,
+  "turns": 23,
+  "durationS": 92,
+  "costUsd": 0.47661260000000005,
+  "tokens": {
+    "input": 16,
+    "cacheWrite": 62262,
+    "cacheRead": 489063,
+    "output": 12972,
+    "totalContext": 551341
+  },
+  "tools": {
+    "Skill": 1,
+    "Read": 10,
+    "Glob": 1,
+    "Bash": 2,
+    "Write": 6,
+    "Edit": 1
+  },
+  "toolCalls": 21,
+  "figmaCalls": 0,
+  "verifyRuns": 2,
+  "reworkEdits": 7,
+  "toolResultChars": {
+    "Skill": 32,
+    "Read": 32549,
+    "Glob": 14,
+    "Bash": 625,
+    "Write": 1326,
+    "Edit": 230
+  },
+  "skillsUsed": [
+    "atlas-prototype"
+  ],
+  "reads": {
+    "total": 10,
+    "unique": 10,
+    "offTask": 0,
+    "byCategory": {
+      "atlas-snapshot": 8,
+      "skills": 1,
+      "prototype-shell": 1
+    },
+    "files": [
+      "atlas/index.md",
+      ".claude/skills/atlas-prototype/references/flow-scaffold.md",
+      "atlas/patterns/form.md",
+      "atlas/Input.md",
+      "atlas/RadioGroup.md",
+      "atlas/Switch.md",
+      "atlas/Button.md",
+      "atlas/Label.md",
+      "atlas/tokens.md",
+      "app/prototypes/_shared/flowRegistry.ts"
+    ]
+  },
+  "bashCmds": [
+    "cd app/prototypes && mkdir -p onboarding/steps && cd onboarding && cat > schema.ts <<'EOF'\nexport type Plan = \"free\" | \"pro\" | \"team\"\n\nexport type OnboardingData = {\n  fullName: string\n  role: string\n  emailNotifications: boolean\n  pushNotifications: boolean\n  plan: Plan\n  skippedPreferences: boolean\n}\n\nexport const ONBOARDING_INITIAL: OnboardingData = {\n  fullName: \"\",\n  role: \"\",\n  emailNotifications: true,\n  pushNotifications: false,\n  plan: \"free\",\n  skippedPreferences: false,\n}\n\nexport const ONBOARDING_STEPS = [\"profile\", \"preferences\", \"done\"] as const\n\nexport const ROLES = [\n  { value: \"designer\", label: \"Designer\" },\n  { value: \"engineer\", label: \"Engineer\" },\n  { value: \"product\", label: \"Product manager\" },\n  { value: \"founder\", label: \"Founder\" },\n  { value: \"other\", label: \"Other\" },\n] as const\n\nexport const PLANS: { value: Plan; label: string; description: string }[] = [\n  { value: \"free\", label: \"Free\", description: \"For trying things out.\" },\n  { value: \"pro\", label: \"Pro\", description: \"For individuals who want more.\" },\n  { value: \"team\", label: \"Team\", description: \"For groups working together.\" },\n]\n\nexport type OnboardingStepProps = {\n  data: OnboardingData\n  patch: (p: Partial<OnboardingData>) => void\n  next: () => void\n  back: () => void\n  goTo: (i: number) => void\n}\nEOF\ncat > styles.ts <<'EOF'\nimport type { CSSProperties } from \"react\"\n\nexport const stepStyle: CSSProperties = {\n  display: \"flex\",\n  flexDirection: \"column\",\n  gap: \"var(--atlas-spacing-4)\",\n  paddingInline: \"var(--atlas-spacing-4)\",\n  paddingBlock: \"var(--atlas-spacing-4)\",\n}\n\nexport const titleStyle: CSSProperties = {\n  margin: 0,\n  fontSize: \"var(--atlas-text-h2)\",\n  fontWeight: \"var(--atlas-font-weight-semibold)\",\n  lineHeight: \"var(--atlas-line-height-tight)\",\n  color: \"var(--atlas-foreground)\",\n}\n\nexport const helpStyle: CSSProperties = {\n  margin: 0,\n  fontSize: \"var(--atlas-text-body-sm)\",\n  lineHeight: \"var(--atlas-line-height-normal)\",\n  color: \"var(--atlas-foreground-muted)\",\n}\n\nexport const errorStyle: CSSProperties = {\n  margin: 0,\n  marginBlockStart: \"var(--atlas-spacing-1_5)\",\n  fontSize: \"var(--atlas-text-caption)\",\n  color: \"var(--atlas-danger)\",\n}\n\nexport const fieldStyle: CSSProperties = {\n  display: \"flex\",\n  flexDirection: \"column\",\n  gap: \"var(--atlas-spacing-1_5)\",\n}\n\nexport const actionsStyle: CSSProperties = {\n  display: \"flex\",\n  flexDirection: \"column\",\n  gap: \"var(--atlas-spacing-2)\",\n  marginBlockStart: \"var(--atlas-spacing-2)\",\n}\nEOF\ncat > steps/Profile.tsx <<'EOF'\n\"use client\"\nimport { useState } from \"react\"\nimport { Button } from \"@atlas/ui-web/primitives/Button/Button\"\nimport { Input } from \"@atlas/ui-web/primitives/Input/Input\"\nimport { Label } from \"@atlas/ui-web/primitives/Label/Label\"\nimport { RadioGroup, RadioGroupItem } from \"@atlas/ui-web/primitives/RadioGroup/RadioGroup\"\nimport { ROLES, type OnboardingStepProps } from \"../schema\"\nimport { actionsStyle, errorStyle, fieldStyle, helpStyle, stepStyle, titleStyle } from \"../styles\"\n\ntype Errors = { fullName?: string; role?: string }\n\nfunction validate(fullName: string, role: string): Errors {\n  const errors: Errors = {}\n  const name = fullName.trim()\n  if (!name) errors.fullName = \"Enter your full name.\"\n  else if (name.length < 2) errors.fullName = \"Full name must be at least 2 characters.\"\n  if (!role) errors.role = \"Choose the role that fits you best.\"\n  return errors\n}\n\nexport function Profile({ data, patch, next }: OnboardingStepProps) {\n  const [errors, setErrors] = useState<Errors>({})\n  const [submitted, setSubmitted] = useState(false)\n\n  const revalidate = (fullName: string, role: string) => {\n    if (submitted) setErrors(validate(fullName, role))\n  }\n\n  const submit = (e: React.FormEvent) => {\n    e.preventDefault()\n    const found = validate(data.fullName, data.role)\n    setSubmitted(true)\n    setErrors(found)\n    if (found.fullName) document.getElementById(\"onboarding-name\")?.focus()\n    else if (found.role) document.getElementById(\"onboarding-role-designer\")?.focus()\n    if (found.fullName || found.role) return\n    patch({ fullName: data.fullName.trim() })\n    next()\n  }\n\n  return (\n    <form onSubmit={submit} noValidate style={stepStyle}>\n      <div style={{ display: \"flex\", flexDirection: \"column\", gap: \"var(--atlas-spacing-1)\" }}>\n        <h2 style={titleStyle}>Tell us about you</h2>\n        <p style={helpStyle}>This helps us tailor your workspace.</p>\n      </div>\n\n      <div style={fieldStyle}>\n        <Label htmlFor=\"onboarding-name\" required invalid={!!errors.fullName}>Full name</Label>\n        <Input\n          id=\"onboarding-name\"\n          autoComplete=\"name\"\n          value={data.fullName}\n          invalid={!!errors.fullName}\n          aria-describedby={errors.fullName ? \"onboarding-name-error\" : undefined}\n          onChange={(e) => {\n            patch({ fullName: e.target.value })\n            revalidate(e.target.value, data.role)\n          }}\n          onBlur={() => submitted && setErrors(validate(data.fullName, data.role))}\n        />\n        {errors.fullName && <p id=\"onboarding-name-error\" role=\"alert\" style={errorStyle}>{errors.fullName}</p>}\n      </div>\n\n      <div style={fieldStyle}>\n        <Label htmlFor=\"onboarding-role-designer\" required invalid={!!errors.role}>Role</Label>\n        <RadioGroup\n          aria-label=\"Role\"\n          aria-describedby={errors.role ? \"onboarding-role-error\" : undefined}\n          value={data.role}\n          invalid={!!errors.role}\n          required\n          onValueChange={(role) => {\n            patch({ role })\n            revalidate(data.fullName, role)\n          }}\n        >\n          {ROLES.map((r) => (\n            <RadioGroupItem key={r.value} id={`onboarding-role-${r.value}`} value={r.value} label={r.label} invalid={!!errors.role} />\n          ))}\n        </RadioGroup>\n        {errors.role && <p id=\"onboarding-role-error\" role=\"alert\" style={errorStyle}>{errors.role}</p>}\n      </div>\n\n      <div style={actionsStyle}>\n        <Button type=\"submit\" variant=\"primary\" size=\"lg\">Continue</Button>\n      </div>\n    </form>\n  )\n}\nEOF\ncat > steps/Preferences.tsx <<'EOF'\n\"use client\"\nimport { Button } from \"@atlas/ui-web/primitives/Button/Button\"\nimport { Label } from \"@atlas/ui-web/primitives/Label/Label\"\nimport { RadioGroup, RadioGroupItem } from \"@atlas/ui-web/primitives/RadioGroup/RadioGroup\"\nimport { Switch } from \"@atlas/ui-web/primitives/Switch/Switch\"\nimport { PLANS, type OnboardingStepProps, type Plan } from \"../schema\"\nimport { actionsStyle, fieldStyle, helpStyle, stepStyle, titleStyle } from \"../styles\"\n\nexport function Preferences({ data, patch, next, back }: OnboardingStepProps) {\n  const skip = () => {\n    patch({ emailNotifications: false, pushNotifications: false, plan: \"free\", skippedPreferences: true })\n    next()\n  }\n  const submit = (e: React.FormEvent) => {\n    e.preventDefault()\n    patch({ skippedPreferences: false })\n    next()\n  }\n\n  return (\n    <form onSubmit={submit} noValidate style={stepStyle}>\n      <div style={{ display: \"flex\", flexDirection: \"column\", gap: \"var(--atlas-spacing-1)\" }}>\n        <h2 style={titleStyle}>Your preferences</h2>\n        <p style={helpStyle}>You can change these any time. Skip to use the defaults.</p>\n      </div>\n\n      <div style={fieldStyle}>\n        <Switch\n          id=\"onboarding-email\"\n          label=\"Email notifications\"\n          description=\"Product news and account updates\"\n          checked={data.emailNotifications}\n          onCheckedChange={(emailNotifications) => patch({ emailNotifications })}\n        />\n        <Switch\n          id=\"onboarding-push\"\n          label=\"Push notifications\"\n          description=\"Alerts on this device\"\n          checked={data.pushNotifications}\n          onCheckedChange={(pushNotifications) => patch({ pushNotifications })}\n        />\n      </div>\n\n      <div style={fieldStyle}>\n        <Label htmlFor=\"onboarding-plan-free\">Plan</Label>\n        <RadioGroup\n          aria-label=\"Plan\"\n          variant=\"card\"\n          value={data.plan}\n          onValueChange={(plan) => patch({ plan: plan as Plan })}\n        >\n          {PLANS.map((p) => (\n            <RadioGroupItem\n              key={p.value}\n              id={`onboarding-plan-${p.value}`}\n              variant=\"card\"\n              value={p.value}\n              label={p.label}\n              description={p.description}\n            />\n          ))}\n        </RadioGroup>\n      </div>\n\n      <div style={actionsStyle}>\n        <Button type=\"submit\" variant=\"primary\" size=\"lg\">Continue</Button>\n        <div style={{ display: \"flex\", gap: \"var(--atlas-spacing-2)\" }}>\n          <Button type=\"button\" variant=\"ghost\" size=\"md\" onClick={back}>Back</Button>\n          <Button type=\"button\" variant=\"ghost\" size=\"md\" onClick={skip}>Skip</Button>\n        </div>\n      </div>\n    </form>\n  )\n}\nEOF\ncat > steps/Done.tsx <<'EOF'\n\"use client\"\nimport { Button } from \"@atlas/ui-web/primitives/Button/Button\"\nimport { PLANS, type OnboardingStepProps } from \"../schema\"\nimport { actionsStyle, helpStyle, stepStyle, titleStyle } from \"../styles\"\n\nexport function Done({ data, back, goTo }: OnboardingStepProps) {\n  const plan = PLANS.find((p) => p.value === data.plan)?.label\n  const firstName = data.fullName.split(\" \")[0]\n  return (\n    <div style={stepStyle}>\n      <div style={{ display: \"flex\", flexDirection: \"column\", gap: \"var(--atlas-spacing-1)\" }}>\n        <h2 style={titleStyle}>You&apos;re all set, {firstName}</h2>\n        <p style={helpStyle}>\n          {data.skippedPreferences\n            ? \"We used the default preferences. You can change them in settings.\"\n            : `You're on the ${plan} plan. You can change your preferences in settings.`}\n        </p>\n      </div>\n      <div style={actionsStyle}>\n        <Button variant=\"primary\" size=\"lg\" onClick={() => goTo(0)}>Continue to app</Button>\n        <div>\n          <Button variant=\"ghost\" size=\"md\" onClick={back}>Back</Button>\n        </div>\n      </div>\n    </div>\n  )\n}\nEOF\ncat > page.tsx <<'EOF'\n\"use client\"\nimport { FlowShell } from \"../_shared/FlowShell\"\nimport { useFlowState } from \"../_shared/useFlowState\"\nimport { ONBOARDING_INITIAL, ONBOARDING_STEPS, type OnboardingData } from \"./schema\"\nimport { Profile } from \"./steps/Profile\"\nimport { Preferences } from \"./steps/Preferences\"\nimport { Done } from \"./steps/Done\"\n\nexport default function OnboardingFlowPage() {\n  const flow = useFlowState<OnboardingData>({ totalSteps: ONBOARDING_STEPS.length, initialData: ONBOARDING_INITIAL })\n  const props = { data: flow.data, patch: flow.patch, next: flow.next, back: flow.back, goTo: flow.goTo }\n  const key = ONBOARDING_STEPS[flow.step]\n  return (\n    <FlowShell\n      title=\"Onboarding\"\n      step={flow.step}\n      totalSteps={ONBOARDING_STEPS.length}\n      onReset={flow.reset}\n      phoneBackground=\"var(--atlas-background)\"\n    >\n      {key === \"profile\" && <Profile {...props} />}\n      {key === \"preferences\" && <Preferences {...props} />}\n      {key === \"done\" && <Done {...props} />}\n    </FlowShell>\n  )\n}\nEOF\ncd ../_shared && python3 - <<'EOF'\np=\"flowRegistry.ts\"\ns=open(p).read()\ns=s.replace(\"export const flows: FlowMeta[] = []\",\"\"\"export const flows: FlowMeta[] = [\n  {\n    slug: \"onboarding\",\n    name: \"Onboarding\",\n    description: \"Three-step mobile onboarding: profile, skippable preferences, and a confirmation.\",\n    exercises: [\"Button\", \"Input\", \"Label\", \"RadioGroup\", \"Switch\"],\n    status: \"in-progress\",\n  },\n]\"\"\")\nopen(p,\"w\").write(s)\nEOF\ncd ../../.. && npm run atlas:verify -- --scope \"app/prototypes/onboarding/**,app/prototypes/_shared/flowRegistry.ts\" 2>&1 | tail -40",
+    "npm run atlas:verify -- --scope \"app/prototypes/onboarding/**,app/prototypes/_shared/flowRegistry.ts\" 2>&1 | tail -40"
+  ],
+  "quality": {
+    "outputExists": true,
+    "files": 6,
+    "loc": 315,
+    "registered": true,
+    "tokenLintViolations": 0,
+    "tscErrors": 0,
+    "atlasComponentsImported": [
+      "Button",
+      "Input",
+      "Label",
+      "RadioGroup",
+      "RadioGroupItem",
+      "Switch"
+    ],
+    "expectedCoverage": "5/6",
+    "rawElements": 0,
+    "numericStyleLiterals": 0,
+    "primitiveTokenRefs": 0
+  },
+  "phase8": {
+    "readsAll": {
+      "total": 10,
+      "unique": 10,
+      "viaBash": 0,
+      "files": [
+        "atlas/index.md",
+        ".claude/skills/atlas-prototype/references/flow-scaffold.md",
+        "atlas/patterns/form.md",
+        "atlas/Input.md",
+        "atlas/RadioGroup.md",
+        "atlas/Switch.md",
+        "atlas/Button.md",
+        "atlas/Label.md",
+        "atlas/tokens.md",
+        "app/prototypes/_shared/flowRegistry.ts"
+      ]
+    },
+    "sourceOpened": {},
+    "sourceOpenedCount": 0,
+    "verify": {
+      "runs": 2,
+      "failures": 1,
+      "firstPass": false,
+      "finalPass": true,
+      "calls": [
+        {
+          "cmd": "cd app/prototypes && mkdir -p onboarding/steps && cd onboarding && cat > schema.ts <<'EOF'\nexport type Plan = \"free\" | \"",
+          "failed": true
+        },
+        {
+          "cmd": "npm run atlas:verify -- --scope \"app/prototypes/onboarding/**,app/prototypes/_shared/flowRegistry.ts\" 2>&1 | tail -40",
+          "failed": false
+        }
+      ]
+    },
+    "wasted": {
+      "duplicateReads": 0,
+      "unusedComponentReads": [],
+      "offTask": [],
+      "verifierInternals": [],
+      "failedToolCalls": 0,
+      "total": 0
+    },
+    "gaps": {
+      "available": true,
+      "candidatesChanged": [],
+      "expected": [],
+      "recognised": []
+    }
+  },
+  "w1": {
+    "tokenAccuracy": {
+      "value": 1,
+      "valid": 18,
+      "invalid": 0,
+      "primitive": 0,
+      "hardcoded": 0
+    },
+    "componentAccuracy": {
+      "value": 0.833,
+      "covered": 5,
+      "expected": 6,
+      "rawElements": 0
+    },
+    "a11yPass": true,
+    "deprecatedUsage": 0,
+    "humanCorrections": {
+      "available": false
+    },
+    "patternAdherence": {
+      "pattern": "form",
+      "score": 2,
+      "passed": 6,
+      "total": 6,
+      "results": [
+        {
+          "id": "progress-shown",
+          "pass": true
+        },
+        {
+          "id": "skip-optional-step",
+          "pass": true
+        },
+        {
+          "id": "invalid-state",
+          "pass": true
+        },
+        {
+          "id": "error-text",
+          "pass": true
+        },
+        {
+          "id": "labelled-fields",
+          "pass": true
+        },
+        {
+          "id": "back-navigation",
+          "pass": true
+        }
+      ]
+    },
+    "patternStrict": {
+      "passed": 8,
+      "total": 8,
+      "fraction": 1,
+      "results": [
+        {
+          "id": "label-required-prop",
+          "rule": "Required fields use Label required",
+          "pass": true
+        },
+        {
+          "id": "no-typed-asterisk",
+          "rule": "No typed asterisk in a label",
+          "pass": true
+        },
+        {
+          "id": "invalid-prop",
+          "rule": "Invalid fields set invalid",
+          "pass": true
+        },
+        {
+          "id": "describedby",
+          "rule": "Error text wired by aria-describedby",
+          "pass": true
+        },
+        {
+          "id": "skip-ghost",
+          "rule": "Skip is a ghost Button",
+          "pass": true
+        },
+        {
+          "id": "label-htmlfor",
+          "rule": "Labels use htmlFor",
+          "pass": true
+        },
+        {
+          "id": "no-raw-form-controls",
+          "rule": "No raw select or radio input",
+          "pass": true
+        },
+        {
+          "id": "no-per-field-alert",
+          "rule": "No Alert for field errors",
+          "pass": true
+        }
+      ],
+      "rescored": true
+    }
+  },
+  "subtype": "success"
+}

@@ -75,6 +75,49 @@ const WH = ["runs", "completed", "token accuracy", "component accuracy", "patter
 const table = (rs, h = H) => `| task | label | ${h.join(" | ")} |\n|${["", "", ...h].map(() => "---").join("|")}|\n` +
   rs.sort((a, b) => a.task.localeCompare(b.task) || a.label.localeCompare(b.label)).map(r => `| ${r.task} | ${r.label} | ${r.cells.join(" | ")} |`).join("\n")
 
+
+// Wave 1: baseline-w1 vs patterns-w1, same aggregation (mean over runs) for both arms
+const cmpTasks = ["T5", "T6", "T7", "T8", "T9"]
+const loadRuns = (label, task) => { const d = path.join(dir, label, task); return fs.existsSync(d) ? fs.readdirSync(d).filter(f => /^run-\d+\.json$/.test(f)).map(f => JSON.parse(fs.readFileSync(path.join(d, f), "utf8"))) : [] }
+const CMP = [
+  ["Pattern adherence, strict (fraction)", r => r.w1?.patternStrict?.fraction, 3],
+  ["Pattern adherence, loose (0–2)", r => r.w1?.patternAdherence?.score, 2],
+  ["Token accuracy", r => r.w1?.tokenAccuracy?.value, 3],
+  ["Component accuracy", r => r.w1?.componentAccuracy?.value, 3],
+  ["Raw elements", r => r.quality.rawElements, 2],
+  ["A11y pass (share of runs)", r => (r.w1?.a11yPass ? 1 : 0), 2],
+  ["Deprecated usage", r => r.w1?.deprecatedUsage, 2],
+  ["tsc errors", r => r.quality.tscErrors, 2],
+  ["Token-lint violations", r => r.quality.tokenLintViolations, 2],
+  ["Turns", r => r.turns, 1],
+  ["Cost $", r => r.costUsd, 3],
+]
+const meanOf = (runs, g) => { const v = runs.map(g).filter(x => typeof x === "number"); return v.length ? v.reduce((a, b) => a + b, 0) / v.length : null }
+const base = cmpTasks.flatMap(t => loadRuns("baseline-w1", t)), pat = cmpTasks.flatMap(t => loadRuns("patterns-w1", t))
+let compare = ""
+if (base.length && pat.length) {
+  const cell = (m, d) => (m == null ? "–" : m.toFixed(d))
+  const rows = CMP.map(([name, g, d]) => { const b = meanOf(base, g), p = meanOf(pat, g); return `| ${name} | ${cell(b, d)} | ${cell(p, d)} | ${b == null || p == null ? "–" : (p - b >= 0 ? "+" : "") + (p - b).toFixed(d)} |` })
+  const strict = cmpTasks.map(t => { const b = meanOf(loadRuns("baseline-w1", t), CMP[0][1]), p = meanOf(loadRuns("patterns-w1", t), CMP[0][1]); return `| ${t} | ${cell(b, 3)} | ${cell(p, 3)} | ${b == null || p == null ? "–" : (p - b >= 0 ? "+" : "") + (p - b).toFixed(3)} |` })
+  compare = `
+## Wave 1 — baseline-w1 vs patterns-w1
+
+Same model (claude-sonnet-5-5), prompts, run count (${base.length} vs ${pat.length} runs over T5–T9) and aggregation (mean over runs). The only repo difference is the pattern layer (\`atlas/patterns/\`, the Patterns table in \`atlas/index.md\`, and one added read step in the atlas-prototype skill).
+
+| Metric | Baseline | Patterns | Delta |
+|---|---:|---:|---:|
+${rows.join("\n")}
+
+Strict adherence by task:
+
+| Task | Baseline | Patterns | Delta |
+|---|---:|---:|---:|
+${strict.join("\n")}
+
+Strict checks were written after the baseline ran, derive from the pattern docs, and were applied identically to both arms (see benchmarks/README.md). Human corrections and manual /20 are unavailable (headless runs, not hand-scored).
+`
+}
+
 let phase0 = ""; try { phase0 = fs.readFileSync(path.join(dir, "baseline", "PHASE0-SUMMARY.md"), "utf8").trim() } catch {}
 const md = `# Atlas benchmark summary
 
@@ -87,7 +130,7 @@ Correctness first — a label only wins if these are equal or better. Lower is b
 - **gap recognised**: the expected gap (meta.gapComponents) was logged in candidates.json; n/a when the workspace had no candidates.json (phase 0).
 
 ${table(rows)}
-${compRows.length ? `
+${compare}${compRows.length ? `
 ## Phase 9 — component tasks, mean (min–max) across runs
 
 Gates first (proposal §8.1); a count is runs passing. H columns are the §5B source signals: mean (min–max), then [runs where the

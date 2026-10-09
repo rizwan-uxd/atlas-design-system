@@ -49,21 +49,21 @@
         "id": "decline-primary-change",
         "rule": "Declined: primary action changes the card",
         "type": "match",
-        "pattern": "<Button[^>]*variant=\"primary\"[^>]*>\\s*(Use (a )?(different|another)|Try (a )?(different|another)|Change)",
+        "pattern": "<Button(?:[^>]|=>)*variant=\"primary\"(?:[^>]|=>)*>\\s*(Use (a )?(different|another)|Try (a )?(different|another)|Change)",
         "flags": "i"
       },
       {
         "id": "timeout-primary-retry",
         "rule": "Timeout: primary action is Try again",
         "type": "match",
-        "pattern": "time(d)? ?out[\\s\\S]{0,900}<Button[^>]*variant=\"primary\"[^>]*>\\s*(Try again|Retry)",
+        "pattern": "time(d)? ?out[\\s\\S]{0,900}<Button(?:[^>]|=>)*variant=\"primary\"(?:[^>]|=>)*>\\s*(Try again|Retry)",
         "flags": "i"
       },
       {
         "id": "retry-loading",
         "rule": "Retry shows loading on the Button",
         "type": "match",
-        "pattern": "<Button[^>]*\\bloading="
+        "pattern": "<Button(?:[^>]|=>)*\\bloading="
       },
       {
         "id": "alert-actions-slot",
@@ -75,7 +75,7 @@
         "id": "alert-not-dismissible",
         "rule": "Failure Alert is not dismissible",
         "type": "absent",
-        "pattern": "<Alert[^>]*dismissible"
+        "pattern": "<Alert(?:[^>]|=>)*dismissible"
       },
       {
         "id": "no-oops",
@@ -101,7 +101,7 @@
         "id": "support-secondary",
         "rule": "Contact support is not primary",
         "type": "match",
-        "pattern": "<Button[^>]*variant=\"(outline|ghost)\"[^>]*>\\s*Contact support",
+        "pattern": "<Button(?:[^>]|=>)*variant=\"(outline|ghost)\"(?:[^>]|=>)*>\\s*Contact support",
         "flags": "i"
       }
     ]

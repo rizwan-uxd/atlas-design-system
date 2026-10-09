@@ -1,0 +1,244 @@
+{
+  "model": "claude-sonnet-5-5",
+  "ok": true,
+  "error": null,
+  "turns": 27,
+  "durationS": 84,
+  "costUsd": 0.5006646,
+  "tokens": {
+    "input": 18,
+    "cacheWrite": 69458,
+    "cacheRead": 604133,
+    "output": 10197,
+    "totalContext": 673609
+  },
+  "tools": {
+    "Skill": 2,
+    "Read": 15,
+    "Glob": 1,
+    "Write": 3,
+    "Edit": 2,
+    "Bash": 1
+  },
+  "toolCalls": 24,
+  "figmaCalls": 0,
+  "verifyRuns": 1,
+  "reworkEdits": 0,
+  "toolResultChars": {
+    "Skill": 61,
+    "Read": 51656,
+    "Glob": 14,
+    "Write": 670,
+    "Edit": 449,
+    "Bash": 435
+  },
+  "skillsUsed": [
+    "atlas-prototype",
+    "atlas-verify"
+  ],
+  "reads": {
+    "total": 15,
+    "unique": 15,
+    "offTask": 0,
+    "byCategory": {
+      "atlas-snapshot": 12,
+      "skills": 2,
+      "prototype-shell": 1
+    },
+    "files": [
+      "atlas/index.md",
+      ".claude/skills/atlas-prototype/references/flow-scaffold.md",
+      "atlas/Card.md",
+      "atlas/Chart.md",
+      "atlas/ListItem.md",
+      "atlas/Skeleton.md",
+      "atlas/Alert.md",
+      "atlas/patterns/error-recovery.md",
+      "atlas/tokens.md",
+      "atlas/Badge.md",
+      "atlas/Tabs.md",
+      "atlas/Button.md",
+      ".claude/skills/atlas-prototype/references/gaps.md",
+      "atlas/state/candidates.json",
+      "app/prototypes/_shared/flowRegistry.ts"
+    ]
+  },
+  "bashCmds": [
+    "node scripts/atlas-verify.mjs --scope \"app/prototypes/dashboard-summary/**,app/prototypes/_shared/flowRegistry.ts,atlas/state/candidates.json\" 2>&1 | tail -50"
+  ],
+  "quality": {
+    "outputExists": true,
+    "files": 3,
+    "loc": 311,
+    "registered": true,
+    "tokenLintViolations": 0,
+    "tscErrors": 0,
+    "atlasComponentsImported": [
+      "Badge",
+      "Skeleton",
+      "Card",
+      "CardContent",
+      "Alert",
+      "Button",
+      "TabsList",
+      "TabsRoot",
+      "TabsTrigger",
+      "Chart",
+      "ChartContent",
+      "ChartBar",
+      "ChartDescription",
+      "ChartHeader",
+      "ChartTitle",
+      "ListItem",
+      "ListItemActions",
+      "ListItemContent",
+      "ListItemDescription",
+      "ListItemTitle"
+    ],
+    "expectedCoverage": "7/7",
+    "rawElements": 0,
+    "numericStyleLiterals": 16,
+    "primitiveTokenRefs": 0
+  },
+  "phase8": {
+    "readsAll": {
+      "total": 15,
+      "unique": 15,
+      "viaBash": 0,
+      "files": [
+        "atlas/index.md",
+        ".claude/skills/atlas-prototype/references/flow-scaffold.md",
+        "atlas/Card.md",
+        "atlas/Chart.md",
+        "atlas/ListItem.md",
+        "atlas/Skeleton.md",
+        "atlas/Alert.md",
+        "atlas/patterns/error-recovery.md",
+        "atlas/tokens.md",
+        "atlas/Badge.md",
+        "atlas/Tabs.md",
+        "atlas/Button.md",
+        ".claude/skills/atlas-prototype/references/gaps.md",
+        "atlas/state/candidates.json",
+        "app/prototypes/_shared/flowRegistry.ts"
+      ]
+    },
+    "sourceOpened": {},
+    "sourceOpenedCount": 0,
+    "verify": {
+      "runs": 1,
+      "failures": 0,
+      "firstPass": true,
+      "finalPass": true,
+      "calls": [
+        {
+          "cmd": "node scripts/atlas-verify.mjs --scope \"app/prototypes/dashboard-summary/**,app/prototypes/_shared/flowRegistry.ts,atlas/",
+          "failed": false
+        }
+      ]
+    },
+    "wasted": {
+      "duplicateReads": 0,
+      "unusedComponentReads": [],
+      "offTask": [],
+      "verifierInternals": [],
+      "failedToolCalls": 0,
+      "total": 0
+    },
+    "gaps": {
+      "available": true,
+      "candidatesChanged": [
+        "CAND-033 StatCard"
+      ],
+      "expected": [],
+      "recognised": []
+    }
+  },
+  "w1": {
+    "tokenAccuracy": {
+      "value": 1,
+      "valid": 37,
+      "invalid": 0,
+      "primitive": 0,
+      "hardcoded": 0
+    },
+    "componentAccuracy": {
+      "value": 1,
+      "covered": 7,
+      "expected": 7,
+      "rawElements": 0
+    },
+    "a11yPass": true,
+    "deprecatedUsage": 0,
+    "humanCorrections": {
+      "available": false
+    },
+    "patternAdherence": {
+      "pattern": "dashboard",
+      "score": 2,
+      "passed": 5,
+      "total": 5,
+      "results": [
+        {
+          "id": "change-as-badge",
+          "pass": true
+        },
+        {
+          "id": "error-with-retry",
+          "pass": true
+        },
+        {
+          "id": "loading-skeleton",
+          "pass": true
+        },
+        {
+          "id": "chart-accessible-name",
+          "pass": true
+        },
+        {
+          "id": "error-is-alert-danger",
+          "pass": true
+        }
+      ]
+    },
+    "patternStrict": {
+      "passed": 6,
+      "total": 6,
+      "fraction": 1,
+      "results": [
+        {
+          "id": "error-alert-actions",
+          "rule": "Failure is a danger Alert with recovery in the actions slot",
+          "pass": true
+        },
+        {
+          "id": "alert-not-dismissible",
+          "rule": "Failure Alert is not dismissible",
+          "pass": true
+        },
+        {
+          "id": "retry-loading",
+          "rule": "Retry shows loading on the Button",
+          "pass": true
+        },
+        {
+          "id": "loading-busy",
+          "rule": "Loading region sets aria-busy",
+          "pass": true
+        },
+        {
+          "id": "chart-named",
+          "rule": "Chart has an accessible name",
+          "pass": true
+        },
+        {
+          "id": "no-duplicate-live-region",
+          "rule": "No extra live region on the Alert",
+          "pass": true
+        }
+      ],
+      "rescored": true
+    }
+  },
+  "subtype": "success"
+}

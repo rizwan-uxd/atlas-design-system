@@ -50,7 +50,7 @@
         "id": "label-required-prop",
         "rule": "Required fields use Label required",
         "type": "match",
-        "pattern": "<Label[^>]*\\brequired\\b"
+        "pattern": "<Label(?:[^>]|=>)*\\brequired\\b"
       },
       {
         "id": "no-typed-asterisk",
@@ -74,14 +74,14 @@
         "id": "skip-ghost",
         "rule": "Skip is a ghost Button",
         "type": "match",
-        "pattern": "<Button[^>]*variant=\"ghost\"[^>]*>\\s*Skip",
+        "pattern": "<Button(?:[^>]|=>)*variant=\"ghost\"(?:[^>]|=>)*>\\s*Skip",
         "flags": "i"
       },
       {
         "id": "label-htmlfor",
         "rule": "Labels use htmlFor",
         "type": "match",
-        "pattern": "<Label[^>]*htmlFor="
+        "pattern": "<Label(?:[^>]|=>)*htmlFor="
       },
       {
         "id": "no-raw-form-controls",

@@ -194,9 +194,9 @@
       ]
     },
     "patternStrict": {
-      "passed": 7,
+      "passed": 8,
       "total": 8,
-      "fraction": 0.875,
+      "fraction": 1,
       "results": [
         {
           "id": "label-required-prop",
@@ -221,7 +221,7 @@
         {
           "id": "skip-ghost",
           "rule": "Skip is a ghost Button",
-          "pass": false
+          "pass": true
         },
         {
           "id": "label-htmlfor",

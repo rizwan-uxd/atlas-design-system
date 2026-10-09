@@ -2,68 +2,69 @@
   "model": "claude-sonnet-5-5",
   "ok": true,
   "error": null,
-  "turns": 20,
-  "durationS": 125,
-  "costUsd": 0.40663499999999997,
+  "turns": 22,
+  "durationS": 67,
+  "costUsd": 0.3940374,
   "tokens": {
-    "input": 16,
-    "cacheWrite": 55436,
-    "cacheRead": 466395,
-    "output": 9158,
-    "totalContext": 521847
+    "input": 14,
+    "cacheWrite": 58050,
+    "cacheRead": 412047,
+    "output": 7940,
+    "totalContext": 470111
   },
   "tools": {
     "Skill": 1,
-    "Read": 10,
+    "Read": 11,
     "Glob": 1,
-    "Write": 4,
     "Edit": 1,
+    "Write": 5,
     "Bash": 1
   },
-  "toolCalls": 18,
+  "toolCalls": 20,
   "figmaCalls": 0,
   "verifyRuns": 1,
   "reworkEdits": 0,
   "toolResultChars": {
     "Skill": 32,
-    "Read": 26384,
+    "Read": 34238,
     "Glob": 14,
-    "Write": 895,
     "Edit": 230,
-    "Bash": 570
+    "Write": 1109,
+    "Bash": 573
   },
   "skillsUsed": [
     "atlas-prototype"
   ],
   "reads": {
-    "total": 10,
-    "unique": 10,
+    "total": 11,
+    "unique": 11,
     "offTask": 0,
     "byCategory": {
-      "atlas-snapshot": 8,
+      "atlas-snapshot": 9,
       "skills": 1,
       "prototype-shell": 1
     },
     "files": [
       "atlas/index.md",
       ".claude/skills/atlas-prototype/references/flow-scaffold.md",
-      "atlas/Button.md",
+      "atlas/patterns/form.md",
       "atlas/Input.md",
       "atlas/Label.md",
+      "atlas/Button.md",
+      "atlas/Switch.md",
+      "atlas/RadioGroup.md",
       "atlas/Alert.md",
       "atlas/tokens.md",
-      "atlas/Switch.md",
-      "app/prototypes/_shared/flowRegistry.ts",
-      "atlas/Card.md"
+      "app/prototypes/_shared/flowRegistry.ts"
     ]
   },
   "bashCmds": [
-    "npm run atlas:verify -- --scope \"app/prototypes/payment-error/**,app/prototypes/_shared/flowRegistry.ts\" 2>&1 | tail -40"
+    "npm run atlas:verify -- --scope \"app/prototypes/onboarding/**,app/prototypes/_shared/flowRegistry.ts\" 2>&1 | tail -40"
   ],
   "quality": {
     "outputExists": true,
-    "files": 4,
-    "loc": 333,
+    "files": 5,
+    "loc": 328,
     "registered": true,
     "tokenLintViolations": 0,
     "tscErrors": 0,
@@ -71,32 +72,33 @@
       "Button",
       "Input",
       "Label",
-      "Switch",
-      "Card",
-      "CardContent",
-      "Alert"
+      "RadioGroup",
+      "RadioGroupItem",
+      "Alert",
+      "Switch"
     ],
-    "expectedCoverage": "4/4",
+    "expectedCoverage": "5/6",
     "rawElements": 0,
-    "numericStyleLiterals": 6,
+    "numericStyleLiterals": 0,
     "primitiveTokenRefs": 0
   },
   "phase8": {
     "readsAll": {
-      "total": 10,
-      "unique": 10,
+      "total": 11,
+      "unique": 11,
       "viaBash": 0,
       "files": [
         "atlas/index.md",
         ".claude/skills/atlas-prototype/references/flow-scaffold.md",
-        "atlas/Button.md",
+        "atlas/patterns/form.md",
         "atlas/Input.md",
         "atlas/Label.md",
+        "atlas/Button.md",
+        "atlas/Switch.md",
+        "atlas/RadioGroup.md",
         "atlas/Alert.md",
         "atlas/tokens.md",
-        "atlas/Switch.md",
-        "app/prototypes/_shared/flowRegistry.ts",
-        "atlas/Card.md"
+        "app/prototypes/_shared/flowRegistry.ts"
       ]
     },
     "sourceOpened": {},
@@ -108,7 +110,7 @@
       "finalPass": true,
       "calls": [
         {
-          "cmd": "npm run atlas:verify -- --scope \"app/prototypes/payment-error/**,app/prototypes/_shared/flowRegistry.ts\" 2>&1 | tail -40",
+          "cmd": "npm run atlas:verify -- --scope \"app/prototypes/onboarding/**,app/prototypes/_shared/flowRegistry.ts\" 2>&1 | tail -40",
           "failed": false
         }
       ]
@@ -131,15 +133,15 @@
   "w1": {
     "tokenAccuracy": {
       "value": 1,
-      "valid": 26,
+      "valid": 32,
       "invalid": 0,
       "primitive": 0,
       "hardcoded": 0
     },
     "componentAccuracy": {
-      "value": 1,
-      "covered": 4,
-      "expected": 4,
+      "value": 0.833,
+      "covered": 5,
+      "expected": 6,
       "rawElements": 0
     },
     "a11yPass": true,
@@ -148,86 +150,81 @@
       "available": false
     },
     "patternAdherence": {
-      "pattern": "error-recovery",
+      "pattern": "form",
       "score": 2,
       "passed": 6,
       "total": 6,
       "results": [
         {
-          "id": "alert-danger",
+          "id": "progress-shown",
           "pass": true
         },
         {
-          "id": "retry-action",
+          "id": "skip-optional-step",
           "pass": true
         },
         {
-          "id": "loading-on-submit",
+          "id": "invalid-state",
           "pass": true
         },
         {
-          "id": "alternate-path",
+          "id": "error-text",
           "pass": true
         },
         {
-          "id": "failure-announced",
+          "id": "labelled-fields",
           "pass": true
         },
         {
-          "id": "timeout-distinct",
+          "id": "back-navigation",
           "pass": true
         }
       ]
     },
     "patternStrict": {
-      "passed": 3,
-      "total": 9,
-      "fraction": 0.333,
+      "passed": 7,
+      "total": 8,
+      "fraction": 0.875,
       "results": [
         {
-          "id": "decline-primary-change",
-          "rule": "Declined: primary action changes the card",
-          "pass": false
-        },
-        {
-          "id": "timeout-primary-retry",
-          "rule": "Timeout: primary action is Try again",
-          "pass": false
-        },
-        {
-          "id": "retry-loading",
-          "rule": "Retry shows loading on the Button",
+          "id": "label-required-prop",
+          "rule": "Required fields use Label required",
           "pass": true
         },
         {
-          "id": "alert-actions-slot",
-          "rule": "Recovery lives in the Alert actions slot",
-          "pass": false
-        },
-        {
-          "id": "alert-not-dismissible",
-          "rule": "Failure Alert is not dismissible",
-          "pass": false
-        },
-        {
-          "id": "no-oops",
-          "rule": "No \"Oops\" or \"Something went wrong\"",
+          "id": "no-typed-asterisk",
+          "rule": "No typed asterisk in a label",
           "pass": true
         },
         {
-          "id": "charge-status",
-          "rule": "Says whether the user was charged",
-          "pass": false
-        },
-        {
-          "id": "no-duplicate-live-region",
-          "rule": "No second live region (Alert danger is role=alert)",
-          "pass": false
-        },
-        {
-          "id": "support-secondary",
-          "rule": "Contact support is not primary",
+          "id": "invalid-prop",
+          "rule": "Invalid fields set invalid",
           "pass": true
+        },
+        {
+          "id": "describedby",
+          "rule": "Error text wired by aria-describedby",
+          "pass": true
+        },
+        {
+          "id": "skip-ghost",
+          "rule": "Skip is a ghost Button",
+          "pass": true
+        },
+        {
+          "id": "label-htmlfor",
+          "rule": "Labels use htmlFor",
+          "pass": true
+        },
+        {
+          "id": "no-raw-form-controls",
+          "rule": "No raw select or radio input",
+          "pass": true
+        },
+        {
+          "id": "no-per-field-alert",
+          "rule": "No Alert for field errors",
+          "pass": false
         }
       ],
       "rescored": true

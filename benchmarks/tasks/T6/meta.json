@@ -70,7 +70,7 @@
         "id": "row-selected-prop",
         "rule": "Selected rows set TableRow selected",
         "type": "match",
-        "pattern": "<TableRow[^>]*\\bselected="
+        "pattern": "<TableRow(?:[^>]|=>)*\\bselected="
       },
       {
         "id": "count-live",
@@ -82,7 +82,7 @@
         "id": "destructive-alertdialog",
         "rule": "Delete confirms in AlertDialog variant=destructive",
         "type": "match",
-        "pattern": "<AlertDialogContent[^>]*variant=\"destructive\""
+        "pattern": "<AlertDialogContent(?:[^>]|=>)*variant=\"destructive\""
       },
       {
         "id": "dialog-names-count",
@@ -100,7 +100,7 @@
         "id": "table-named",
         "rule": "Table is named (aria-label or caption)",
         "type": "match",
-        "pattern": "<Table[^>]*aria-label=|<TableCaption"
+        "pattern": "<Table(?:[^>]|=>)*aria-label=|<TableCaption"
       },
       {
         "id": "loading-busy",

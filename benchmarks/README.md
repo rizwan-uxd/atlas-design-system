@@ -49,3 +49,6 @@ The first `patternChecks` were presence checks and the baseline passed all of th
 
 ### Run timeout
 `run.sh` limits each attempt to `BENCH_RUN_TIMEOUT` seconds (default 900; healthy runs take 2–5 minutes) after two `patterns-w1` attempts stalled for hours in API retries. A timed-out attempt is discarded (its log is kept as `run-N.timeout-K.jsonl`, which `summarize.mjs` ignores), the workspace is reset to its base commit, and the run is retried up to `BENCH_TIMEOUT_RETRIES` times (default 1). Timeouts never count as results; if every attempt times out the script stops.
+
+### Regex fix applied to both arms
+After `patterns-w1` finished, two strict checks were found to under-count both arms: `[^>]*` stopped at the `=>` in `onClick={() => …}` (T9 `support-secondary`, `timeout-primary-retry`, and T8 `skip-ghost`). All strict patterns now use `(?:[^>]|=>)*` and both arms were re-scored from their saved workspaces. Strict adherence before and after the fix: baseline 0.796 to 0.812, patterns 0.944 to 0.981; T9 baseline 0.407 to 0.444, T9 patterns 0.815 to 1.000.

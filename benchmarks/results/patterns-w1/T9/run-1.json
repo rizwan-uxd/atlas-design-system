@@ -3,19 +3,18 @@
   "ok": true,
   "error": null,
   "turns": 20,
-  "durationS": 125,
-  "costUsd": 0.40663499999999997,
+  "durationS": 80,
+  "costUsd": 0.43875919999999996,
   "tokens": {
-    "input": 16,
-    "cacheWrite": 55436,
-    "cacheRead": 466395,
-    "output": 9158,
-    "totalContext": 521847
+    "input": 18,
+    "cacheWrite": 59444,
+    "cacheRead": 554586,
+    "output": 9003,
+    "totalContext": 614048
   },
   "tools": {
     "Skill": 1,
-    "Read": 10,
-    "Glob": 1,
+    "Read": 11,
     "Write": 4,
     "Edit": 1,
     "Bash": 1
@@ -26,35 +25,35 @@
   "reworkEdits": 0,
   "toolResultChars": {
     "Skill": 32,
-    "Read": 26384,
-    "Glob": 14,
-    "Write": 895,
+    "Read": 36163,
+    "Write": 892,
     "Edit": 230,
-    "Bash": 570
+    "Bash": 566
   },
   "skillsUsed": [
     "atlas-prototype"
   ],
   "reads": {
-    "total": 10,
-    "unique": 10,
+    "total": 11,
+    "unique": 11,
     "offTask": 0,
     "byCategory": {
-      "atlas-snapshot": 8,
+      "atlas-snapshot": 9,
       "skills": 1,
       "prototype-shell": 1
     },
     "files": [
       "atlas/index.md",
       ".claude/skills/atlas-prototype/references/flow-scaffold.md",
+      "atlas/patterns/error-recovery.md",
+      "atlas/patterns/form.md",
+      "atlas/Alert.md",
       "atlas/Button.md",
       "atlas/Input.md",
       "atlas/Label.md",
-      "atlas/Alert.md",
       "atlas/tokens.md",
-      "atlas/Switch.md",
-      "app/prototypes/_shared/flowRegistry.ts",
-      "atlas/Card.md"
+      "atlas/Checkbox.md",
+      "app/prototypes/_shared/flowRegistry.ts"
     ]
   },
   "bashCmds": [
@@ -63,40 +62,39 @@
   "quality": {
     "outputExists": true,
     "files": 4,
-    "loc": 333,
+    "loc": 317,
     "registered": true,
     "tokenLintViolations": 0,
     "tscErrors": 0,
     "atlasComponentsImported": [
+      "Alert",
       "Button",
+      "Checkbox",
       "Input",
-      "Label",
-      "Switch",
-      "Card",
-      "CardContent",
-      "Alert"
+      "Label"
     ],
     "expectedCoverage": "4/4",
     "rawElements": 0,
-    "numericStyleLiterals": 6,
+    "numericStyleLiterals": 5,
     "primitiveTokenRefs": 0
   },
   "phase8": {
     "readsAll": {
-      "total": 10,
-      "unique": 10,
+      "total": 11,
+      "unique": 11,
       "viaBash": 0,
       "files": [
         "atlas/index.md",
         ".claude/skills/atlas-prototype/references/flow-scaffold.md",
+        "atlas/patterns/error-recovery.md",
+        "atlas/patterns/form.md",
+        "atlas/Alert.md",
         "atlas/Button.md",
         "atlas/Input.md",
         "atlas/Label.md",
-        "atlas/Alert.md",
         "atlas/tokens.md",
-        "atlas/Switch.md",
-        "app/prototypes/_shared/flowRegistry.ts",
-        "atlas/Card.md"
+        "atlas/Checkbox.md",
+        "app/prototypes/_shared/flowRegistry.ts"
       ]
     },
     "sourceOpened": {},
@@ -131,7 +129,7 @@
   "w1": {
     "tokenAccuracy": {
       "value": 1,
-      "valid": 26,
+      "valid": 29,
       "invalid": 0,
       "primitive": 0,
       "hardcoded": 0
@@ -180,19 +178,19 @@
       ]
     },
     "patternStrict": {
-      "passed": 3,
+      "passed": 9,
       "total": 9,
-      "fraction": 0.333,
+      "fraction": 1,
       "results": [
         {
           "id": "decline-primary-change",
           "rule": "Declined: primary action changes the card",
-          "pass": false
+          "pass": true
         },
         {
           "id": "timeout-primary-retry",
           "rule": "Timeout: primary action is Try again",
-          "pass": false
+          "pass": true
         },
         {
           "id": "retry-loading",
@@ -202,12 +200,12 @@
         {
           "id": "alert-actions-slot",
           "rule": "Recovery lives in the Alert actions slot",
-          "pass": false
+          "pass": true
         },
         {
           "id": "alert-not-dismissible",
           "rule": "Failure Alert is not dismissible",
-          "pass": false
+          "pass": true
         },
         {
           "id": "no-oops",
@@ -217,12 +215,12 @@
         {
           "id": "charge-status",
           "rule": "Says whether the user was charged",
-          "pass": false
+          "pass": true
         },
         {
           "id": "no-duplicate-live-region",
           "rule": "No second live region (Alert danger is role=alert)",
-          "pass": false
+          "pass": true
         },
         {
           "id": "support-secondary",

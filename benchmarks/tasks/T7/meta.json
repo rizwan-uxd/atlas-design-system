@@ -44,19 +44,19 @@
         "id": "error-alert-actions",
         "rule": "Failure is a danger Alert with recovery in the actions slot",
         "type": "match",
-        "pattern": "<Alert[^>]*variant=\"danger\"[\\s\\S]{0,500}actions="
+        "pattern": "<Alert(?:[^>]|=>)*variant=\"danger\"[\\s\\S]{0,500}actions="
       },
       {
         "id": "alert-not-dismissible",
         "rule": "Failure Alert is not dismissible",
         "type": "absent",
-        "pattern": "<Alert[^>]*dismissible"
+        "pattern": "<Alert(?:[^>]|=>)*dismissible"
       },
       {
         "id": "retry-loading",
         "rule": "Retry shows loading on the Button",
         "type": "match",
-        "pattern": "<Button[^>]*\\bloading="
+        "pattern": "<Button(?:[^>]|=>)*\\bloading="
       },
       {
         "id": "loading-busy",
@@ -74,7 +74,7 @@
         "id": "no-duplicate-live-region",
         "rule": "No extra live region on the Alert",
         "type": "absent",
-        "pattern": "<Alert[^>]*(role=|aria-live)"
+        "pattern": "<Alert(?:[^>]|=>)*(role=|aria-live)"
       }
     ]
   }
