@@ -19,7 +19,7 @@ test("parse returns name, value and line", () => {
     ["--atlas-button-primary-background", "var(--atlas-primary)"],
     ["--atlas-button-size-md-height", "var(--atlas-spacing-10)"],
   ])
-  assert.ok(t[0].line > 1)
+  assert.deepEqual(t.map((x) => x.line), [6, 7])
 })
 
 test("a missing block is a violation", () => {
@@ -45,7 +45,28 @@ test("a literal value is rejected", () => {
 
 test("a name outside the component prefixes is rejected", () => {
   const v = lintComponentTokens(wrap("  --atlas-badge-background: var(--atlas-primary);"))
-  assert.match(v.join("\n"), /name/)
+  assert.match(v.join("\n"), /name must be/)
+})
+
+test("a declaration without a trailing semicolon is still linted", () => {
+  const bad = lintComponentTokens(wrap(OK + "\n  --atlas-card-background: var(--atlas-color-brand-500)"))
+  assert.match(bad.join("\n"), /primitive/)
+  const good = lintComponentTokens(wrap(OK + "\n  --atlas-card-background: var(--atlas-primary)"))
+  assert.deepEqual(good, [])
+})
+
+test("commented-out declarations are ignored", () => {
+  const css = wrap("  /* --atlas-button-primary-background: 12px; */\n" + OK)
+  assert.deepEqual(lintComponentTokens(css), [])
+  assert.deepEqual(parseComponentTokens(css).map((x) => x.name), [
+    "--atlas-button-primary-background",
+    "--atlas-button-size-md-height",
+  ])
+})
+
+test("a component token inside a comment outside the block is not flagged", () => {
+  const css = wrap(OK) + "/* --atlas-card-radius: 12px; */\n"
+  assert.deepEqual(lintComponentTokens(css), [])
 })
 
 test("the Card hover exception passes only with its exact value", () => {

@@ -36,7 +36,7 @@ export function parseComponentTokens(css) {
   const block = extractComponentBlock(css)
   if (!block) return []
   const body = stripComments(block.body)
-  return [...body.matchAll(/(--atlas-[\w-]+)\s*:\s*([^;]+);/g)].map((m) => ({
+  return [...body.matchAll(/(--atlas-[\w-]+)\s*:\s*([^;]+?)\s*(?:;|$)/g)].map((m) => ({
     name: m[1],
     value: squash(m[2]),
     line: lineAt(css, block.bodyOffset + m.index),
