@@ -19,22 +19,22 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  border-radius: var(--atlas-radius-lg);
+  border-radius: var(--atlas-card-radius);
   overflow: hidden; /* clips children to rounded corners */
   box-sizing: border-box;
   /* md defaults */
-  --_card-padding: var(--atlas-spacing-4);
-  --_card-gap:     var(--atlas-spacing-3);
+  --_card-padding: var(--atlas-card-size-md-padding);
+  --_card-gap:     var(--atlas-card-size-md-gap);
 }
 
-.sm { --_card-padding: var(--atlas-spacing-3); --_card-gap: var(--atlas-spacing-2); }
-.lg { --_card-padding: var(--atlas-spacing-6); --_card-gap: var(--atlas-spacing-4); }
+.sm { --_card-padding: var(--atlas-card-size-sm-padding); --_card-gap: var(--atlas-card-size-sm-gap); }
+.lg { --_card-padding: var(--atlas-card-size-lg-padding); --_card-gap: var(--atlas-card-size-lg-gap); }
 
 /* ── Variants ─────────────────────────────────────────────────── */
 
 .default {
-  background-color: var(--atlas-background);
-  border: var(--atlas-border-width-1) solid var(--atlas-border);
+  background-color: var(--atlas-card-default-background);
+  border: var(--atlas-border-width-1) solid var(--atlas-card-default-border);
 }
 
 /*
@@ -45,17 +45,17 @@
  * no visual change in light mode, correct depth cue in dark mode).
  */
 .elevated {
-  background-color: var(--atlas-surface-raised);
-  box-shadow: var(--atlas-shadow-md);
+  background-color: var(--atlas-card-elevated-background);
+  box-shadow: var(--atlas-card-elevated-shadow);
 }
 
 .outlined {
-  background-color: var(--atlas-background);
-  border: var(--atlas-border-width-1) solid var(--atlas-border-strong);
+  background-color: var(--atlas-card-outlined-background);
+  border: var(--atlas-border-width-1) solid var(--atlas-card-outlined-border);
 }
 
 .filled {
-  background-color: var(--atlas-background-muted);
+  background-color: var(--atlas-card-filled-background);
 }
 
 /* ── Selected state — primary border + subtle bg on all variants ─ */
@@ -68,14 +68,14 @@
 
 .selected.default,
 .selected.outlined {
-  border-color: var(--atlas-primary);
-  background-color: var(--atlas-background-subtle);
+  border-color: var(--atlas-card-selected-border);
+  background-color: var(--atlas-card-selected-background);
 }
 
 .selected.elevated,
 .selected.filled {
-  border: var(--atlas-border-width-1) solid var(--atlas-primary);
-  background-color: var(--atlas-background-subtle);
+  border: var(--atlas-border-width-1) solid var(--atlas-card-selected-border);
+  background-color: var(--atlas-card-selected-background);
 }
 
 /* ── Interactive — button reset + hover, focus, motion ────────── */
@@ -110,9 +110,12 @@
 }
 
 /* Default and outlined hover */
-.interactive.default:hover,
-.interactive.outlined:hover {
+.interactive.default:hover {
   background-color: var(--atlas-background-subtle);
+}
+
+.interactive.outlined:hover {
+  background-color: var(--atlas-card-outlined-background-hover);
 }
 
 /* Filled hover — light mode correct (bg-muted → bg-subtle = lighter) */
@@ -127,12 +130,12 @@
  * to always lighten the resting fill by ~20% toward white.
  */
 [data-theme="dark"] .interactive.filled:hover {
-  background-color: color-mix(in oklch, var(--atlas-background-muted) 80%, oklch(1 0 0));
+  background-color: var(--atlas-card-filled-background-hover);
 }
 
 /* Elevated hover — lift shadow, keep bg */
 .interactive.elevated:hover {
-  box-shadow: var(--atlas-shadow-lg);
+  box-shadow: var(--atlas-card-elevated-shadow-hover);
 }
 
 /* Focus ring — outline renders outside overflow:hidden in modern browsers */
@@ -193,7 +196,7 @@
   font-family: var(--atlas-font-sans);
   font-weight: var(--atlas-font-weight-semibold);
   font-size: var(--atlas-text-h4); /* responsive heading token */
-  color: var(--atlas-foreground);
+  color: var(--atlas-card-title-foreground);
   line-height: var(--atlas-line-height-snug);
 }
 
@@ -206,7 +209,7 @@
   margin-block-start: var(--atlas-spacing-1);
   font-family: var(--atlas-font-sans);
   font-size: var(--atlas-text-body-sm);
-  color: var(--atlas-foreground-muted);
+  color: var(--atlas-card-description-foreground);
   line-height: var(--atlas-line-height-normal);
 }
 
