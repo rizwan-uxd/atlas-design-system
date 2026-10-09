@@ -55,7 +55,7 @@ Mobile-native baseline: `md` and `lg` already meet `touch.min` (44px). `sm` is w
 | Variant | default | hover | active | disabled |
 |---|---|---|---|---|
 | primary | `--atlas-primary` | `--atlas-primary-hover` | `--atlas-primary-active` | `--atlas-primary` + `opacity-disabled` |
-| secondary | `--atlas-background-muted` | `--atlas-background-subtle` | `--atlas-background-subtle` | same + `opacity-disabled` |
+| secondary | `--atlas-background-muted` | `--atlas-background-hovered` | `--atlas-background-hovered` | same + `opacity-disabled` |
 | outline | `transparent` | `--atlas-background-subtle` | `--atlas-background-muted` | `transparent` |
 | ghost | `transparent` | `--atlas-background-subtle` | `--atlas-background-muted` | `transparent` |
 | destructive | `--atlas-danger` | `--atlas-danger-hover` | `--atlas-danger-hover` | `--atlas-danger` + `opacity-disabled` |

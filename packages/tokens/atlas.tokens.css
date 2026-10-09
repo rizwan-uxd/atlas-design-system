@@ -352,8 +352,8 @@
   --atlas-button-primary-background-active: var(--atlas-primary-active);
   --atlas-button-primary-foreground: var(--atlas-primary-foreground);
   --atlas-button-secondary-background: var(--atlas-background-muted);
-  --atlas-button-secondary-background-hover: var(--atlas-background-subtle);
-  --atlas-button-secondary-background-active: var(--atlas-background-subtle);
+  --atlas-button-secondary-background-hover: var(--atlas-background-hovered);
+  --atlas-button-secondary-background-active: var(--atlas-background-hovered);
   --atlas-button-secondary-foreground: var(--atlas-foreground);
   --atlas-button-outline-foreground: var(--atlas-foreground);
   --atlas-button-outline-border: var(--atlas-border-strong);
