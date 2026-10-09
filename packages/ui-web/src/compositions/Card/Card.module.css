@@ -111,25 +111,15 @@
 
 /* Default and outlined hover */
 .interactive.default:hover {
-  background-color: var(--atlas-background-subtle);
+  background-color: var(--atlas-card-default-background-hover);
 }
 
 .interactive.outlined:hover {
   background-color: var(--atlas-card-outlined-background-hover);
 }
 
-/* Filled hover — light mode correct (bg-muted → bg-subtle = lighter) */
+/* Filled hover lightens the resting fill in both themes (background-hovered); retired the dark-only color-mix from BUG-054. */
 .interactive.filled:hover {
-  background-color: var(--atlas-background-subtle);
-}
-
-/*
- * BUG-054 — dark mode inversion fix for filled interactive hover.
- * In dark mode bg-muted = neutral-800 (resting) and bg-subtle = neutral-900
- * (darker) — hover darkens instead of lightening. Override with color-mix
- * to always lighten the resting fill by ~20% toward white.
- */
-[data-theme="dark"] .interactive.filled:hover {
   background-color: var(--atlas-card-filled-background-hover);
 }
 

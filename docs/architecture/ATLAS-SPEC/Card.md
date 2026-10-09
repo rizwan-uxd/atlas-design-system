@@ -58,10 +58,10 @@ Non-interactive cards have only `default` and `disabled`.
 
 | Variant | default | hover (interactive) | selected |
 |---|---|---|---|
-| default | `--atlas-background` | `--atlas-background-subtle` | `--atlas-background-subtle` |
+| default | `--atlas-surface` | `--atlas-background-hovered` | `--atlas-background-subtle` |
 | elevated | `--atlas-background` | `--atlas-background` | `--atlas-background-subtle` |
-| outlined | `--atlas-background` | `--atlas-background-subtle` | `--atlas-background-subtle` |
-| filled | `--atlas-background-muted` | `--atlas-background-subtle` | `--atlas-background-subtle` |
+| outlined | `--atlas-surface` | `--atlas-background-hovered` | `--atlas-background-subtle` |
+| filled | `--atlas-background-muted` | `--atlas-background-hovered` | `--atlas-background-subtle` |
 
 ### Border
 

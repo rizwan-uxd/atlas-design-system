@@ -398,7 +398,7 @@
   --atlas-input-background-disabled: var(--atlas-background-muted);
   --atlas-input-foreground-disabled: var(--atlas-foreground-disabled);
   --atlas-input-filled-background: var(--atlas-background-muted);
-  --atlas-input-filled-background-hover: var(--atlas-background-subtle);
+  --atlas-input-filled-background-hover: var(--atlas-background-hovered);
   --atlas-input-filled-background-focus: var(--atlas-background);
   --atlas-input-icon-foreground: var(--atlas-foreground-muted);
   --atlas-input-affix-foreground: var(--atlas-foreground-muted);
@@ -417,20 +417,17 @@
   --atlas-input-size-lg-font-size: var(--atlas-font-size-base);
 
   /* Card · colour and elevation */
-  --atlas-card-default-background: var(--atlas-background);
+  --atlas-card-default-background: var(--atlas-surface);
   --atlas-card-default-border: var(--atlas-border);
+  --atlas-card-default-background-hover: var(--atlas-background-hovered);
   --atlas-card-elevated-background: var(--atlas-surface-raised);
   --atlas-card-elevated-shadow: var(--atlas-shadow-md);
   --atlas-card-elevated-shadow-hover: var(--atlas-shadow-lg);
-  --atlas-card-outlined-background: var(--atlas-background);
+  --atlas-card-outlined-background: var(--atlas-surface);
   --atlas-card-outlined-border: var(--atlas-border-strong);
-  --atlas-card-outlined-background-hover: var(--atlas-background-subtle);
+  --atlas-card-outlined-background-hover: var(--atlas-background-hovered);
   --atlas-card-filled-background: var(--atlas-background-muted);
-  /* approved exception (spec 2026-10-09-component-tokens-design.md): the only component token that is
-     not an alias. It preserves the existing computed hover value until a semantic token is approved.
-     Used only by the dark-mode filled hover rule in Card.module.css; the light filled hover keeps
-     --atlas-background-subtle (see DISC-090). */
-  --atlas-card-filled-background-hover: color-mix(in oklch, var(--atlas-background-muted) 80%, oklch(1 0 0));
+  --atlas-card-filled-background-hover: var(--atlas-background-hovered);
   --atlas-card-selected-border: var(--atlas-primary);
   --atlas-card-selected-background: var(--atlas-background-subtle);
   --atlas-card-title-foreground: var(--atlas-foreground);

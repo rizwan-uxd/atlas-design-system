@@ -1,7 +1,7 @@
 import { test } from "node:test"
 import assert from "node:assert/strict"
 import {
-  BEGIN, END, CARD_EXCEPTION, extractComponentBlock, parseComponentTokens, lintComponentTokens, renderComponentSection,
+  BEGIN, END, extractComponentBlock, parseComponentTokens, lintComponentTokens, renderComponentSection,
 } from "../lib/component-tokens.mjs"
 
 const wrap = (decls, selector = ':root,\n[data-theme="dark"],\n.dark') =>
@@ -69,13 +69,6 @@ test("a component token inside a comment outside the block is not flagged", () =
   assert.deepEqual(lintComponentTokens(css), [])
 })
 
-test("the Card hover exception passes only with its exact value", () => {
-  const ok = `  ${CARD_EXCEPTION.name}: ${CARD_EXCEPTION.value};`
-  assert.deepEqual(lintComponentTokens(wrap(ok)), [])
-  const bad = `  ${CARD_EXCEPTION.name}: color-mix(in oklch, var(--atlas-background-muted) 70%, oklch(1 0 0));`
-  assert.match(lintComponentTokens(wrap(bad)).join("\n"), /exception/)
-})
-
 test("any other color-mix is rejected", () => {
   const v = lintComponentTokens(wrap("  --atlas-button-ghost-background-hover: color-mix(in oklch, var(--atlas-primary) 10%, oklch(1 0 0));"))
   assert.match(v.join("\n"), /must be var\(--atlas-/)
@@ -129,10 +122,15 @@ test("the real token CSS has a valid component-token block", () => {
   assert.ok(parseComponentTokens(REAL_CSS).length >= 80)
 })
 
-test("the real block keeps the exception comment beside the exception token", () => {
-  const i = REAL_CSS.indexOf(CARD_EXCEPTION.name)
-  assert.ok(i > 0)
-  assert.match(REAL_CSS.slice(Math.max(0, i - 400), i), /approved exception/)
+test("the old Card color-mix exception is now rejected", () => {
+  const v = lintComponentTokens(wrap("  --atlas-card-filled-background-hover: color-mix(in oklch, var(--atlas-background-muted) 80%, oklch(1 0 0));"))
+  assert.match(v.join("\n"), /must be var\(--atlas-/)
+})
+
+test("the real block defines card-default-background-hover as background-hovered", () => {
+  const t = parseComponentTokens(REAL_CSS).find((x) => x.name === "--atlas-card-default-background-hover")
+  assert.ok(t)
+  assert.equal(t.value, "var(--atlas-background-hovered)")
 })
 
 test("every semantic alias target in the real block is defined in the token file", () => {
