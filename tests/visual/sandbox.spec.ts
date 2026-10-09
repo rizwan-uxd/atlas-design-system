@@ -19,7 +19,8 @@ for (const theme of ["light", "dark"] as const) {
         if (SKIP.some((s) => title.startsWith(s))) continue
         const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")
         await section.scrollIntoViewIfNeeded()
-        await expect(section).toHaveScreenshot(`${theme}-${slug}.png`)
+        // soft: report every differing section, not only the first
+        await expect.soft(section).toHaveScreenshot(`${theme}-${slug}.png`)
       }
     })
   })
