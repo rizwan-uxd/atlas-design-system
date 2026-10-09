@@ -45,7 +45,7 @@
 - Test: `scripts/tests/component-tokens.test.mjs`
 
 **Interfaces:**
-- Produces: `COMPONENTS`, `BEGIN`, `END`, `CARD_EXCEPTION`, `extractComponentBlock(css) → {selector, body, startLine} | null`, `parseComponentTokens(css) → [{name, value, line}]`, `lintComponentTokens(css) → string[]`, `renderComponentSection(css) → string` (empty string when there is no block), `SECTION_BEGIN`, `SECTION_END`.
+- Produces: `COMPONENTS`, `BEGIN`, `END`, `CARD_EXCEPTION`, `extractComponentBlock(css) → {selector, body, bodyOffset} | null`, `parseComponentTokens(css) → [{name, value, line}]`, `lintComponentTokens(css) → string[]`, `renderComponentSection(css) → string` (empty string when there is no block), `SECTION_BEGIN`, `SECTION_END`.
 
 - [ ] **Step 1: Write the failing tests**
 
