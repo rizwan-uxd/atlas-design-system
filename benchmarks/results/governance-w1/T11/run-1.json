@@ -1,0 +1,131 @@
+{
+  "model": "claude-sonnet-5-5",
+  "ok": true,
+  "error": null,
+  "turns": 8,
+  "durationS": 28,
+  "costUsd": 0.19618280000000002,
+  "tokens": {
+    "input": 10,
+    "cacheWrite": 33792,
+    "cacheRead": 235224,
+    "output": 1395,
+    "totalContext": 269026
+  },
+  "tools": {
+    "Read": 2,
+    "Bash": 2,
+    "Edit": 3
+  },
+  "toolCalls": 7,
+  "figmaCalls": 0,
+  "verifyRuns": 2,
+  "reworkEdits": 3,
+  "toolResultChars": {
+    "Read": 961,
+    "Bash": 848,
+    "Edit": 723
+  },
+  "skillsUsed": [],
+  "reads": {
+    "total": 2,
+    "unique": 2,
+    "offTask": 0,
+    "byCategory": {
+      "new-output": 1,
+      "atlas-snapshot": 1
+    },
+    "files": [
+      "app/prototypes/legacy-fixture/LegacyScreen.tsx",
+      "atlas/state/deprecations.json"
+    ]
+  },
+  "bashCmds": [
+    "sed -i '' 's/variant=\"neutral\"/variant=\"info\"/; s/variant=\"link\"/variant=\"ghost\"/' app/prototypes/legacy-fixture/LegacyScreen.tsx && cat app/prototypes/legacy-fixture/LegacyScreen.tsx && npm run atlas:verify -- --scope \"app/prototypes/legacy-fixture/**\" 2>&1 | tail -30",
+    "npm run atlas:verify -- --scope \"app/prototypes/legacy-fixture/**\" 2>&1 | tail -30"
+  ],
+  "quality": {
+    "outputExists": true,
+    "files": 1,
+    "loc": 13,
+    "registered": false,
+    "tokenLintViolations": 0,
+    "tscErrors": 0,
+    "atlasComponentsImported": [
+      "Alert",
+      "Button"
+    ],
+    "expectedCoverage": "2/2",
+    "rawElements": 0,
+    "numericStyleLiterals": 0,
+    "primitiveTokenRefs": 0
+  },
+  "phase8": {
+    "readsAll": {
+      "total": 4,
+      "unique": 2,
+      "viaBash": 2,
+      "files": [
+        "app/prototypes/legacy-fixture/LegacyScreen.tsx",
+        "atlas/state/deprecations.json",
+        "Bash:app/prototypes/legacy-fixture/LegacyScreen.tsx",
+        "Bash:app/prototypes/legacy-fixture/LegacyScreen.tsx"
+      ]
+    },
+    "sourceOpened": {},
+    "sourceOpenedCount": 0,
+    "verify": {
+      "runs": 1,
+      "failures": 0,
+      "firstPass": true,
+      "finalPass": true,
+      "calls": [
+        {
+          "cmd": "npm run atlas:verify -- --scope \"app/prototypes/legacy-fixture/**\" 2>&1 | tail -30",
+          "failed": false
+        }
+      ]
+    },
+    "wasted": {
+      "duplicateReads": 0,
+      "unusedComponentReads": [],
+      "offTask": [],
+      "verifierInternals": [],
+      "failedToolCalls": 1,
+      "total": 1
+    },
+    "gaps": {
+      "available": true,
+      "candidatesChanged": [],
+      "expected": [],
+      "recognised": []
+    }
+  },
+  "w1": {
+    "tokenAccuracy": {
+      "value": null,
+      "valid": 0,
+      "invalid": 0,
+      "primitive": 0,
+      "hardcoded": 0
+    },
+    "componentAccuracy": {
+      "value": 1,
+      "covered": 2,
+      "expected": 2,
+      "rawElements": 0
+    },
+    "a11yPass": true,
+    "deprecatedUsage": 0,
+    "humanCorrections": {
+      "available": false
+    },
+    "migration": {
+      "removedRemaining": [],
+      "expectedMet": true,
+      "contentKept": true,
+      "migrated": true
+    }
+  },
+  "subtype": "success"
+}
