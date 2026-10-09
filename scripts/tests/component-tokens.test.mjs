@@ -5,7 +5,7 @@ import {
 } from "../lib/component-tokens.mjs"
 
 const wrap = (decls, selector = ':root,\n[data-theme="dark"],\n.dark') =>
-  `:root { --atlas-primary: x; }\n${BEGIN}\n${selector} {\n${decls}\n}\n${END}\n`
+  `:root { --atlas-primary: x; --atlas-spacing-10: x; --atlas-foreground: x; --atlas-background: x; --atlas-background-muted: x; --atlas-border-strong: x; --atlas-radius-lg: x; --atlas-radius-md: x; --atlas-danger: x; --atlas-border: x; }\n${BEGIN}\n${selector} {\n${decls}\n}\n${END}\n`
 
 const OK = "  --atlas-button-primary-background: var(--atlas-primary);\n  --atlas-button-size-md-height: var(--atlas-spacing-10);"
 
@@ -89,6 +89,11 @@ test("the selector must cover :root, [data-theme=dark] and .dark", () => {
 test("a component token defined outside the block is rejected", () => {
   const css = wrap(OK) + ":root { --atlas-card-radius: var(--atlas-radius-lg); }\n"
   assert.match(lintComponentTokens(css).join("\n"), /outside the component-token block/)
+})
+
+test("an alias to an undefined token is rejected", () => {
+  const v = lintComponentTokens(wrap("  --atlas-button-primary-background: var(--atlas-primry);"))
+  assert.match(v.join("\n"), /undefined token/)
 })
 
 test("a duplicate name is rejected", () => {

@@ -1082,7 +1082,7 @@
       "component": "Card",
       "side": "both",
       "status": "open",
-      "issue": "Figma Card item spacing and size-dependent corner radius differ from code: Figma binds itemSpacing spacing/1_5, spacing/2, spacing/2 for sm, md, lg where code uses card-size-<size>-gap (spacing-2, spacing-3, spacing-4); Figma uses radius/md at sm, radius-lg at md and radius/xl at lg where code uses radius-lg at every size. Found 2026-10-09 while rebinding Card to component tokens; those bindings stayed on their Figma variables.",
+      "issue": "Figma Card item spacing and size-dependent corner radius differ from code: Figma binds itemSpacing spacing-1_5, spacing-2, spacing-2 for sm, md, lg where code uses card-size-<size>-gap (spacing-2, spacing-3, spacing-4); Figma uses radius-md at sm, radius-lg at md and radius-xl at lg where code uses radius-lg at every size. Found 2026-10-09 while rebinding Card to component tokens; those bindings stayed on their Figma variables.",
       "resolution": "Decide whether Figma or code is right for gap and radius per size; then align the other side and bind the Card component set to card/size-*-gap and card/radius.",
       "firstSeen": "2026-10-09",
       "lastSeen": "2026-10-09"

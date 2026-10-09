@@ -22,6 +22,7 @@ which preserves the existing computed value until a proper semantic token is app
 That exception is `color-mix(in oklch, var(--atlas-background-muted) 80%, oklch(1 0 0))` in
 `Card.module.css`. The component token `--atlas-card-filled-background-hover` carries that expression
 with a comment pointing here. It is not an alias and it is the only one. No other new value is allowed.
+It is used only by the dark-mode filled hover rule in `Card.module.css`; the light filled hover keeps `--atlas-background-subtle` (see DISC-090).
 
 ## Who uses them
 Component tokens are for Atlas component implementation and documentation. Product code and

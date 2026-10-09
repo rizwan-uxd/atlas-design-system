@@ -51,6 +51,7 @@ export function lintComponentTokens(css) {
   for (const need of [":root", '[data-theme="dark"]', ".dark"]) {
     if (!sel.includes(need)) out.push(`selector "${sel}" must include ${need} so every theme scope re-resolves the aliases`)
   }
+  const defined = new Set([...stripComments(css).matchAll(/(--atlas-[\w-]+)\s*:/g)].map((m) => m[1]))
   const seen = new Set()
   for (const t of parseComponentTokens(css)) {
     const at = `line ${t.line} ${t.name}`
@@ -65,6 +66,7 @@ export function lintComponentTokens(css) {
     if (!alias) { out.push(`${at}: must be var(--atlas-<semantic>), got "${t.value}"`); continue }
     if (PRIMITIVE.test(alias[1])) out.push(`${at}: aliases a primitive (${alias[1]}) — use a semantic token`)
     else if (COMPONENT_PREFIX.test(alias[1])) out.push(`${at}: aliases another component token (${alias[1]}) — alias a semantic token`)
+    else if (!defined.has(alias[1])) out.push(`${at}: aliases undefined token (${alias[1]})`)
   }
   // no component token may be defined anywhere else in the file
   const outside = css.slice(0, css.indexOf(BEGIN)) + css.slice(css.indexOf(END) + END.length)
@@ -84,7 +86,7 @@ export function renderComponentSection(css) {
     "",
     "## Component tokens (Atlas implementation tokens)",
     "",
-    "These name the visual decisions inside Atlas components. They exist for implementing and documenting Atlas components, and every one aliases a semantic token above. Product code and prototypes use the semantic tokens; reach for a component token only when styling or wrapping an Atlas component.",
+    "These name the visual decisions inside Atlas components. They exist for implementing and documenting Atlas components, and all but one alias a semantic token above (Card's filled hover keeps a computed colour; see the spec). Product code and prototypes use the semantic tokens; reach for a component token only when styling or wrapping an Atlas component.",
   ]
   for (const c of COMPONENTS) {
     const mine = tokens.filter((t) => t.name.startsWith(`--atlas-${c}-`))

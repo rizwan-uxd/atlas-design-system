@@ -427,7 +427,9 @@
   --atlas-card-outlined-background-hover: var(--atlas-background-subtle);
   --atlas-card-filled-background: var(--atlas-background-muted);
   /* approved exception (spec 2026-10-09-component-tokens-design.md): the only component token that is
-     not an alias. It preserves the existing computed hover value until a semantic token is approved. */
+     not an alias. It preserves the existing computed hover value until a semantic token is approved.
+     Used only by the dark-mode filled hover rule in Card.module.css; the light filled hover keeps
+     --atlas-background-subtle (see DISC-090). */
   --atlas-card-filled-background-hover: color-mix(in oklch, var(--atlas-background-muted) 80%, oklch(1 0 0));
   --atlas-card-selected-border: var(--atlas-primary);
   --atlas-card-selected-background: var(--atlas-background-subtle);
