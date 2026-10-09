@@ -22,6 +22,8 @@ DON'T
 PROPERTIES
 Variant: default | filled | unstyled (unstyled when the surrounding container owns the border: search bars, inline edit). Size: sm | md | lg. State: default | hover | focus-visible | disabled | error.
 
+CODE    <Input> in @atlas/ui-web/primitives/Input
+
 <!-- BEGIN:generated-structure -->
 
 ## Variants

@@ -21,6 +21,8 @@ DON'T
 PROPERTIES
 Variant: primary | secondary | outline | ghost | destructive | link. Size: xs | sm | md | lg. Icon only: false | true. State: default | hover | focus-visible | active | disabled | loading. Leading icon and Trailing icon are booleans with swappable slots.
 
+CODE    <Button> in @atlas/ui-web/primitives/Button
+
 <!-- BEGIN:generated-structure -->
 
 ## Variants

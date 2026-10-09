@@ -23,6 +23,8 @@ DON'T
 PROPERTIES
 Variant: info | success | warning | danger | neutral. Size: sm | md | lg. Dismissible: boolean.
 
+CODE    <Alert> in @atlas/ui-web/compositions/Alert
+
 <!-- BEGIN:generated-structure -->
 
 ## Variants

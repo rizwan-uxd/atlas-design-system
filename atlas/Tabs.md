@@ -23,6 +23,8 @@ DON'T
 PROPERTIES
 Variant: line | pill | segmented | outline. Size: sm | md | lg. State: default | hover | focus-visible | selected | disabled. Icon, Badge, Animated: booleans.
 
+CODE    <Tabs> in @atlas/ui-web/patterns/Tabs
+
 <!-- BEGIN:generated-structure -->
 
 ## Variants

@@ -21,6 +21,8 @@ DON'T
 PROPERTIES
 Variant: neutral | primary | success | warning | danger | info. Appearance: default | outline. Size: sm | md | lg. State: default | disabled.
 
+CODE    <Badge> in @atlas/ui-web/primitives/Badge
+
 <!-- BEGIN:generated-structure -->
 
 ## Variants

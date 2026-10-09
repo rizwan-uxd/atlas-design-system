@@ -21,6 +21,8 @@ DON'T
 PROPERTIES
 Variant: default | outlined | elevated | filled. Size: sm | md | lg. State: default | hover | focus-visible | active | disabled.
 
+CODE    <Card> in @atlas/ui-web/compositions/Card
+
 <!-- BEGIN:generated-structure -->
 
 ## Variants

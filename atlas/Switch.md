@@ -21,6 +21,8 @@ DON'T
 PROPERTIES
 Checked: off | on. Size: sm | md | lg. State: default | hover | focus-visible | active | disabled. Invalid: boolean.
 
+CODE    <Switch> in @atlas/ui-web/primitives/Switch
+
 <!-- BEGIN:generated-structure -->
 
 ## Sizes

@@ -22,6 +22,8 @@ DON'T
 PROPERTIES
 Variant: default | destructive. Size: sm | md | lg | xl | full. State: default | loading.
 
+CODE    <Dialog> in @atlas/ui-web/compositions/Dialog
+
 <!-- BEGIN:generated-structure -->
 
 ## Variants

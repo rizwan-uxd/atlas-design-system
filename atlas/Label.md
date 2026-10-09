@@ -28,6 +28,8 @@ PROPERTIES
 • Required: boolean — shows the * marker
 • Optional: boolean — shows the "(optional)" hint
 
+CODE    <Label> in @atlas/ui-web/primitives/Label
+
 <!-- BEGIN:generated-structure -->
 
 ## Variants

@@ -21,6 +21,8 @@ DON'T
 PROPERTIES
 Variant: default | filled | unstyled. Size: sm | md | lg. State: default | hover | focus-visible | disabled | error.
 
+CODE    <Textarea> in @atlas/ui-web/primitives/Textarea
+
 <!-- BEGIN:generated-structure -->
 
 ## Variants
