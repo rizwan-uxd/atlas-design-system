@@ -15,6 +15,7 @@
 import fs from "node:fs"
 import path from "node:path"
 import { fileURLToPath } from "node:url"
+import { renderComponentSection, SECTION_BEGIN, SECTION_END } from "./lib/component-tokens.mjs"
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..")
 const SRC = path.join(ROOT, "packages/ui-web/src")
@@ -656,6 +657,8 @@ for (const rel of ["atlas/tokens.md", "atlas/README.md"]) {
   let body = read(abs).replace(/^<!-- GENERATED[^>]*-->/, `<!-- ${HEADER} -->`)
   if (rel === "atlas/tokens.md") {
     body = upsertSection(body, LAYOUT_BEGIN, LAYOUT_END, layoutSection)
+    const componentSection = renderComponentSection(read(TOKENS_CSS))
+    if (componentSection) body = upsertSection(body, SECTION_BEGIN, SECTION_END, componentSection)
   }
   write(rel, body)
 }
