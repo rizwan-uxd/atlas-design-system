@@ -460,7 +460,7 @@ for (const p of patterns) {
 
 /* ── index.md ───────────────────────────────────────────── */
 
-const missing = ["Avatar", "Table", "Tooltip", "Select", "Radio", "Toast"].filter((n) => !comps.some((c) => c.name === n))
+const missing = ["Avatar", "Table", "Tooltip", "Select", "RadioGroup", "Toast"].filter((n) => !comps.some((c) => c.name === n))
 write("atlas/index.md", [
   `<!-- ${HEADER} -->`,
   "",
@@ -473,7 +473,9 @@ write("atlas/index.md", [
   ...comps.map((c) =>
     `| ${c.name} | ${c.tier} | \`@atlas/ui-web/${c.tier}/${c.name}/${c.name}\` | ${(c.variants ?? []).join(", ") || "—"} | ${(c.sizes ?? []).join(", ") || "—"} |`),
   "",
-  `No ${missing.slice(0, -1).join(", ")} or ${missing.at(-1)} exists. Compose gaps from primitives and log them in \`state/candidates.json\`.`,
+  missing.length
+    ? `No ${missing.length > 1 ? `${missing.slice(0, -1).join(", ")} or ${missing.at(-1)}` : missing[0]} exists. Compose gaps from primitives and log them in \`state/candidates.json\`.`
+    : "Compose anything missing from primitives and log the gap in `state/candidates.json`.",
   "",
   ...(patterns.length ? [
     "## Patterns",
