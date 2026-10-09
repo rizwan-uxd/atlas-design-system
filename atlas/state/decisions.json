@@ -329,6 +329,12 @@
       "topic": "Resolve Figma/code discrepancies DISC-032, 089, 090, 091, 092",
       "decision": "Owner-approved 2026-10-09. DISC-091: filled Input hover uses --atlas-background-hovered in Figma and code (dark mode previously darkened on hover). DISC-090: Card filled hover uses --atlas-background-hovered in both themes; the Card color-mix exception is retired. DISC-092: Button outline disabled stroke is border-strong (Figma rebound). DISC-089: Card gap is card-size-<size>-gap (8/12/16) and radius is radius-lg at every size (Figma rebound to match the spec). DISC-032 split: Card default and outlined fills follow Figma (--atlas-surface, lifts the card off the page in dark mode like BUG-051); strokes follow code (default --atlas-border, outlined --atlas-border-strong; Figma strokes rebound). Hover for default and outlined Card is --atlas-background-hovered via the new component token --atlas-card-default-background-hover (alias, no new semantic token); selected keeps --atlas-background-subtle and the primary border. Dark-mode visual changes: Card default/outlined fill, Card hover states, filled Input hover. No new semantic tokens; one new component token.",
       "date": "2026-10-09"
+    },
+    {
+      "id": "DEC-055",
+      "topic": "Button secondary hover and active use background-hovered",
+      "decision": "User request (2026-10-09), same defect class as DEC-054 (DISC-091). Button secondary rests on --atlas-background-muted; hover and active used --atlas-background-subtle, which in dark mode (neutral-900) is darker than the resting fill (neutral-800), so the button darkened on hover. Hover and active now use --atlas-background-hovered (light neutral-50 = unchanged; dark neutral-700, lighter than resting). Figma: the component variables button/secondary-background-hover and button/secondary-background-active were re-aliased from background-subtle to background-hovered (affects the 8 hover and 8 active Button secondary variants); code: the two component tokens --atlas-button-secondary-background-hover and -active. Button.module.css unchanged (already uses the component tokens). Spec Button.md updated. No new tokens. Light mode unchanged; dark mode secondary hover and active change.",
+      "date": "2026-10-09"
     }
   ]
 }
