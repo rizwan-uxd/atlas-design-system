@@ -11,4 +11,5 @@ export type {
   AnimatedIconDefinition,
   IconAnimation,
   IconMotionContext,
+  IconToggle,
 } from "./animated-icon.types"

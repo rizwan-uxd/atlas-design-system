@@ -22,11 +22,53 @@ Correctness first — a label only wins if these are equal or better. Lower is b
 | T1 | harness-v2 | 3 | 3/3 | 3/3 | 7/7 7/7 7/7 | 0 | 0 | 0 | 16 (run 1) | 3/3 | 32.33 (29–36) | 0.78 (0.64–0.97) | 1.50M (1.12M–1.94M) | 1.57M (1.18M–2.02M) | 18.9k (14.8k–25.6k) | 29.33 (26–33) | 194 (160–242) | 13.33 (13–14) | 0 | 0 | 0.33 (0–1) | 2/3 | 0 | 3/3 logged any |
 | T1 | harness-v3 | 3 | 3/3 | 3/3 | 7/7 6/7 7/7 | 0 | 0 | 0 | – | 3/3 | 34.33 (28–39) | 0.79 (0.73–0.81) | 1.49M (1.15M–1.69M) | 1.57M (1.23M–1.76M) | 18.9k (17.8k–20.9k) | 31.33 (25–36) | 197 (187–212) | 15 (13–16) | 0.33 (0–1) | 2 (0–3) | 0 | 3/3 | 0.33 (0–1) | 3/3 logged any |
 | T1 | harness-v7 | 3 | 3/3 | 3/3 | 7/7 7/7 7/7 | 0 | 0 | 0 | – | 3/3 | 35.33 (31–38) | 0.80 (0.72–0.86) | 1.64M (1.41M–1.90M) | 1.71M (1.48M–1.97M) | 16.8k (15.9k–17.4k) | 32.33 (28–35) | 170 (161–175) | 16 (13–19) | 0.67 (0–2) | 1.33 (0–4) | 0.33 (0–1) | 2/3 | 0.67 (0–1) | 3/3 logged any |
+| T10 | governance-w1 | 3 | 3/3 | 0/3 | 2/2 2/2 2/2 | 1 | 0 | 1 | – | 0/3 | 5.67 (4–8) | 0.20 (0.18–0.22) | 186.1k (129.3k–243.9k) | 222.1k (164.0k–282.2k) | 1567 (1249–2055) | 4.67 (3–7) | 21.33 (18–28) | 4 (3–6) | 0 | 1 | 0 | 0/3 | 0.67 (0–2) | 0/3 logged any |
+| T11 | governance-w1 | 3 | 3/3 | 0/3 | 2/2 2/2 2/2 | 0 | 0 | 0 | – | 3/3 | 8 | 0.20 (0.20–0.20) | 235.2k (235.1k–235.2k) | 268.9k (268.8k–269.0k) | 1373 (1326–1399) | 7 | 30.33 (27–36) | 3.67 (3–4) | 2 (1–3) | 0 | 0 | 3/3 | 1 | 0/3 logged any |
 | T2 | baseline | 3 | 3/3 | 3/3 | 3/6 5/6 5/6 | 0 | 0 | 0.67 (0–1) | 14 (run 3) | 3/3 | 27.67 (24–31) | 0.70 (0.63–0.79) | 1.59M (1.35M–1.79M) | 1.67M (1.43M–1.88M) | 10.1k (9228–11.1k) | 26.33 (23–30) | 117 (95–142) | 13 (11–14) | 2.33 (1–4) | 9 (8–10) | 1 | 0/3 | 5.33 (5–6) | n/a |
 | T2 | harness | 3 | 3/3 | 3/3 | 4/6 4/6 4/6 | 0 | 0 | 0 | – | 3/3 | 26.33 (23–29) | 0.47 (0.40–0.54) | 1.09M (822.9k–1.39M) | 1.16M (882.0k–1.46M) | 9453 (8178–10.2k) | 23.33 (20–26) | 115 (98–133) | 11.33 (11–12) | 0 | 0 | 0.33 (0–1) | 2/3 | 1 | 3/3 |
 | T2 | harness-v2 | 3 | 3/3 | 3/3 | 5/6 5/6 5/6 | 0 | 0 | 0 | 16 (run 3) | 3/3 | 24.33 (23–25) | 0.51 (0.47–0.58) | 880.8k (753.9k–1.06M) | 942.2k (813.7k–1.12M) | 8912 (7515–10.8k) | 21.33 (20–22) | 101 (79–121) | 12.67 (12–13) | 0.33 (0–1) | 0.33 (0–1) | 0.33 (0–1) | 2/3 | 1 | 3/3 |
 | T2 | harness-v3 | 3 | 3/3 | 3/3 | 5/6 5/6 5/6 | 0 | 0 | 0 | – | 3/3 | 23.67 (22–25) | 0.47 (0.44–0.51) | 812.5k (727.3k–898.9k) | 871.0k (784.5k–959.3k) | 7386 (6604–8756) | 20.67 (19–22) | 95.33 (85–112) | 11.67 (11–12) | 0 | 0 | 0 | 3/3 | 0.67 (0–1) | 3/3 |
 | T2 | harness-v7 | 3 | 3/3 | 3/3 | 6/6 5/6 5/6 | 0 | 0 | 0 | – | 3/3 | 25.33 (24–26) | 0.51 (0.49–0.53) | 868.2k (833.3k–931.3k) | 930.2k (894.1k–993.3k) | 8397 (7001–10.5k) | 22.33 (21–23) | 96 (90–103) | 12.67 (12–13) | 0 | 0.67 (0–1) | 0 | 3/3 | 0.67 (0–1) | 3/3 |
+| T5 | baseline-w1 | 3 | 3/3 | 3/3 | 2/2 2/2 2/2 | 0 | 0 | 0 | – | 3/3 | 19.67 (18–21) | 0.38 (0.37–0.39) | 409.4k (406.3k–414.1k) | 466.8k (462.8k–472.1k) | 7035 (6494–7332) | 17.67 (16–19) | 96.33 (65–126) | 10 | 0 | 0 | 0 | 3/3 | 0 | 3/3 logged any |
+| T5 | patterns-w1 | 3 | 3/3 | 3/3 | 2/2 2/2 2/2 | 0 | 0 | 0 | – | 3/3 | 22.67 (20–25) | 0.46 (0.39–0.49) | 647.0k (475.4k–807.8k) | 708.9k (534.6k–870.2k) | 7892 (6260–9728) | 20.33 (18–22) | 69.33 (61–76) | 12.67 (11–16) | 1.33 (0–4) | 0.33 (0–1) | 0.67 (0–2) | 2/3 | 2 (0–6) | 3/3 logged any |
+| T6 | baseline-w1 | 3 | 3/3 | 3/3 | 8/8 8/8 8/8 | 0 | 0 | 0 | – | 3/3 | 25.33 (25–26) | 0.48 (0.47–0.49) | 506.0k (495.1k–512.7k) | 573.2k (562.0k–579.7k) | 11.2k (10.7k–12.0k) | 23.33 (23–24) | 151 (97–256) | 14.67 (14–15) | 0 | 0 | 0 | 3/3 | 0.33 (0–1) | 3/3 logged any |
+| T6 | patterns-w1 | 3 | 3/3 | 3/3 | 8/8 8/8 8/8 | 0 | 0 | 0 | – | 3/3 | 28 (27–29) | 0.53 (0.50–0.58) | 618.9k (508.0k–757.0k) | 693.2k (582.3k–831.5k) | 11.1k (10.2k–12.6k) | 26 (25–27) | 89.33 (82–102) | 18 | 0 | 0 | 0 | 3/3 | 0.67 (0–1) | 3/3 logged any |
+| T7 | baseline-w1 | 3 | 3/3 | 3/3 | 7/7 7/7 7/7 | 0 | 0 | 0 | – | 3/3 | 23.33 (21–26) | 0.44 (0.41–0.47) | 555.8k (408.5k–651.4k) | 614.5k (467.0k–711.7k) | 9149 (8339–9997) | 21.33 (19–24) | 90.33 (74–120) | 12.33 (12–13) | 0 | 0 | 0 | 3/3 | 0.33 (0–1) | 0/3 logged any |
+| T7 | patterns-w1 | 3 | 3/3 | 3/3 | 7/7 7/7 7/7 | 0 | 0 | 0 | – | 3/3 | 24.33 (20–27) | 0.46 (0.40–0.50) | 561.3k (415.4k–664.2k) | 625.2k (474.5k–727.5k) | 9095 (8151–10.2k) | 21.67 (18–24) | 78 (68–84) | 13.67 (13–15) | 0 | 0 | 0 | 3/3 | 0 | 1/3 logged any |
+| T8 | baseline-w1 | 3 | 3/3 | 3/3 | 5/6 5/6 5/6 | 0 | 0 | 0 | – | 3/3 | 23.67 (22–26) | 0.49 (0.46–0.54) | 614.3k (485.2k–808.4k) | 674.9k (545.7k–870.8k) | 12.6k (12.2k–13.3k) | 21.67 (20–24) | 100 (87–116) | 11.67 (10–14) | 1.33 (0–4) | 0 | 0.67 (0–1) | 1/3 | 2 (1–4) | 0/3 logged any |
+| T8 | patterns-w1 | 3 | 3/3 | 3/3 | 5/6 5/6 5/6 | 0 | 0 | 0 | – | 3/3 | 22.67 (22–23) | 0.45 (0.39–0.48) | 465.3k (412.0k–494.9k) | 526.7k (470.1k–558.6k) | 11.2k (7940–13.0k) | 20.67 (20–21) | 81.67 (67–92) | 10.67 (10–11) | 0 | 0 | 0.67 (0–1) | 1/3 | 0.33 (0–1) | 0/3 logged any |
+| T9 | baseline-w1 | 3 | 3/3 | 3/3 | 4/4 4/4 4/4 | 0 | 0 | 0 | – | 3/3 | 21.33 (20–23) | 0.45 (0.41–0.48) | 499.7k (466.4k–556.1k) | 557.3k (521.8k–613.9k) | 11.5k (9158–14.2k) | 19.33 (18–21) | 121 (113–125) | 9.67 (9–10) | 0 | 0.33 (0–1) | 1 (0–2) | 1/3 | 0 | 0/3 logged any |
+| T9 | patterns-w1 | 3 | 3/3 | 3/3 | 4/4 4/4 4/4 | 0 | 0 | 0 | – | 3/3 | 21.67 (20–23) | 0.47 (0.43–0.55) | 541.2k (416.0k–652.9k) | 603.6k (477.5k–719.3k) | 11.5k (9003–15.1k) | 19.67 (18–21) | 90.67 (80–107) | 13 (11–17) | 2 (0–6) | 0 | 0.33 (0–1) | 2/3 | 0.33 (0–1) | 0/3 logged any |
+
+## Wave 1 — baseline-w1 vs patterns-w1
+
+Same model (claude-sonnet-5-5), prompts, run count (15 vs 15 runs over T5–T9) and aggregation (mean over runs). The only repo difference is the pattern layer (`atlas/patterns/`, the Patterns table in `atlas/index.md`, and one added read step in the atlas-prototype skill).
+
+| Metric | Baseline | Patterns | Delta |
+|---|---:|---:|---:|
+| Pattern adherence, strict (fraction) | 0.812 | 0.981 | +0.169 |
+| Pattern adherence, loose (0–2) | 2.00 | 2.00 | +0.00 |
+| Token accuracy | 1.000 | 1.000 | +0.000 |
+| Component accuracy | 0.967 | 0.967 | +0.000 |
+| Raw elements | 0.00 | 0.00 | +0.00 |
+| A11y pass (share of runs) | 1.00 | 1.00 | +0.00 |
+| Deprecated usage | 0.00 | 0.00 | +0.00 |
+| tsc errors | 0.00 | 0.00 | +0.00 |
+| Token-lint violations | 0.00 | 0.00 | +0.00 |
+| Turns | 22.7 | 23.9 | +1.2 |
+| Cost $ | 0.447 | 0.474 | +0.027 |
+
+Strict adherence by task:
+
+| Task | Baseline | Patterns | Delta |
+|---|---:|---:|---:|
+| T5 | 0.867 | 1.000 | +0.133 |
+| T6 | 0.900 | 1.000 | +0.100 |
+| T7 | 0.889 | 0.944 | +0.056 |
+| T8 | 0.958 | 0.958 | +0.000 |
+| T9 | 0.444 | 1.000 | +0.556 |
+
+Strict checks were written after the baseline ran, derive from the pattern docs, and were applied identically to both arms (see benchmarks/README.md). Human corrections and manual /20 are unavailable (headless runs, not hand-scored).
 
 ## Phase 9 — component tasks, mean (min–max) across runs
 
@@ -48,3 +90,28 @@ signal is present] — a hypothesis reproduces at ≥2/3 in harness-v2. Effort c
 | T4 | harness-v3 | 3 | 3/3 | 3/3 | 0 | 3/3 | 3/3 | 0 | 3/3 | 0/3 | 3/3 | – | 2 [3/3] | 0 [0/3] | 0 [0/3] | 0 [0/3] | 0 [0/3] | 21 (16–25) | 0.50 (0.38–0.64) | 722.2k (318.1k–1.13M) | 13 (12–15) | 2 (0–5) | 0/3 |
 | T4 | harness-v7 | 3 | 3/3 | 3/3 | 0 | 3/3 | 3/3 | 0 | 3/3 | 0/3 | 3/3 | – | 2 [3/3] | 0 [0/3] | 0 [0/3] | 0 [0/3] | 0 [0/3] | 15.67 (11–23) | 0.39 (0.33–0.49) | 491.7k (311.1k–781.8k) | 10.67 (7–16) | 0 | 0/3 |
 | T4 | no-skill | 3 | 3/3 | 0/3 | 0 | 0/3 | 3/3 | 0 | 1/3 | 0/3 | 0/3 | – | 2.33 (2–3) [3/3] | 0 [0/3] | 1 [0/3] | 0 [0/3] | 3.33 (0–7) [2/3] | 53.33 (38–72) | 1.31 (1.11–1.60) | 3.27M (2.51M–4.23M) | 26.33 (16–35) | 0.33 (0–1) | 0/3 |
+
+## Wave 1 — AI-readiness metrics, mean (min–max) across runs
+
+Computed by `analyze.mjs` from the output and the run log; nothing is estimated.
+- **token accuracy**: semantic `--atlas-*` refs that exist, divided by those plus undefined refs, primitive refs and hardcoded colours or lengths.
+- **component accuracy**: expected Atlas components imported, as a fraction (`meta.expectedComponents`).
+- **pattern adherence**: per-task deterministic checks in `meta.w1.patternChecks`: 0 none hold, 1 some hold, 2 all hold.
+- **a11y pass / deprecated usage**: atlas-verify's `a11y` and `deprecated-usage` checks on the run's changes (count of runs passing; mean violations).
+- **audit recall / precision** (T10): seeded violations found; cited lines that are real. **migrated** (T11): all deprecated values replaced, content kept.
+- **human corrections**: the harness is headless, so this is unavailable. `reworkEdits` (agent edits after its first verify) is the nearest signal and is in each run JSON.
+
+| task | label | runs | completed | token accuracy | component accuracy | pattern adherence 0–2 (loose) | pattern adherence strict (fraction) | raw els | a11y pass | deprecated usage | audit recall / precision | migrated | turns | cost $ | manual /20 | human corrections |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| T10 | governance-w1 | 3 | 3/3 | – | 1 | – | – | 1 | 3/3 | 0 | 1 / prec 1 | – | 5.67 (4–8) | 0.20 (0.18–0.22) | – | unavailable |
+| T11 | governance-w1 | 3 | 3/3 | – | 1 | – | – | 0 | 3/3 | 0 | – | 3/3 | 8 | 0.20 (0.20–0.20) | – | unavailable |
+| T5 | baseline-w1 | 3 | 3/3 | 1 | 1 | 2 | 0.87 (0.80–1) | 0 | 3/3 | 0 | – | – | 19.67 (18–21) | 0.38 (0.37–0.39) | – | unavailable |
+| T5 | patterns-w1 | 3 | 3/3 | 1 | 1 | 2 | 1 | 0 | 3/3 | 0 | – | – | 22.67 (20–25) | 0.46 (0.39–0.49) | – | unavailable |
+| T6 | baseline-w1 | 3 | 3/3 | 1 | 1 | 2 | 0.90 | 0 | 3/3 | 0 | – | – | 25.33 (25–26) | 0.48 (0.47–0.49) | – | unavailable |
+| T6 | patterns-w1 | 3 | 3/3 | 1 | 1 | 2 | 1 | 0 | 3/3 | 0 | – | – | 28 (27–29) | 0.53 (0.50–0.58) | – | unavailable |
+| T7 | baseline-w1 | 3 | 3/3 | 1 | 1 | 2 | 0.89 (0.83–1) | 0 | 3/3 | 0 | – | – | 23.33 (21–26) | 0.44 (0.41–0.47) | – | unavailable |
+| T7 | patterns-w1 | 3 | 3/3 | 1 | 1 | 2 | 0.94 (0.83–1) | 0 | 3/3 | 0 | – | – | 24.33 (20–27) | 0.46 (0.40–0.50) | – | unavailable |
+| T8 | baseline-w1 | 3 | 3/3 | 1 | 0.83 | 2 | 0.96 (0.88–1) | 0 | 3/3 | 0 | – | – | 23.67 (22–26) | 0.49 (0.46–0.54) | – | unavailable |
+| T8 | patterns-w1 | 3 | 3/3 | 1 | 0.83 | 2 | 0.96 (0.88–1) | 0 | 3/3 | 0 | – | – | 22.67 (22–23) | 0.45 (0.39–0.48) | – | unavailable |
+| T9 | baseline-w1 | 3 | 3/3 | 1 | 1 | 2 | 0.44 (0.33–0.56) | 0 | 3/3 | 0 | – | – | 21.33 (20–23) | 0.45 (0.41–0.48) | – | unavailable |
+| T9 | patterns-w1 | 3 | 3/3 | 1 | 1 | 2 | 1 | 0 | 3/3 | 0 | – | – | 21.67 (20–23) | 0.47 (0.43–0.55) | – | unavailable |

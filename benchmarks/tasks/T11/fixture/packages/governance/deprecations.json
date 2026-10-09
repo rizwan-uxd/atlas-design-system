@@ -1,0 +1,7 @@
+{
+  "_note": "BENCHMARK FIXTURE ONLY. Overlaid onto the throwaway workspace by run.sh; never part of the repo's registry.",
+  "entries": [
+    { "kind": "variant", "name": "Alert.neutral", "since": "1.1.0", "removeIn": "2.0.0", "replacement": "Alert.info", "migration": "Use variant=\"info\"." },
+    { "kind": "variant", "name": "Button.link", "since": "1.1.0", "removeIn": "2.0.0", "replacement": "Button.ghost", "migration": "Use variant=\"ghost\"." }
+  ]
+}

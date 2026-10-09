@@ -17,7 +17,9 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
-    "test:scripts": "node --test scripts/tests/atlas-sync.test.mjs"
+    "test:scripts": "node --test scripts/tests/*.test.mjs",
+    "test:visual": "playwright test",
+    "test:visual:update": "playwright test --update-snapshots"
   },
   "workspaces": [
     "packages/*"
@@ -39,6 +41,7 @@
   },
   "devDependencies": {
     "@figma/code-connect": "^1.4.5",
+    "@playwright/test": "^1.64.0",
     "@tailwindcss/postcss": "^4",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.9.1",

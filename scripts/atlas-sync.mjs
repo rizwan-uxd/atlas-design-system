@@ -64,7 +64,7 @@ function write(rel, content) {
   const abs = path.join(ROOT, rel)
   const before = fs.existsSync(abs) ? read(abs) : null
   if (before === content) return
-  if (!CHECK) fs.writeFileSync(abs, content)
+  if (!CHECK) { fs.mkdirSync(path.dirname(abs), { recursive: true }); fs.writeFileSync(abs, content) }
   written.push(rel)
 }
 
@@ -265,6 +265,23 @@ const figmaVersion = pull ? (pull.figmaVersion ?? null) : null
 const source = pull ? "figma-synced" : "repo-derived"
 const HEADER = stamp(source, syncedAt, figmaVersion)
 
+/* ── governance (authored in packages/governance) ───────── */
+
+const GOV = path.join(ROOT, "packages/governance")
+const readGov = (name, fallback) => (fs.existsSync(path.join(GOV, name)) ? JSON.parse(read(path.join(GOV, name))) : fallback)
+const ownership = readGov("ownership.json", { owners: {}, componentOwners: {} })
+const deprecations = (readGov("deprecations.json", { entries: [] }).entries ?? [])
+const depDetail = ({ since, removeIn, replacement, migration }) => ({ since, removeIn, replacement, migration })
+/** deprecation of a whole component, or null */
+const deprecationOf = (name) => {
+  const e = deprecations.find((d) => d.kind === "component" && d.name === name)
+  return e ? depDetail(e) : null
+}
+/** deprecated variants of a component: { variant, ...detail }[] */
+const deprecatedVariantsOf = (name) =>
+  deprecations.filter((d) => d.kind === "variant" && d.name.startsWith(`${name}.`))
+    .map((d) => ({ variant: d.name.slice(name.length + 1), ...depDetail(d) }))
+
 const comps = components().map((c) => {
   const src = read(c.tsx)
   const { nodeId, enums } = codeConnect(c.name)
@@ -360,6 +377,10 @@ for (const c of comps) {
     _generated: HEADER,
     name: c.name,
     tier: c.tier,
+    status: deprecationOf(c.name) ? "deprecated" : "stable",
+    deprecated: deprecationOf(c.name),
+    ...(deprecatedVariantsOf(c.name).length ? { deprecatedVariants: deprecatedVariantsOf(c.name) } : {}),
+    ...(ownership.componentOwners?.[c.name] ? { owner: ownership.componentOwners[c.name] } : {}),
     import: `@atlas/ui-web/${c.tier}/${c.name}/${c.name}`,
     variants: c.variants ?? [],
     sizes: c.sizes ?? [],
@@ -376,9 +397,70 @@ for (const c of comps) {
   write(`atlas/metadata/${c.name}.json`, compactJson(json))
 }
 
+/* ── patterns (authored in packages/governance/patterns) ── */
+
+const PATTERNS_SRC = path.join(GOV, "patterns")
+const REQUIRED_SECTIONS = ["Use when", "Don't use when", "Decision rules", "Components and variants", "Layout and density",
+  "Hierarchy and composition", "Responsive behavior", "States", "Accessibility", "Anti-patterns", "Example"]
+const patternErrors = []
+const patterns = fs.existsSync(PATTERNS_SRC)
+  ? fs.readdirSync(PATTERNS_SRC).filter((f) => f.endsWith(".md")).sort().map((file) => {
+      const slug = file.replace(/\.md$/, "")
+      const raw = read(path.join(PATTERNS_SRC, file))
+      const fm = raw.match(/^---\n([\s\S]*?)\n---\n/)
+      const summary = fm?.[1].match(/^summary:\s*(.+)$/m)?.[1].trim()
+      const body = raw.replace(/^---\n[\s\S]*?\n---\n/, "")
+      const title = body.match(/^# (.+)$/m)?.[1]
+      const err = (m) => patternErrors.push(`patterns/${file}: ${m}`)
+      if (!summary) err("front matter needs `summary:`")
+      if (!title) err("needs a `# Title` heading")
+      const sections = new Map()
+      let cur = null
+      for (const line of body.split("\n")) {
+        const h = line.match(/^## (.+)$/)
+        if (h) { cur = h[1].trim(); sections.set(cur, []) } else if (cur) sections.get(cur).push(line)
+      }
+      for (const name of REQUIRED_SECTIONS) {
+        if (!sections.has(name)) err(`missing section "## ${name}"`)
+        else if (!sections.get(name).some((l) => l.trim())) err(`section "## ${name}" is empty`)
+      }
+      // every component, variant and size named under "Components and variants" must exist in the library
+      for (const line of sections.get("Components and variants") ?? []) {
+        const m = line.match(/^- `(\w+)`(.*)$/)
+        if (!m) { if (line.trim()) err(`unparseable line under Components and variants: ${line.trim()}`); continue }
+        const comp = comps.find((c) => c.name === m[1])
+        if (!comp) { err(`component ${m[1]} does not exist in packages/ui-web/src`); continue }
+        for (const [, kind, vals] of m[2].matchAll(/(variant|size):\s*((?:`[\w-]+`(?:,\s*)?)+)/g)) {
+          const allowed = kind === "variant" ? comp.variants : comp.sizes
+          for (const v of [...vals.matchAll(/`([\w-]+)`/g)].map((x) => x[1]))
+            if (!allowed?.includes(v)) err(`${m[1]} has no ${kind} \`${v}\` (${allowed?.join(", ") || "none"})`)
+        }
+      }
+      // the example is a real .tsx file that tsc compiles; the generated doc embeds it
+      const exFile = path.join(PATTERNS_SRC, "examples", `${slug}.example.tsx`)
+      let example = null
+      if (!body.includes("{{example}}")) err("Example section needs the {{example}} marker")
+      if (!fs.existsSync(exFile)) err(`missing examples/${slug}.example.tsx`)
+      else example = read(exFile).trimEnd()
+      return { slug, file, title, summary, body, example }
+    })
+  : []
+if (patternErrors.length) {
+  console.error(`✗ pattern validation failed:\n${patternErrors.map((e) => `  ${e}`).join("\n")}`)
+  process.exit(1)
+}
+for (const p of patterns) {
+  write(`atlas/patterns/${p.slug}.md`, [
+    `<!-- ${HEADER} Source: packages/governance/patterns/${p.file}. -->`,
+    "",
+    p.body.replace("{{example}}", "```tsx\n" + p.example + "\n```").trim(),
+    "",
+  ].join("\n"))
+}
+
 /* ── index.md ───────────────────────────────────────────── */
 
-const missing = ["Avatar", "Table", "Tooltip", "Select", "Radio", "Toast"].filter((n) => !comps.some((c) => c.name === n))
+const missing = ["Avatar", "Table", "Tooltip", "Select", "RadioGroup", "Toast"].filter((n) => !comps.some((c) => c.name === n))
 write("atlas/index.md", [
   `<!-- ${HEADER} -->`,
   "",
@@ -391,7 +473,23 @@ write("atlas/index.md", [
   ...comps.map((c) =>
     `| ${c.name} | ${c.tier} | \`@atlas/ui-web/${c.tier}/${c.name}/${c.name}\` | ${(c.variants ?? []).join(", ") || "—"} | ${(c.sizes ?? []).join(", ") || "—"} |`),
   "",
-  `No ${missing.slice(0, -1).join(", ")} or ${missing.at(-1)} exists. Compose gaps from primitives and log them in \`state/candidates.json\`.`,
+  missing.length
+    ? `No ${missing.length > 1 ? `${missing.slice(0, -1).join(", ")} or ${missing.at(-1)}` : missing[0]} exists. Compose gaps from primitives and log them in \`state/candidates.json\`.`
+    : "Compose anything missing from primitives and log the gap in `state/candidates.json`.",
+  "",
+  ...(patterns.length ? [
+    "## Patterns",
+    "",
+    "Composition rules for common screens. When a request matches one, read `atlas/patterns/<slug>.md` before choosing components.",
+    "",
+    "| Pattern | File | Use for |",
+    "|---|---|---|",
+    ...patterns.map((p) => `| ${p.title} | \`atlas/patterns/${p.slug}.md\` | ${p.summary} |`),
+    "",
+  ] : []),
+  deprecations.length
+    ? `Deprecated (do not use; use the replacement): ${deprecations.map((d) => `\`${d.name}\` → ${d.replacement}`).join(" · ")}. Details in \`state/deprecations.json\`.`
+    : "Deprecated: none. Never introduce a deprecated asset; the registry is `state/deprecations.json`. Owners: `state/ownership.json`.",
   "",
 ].join("\n"))
 
@@ -600,6 +698,18 @@ for (const e of existing) {
 write("atlas/state/discrepancies.json", compactJson({
   ...disc, _generated: HEADER, syncedAt, figmaVersion, discrepancies: existing,
 }))
+
+/* ── state/ownership.json, state/deprecations.json (copied from packages/governance) ── */
+
+const govState = (name, body) => write(`atlas/state/${name}.json`, compactJson({
+  _generated: `GENERATED — do not hand-edit. copied from packages/governance/${name}.json by atlas-figma-sync.`,
+  ...body,
+}))
+{
+  const { _note: _o, ...own } = ownership
+  govState("ownership", { source: "packages/governance/ownership.json", ...own })
+  govState("deprecations", { source: "packages/governance/deprecations.json", entries: deprecations })
+}
 
 /* ── state stamps ───────────────────────────────────────── */
 

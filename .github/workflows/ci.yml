@@ -57,8 +57,10 @@ jobs:
           node-version: 20
           cache: npm
       - run: npm ci --legacy-peer-deps
-      - run: npx eslint packages/ui-web/src/ --ext .ts,.tsx --max-warnings=0
-        continue-on-error: true   # flip to false once eslint config is tuned
+      # Blocking ratchet: existing errors are recorded in eslint-suppressions.json and the 7 current
+      # warnings are capped, so only new problems fail. Fixing one makes its suppression stale and
+      # fails the run until `npx eslint packages/ui-web/src --prune-suppressions` is committed.
+      - run: npx eslint packages/ui-web/src/ --ext .ts,.tsx --max-warnings=7
 
   # ─── Token build (drift check) ─────────────────────────────────────────────
   tokens-build:
@@ -119,3 +121,57 @@ jobs:
       - run: >
           npx figma connect parse
           --config packages/figma-sync/mcp/configs/figma.config.json
+
+  # ─── Atlas verify (design checks, scope, snapshot freshness) ───────────────
+  # tsc, vitest and token-lint already run in their own jobs, so they are skipped here.
+  # A PR that adds an approved component or token carries the `atlas-approved-new` label.
+  atlas-verify:
+    name: Atlas Verify
+    runs-on: ubuntu-latest
+    needs: setup
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci --legacy-peer-deps
+      - name: Script tests
+        run: npm run test:scripts
+      - name: Atlas verify
+        env:
+          BASE: ${{ github.event_name == 'pull_request' && format('origin/{0}', github.base_ref) || 'HEAD~1' }}
+          ALLOW_NEW: ${{ github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'atlas-approved-new') && '--allow-new-component --allow-new-token' || '' }}
+        run: npm run atlas:verify -- --base "$BASE" --skip tsc,tests,token-lint $ALLOW_NEW
+
+  # ─── Visual regression (sandbox sections, light + dark) ────────────────────
+  # Baselines are linux screenshots made by the "Visual baseline" workflow and committed under
+  # tests/visual/. Until they exist this job is skipped.
+  visual:
+    name: Visual Regression
+    runs-on: ubuntu-latest
+    needs: setup
+    steps:
+      - uses: actions/checkout@v4
+      - id: baselines
+        run: echo "found=$(ls tests/visual/*-snapshots/*-linux.png 2>/dev/null | wc -l)" >> "$GITHUB_OUTPUT"
+      - if: steps.baselines.outputs.found != '0'
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - if: steps.baselines.outputs.found != '0'
+        run: npm ci --legacy-peer-deps
+      - if: steps.baselines.outputs.found != '0'
+        run: npx playwright install --with-deps chromium
+      - if: steps.baselines.outputs.found != '0'
+        run: npm run test:visual
+      - if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-diff
+          path: |
+            test-results/
+            playwright-report/

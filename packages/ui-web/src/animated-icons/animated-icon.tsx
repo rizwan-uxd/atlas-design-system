@@ -4,9 +4,11 @@
  * Atlas AnimatedIcon — an outline icon that animates from motion tokens.
  *
  * Icons: check | x | search | settings | download | upload | refresh | bell | plug-connected | panel-left-open
+ *        | airplay | volume | mic | mic-v2 | video | video-v2 | play-pause-circle | play-pause
+ *        | skip-back | skip-forward
  * Sizes: xs 16 | sm 20 | md 24 | lg 32 (icon-size tokens; stroke follows icon-stroke tokens)
  * Tone: default (inherits text colour) | muted | success | warning | danger | info
- * Trigger (when it plays): manual | appear | hover | press | focus | loop
+ * Trigger (when it plays): manual | appear | hover | press | focus | loop | toggle
  * State (what it says): idle | loading | success | error | disabled
  *
  * Motion: durations, easings and the pulse opacity come from the motion tokens via MotionProvider.
@@ -14,15 +16,21 @@
  *   drops path, opacity and loop animation. Icons render their static end state; `appear` becomes
  *   a short opacity fade.
  * Accessibility: decorative (`aria-hidden`) unless `label` is set, which makes it `role="img"`.
+ * Toggle: `trigger="toggle"` follows the controlled `pressed` prop. The parent control owns the
+ *   state and `aria-pressed`; the icon plays its toggle timeline forward when `pressed` becomes true
+ *   and backward when it becomes false, continuing from the current frame if flipped mid-flight.
+ *   Momentary icons (skip) restart forward from frame 0 on every change instead.
+ *   Reduced motion and disabled jump straight to the target pose.
  * Parent-driven: `hover`, `press` and `focus` listen on the nearest interactive ancestor, so
  *   `<Button><AnimatedIcon trigger="hover" /></Button>` needs no wiring. For any other case use the
  *   ref handle (`startAnimation` / `stopAnimation`).
  */
 
 import * as React from "react"
-import { motion, useAnimate } from "motion/react"
+import { animate as animateValue, motion, useAnimate } from "motion/react"
 import { useMotionPresets, usePrefersReducedMotion } from "../motion"
 import { animatedIconRegistry } from "./animated-icon.registry"
+import { frameSeconds } from "./timeline"
 import type {
   AnimatedIconHandle,
   AnimatedIconProps,
@@ -56,6 +64,7 @@ export const AnimatedIcon = React.forwardRef<AnimatedIconHandle, AnimatedIconPro
       trigger = "manual",
       state = "idle",
       disabled = false,
+      pressed = false,
       label,
       className,
       ...props
@@ -68,6 +77,10 @@ export const AnimatedIcon = React.forwardRef<AnimatedIconHandle, AnimatedIconPro
     const [scope, animate] = useAnimate<SVGSVGElement>()
     const running = React.useRef(new Set<IconPlayback>())
     const isDisabled = disabled || state === "disabled"
+    const uid = React.useId().replace(/:/g, "")
+    const toggle = trigger === "toggle" ? definition.toggle : undefined
+    const progress = React.useRef(pressed ? 1 : 0)
+    const toggleRun = React.useRef<IconPlayback | null>(null)
 
     const track = React.useCallback(<T extends IconPlayback>(playback: T): T => {
       running.current.add(playback)
@@ -89,7 +102,7 @@ export const AnimatedIcon = React.forwardRef<AnimatedIconHandle, AnimatedIconPro
       const parts = root.querySelectorAll("[data-part]")
       const drawn = root.querySelectorAll("[data-draw]")
       if (parts.length) animate(parts, { x: 0, y: 0, rotate: 0, scale: 1, opacity: 1 }, options)
-      if (drawn.length) animate(drawn, { pathLength: 1 }, options)
+      if (drawn.length) animate(drawn, { pathLength: 1, pathOffset: 0 }, options)
     }, [animate, isDisabled, presets, reduced, scope])
 
     const play = React.useCallback(
@@ -148,6 +161,66 @@ export const AnimatedIcon = React.forwardRef<AnimatedIconHandle, AnimatedIconPro
       if (state === "success") play("success")
       if (state === "error") play("error")
     }, [state, isDisabled, play, cancel, rest])
+
+    // Toggle: lay out the starting pose before paint, then follow `pressed`.
+    React.useLayoutEffect(() => {
+      const root = scope.current
+      if (root && toggle) toggle.render(root, progress.current * (toggle.frames - 1))
+      // eslint-disable-next-line react-hooks/exhaustive-deps -- first pose only; changes go through the effect below
+    }, [toggle])
+
+    const lastPressed = React.useRef(pressed)
+    React.useEffect(() => {
+      const root = scope.current
+      if (!root || !toggle) return
+      const changed = lastPressed.current !== pressed
+      lastPressed.current = pressed
+      const seconds = toggle.duration?.(presets) ?? frameSeconds(toggle.frames)
+      const end = toggle.frames - 1
+
+      // Momentary: every change restarts from frame 0 and holds the last frame.
+      if (toggle.momentary) {
+        if (!changed) return
+        toggleRun.current?.stop()
+        if (reduced || isDisabled || seconds <= 0) {
+          progress.current = 1
+          toggle.render(root, end)
+          return
+        }
+        progress.current = 0
+        toggle.render(root, 0)
+        toggleRun.current = animateValue(0, 1, {
+          duration: seconds,
+          ease: "linear",
+          onUpdate: (value) => {
+            progress.current = value
+            toggle.render(root, value * end)
+          },
+        })
+        return
+      }
+
+      const target = pressed ? 1 : 0
+      toggleRun.current?.stop()
+      toggleRun.current = null
+      const from = progress.current
+      if (from === target) return
+      if (reduced || isDisabled || seconds <= 0) {
+        progress.current = target
+        toggle.render(root, target * end)
+        return
+      }
+      toggleRun.current = animateValue(from, target, {
+        duration: seconds * Math.abs(target - from),
+        ease: "linear",
+        onUpdate: (value) => {
+          progress.current = value
+          toggle.render(root, value * end)
+        },
+      })
+    }, [pressed, toggle, presets, reduced, isDisabled, scope])
+
+    React.useEffect(() => () => toggleRun.current?.stop(), [])
 
     // Trigger: appear and loop start on their own; hover, press and focus listen on the control.
     React.useEffect(() => {
@@ -234,8 +307,9 @@ export const AnimatedIcon = React.forwardRef<AnimatedIconHandle, AnimatedIconPro
         data-trigger={trigger}
         data-state={state}
         data-disabled={isDisabled}
+        data-pressed={toggle ? pressed : undefined}
       >
-        {definition.glyph}
+        {typeof definition.glyph === "function" ? definition.glyph(uid) : definition.glyph}
       </motion.svg>
     )
   },

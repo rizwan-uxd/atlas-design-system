@@ -3,7 +3,7 @@
  * atlas-verify — check work before reporting it done.
  *
  * Three groups, each a pass/fail line plus its mismatches:
- *   design  snapshot current · variants/sizes used vs atlas/metadata · tokens exist and are semantic
+ *   design  snapshot current · variants/sizes used vs atlas/metadata · no new use of a deprecated asset · tokens exist and are semantic
  *   code    token-lint · tsc · tests · Atlas components over raw controls · basic a11y · prototype registered
  *   scope   diff stays inside --scope · no new tokens · no new components
  *
@@ -16,6 +16,7 @@
  *   node scripts/atlas-verify.mjs --base main --allow-new-component --skip tests
  *   node scripts/atlas-verify.mjs --json
  *   node scripts/atlas-verify.mjs --scope "…" --stamp                  # on a full pass, stamp verifiedAt
+ *   node scripts/atlas-verify.mjs --stamp-components Button,Input     # same, for named components with no library change
  *
  * Exit: 0 when no check fails (warnings allowed), 1 when any check fails.
  */
@@ -36,7 +37,9 @@ const SKIP = new Set(list(opt("--skip")))
 const JSON_OUT = flag("--json")
 const ALLOW_COMPONENT = flag("--allow-new-component")
 const ALLOW_TOKEN = flag("--allow-new-token")
-const STAMP = flag("--stamp")
+// --stamp-components A,B stamps named components on a full pass even when no library file changed (a verification-only task); implies --stamp
+const STAMP_NAMED = new Set(list(opt("--stamp-components")))
+const STAMP = flag("--stamp") || STAMP_NAMED.size > 0
 
 const read = (rel) => fs.readFileSync(path.join(ROOT, rel), "utf8")
 const exists = (rel) => fs.existsSync(path.join(ROOT, rel))
@@ -175,6 +178,44 @@ check("design", "variants-sizes", () => {
   return verdict(fails)
 })
 
+// Deprecated assets (packages/governance/deprecations.json). A changed file fails only for a use it adds:
+// a use already present in the file at --base is historical and is migrated when its owner chooses.
+const DEPRECATIONS_FILE = "packages/governance/deprecations.json"
+const deprecations = exists(DEPRECATIONS_FILE) ? (JSON.parse(read(DEPRECATIONS_FILE)).entries ?? []) : []
+const deprecatedUses = (src) => {
+  const hits = []
+  const add = (d, line, what) => hits.push({ key: `${d.name}|${what}`, line,
+    msg: `${what} — ${d.kind} ${d.name} is deprecated since ${d.since}, removed in ${d.removeIn}; use ${d.replacement}. ${d.migration}` })
+  for (const d of deprecations) {
+    if (d.kind === "token") {
+      for (const m of src.matchAll(new RegExp(`${d.name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(?![\\w-])`, "g")))
+        if (!/^\s*:/.test(src.slice(m.index + d.name.length, m.index + d.name.length + 8))) add(d, lineOf(src, m.index), `uses ${d.name}`)
+    }
+  }
+  for (const u of atlasUsage(src)) {
+    for (const d of deprecations) {
+      if (d.kind === "component" && u.component === d.name && (u.exported === d.name || u.exported.startsWith(d.name)))
+        add(d, lineOf(src, src.indexOf(u.exported)), `imports ${u.exported}`)
+      if (d.kind === "variant" && d.name.startsWith(`${u.component}.`) && (u.exported === u.component || u.exported === `${u.component}Root`)) {
+        const variant = d.name.slice(u.component.length + 1)
+        for (const tag of jsxTags(src, u.local))
+          if (literalProp(blankNestedJsx(tag.attrs), "variant") === variant) add(d, tag.line, `<${u.local} variant="${variant}">`)
+      }
+    }
+  }
+  return hits
+}
+
+check("design", "deprecated-usage", () => {
+  const fails = []
+  for (const { file, src } of sources) {
+    const old = sh(`git show ${BASE}:${file}`, ROOT)
+    const before = new Set(old.ok ? deprecatedUses(old.out).map((h) => h.key) : [])
+    for (const h of deprecatedUses(src)) if (!before.has(h.key)) fails.push(`${file}:${h.line} ${h.msg}`)
+  }
+  return verdict(fails)
+})
+
 check("design", "tokens", () => {
   const fails = []
   for (const { file, src } of sources) {
@@ -293,12 +334,13 @@ if (STAMP) {
   const skipped = results.filter((r) => r.status === "skip").map((r) => r.id)
   if (failed.length) stampNote.push("not stamped: a check failed")
   else if (skipped.length) stampNote.push(`not stamped: skipped ${skipped.join(", ")}`)
-  else if (!libChanged.size) stampNote.push("not stamped: no library component changed")
+  else if (!libChanged.size && !STAMP_NAMED.size) stampNote.push("not stamped: no library component changed")
   else {
     const rel = "atlas/state/status.json"
     const at = new Date().toISOString()
     let body = read(rel)
-    for (const name of [...libChanged].sort()) {
+    for (const name of [...new Set([...libChanged, ...STAMP_NAMED])].sort()) {
+      if (STAMP_NAMED.has(name) && !metadata[name]) { stampNote.push(`not stamped: ${name} has no atlas/metadata/${name}.json`); continue }
       const row = new RegExp(`("${name}": \\{[^}]*"verifiedAt": )(null|"[^"]*")`)
       if (row.test(body)) { body = body.replace(row, `$1"${at}"`); stamped.push(name) }
       else stampNote.push(`not stamped: ${name} has no row in ${rel}`)

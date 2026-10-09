@@ -1,0 +1,136 @@
+{
+  "model": "claude-sonnet-5-5",
+  "ok": true,
+  "error": null,
+  "turns": 4,
+  "durationS": 18,
+  "costUsd": 0.1769848,
+  "tokens": {
+    "input": 6,
+    "cacheWrite": 34656,
+    "cacheRead": 129294,
+    "output": 1249,
+    "totalContext": 163956
+  },
+  "tools": {
+    "Read": 2,
+    "Grep": 1
+  },
+  "toolCalls": 3,
+  "figmaCalls": 0,
+  "verifyRuns": 0,
+  "reworkEdits": 0,
+  "toolResultChars": {
+    "Read": 6124,
+    "Grep": 16
+  },
+  "skillsUsed": [],
+  "reads": {
+    "total": 2,
+    "unique": 2,
+    "offTask": 0,
+    "byCategory": {
+      "new-output": 1,
+      "atlas-snapshot": 1
+    },
+    "files": [
+      "app/prototypes/drift-fixture/DriftScreen.tsx",
+      "atlas/index.md"
+    ]
+  },
+  "bashCmds": [],
+  "quality": {
+    "outputExists": true,
+    "files": 1,
+    "loc": 18,
+    "registered": false,
+    "tokenLintViolations": 1,
+    "tscErrors": 0,
+    "atlasComponentsImported": [
+      "Button",
+      "Card",
+      "CardContent"
+    ],
+    "expectedCoverage": "2/2",
+    "rawElements": 1,
+    "numericStyleLiterals": 1,
+    "primitiveTokenRefs": 1
+  },
+  "phase8": {
+    "readsAll": {
+      "total": 3,
+      "unique": 3,
+      "viaBash": 0,
+      "files": [
+        "app/prototypes/drift-fixture/DriftScreen.tsx",
+        "atlas/index.md",
+        "Grep:packages/tokens/atlas.tokens.css"
+      ]
+    },
+    "sourceOpened": {
+      "token-source": [
+        "packages/tokens/atlas.tokens.css"
+      ]
+    },
+    "sourceOpenedCount": 1,
+    "verify": {
+      "runs": 0,
+      "failures": 0,
+      "firstPass": null,
+      "finalPass": null,
+      "calls": []
+    },
+    "wasted": {
+      "duplicateReads": 0,
+      "unusedComponentReads": [],
+      "offTask": [],
+      "verifierInternals": [],
+      "failedToolCalls": 0,
+      "total": 0
+    },
+    "gaps": {
+      "available": true,
+      "candidatesChanged": [],
+      "expected": [],
+      "recognised": []
+    }
+  },
+  "w1": {
+    "tokenAccuracy": null,
+    "componentAccuracy": {
+      "value": 1,
+      "covered": 2,
+      "expected": 2,
+      "rawElements": 1
+    },
+    "a11yPass": true,
+    "deprecatedUsage": 0,
+    "humanCorrections": {
+      "available": false
+    },
+    "audit": {
+      "found": [
+        "hardcoded-colour-hex",
+        "hardcoded-length",
+        "primitive-token",
+        "undefined-token",
+        "raw-button",
+        "hardcoded-colour-rgb",
+        "clickable-div"
+      ],
+      "recall": 1,
+      "expected": 7,
+      "citedLines": [
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "precision": 1,
+      "edits": 0,
+      "noEdit": true
+    }
+  },
+  "subtype": "success"
+}

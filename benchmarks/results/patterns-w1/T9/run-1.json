@@ -1,0 +1,235 @@
+{
+  "model": "claude-sonnet-5-5",
+  "ok": true,
+  "error": null,
+  "turns": 20,
+  "durationS": 80,
+  "costUsd": 0.43875919999999996,
+  "tokens": {
+    "input": 18,
+    "cacheWrite": 59444,
+    "cacheRead": 554586,
+    "output": 9003,
+    "totalContext": 614048
+  },
+  "tools": {
+    "Skill": 1,
+    "Read": 11,
+    "Write": 4,
+    "Edit": 1,
+    "Bash": 1
+  },
+  "toolCalls": 18,
+  "figmaCalls": 0,
+  "verifyRuns": 1,
+  "reworkEdits": 0,
+  "toolResultChars": {
+    "Skill": 32,
+    "Read": 36163,
+    "Write": 892,
+    "Edit": 230,
+    "Bash": 566
+  },
+  "skillsUsed": [
+    "atlas-prototype"
+  ],
+  "reads": {
+    "total": 11,
+    "unique": 11,
+    "offTask": 0,
+    "byCategory": {
+      "atlas-snapshot": 9,
+      "skills": 1,
+      "prototype-shell": 1
+    },
+    "files": [
+      "atlas/index.md",
+      ".claude/skills/atlas-prototype/references/flow-scaffold.md",
+      "atlas/patterns/error-recovery.md",
+      "atlas/patterns/form.md",
+      "atlas/Alert.md",
+      "atlas/Button.md",
+      "atlas/Input.md",
+      "atlas/Label.md",
+      "atlas/tokens.md",
+      "atlas/Checkbox.md",
+      "app/prototypes/_shared/flowRegistry.ts"
+    ]
+  },
+  "bashCmds": [
+    "npm run atlas:verify -- --scope \"app/prototypes/payment-error/**,app/prototypes/_shared/flowRegistry.ts\" 2>&1 | tail -40"
+  ],
+  "quality": {
+    "outputExists": true,
+    "files": 4,
+    "loc": 317,
+    "registered": true,
+    "tokenLintViolations": 0,
+    "tscErrors": 0,
+    "atlasComponentsImported": [
+      "Alert",
+      "Button",
+      "Checkbox",
+      "Input",
+      "Label"
+    ],
+    "expectedCoverage": "4/4",
+    "rawElements": 0,
+    "numericStyleLiterals": 5,
+    "primitiveTokenRefs": 0
+  },
+  "phase8": {
+    "readsAll": {
+      "total": 11,
+      "unique": 11,
+      "viaBash": 0,
+      "files": [
+        "atlas/index.md",
+        ".claude/skills/atlas-prototype/references/flow-scaffold.md",
+        "atlas/patterns/error-recovery.md",
+        "atlas/patterns/form.md",
+        "atlas/Alert.md",
+        "atlas/Button.md",
+        "atlas/Input.md",
+        "atlas/Label.md",
+        "atlas/tokens.md",
+        "atlas/Checkbox.md",
+        "app/prototypes/_shared/flowRegistry.ts"
+      ]
+    },
+    "sourceOpened": {},
+    "sourceOpenedCount": 0,
+    "verify": {
+      "runs": 1,
+      "failures": 0,
+      "firstPass": true,
+      "finalPass": true,
+      "calls": [
+        {
+          "cmd": "npm run atlas:verify -- --scope \"app/prototypes/payment-error/**,app/prototypes/_shared/flowRegistry.ts\" 2>&1 | tail -40",
+          "failed": false
+        }
+      ]
+    },
+    "wasted": {
+      "duplicateReads": 0,
+      "unusedComponentReads": [],
+      "offTask": [],
+      "verifierInternals": [],
+      "failedToolCalls": 0,
+      "total": 0
+    },
+    "gaps": {
+      "available": true,
+      "candidatesChanged": [],
+      "expected": [],
+      "recognised": []
+    }
+  },
+  "w1": {
+    "tokenAccuracy": {
+      "value": 1,
+      "valid": 29,
+      "invalid": 0,
+      "primitive": 0,
+      "hardcoded": 0
+    },
+    "componentAccuracy": {
+      "value": 1,
+      "covered": 4,
+      "expected": 4,
+      "rawElements": 0
+    },
+    "a11yPass": true,
+    "deprecatedUsage": 0,
+    "humanCorrections": {
+      "available": false
+    },
+    "patternAdherence": {
+      "pattern": "error-recovery",
+      "score": 2,
+      "passed": 6,
+      "total": 6,
+      "results": [
+        {
+          "id": "alert-danger",
+          "pass": true
+        },
+        {
+          "id": "retry-action",
+          "pass": true
+        },
+        {
+          "id": "loading-on-submit",
+          "pass": true
+        },
+        {
+          "id": "alternate-path",
+          "pass": true
+        },
+        {
+          "id": "failure-announced",
+          "pass": true
+        },
+        {
+          "id": "timeout-distinct",
+          "pass": true
+        }
+      ]
+    },
+    "patternStrict": {
+      "passed": 9,
+      "total": 9,
+      "fraction": 1,
+      "results": [
+        {
+          "id": "decline-primary-change",
+          "rule": "Declined: primary action changes the card",
+          "pass": true
+        },
+        {
+          "id": "timeout-primary-retry",
+          "rule": "Timeout: primary action is Try again",
+          "pass": true
+        },
+        {
+          "id": "retry-loading",
+          "rule": "Retry shows loading on the Button",
+          "pass": true
+        },
+        {
+          "id": "alert-actions-slot",
+          "rule": "Recovery lives in the Alert actions slot",
+          "pass": true
+        },
+        {
+          "id": "alert-not-dismissible",
+          "rule": "Failure Alert is not dismissible",
+          "pass": true
+        },
+        {
+          "id": "no-oops",
+          "rule": "No \"Oops\" or \"Something went wrong\"",
+          "pass": true
+        },
+        {
+          "id": "charge-status",
+          "rule": "Says whether the user was charged",
+          "pass": true
+        },
+        {
+          "id": "no-duplicate-live-region",
+          "rule": "No second live region (Alert danger is role=alert)",
+          "pass": true
+        },
+        {
+          "id": "support-secondary",
+          "rule": "Contact support is not primary",
+          "pass": true
+        }
+      ],
+      "rescored": true
+    }
+  },
+  "subtype": "success"
+}

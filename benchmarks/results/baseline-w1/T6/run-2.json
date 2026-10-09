@@ -1,0 +1,275 @@
+{
+  "model": "claude-sonnet-5-5",
+  "ok": true,
+  "error": null,
+  "turns": 25,
+  "durationS": 97,
+  "costUsd": 0.48180200000000006,
+  "tokens": {
+    "input": 16,
+    "cacheWrite": 67699,
+    "cacheRead": 510220,
+    "output": 10893,
+    "totalContext": 577935
+  },
+  "tools": {
+    "Skill": 1,
+    "Read": 15,
+    "Glob": 1,
+    "Write": 2,
+    "Edit": 3,
+    "Bash": 1
+  },
+  "toolCalls": 23,
+  "figmaCalls": 0,
+  "verifyRuns": 1,
+  "reworkEdits": 0,
+  "toolResultChars": {
+    "Skill": 32,
+    "Read": 46689,
+    "Glob": 14,
+    "Write": 439,
+    "Edit": 668,
+    "Bash": 632
+  },
+  "skillsUsed": [
+    "atlas-prototype"
+  ],
+  "reads": {
+    "total": 15,
+    "unique": 15,
+    "offTask": 0,
+    "byCategory": {
+      "atlas-snapshot": 12,
+      "skills": 2,
+      "prototype-shell": 1
+    },
+    "files": [
+      "atlas/index.md",
+      ".claude/skills/atlas-prototype/references/flow-scaffold.md",
+      "atlas/Table.md",
+      "atlas/Checkbox.md",
+      "atlas/Input.md",
+      "atlas/Select.md",
+      "atlas/AlertDialog.md",
+      "atlas/Badge.md",
+      "atlas/Skeleton.md",
+      "atlas/Button.md",
+      "atlas/Tabs.md",
+      "atlas/tokens.md",
+      ".claude/skills/atlas-prototype/references/gaps.md",
+      "app/prototypes/_shared/flowRegistry.ts",
+      "atlas/state/candidates.json"
+    ]
+  },
+  "bashCmds": [
+    "npm run atlas:verify -- --scope \"app/prototypes/invoices-table/**,app/prototypes/_shared/flowRegistry.ts,atlas/state/candidates.json\" 2>&1 | tail -40"
+  ],
+  "quality": {
+    "outputExists": true,
+    "files": 2,
+    "loc": 321,
+    "registered": true,
+    "tokenLintViolations": 0,
+    "tscErrors": 0,
+    "atlasComponentsImported": [
+      "Button",
+      "Input",
+      "Checkbox",
+      "Badge",
+      "Skeleton",
+      "Select",
+      "SelectTrigger",
+      "SelectValue",
+      "SelectContent",
+      "SelectItem",
+      "Table",
+      "TableHeader",
+      "TableBody",
+      "TableRow",
+      "TableHead",
+      "TableCell",
+      "TabsRoot",
+      "TabsList",
+      "TabsTrigger",
+      "AlertDialog",
+      "AlertDialogContent",
+      "AlertDialogTitle",
+      "AlertDialogDescription",
+      "AlertDialogFooter",
+      "AlertDialogCancel",
+      "AlertDialogAction"
+    ],
+    "expectedCoverage": "8/8",
+    "rawElements": 0,
+    "numericStyleLiterals": 12,
+    "primitiveTokenRefs": 0
+  },
+  "phase8": {
+    "readsAll": {
+      "total": 15,
+      "unique": 15,
+      "viaBash": 0,
+      "files": [
+        "atlas/index.md",
+        ".claude/skills/atlas-prototype/references/flow-scaffold.md",
+        "atlas/Table.md",
+        "atlas/Checkbox.md",
+        "atlas/Input.md",
+        "atlas/Select.md",
+        "atlas/AlertDialog.md",
+        "atlas/Badge.md",
+        "atlas/Skeleton.md",
+        "atlas/Button.md",
+        "atlas/Tabs.md",
+        "atlas/tokens.md",
+        ".claude/skills/atlas-prototype/references/gaps.md",
+        "app/prototypes/_shared/flowRegistry.ts",
+        "atlas/state/candidates.json"
+      ]
+    },
+    "sourceOpened": {},
+    "sourceOpenedCount": 0,
+    "verify": {
+      "runs": 1,
+      "failures": 0,
+      "firstPass": true,
+      "finalPass": true,
+      "calls": [
+        {
+          "cmd": "npm run atlas:verify -- --scope \"app/prototypes/invoices-table/**,app/prototypes/_shared/flowRegistry.ts,atlas/state/can",
+          "failed": false
+        }
+      ]
+    },
+    "wasted": {
+      "duplicateReads": 0,
+      "unusedComponentReads": [],
+      "offTask": [],
+      "verifierInternals": [],
+      "failedToolCalls": 0,
+      "total": 0
+    },
+    "gaps": {
+      "available": true,
+      "candidatesChanged": [
+        "CAND-024 DataTable",
+        "CAND-030 BulkActionBar",
+        "CAND-031 EmptyState"
+      ],
+      "expected": [],
+      "recognised": []
+    }
+  },
+  "w1": {
+    "tokenAccuracy": {
+      "value": 1,
+      "valid": 39,
+      "invalid": 0,
+      "primitive": 0,
+      "hardcoded": 0
+    },
+    "componentAccuracy": {
+      "value": 1,
+      "covered": 8,
+      "expected": 8,
+      "rawElements": 0
+    },
+    "a11yPass": true,
+    "deprecatedUsage": 0,
+    "humanCorrections": {
+      "available": false
+    },
+    "patternAdherence": {
+      "pattern": "data-table",
+      "score": 2,
+      "passed": 6,
+      "total": 6,
+      "results": [
+        {
+          "id": "select-all-indeterminate",
+          "pass": true
+        },
+        {
+          "id": "selected-count",
+          "pass": true
+        },
+        {
+          "id": "destructive-confirmed",
+          "pass": true
+        },
+        {
+          "id": "loading-skeleton",
+          "pass": true
+        },
+        {
+          "id": "no-match-state",
+          "pass": true
+        },
+        {
+          "id": "labelled-controls",
+          "pass": true
+        }
+      ]
+    },
+    "patternStrict": {
+      "passed": 9,
+      "total": 10,
+      "fraction": 0.9,
+      "results": [
+        {
+          "id": "indeterminate",
+          "rule": "Select-all uses indeterminate for a partial selection",
+          "pass": true
+        },
+        {
+          "id": "row-label",
+          "rule": "Row checkbox label names the row (interpolated aria-label)",
+          "pass": true
+        },
+        {
+          "id": "select-all-label",
+          "rule": "Select-all checkbox is labelled",
+          "pass": true
+        },
+        {
+          "id": "row-selected-prop",
+          "rule": "Selected rows set TableRow selected",
+          "pass": true
+        },
+        {
+          "id": "count-live",
+          "rule": "Selected count announced (aria-live polite)",
+          "pass": true
+        },
+        {
+          "id": "destructive-alertdialog",
+          "rule": "Delete confirms in AlertDialog variant=destructive",
+          "pass": true
+        },
+        {
+          "id": "dialog-names-count",
+          "rule": "Confirmation title includes the count",
+          "pass": true
+        },
+        {
+          "id": "numeric-align-end",
+          "rule": "Numeric column aligned end",
+          "pass": true
+        },
+        {
+          "id": "table-named",
+          "rule": "Table is named (aria-label or caption)",
+          "pass": false
+        },
+        {
+          "id": "loading-busy",
+          "rule": "Loading region sets aria-busy",
+          "pass": true
+        }
+      ],
+      "rescored": true
+    }
+  },
+  "subtype": "success"
+}

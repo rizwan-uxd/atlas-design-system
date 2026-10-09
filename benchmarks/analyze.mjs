@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 // analyze.mjs <run.jsonl> <workspace> <meta.json> [candidates-before.json]  → JSON metrics on stdout
 import fs from "fs"; import path from "path"
-import { sh, atlasImports, coverage, rawElements, numericStyleLiterals, primitiveTokenRefs, tokenLintViolations, tscErrors, registered } from "../scripts/lib/quality-checks.mjs"
+import { sh, atlasImports, coverage, rawElements, numericStyleLiterals, primitiveTokenRefs, lengthLiterals, PRIMITIVE_TOKEN_REF, tokenLintViolations, tscErrors, registered } from "../scripts/lib/quality-checks.mjs"
+import { scoreStrict } from "./lib/strict.mjs"
 import { componentMetrics } from "./phase-9/component-metrics.mjs"
 const [log, ws, metaPath] = process.argv.slice(2)
 const meta = JSON.parse(fs.readFileSync(metaPath, "utf8"))
@@ -171,6 +172,79 @@ const phase8 = {
 // phase 9: component tasks get correctness gates and H1–H5 source signals (prototype metrics above are unchanged)
 const component = meta.type === "component" ? componentMetrics({ ws, meta, calls, allReads, events, result, sh, tscOut: tsc, verify: phase8.verify }) : undefined
 
+// ---- wave 1: deterministic AI-readiness metrics (see benchmarks/README.md "Wave 1") ----
+// Every number here is computed from the output or the run log. A metric the harness cannot measure
+// reliably is reported as { available: false }, never estimated.
+const w1 = (() => {
+  const cfg = meta.w1
+  if (!cfg) return undefined
+  const tokenCssPath = path.join(ws, "packages/tokens/atlas.tokens.css")
+  const defined = new Set(fs.existsSync(tokenCssPath) ? [...fs.readFileSync(tokenCssPath, "utf8").matchAll(/(--atlas-[\w-]+)\s*:/g)].map(m => m[1]) : [])
+  const primitiveRe = new RegExp(`^${PRIMITIVE_TOKEN_REF.source}$`)
+  let valid = 0, invalid = 0, primitive = 0
+  for (const m of src.matchAll(/--atlas-[\w-]+/g)) {
+    if (/^\s*:/.test(src.slice(m.index + m[0].length, m.index + m[0].length + 8))) continue // a definition
+    if (/^--atlas-color-/.test(m[0]) || primitiveRe.test(m[0])) primitive++
+    else if (defined.has(m[0])) valid++
+    else invalid++
+  }
+  const hardcoded = (src.match(/#[0-9a-fA-F]{3,8}\b/g) || []).length + (src.match(/\b(?:rgba?|hsla?|oklch)\(/g) || []).length + lengthLiterals(src).length
+  const denom = valid + invalid + primitive + hardcoded
+  const expected = meta.expectedComponents || []
+  const covered = expected.filter(c => imported.some(i => i === c || i.startsWith(c))).length
+
+  // a11y and deprecated-usage come from atlas-verify's own checks, run on the workspace's changes
+  let verifyChecks = {}
+  try {
+    const v = JSON.parse(sh("node scripts/atlas-verify.mjs --json --skip tsc,tests,token-lint,snapshot-current", ws).out)
+    for (const r of v.results) verifyChecks[r.id] = r
+  } catch {}
+
+  const out = {
+    tokenAccuracy: cfg.audit ? null : { value: denom ? +(valid / denom).toFixed(3) : null, valid, invalid, primitive, hardcoded },
+    componentAccuracy: expected.length ? { value: +(covered / expected.length).toFixed(3), covered, expected: expected.length, rawElements: q.rawElements } : null,
+    a11yPass: verifyChecks.a11y ? verifyChecks.a11y.status !== "fail" : null,
+    deprecatedUsage: verifyChecks["deprecated-usage"] ? verifyChecks["deprecated-usage"].mismatches.length : null,
+    // the harness has no human in the loop; the agent's own post-verify edits are the closest signal and are in reworkEdits
+    humanCorrections: { available: false },
+  }
+
+  if (cfg.patternChecks) {
+    const results = cfg.patternChecks.map(c => {
+      const hits = (src.match(new RegExp(c.pattern, `${c.flags || ""}g`)) || []).length
+      const pass = c.type === "absent" ? hits === 0 : c.type === "count" ? hits >= (c.min ?? 0) && hits <= (c.max ?? Infinity) : hits > 0
+      return { id: c.id, pass }
+    })
+    const passed = results.filter(r => r.pass).length
+    // 0 = no check holds, 1 = some hold, 2 = all hold
+    out.patternAdherence = { pattern: cfg.pattern, score: passed === results.length ? 2 : passed === 0 ? 0 : 1, passed, total: results.length, results }
+  }
+
+  if (cfg.strictChecks) out.patternStrict = scoreStrict(src, cfg.strictChecks)
+
+  if (cfg.audit) {
+    const text = result?.result || ""
+    const lineCount = l => cfg.audit.findings.filter(x => x.line === l).length // a line citation alone credits a finding only when it is the only one on that line
+    const found = cfg.audit.findings.filter(f => text.includes(f.needle) || (lineCount(f.line) === 1 && new RegExp(`${cfg.audit.file}:${f.line}\\b|\\bline ${f.line}\\b`).test(text)))
+    const cited = new Set([...text.matchAll(new RegExp(`${cfg.audit.file.replace(".", "\\.")}:(\\d+)`, "g"))].map(m => +m[1]))
+    const real = new Set(cfg.audit.findings.map(f => f.line))
+    const writes = events.filter(e => e.kind === "write").length
+    out.audit = { found: found.map(f => f.id), recall: +(found.length / cfg.audit.findings.length).toFixed(3), expected: cfg.audit.findings.length,
+      citedLines: [...cited], precision: cited.size ? +([...cited].filter(l => real.has(l)).length / cited.size).toFixed(3) : null,
+      edits: writes, noEdit: writes === 0 }
+  }
+
+  if (cfg.migration) {
+    const f = path.join(ws, "app/prototypes", meta.slug, cfg.migration.file)
+    const body = fs.existsSync(f) ? fs.readFileSync(f, "utf8") : ""
+    const removedRemaining = cfg.migration.removed.filter(r => body.includes(r))
+    const expectedMet = cfg.migration.expected.every(e => (body.match(new RegExp(e.pattern, "g")) || []).length >= e.min)
+    out.migration = { removedRemaining, expectedMet, contentKept: ["Heads up", "View details", "Dismiss"].every(t => body.includes(t)),
+      migrated: removedRemaining.length === 0 && expectedMet }
+  }
+  return out
+})()
+
 const u = result?.usage || {}
 console.log(JSON.stringify({
   // a usage-limit or API error still arrives as subtype "success" with is_error set
@@ -180,5 +254,5 @@ console.log(JSON.stringify({
     totalContext: (u.input_tokens || 0) + (u.cache_creation_input_tokens || 0) + (u.cache_read_input_tokens || 0) },
   tools, toolCalls, figmaCalls, verifyRuns, reworkEdits, toolResultChars: resultChars, skillsUsed,
   reads: { total: reads.length, unique: new Set(reads).size, offTask, byCategory: readsByCat, files: reads },
-  bashCmds, quality: q, phase8, component, subtype: result?.subtype,
+  bashCmds, quality: q, phase8, component, w1, subtype: result?.subtype,
 }, null, 2))

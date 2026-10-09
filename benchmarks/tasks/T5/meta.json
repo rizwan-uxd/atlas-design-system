@@ -1,0 +1,67 @@
+{
+  "slug": "empty-state",
+  "expectedComponents": [
+    "Input",
+    "Button"
+  ],
+  "w1": {
+    "pattern": "empty-state",
+    "patternChecks": [
+      {
+        "id": "recovery-action",
+        "type": "match",
+        "pattern": "clear (the )?(search|filter)|show all|back to (all|the) (projects|list)",
+        "flags": "i"
+      },
+      {
+        "id": "announced",
+        "type": "match",
+        "pattern": "role=\"status\"|aria-live"
+      },
+      {
+        "id": "decorative-icon-hidden",
+        "type": "match",
+        "pattern": "aria-hidden"
+      },
+      {
+        "id": "no-destructive",
+        "type": "absent",
+        "pattern": "variant=\"destructive\""
+      }
+    ],
+    "strictChecks": [
+      {
+        "id": "status-region",
+        "rule": "Message wrapped in role=\"status\"",
+        "type": "match",
+        "pattern": "role=\"status\""
+      },
+      {
+        "id": "statement-title",
+        "rule": "Title states the situation (\"No results\u2026\", \"No projects\u2026\")",
+        "type": "match",
+        "pattern": "No (results|projects|matches)",
+        "flags": "i"
+      },
+      {
+        "id": "clear-action",
+        "rule": "No-results action clears the search or filters",
+        "type": "match",
+        "pattern": "(clear|reset)\\s+(the\\s+)?(search|filter)|show all",
+        "flags": "i"
+      },
+      {
+        "id": "not-in-card",
+        "rule": "Empty state is not placed in a Card",
+        "type": "absent",
+        "pattern": "<Card[\\s>]"
+      },
+      {
+        "id": "no-animated-icon",
+        "rule": "Decorative icon is a static lucide icon, not AnimatedIcon",
+        "type": "absent",
+        "pattern": "AnimatedIcon"
+      }
+    ]
+  }
+}

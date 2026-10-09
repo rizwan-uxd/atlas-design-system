@@ -1,0 +1,240 @@
+{
+  "model": "claude-sonnet-5-5",
+  "ok": true,
+  "error": null,
+  "turns": 23,
+  "durationS": 86,
+  "costUsd": 0.480257,
+  "tokens": {
+    "input": 16,
+    "cacheWrite": 63684,
+    "cacheRead": 494895,
+    "output": 12651,
+    "totalContext": 558595
+  },
+  "tools": {
+    "Skill": 1,
+    "Read": 11,
+    "Glob": 1,
+    "Bash": 2,
+    "Write": 5,
+    "Edit": 1
+  },
+  "toolCalls": 21,
+  "figmaCalls": 0,
+  "verifyRuns": 2,
+  "reworkEdits": 6,
+  "toolResultChars": {
+    "Skill": 32,
+    "Read": 35830,
+    "Glob": 14,
+    "Bash": 625,
+    "Write": 1109,
+    "Edit": 230
+  },
+  "skillsUsed": [
+    "atlas-prototype"
+  ],
+  "reads": {
+    "total": 11,
+    "unique": 11,
+    "offTask": 0,
+    "byCategory": {
+      "atlas-snapshot": 9,
+      "skills": 1,
+      "prototype-shell": 1
+    },
+    "files": [
+      "atlas/index.md",
+      ".claude/skills/atlas-prototype/references/flow-scaffold.md",
+      "atlas/patterns/form.md",
+      "atlas/Input.md",
+      "atlas/Label.md",
+      "atlas/Button.md",
+      "atlas/Switch.md",
+      "atlas/RadioGroup.md",
+      "atlas/Select.md",
+      "atlas/tokens.md",
+      "app/prototypes/_shared/flowRegistry.ts"
+    ]
+  },
+  "bashCmds": [
+    "cd app/prototypes && mkdir -p onboarding/steps && cat > onboarding/schema.ts <<'EOF'\nexport type Role = \"designer\" | \"developer\" | \"product\" | \"other\"\nexport type Plan = \"free\" | \"pro\" | \"team\"\n\nexport type OnboardingData = {\n  fullName: string\n  role: Role | \"\"\n  emailNotifications: boolean\n  pushNotifications: boolean\n  plan: Plan\n}\n\nexport const ONBOARDING_INITIAL: OnboardingData = {\n  fullName: \"\",\n  role: \"\",\n  emailNotifications: true,\n  pushNotifications: false,\n  plan: \"free\",\n}\n\nexport const ONBOARDING_STEPS = [\"profile\", \"preferences\", \"done\"] as const\n\nexport type OnboardingStepProps = {\n  data: OnboardingData\n  patch: (p: Partial<OnboardingData>) => void\n  next: () => void\n  back: () => void\n  goTo: (i: number) => void\n}\n\nexport const ROLES: { value: Role; label: string }[] = [\n  { value: \"designer\", label: \"Designer\" },\n  { value: \"developer\", label: \"Developer\" },\n  { value: \"product\", label: \"Product manager\" },\n  { value: \"other\", label: \"Other\" },\n]\n\nexport const PLANS: { value: Plan; label: string; description: string }[] = [\n  { value: \"free\", label: \"Free\", description: \"For trying things out. One project.\" },\n  { value: \"pro\", label: \"Pro\", description: \"For individuals. Unlimited projects.\" },\n  { value: \"team\", label: \"Team\", description: \"For groups. Shared workspaces and roles.\" },\n]\nEOF\ncat > onboarding/page.tsx <<'EOF'\n\"use client\"\nimport { FlowShell } from \"../_shared/FlowShell\"\nimport { useFlowState } from \"../_shared/useFlowState\"\nimport { ONBOARDING_INITIAL, ONBOARDING_STEPS, OnboardingData } from \"./schema\"\nimport { Profile } from \"./steps/Profile\"\nimport { Preferences } from \"./steps/Preferences\"\nimport { Done } from \"./steps/Done\"\n\nexport default function OnboardingFlowPage() {\n  const flow = useFlowState<OnboardingData>({ totalSteps: ONBOARDING_STEPS.length, initialData: ONBOARDING_INITIAL })\n  const props = { data: flow.data, patch: flow.patch, next: flow.next, back: flow.back, goTo: flow.goTo }\n  const key = ONBOARDING_STEPS[flow.step]\n  return (\n    <FlowShell title=\"Onboarding\" step={flow.step} totalSteps={ONBOARDING_STEPS.length} onReset={flow.reset}\n      phoneBackground=\"var(--atlas-background)\">\n      {key === \"profile\" && <Profile {...props} />}\n      {key === \"preferences\" && <Preferences {...props} />}\n      {key === \"done\" && <Done {...props} />}\n    </FlowShell>\n  )\n}\nEOF\ncat > onboarding/steps/Profile.tsx <<'EOF'\n\"use client\"\nimport { useState } from \"react\"\nimport { Button } from \"@atlas/ui-web/primitives/Button/Button\"\nimport { Input } from \"@atlas/ui-web/primitives/Input/Input\"\nimport { Label } from \"@atlas/ui-web/primitives/Label/Label\"\nimport { RadioGroup, RadioGroupItem } from \"@atlas/ui-web/primitives/RadioGroup/RadioGroup\"\nimport { ROLES, type OnboardingStepProps } from \"../schema\"\n\ntype Errors = { fullName?: string; role?: string }\n\nfunction validateName(value: string): string | undefined {\n  const name = value.trim()\n  if (!name) return \"Enter your full name.\"\n  if (name.length < 2 || !/\\p{L}/u.test(name)) return \"Enter a valid name, at least 2 characters with letters.\"\n  return undefined\n}\n\nconst errorStyle = {\n  margin: 0,\n  marginBlockStart: \"var(--atlas-spacing-1_5)\",\n  color: \"var(--atlas-danger)\",\n  fontSize: \"var(--atlas-text-body-sm)\",\n} as const\n\nexport function Profile({ data, patch, next }: OnboardingStepProps) {\n  const [errors, setErrors] = useState<Errors>({})\n\n  const submit = (e: React.FormEvent) => {\n    e.preventDefault()\n    const found: Errors = {\n      fullName: validateName(data.fullName),\n      role: data.role ? undefined : \"Choose the role that fits you best.\",\n    }\n    setErrors(found)\n    if (found.fullName) return document.getElementById(\"onboarding-name\")?.focus()\n    if (found.role) return document.getElementById(`onboarding-role-${ROLES[0].value}`)?.focus()\n    patch({ fullName: data.fullName.trim() })\n    next()\n  }\n\n  return (\n    <form onSubmit={submit} noValidate\n      style={{ display: \"flex\", flexDirection: \"column\", gap: \"var(--atlas-spacing-4)\", paddingInline: \"var(--atlas-spacing-4)\" }}>\n      <div>\n        <h2 style={{ margin: 0, fontSize: \"var(--atlas-text-h2)\", fontWeight: \"var(--atlas-font-weight-semibold)\", color: \"var(--atlas-foreground)\" }}>\n          Tell us about you\n        </h2>\n        <p style={{ margin: 0, marginBlockStart: \"var(--atlas-spacing-1)\", fontSize: \"var(--atlas-text-body-sm)\", color: \"var(--atlas-foreground-muted)\" }}>\n          This helps us tailor your workspace.\n        </p>\n      </div>\n\n      <div>\n        <Label htmlFor=\"onboarding-name\" required invalid={!!errors.fullName}>Full name</Label>\n        <Input id=\"onboarding-name\" autoComplete=\"name\" value={data.fullName}\n          onChange={(e) => {\n            patch({ fullName: e.target.value })\n            if (errors.fullName) setErrors((p) => ({ ...p, fullName: undefined }))\n          }}\n          onBlur={() => data.fullName && setErrors((p) => ({ ...p, fullName: validateName(data.fullName) }))}\n          invalid={!!errors.fullName}\n          aria-describedby={errors.fullName ? \"onboarding-name-error\" : undefined} />\n        {errors.fullName && <p id=\"onboarding-name-error\" role=\"alert\" style={errorStyle}>{errors.fullName}</p>}\n      </div>\n\n      <div>\n        <Label htmlFor=\"onboarding-role-group\" required invalid={!!errors.role}>Role</Label>\n        <RadioGroup id=\"onboarding-role-group\" aria-label=\"Role\" value={data.role} invalid={!!errors.role} required\n          onValueChange={(v) => {\n            patch({ role: v as typeof data.role })\n            setErrors((p) => ({ ...p, role: undefined }))\n          }}\n          aria-describedby={errors.role ? \"onboarding-role-error\" : undefined}>\n          {ROLES.map((r) => (\n            <RadioGroupItem key={r.value} id={`onboarding-role-${r.value}`} value={r.value} label={r.label} invalid={!!errors.role} />\n          ))}\n        </RadioGroup>\n        {errors.role && <p id=\"onboarding-role-error\" role=\"alert\" style={errorStyle}>{errors.role}</p>}\n      </div>\n\n      <Button type=\"submit\" variant=\"primary\" size=\"lg\">Continue</Button>\n    </form>\n  )\n}\nEOF\ncat > onboarding/steps/Preferences.tsx <<'EOF'\n\"use client\"\nimport { Button } from \"@atlas/ui-web/primitives/Button/Button\"\nimport { Label } from \"@atlas/ui-web/primitives/Label/Label\"\nimport { RadioGroup, RadioGroupItem } from \"@atlas/ui-web/primitives/RadioGroup/RadioGroup\"\nimport { Switch } from \"@atlas/ui-web/primitives/Switch/Switch\"\nimport { ONBOARDING_INITIAL, PLANS, type OnboardingStepProps, type Plan } from \"../schema\"\n\nexport function Preferences({ data, patch, next, back }: OnboardingStepProps) {\n  const skip = () => {\n    patch({\n      emailNotifications: ONBOARDING_INITIAL.emailNotifications,\n      pushNotifications: ONBOARDING_INITIAL.pushNotifications,\n      plan: ONBOARDING_INITIAL.plan,\n    })\n    next()\n  }\n\n  return (\n    <div style={{ display: \"flex\", flexDirection: \"column\", gap: \"var(--atlas-spacing-4)\", paddingInline: \"var(--atlas-spacing-4)\" }}>\n      <div>\n        <h2 style={{ margin: 0, fontSize: \"var(--atlas-text-h2)\", fontWeight: \"var(--atlas-font-weight-semibold)\", color: \"var(--atlas-foreground)\" }}>\n          Set your preferences\n        </h2>\n        <p style={{ margin: 0, marginBlockStart: \"var(--atlas-spacing-1)\", fontSize: \"var(--atlas-text-body-sm)\", color: \"var(--atlas-foreground-muted)\" }}>\n          Optional. You can change these any time.\n        </p>\n      </div>\n\n      <div style={{ display: \"flex\", flexDirection: \"column\", gap: \"var(--atlas-spacing-3)\" }}>\n        <Switch id=\"onboarding-email\" label=\"Email notifications\" description=\"Updates and receipts in your inbox\"\n          checked={data.emailNotifications} onCheckedChange={(v) => patch({ emailNotifications: v })} />\n        <Switch id=\"onboarding-push\" label=\"Push notifications\" description=\"Alerts on this device\"\n          checked={data.pushNotifications} onCheckedChange={(v) => patch({ pushNotifications: v })} />\n      </div>\n\n      <div>\n        <Label htmlFor=\"onboarding-plan-group\">Plan</Label>\n        <RadioGroup id=\"onboarding-plan-group\" aria-label=\"Plan\" variant=\"card\" value={data.plan}\n          onValueChange={(v) => patch({ plan: v as Plan })}>\n          {PLANS.map((p) => (\n            <RadioGroupItem key={p.value} variant=\"card\" id={`onboarding-plan-${p.value}`} value={p.value}\n              label={p.label} description={p.description} />\n          ))}\n        </RadioGroup>\n      </div>\n\n      <div style={{ display: \"flex\", flexDirection: \"column\", gap: \"var(--atlas-spacing-2)\" }}>\n        <Button variant=\"primary\" size=\"lg\" onClick={next}>Continue</Button>\n        <div style={{ display: \"flex\", gap: \"var(--atlas-spacing-2)\" }}>\n          <Button variant=\"ghost\" size=\"md\" onClick={back}>Back</Button>\n          <Button variant=\"ghost\" size=\"md\" onClick={skip}>Skip</Button>\n        </div>\n      </div>\n    </div>\n  )\n}\nEOF\ncat > onboarding/steps/Done.tsx <<'EOF'\n\"use client\"\nimport { Button } from \"@atlas/ui-web/primitives/Button/Button\"\nimport { PLANS, type OnboardingStepProps } from \"../schema\"\n\nexport function Done({ data, back, goTo }: OnboardingStepProps) {\n  const plan = PLANS.find((p) => p.value === data.plan)?.label\n  const firstName = data.fullName.trim().split(/\\s+/)[0]\n  return (\n    <div style={{ display: \"flex\", flexDirection: \"column\", gap: \"var(--atlas-spacing-4)\", paddingInline: \"var(--atlas-spacing-4)\" }}>\n      <div role=\"status\">\n        <h2 style={{ margin: 0, fontSize: \"var(--atlas-text-h2)\", fontWeight: \"var(--atlas-font-weight-semibold)\", color: \"var(--atlas-foreground)\" }}>\n          You&apos;re all set, {firstName}\n        </h2>\n        <p style={{ margin: 0, marginBlockStart: \"var(--atlas-spacing-1)\", fontSize: \"var(--atlas-text-body-sm)\", color: \"var(--atlas-foreground-muted)\" }}>\n          Your account is ready on the {plan} plan.\n        </p>\n      </div>\n      <div style={{ display: \"flex\", flexDirection: \"column\", gap: \"var(--atlas-spacing-2)\" }}>\n        <Button variant=\"primary\" size=\"lg\" onClick={() => goTo(0)}>Continue to app</Button>\n        <div>\n          <Button variant=\"ghost\" size=\"md\" onClick={back}>Back</Button>\n        </div>\n      </div>\n    </div>\n  )\n}\nEOF\npython3 - <<'EOF'\np=\"_shared/flowRegistry.ts\"\ns=open(p).read()\ns=s.replace(\"export const flows: FlowMeta[] = []\",\"\"\"export const flows: FlowMeta[] = [\n  {\n    slug: \"onboarding\",\n    name: \"Onboarding\",\n    description: \"Three-step mobile onboarding: profile, optional preferences, and a confirmation.\",\n    exercises: [\"Button\", \"Input\", \"Label\", \"RadioGroup\", \"Switch\"],\n    status: \"in-progress\",\n  },\n]\"\"\")\nopen(p,\"w\").write(s)\nEOF\ncd ../.. && npm run atlas:verify -- --scope \"app/prototypes/onboarding/**,app/prototypes/_shared/flowRegistry.ts\" 2>&1 | tail -40",
+    "npm run atlas:verify -- --scope \"app/prototypes/onboarding/**,app/prototypes/_shared/flowRegistry.ts\" 2>&1 | tail -40"
+  ],
+  "quality": {
+    "outputExists": true,
+    "files": 5,
+    "loc": 233,
+    "registered": true,
+    "tokenLintViolations": 0,
+    "tscErrors": 0,
+    "atlasComponentsImported": [
+      "Button",
+      "Input",
+      "Label",
+      "RadioGroup",
+      "RadioGroupItem",
+      "Switch"
+    ],
+    "expectedCoverage": "5/6",
+    "rawElements": 0,
+    "numericStyleLiterals": 0,
+    "primitiveTokenRefs": 0
+  },
+  "phase8": {
+    "readsAll": {
+      "total": 11,
+      "unique": 11,
+      "viaBash": 0,
+      "files": [
+        "atlas/index.md",
+        ".claude/skills/atlas-prototype/references/flow-scaffold.md",
+        "atlas/patterns/form.md",
+        "atlas/Input.md",
+        "atlas/Label.md",
+        "atlas/Button.md",
+        "atlas/Switch.md",
+        "atlas/RadioGroup.md",
+        "atlas/Select.md",
+        "atlas/tokens.md",
+        "app/prototypes/_shared/flowRegistry.ts"
+      ]
+    },
+    "sourceOpened": {},
+    "sourceOpenedCount": 0,
+    "verify": {
+      "runs": 2,
+      "failures": 1,
+      "firstPass": false,
+      "finalPass": true,
+      "calls": [
+        {
+          "cmd": "cd app/prototypes && mkdir -p onboarding/steps && cat > onboarding/schema.ts <<'EOF'\nexport type Role = \"designer\" | \"de",
+          "failed": true
+        },
+        {
+          "cmd": "npm run atlas:verify -- --scope \"app/prototypes/onboarding/**,app/prototypes/_shared/flowRegistry.ts\" 2>&1 | tail -40",
+          "failed": false
+        }
+      ]
+    },
+    "wasted": {
+      "duplicateReads": 0,
+      "unusedComponentReads": [
+        "atlas/Select.md"
+      ],
+      "offTask": [],
+      "verifierInternals": [],
+      "failedToolCalls": 0,
+      "total": 1
+    },
+    "gaps": {
+      "available": true,
+      "candidatesChanged": [],
+      "expected": [],
+      "recognised": []
+    }
+  },
+  "w1": {
+    "tokenAccuracy": {
+      "value": 1,
+      "valid": 32,
+      "invalid": 0,
+      "primitive": 0,
+      "hardcoded": 0
+    },
+    "componentAccuracy": {
+      "value": 0.833,
+      "covered": 5,
+      "expected": 6,
+      "rawElements": 0
+    },
+    "a11yPass": true,
+    "deprecatedUsage": 0,
+    "humanCorrections": {
+      "available": false
+    },
+    "patternAdherence": {
+      "pattern": "form",
+      "score": 2,
+      "passed": 6,
+      "total": 6,
+      "results": [
+        {
+          "id": "progress-shown",
+          "pass": true
+        },
+        {
+          "id": "skip-optional-step",
+          "pass": true
+        },
+        {
+          "id": "invalid-state",
+          "pass": true
+        },
+        {
+          "id": "error-text",
+          "pass": true
+        },
+        {
+          "id": "labelled-fields",
+          "pass": true
+        },
+        {
+          "id": "back-navigation",
+          "pass": true
+        }
+      ]
+    },
+    "patternStrict": {
+      "passed": 8,
+      "total": 8,
+      "fraction": 1,
+      "results": [
+        {
+          "id": "label-required-prop",
+          "rule": "Required fields use Label required",
+          "pass": true
+        },
+        {
+          "id": "no-typed-asterisk",
+          "rule": "No typed asterisk in a label",
+          "pass": true
+        },
+        {
+          "id": "invalid-prop",
+          "rule": "Invalid fields set invalid",
+          "pass": true
+        },
+        {
+          "id": "describedby",
+          "rule": "Error text wired by aria-describedby",
+          "pass": true
+        },
+        {
+          "id": "skip-ghost",
+          "rule": "Skip is a ghost Button",
+          "pass": true
+        },
+        {
+          "id": "label-htmlfor",
+          "rule": "Labels use htmlFor",
+          "pass": true
+        },
+        {
+          "id": "no-raw-form-controls",
+          "rule": "No raw select or radio input",
+          "pass": true
+        },
+        {
+          "id": "no-per-field-alert",
+          "rule": "No Alert for field errors",
+          "pass": true
+        }
+      ],
+      "rescored": true
+    }
+  },
+  "subtype": "success"
+}

@@ -1,0 +1,113 @@
+{
+  "slug": "invoices-table",
+  "expectedComponents": [
+    "Table",
+    "Checkbox",
+    "Select",
+    "Input",
+    "Button",
+    "AlertDialog",
+    "Badge",
+    "Skeleton"
+  ],
+  "w1": {
+    "pattern": "data-table",
+    "patternChecks": [
+      {
+        "id": "select-all-indeterminate",
+        "type": "match",
+        "pattern": "indeterminate"
+      },
+      {
+        "id": "selected-count",
+        "type": "match",
+        "pattern": "\\bselected\\b",
+        "flags": "i"
+      },
+      {
+        "id": "destructive-confirmed",
+        "type": "match",
+        "pattern": "<AlertDialog|<Dialog"
+      },
+      {
+        "id": "loading-skeleton",
+        "type": "match",
+        "pattern": "<Skeleton"
+      },
+      {
+        "id": "no-match-state",
+        "type": "match",
+        "pattern": "no (results|invoices|matches)|nothing (matches|found)",
+        "flags": "i"
+      },
+      {
+        "id": "labelled-controls",
+        "type": "match",
+        "pattern": "aria-label|<Label"
+      }
+    ],
+    "strictChecks": [
+      {
+        "id": "indeterminate",
+        "rule": "Select-all uses indeterminate for a partial selection",
+        "type": "match",
+        "pattern": "indeterminate"
+      },
+      {
+        "id": "row-label",
+        "rule": "Row checkbox label names the row (interpolated aria-label)",
+        "type": "match",
+        "pattern": "aria-label=\\{`[^`]*\\$\\{"
+      },
+      {
+        "id": "select-all-label",
+        "rule": "Select-all checkbox is labelled",
+        "type": "match",
+        "pattern": "aria-label=\"Select all",
+        "flags": "i"
+      },
+      {
+        "id": "row-selected-prop",
+        "rule": "Selected rows set TableRow selected",
+        "type": "match",
+        "pattern": "<TableRow(?:[^>]|=>)*\\bselected="
+      },
+      {
+        "id": "count-live",
+        "rule": "Selected count announced (aria-live polite)",
+        "type": "match",
+        "pattern": "aria-live=\"polite\""
+      },
+      {
+        "id": "destructive-alertdialog",
+        "rule": "Delete confirms in AlertDialog variant=destructive",
+        "type": "match",
+        "pattern": "<AlertDialogContent(?:[^>]|=>)*variant=\"destructive\""
+      },
+      {
+        "id": "dialog-names-count",
+        "rule": "Confirmation title includes the count",
+        "type": "match",
+        "pattern": "<AlertDialogTitle>[\\s\\S]{0,160}\\{[^}]*(count|length|size|selected)"
+      },
+      {
+        "id": "numeric-align-end",
+        "rule": "Numeric column aligned end",
+        "type": "match",
+        "pattern": "align=\"end\""
+      },
+      {
+        "id": "table-named",
+        "rule": "Table is named (aria-label or caption)",
+        "type": "match",
+        "pattern": "<Table(?:[^>]|=>)*aria-label=|<TableCaption"
+      },
+      {
+        "id": "loading-busy",
+        "rule": "Loading region sets aria-busy",
+        "type": "match",
+        "pattern": "aria-busy"
+      }
+    ]
+  }
+}

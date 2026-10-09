@@ -1,0 +1,109 @@
+{
+  "slug": "payment-error",
+  "expectedComponents": [
+    "Input",
+    "Label",
+    "Button",
+    "Alert"
+  ],
+  "w1": {
+    "pattern": "error-recovery",
+    "patternChecks": [
+      {
+        "id": "alert-danger",
+        "type": "match",
+        "pattern": "<Alert[^>]*variant=\"danger\""
+      },
+      {
+        "id": "retry-action",
+        "type": "match",
+        "pattern": "try again|retry",
+        "flags": "i"
+      },
+      {
+        "id": "loading-on-submit",
+        "type": "match",
+        "pattern": "loading=|isSubmitting|submitting",
+        "flags": "i"
+      },
+      {
+        "id": "alternate-path",
+        "type": "match",
+        "pattern": "different card|another card|contact support|support",
+        "flags": "i"
+      },
+      {
+        "id": "failure-announced",
+        "type": "match",
+        "pattern": "role=\"alert\"|aria-live|\\.focus\\("
+      },
+      {
+        "id": "timeout-distinct",
+        "type": "match",
+        "pattern": "time(d)? ?out|network|connection",
+        "flags": "i"
+      }
+    ],
+    "strictChecks": [
+      {
+        "id": "decline-primary-change",
+        "rule": "Declined: primary action changes the card",
+        "type": "match",
+        "pattern": "<Button(?:[^>]|=>)*variant=\"primary\"(?:[^>]|=>)*>\\s*(Use (a )?(different|another)|Try (a )?(different|another)|Change)",
+        "flags": "i"
+      },
+      {
+        "id": "timeout-primary-retry",
+        "rule": "Timeout: primary action is Try again",
+        "type": "match",
+        "pattern": "time(d)? ?out[\\s\\S]{0,900}<Button(?:[^>]|=>)*variant=\"primary\"(?:[^>]|=>)*>\\s*(Try again|Retry)",
+        "flags": "i"
+      },
+      {
+        "id": "retry-loading",
+        "rule": "Retry shows loading on the Button",
+        "type": "match",
+        "pattern": "<Button(?:[^>]|=>)*\\bloading="
+      },
+      {
+        "id": "alert-actions-slot",
+        "rule": "Recovery lives in the Alert actions slot",
+        "type": "match",
+        "pattern": "<Alert[\\s\\S]{0,600}actions="
+      },
+      {
+        "id": "alert-not-dismissible",
+        "rule": "Failure Alert is not dismissible",
+        "type": "absent",
+        "pattern": "<Alert(?:[^>]|=>)*dismissible"
+      },
+      {
+        "id": "no-oops",
+        "rule": "No \"Oops\" or \"Something went wrong\"",
+        "type": "absent",
+        "pattern": "oops|something went wrong",
+        "flags": "i"
+      },
+      {
+        "id": "charge-status",
+        "rule": "Says whether the user was charged",
+        "type": "match",
+        "pattern": "charged",
+        "flags": "i"
+      },
+      {
+        "id": "no-duplicate-live-region",
+        "rule": "No second live region (Alert danger is role=alert)",
+        "type": "absent",
+        "pattern": "role=\"alert\"|aria-live"
+      },
+      {
+        "id": "support-secondary",
+        "rule": "Contact support is not primary",
+        "type": "match",
+        "pattern": "<Button(?:[^>]|=>)*variant=\"(outline|ghost)\"(?:[^>]|=>)*>\\s*Contact support",
+        "flags": "i"
+      }
+    ]
+  }
+}

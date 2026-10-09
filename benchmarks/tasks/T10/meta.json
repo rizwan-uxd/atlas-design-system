@@ -1,0 +1,21 @@
+{
+  "type": "prototype",
+  "slug": "drift-fixture",
+  "expectedComponents": ["Button", "Card"],
+  "fixtureSync": false,
+  "w1": {
+    "audit": {
+      "file": "DriftScreen.tsx",
+      "mustNotEdit": true,
+      "findings": [
+        { "id": "hardcoded-colour-hex", "line": 8, "needle": "#0b6bff" },
+        { "id": "hardcoded-length", "line": 8, "needle": "padding: 13" },
+        { "id": "primitive-token", "line": 9, "needle": "--atlas-blue-500" },
+        { "id": "undefined-token", "line": 10, "needle": "--atlas-brand-accent" },
+        { "id": "raw-button", "line": 11, "needle": "<button" },
+        { "id": "hardcoded-colour-rgb", "line": 11, "needle": "rgb(20, 20, 20)" },
+        { "id": "clickable-div", "line": 12, "needle": "onClick" }
+      ]
+    }
+  }
+}

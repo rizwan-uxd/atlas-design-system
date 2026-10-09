@@ -1,0 +1,229 @@
+{
+  "model": "claude-sonnet-5-5",
+  "ok": true,
+  "error": null,
+  "turns": 23,
+  "durationS": 76,
+  "costUsd": 0.484939,
+  "tokens": {
+    "input": 20,
+    "cacheWrite": 64015,
+    "cacheRead": 657795,
+    "output": 9728,
+    "totalContext": 721830
+  },
+  "tools": {
+    "Skill": 1,
+    "Read": 11,
+    "Glob": 1,
+    "Bash": 2,
+    "Write": 3,
+    "Grep": 1,
+    "Edit": 2
+  },
+  "toolCalls": 21,
+  "figmaCalls": 0,
+  "verifyRuns": 1,
+  "reworkEdits": 0,
+  "toolResultChars": {
+    "Skill": 32,
+    "Read": 42172,
+    "Glob": 14,
+    "Bash": 643,
+    "Write": 661,
+    "Grep": 82,
+    "Edit": 449
+  },
+  "skillsUsed": [
+    "atlas-prototype"
+  ],
+  "reads": {
+    "total": 11,
+    "unique": 11,
+    "offTask": 0,
+    "byCategory": {
+      "atlas-snapshot": 8,
+      "skills": 2,
+      "prototype-shell": 1
+    },
+    "files": [
+      "atlas/index.md",
+      ".claude/skills/atlas-prototype/references/flow-scaffold.md",
+      "atlas/patterns/empty-state.md",
+      "atlas/Input.md",
+      "atlas/Button.md",
+      "atlas/Tabs.md",
+      "atlas/ListItem.md",
+      "atlas/tokens.md",
+      ".claude/skills/atlas-prototype/references/gaps.md",
+      "atlas/state/candidates.json",
+      "app/prototypes/_shared/flowRegistry.ts"
+    ]
+  },
+  "bashCmds": [
+    "cd app/prototypes && mkdir -p empty-state && cat > empty-state/schema.ts <<'EOF'\nexport type Project = { id: string; name: string; updated: string }\n\nexport type Scenario = \"list\" | \"first-use\" | \"no-results\"\n\nexport const SCENARIOS: { value: Scenario; label: string }[] = [\n  { value: \"list\", label: \"List\" },\n  { value: \"first-use\", label: \"First use\" },\n  { value: \"no-results\", label: \"No results\" },\n]\n\nexport const NO_RESULTS_QUERY = \"Zebra\"\n\nexport const PROJECTS: Project[] = [\n  { id: \"p1\", name: \"Website redesign\", updated: \"Updated Oct 7, 2026\" },\n  { id: \"p2\", name: \"Mobile onboarding\", updated: \"Updated Oct 3, 2026\" },\n  { id: \"p3\", name: \"Q4 planning\", updated: \"Updated Sep 28, 2026\" },\n]\nEOF\ncat > empty-state/ProjectsEmpty.tsx <<'EOF'\n\"use client\"\nimport { Plus, SearchX, FolderOpen } from \"lucide-react\"\nimport { Button } from \"@atlas/ui-web/primitives/Button/Button\"\n\ntype Props =\n  | { kind: \"first-use\"; onCreate: () => void }\n  | { kind: \"no-results\"; query: string; onClear: () => void }\n\n// Composed locally: Atlas has no EmptyState component (CAND-030).\nexport function ProjectsEmpty(props: Props) {\n  const first = props.kind === \"first-use\"\n  const Icon = first ? FolderOpen : SearchX\n  return (\n    <div\n      role=\"status\"\n      style={{\n        display: \"grid\",\n        justifyItems: \"center\",\n        textAlign: \"center\",\n        gap: \"var(--atlas-spacing-3)\",\n        paddingBlock: \"var(--atlas-spacing-12)\",\n        paddingInline: \"var(--atlas-spacing-4)\",\n      }}\n    >\n      <Icon aria-hidden=\"true\" size={40} color=\"var(--atlas-foreground-subtle)\" />\n      <h2 style={{ margin: 0, fontSize: \"var(--atlas-text-h3)\", fontWeight: \"var(--atlas-font-weight-semibold)\", color: \"var(--atlas-foreground)\" }}>\n        {first ? \"No projects yet\" : `No results for “${props.query}”`}\n      </h2>\n      <p style={{ margin: 0, maxInlineSize: \"var(--atlas-content-width-sm)\", fontSize: \"var(--atlas-text-body-sm)\", color: \"var(--atlas-foreground-muted)\" }}>\n        {first\n          ? \"Projects group your files, tasks and teammates in one place. Create one to get started.\"\n          : \"Try a different search, or clear it to see every project.\"}\n      </p>\n      <div style={{ marginBlockStart: \"var(--atlas-spacing-3)\" }}>\n        {props.kind === \"first-use\" ? (\n          <Button variant=\"primary\" size=\"md\" leadingIcon={<Plus aria-hidden=\"true\" />} onClick={props.onCreate}>\n            New project\n          </Button>\n        ) : (\n          <Button variant=\"outline\" size=\"md\" onClick={props.onClear}>\n            Clear search\n          </Button>\n        )}\n      </div>\n    </div>\n  )\n}\nEOF\ncat > empty-state/page.tsx <<'EOF'\n\"use client\"\nimport { useState } from \"react\"\nimport { Search } from \"lucide-react\"\nimport { Input } from \"@atlas/ui-web/primitives/Input/Input\"\nimport { TabsRoot, TabsList, TabsTrigger } from \"@atlas/ui-web/patterns/Tabs/Tabs\"\nimport { ListItem, ListItemContent, ListItemTitle, ListItemDescription } from \"@atlas/ui-web/compositions/ListItem/ListItem\"\nimport { FlowShell } from \"../_shared/FlowShell\"\nimport { ProjectsEmpty } from \"./ProjectsEmpty\"\nimport { NO_RESULTS_QUERY, PROJECTS, SCENARIOS, type Project, type Scenario } from \"./schema\"\n\nexport default function EmptyStatePage() {\n  const [scenario, setScenario] = useState<Scenario>(\"list\")\n  const [query, setQuery] = useState(\"\")\n  const [created, setCreated] = useState<Project[]>([])\n\n  const all = scenario === \"first-use\" ? created : PROJECTS\n  const trimmed = query.trim().toLowerCase()\n  const visible = all.filter((p) => p.name.toLowerCase().includes(trimmed))\n  const kind = all.length === 0 ? \"first-use\" : visible.length === 0 ? \"no-results\" : \"list\"\n\n  const switchScenario = (value: string) => {\n    const next = value as Scenario\n    setScenario(next)\n    setCreated([])\n    setQuery(next === \"no-results\" ? NO_RESULTS_QUERY : \"\")\n  }\n  const clearSearch = () => {\n    setQuery(\"\")\n    setScenario(\"list\")\n  }\n  const create = () =>\n    setCreated([{ id: \"new\", name: \"Untitled project\", updated: \"Updated just now\" }])\n\n  return (\n    <FlowShell title=\"Projects: empty states\" step={0} totalSteps={1} showProgress={false}\n      phoneBackground=\"var(--atlas-background)\">\n      <div style={{ display: \"flex\", flexDirection: \"column\", gap: \"var(--atlas-spacing-4)\", paddingInline: \"var(--atlas-spacing-4)\", paddingBlockEnd: \"var(--atlas-spacing-6)\" }}>\n        <TabsRoot variant=\"segmented\" size=\"sm\" value={scenario} onValueChange={switchScenario}>\n          <TabsList aria-label=\"Review state\">\n            {SCENARIOS.map((s) => (\n              <TabsTrigger key={s.value} value={s.value}>{s.label}</TabsTrigger>\n            ))}\n          </TabsList>\n        </TabsRoot>\n\n        <h1 style={{ margin: 0, fontSize: \"var(--atlas-text-h1)\", fontWeight: \"var(--atlas-font-weight-bold)\", color: \"var(--atlas-foreground)\" }}>\n          Projects\n        </h1>\n\n        {kind !== \"first-use\" && (\n          <Input\n            type=\"search\"\n            size=\"md\"\n            aria-label=\"Search projects\"\n            placeholder=\"Search projects\"\n            leadingIcon={<Search aria-hidden=\"true\" />}\n            value={query}\n            onChange={(e) => setQuery(e.target.value)}\n          />\n        )}\n\n        {kind === \"list\" && (\n          <ul style={{ listStyle: \"none\", margin: 0, padding: 0, display: \"flex\", flexDirection: \"column\", gap: \"var(--atlas-spacing-2)\" }}>\n            {visible.map((p) => (\n              <ListItem key={p.id} as=\"li\" variant=\"outline\" size=\"md\">\n                <ListItemContent>\n                  <ListItemTitle>{p.name}</ListItemTitle>\n                  <ListItemDescription>{p.updated}</ListItemDescription>\n                </ListItemContent>\n              </ListItem>\n            ))}\n          </ul>\n        )}\n        {kind === \"first-use\" && <ProjectsEmpty kind=\"first-use\" onCreate={create} />}\n        {kind === \"no-results\" && <ProjectsEmpty kind=\"no-results\" query={query.trim()} onClear={clearSearch} />}\n      </div>\n    </FlowShell>\n  )\n}\nEOF\ncd .. && cd .. && python3 - <<'EOF'\nimport json,re\np='atlas/state/candidates.json'\ns=open(p).read()\ns=s.replace('\"seenIn\": [\"packages/governance/patterns/empty-state.md\", \"benchmarks/tasks/T5 (baseline-w1 runs composed their own)\"],','\"seenIn\": [\"packages/governance/patterns/empty-state.md\", \"benchmarks/tasks/T5 (baseline-w1 runs composed their own)\", \"app/prototypes/empty-state\"],')\ni=s.index('CAND-030'); j=s.index('\"occurrences\": 1',i)\ns=s[:j]+'\"occurrences\": 2'+s[j+len('\"occurrences\": 1'):]\nopen(p,'w').write(s); json.loads(s)\nEOF\ngrep -n \"send-money\" -B2 -A8 app/prototypes/_shared/flowRegistry.ts | head -40; tail -15 app/prototypes/_shared/flowRegistry.ts",
+    "npm run atlas:verify -- --scope \"app/prototypes/empty-state/**,app/prototypes/_shared/flowRegistry.ts,atlas/state/candidates.json\" 2>&1 | tail -40"
+  ],
+  "quality": {
+    "outputExists": true,
+    "files": 3,
+    "loc": 146,
+    "registered": true,
+    "tokenLintViolations": 0,
+    "tscErrors": 0,
+    "atlasComponentsImported": [
+      "Button",
+      "Input",
+      "TabsRoot",
+      "TabsList",
+      "TabsTrigger",
+      "ListItem",
+      "ListItemContent",
+      "ListItemTitle",
+      "ListItemDescription"
+    ],
+    "expectedCoverage": "2/2",
+    "rawElements": 0,
+    "numericStyleLiterals": 0,
+    "primitiveTokenRefs": 0
+  },
+  "phase8": {
+    "readsAll": {
+      "total": 16,
+      "unique": 12,
+      "viaBash": 4,
+      "files": [
+        "atlas/index.md",
+        ".claude/skills/atlas-prototype/references/flow-scaffold.md",
+        "atlas/patterns/empty-state.md",
+        "atlas/Input.md",
+        "atlas/Button.md",
+        "atlas/Tabs.md",
+        "atlas/ListItem.md",
+        "atlas/tokens.md",
+        ".claude/skills/atlas-prototype/references/gaps.md",
+        "atlas/state/candidates.json",
+        "Bash:atlas/state/candidates.json",
+        "Bash:packages/governance/patterns/empty-state.md",
+        "Bash:app/prototypes/_shared/flowRegistry.ts",
+        "Bash:app/prototypes/_shared/flowRegistry.ts",
+        "Grep:app/prototypes/_shared/flowRegistry.ts",
+        "app/prototypes/_shared/flowRegistry.ts"
+      ]
+    },
+    "sourceOpened": {
+      "verifier-internals": [
+        "packages/governance/patterns/empty-state.md"
+      ]
+    },
+    "sourceOpenedCount": 1,
+    "verify": {
+      "runs": 1,
+      "failures": 0,
+      "firstPass": true,
+      "finalPass": true,
+      "calls": [
+        {
+          "cmd": "npm run atlas:verify -- --scope \"app/prototypes/empty-state/**,app/prototypes/_shared/flowRegistry.ts,atlas/state/candid",
+          "failed": false
+        }
+      ]
+    },
+    "wasted": {
+      "duplicateReads": 4,
+      "unusedComponentReads": [],
+      "offTask": [],
+      "verifierInternals": [
+        "packages/governance/patterns/empty-state.md"
+      ],
+      "failedToolCalls": 1,
+      "total": 6
+    },
+    "gaps": {
+      "available": true,
+      "candidatesChanged": [
+        "CAND-030 EmptyState"
+      ],
+      "expected": [],
+      "recognised": []
+    }
+  },
+  "w1": {
+    "tokenAccuracy": {
+      "value": 1,
+      "valid": 19,
+      "invalid": 0,
+      "primitive": 0,
+      "hardcoded": 0
+    },
+    "componentAccuracy": {
+      "value": 1,
+      "covered": 2,
+      "expected": 2,
+      "rawElements": 0
+    },
+    "a11yPass": true,
+    "deprecatedUsage": 0,
+    "humanCorrections": {
+      "available": false
+    },
+    "patternAdherence": {
+      "pattern": "empty-state",
+      "score": 2,
+      "passed": 4,
+      "total": 4,
+      "results": [
+        {
+          "id": "recovery-action",
+          "pass": true
+        },
+        {
+          "id": "announced",
+          "pass": true
+        },
+        {
+          "id": "decorative-icon-hidden",
+          "pass": true
+        },
+        {
+          "id": "no-destructive",
+          "pass": true
+        }
+      ]
+    },
+    "patternStrict": {
+      "passed": 5,
+      "total": 5,
+      "fraction": 1,
+      "results": [
+        {
+          "id": "status-region",
+          "rule": "Message wrapped in role=\"status\"",
+          "pass": true
+        },
+        {
+          "id": "statement-title",
+          "rule": "Title states the situation (\"No results…\", \"No projects…\")",
+          "pass": true
+        },
+        {
+          "id": "clear-action",
+          "rule": "No-results action clears the search or filters",
+          "pass": true
+        },
+        {
+          "id": "not-in-card",
+          "rule": "Empty state is not placed in a Card",
+          "pass": true
+        },
+        {
+          "id": "no-animated-icon",
+          "rule": "Decorative icon is a static lucide icon, not AnimatedIcon",
+          "pass": true
+        }
+      ],
+      "rescored": true
+    }
+  },
+  "subtype": "success"
+}

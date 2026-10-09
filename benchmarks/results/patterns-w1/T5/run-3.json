@@ -1,0 +1,226 @@
+{
+  "model": "claude-sonnet-5-5",
+  "ok": true,
+  "error": null,
+  "turns": 25,
+  "durationS": 71,
+  "costUsd": 0.4879608,
+  "tokens": {
+    "input": 24,
+    "cacheWrite": 62373,
+    "cacheRead": 807754,
+    "output": 7687,
+    "totalContext": 870151
+  },
+  "tools": {
+    "Skill": 2,
+    "Read": 11,
+    "Glob": 1,
+    "Write": 2,
+    "Edit": 3,
+    "Bash": 3
+  },
+  "toolCalls": 22,
+  "figmaCalls": 0,
+  "verifyRuns": 3,
+  "reworkEdits": 0,
+  "toolResultChars": {
+    "Skill": 61,
+    "Read": 42172,
+    "Glob": 14,
+    "Write": 440,
+    "Edit": 676,
+    "Bash": 448
+  },
+  "skillsUsed": [
+    "atlas-prototype",
+    "atlas-verify"
+  ],
+  "reads": {
+    "total": 11,
+    "unique": 11,
+    "offTask": 0,
+    "byCategory": {
+      "atlas-snapshot": 8,
+      "skills": 2,
+      "prototype-shell": 1
+    },
+    "files": [
+      "atlas/index.md",
+      ".claude/skills/atlas-prototype/references/flow-scaffold.md",
+      "atlas/patterns/empty-state.md",
+      "atlas/tokens.md",
+      "atlas/Button.md",
+      "atlas/Input.md",
+      "atlas/Tabs.md",
+      "atlas/ListItem.md",
+      ".claude/skills/atlas-prototype/references/gaps.md",
+      "atlas/state/candidates.json",
+      "app/prototypes/_shared/flowRegistry.ts"
+    ]
+  },
+  "bashCmds": [
+    "node scripts/atlas-verify.mjs --scope \"app/prototypes/empty-state/**,app/prototypes/_shared/flowRegistry.ts,atlas/state/candidates.json\" 2>&1 | tail -40; echo EXIT ${PIPESTATUS[0]}",
+    "node scripts/atlas-verify.mjs --scope \"app/prototypes/empty-state/**,app/prototypes/_shared/flowRegistry.ts,atlas/state/candidates.json\" > /tmp/v.txt 2>&1; echo EXIT $?; tail -40 /tmp/v.txt",
+    "node scripts/atlas-verify.mjs --scope \"app/prototypes/empty-state/**,app/prototypes/_shared/flowRegistry.ts,atlas/state/candidates.json\""
+  ],
+  "quality": {
+    "outputExists": true,
+    "files": 2,
+    "loc": 222,
+    "registered": true,
+    "tokenLintViolations": 0,
+    "tscErrors": 0,
+    "atlasComponentsImported": [
+      "Input",
+      "TabsRoot",
+      "TabsList",
+      "TabsTrigger",
+      "ListItem",
+      "ListItemContent",
+      "ListItemTitle",
+      "ListItemDescription",
+      "Button"
+    ],
+    "expectedCoverage": "2/2",
+    "rawElements": 0,
+    "numericStyleLiterals": 0,
+    "primitiveTokenRefs": 0
+  },
+  "phase8": {
+    "readsAll": {
+      "total": 11,
+      "unique": 11,
+      "viaBash": 0,
+      "files": [
+        "atlas/index.md",
+        ".claude/skills/atlas-prototype/references/flow-scaffold.md",
+        "atlas/patterns/empty-state.md",
+        "atlas/tokens.md",
+        "atlas/Button.md",
+        "atlas/Input.md",
+        "atlas/Tabs.md",
+        "atlas/ListItem.md",
+        ".claude/skills/atlas-prototype/references/gaps.md",
+        "atlas/state/candidates.json",
+        "app/prototypes/_shared/flowRegistry.ts"
+      ]
+    },
+    "sourceOpened": {},
+    "sourceOpenedCount": 0,
+    "verify": {
+      "runs": 3,
+      "failures": 2,
+      "firstPass": false,
+      "finalPass": true,
+      "calls": [
+        {
+          "cmd": "node scripts/atlas-verify.mjs --scope \"app/prototypes/empty-state/**,app/prototypes/_shared/flowRegistry.ts,atlas/state/",
+          "failed": true
+        },
+        {
+          "cmd": "node scripts/atlas-verify.mjs --scope \"app/prototypes/empty-state/**,app/prototypes/_shared/flowRegistry.ts,atlas/state/",
+          "failed": true
+        },
+        {
+          "cmd": "node scripts/atlas-verify.mjs --scope \"app/prototypes/empty-state/**,app/prototypes/_shared/flowRegistry.ts,atlas/state/",
+          "failed": false
+        }
+      ]
+    },
+    "wasted": {
+      "duplicateReads": 0,
+      "unusedComponentReads": [],
+      "offTask": [],
+      "verifierInternals": [],
+      "failedToolCalls": 0,
+      "total": 0
+    },
+    "gaps": {
+      "available": true,
+      "candidatesChanged": [
+        "CAND-030 EmptyState"
+      ],
+      "expected": [],
+      "recognised": []
+    }
+  },
+  "w1": {
+    "tokenAccuracy": {
+      "value": 1,
+      "valid": 27,
+      "invalid": 0,
+      "primitive": 0,
+      "hardcoded": 0
+    },
+    "componentAccuracy": {
+      "value": 1,
+      "covered": 2,
+      "expected": 2,
+      "rawElements": 0
+    },
+    "a11yPass": true,
+    "deprecatedUsage": 0,
+    "humanCorrections": {
+      "available": false
+    },
+    "patternAdherence": {
+      "pattern": "empty-state",
+      "score": 2,
+      "passed": 4,
+      "total": 4,
+      "results": [
+        {
+          "id": "recovery-action",
+          "pass": true
+        },
+        {
+          "id": "announced",
+          "pass": true
+        },
+        {
+          "id": "decorative-icon-hidden",
+          "pass": true
+        },
+        {
+          "id": "no-destructive",
+          "pass": true
+        }
+      ]
+    },
+    "patternStrict": {
+      "passed": 5,
+      "total": 5,
+      "fraction": 1,
+      "results": [
+        {
+          "id": "status-region",
+          "rule": "Message wrapped in role=\"status\"",
+          "pass": true
+        },
+        {
+          "id": "statement-title",
+          "rule": "Title states the situation (\"No results…\", \"No projects…\")",
+          "pass": true
+        },
+        {
+          "id": "clear-action",
+          "rule": "No-results action clears the search or filters",
+          "pass": true
+        },
+        {
+          "id": "not-in-card",
+          "rule": "Empty state is not placed in a Card",
+          "pass": true
+        },
+        {
+          "id": "no-animated-icon",
+          "rule": "Decorative icon is a static lucide icon, not AnimatedIcon",
+          "pass": true
+        }
+      ],
+      "rescored": true
+    }
+  },
+  "subtype": "success"
+}
