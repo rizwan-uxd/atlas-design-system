@@ -16,6 +16,7 @@
  *   node scripts/atlas-verify.mjs --base main --allow-new-component --skip tests
  *   node scripts/atlas-verify.mjs --json
  *   node scripts/atlas-verify.mjs --scope "…" --stamp                  # on a full pass, stamp verifiedAt
+ *   node scripts/atlas-verify.mjs --stamp-components Button,Input     # same, for named components with no library change
  *
  * Exit: 0 when no check fails (warnings allowed), 1 when any check fails.
  */
@@ -36,7 +37,9 @@ const SKIP = new Set(list(opt("--skip")))
 const JSON_OUT = flag("--json")
 const ALLOW_COMPONENT = flag("--allow-new-component")
 const ALLOW_TOKEN = flag("--allow-new-token")
-const STAMP = flag("--stamp")
+// --stamp-components A,B stamps named components on a full pass even when no library file changed (a verification-only task); implies --stamp
+const STAMP_NAMED = new Set(list(opt("--stamp-components")))
+const STAMP = flag("--stamp") || STAMP_NAMED.size > 0
 
 const read = (rel) => fs.readFileSync(path.join(ROOT, rel), "utf8")
 const exists = (rel) => fs.existsSync(path.join(ROOT, rel))
@@ -331,12 +334,13 @@ if (STAMP) {
   const skipped = results.filter((r) => r.status === "skip").map((r) => r.id)
   if (failed.length) stampNote.push("not stamped: a check failed")
   else if (skipped.length) stampNote.push(`not stamped: skipped ${skipped.join(", ")}`)
-  else if (!libChanged.size) stampNote.push("not stamped: no library component changed")
+  else if (!libChanged.size && !STAMP_NAMED.size) stampNote.push("not stamped: no library component changed")
   else {
     const rel = "atlas/state/status.json"
     const at = new Date().toISOString()
     let body = read(rel)
-    for (const name of [...libChanged].sort()) {
+    for (const name of [...new Set([...libChanged, ...STAMP_NAMED])].sort()) {
+      if (STAMP_NAMED.has(name) && !metadata[name]) { stampNote.push(`not stamped: ${name} has no atlas/metadata/${name}.json`); continue }
       const row = new RegExp(`("${name}": \\{[^}]*"verifiedAt": )(null|"[^"]*")`)
       if (row.test(body)) { body = body.replace(row, `$1"${at}"`); stamped.push(name) }
       else stampNote.push(`not stamped: ${name} has no row in ${rel}`)

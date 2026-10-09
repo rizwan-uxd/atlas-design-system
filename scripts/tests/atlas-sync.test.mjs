@@ -45,7 +45,8 @@ test("Sizes follow a metadata change in a doc without a Figma description, and a
     assert.equal(out.match(/^## Sizes/gm).length, 1, "legacy section replaced, not duplicated")
     assert.match(block(out), /## Sizes\n`sm` · `md` · `lg` · `xl`\n/)
     assert.doesNotMatch(out, /does not have it yet/)
-    assert.doesNotMatch(block(out), /Figma: .*differs/, "code and Figma sizes now agree")
+    // Figma draws sm | md | lg, so a code-only xl is reported as drift next to the value list
+    assert.match(block(out), /Figma: `sm` · `md` · `lg` — differs from code/)
 
     assert.equal(writtenCount(sync(dir)), 0, "second sync writes zero files")
   } finally {
@@ -56,6 +57,11 @@ test("Sizes follow a metadata change in a doc without a Figma description, and a
 test("per-value hints survive and a removed value drops out", () => {
   const dir = copyInputs()
   try {
+    // a hint written after a value is authored text; Button's Figma description no longer carries one, so seed it
+    const doc = path.join(dir, "atlas/Button.md")
+    const seeded = fs.readFileSync(doc, "utf8").replace(/(## Sizes\n)`xs` · `sm` · `md` · `lg`/, "$1`xs` · `sm` · `md` default · `lg`")
+    assert.match(seeded, /`md` default/)
+    fs.writeFileSync(doc, seeded)
     sync(dir)
     const tsx = path.join(dir, "packages/ui-web/src/primitives/Button/Button.tsx")
     const src = fs.readFileSync(tsx, "utf8")

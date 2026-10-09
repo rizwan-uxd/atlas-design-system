@@ -74,3 +74,54 @@ test("a use already present at --base is historical and does not fail", () => {
     assert.equal(run(dir).status, "pass")
   } finally { cleanup(dir) }
 })
+
+// ─── --stamp-components ──────────────────────────────────────────────────────
+
+const stampRepo = () => {
+  const { dir, git } = repo()
+  for (const rel of ["tsconfig.json", "tsconfig.base.json", "vitest.config.ts", "package.json", "next-env.d.ts", "app", "packages/ui-web/tests"])
+    if (fs.existsSync(path.join(REPO, rel))) fs.cpSync(path.join(REPO, rel), path.join(dir, rel), { recursive: true })
+  fs.symlinkSync(path.join(REPO, "node_modules"), path.join(dir, "node_modules"))
+  fs.writeFileSync(path.join(dir, ".git/info/exclude"), "/node_modules\n")
+  git("add -A"); git("commit -q -m full")
+  return { dir, git }
+}
+const runStamp = (dir, args) => {
+  let out
+  try { out = execFileSync("node", [path.join(dir, "scripts/atlas-verify.mjs"), "--json", ...args], { cwd: dir, encoding: "utf8", timeout: 240000 }) } catch (e) { out = e.stdout }
+  return JSON.parse(out)
+}
+const verifiedAt = (dir, name) => JSON.parse(fs.readFileSync(path.join(dir, "atlas/state/status.json"), "utf8")).components[name].verifiedAt
+
+test("--stamp-components stamps a named component on a full pass with no library change, and never an unnamed one", () => {
+  const { dir } = stampRepo()
+  try {
+    const before = verifiedAt(dir, "Button")
+    const r = runStamp(dir, ["--stamp-components", "Button"])
+    assert.equal(r.ok, true, JSON.stringify(r.results.filter((x) => x.status === "fail")))
+    assert.deepEqual(r.stamped, ["Button"])
+    assert.notEqual(verifiedAt(dir, "Button"), before)
+    assert.match(verifiedAt(dir, "Button"), /^\d{4}-\d\d-\d\dT/)
+    assert.equal(verifiedAt(dir, "Input"), JSON.parse(fs.readFileSync(path.join(REPO, "atlas/state/status.json"), "utf8")).components.Input.verifiedAt)
+  } finally { cleanup(dir) }
+})
+
+test("--stamp-components does not stamp when a check is skipped or fails, or when the name is unknown", () => {
+  const { dir } = stampRepo()
+  try {
+    const before = verifiedAt(dir, "Button")
+    const skipped = runStamp(dir, ["--stamp-components", "Button", "--skip", "tests"])
+    assert.deepEqual(skipped.stamped, [])
+    assert.match(skipped.stampNote.join(" "), /skipped tests/)
+    deprecate(dir, [{ kind: "component", name: "Alert", ...detail }])
+    fs.mkdirSync(path.join(dir, "app/prototypes/dep-fixture"), { recursive: true })
+    fs.writeFileSync(path.join(dir, FIXTURE), alertUse)
+    const failed = runStamp(dir, ["--stamp-components", "Button", "--skip", "tsc,tests,token-lint,snapshot-current"])
+    assert.deepEqual(failed.stamped, [])
+    assert.equal(verifiedAt(dir, "Button"), before)
+    fs.rmSync(path.join(dir, FIXTURE)); deprecate(dir, [])
+    const unknown = runStamp(dir, ["--stamp-components", "NoSuchThing"])
+    assert.deepEqual(unknown.stamped, [])
+    assert.match(unknown.stampNote.join(" "), /NoSuchThing has no atlas\/metadata/)
+  } finally { cleanup(dir) }
+})
