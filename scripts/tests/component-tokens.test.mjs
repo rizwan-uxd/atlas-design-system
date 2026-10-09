@@ -112,3 +112,28 @@ test("no block renders nothing", () => {
 test("extractComponentBlock exposes the selector", () => {
   assert.match(extractComponentBlock(wrap(OK)).selector, /\.dark/)
 })
+
+import fs from "node:fs"
+import path from "node:path"
+import { fileURLToPath } from "node:url"
+const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..")
+const REAL_CSS = fs.readFileSync(path.join(REPO, "packages/tokens/atlas.tokens.css"), "utf8")
+
+test("the real token CSS has a valid component-token block", () => {
+  assert.deepEqual(lintComponentTokens(REAL_CSS), [])
+  assert.ok(parseComponentTokens(REAL_CSS).length >= 80)
+})
+
+test("the real block keeps the exception comment beside the exception token", () => {
+  const i = REAL_CSS.indexOf(CARD_EXCEPTION.name)
+  assert.ok(i > 0)
+  assert.match(REAL_CSS.slice(Math.max(0, i - 400), i), /approved exception/)
+})
+
+test("every semantic alias target in the real block is defined in the token file", () => {
+  const defined = new Set([...REAL_CSS.matchAll(/(--atlas-[\w-]+)\s*:/g)].map((m) => m[1]))
+  for (const t of parseComponentTokens(REAL_CSS)) {
+    const target = t.value.match(/^var\((--atlas-[\w-]+)\)$/)
+    if (target) assert.ok(defined.has(target[1]), `${t.name} aliases undefined ${target[1]}`)
+  }
+})

@@ -190,6 +190,16 @@ test("tokens.md gets a labelled component-token section, and a second sync write
 test("tokens.md has no component-token section while the CSS has no block", () => {
   const dir = copyInputs()
   try {
+    const cssPath = path.join(dir, "packages/tokens/atlas.tokens.css")
+    const css = fs.readFileSync(cssPath, "utf8")
+    const cb = css.indexOf("/* BEGIN:component-tokens */")
+    const ce = css.indexOf("/* END:component-tokens */") + "/* END:component-tokens */".length
+    fs.writeFileSync(cssPath, css.slice(0, cb) + css.slice(ce))
+    const mdPath = path.join(dir, "atlas/tokens.md")
+    const md = fs.readFileSync(mdPath, "utf8")
+    const mb = md.indexOf("<!-- BEGIN:generated-component-tokens -->")
+    const me = md.indexOf("<!-- END:generated-component-tokens -->") + "<!-- END:generated-component-tokens -->".length
+    if (mb !== -1) fs.writeFileSync(mdPath, md.slice(0, mb) + md.slice(me))
     sync(dir)
     assert.doesNotMatch(fs.readFileSync(path.join(dir, "atlas/tokens.md"), "utf8"), /generated-component-tokens/)
   } finally { fs.rmSync(dir, { recursive: true, force: true }) }
