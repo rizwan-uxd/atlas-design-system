@@ -1076,6 +1076,46 @@
       "issue": "Code shipped leadingIcon/badge on TabsTrigger (and icon/badge on TabItem) with no Figma-drawn equivalent — the trigger component (146:54) had only Variant/Size/State, each variant's only child was a plain TEXT node. Found while investigating the shadcn reference's Tab component, which has real icon/badge boolean properties. Not detectable by sync (it only diffs the Variant/Size axes, never booleans).",
       "resolution": "Resolved per user decision (2026-09-29): added Icon (BOOLEAN, default off) + Icon slot (INSTANCE_SWAP, default Atlas/Icons circle-check) and Badge (BOOLEAN, default off, visibility bound to an appended Atlas Badge neutral/sm/default instance) directly on component set 146:54, wired via componentPropertyReferences across all 60 variants — mirrors Button's DEC-024 Leading icon/slot pattern. Code needed no change: TabsTrigger's leadingIcon/badge props already existed and now have a Figma-drawn equivalent (DEC-002).",
       "date": "2026-09-29"
+    },
+    {
+      "id": "DISC-089",
+      "component": "Card",
+      "side": "both",
+      "status": "open",
+      "issue": "Figma Card item spacing and size-dependent corner radius differ from code: Figma binds itemSpacing spacing-1_5, spacing-2, spacing-2 for sm, md, lg where code uses card-size-<size>-gap (spacing-2, spacing-3, spacing-4); Figma uses radius-md at sm, radius-lg at md and radius-xl at lg where code uses radius-lg at every size. Found 2026-10-09 while rebinding Card to component tokens; those bindings stayed on their Figma variables.",
+      "resolution": "Decide whether Figma or code is right for gap and radius per size; then align the other side and bind the Card component set to card/size-*-gap and card/radius.",
+      "firstSeen": "2026-10-09",
+      "lastSeen": "2026-10-09"
+    },
+    {
+      "id": "DISC-090",
+      "component": "Card",
+      "side": "both",
+      "status": "open",
+      "issue": "Card filled hover differs three ways: Figma aliases card/filled-background-hover to background-muted (its drawn hover fill), code uses background-subtle in light mode and color-mix(...) in dark mode (BUG-054). The code token --atlas-card-filled-background-hover holds the dark-mode color-mix and is used only by the dark rule. Found 2026-10-09 during component tokens.",
+      "resolution": "Approve a semantic hover token for filled Card (light and dark), then retire the color-mix exception and align Figma.",
+      "firstSeen": "2026-10-09",
+      "lastSeen": "2026-10-09"
+    },
+    {
+      "id": "DISC-091",
+      "component": "Input",
+      "side": "both",
+      "status": "open",
+      "issue": "Figma Input filled hover binds background-hovered (Dark differs) where code uses background-subtle; Figma binds the focus and error bottom stroke of filled and unstyled Inputs directly to primary and danger with no filled/unstyled stroke component token. Found 2026-10-09 while rebinding Input; 15 bindings stayed on their semantic variables.",
+      "resolution": "Decide whether background-hovered or background-subtle is the filled hover fill, align the other side, then add stroke tokens for filled/unstyled focus and invalid if wanted (new tokens need approval).",
+      "firstSeen": "2026-10-09",
+      "lastSeen": "2026-10-09"
+    },
+    {
+      "id": "DISC-092",
+      "component": "Button",
+      "side": "both",
+      "status": "open",
+      "issue": "Figma Button outline disabled strokes bind border where code uses border-strong (button-outline-border); 8 bindings stayed on border. Found 2026-10-09 while rebinding Button.",
+      "resolution": "Decide which is right for the disabled outline stroke and align Figma or code.",
+      "firstSeen": "2026-10-09",
+      "lastSeen": "2026-10-09"
     }
   ]
 }

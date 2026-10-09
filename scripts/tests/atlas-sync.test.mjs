@@ -167,3 +167,40 @@ test("a pattern naming a component, variant or size that does not exist fails th
     fs.rmSync(dir, { recursive: true, force: true })
   }
 })
+
+test("tokens.md gets a labelled component-token section, and a second sync writes nothing", () => {
+  const dir = copyInputs()
+  try {
+    const cssPath = path.join(dir, "packages/tokens/atlas.tokens.css")
+    const css = fs.readFileSync(cssPath, "utf8")
+    const at = css.indexOf("/* ─────────────── RTL")
+    assert.ok(at > 0, "RTL marker moved; update this test")
+    const block = '/* BEGIN:component-tokens */\n:root,\n[data-theme="dark"],\n.dark {\n  --atlas-button-primary-background: var(--atlas-primary);\n}\n/* END:component-tokens */\n\n'
+    fs.writeFileSync(cssPath, css.slice(0, at) + block + css.slice(at))
+
+    sync(dir)
+    const md = fs.readFileSync(path.join(dir, "atlas/tokens.md"), "utf8")
+    assert.match(md, /<!-- BEGIN:generated-component-tokens -->/)
+    assert.match(md, /Atlas implementation tokens/)
+    assert.match(md, /`button-primary-background` → `primary`/)
+    assert.equal(writtenCount(sync(dir)), 0)
+  } finally { fs.rmSync(dir, { recursive: true, force: true }) }
+})
+
+test("tokens.md has no component-token section while the CSS has no block", () => {
+  const dir = copyInputs()
+  try {
+    const cssPath = path.join(dir, "packages/tokens/atlas.tokens.css")
+    const css = fs.readFileSync(cssPath, "utf8")
+    const cb = css.indexOf("/* BEGIN:component-tokens */")
+    const ce = css.indexOf("/* END:component-tokens */") + "/* END:component-tokens */".length
+    fs.writeFileSync(cssPath, css.slice(0, cb) + css.slice(ce))
+    const mdPath = path.join(dir, "atlas/tokens.md")
+    const md = fs.readFileSync(mdPath, "utf8")
+    const mb = md.indexOf("<!-- BEGIN:generated-component-tokens -->")
+    const me = md.indexOf("<!-- END:generated-component-tokens -->") + "<!-- END:generated-component-tokens -->".length
+    if (mb !== -1) fs.writeFileSync(mdPath, md.slice(0, mb) + md.slice(me))
+    sync(dir)
+    assert.doesNotMatch(fs.readFileSync(path.join(dir, "atlas/tokens.md"), "utf8"), /generated-component-tokens/)
+  } finally { fs.rmSync(dir, { recursive: true, force: true }) }
+})

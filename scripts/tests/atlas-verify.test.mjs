@@ -32,7 +32,8 @@ const run = (dir) => {
 }
 const alertUse = `import { Alert } from "@atlas/ui-web/compositions/Alert/Alert"\nexport default function P() { return <Alert variant="info" /> }\n`
 const buttonLink = `import { Button } from "@atlas/ui-web/primitives/Button/Button"\nexport default function P() { return <Button variant="link">x</Button> }\n`
-const cleanup = (dir) => fs.rmSync(dir, { recursive: true, force: true })
+// git may run detached background maintenance inside the temp repo; retry so a late write cannot fail the removal (ENOTEMPTY)
+const cleanup = (dir) => fs.rmSync(dir, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 })
 
 test("empty registry passes", () => {
   const { dir } = repo()

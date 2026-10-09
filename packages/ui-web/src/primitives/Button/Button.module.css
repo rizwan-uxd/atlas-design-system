@@ -12,10 +12,10 @@
   align-items: center;
   justify-content: center;
   white-space: nowrap;
-  gap: var(--atlas-spacing-2);
+  gap: var(--atlas-button-gap);
   font-family: var(--atlas-font-sans);
   font-weight: var(--atlas-font-weight-medium);
-  border-radius: var(--atlas-radius-md);
+  border-radius: var(--atlas-button-radius);
   border: var(--atlas-border-width-1) solid transparent;
   cursor: pointer;
   user-select: none;
@@ -56,114 +56,114 @@
   cursor: not-allowed;
   pointer-events: none;
   /* BUG-004 fix: explicit foreground token overrides per-variant colors */
-  color: var(--atlas-foreground-disabled);
+  color: var(--atlas-button-foreground-disabled);
 }
 
 /* ── Variants ─────────────────────────────────────────── */
 
 /* primary */
 .primary {
-  background-color: var(--atlas-primary);
-  color: var(--atlas-primary-foreground);
+  background-color: var(--atlas-button-primary-background);
+  color: var(--atlas-button-primary-foreground);
 }
 .primary:hover:not(:disabled):not([aria-disabled="true"]) {
-  background-color: var(--atlas-primary-hover);
+  background-color: var(--atlas-button-primary-background-hover);
 }
 .primary:active:not(:disabled):not([aria-disabled="true"]) {
-  background-color: var(--atlas-primary-active);
+  background-color: var(--atlas-button-primary-background-active);
 }
 
 /* secondary */
 .secondary {
-  background-color: var(--atlas-background-muted);
-  color: var(--atlas-foreground);
+  background-color: var(--atlas-button-secondary-background);
+  color: var(--atlas-button-secondary-foreground);
 }
 .secondary:hover:not(:disabled):not([aria-disabled="true"]) {
-  background-color: var(--atlas-background-subtle);
+  background-color: var(--atlas-button-secondary-background-hover);
 }
 .secondary:active:not(:disabled):not([aria-disabled="true"]) {
-  background-color: var(--atlas-background-subtle);
+  background-color: var(--atlas-button-secondary-background-active);
 }
 
 /* outline */
 .outline {
   background-color: transparent;
-  color: var(--atlas-foreground);
-  border-color: var(--atlas-border-strong);
+  color: var(--atlas-button-outline-foreground);
+  border-color: var(--atlas-button-outline-border);
 }
 .outline:hover:not(:disabled):not([aria-disabled="true"]) {
-  background-color: var(--atlas-background-subtle);
+  background-color: var(--atlas-button-outline-background-hover);
 }
 .outline:active:not(:disabled):not([aria-disabled="true"]) {
-  background-color: var(--atlas-background-muted);
+  background-color: var(--atlas-button-outline-background-active);
 }
 
 /* ghost */
 .ghost {
   background-color: transparent;
-  color: var(--atlas-foreground);
+  color: var(--atlas-button-ghost-foreground);
 }
 .ghost:hover:not(:disabled):not([aria-disabled="true"]) {
-  background-color: var(--atlas-background-subtle);
+  background-color: var(--atlas-button-ghost-background-hover);
 }
 .ghost:active:not(:disabled):not([aria-disabled="true"]) {
-  background-color: var(--atlas-background-muted);
+  background-color: var(--atlas-button-ghost-background-active);
 }
 
 /* destructive */
 .destructive {
-  background-color: var(--atlas-danger);
-  color: var(--atlas-danger-foreground);
+  background-color: var(--atlas-button-destructive-background);
+  color: var(--atlas-button-destructive-foreground);
 }
 .destructive:hover:not(:disabled):not([aria-disabled="true"]) {
-  background-color: var(--atlas-danger-hover);
+  background-color: var(--atlas-button-destructive-background-hover);
 }
 .destructive:active:not(:disabled):not([aria-disabled="true"]) {
-  background-color: var(--atlas-danger-hover);
+  background-color: var(--atlas-button-destructive-background-active);
 }
 
 /* link — no bg, no border, no radius, no padding-inline */
 .link {
   background-color: transparent;
-  color: var(--atlas-primary);
+  color: var(--atlas-button-link-foreground);
   text-decoration: underline;
   border-radius: 0;
   border-color: transparent;
   padding-inline: 0;
 }
 .link:hover:not(:disabled):not([aria-disabled="true"]) {
-  color: var(--atlas-primary-hover);
+  color: var(--atlas-button-link-foreground-hover);
 }
 .link:active:not(:disabled):not([aria-disabled="true"]) {
-  color: var(--atlas-primary-active);
+  color: var(--atlas-button-link-foreground-active);
 }
 
 /* ── Sizes ────────────────────────────────────────────── */
 /* padding-inline = logical shorthand for padding-inline-start + padding-inline-end */
 
 .xs {
-  height: var(--atlas-spacing-6);         /* 24px */
-  padding-inline: var(--atlas-spacing-2); /* 8px */
-  gap: var(--atlas-spacing-1);            /* 4px */
-  font-size: var(--atlas-font-size-xs);
+  height: var(--atlas-button-size-xs-height);         /* 24px */
+  padding-inline: var(--atlas-button-size-xs-padding-inline); /* 8px */
+  gap: var(--atlas-button-size-xs-gap);            /* 4px */
+  font-size: var(--atlas-button-size-xs-font-size);
 }
 
 .sm {
-  height: var(--atlas-spacing-8);         /* 32px */
-  padding-inline: var(--atlas-spacing-3); /* 12px */
-  font-size: var(--atlas-font-size-sm);
+  height: var(--atlas-button-size-sm-height);         /* 32px */
+  padding-inline: var(--atlas-button-size-sm-padding-inline); /* 12px */
+  font-size: var(--atlas-button-size-sm-font-size);
 }
 
 .md {
-  height: var(--atlas-spacing-10);        /* 40px */
-  padding-inline: var(--atlas-spacing-4); /* 16px */
-  font-size: var(--atlas-font-size-base); /* text-body per spec */
+  height: var(--atlas-button-size-md-height);        /* 40px */
+  padding-inline: var(--atlas-button-size-md-padding-inline); /* 16px */
+  font-size: var(--atlas-button-size-md-font-size); /* text-body per spec */
 }
 
 .lg {
-  height: var(--atlas-spacing-12);        /* 48px */
-  padding-inline: var(--atlas-spacing-6); /* 24px */
-  font-size: var(--atlas-font-size-base);
+  height: var(--atlas-button-size-lg-height);        /* 48px */
+  padding-inline: var(--atlas-button-size-lg-padding-inline); /* 24px */
+  font-size: var(--atlas-button-size-lg-font-size);
 }
 
 /* icon — layout modifier only; zero padding; width is driven by the size compound rule below.
@@ -175,10 +175,10 @@
 }
 
 /* Size-specific widths for icon-only buttons (match each size's height) */
-.xs.icon { width: var(--atlas-spacing-6); }   /* 24px */
-.sm.icon { width: var(--atlas-spacing-8); }   /* 32px */
-.md.icon { width: var(--atlas-spacing-10); }  /* 40px */
-.lg.icon { width: var(--atlas-spacing-12); }  /* 48px */
+.xs.icon { width: var(--atlas-button-size-xs-height); }   /* 24px */
+.sm.icon { width: var(--atlas-button-size-sm-height); }   /* 32px */
+.md.icon { width: var(--atlas-button-size-md-height); }  /* 40px */
+.lg.icon { width: var(--atlas-button-size-lg-height); }  /* 48px */
 
 /* ── Loading — trailing icon placeholder ─────────────── */
 /* Keeps the trailing icon slot in the layout during loading so button

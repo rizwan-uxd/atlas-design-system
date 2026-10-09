@@ -10,6 +10,7 @@
  *   2. No rgb() / rgba() calls (outside packages/tokens/)
  *   3. No oklch() calls (outside packages/tokens/)
  *   4. No hsl() / hsla() calls (outside packages/tokens/)
+ *   5. Component tokens alias semantic tokens (the one exception is --atlas-card-filled-background-hover)
  *
  * Allow-list:
  *   - Lines containing "token-lint-disable-next-line" suppress the NEXT line only.
@@ -32,6 +33,7 @@
 import fs from "fs"
 import path from "path"
 import { fileURLToPath } from "url"
+import { BEGIN, lintComponentTokens } from "../../scripts/lib/component-tokens.mjs"
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const ROOT = path.resolve(__dirname, "../..")
@@ -154,6 +156,19 @@ for (const dir of SCAN_DIRS) {
           violations.push({ file: rel, line: lineNo, rule: rule.id, text: line.trim() })
         }
       }
+    }
+  }
+}
+
+// ─── Component tokens (alias-only rule) ─────────────────────────────────────
+
+const TOKEN_CSS_PATH = path.join(ROOT, "packages/tokens/atlas.tokens.css")
+if (fs.existsSync(TOKEN_CSS_PATH)) {
+  const tokenCss = fs.readFileSync(TOKEN_CSS_PATH, "utf8")
+  // the layer is optional until the block exists; once present it is always checked
+  if (tokenCss.includes(BEGIN)) {
+    for (const message of lintComponentTokens(tokenCss)) {
+      violations.push({ file: "packages/tokens/atlas.tokens.css", line: 0, rule: "component-token-alias", text: message })
     }
   }
 }

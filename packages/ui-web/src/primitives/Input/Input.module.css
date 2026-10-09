@@ -21,10 +21,10 @@
   min-width: 0;
   box-sizing: border-box;
   font-family: var(--atlas-font-sans);
-  color: var(--atlas-foreground);
-  background-color: var(--atlas-background);
-  border: var(--atlas-border-width-1) solid var(--atlas-border);
-  border-radius: var(--atlas-radius-md);
+  color: var(--atlas-input-foreground);
+  background-color: var(--atlas-input-background);
+  border: var(--atlas-border-width-1) solid var(--atlas-input-border);
+  border-radius: var(--atlas-input-radius);
   outline: none;
   transition:
     border-color       var(--atlas-duration-fast) var(--atlas-easing-standard),
@@ -32,14 +32,14 @@
 }
 
 .input::placeholder {
-  color: var(--atlas-foreground-muted);
+  color: var(--atlas-input-placeholder);
 }
 
 /* Hover — BUG-007 fix: exclude invalid inputs so the danger border is not suppressed.
    The :not([aria-invalid="true"]) guard ensures hover (specificity 0-4-0) cannot
    override the error rule (specificity 0-2-0) when both conditions are true. */
 .input:hover:not(:disabled):not([readonly]):not([aria-invalid="true"]) {
-  border-color: var(--atlas-border-strong);
+  border-color: var(--atlas-input-border-hover);
 }
 
 /* BUG-008 fix: unstyled variant has no hover border per spec (column shows "none").
@@ -52,13 +52,13 @@
 /* Focus-visible — border shifts to primary; outline ring lives on the wrapper */
 .input:focus-visible {
   outline: none; /* Ring is shown on the wrapper via :has(:focus-visible) below */
-  border-color: var(--atlas-primary);
+  border-color: var(--atlas-input-border-focus);
 }
 
 /* Disabled */
 .input:disabled {
-  background-color: var(--atlas-background-muted);
-  color: var(--atlas-foreground-disabled);
+  background-color: var(--atlas-input-background-disabled);
+  color: var(--atlas-input-foreground-disabled);
   cursor: not-allowed;
   opacity: var(--atlas-opacity-disabled);
 }
@@ -70,7 +70,7 @@
 
 /* Invalid — border shifts to danger */
 .input[aria-invalid="true"] {
-  border-color: var(--atlas-danger);
+  border-color: var(--atlas-input-border-invalid);
 }
 
 /* ── Sizes ────────────────────────────────────────────────────── */
@@ -82,21 +82,21 @@
 */
 
 .sm {
-  height: var(--atlas-spacing-8);
-  padding-inline: var(--atlas-spacing-3);
-  font-size: var(--atlas-font-size-sm);
+  height: var(--atlas-input-size-sm-height);
+  padding-inline: var(--atlas-input-size-sm-padding-inline);
+  font-size: var(--atlas-input-size-sm-font-size);
 }
 
 .md {
-  height: var(--atlas-spacing-10);
-  padding-inline: var(--atlas-spacing-3);
-  font-size: var(--atlas-font-size-base); /* text-body per spec */
+  height: var(--atlas-input-size-md-height);
+  padding-inline: var(--atlas-input-size-md-padding-inline);
+  font-size: var(--atlas-input-size-md-font-size); /* text-body per spec */
 }
 
 .lg {
-  height: var(--atlas-spacing-12);
-  padding-inline: var(--atlas-spacing-4);
-  font-size: var(--atlas-font-size-base);
+  height: var(--atlas-input-size-lg-height);
+  padding-inline: var(--atlas-input-size-lg-padding-inline);
+  font-size: var(--atlas-input-size-lg-font-size);
 }
 
 /* ── Wrapper focus ring (default + filled variants only) ──────── */
@@ -111,13 +111,13 @@
 .default:has(.input:focus-visible) {
   outline: var(--atlas-border-width-2) solid var(--atlas-focus-ring);
   outline-offset: var(--atlas-spacing-0_5);
-  border-radius: var(--atlas-radius-md);
+  border-radius: var(--atlas-input-radius);
 }
 
 .filled:has(.input:focus-visible) {
   outline: var(--atlas-border-width-2) solid var(--atlas-focus-ring);
   outline-offset: var(--atlas-spacing-0_5);
-  border-radius: var(--atlas-radius-md);
+  border-radius: var(--atlas-input-radius);
 }
 
 /* ── Variant: filled ──────────────────────────────────────────── */
@@ -127,31 +127,31 @@
 */
 
 .filled .input {
-  background-color: var(--atlas-background-muted);
+  background-color: var(--atlas-input-filled-background);
   border: none;
   border-block-end: var(--atlas-border-width-1) solid transparent;
-  border-start-start-radius: var(--atlas-radius-md);
-  border-start-end-radius: var(--atlas-radius-md);
+  border-start-start-radius: var(--atlas-input-radius);
+  border-start-end-radius: var(--atlas-input-radius);
   border-end-start-radius: var(--atlas-radius-none);
   border-end-end-radius: var(--atlas-radius-none);
 }
 
 .filled .input:hover:not(:disabled):not([readonly]) {
-  background-color: var(--atlas-background-subtle);
+  background-color: var(--atlas-input-filled-background-hover);
 }
 
 .filled .input:focus-visible {
-  background-color: var(--atlas-background);
+  background-color: var(--atlas-input-filled-background-focus);
   outline: none; /* Ring is on the wrapper via :has(:focus-visible) */
-  border-block-end-color: var(--atlas-primary);
+  border-block-end-color: var(--atlas-input-border-focus);
 }
 
 .filled .input[aria-invalid="true"] {
-  border-block-end-color: var(--atlas-danger);
+  border-block-end-color: var(--atlas-input-border-invalid);
 }
 
 .filled .input:disabled {
-  background-color: var(--atlas-background-muted);
+  background-color: var(--atlas-input-background-disabled);
 }
 
 /* ── Variant: unstyled ────────────────────────────────────────── */
@@ -170,11 +170,11 @@
 .unstyled .input:focus-visible {
   /* No ring for unstyled — bottom border IS the focus indicator (per spec) */
   outline: none;
-  border-block-end-color: var(--atlas-primary);
+  border-block-end-color: var(--atlas-input-border-focus);
 }
 
 .unstyled .input[aria-invalid="true"] {
-  border-block-end-color: var(--atlas-danger);
+  border-block-end-color: var(--atlas-input-border-invalid);
 }
 
 /* ── Icon slots ───────────────────────────────────────────────── */
@@ -192,11 +192,11 @@
   transform: translateY(-50%);
   display: flex;
   align-items: center;
-  color: var(--atlas-foreground-muted);
+  color: var(--atlas-input-icon-foreground);
   pointer-events: none;
   /* Icon container matches icon size */
-  width: var(--atlas-spacing-5);
-  height: var(--atlas-spacing-5);
+  width: var(--atlas-input-icon-size);
+  height: var(--atlas-input-icon-size);
 }
 
 .iconLeading {
@@ -209,11 +209,11 @@
 
 /* Expand input padding to clear icon + gap */
 .wrapper[data-leading-icon] .input {
-  padding-inline-start: var(--atlas-spacing-10); /* 40px */
+  padding-inline-start: var(--atlas-input-adornment-padding); /* 40px */
 }
 
 .wrapper[data-trailing-icon] .input {
-  padding-inline-end: var(--atlas-spacing-10); /* 40px */
+  padding-inline-end: var(--atlas-input-adornment-padding); /* 40px */
 }
 
 /* ── Affix slots (prefix / suffix text) ───────────────────────── */
@@ -224,7 +224,7 @@
   transform: translateY(-50%);
   font-family: var(--atlas-font-sans);
   font-size: var(--atlas-font-size-sm);
-  color: var(--atlas-foreground-muted);
+  color: var(--atlas-input-affix-foreground);
   pointer-events: none;
   white-space: nowrap;
 }
@@ -240,11 +240,11 @@
 /* When both icon and affix are present the icon takes precedence.
    Callers should use one or the other, not both on the same side. */
 .wrapper[data-prefix] .input {
-  padding-inline-start: var(--atlas-spacing-10);
+  padding-inline-start: var(--atlas-input-adornment-padding);
 }
 
 .wrapper[data-suffix] .input {
-  padding-inline-end: var(--atlas-spacing-10);
+  padding-inline-end: var(--atlas-input-adornment-padding);
 }
 
 /* ── Loading spinner ──────────────────────────────────────────── */
