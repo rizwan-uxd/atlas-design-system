@@ -75,10 +75,25 @@ for i in $(seq 1 "$REPS"); do
   fi
   [ -n "$DRY" ] && { echo "  · dry run: workspace ready at $WS"; continue; }
   echo "▶ $LABEL $TASK run $i/$REPS  ($WS)"
-  ( cd "$WS" && claude -p "$(cat "$TDIR/prompt.md")" --model "$MODEL" \
-      --output-format stream-json --verbose --permission-mode acceptEdits \
-      --allowedTools "$TOOLS" ${EXTRA[@]+"${EXTRA[@]}"} \
-      > "$OUT/run-$i.jsonl" 2> "$OUT/run-$i.err" )
+  # Wall-clock limit per attempt (BENCH_RUN_TIMEOUT seconds, default 900; healthy runs take 2-5 min). An API
+  # stall can otherwise hang a run for hours. A timed-out attempt is discarded: its log is kept as
+  # run-N.timeout-K.jsonl (never read by summarize), the workspace is reset, and the run is retried up to
+  # BENCH_TIMEOUT_RETRIES times (default 1). Only the attempt that finishes becomes run-N.json.
+  RUN_TIMEOUT=${BENCH_RUN_TIMEOUT:-900}; RETRIES=${BENCH_TIMEOUT_RETRIES:-1}; ATTEMPT=0
+  while :; do
+    ATTEMPT=$((ATTEMPT + 1))
+    ( cd "$WS" && perl -e 'alarm shift; exec @ARGV' "$RUN_TIMEOUT" \
+        claude -p "$(cat "$TDIR/prompt.md")" --model "$MODEL" \
+        --output-format stream-json --verbose --permission-mode acceptEdits \
+        --allowedTools "$TOOLS" ${EXTRA[@]+"${EXTRA[@]}"} \
+        > "$OUT/run-$i.jsonl" 2> "$OUT/run-$i.err" )
+    RC=$?
+    [ "$RC" -ne 142 ] && break   # 142 = SIGALRM from the watchdog
+    mv "$OUT/run-$i.jsonl" "$OUT/run-$i.timeout-$ATTEMPT.jsonl"; mv "$OUT/run-$i.err" "$OUT/run-$i.timeout-$ATTEMPT.err"
+    echo "  ⏱ run $i attempt $ATTEMPT hit the ${RUN_TIMEOUT}s limit — discarded"
+    if [ "$ATTEMPT" -gt "$RETRIES" ]; then echo "  ✗ run $i timed out $ATTEMPT times — stopping"; exit 1; fi
+    ( cd "$WS" && git reset -q --hard && git clean -qfd )
+  done
   node "$ROOT/benchmarks/analyze.mjs" "$OUT/run-$i.jsonl" "$WS" "$TDIR/meta.json" > "$OUT/run-$i.json" \
     && echo "  ✓ analysed → results/$LABEL/$TASK/run-$i.json"
   if [ -n "$COMMIT" ]; then
