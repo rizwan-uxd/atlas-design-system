@@ -353,10 +353,10 @@
     {
       "id": "DISC-032",
       "component": "Card",
-      "side": "code",
-      "status": "open",
+      "side": "closed",
+      "status": "closed",
       "issue": "default/outlined bind different tokens in Figma than code assumes — dark-mode-only divergence, same class of bug as the documented BUG-051 (elevated already correctly uses surface-raised over background). Found 2026-09-27 at the A7 audit while modeling the new filled variant off default; not part of DISC-005/019 and not fixed in that phase (user chose to log and defer).",
-      "resolution": "Figma binds default to surface + border-subtle (code uses background + border) and outlined to surface + border (code uses border-strong). Code: change .default background-color to --atlas-surface and border-color to --atlas-border-subtle; change .outlined border-color from --atlas-border-strong to --atlas-border. Figma is unchanged (it's already correct) — this is a code-side fix."
+      "resolution": "Closed 2026-10-09 (DEC-054): Card default and outlined fills follow Figma (--atlas-surface); strokes follow code (default --atlas-border, outlined --atlas-border-strong) with Figma strokes rebound; hover uses --atlas-background-hovered via --atlas-card-default-background-hover."
     },
     {
       "id": "DISC-033",
@@ -1080,40 +1080,40 @@
     {
       "id": "DISC-089",
       "component": "Card",
-      "side": "both",
-      "status": "open",
+      "side": "closed",
+      "status": "closed",
       "issue": "Figma Card item spacing and size-dependent corner radius differ from code: Figma binds itemSpacing spacing-1_5, spacing-2, spacing-2 for sm, md, lg where code uses card-size-<size>-gap (spacing-2, spacing-3, spacing-4); Figma uses radius-md at sm, radius-lg at md and radius-xl at lg where code uses radius-lg at every size. Found 2026-10-09 while rebinding Card to component tokens; those bindings stayed on their Figma variables.",
-      "resolution": "Decide whether Figma or code is right for gap and radius per size; then align the other side and bind the Card component set to card/size-*-gap and card/radius.",
+      "resolution": "Closed 2026-10-09 (DEC-054): Card gap is card-size-<size>-gap (8/12/16) and radius is radius-lg at every size, with Figma rebound to match the spec.",
       "firstSeen": "2026-10-09",
       "lastSeen": "2026-10-09"
     },
     {
       "id": "DISC-090",
       "component": "Card",
-      "side": "both",
-      "status": "open",
+      "side": "closed",
+      "status": "closed",
       "issue": "Card filled hover differs three ways: Figma aliases card/filled-background-hover to background-muted (its drawn hover fill), code uses background-subtle in light mode and color-mix(...) in dark mode (BUG-054). The code token --atlas-card-filled-background-hover holds the dark-mode color-mix and is used only by the dark rule. Found 2026-10-09 during component tokens.",
-      "resolution": "Approve a semantic hover token for filled Card (light and dark), then retire the color-mix exception and align Figma.",
+      "resolution": "Closed 2026-10-09 (DEC-054): Card filled hover aliases --atlas-background-hovered in both themes and the color-mix exception is retired.",
       "firstSeen": "2026-10-09",
       "lastSeen": "2026-10-09"
     },
     {
       "id": "DISC-091",
       "component": "Input",
-      "side": "both",
-      "status": "open",
+      "side": "closed",
+      "status": "closed",
       "issue": "Figma Input filled hover binds background-hovered (Dark differs) where code uses background-subtle; Figma binds the focus and error bottom stroke of filled and unstyled Inputs directly to primary and danger with no filled/unstyled stroke component token. Found 2026-10-09 while rebinding Input; 15 bindings stayed on their semantic variables.",
-      "resolution": "Decide whether background-hovered or background-subtle is the filled hover fill, align the other side, then add stroke tokens for filled/unstyled focus and invalid if wanted (new tokens need approval).",
+      "resolution": "Closed 2026-10-09 (DEC-054): Filled Input hover uses --atlas-background-hovered in Figma and code.",
       "firstSeen": "2026-10-09",
       "lastSeen": "2026-10-09"
     },
     {
       "id": "DISC-092",
       "component": "Button",
-      "side": "both",
-      "status": "open",
+      "side": "closed",
+      "status": "closed",
       "issue": "Figma Button outline disabled strokes bind border where code uses border-strong (button-outline-border); 8 bindings stayed on border. Found 2026-10-09 while rebinding Button.",
-      "resolution": "Decide which is right for the disabled outline stroke and align Figma or code.",
+      "resolution": "Closed 2026-10-09 (DEC-054): Button outline disabled stroke is border-strong, with Figma rebound.",
       "firstSeen": "2026-10-09",
       "lastSeen": "2026-10-09"
     }

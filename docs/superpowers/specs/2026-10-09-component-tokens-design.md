@@ -16,13 +16,9 @@ component token aliases an existing semantic token.
 | Rejected | Scoped CSS custom properties inside each module (not retrievable, not bindable in Figma); a JSON-generated pipeline (too large for this step). |
 
 ## Rule: aliases only
-All new component tokens must alias existing semantic tokens, except Card interactive filled hover,
-which preserves the existing computed value until a proper semantic token is approved.
+All new component tokens must alias existing semantic tokens.
 
-That exception is `color-mix(in oklch, var(--atlas-background-muted) 80%, oklch(1 0 0))` in
-`Card.module.css`. The component token `--atlas-card-filled-background-hover` carries that expression
-with a comment pointing here. It is not an alias and it is the only one. No other new value is allowed.
-It is used only by the dark-mode filled hover rule in `Card.module.css`; the light filled hover keeps `--atlas-background-subtle` (see DISC-090).
+There are no exceptions. The one earlier exception (Card filled hover, a computed color-mix) was retired on 2026-10-09 by DEC-054: filled hover now aliases --atlas-background-hovered.
 
 ## Who uses them
 Component tokens are for Atlas component implementation and documentation. Product code and
@@ -66,8 +62,7 @@ plus the xs gap and the radius.
 4. **Final approval** — by the owner.
 
 ## Success criteria
-- Visual regression reports **zero pixel changes** (everything is an alias; the one exception
-  resolves to the same computed value).
+- Visual regression reports **zero pixel changes** (everything is an alias).
 - `atlas:verify`, vitest, `tsc`, ESLint and `token-lint` pass.
 - `token-lint` still rejects primitive refs in app code and does not let a component token point
   at a primitive (`--atlas-color-*`).
