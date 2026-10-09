@@ -29,6 +29,7 @@ Atlas Design System. Versions follow semver for the library and tokens together.
 - Dark mode: Card default and outlined fill is `--atlas-surface` (was `--atlas-background`), so the card lifts off the page; Card default and outlined hover, Card filled hover and filled Input hover use `--atlas-background-hovered`; Button secondary hover and active use `--atlas-background-hovered`. Light mode is unchanged. Decisions DEC-053 to DEC-055.
 - Card strokes stay `--atlas-border` (default) and `--atlas-border-strong` (outlined); Card gap is 8/12/16 and radius `--atlas-radius-lg` at every size, and Figma was aligned to the code.
 - Figma descriptions now carry a one-line `CODE` entry for 10 components; the component docs in `atlas/` come from them. Stale `atlas/index.md` footer and `gaps.md` guidance corrected.
+- Visual regression tolerance tightened (`threshold` 0.2 to 0.01, `maxDiffPixelRatio` 0.002 to 0.0005) and every differing section is now reported, not only the first. The old default could not see the dark-mode Card fill change (it ignored differences under about 53 of 255 grey levels). Linux baselines regenerated.
 
 ### Fixed
 - Dark-mode hover that darkened instead of lightening: filled Input, Card filled and Button secondary (the Card case had a dark-only `color-mix` workaround from BUG-054, now removed).
