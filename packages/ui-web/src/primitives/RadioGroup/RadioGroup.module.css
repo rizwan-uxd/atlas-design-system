@@ -29,7 +29,7 @@
 .root {
   display: flex;
   align-items: flex-start;
-  gap: var(--atlas-spacing-3);
+  gap: var(--atlas-radio-gap);
   cursor: pointer;
 }
 
@@ -47,11 +47,11 @@
   flex-shrink: 0;
   box-sizing: border-box;
   margin: 0;
-  border: var(--atlas-border-width-1) solid var(--atlas-border-strong);
-  border-radius: var(--atlas-radius-full);
-  background-color: var(--atlas-background);
+  border: var(--atlas-border-width-1) solid var(--atlas-radio-border);
+  border-radius: var(--atlas-radio-radius);
+  background-color: var(--atlas-radio-background);
   /* dot colour */
-  color: var(--atlas-primary-foreground);
+  color: var(--atlas-radio-foreground);
   cursor: inherit;
   transition:
     background-color var(--atlas-duration-fast) var(--atlas-easing-standard),
@@ -60,8 +60,8 @@
 
 .input::before {
   content: "";
-  inline-size: var(--atlas-spacing-2);
-  block-size: var(--atlas-spacing-2);
+  inline-size: var(--atlas-radio-dot);
+  block-size: var(--atlas-radio-dot);
   border-radius: var(--atlas-radius-full);
   background-color: currentColor;
   transform: scale(0);
@@ -73,33 +73,33 @@
 }
 
 .root[data-size="sm"] .input {
-  inline-size: var(--atlas-spacing-4);
-  block-size: var(--atlas-spacing-4);
+  inline-size: var(--atlas-radio-size-sm-control);
+  block-size: var(--atlas-radio-size-sm-control);
   margin-block: var(--atlas-spacing-0_5);
 }
 
 .root[data-size="md"] .input {
-  inline-size: var(--atlas-spacing-5);
-  block-size: var(--atlas-spacing-5);
+  inline-size: var(--atlas-radio-size-md-control);
+  block-size: var(--atlas-radio-size-md-control);
 }
 
 /* ── Checked ───────────────────────────────────────────────────── */
 
 .input:checked {
-  background-color: var(--atlas-primary);
-  border-color: var(--atlas-primary);
+  background-color: var(--atlas-radio-checked-background);
+  border-color: var(--atlas-radio-checked-border);
 }
 
 /* ── Hover (web only) ──────────────────────────────────────────── */
 
 .root:hover .input:not(:disabled):not(:checked) {
-  background-color: var(--atlas-background-subtle);
-  border-color: var(--atlas-foreground);
+  background-color: var(--atlas-radio-background-hover);
+  border-color: var(--atlas-radio-border-hover);
 }
 
 .root:hover .input:not(:disabled):checked {
-  background-color: var(--atlas-primary-hover);
-  border-color: var(--atlas-primary-hover);
+  background-color: var(--atlas-radio-checked-background-hover);
+  border-color: var(--atlas-radio-checked-border-hover);
 }
 
 /* ── Focus-visible — ring on the radio only ────────────────────── */
@@ -112,22 +112,22 @@
 /* ── Invalid ───────────────────────────────────────────────────── */
 
 .input[aria-invalid="true"] {
-  border-color: var(--atlas-danger);
+  border-color: var(--atlas-radio-invalid-border);
 }
 
 .root:hover .input[aria-invalid="true"]:not(:disabled):not(:checked) {
-  border-color: var(--atlas-danger);
+  border-color: var(--atlas-radio-invalid-border);
 }
 
 .input[aria-invalid="true"]:checked {
-  background-color: var(--atlas-danger);
-  border-color: var(--atlas-danger);
-  color: var(--atlas-danger-foreground);
+  background-color: var(--atlas-radio-invalid-checked-background);
+  border-color: var(--atlas-radio-invalid-checked-border);
+  color: var(--atlas-radio-invalid-checked-foreground);
 }
 
 .root:hover .input[aria-invalid="true"]:not(:disabled):checked {
-  background-color: var(--atlas-danger-hover);
-  border-color: var(--atlas-danger-hover);
+  background-color: var(--atlas-radio-invalid-checked-background-hover);
+  border-color: var(--atlas-radio-invalid-checked-border-hover);
 }
 
 /* ── Disabled ──────────────────────────────────────────────────── */
@@ -138,8 +138,8 @@
 }
 
 .input:disabled:not(:checked) {
-  background-color: var(--atlas-background-muted);
-  border-color: var(--atlas-border);
+  background-color: var(--atlas-radio-background-disabled);
+  border-color: var(--atlas-radio-border-disabled);
 }
 
 /* ── Label and description ─────────────────────────────────────── */
@@ -156,14 +156,14 @@
   font-size: var(--atlas-font-size-sm);
   font-weight: var(--atlas-font-weight-semibold);
   line-height: var(--atlas-line-height-normal);
-  color: var(--atlas-foreground);
+  color: var(--atlas-radio-label-foreground);
 }
 
 .description {
   font-family: var(--atlas-font-sans);
   font-size: var(--atlas-font-size-xs);
   line-height: var(--atlas-line-height-normal);
-  color: var(--atlas-foreground-muted);
+  color: var(--atlas-radio-description-foreground);
 }
 
 /* ── Variant: card ─────────────────────────────────────────────── */
@@ -173,21 +173,21 @@
   box-sizing: border-box;
   padding-block: var(--atlas-spacing-3);
   padding-inline: var(--atlas-spacing-4);
-  border: var(--atlas-border-width-1) solid var(--atlas-border-strong);
-  border-radius: var(--atlas-radius-md);
-  background-color: var(--atlas-surface);
+  border: var(--atlas-border-width-1) solid var(--atlas-radio-card-border);
+  border-radius: var(--atlas-radio-card-radius);
+  background-color: var(--atlas-radio-card-background);
   transition:
     border-color     var(--atlas-duration-fast) var(--atlas-easing-standard),
     background-color var(--atlas-duration-fast) var(--atlas-easing-standard);
 }
 
 .root[data-variant="card"][data-checked] {
-  border-color: var(--atlas-primary);
+  border-color: var(--atlas-radio-card-checked-border);
   background-color: var(--atlas-primary-subtle);
 }
 
 .root[data-variant="card"][data-invalid] {
-  border-color: var(--atlas-danger);
+  border-color: var(--atlas-radio-card-invalid-border);
 }
 
 .group[data-variant="card"][data-direction="vertical"] > .root {

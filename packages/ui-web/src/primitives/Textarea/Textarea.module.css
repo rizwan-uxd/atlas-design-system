@@ -20,10 +20,10 @@
   width: 100%;
   box-sizing: border-box;
   font-family: var(--atlas-font-sans);
-  color: var(--atlas-foreground);
-  background-color: var(--atlas-background);
-  border: var(--atlas-border-width-1) solid var(--atlas-border);
-  border-radius: var(--atlas-radius-md);
+  color: var(--atlas-textarea-foreground);
+  background-color: var(--atlas-textarea-background);
+  border: var(--atlas-border-width-1) solid var(--atlas-textarea-border);
+  border-radius: var(--atlas-textarea-radius);
   outline: none;
   resize: vertical; /* default; overridden by .resizeNone / .resizeBoth */
   transition:
@@ -32,25 +32,25 @@
 }
 
 .textarea::placeholder {
-  color: var(--atlas-foreground-muted);
+  color: var(--atlas-textarea-placeholder);
 }
 
 /* Hover — guarded so error border is never overridden */
 .textarea:hover:not(:disabled):not([readonly]):not([aria-invalid="true"]) {
-  border-color: var(--atlas-border-strong);
+  border-color: var(--atlas-textarea-border-hover);
 }
 
 /* Focus-visible */
 .textarea:focus-visible {
   outline: var(--atlas-border-width-2) solid var(--atlas-focus-ring);
   outline-offset: var(--atlas-spacing-0_5);
-  border-color: var(--atlas-primary);
+  border-color: var(--atlas-textarea-border-focus);
 }
 
 /* Disabled */
 .textarea:disabled {
-  background-color: var(--atlas-background-muted);
-  color: var(--atlas-foreground-disabled);
+  background-color: var(--atlas-textarea-background-disabled);
+  color: var(--atlas-textarea-foreground-disabled);
   cursor: not-allowed;
   opacity: var(--atlas-opacity-disabled);
   resize: none;
@@ -64,7 +64,7 @@
 
 /* Invalid */
 .textarea[aria-invalid="true"] {
-  border-color: var(--atlas-danger);
+  border-color: var(--atlas-textarea-border-invalid);
 }
 
 /* ── Resize modifiers ─────────────────────────────────────────── */
@@ -91,54 +91,54 @@
 
 .sm {
   min-height: calc(var(--atlas-spacing-10) * 2);       /* 80px */
-  padding-block: var(--atlas-spacing-2);
-  padding-inline: var(--atlas-spacing-3);
-  font-size: var(--atlas-font-size-sm);
+  padding-block: var(--atlas-textarea-size-sm-padding-block);
+  padding-inline: var(--atlas-textarea-size-sm-padding-inline);
+  font-size: var(--atlas-textarea-size-sm-font-size);
 }
 
 .md {
   min-height: calc(var(--atlas-spacing-12) * 2);       /* 96px */
-  padding-block: var(--atlas-spacing-3);
-  padding-inline: var(--atlas-spacing-3);
+  padding-block: var(--atlas-textarea-size-md-padding-block);
+  padding-inline: var(--atlas-textarea-size-md-padding-inline);
   font-size: var(--atlas-text-body);
 }
 
 .lg {
   min-height: calc(var(--atlas-spacing-16) * 2);       /* 128px */
-  padding-block: var(--atlas-spacing-3);
-  padding-inline: var(--atlas-spacing-4);
+  padding-block: var(--atlas-textarea-size-lg-padding-block);
+  padding-inline: var(--atlas-textarea-size-lg-padding-inline);
   font-size: var(--atlas-text-body);
 }
 
 /* ── Variant: filled ──────────────────────────────────────────── */
 
 .filled .textarea {
-  background-color: var(--atlas-background-muted);
+  background-color: var(--atlas-textarea-filled-background);
   border: none;
   border-block-end: var(--atlas-border-width-1) solid transparent;
-  border-start-start-radius: var(--atlas-radius-md);
-  border-start-end-radius: var(--atlas-radius-md);
+  border-start-start-radius: var(--atlas-textarea-radius);
+  border-start-end-radius: var(--atlas-textarea-radius);
   border-end-start-radius: var(--atlas-radius-none);
   border-end-end-radius: var(--atlas-radius-none);
 }
 
 .filled .textarea:hover:not(:disabled):not([readonly]) {
-  background-color: var(--atlas-background-subtle);
+  background-color: var(--atlas-textarea-filled-background-hover);
 }
 
 .filled .textarea:focus-visible {
-  background-color: var(--atlas-background);
+  background-color: var(--atlas-textarea-filled-background-focus);
   outline: var(--atlas-border-width-2) solid var(--atlas-focus-ring);
   outline-offset: var(--atlas-spacing-0_5);
-  border-block-end-color: var(--atlas-primary);
+  border-block-end-color: var(--atlas-textarea-border-focus);
 }
 
 .filled .textarea[aria-invalid="true"] {
-  border-block-end-color: var(--atlas-danger);
+  border-block-end-color: var(--atlas-textarea-border-invalid);
 }
 
 .filled .textarea:disabled {
-  background-color: var(--atlas-background-muted);
+  background-color: var(--atlas-textarea-background-disabled);
 }
 
 /* ── Variant: unstyled ────────────────────────────────────────── */
@@ -161,11 +161,11 @@
 
 .unstyled .textarea:focus-visible {
   outline: none;
-  border-color: var(--atlas-primary);
+  border-color: var(--atlas-textarea-border-focus);
 }
 
 .unstyled .textarea[aria-invalid="true"] {
-  border-color: var(--atlas-danger);
+  border-color: var(--atlas-textarea-border-invalid);
 }
 
 .unstyled .textarea:disabled {
@@ -180,23 +180,17 @@
   inset-inline-end: var(--atlas-spacing-3);
   font-family: var(--atlas-font-sans);
   font-size: var(--atlas-text-caption); /* font-size-xs */
-  color: var(--atlas-foreground-muted);
+  color: var(--atlas-textarea-counter-foreground);
   pointer-events: none;
   line-height: var(--atlas-line-height-tight);
 }
 
 .counterOver {
-  color: var(--atlas-danger);
+  color: var(--atlas-textarea-counter-foreground-over);
 }
 
 /* ── Reduced motion ───────────────────────────────────────────── */
 
-
-/* BUG-055: Dark mode filled hover inversion fix (same root cause as BUG-052).
-   In dark mode background-subtle is darker than background-muted — override. */
-[data-theme="dark"] .filled .textarea:hover:not(:disabled):not([readonly]) {
-  background-color: color-mix(in oklch, var(--atlas-background-muted) 80%, oklch(1 0 0));
-}
 
 @media (prefers-reduced-motion: reduce) {
   .textarea {

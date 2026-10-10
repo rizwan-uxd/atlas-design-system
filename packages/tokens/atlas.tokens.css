@@ -440,6 +440,146 @@
   --atlas-card-size-md-gap: var(--atlas-spacing-3);
   --atlas-card-size-lg-padding: var(--atlas-spacing-6);
   --atlas-card-size-lg-gap: var(--atlas-spacing-4);
+
+  /* Textarea · colour */
+  --atlas-textarea-foreground: var(--atlas-foreground);
+  --atlas-textarea-background: var(--atlas-background);
+  --atlas-textarea-border: var(--atlas-border);
+  --atlas-textarea-border-hover: var(--atlas-border-strong);
+  --atlas-textarea-border-focus: var(--atlas-primary);
+  --atlas-textarea-border-invalid: var(--atlas-danger);
+  --atlas-textarea-placeholder: var(--atlas-foreground-muted);
+  --atlas-textarea-background-disabled: var(--atlas-background-muted);
+  --atlas-textarea-foreground-disabled: var(--atlas-foreground-disabled);
+  --atlas-textarea-filled-background: var(--atlas-background-muted);
+  --atlas-textarea-filled-background-hover: var(--atlas-background-hovered);
+  --atlas-textarea-filled-background-focus: var(--atlas-background);
+  --atlas-textarea-counter-foreground: var(--atlas-foreground-muted);
+  --atlas-textarea-counter-foreground-over: var(--atlas-danger);
+  /* Textarea · size and shape */
+  --atlas-textarea-radius: var(--atlas-radius-md);
+  --atlas-textarea-size-sm-padding-block: var(--atlas-spacing-2);
+  --atlas-textarea-size-sm-padding-inline: var(--atlas-spacing-3);
+  --atlas-textarea-size-sm-font-size: var(--atlas-font-size-sm);
+  --atlas-textarea-size-md-padding-block: var(--atlas-spacing-3);
+  --atlas-textarea-size-md-padding-inline: var(--atlas-spacing-3);
+  --atlas-textarea-size-lg-padding-block: var(--atlas-spacing-3);
+  --atlas-textarea-size-lg-padding-inline: var(--atlas-spacing-4);
+
+  /* Checkbox · colour */
+  --atlas-checkbox-background: var(--atlas-background);
+  --atlas-checkbox-border: var(--atlas-border-strong);
+  --atlas-checkbox-foreground: var(--atlas-primary-foreground);
+  --atlas-checkbox-background-hover: var(--atlas-background-subtle);
+  --atlas-checkbox-border-hover: var(--atlas-foreground);
+  --atlas-checkbox-checked-background: var(--atlas-primary);
+  --atlas-checkbox-checked-background-hover: var(--atlas-primary-hover);
+  --atlas-checkbox-background-disabled: var(--atlas-background-muted);
+  --atlas-checkbox-border-disabled: var(--atlas-border);
+  --atlas-checkbox-invalid-border: var(--atlas-danger);
+  --atlas-checkbox-invalid-checked-background: var(--atlas-danger);
+  --atlas-checkbox-invalid-checked-background-hover: var(--atlas-danger-hover);
+  --atlas-checkbox-invalid-checked-foreground: var(--atlas-danger-foreground);
+  --atlas-checkbox-label-foreground: var(--atlas-foreground);
+  --atlas-checkbox-label-foreground-disabled: var(--atlas-foreground-disabled);
+  --atlas-checkbox-description-foreground: var(--atlas-foreground-muted);
+  --atlas-checkbox-description-foreground-disabled: var(--atlas-foreground-disabled);
+  --atlas-checkbox-required-foreground: var(--atlas-danger);
+  --atlas-checkbox-required-foreground-disabled: var(--atlas-foreground-disabled);
+  --atlas-checkbox-card-border: var(--atlas-border-strong);
+  --atlas-checkbox-card-background: var(--atlas-background);
+  --atlas-checkbox-card-checked-border: var(--atlas-primary);
+  --atlas-checkbox-card-invalid-border: var(--atlas-danger);
+  /* Checkbox · size and shape */
+  --atlas-checkbox-radius: var(--atlas-radius-sm);
+  --atlas-checkbox-card-radius: var(--atlas-radius-md);
+  --atlas-checkbox-gap: var(--atlas-spacing-3);
+  --atlas-checkbox-size-sm-box: var(--atlas-spacing-4);
+  --atlas-checkbox-size-md-box: var(--atlas-spacing-5);
+  --atlas-checkbox-size-lg-box: var(--atlas-spacing-6);
+
+  /* Switch · colour */
+  --atlas-switch-track-background: var(--atlas-background-muted);
+  --atlas-switch-track-background-hover: var(--atlas-background-hovered);
+  --atlas-switch-track-background-active: var(--atlas-background-hovered);
+  --atlas-switch-checked-track-background: var(--atlas-primary);
+  --atlas-switch-checked-track-background-hover: var(--atlas-primary-hover);
+  --atlas-switch-checked-track-background-active: var(--atlas-primary-active);
+  --atlas-switch-thumb-background: var(--atlas-foreground-on-brand);
+  --atlas-switch-label-foreground: var(--atlas-foreground);
+  --atlas-switch-description-foreground: var(--atlas-foreground-muted);
+  /* Switch · size and shape */
+  --atlas-switch-gap: var(--atlas-spacing-3);
+  --atlas-switch-size-sm-height: var(--atlas-spacing-4);
+  --atlas-switch-size-md-height: var(--atlas-spacing-5);
+  --atlas-switch-size-lg-height: var(--atlas-spacing-6);
+  --atlas-switch-size-sm-thumb: var(--atlas-spacing-3);
+  --atlas-switch-size-md-thumb: var(--atlas-spacing-4);
+  --atlas-switch-size-lg-thumb: var(--atlas-spacing-5);
+
+  /* Radio · colour */
+  --atlas-radio-background: var(--atlas-background);
+  --atlas-radio-border: var(--atlas-border-strong);
+  --atlas-radio-foreground: var(--atlas-primary-foreground);
+  --atlas-radio-background-hover: var(--atlas-background-subtle);
+  --atlas-radio-border-hover: var(--atlas-foreground);
+  --atlas-radio-checked-background: var(--atlas-primary);
+  --atlas-radio-checked-border: var(--atlas-primary);
+  --atlas-radio-checked-background-hover: var(--atlas-primary-hover);
+  --atlas-radio-checked-border-hover: var(--atlas-primary-hover);
+  --atlas-radio-background-disabled: var(--atlas-background-muted);
+  --atlas-radio-border-disabled: var(--atlas-border);
+  --atlas-radio-invalid-border: var(--atlas-danger);
+  --atlas-radio-invalid-checked-background: var(--atlas-danger);
+  --atlas-radio-invalid-checked-border: var(--atlas-danger);
+  --atlas-radio-invalid-checked-foreground: var(--atlas-danger-foreground);
+  --atlas-radio-invalid-checked-background-hover: var(--atlas-danger-hover);
+  --atlas-radio-invalid-checked-border-hover: var(--atlas-danger-hover);
+  --atlas-radio-label-foreground: var(--atlas-foreground);
+  --atlas-radio-description-foreground: var(--atlas-foreground-muted);
+  --atlas-radio-card-border: var(--atlas-border-strong);
+  --atlas-radio-card-background: var(--atlas-surface);
+  --atlas-radio-card-checked-border: var(--atlas-primary);
+  --atlas-radio-card-invalid-border: var(--atlas-danger);
+  /* Radio · size and shape */
+  --atlas-radio-radius: var(--atlas-radius-full);
+  --atlas-radio-card-radius: var(--atlas-radius-md);
+  --atlas-radio-gap: var(--atlas-spacing-3);
+  --atlas-radio-dot: var(--atlas-spacing-2);
+  --atlas-radio-size-sm-control: var(--atlas-spacing-4);
+  --atlas-radio-size-md-control: var(--atlas-spacing-5);
+
+  /* Select · colour */
+  --atlas-select-foreground: var(--atlas-foreground);
+  --atlas-select-background: var(--atlas-background);
+  --atlas-select-border: var(--atlas-border);
+  --atlas-select-border-hover: var(--atlas-border-strong);
+  --atlas-select-border-focus: var(--atlas-primary);
+  --atlas-select-border-invalid: var(--atlas-danger);
+  --atlas-select-background-disabled: var(--atlas-background-muted);
+  --atlas-select-foreground-disabled: var(--atlas-foreground-disabled);
+  --atlas-select-placeholder-foreground: var(--atlas-foreground-muted);
+  --atlas-select-chevron-foreground: var(--atlas-foreground-muted);
+  --atlas-select-content-background: var(--atlas-surface-overlay);
+  --atlas-select-content-foreground: var(--atlas-foreground);
+  --atlas-select-content-border: var(--atlas-border);
+  --atlas-select-item-foreground: var(--atlas-foreground);
+  --atlas-select-item-background-focus: var(--atlas-background-accent);
+  --atlas-select-item-indicator-foreground: var(--atlas-primary);
+  --atlas-select-label-foreground: var(--atlas-foreground-muted);
+  /* Select · size and shape */
+  --atlas-select-radius: var(--atlas-radius-md);
+  --atlas-select-content-radius: var(--atlas-radius-md);
+  --atlas-select-size-sm-height: var(--atlas-spacing-8);
+  --atlas-select-size-sm-padding-inline-start: var(--atlas-spacing-3);
+  --atlas-select-size-sm-padding-inline-end: var(--atlas-spacing-2);
+  --atlas-select-size-sm-font-size: var(--atlas-font-size-sm);
+  --atlas-select-size-sm-gap: var(--atlas-spacing-1);
+  --atlas-select-size-md-height: var(--atlas-spacing-10);
+  --atlas-select-size-md-padding-inline-start: var(--atlas-spacing-3);
+  --atlas-select-size-md-padding-inline-end: var(--atlas-spacing-2);
+  --atlas-select-size-md-font-size: var(--atlas-font-size-base);
+  --atlas-select-size-md-gap: var(--atlas-spacing-1);
 }
 /* END:component-tokens */
 

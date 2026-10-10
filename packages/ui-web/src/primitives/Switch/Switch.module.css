@@ -9,7 +9,7 @@
 .root {
   display: inline-flex;
   align-items: flex-start;
-  gap: var(--atlas-spacing-3);
+  gap: var(--atlas-switch-gap);
 }
 
 .root[data-disabled] {
@@ -24,7 +24,7 @@
   border: none;
   padding: 0;
   border-radius: var(--atlas-radius-full);
-  background-color: var(--atlas-background-muted); /* off state per spec */
+  background-color: var(--atlas-switch-track-background); /* off state per spec */
   position: relative;
   cursor: pointer;
   outline: none;
@@ -33,30 +33,17 @@
 }
 
 .track[data-state="checked"] {
-  background-color: var(--atlas-primary);
+  background-color: var(--atlas-switch-checked-track-background);
 }
 
 /* ── Hover states ─────────────────────────────────────────────── */
 
 .track:hover:not([data-disabled])[data-state="unchecked"] {
-  background-color: var(--atlas-background-subtle);
+  background-color: var(--atlas-switch-track-background-hover);
 }
 
 .track:hover:not([data-disabled])[data-state="checked"] {
-  background-color: var(--atlas-primary-hover);
-}
-
-/*
-  BUG-053 — dark mode inversion fix.
-  In dark mode the background scale runs: background (neutral-950) →
-  background-subtle (neutral-900) → background-muted (neutral-800, lightest).
-  The resting unchecked track is background-muted (lightest) so hovering
-  to background-subtle (darker) creates an inverted affordance.
-  Override: lighten the resting colour slightly using color-mix instead of
-  stepping toward a darker token.
-*/
-[data-theme="dark"] .track:hover:not([data-disabled])[data-state="unchecked"] {
-  background-color: color-mix(in oklch, var(--atlas-background-muted) 80%, oklch(1 0 0));
+  background-color: var(--atlas-switch-checked-track-background-hover);
 }
 
 /* ── Active / pressed state ───────────────────────────────────── */
@@ -67,15 +54,11 @@
 */
 
 .track:active:not([data-disabled])[data-state="unchecked"] {
-  background-color: var(--atlas-background-subtle);
+  background-color: var(--atlas-switch-track-background-active);
 }
 
 .track:active:not([data-disabled])[data-state="checked"] {
-  background-color: var(--atlas-primary-active);
-}
-
-[data-theme="dark"] .track:active:not([data-disabled])[data-state="unchecked"] {
-  background-color: color-mix(in oklch, var(--atlas-background-muted) 70%, oklch(1 0 0));
+  background-color: var(--atlas-switch-checked-track-background-active);
 }
 
 .track[data-disabled] {
@@ -134,17 +117,17 @@
 
 .sm {
   width: calc(var(--atlas-spacing-6) + var(--atlas-spacing-1)); /* 28 px */
-  height: var(--atlas-spacing-4);                               /* 16 px */
+  height: var(--atlas-switch-size-sm-height);                   /* 16 px */
 }
 
 .md {
   width: var(--atlas-spacing-9);  /* 36 px */
-  height: var(--atlas-spacing-5); /* 20 px */
+  height: var(--atlas-switch-size-md-height); /* 20 px */
 }
 
 .lg {
   width: calc(var(--atlas-spacing-10) + var(--atlas-spacing-1)); /* 44 px */
-  height: var(--atlas-spacing-6);                                /* 24 px */
+  height: var(--atlas-switch-size-lg-height);                    /* 24 px */
 }
 
 /* ── Thumb ────────────────────────────────────────────────────── */
@@ -161,7 +144,7 @@
    * dark themes, making it the correct semantic choice for a thumb that must
    * always appear as a white circle. This is a documented spec deviation.
    */
-  background-color: var(--atlas-foreground-on-brand);
+  background-color: var(--atlas-switch-thumb-background);
   box-shadow: var(--atlas-shadow-sm);
   /* Logical inset — RTL-safe starting position */
   inset-block-start: var(--atlas-spacing-0_5);
@@ -171,18 +154,18 @@
 }
 
 .sm .thumb {
-  width: var(--atlas-spacing-3);  /* 12 px */
-  height: var(--atlas-spacing-3); /* 12 px */
+  width: var(--atlas-switch-size-sm-thumb);  /* 12 px */
+  height: var(--atlas-switch-size-sm-thumb); /* 12 px */
 }
 
 .md .thumb {
-  width: var(--atlas-spacing-4);  /* 16 px */
-  height: var(--atlas-spacing-4); /* 16 px */
+  width: var(--atlas-switch-size-md-thumb);  /* 16 px */
+  height: var(--atlas-switch-size-md-thumb); /* 16 px */
 }
 
 .lg .thumb {
-  width: var(--atlas-spacing-5);  /* 20 px */
-  height: var(--atlas-spacing-5); /* 20 px */
+  width: var(--atlas-switch-size-lg-thumb);  /* 20 px */
+  height: var(--atlas-switch-size-lg-thumb); /* 20 px */
 }
 
 /*
@@ -237,7 +220,7 @@
   font-family: var(--atlas-font-sans);
   font-size: var(--atlas-font-size-sm);
   font-weight: var(--atlas-font-weight-medium);
-  color: var(--atlas-foreground);
+  color: var(--atlas-switch-label-foreground);
   /* BUG-017 — was magic number 1.4 */
   line-height: var(--atlas-line-height-snug);
   cursor: pointer;
@@ -250,7 +233,7 @@
 .description {
   font-family: var(--atlas-font-sans);
   font-size: var(--atlas-font-size-xs);
-  color: var(--atlas-foreground-muted);
+  color: var(--atlas-switch-description-foreground);
   /* BUG-017 — was magic number 1.4 */
   line-height: var(--atlas-line-height-snug);
 }
