@@ -142,3 +142,20 @@ test("every semantic alias target in the real block is defined in the token file
     if (target) assert.ok(defined.has(target[1]), `${t.name} aliases undefined ${target[1]}`)
   }
 })
+
+test("the five form-control prefixes are accepted", () => {
+  for (const c of ["textarea", "checkbox", "switch", "radio", "select"]) {
+    assert.deepEqual(lintComponentTokens(wrap(`  --atlas-${c}-border: var(--atlas-border);`)), [], c)
+  }
+})
+
+test("a form-control token may not alias another component token", () => {
+  const v = lintComponentTokens(wrap("  --atlas-select-border: var(--atlas-input-border);"))
+  assert.match(v.join("\n"), /component token/)
+})
+
+test("form-control tokens render under their own heading", () => {
+  const md = renderComponentSection(wrap("  --atlas-switch-gap: var(--atlas-spacing-3);"))
+  assert.match(md, /### Switch/)
+  assert.match(md, /`switch-gap` → `spacing-3`/)
+})

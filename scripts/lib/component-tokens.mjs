@@ -1,7 +1,7 @@
 // Pure helpers for the component-token layer in packages/tokens/atlas.tokens.css (no I/O).
 // Rule: a component token aliases a semantic token. The single exception is CARD_EXCEPTION.
 
-export const COMPONENTS = ["button", "input", "card"]
+export const COMPONENTS = ["button", "input", "card", "textarea", "checkbox", "switch", "radio", "select"]
 export const BEGIN = "/* BEGIN:component-tokens */"
 export const END = "/* END:component-tokens */"
 export const SECTION_BEGIN = "<!-- BEGIN:generated-component-tokens -->"
