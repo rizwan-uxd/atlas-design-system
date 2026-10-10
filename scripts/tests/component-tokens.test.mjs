@@ -159,3 +159,24 @@ test("form-control tokens render under their own heading", () => {
   assert.match(md, /### Switch/)
   assert.match(md, /`switch-gap` → `spacing-3`/)
 })
+
+test("the real block defines the 125 form-control tokens", () => {
+  const names = parseComponentTokens(REAL_CSS).map((x) => x.name)
+  const counts = { textarea: 22, checkbox: 29, switch: 16, radio: 29, select: 29 }
+  for (const [c, n] of Object.entries(counts)) {
+    assert.equal(names.filter((x) => x.startsWith(`--atlas-${c}-`)).length, n, c)
+  }
+})
+
+test("the approved colour-mix retirements alias background-hovered", () => {
+  const val = (n) => parseComponentTokens(REAL_CSS).find((x) => x.name === n)?.value
+  for (const n of ["--atlas-textarea-filled-background-hover", "--atlas-switch-track-background-hover", "--atlas-switch-track-background-active"]) {
+    assert.equal(val(n), "var(--atlas-background-hovered)", n)
+  }
+})
+
+test("no card-checked background token exists (stays untokenised)", () => {
+  const names = parseComponentTokens(REAL_CSS).map((x) => x.name)
+  assert.ok(!names.includes("--atlas-checkbox-card-checked-background"))
+  assert.ok(!names.includes("--atlas-radio-card-checked-background"))
+})
