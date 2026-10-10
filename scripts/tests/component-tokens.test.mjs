@@ -180,3 +180,25 @@ test("no card-checked background token exists (stays untokenised)", () => {
   assert.ok(!names.includes("--atlas-checkbox-card-checked-background"))
   assert.ok(!names.includes("--atlas-radio-card-checked-background"))
 })
+
+const MODULE = (n) => fs.readFileSync(path.join(REPO, `packages/ui-web/src/primitives/${n}/${n}.module.css`), "utf8")
+const stripCss = (s) => s.replace(/\/\*[\s\S]*?\*\//g, "")
+
+test("Textarea and Switch no longer use color-mix", () => {
+  for (const n of ["Textarea", "Switch"]) assert.doesNotMatch(stripCss(MODULE(n)), /color-mix/, n)
+})
+
+test("Checkbox and RadioGroup keep only the dark card-checked color-mix", () => {
+  for (const n of ["Checkbox", "RadioGroup"]) {
+    const hits = stripCss(MODULE(n)).match(/color-mix/g) || []
+    assert.equal(hits.length, 1, n)
+    assert.match(stripCss(MODULE(n)), /\[data-theme="dark"\][^{]*\[data-checked\][^{]*\{[^}]*color-mix/, n)
+  }
+})
+
+test("each switched module references its component tokens", () => {
+  const prefix = { Textarea: "textarea", Checkbox: "checkbox", Switch: "switch", RadioGroup: "radio", Select: "select" }
+  for (const [n, p] of Object.entries(prefix)) {
+    assert.match(stripCss(MODULE(n)), new RegExp(`var\\(--atlas-${p}-`), n)
+  }
+})
