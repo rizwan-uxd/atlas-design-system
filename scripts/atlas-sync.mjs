@@ -459,41 +459,6 @@ for (const p of patterns) {
   ].join("\n"))
 }
 
-/* ── index.md ───────────────────────────────────────────── */
-
-const missing = ["Avatar", "Table", "Tooltip", "Select", "RadioGroup", "Toast"].filter((n) => !comps.some((c) => c.name === n))
-write("atlas/index.md", [
-  `<!-- ${HEADER} -->`,
-  "",
-  "# Atlas components",
-  "",
-  "One line per component. Read `atlas/<Name>.md` only for the components you will use.",
-  "",
-  "| Component | Tier | Import | Variants | Sizes |",
-  "|---|---|---|---|---|",
-  ...comps.map((c) =>
-    `| ${c.name} | ${c.tier} | \`@atlas/ui-web/${c.tier}/${c.name}/${c.name}\` | ${(c.variants ?? []).join(", ") || "—"} | ${(c.sizes ?? []).join(", ") || "—"} |`),
-  "",
-  missing.length
-    ? `No ${missing.length > 1 ? `${missing.slice(0, -1).join(", ")} or ${missing.at(-1)}` : missing[0]} exists. Compose gaps from primitives and log them in \`state/candidates.json\`.`
-    : "Compose anything missing from primitives and log the gap in `state/candidates.json`.",
-  "",
-  ...(patterns.length ? [
-    "## Patterns",
-    "",
-    "Composition rules for common screens. When a request matches one, read `atlas/patterns/<slug>.md` before choosing components.",
-    "",
-    "| Pattern | File | Use for |",
-    "|---|---|---|",
-    ...patterns.map((p) => `| ${p.title} | \`atlas/patterns/${p.slug}.md\` | ${p.summary} |`),
-    "",
-  ] : []),
-  deprecations.length
-    ? `Deprecated (do not use; use the replacement): ${deprecations.map((d) => `\`${d.name}\` → ${d.replacement}`).join(" · ")}. Details in \`state/deprecations.json\`.`
-    : "Deprecated: none. Never introduce a deprecated asset; the registry is `state/deprecations.json`. Owners: `state/ownership.json`.",
-  "",
-].join("\n"))
-
 /* ── <Name>.md ──────────────────────────────────────────── */
 
 /**
@@ -620,6 +585,81 @@ for (const c of comps) {
     write(rel, upsertSection(upsertStructure(body, c), API_BEGIN, API_END, apiSection(c)))
   }
 }
+
+/* ── component selection guidance ───────────────────────── */
+
+// Every component doc (atlas/<Name>.md for a component in packages/ui-web) must say when to use it,
+// when not to, and how. Patterns (atlas/patterns/) and other docs are not component docs and are not checked.
+const REQUIRED_GUIDANCE = ["USE WHEN", "DON'T USE WHEN", "HOW TO USE"]
+const GUIDANCE_HEADING = /^[A-Z][A-Z' ]+$/
+
+/** lines under an all-caps heading, up to the next all-caps heading; null when the heading is absent */
+function guidanceSection(body, heading) {
+  const lines = body.split("\n")
+  const at = lines.findIndex((l) => l.trim() === heading)
+  if (at === -1) return null
+  const rest = lines.slice(at + 1)
+  const end = rest.findIndex((l) => GUIDANCE_HEADING.test(l.trim()) || /^(## |<!-- )/.test(l))
+  return (end === -1 ? rest : rest.slice(0, end)).map((l) => l.trim()).filter(Boolean)
+}
+const bullet = (l) => l.replace(/^[·•-]\s*/, "")
+const cell = (t) => t.replace(/\|/g, "\\|")
+
+const guidance = new Map()
+const guidanceErrors = []
+for (const c of comps) {
+  const rel = `atlas/${c.name}.md`
+  const abs = path.join(ROOT, rel)
+  const body = fs.existsSync(abs) ? read(abs) : null
+  if (body === null) { guidanceErrors.push(`${rel}: component doc is missing`); continue }
+  for (const h of REQUIRED_GUIDANCE) {
+    const lines = guidanceSection(body, h)
+    if (!lines) guidanceErrors.push(`${rel}: missing "${h}" section — add a line \`${h}\` followed by "· " bullets`)
+    else if (!lines.length) guidanceErrors.push(`${rel}: "${h}" section is empty — add at least one "· " bullet`)
+  }
+  const use = guidanceSection(body, "USE WHEN")?.[0], not = guidanceSection(body, "DON'T USE WHEN")?.[0]
+  if (use && not) guidance.set(c.name, `**Use:** ${cell(bullet(use))} **Not:** ${cell(bullet(not))}`)
+}
+if (guidanceErrors.length) {
+  console.error(`✗ component guidance validation failed:\n${guidanceErrors.map((e) => `  ${e}`).join("\n")}`)
+  process.exit(1)
+}
+const guidanceCell = (name) => guidance.get(name)
+
+/* ── index.md ───────────────────────────────────────────── */
+
+const missing = ["Avatar", "Table", "Tooltip", "Select", "RadioGroup", "Toast"].filter((n) => !comps.some((c) => c.name === n))
+write("atlas/index.md", [
+  `<!-- ${HEADER} -->`,
+  "",
+  "# Atlas components",
+  "",
+  "One line per component. Read `atlas/<Name>.md` only for the components you will use.",
+  "",
+  "| Component | Tier | Import | Variants | Sizes | Use for / Not for |",
+  "|---|---|---|---|---|---|",
+  ...comps.map((c) =>
+    `| ${c.name} | ${c.tier} | \`@atlas/ui-web/${c.tier}/${c.name}/${c.name}\` | ${(c.variants ?? []).join(", ") || "—"} | ${(c.sizes ?? []).join(", ") || "—"} | ${guidanceCell(c.name)} |`),
+  "",
+  missing.length
+    ? `No ${missing.length > 1 ? `${missing.slice(0, -1).join(", ")} or ${missing.at(-1)}` : missing[0]} exists. Compose gaps from primitives and log them in \`state/candidates.json\`.`
+    : "Compose anything missing from primitives and log the gap in `state/candidates.json`.",
+  "",
+  ...(patterns.length ? [
+    "## Patterns",
+    "",
+    "Composition rules for common screens. When a request matches one, read `atlas/patterns/<slug>.md` before choosing components.",
+    "",
+    "| Pattern | File | Use for |",
+    "|---|---|---|",
+    ...patterns.map((p) => `| ${p.title} | \`atlas/patterns/${p.slug}.md\` | ${p.summary} |`),
+    "",
+  ] : []),
+  deprecations.length
+    ? `Deprecated (do not use; use the replacement): ${deprecations.map((d) => `\`${d.name}\` → ${d.replacement}`).join(" · ")}. Details in \`state/deprecations.json\`.`
+    : "Deprecated: none. Never introduce a deprecated asset; the registry is `state/deprecations.json`. Owners: `state/ownership.json`.",
+  "",
+].join("\n"))
 
 /* ── tokens ─────────────────────────────────────────────── */
 

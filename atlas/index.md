@@ -4,46 +4,46 @@
 
 One line per component. Read `atlas/<Name>.md` only for the components you will use.
 
-| Component | Tier | Import | Variants | Sizes |
-|---|---|---|---|---|
-| Button | primitives | `@atlas/ui-web/primitives/Button/Button` | primary, secondary, outline, ghost, destructive, link | xs, sm, md, lg |
-| Input | primitives | `@atlas/ui-web/primitives/Input/Input` | default, filled, unstyled | sm, md, lg |
-| Label | primitives | `@atlas/ui-web/primitives/Label/Label` | default, inline | sm, md, lg |
-| Textarea | primitives | `@atlas/ui-web/primitives/Textarea/Textarea` | default, filled, unstyled | sm, md, lg |
-| Checkbox | primitives | `@atlas/ui-web/primitives/Checkbox/Checkbox` | default, card | sm, md, lg |
-| Switch | primitives | `@atlas/ui-web/primitives/Switch/Switch` | — | sm, md, lg |
-| Badge | primitives | `@atlas/ui-web/primitives/Badge/Badge` | neutral, primary, success, warning, danger, info | sm, md, lg |
-| Alert | compositions | `@atlas/ui-web/compositions/Alert/Alert` | info, success, warning, danger, neutral | sm, md, lg |
-| Card | compositions | `@atlas/ui-web/compositions/Card/Card` | default, elevated, outlined, filled | sm, md, lg |
-| Dialog | compositions | `@atlas/ui-web/compositions/Dialog/Dialog` | default, destructive | sm, md, lg, xl, full |
-| Tabs | patterns | `@atlas/ui-web/patterns/Tabs/Tabs` | line, pill, segmented, outline | sm, md, lg |
-| NavBar | layouts | `@atlas/ui-web/layouts/NavBar/NavBar` | default, transparent, bordered, floating | sm, md, lg |
-| AlertDialog | compositions | `@atlas/ui-web/compositions/AlertDialog/AlertDialog` | default, destructive | sm, md, lg |
-| Avatar | primitives | `@atlas/ui-web/primitives/Avatar/Avatar` | — | xs, sm, md, lg, xl |
-| Breadcrumb | patterns | `@atlas/ui-web/patterns/Breadcrumb/Breadcrumb` | — | — |
-| Bubble | primitives | `@atlas/ui-web/primitives/Bubble/Bubble` | primary, secondary, muted, tinted, outline, destructive | — |
-| ButtonGroup | compositions | `@atlas/ui-web/compositions/ButtonGroup/ButtonGroup` | — | sm, md, lg |
-| Chart | compositions | `@atlas/ui-web/compositions/Chart/Chart` | — | — |
-| CodeBlock | compositions | `@atlas/ui-web/compositions/CodeBlock/CodeBlock` | default, typing | sm, md, lg |
-| DatePicker | compositions | `@atlas/ui-web/compositions/DatePicker/DatePicker` | — | — |
-| Divider | primitives | `@atlas/ui-web/primitives/Divider/Divider` | — | — |
-| Drawer | compositions | `@atlas/ui-web/compositions/Drawer/Drawer` | — | sm, md, lg, xl, full |
-| DropdownMenu | patterns | `@atlas/ui-web/patterns/DropdownMenu/DropdownMenu` | — | — |
-| Image | primitives | `@atlas/ui-web/primitives/Image/Image` | — | — |
-| ListItem | compositions | `@atlas/ui-web/compositions/ListItem/ListItem` | default, outline, muted | sm, md |
-| Progress | primitives | `@atlas/ui-web/primitives/Progress/Progress` | — | — |
-| RadioGroup | primitives | `@atlas/ui-web/primitives/RadioGroup/RadioGroup` | default, card | sm, md |
-| ScrollProgress | primitives | `@atlas/ui-web/primitives/ScrollProgress/ScrollProgress` | — | — |
-| Select | primitives | `@atlas/ui-web/primitives/Select/Select` | — | sm, md |
-| Sheet | compositions | `@atlas/ui-web/compositions/Sheet/Sheet` | — | sm, md, lg, xl, full |
-| Sidebar | layouts | `@atlas/ui-web/layouts/Sidebar/Sidebar` | — | — |
-| SidebarMenuRow | primitives | `@atlas/ui-web/primitives/SidebarMenuRow/SidebarMenuRow` | — | — |
-| Skeleton | primitives | `@atlas/ui-web/primitives/Skeleton/Skeleton` | — | — |
-| Slider | primitives | `@atlas/ui-web/primitives/Slider/Slider` | — | — |
-| Spinner | primitives | `@atlas/ui-web/primitives/Spinner/Spinner` | default, custom | xs, sm, md, lg |
-| Table | primitives | `@atlas/ui-web/primitives/Table/Table` | — | — |
-| Toast | compositions | `@atlas/ui-web/compositions/Toast/Toast` | default, success, danger | — |
-| Tooltip | primitives | `@atlas/ui-web/primitives/Tooltip/Tooltip` | — | — |
+| Component | Tier | Import | Variants | Sizes | Use for / Not for |
+|---|---|---|---|---|---|
+| Button | primitives | `@atlas/ui-web/primitives/Button/Button` | primary, secondary, outline, ghost, destructive, link | xs, sm, md, lg | **Use:** Submitting a form, confirming or cancelling, or opening a dialog. **Not:** Navigating to another page or route → a link (variant="link" only styles an anchor; use asChild with the router link). |
+| Input | primitives | `@atlas/ui-web/primitives/Input/Input` | default, filled, unstyled | sm, md, lg | **Use:** Collecting one line of text, email, number, search or password. **Not:** Multi-line text → Textarea. |
+| Label | primitives | `@atlas/ui-web/primitives/Label/Label` | default, inline | sm, md, lg | **Use:** Naming any Input, Textarea or Select, stacked above or beside it. **Not:** Writing a heading or legend → a heading element. |
+| Textarea | primitives | `@atlas/ui-web/primitives/Textarea/Textarea` | default, filled, unstyled | sm, md, lg | **Use:** Notes, messages, descriptions or any text that can exceed one line. **Not:** The value stays on one line → Input |
+| Checkbox | primitives | `@atlas/ui-web/primitives/Checkbox/Checkbox` | default, card | sm, md, lg | **Use:** Several options can be chosen independently from a list. **Not:** The choice takes effect immediately without a save → Switch. |
+| Switch | primitives | `@atlas/ui-web/primitives/Switch/Switch` | — | sm, md, lg | **Use:** A preference or setting takes effect immediately, with no save step. **Not:** The value is submitted later with a form → Checkbox |
+| Badge | primitives | `@atlas/ui-web/primitives/Badge/Badge` | neutral, primary, success, warning, danger, info | sm, md, lg | **Use:** Marking the status of a row or object (Active, Failed, Draft). **Not:** The user must act on it → Button. |
+| Alert | compositions | `@atlas/ui-web/compositions/Alert/Alert` | info, success, warning, danger, neutral | sm, md, lg | **Use:** A form-level error, a warning above a step, or a notice that stays in the page flow until the condition clears. **Not:** A short confirmation of a completed action ("Saved") → Toast. |
+| Card | compositions | `@atlas/ui-web/compositions/Card/Card` | default, elevated, outlined, filled | sm, md, lg | **Use:** Grouping related content on a bordered or raised surface: a settings group, summary block, or selectable option. **Not:** A container used only for spacing → a plain element. |
+| Dialog | compositions | `@atlas/ui-web/compositions/Dialog/Dialog` | default, destructive | sm, md, lg, xl, full | **Use:** A short focused form or detail view that must not lose the page behind it. **Not:** A decision that must be made, especially destructive or irreversible, with no close control → AlertDialog. |
+| Tabs | patterns | `@atlas/ui-web/patterns/Tabs/Tabs` | line, pill, segmented, outline | sm, md, lg | **Use:** Two to five peer views of the same subject share one page. **Not:** The views are steps in a sequence → a flow |
+| NavBar | layouts | `@atlas/ui-web/layouts/NavBar/NavBar` | default, transparent, bordered, floating | sm, md, lg | **Use:** The app or site needs a persistent top header with brand, primary links and actions. **Not:** Switching views within a page → Tabs |
+| AlertDialog | compositions | `@atlas/ui-web/compositions/AlertDialog/AlertDialog` | default, destructive | sm, md, lg | **Use:** The user must explicitly confirm or cancel before anything happens: delete, discard, revoke, send to many. **Not:** Content needs a form, rich body, or an optional close control → Dialog. |
+| Avatar | primitives | `@atlas/ui-web/primitives/Avatar/Avatar` | — | xs, sm, md, lg, xl | **Use:** Showing a person or entity beside a name in a list row, comment, header or member list. **Not:** The avatar must be pressed on its own → wrap it in Button. |
+| Breadcrumb | patterns | `@atlas/ui-web/patterns/Breadcrumb/Breadcrumb` | — | — | **Use:** The page sits two or more levels deep and the user needs to jump back up the hierarchy. **Not:** Primary site navigation → NavBar |
+| Bubble | primitives | `@atlas/ui-web/primitives/Bubble/Bubble` | primary, secondary, muted, tinted, outline, destructive | — | **Use:** Showing one message in a chat, comment thread or assistant conversation. **Not:** Showing a system or status notice → Alert. |
+| ButtonGroup | compositions | `@atlas/ui-web/compositions/ButtonGroup/ButtonGroup` | — | sm, md, lg | **Use:** A few related actions on one object belong together: alignment, view mode, a split action. **Not:** Actions are unrelated → separate Buttons with spacing. |
+| Chart | compositions | `@atlas/ui-web/compositions/Chart/Chart` | — | — | **Use:** One metric over time or across categories (visitors per day, revenue per month). **Not:** A single number → Card. |
+| CodeBlock | compositions | `@atlas/ui-web/compositions/CodeBlock/CodeBlock` | default, typing | sm, md, lg | **Use:** Showing a short, readable snippet, install command, or example in docs or onboarding. **Not:** The user must edit the text → Textarea. |
+| DatePicker | compositions | `@atlas/ui-web/compositions/DatePicker/DatePicker` | — | — | **Use:** A single date must be chosen from a calendar (due date, booking date, birthdate). **Not:** Only a month or year is needed → Select. |
+| Divider | primitives | `@atlas/ui-web/primitives/Divider/Divider` | — | — | **Use:** Separating a title from its body or rows in a key/value list. **Not:** Creating space between items → gap or padding. |
+| Drawer | compositions | `@atlas/ui-web/compositions/Drawer/Drawer` | — | sm, md, lg, xl, full | **Use:** A persistent side menu or secondary panel docked to the start or end edge (a mobile nav drawer). **Not:** A centred, momentary decision or form → Dialog. |
+| DropdownMenu | patterns | `@atlas/ui-web/patterns/DropdownMenu/DropdownMenu` | — | — | **Use:** A button or avatar should reveal a compact list of actions (account menu, row actions, "More"). **Not:** A form field must submit a chosen value → Select |
+| Image | primitives | `@atlas/ui-web/primitives/Image/Image` | — | — | **Use:** Showing photos, thumbnails or covers in cards and lists where layout must not shift. **Not:** Showing a person or entity identity → Avatar. |
+| ListItem | compositions | `@atlas/ui-web/compositions/ListItem/ListItem` | default, outline, muted | sm, md | **Use:** A list row with a leading visual, title, description, and an optional action (people, files, links, settings). **Not:** A free-form content surface → Card. |
+| Progress | primitives | `@atlas/ui-web/primitives/Progress/Progress` | — | — | **Use:** A task with a known percentage or step count (upload, export, multi-step form). **Not:** A short wait with no layout → Spinner. |
+| RadioGroup | primitives | `@atlas/ui-web/primitives/RadioGroup/RadioGroup` | default, card | sm, md | **Use:** Choosing exactly one option from a short list (2-6) with every option visible. **Not:** Several options can be picked → Checkbox. |
+| ScrollProgress | primitives | `@atlas/ui-web/primitives/ScrollProgress/ScrollProgress` | — | — | **Use:** A long article, doc or reading view where "how far through am I" helps. **Not:** Task, upload or step progress → Progress |
+| Select | primitives | `@atlas/ui-web/primitives/Select/Select` | — | sm, md | **Use:** The user picks one option from a predefined list of more than five (country, currency, frequency). **Not:** Two to five visible options → RadioGroup |
+| Sheet | compositions | `@atlas/ui-web/compositions/Sheet/Sheet` | — | sm, md, lg, xl, full | **Use:** A bottom sheet on mobile (`side="bottom"`, with the drag handle): actions, filters, pickers. **Not:** A centred, momentary decision → Dialog. |
+| Sidebar | layouts | `@atlas/ui-web/layouts/Sidebar/Sidebar` | — | — | **Use:** A dashboard or app shell needs a persistent vertical navigation with sections. **Not:** A top header with brand, few links and actions → NavBar |
+| SidebarMenuRow | primitives | `@atlas/ui-web/primitives/SidebarMenuRow/SidebarMenuRow` | — | — | **Use:** A row in a Sidebar nav list: icon, label, optional count or status. **Not:** A top-bar link → NavBar |
+| Skeleton | primitives | `@atlas/ui-web/primitives/Skeleton/Skeleton` | — | — | **Use:** Content with a known layout is loading (list row, card, form, table) and arrives in a few seconds. **Not:** Unknown wait with no layout → Spinner |
+| Slider | primitives | `@atlas/ui-web/primitives/Slider/Slider` | — | — | **Use:** A value on a continuous scale where position matters more than the exact number (volume, brightness). **Not:** An exact number is typed in → Input |
+| Spinner | primitives | `@atlas/ui-web/primitives/Spinner/Spinner` | default, custom | xs, sm, md, lg | **Use:** A short, indeterminate wait such as a button submitting or a section loading. **Not:** A known percentage → Progress |
+| Table | primitives | `@atlas/ui-web/primitives/Table/Table` | — | — | **Use:** Comparing rows of structured data across the same columns (users, invoices, orders). **Not:** A single record's fields → Card |
+| Toast | compositions | `@atlas/ui-web/compositions/Toast/Toast` | default, success, danger | — | **Use:** Confirming a completed action ("Link copied", "Changes saved"). **Not:** The message must persist or the user must not miss it → Alert (inline). |
+| Tooltip | primitives | `@atlas/ui-web/primitives/Tooltip/Tooltip` | — | — | **Use:** Naming an icon-only button or control. **Not:** The content is essential to finish the task → helper text or inline copy |
 
 Compose anything missing from primitives and log the gap in `state/candidates.json`.
 
