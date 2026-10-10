@@ -53,10 +53,14 @@ Composition rules for common screens. When a request matches one, read `atlas/pa
 
 | Pattern | File | Use for |
 |---|---|---|
+| Auth | `atlas/patterns/auth.md` | Sign the user in or create an account with email, social or passkey options and a one-time code step, including errors and resend. |
+| Dashboard | `atlas/patterns/dashboard.md` | Show the state of a product or account at a glance with filters, KPI cards, a chart and a detail table, including loading and empty states. |
 | Data table | `atlas/patterns/data-table.md` | Show a set of records in rows and columns with search, filtering, row selection and bulk actions. |
 | Empty state | `atlas/patterns/empty-state.md` | Tell the user why a list or screen has no content and what to do next (first use, no results, cleared). |
 | Error recovery | `atlas/patterns/error-recovery.md` | Tell the user something failed, keep their work, and give a clear way to recover (retry, fix, or go another way). |
 | Form | `atlas/patterns/form.md` | Collect one or more values from the user and submit or save them, including multi-step forms and validation. |
+| Onboarding | `atlas/patterns/onboarding.md` | Get a new user from first sign-in to a working account with a short setup flow, then a get-started checklist inside the product. |
+| Search and filter | `atlas/patterns/search-filter.md` | Search a set of records with a query, scope tabs, filters, sort and removable filter chips, including no-results recovery. |
 | Settings | `atlas/patterns/settings.md` | A screen of preferences and account actions: instant toggles, a few saved fields, appearance choice, and a destructive action. |
 
 Deprecated: none. Never introduce a deprecated asset; the registry is `state/deprecations.json`. Owners: `state/ownership.json`.
