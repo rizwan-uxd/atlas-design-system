@@ -46,7 +46,7 @@ Mobile-app baseline: `md` minimum (44px hit area when paired with label tap zone
 | Variant | default | hover | focus | disabled |
 |---|---|---|---|---|
 | default | `--atlas-background` | `--atlas-background` | `--atlas-background` | `--atlas-background-muted` |
-| filled | `--atlas-background-muted` | `--atlas-background-subtle` | `--atlas-background` | `--atlas-background-muted` |
+| filled | `--atlas-background-muted` | `--atlas-background-hovered` | `--atlas-background` | `--atlas-background-muted` |
 | unstyled | `transparent` | `transparent` | `transparent` | `transparent` |
 
 ### Border

@@ -32,8 +32,12 @@ const run = (dir) => {
 }
 const alertUse = `import { Alert } from "@atlas/ui-web/compositions/Alert/Alert"\nexport default function P() { return <Alert variant="info" /> }\n`
 const buttonLink = `import { Button } from "@atlas/ui-web/primitives/Button/Button"\nexport default function P() { return <Button variant="link">x</Button> }\n`
-// git may run detached background maintenance inside the temp repo; retry so a late write cannot fail the removal (ENOTEMPTY)
-const cleanup = (dir) => fs.rmSync(dir, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 })
+// Removing the throwaway repo is best-effort: on CI the removal intermittently fails with ENOTEMPTY while
+// something is still writing into .git. The assertions have already run by then and a leftover directory in
+// the OS temp dir is harmless, so a failed removal must not fail the test.
+const cleanup = (dir) => {
+  try { fs.rmSync(dir, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 }) } catch { /* best effort */ }
+}
 
 test("empty registry passes", () => {
   const { dir } = repo()
