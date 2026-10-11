@@ -435,6 +435,11 @@ const patterns = fs.existsSync(PATTERNS_SRC)
           const allowed = kind === "variant" ? comp.variants : comp.sizes
           for (const v of [...vals.matchAll(/`([\w-]+)`/g)].map((x) => x[1]))
             if (!allowed?.includes(v)) err(`${m[1]} has no ${kind} \`${v}\` (${allowed?.join(", ") || "none"})`)
+          // Figma is the authority: when the snapshot carries the property, the pattern may only name values Figma draws
+          const drawn = comp.figma?.properties?.[kind === "variant" ? "Variant" : "Size"]
+          if (drawn)
+            for (const v of [...vals.matchAll(/`([\w-]+)`/g)].map((x) => x[1]))
+              if (!drawn.includes(v)) err(`${m[1]} ${kind} \`${v}\` is not drawn in Figma (${drawn.join(", ")})`)
         }
       }
       // the example is a real .tsx file that tsc compiles; the generated doc embeds it
