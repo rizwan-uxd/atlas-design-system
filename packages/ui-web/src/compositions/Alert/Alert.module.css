@@ -156,7 +156,8 @@
   flex-wrap: wrap;
   align-items: center;
   gap: var(--atlas-spacing-2);
-  margin-block-start: var(--atlas-spacing-3);
+  /* Figma: 8px slot padding under the 2px body gap; no single spacing token is 10px */
+  margin-block-start: calc(var(--atlas-spacing-2) + var(--atlas-spacing-0_5));
 }
 
 /* ── Dismiss button ───────────────────────────────────────────── */
