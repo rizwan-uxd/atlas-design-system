@@ -347,6 +347,12 @@
       "topic": "Usage guidance (when to use / how to use) for all 38 web components",
       "decision": "Owner-approved 2026-10-10 (spec docs/superpowers/specs/2026-10-10-component-guidance-design.md, drafts in docs/superpowers/specs/component-guidance/). Every component's Figma description now carries the same sections in this order: USE WHEN, DON'T USE WHEN (each naming the alternative), HOW TO USE, DO, DON'T, RELATED; the spec-summary line and Motion/Accessibility/States/PROPERTIES/CODE parts are kept. HOW TO USE uses code prop names (invalid, iconOnly, loading), not Figma property names. Dialog is the general modal; AlertDialog owns must-decide and destructive confirmations (no close control, no outside-click dismissal). Stale statements corrected: DropdownMenu (Select exists), Tooltip (no Popover), NavBar (NavBarTabBar exists on web), Select thresholds (five or fewer vs more than five), Table (whole family). Sidebar now has atlas/Sidebar.md. Figma descriptions written 2026-10-10 via use_figma; synced from those descriptions (the published library was not republished, so the pull carried descriptions read from the file). No tokens or components added.",
       "date": "2026-10-10"
+    },
+    {
+      "id": "DEC-058",
+      "topic": "Figma opacity variables hold percent; CSS holds fractions",
+      "decision": "Owner-approved 2026-10-11. Figma OPACITY-scoped variables use a 0-100 scale, so opacity/disabled, opacity/hover, opacity/overlay and opacity/pulse were stored as 0.5, 0.9, 0.6 and 0.5 and rendered as 0.5%, 0.9%, 0.6% and 0.5%: every disabled Button (48 variants), Switch (6) and Button Group node (78) bound to opacity/disabled was nearly invisible. The four variables were corrected in Figma Atlas/Primitives to 50, 90, 60 and 50, repairing all bound nodes with no new variable and no separate disabled component. CSS tokens stay fractions (--atlas-opacity-disabled: 0.5); packages/tokens/atlas.figma.tokens.json carries the Figma scale with a note, and a Figma-to-CSS importer must divide opacity/* by 100. Dropdown, RadioGroup and Slider still set disabled 0.5 by hand (DEC-016 and later); rebinding them is not part of this change.",
+      "date": "2026-10-11"
     }
   ]
 }
