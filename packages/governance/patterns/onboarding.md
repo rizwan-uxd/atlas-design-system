@@ -44,7 +44,10 @@ summary: Get a new user from first sign-in to a working account with a short set
 - The checklist leads with the task that gives value fastest, not a settings task.
 
 ## Responsive behavior
-- Phone: single column, actions pinned below the control, cards stack. Checklist rows keep the action visible; do not hide it in a menu.
+- Phone is the primary layout. Single column; the primary action is pinned to the bottom edge with Back and Skip as a row of ghost Buttons below it. Cards stack. Checklist rows keep the action visible; do not hide it in a menu.
+- When the keyboard is open, the pinned actions move up and stay visible above it. Never let the keyboard cover Continue.
+- Back returns to the previous step with its answer still filled in. Leaving and returning resumes the same step.
+- Wider screens centre the same column at the content width; the primary action sits at the end of the row.
 
 ## States
 - default · selected (card with checked state) · invalid · loading (Continue `loading`) · skipped · complete.

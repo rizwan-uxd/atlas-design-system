@@ -8,27 +8,40 @@ import { Label } from "@atlas/ui-web/primitives/Label/Label"
 import { Progress } from "@atlas/ui-web/primitives/Progress/Progress"
 import { RadioGroup, RadioGroupItem } from "@atlas/ui-web/primitives/RadioGroup/RadioGroup"
 
-type Setup = { useCase: string; workspace: string }
+type Setup = { useCase: string; workspace: string; teammate: string }
 
 export function SetupFlow({ onFinish }: { onFinish: (v: Setup) => Promise<void> }) {
   const [step, setStep] = React.useState(0)
   const [useCase, setUseCase] = React.useState("")
   const [workspace, setWorkspace] = React.useState("")
+  const [teammate, setTeammate] = React.useState("")
+  const [complete, setComplete] = React.useState(false)
   const [saving, setSaving] = React.useState(false)
   const [failed, setFailed] = React.useState(false)
-  const total = 2
+  const total = 3
 
-  async function next() {
+  async function next(skip = false) {
     if (step < total - 1) return setStep(step + 1)
     setSaving(true)
     setFailed(false)
     try {
-      await onFinish({ useCase, workspace })
+      await onFinish({ useCase, workspace, teammate: skip ? "" : teammate })
+      setComplete(true)
     } catch {
       setFailed(true)
     } finally {
       setSaving(false)
     }
+  }
+
+  if (complete) {
+    return (
+      <div role="status" style={{ display: "grid", gap: "var(--atlas-spacing-4)" }}>
+        <h1>You're all set</h1>
+        <p style={{ color: "var(--atlas-foreground-muted)" }}>Your workspace is ready. Your answers are saved.</p>
+        <Button variant="primary">Go to home</Button>
+      </div>
+    )
   }
 
   return (
@@ -44,9 +57,19 @@ export function SetupFlow({ onFinish }: { onFinish: (v: Setup) => Promise<void> 
             <RadioGroupItem value="school" label="For school" description="Coursework and research" />
           </RadioGroup>
         </div>
+      ) : step === 2 ? (
+        <div style={{ display: "grid", gap: "var(--atlas-spacing-4)" }}>
+          <h1>Invite your team</h1>
+          <p style={{ color: "var(--atlas-foreground-muted)" }}>You can also do this later.</p>
+          <div>
+            <Label htmlFor="teammate" optional>Teammate email</Label>
+            <Input id="teammate" type="email" inputMode="email" value={teammate} onChange={(e) => setTeammate(e.target.value)} />
+          </div>
+        </div>
       ) : (
         <div style={{ display: "grid", gap: "var(--atlas-spacing-4)" }}>
           <h1>Name your workspace</h1>
+          <p style={{ color: "var(--atlas-foreground-muted)" }}>This is what your teammates will see.</p>
           <div>
             <Label htmlFor="workspace" required>Workspace name</Label>
             <Input id="workspace" value={workspace} onChange={(e) => setWorkspace(e.target.value)} />
@@ -54,11 +77,15 @@ export function SetupFlow({ onFinish }: { onFinish: (v: Setup) => Promise<void> 
         </div>
       )}
       {failed && <Alert variant="danger" title="We couldn't save your setup" description="Your answers are still here. Try again." />}
-      <div style={{ display: "flex", gap: "var(--atlas-spacing-3)", justifyContent: "space-between" }}>
-        {step > 0 ? <Button variant="ghost" onClick={() => setStep(step - 1)}>Back</Button> : <span />}
-        <Button variant="primary" loading={saving} disabled={step === 0 ? !useCase : !workspace.trim()} onClick={next}>
+      {/* Pinned actions: Continue on top, Back and Skip below as ghost Buttons. Back is on every step but the first. */}
+      <div style={{ display: "grid", gap: "var(--atlas-spacing-3)" }}>
+        <Button variant="primary" loading={saving} disabled={step === 0 ? !useCase : step === 1 ? !workspace.trim() : false} onClick={() => next()}>
           {step === total - 1 ? "Finish" : "Continue"}
         </Button>
+        <div style={{ display: "flex", gap: "var(--atlas-spacing-3)" }}>
+          {step > 0 && <Button variant="ghost" style={{ flex: 1 }} onClick={() => setStep(step - 1)}>Back</Button>}
+          {step === 2 && <Button variant="ghost" style={{ flex: 1 }} onClick={() => { setTeammate(""); next(true) }}>Skip</Button>}
+        </div>
       </div>
     </div>
   )
