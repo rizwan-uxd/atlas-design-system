@@ -23,6 +23,13 @@ export function SearchResults({ results, loading, error, onSearch, onRetry }: {
   const [sort, setSort] = React.useState("relevance")
   const [filters, setFilters] = React.useState<string[]>([])
   const run = (q = query, s = scope, so = sort, f = filters) => onSearch(q, s, so, f)
+  // One chip per attribute: choosing a value replaces that attribute's chip, "any" removes it.
+  const setAttr = (attr: string, value: string) => {
+    const next = filters.filter((x) => !x.startsWith(`${attr}: `))
+    if (value !== "any") next.push(`${attr}: ${value}`)
+    setFilters(next); run(query, scope, sort, next)
+  }
+  const attrValue = (attr: string) => filters.find((x) => x.startsWith(`${attr}: `))?.slice(attr.length + 2) ?? "any"
 
   return (
     <div style={{ display: "grid", gap: "var(--atlas-spacing-4)" }}>
@@ -51,6 +58,18 @@ export function SearchResults({ results, loading, error, onSearch, onRetry }: {
         </Select>
       </div>
 
+      <div style={{ display: "flex", gap: "var(--atlas-spacing-3)", flexWrap: "wrap" }}>
+        {([["Type", ["PDF", "Image", "Doc"]], ["Status", ["Open", "Closed"]]] as const).map(([attr, values]) => (
+          <Select key={attr} value={attrValue(attr)} onValueChange={(v) => setAttr(attr, v)}>
+            <SelectTrigger aria-label={attr}><SelectValue /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="any">{attr}: Any</SelectItem>
+              {values.map((v) => <SelectItem key={v} value={v}>{attr}: {v}</SelectItem>)}
+            </SelectContent>
+          </Select>
+        ))}
+      </div>
+
       {filters.length > 0 && (
         <div style={{ display: "flex", gap: "var(--atlas-spacing-2)", flexWrap: "wrap", alignItems: "center" }}>
           {filters.map((f) => (
@@ -71,7 +90,7 @@ export function SearchResults({ results, loading, error, onSearch, onRetry }: {
       ) : results.length === 0 ? (
         <div style={{ display: "grid", gap: "var(--atlas-spacing-3)" }}>
           <p>No results for “{query}”.</p>
-          <p style={{ color: "var(--atlas-foreground-muted)" }}>Check the spelling or remove a filter.</p>
+          <p style={{ color: "var(--atlas-foreground-muted)" }}>Check the spelling, or remove a filter to widen the search.</p>
           {filters.length > 0 && <Button variant="outline" onClick={() => { setFilters([]); run(query, scope, sort, []) }}>Clear filters</Button>}
         </div>
       ) : (
