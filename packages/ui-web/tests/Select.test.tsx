@@ -55,6 +55,39 @@ describe("Select", () => {
     expect(screen.getByRole("combobox")).toHaveTextContent("Choose")
   })
 
+  it("shows the label of a controlled value before it is opened", () => {
+    render(<TestSelect value="b" placeholder="Choose" />)
+    const trigger = screen.getByRole("combobox")
+    expect(trigger).toHaveTextContent("Bravo")
+    expect(trigger).not.toHaveTextContent("Choose")
+  })
+
+  it("shows the label of a default value before it is opened", () => {
+    render(<TestSelect defaultValue="a" placeholder="Choose" />)
+    expect(screen.getByRole("combobox")).toHaveTextContent("Alpha")
+  })
+
+  it("shows the label of a value nested in a group before it is opened", () => {
+    render(
+      <Select value="y">
+        <SelectTrigger aria-label="Grouped"><SelectValue placeholder="Choose" /></SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            <SelectLabel>Letters</SelectLabel>
+            <SelectItem value="x">Xray</SelectItem>
+            <SelectItem value="y">Yankee</SelectItem>
+          </SelectGroup>
+        </SelectContent>
+      </Select>,
+    )
+    expect(screen.getByRole("combobox")).toHaveTextContent("Yankee")
+  })
+
+  it("keeps the placeholder when the value matches no item", () => {
+    render(<TestSelect value="zzz" placeholder="Choose" />)
+    expect(screen.getByRole("combobox")).toHaveTextContent("Choose")
+  })
+
   // ── 2. Sizes ────────────────────────────────────────────────────
   it.each(["sm", "md"] as const)("applies %s size class", (size) => {
     render(<TestSelect size={size} />)
@@ -91,7 +124,7 @@ describe("Select", () => {
   it("shows checkmark on the selected item", () => {
     render(<TestSelect defaultValue="b" />)
     fireEvent.click(screen.getByRole("combobox"))
-    const bravo = screen.getByText("Bravo").closest('[role="option"]')!
+    const bravo = screen.getByRole("option", { name: "Bravo" })
     expect(bravo).toHaveAttribute("aria-selected", "true")
   })
 
