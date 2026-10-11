@@ -168,6 +168,19 @@ test("a pattern naming a component, variant or size that does not exist fails th
   }
 })
 
+test("a pattern naming a variant that code has but Figma does not draw fails the sync", () => {
+  const dir = copyInputs("packages/governance")
+  try {
+    const meta = path.join(dir, "atlas/metadata/Button.json")
+    const json = JSON.parse(fs.readFileSync(meta, "utf8"))
+    json.figmaProperties.Variant = json.figmaProperties.Variant.filter((v) => v !== "ghost")
+    fs.writeFileSync(meta, JSON.stringify(json, null, 2))
+    assert.match(syncFails(dir), /Button variant `ghost` is not drawn in Figma/)
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true })
+  }
+})
+
 test("tokens.md gets a labelled component-token section, and a second sync writes nothing", () => {
   const dir = copyInputs()
   try {
