@@ -174,6 +174,46 @@
       "composedFrom": "Label + Input with a hand-wired error paragraph and aria-describedby",
       "occurrences": 0,
       "note": "The form pattern asks for a Label with htmlFor, invalid, and error text wired by aria-describedby on every field. Atlas has no component that owns that wiring, so each screen repeats it. Not built."
+    },
+    {
+      "id": "CAND-033",
+      "name": "PasswordInput (show/hide toggle)",
+      "seenIn": ["packages/governance/patterns/auth.md"],
+      "composedFrom": "Input with a trailing Button for show/hide and aria-pressed",
+      "occurrences": 0,
+      "note": "Auth pattern asks for a visible show/hide control on password fields (Uber, Descript, Amazon). Atlas has no component that owns it. Not built."
+    },
+    {
+      "id": "CAND-034",
+      "name": "OTP / verification code input",
+      "seenIn": ["packages/governance/patterns/auth.md"],
+      "composedFrom": "One Input with inputMode numeric and autoComplete one-time-code",
+      "occurrences": 0,
+      "note": "Uber and others use per-digit boxes; Atlas composes a single Input instead. Not built."
+    },
+    {
+      "id": "CAND-035",
+      "name": "Stepper (labelled steps)",
+      "seenIn": ["packages/governance/patterns/onboarding.md"],
+      "composedFrom": "Progress with a 'Step n of N' valueLabel",
+      "occurrences": 0,
+      "note": "Wise labels each step in a step bar; Atlas Progress has no per-step labels. Not built."
+    },
+    {
+      "id": "CAND-036",
+      "name": "Stat / metric card",
+      "seenIn": ["packages/governance/patterns/dashboard.md"],
+      "composedFrom": "Card with CardDescription, a value paragraph and a Badge delta",
+      "occurrences": 0,
+      "note": "Dashboard KPI cards (Vercel, Zoho, Mintlify) repeat this composition. Not built."
+    },
+    {
+      "id": "CAND-037",
+      "name": "CommandMenu (command palette)",
+      "seenIn": ["packages/governance/patterns/search-filter.md"],
+      "composedFrom": "none; search-filter pattern covers in-page search only",
+      "occurrences": 0,
+      "note": "Linear and Notion expose a Cmd+K command menu. Atlas has no component. Not built."
     }
   ]
 }

@@ -137,7 +137,7 @@ test("every authored pattern is generated with its example embedded, listed in t
   const dir = copyInputs("packages/governance")
   try {
     sync(dir)
-    const slugs = ["data-table", "empty-state", "error-recovery", "form", "settings"]
+    const slugs = ["auth", "dashboard", "data-table", "empty-state", "error-recovery", "form", "onboarding", "search-filter", "settings"]
     const index = fs.readFileSync(path.join(dir, "atlas/index.md"), "utf8")
     for (const slug of slugs) {
       const doc = fs.readFileSync(path.join(dir, `atlas/patterns/${slug}.md`), "utf8")
