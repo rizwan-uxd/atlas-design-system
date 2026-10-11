@@ -17,9 +17,10 @@ figma.connect(
       appearance: figma.enum("Appearance", { default: "default", outline: "outline" }),
       size:       figma.enum("Size",  { sm: "sm", md: "md", lg: "lg" }),
       disabled:   figma.enum("State", { disabled: true }),
+      removable:  figma.boolean("Removable"),
     },
-    example: ({ variant, appearance, size, disabled }) => (
-      <Badge variant={variant} appearance={appearance} size={size} disabled={disabled}>
+    example: ({ variant, appearance, size, disabled, removable }) => (
+      <Badge variant={variant} appearance={appearance} size={size} disabled={disabled} removable={removable} removeLabel="Label">
         Label
       </Badge>
     ),

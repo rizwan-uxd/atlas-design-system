@@ -136,7 +136,7 @@ export function SearchResults({ results, loading, error, onSearch, onRetry }: {
       {filters.length > 0 && (
         <div style={{ display: "flex", gap: "var(--atlas-spacing-2)", flexWrap: "wrap", alignItems: "center" }}>
           {filters.map((f) => (
-            <Badge key={f} variant="neutral" removable removeLabel={`Remove filter ${f}`}
+            <Badge key={f} variant="neutral" removable removeLabel={`filter ${f}`}
               onRemove={() => { const next = filters.filter((x) => x !== f); setFilters(next); run(query, scope, sort, next) }}>
               {f}
             </Badge>
