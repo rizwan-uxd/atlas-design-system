@@ -41,6 +41,7 @@
 - Do not put the auth form inside a Card on a phone. Use a Card only when the form floats over a busy background.
 
 ## Responsive behavior
+- Phone is the primary layout. The primary action is pinned to the bottom edge; with the keyboard open it moves up and stays visible above the keyboard, and the alternative methods and legal line scroll away beneath it.
 - Phone: full-width controls, keyboard-safe spacing, `type="email"` or `inputMode` set so the right keyboard opens. Wider screens keep the single column; do not add a split hero that hides the form below the fold.
 
 ## States
@@ -74,9 +75,10 @@ type Props = {
   onRequestCode: (email: string) => Promise<void>
   onVerifyCode: (email: string, code: string) => Promise<boolean>
   onSocial: (provider: "google" | "apple" | "passkey") => void
+  onSignUp: () => void
 }
 
-export function SignIn({ onRequestCode, onVerifyCode, onSocial }: Props) {
+export function SignIn({ onRequestCode, onVerifyCode, onSocial, onSignUp }: Props) {
   const [step, setStep] = React.useState<"email" | "code">("email")
   const [email, setEmail] = React.useState("")
   const [code, setCode] = React.useState("")
@@ -123,12 +125,12 @@ export function SignIn({ onRequestCode, onVerifyCode, onSocial }: Props) {
     return (
       <form onSubmit={verify} noValidate style={{ display: "grid", gap: "var(--atlas-spacing-4)" }}>
         <h1>Check your email</h1>
-        <p style={muted}>We sent a code to <strong>{email}</strong>.</p>
+        <p style={muted}>We sent a 6-digit code to <strong>{email}</strong>.</p>
         <Button type="button" variant="link" onClick={() => { setStep("email"); setCode(""); setCodeError(undefined) }}>
           Use a different email
         </Button>
         <div>
-          <Label htmlFor="code" required>Verification code</Label>
+          <Label htmlFor="code" required>Code</Label>
           <Input id="code" inputMode="numeric" autoComplete="one-time-code" value={code}
             onChange={(e) => setCode(e.target.value)} invalid={!!codeError}
             aria-describedby={codeError ? "code-error" : undefined} />
@@ -144,7 +146,8 @@ export function SignIn({ onRequestCode, onVerifyCode, onSocial }: Props) {
 
   return (
     <form onSubmit={sendCode} noValidate style={{ display: "grid", gap: "var(--atlas-spacing-4)" }}>
-      <h1>Sign in or create an account</h1>
+      <h1>Sign in</h1>
+      <p style={muted}>Enter your email to continue.</p>
       <div>
         <Label htmlFor="email" required>Email</Label>
         <Input id="email" type="email" autoComplete="email" value={email}
@@ -161,8 +164,11 @@ export function SignIn({ onRequestCode, onVerifyCode, onSocial }: Props) {
       </div>
       <Button type="button" variant="outline" onClick={() => onSocial("google")}>Continue with Google</Button>
       <Button type="button" variant="outline" onClick={() => onSocial("apple")}>Continue with Apple</Button>
-      <Button type="button" variant="outline" onClick={() => onSocial("passkey")}>Use a passkey</Button>
-      <p style={muted}>By continuing you agree to the Terms of Service and Privacy Policy.</p>
+      <Button type="button" variant="outline" onClick={() => onSocial("passkey")}>Continue with a passkey</Button>
+      <p style={{ ...muted, textAlign: "center" }}>By continuing you agree to the Terms and Privacy Policy.</p>
+      <p style={{ ...muted, textAlign: "center" }}>
+        Don't have an account? <Button type="button" variant="link" onClick={onSignUp}>Sign up</Button>
+      </p>
     </form>
   )
 }

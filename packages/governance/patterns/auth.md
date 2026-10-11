@@ -42,6 +42,7 @@ summary: Sign the user in or create an account with email, social or passkey opt
 - Do not put the auth form inside a Card on a phone. Use a Card only when the form floats over a busy background.
 
 ## Responsive behavior
+- Phone is the primary layout. The primary action is pinned to the bottom edge; with the keyboard open it moves up and stays visible above the keyboard, and the alternative methods and legal line scroll away beneath it.
 - Phone: full-width controls, keyboard-safe spacing, `type="email"` or `inputMode` set so the right keyboard opens. Wider screens keep the single column; do not add a split hero that hides the form below the fold.
 
 ## States
