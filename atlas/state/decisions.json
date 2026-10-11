@@ -353,6 +353,12 @@
       "topic": "Figma opacity variables hold percent; CSS holds fractions",
       "decision": "Owner-approved 2026-10-11. Figma OPACITY-scoped variables use a 0-100 scale, so opacity/disabled, opacity/hover, opacity/overlay and opacity/pulse were stored as 0.5, 0.9, 0.6 and 0.5 and rendered as 0.5%, 0.9%, 0.6% and 0.5%: every disabled Button (48 variants), Switch (6) and Button Group node (78) bound to opacity/disabled was nearly invisible. The four variables were corrected in Figma Atlas/Primitives to 50, 90, 60 and 50, repairing all bound nodes with no new variable and no separate disabled component. CSS tokens stay fractions (--atlas-opacity-disabled: 0.5); packages/tokens/atlas.figma.tokens.json carries the Figma scale with a note, and a Figma-to-CSS importer must divide opacity/* by 100. Dropdown, RadioGroup and Slider still set disabled 0.5 by hand (DEC-016 and later); rebinding them is not part of this change.",
       "date": "2026-10-11"
+    },
+    {
+      "id": "DEC-059",
+      "topic": "Progress and its Bar take a Percent variant property (exception to DEC-003)",
+      "decision": "Owner-approved 2026-10-11. Figma cannot bind a rectangle's width to a number, so the Progress bar fill had no value. The internal .Progress / Bar set (538:7) and Progress (541:28) gain a Percent variant property with 0, 10 ... 100 (determinate; indeterminate stays one variant), the fill being that share of the track, scaled by its existing constraint. The old determinate variant became Percent=50 so existing instances are unchanged. The property is named Percent, not Value, because Progress already has a boolean Value (the value text). Colour, radius and height stay on primary, radius/full and spacing/1; no new token. DEC-003 says a value prop is not a variant value; this is a deliberate exception because Figma has no numeric binding. In code the value stays the numeric `value` prop and Progress.figma.tsx maps Percent to it.",
+      "date": "2026-10-11"
     }
   ]
 }
