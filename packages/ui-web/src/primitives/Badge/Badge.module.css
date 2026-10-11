@@ -177,6 +177,18 @@
   flex-shrink: 0;
 }
 
+/* The drawn remove icon: 12px on sm and md, 16px on lg (Figma Badge, Removable). */
+.removeIcon {
+  inline-size: var(--atlas-spacing-3);
+  block-size: var(--atlas-spacing-3);
+  stroke-width: var(--atlas-icon-stroke-xs);
+}
+
+.lg .removeIcon {
+  inline-size: var(--atlas-spacing-4);
+  block-size: var(--atlas-spacing-4);
+}
+
 .removeBtn:hover {
   opacity: 1;
 }
