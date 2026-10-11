@@ -79,6 +79,32 @@ test("per-value hints survive and a removed value drops out", () => {
   }
 })
 
+// ─── props extracted from a type alias: (A | B) & { ... } ────────────────────
+
+test("props of `export type XProps = (A | B) & {...}` list the union arms merged with the object literal (DISC-084)", () => {
+  const dir = copyInputs()
+  try {
+    sync(dir)
+    const names = readJson(dir, "atlas/metadata/DatePicker.json").props.map((p) => p.name)
+    for (const n of ["mode", "value", "defaultValue", "onValueChange", "min", "max", "disabled", "name", "required", "children"]) {
+      assert.ok(names.includes(n), `DatePicker props include ${n}`)
+    }
+    assert.equal(new Set(names).size, names.length, "each prop appears once")
+
+    const byName = Object.fromEntries(readJson(dir, "atlas/metadata/DatePicker.json").props.map((p) => [p.name, p]))
+    assert.equal(byName.mode.required, false, "mode is optional in the single arm, so optional overall")
+    assert.match(byName.value.type, /Date/)
+    assert.match(byName.value.type, /DatePickerRange/, "differing arm types are joined")
+    assert.equal(byName.min.required, false)
+
+    const doc = fs.readFileSync(path.join(dir, "atlas/DatePicker.md"), "utf8")
+    assert.doesNotMatch(doc, /\*\*DatePicker\*\*[^\n]*\n(?:- ref:[^\n]*\n)?- no own props/, "DatePicker root is no longer 'no own props'")
+    assert.equal(writtenCount(sync(dir)), 0, "second sync writes zero files")
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true })
+  }
+})
+
 // ─── governance: lifecycle, ownership, deprecations ──────────────────────────
 
 const readJson = (dir, rel) => JSON.parse(fs.readFileSync(path.join(dir, rel), "utf8"))
