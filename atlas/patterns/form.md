@@ -66,15 +66,20 @@
 ```tsx
 import * as React from "react"
 import { Alert } from "@atlas/ui-web/compositions/Alert/Alert"
+import { Checkbox } from "@atlas/ui-web/primitives/Checkbox/Checkbox"
 import { Button } from "@atlas/ui-web/primitives/Button/Button"
 import { Input } from "@atlas/ui-web/primitives/Input/Input"
 import { Label } from "@atlas/ui-web/primitives/Label/Label"
+import { RadioGroup, RadioGroupItem } from "@atlas/ui-web/primitives/RadioGroup/RadioGroup"
 
 type Errors = { name?: string; email?: string }
 
-export function ProfileForm({ onSave }: { onSave: (v: { name: string; email: string }) => Promise<void> }) {
+export function ProfileForm({ onSave }: { onSave: (v: { name: string; email: string; phone: string; plan: string; news: boolean }) => Promise<void> }) {
   const [name, setName] = React.useState("")
   const [email, setEmail] = React.useState("")
+  const [phone, setPhone] = React.useState("")
+  const [plan, setPlan] = React.useState("team")
+  const [news, setNews] = React.useState(false)
   const [errors, setErrors] = React.useState<Errors>({})
   const [failed, setFailed] = React.useState(false)
   const [saving, setSaving] = React.useState(false)
@@ -89,7 +94,7 @@ export function ProfileForm({ onSave }: { onSave: (v: { name: string; email: str
     setSaving(true)
     setFailed(false)
     try {
-      await onSave({ name, email })
+      await onSave({ name, email, phone, plan, news })
     } catch {
       setFailed(true)
     } finally {
@@ -111,6 +116,16 @@ export function ProfileForm({ onSave }: { onSave: (v: { name: string; email: str
           invalid={!!errors.email} aria-describedby={errors.email ? "email-error" : undefined} />
         {errors.email && <p id="email-error" style={{ color: "var(--atlas-danger)" }}>{errors.email}</p>}
       </div>
+      <div>
+        <Label htmlFor="phone" optional>Phone</Label>
+        <Input id="phone" type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} />
+      </div>
+      <RadioGroup aria-label="Plan" value={plan} onValueChange={setPlan}>
+        <RadioGroupItem value="personal" label="Personal" description="For one person." />
+        <RadioGroupItem value="team" label="Team" description="Share projects with others." />
+        <RadioGroupItem value="business" label="Business" description="Billing and admin controls." />
+      </RadioGroup>
+      <Checkbox label="Send me product news" checked={news} onCheckedChange={(c) => setNews(c === true)} />
       {failed && <Alert variant="danger" title="We couldn't save your details" description="Your entries are still here. Check your connection and try again." />}
       <Button type="submit" variant="primary" loading={saving}>Save</Button>
     </form>
