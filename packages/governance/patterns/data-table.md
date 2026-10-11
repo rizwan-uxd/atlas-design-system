@@ -33,7 +33,7 @@ summary: Show a set of records in rows and columns with search, filtering, row s
 - `Skeleton`
 
 ## Layout and density
-- Toolbar (search, filter) → optional bulk bar replacing or sitting under it → table. Row height from the Table tokens; do not override.
+- Toolbar (search, filter) → bulk bar under it, only while rows are selected → table. Row height from the Table tokens; do not override.
 - Dense by default: toolbar controls and bulk buttons use `sm`; keep Table cell content to one line and truncate.
 - The table scrolls horizontally inside its own wrapper on small screens; do not shrink fonts to fit.
 
@@ -46,7 +46,7 @@ summary: Show a set of records in rows and columns with search, filtering, row s
 - Bulk bar stacks the count above the actions when narrower than the tablet breakpoint.
 
 ## States
-- loading: `Skeleton` rows with the same column layout; set `aria-busy` on the table region.
+- loading: `Skeleton` rows in the same column layout, toolbar still shown; set `aria-busy` on the table region.
 - empty: no records at all → Empty state (first-use). Filters match nothing → Empty state (no-results) with "Clear filters".
 - error: failed to load → Error recovery pattern, with Retry; keep the toolbar.
 - selected, sorted, disabled (while a bulk action runs).
