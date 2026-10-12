@@ -40,7 +40,7 @@ import { SidebarMenuRow, SidebarMenuRowChild } from "@atlas/ui-web/primitives/Si
 import { Sidebar, SidebarHeader, SidebarBody, SidebarSection, SidebarFooter, SidebarCollapseToggle } from "@atlas/ui-web/layouts/Sidebar/Sidebar"
 import { MotionConfig } from "motion/react"
 import { AnimatedIcon, animatedIconNames, type AnimatedIconHandle, type AnimatedIconState } from "@atlas/ui-web/animated-icons"
-import { House, CreditCard, Receipt, Clock, Settings, Archive, Folder, ChevronRight } from "lucide-react"
+import { House, CreditCard, Receipt, Clock, Settings, Archive, Folder, ChevronRight, Palette, ArrowRight, Sun, Moon, Upload, Star, Search, X, Image as ImageIcon, Ellipsis, Check, TriangleAlert, CircleAlert, PartyPopper, Command, Inbox, Send } from "lucide-react"
 
 // Demo picture: an inline SVG so the sandbox needs no network.
 const DEMO_IMAGE = "data:image/svg+xml;utf8," + encodeURIComponent(
@@ -110,7 +110,7 @@ export default function SandboxPage() {
     }}>
       {/* NavBar */}
       <NavBar
-        brand="🎨 Atlas"
+        brand={<span style={{ display: "inline-flex", alignItems: "center", gap: "var(--atlas-spacing-2)" }}><Palette size={20} aria-hidden="true" />Atlas</span>}
         links={[
           { label: "Components", active: true },
           { label: "Tokens" },
@@ -119,10 +119,10 @@ export default function SandboxPage() {
         actions={
           <div style={{ display: "flex", gap: "var(--atlas-spacing-2)", alignItems: "center" }}>
             <Link href="/prototypes" style={{ textDecoration: "none" }}>
-              <Button variant="outline" size="sm">Prototypes →</Button>
+              <Button variant="outline" size="sm" trailingIcon={<ArrowRight size={16} aria-hidden="true" />}>Prototypes</Button>
             </Link>
-            <Button variant="ghost" size="sm" onClick={toggleTheme}>
-              {dark ? "☀ Light" : "☾ Dark"}
+            <Button variant="ghost" size="sm" onClick={toggleTheme} leadingIcon={dark ? <Sun size={16} aria-hidden="true" /> : <Moon size={16} aria-hidden="true" />}>
+              {dark ? "Light" : "Dark"}
             </Button>
           </div>
         }
@@ -155,14 +155,14 @@ export default function SandboxPage() {
               <Button size="sm">Small</Button>
               <Button size="md">Medium</Button>
               <Button size="lg">Large</Button>
-              <Button iconOnly aria-label="Upload">⬆</Button>
+              <Button iconOnly aria-label="Upload"><Upload size={16} aria-hidden="true" /></Button>
             </Row>
             <Row>
               <Button loading>Loading</Button>
-              <Button loading trailingIcon={<span>→</span>}>Loading + trailing</Button>
+              <Button loading trailingIcon={<ArrowRight size={16} aria-hidden="true" />}>Loading + trailing</Button>
               <Button disabled>Disabled</Button>
-              <Button variant="primary" leadingIcon={<span>★</span>}>Leading icon</Button>
-              <Button variant="secondary" trailingIcon={<span>→</span>}>Trailing icon</Button>
+              <Button variant="primary" leadingIcon={<Star size={16} aria-hidden="true" />}>Leading icon</Button>
+              <Button variant="secondary" trailingIcon={<ArrowRight size={16} aria-hidden="true" />}>Trailing icon</Button>
             </Row>
           </div>
         </Section>
@@ -212,7 +212,7 @@ export default function SandboxPage() {
             <div>
               <Label htmlFor="i4">With icons</Label>
               <div style={{ marginTop: "var(--atlas-spacing-1)" }}>
-                <Input id="i4" leadingIcon={<span style={{ fontSize: "var(--atlas-font-size-xs)" }}>🔍</span>} trailingIcon={<span style={{ fontSize: "var(--atlas-font-size-xs)" }}>✕</span>} placeholder="Search…" />
+                <Input id="i4" leadingIcon={<Search size={16} aria-hidden="true" />} trailingIcon={<X size={16} aria-hidden="true" />} placeholder="Search…" />
               </div>
             </div>
             <div>
@@ -451,8 +451,8 @@ export default function SandboxPage() {
           {/* Leading visual + action slot */}
           <Card>
             <CardHeader
-              leading={<span style={{ fontSize: "var(--atlas-font-size-2xl)" }}>🖼️</span>}
-              action={<Button size="sm" variant="ghost">⋯</Button>}
+              leading={<ImageIcon size={24} aria-hidden="true" />}
+              action={<Button size="sm" variant="ghost" iconOnly aria-label="More actions"><Ellipsis size={16} aria-hidden="true" /></Button>}
             >
               <CardTitle>With leading &amp; action</CardTitle>
               <CardDescription>Leading visual at inline-start, action menu at inline-end</CardDescription>
@@ -558,14 +558,14 @@ export default function SandboxPage() {
               <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase", letterSpacing: "var(--atlas-letter-spacing-wide)" }}>Icon slots</p>
               <Row>
                 <Badge variant="info" leadingIcon={<span style={{ fontSize: "var(--atlas-font-size-xs)" }}>ℹ</span>}>Leading icon</Badge>
-                <Badge variant="success" trailingIcon={<span style={{ fontSize: "var(--atlas-font-size-xs)" }}>✓</span>}>Trailing icon</Badge>
-                <Badge variant="warning" leadingIcon={<span style={{ fontSize: "var(--atlas-font-size-xs)" }}>⚠</span>} trailingIcon={<span style={{ fontSize: "var(--atlas-font-size-xs)" }}>!</span>}>Both icons</Badge>
+                <Badge variant="success" trailingIcon={<Check size={12} aria-hidden="true" />}>Trailing icon</Badge>
+                <Badge variant="warning" leadingIcon={<TriangleAlert size={12} aria-hidden="true" />} trailingIcon={<CircleAlert size={12} aria-hidden="true" />}>Both icons</Badge>
               </Row>
             </div>
 
             {/* Removable */}
             <div>
-              <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase", letterSpacing: "var(--atlas-letter-spacing-wide)" }}>Removable (× fires callback)</p>
+              <p style={{ margin: "0 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase", letterSpacing: "var(--atlas-letter-spacing-wide)" }}>Removable (dismiss fires callback)</p>
               <Row>
                 <Badge variant="neutral" removable onRemove={() => alert("removed: neutral")}>Neutral</Badge>
                 <Badge variant="success" removable onRemove={() => alert("removed: success")}>Success</Badge>
@@ -711,7 +711,7 @@ export default function SandboxPage() {
             <Alert variant="danger" description="Failed to connect to the server." />
 
             {/* Dismissible */}
-            <p style={{ margin: "var(--atlas-spacing-2) 0 0", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase", letterSpacing: "var(--atlas-letter-spacing-wide)" }}>Dismissible (× has 44px touch target)</p>
+            <p style={{ margin: "var(--atlas-spacing-2) 0 0", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase", letterSpacing: "var(--atlas-letter-spacing-wide)" }}>Dismissible (dismiss has 44px touch target)</p>
             <Alert variant="success" title="File uploaded" description="Your file has been processed and is ready." dismissible onDismiss={() => alert("dismissed")} />
             <Alert variant="warning" title="Storage almost full" description="You're using 90% of your storage quota." dismissible onDismiss={() => alert("dismissed")} />
 
@@ -746,7 +746,7 @@ export default function SandboxPage() {
             {/* hideIcon + icon override */}
             <p style={{ margin: "var(--atlas-spacing-2) 0 0", fontSize: "var(--atlas-font-size-xs)", color: "var(--atlas-foreground-muted)", textTransform: "uppercase", letterSpacing: "var(--atlas-letter-spacing-wide)" }}>hideIcon / icon override</p>
             <Alert variant="info" title="No icon" description="Icon hidden via hideIcon prop." hideIcon />
-            <Alert variant="success" icon={<span>🎉</span>} title="Custom icon" description="Overrides the default check with a custom node." />
+            <Alert variant="success" icon={<PartyPopper size={16} aria-hidden="true" />} title="Custom icon" description="Overrides the default check with a custom node." />
 
           </div>
         </Section>
@@ -982,7 +982,7 @@ export default function SandboxPage() {
                   <DropdownMenuLabel>My Account</DropdownMenuLabel>
                   <DropdownMenuGroup>
                     <DropdownMenuItem>Profile</DropdownMenuItem>
-                    <DropdownMenuItem shortcut="⌘B">Billing</DropdownMenuItem>
+                    <DropdownMenuItem shortcut={<span style={{ display: "inline-flex", alignItems: "center", gap: "var(--atlas-spacing-0_5)" }}><Command size={12} aria-hidden="true" />B</span>}>Billing</DropdownMenuItem>
                     <DropdownMenuSub>
                       <DropdownMenuSubTrigger>Team</DropdownMenuSubTrigger>
                       <DropdownMenuSubContent>
@@ -1582,7 +1582,7 @@ export default function SandboxPage() {
                 <Tabs
                   variant={variant}
                   items={[
-                    { id: `${variant}-overview`, label: "Overview", content: <p style={{ margin: 0, color: "var(--atlas-foreground-muted)", fontSize: "var(--atlas-font-size-sm)" }}>Overview panel — switch tabs with ← → arrow keys.</p> },
+                    { id: `${variant}-overview`, label: "Overview", content: <p style={{ margin: 0, color: "var(--atlas-foreground-muted)", fontSize: "var(--atlas-font-size-sm)" }}>Overview panel — switch tabs with Left and Right arrow keys.</p> },
                     { id: `${variant}-details`,  label: "Details",  content: <p style={{ margin: 0, color: "var(--atlas-foreground-muted)", fontSize: "var(--atlas-font-size-sm)" }}>Details panel content.</p> },
                     { id: `${variant}-settings`, label: "Settings", content: <p style={{ margin: 0, color: "var(--atlas-foreground-muted)", fontSize: "var(--atlas-font-size-sm)" }}>Settings panel content.</p> },
                     { id: `${variant}-disabled`, label: "Disabled", disabled: true, content: <></> },
@@ -1625,20 +1625,20 @@ export default function SandboxPage() {
                   {
                     id: "ib-inbox",
                     label: "Inbox",
-                    icon: <span style={{ fontSize: "var(--atlas-font-size-sm)" }}>📥</span>,
+                    icon: <Inbox size={16} aria-hidden="true" />,
                     badge: <Badge size="sm" variant="danger">4</Badge>,
                     content: <p style={{ margin: 0, fontSize: "var(--atlas-font-size-sm)", color: "var(--atlas-foreground-muted)" }}>Inbox — 4 unread messages</p>,
                   },
                   {
                     id: "ib-sent",
                     label: "Sent",
-                    icon: <span style={{ fontSize: "var(--atlas-font-size-sm)" }}>📤</span>,
+                    icon: <Send size={16} aria-hidden="true" />,
                     content: <p style={{ margin: 0, fontSize: "var(--atlas-font-size-sm)", color: "var(--atlas-foreground-muted)" }}>Sent items</p>,
                   },
                   {
                     id: "ib-archived",
                     label: "Archived",
-                    icon: <span style={{ fontSize: "var(--atlas-font-size-sm)" }}>🗄️</span>,
+                    icon: <Archive size={16} aria-hidden="true" />,
                     content: <p style={{ margin: 0, fontSize: "var(--atlas-font-size-sm)", color: "var(--atlas-foreground-muted)" }}>Archived messages</p>,
                   },
                 ]}

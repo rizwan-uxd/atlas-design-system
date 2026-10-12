@@ -2,6 +2,7 @@
 
 import React from "react"
 import Link from "next/link"
+import { ArrowLeft } from "lucide-react"
 import { Button } from "@atlas/ui-web/primitives/Button/Button"
 import { PhoneFrame } from "./PhoneFrame"
 import { StepProgress } from "./StepProgress"
@@ -60,12 +61,16 @@ export function FlowShell({
           <Link
             href="/prototypes"
             style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "var(--atlas-spacing-1)",
               fontSize: "var(--atlas-font-size-sm)",
               color: "var(--atlas-foreground-muted)",
               textDecoration: "none",
             }}
           >
-            ← Prototypes
+            <ArrowLeft size={16} aria-hidden="true" />
+            Prototypes
           </Link>
           <span style={{ color: "var(--atlas-border-strong)" }}>/</span>
           <strong style={{ fontSize: "var(--atlas-font-size-sm)" }}>{title}</strong>
