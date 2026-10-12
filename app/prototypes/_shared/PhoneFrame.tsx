@@ -1,6 +1,7 @@
 "use client"
 
 import React from "react"
+import { Signal } from "lucide-react"
 
 /**
  * PhoneFrame — chrome that wraps a prototype "screen" to feel like a phone.
@@ -84,7 +85,7 @@ export function PhoneFrame({
         >
           <span>9:41</span>
           <div style={{ display: "flex", gap: 5, alignItems: "center" }}>
-            <span style={{ fontSize: 11, letterSpacing: -1 }}>●●●●</span>
+            <Signal size={14} color={tintColor} aria-hidden="true" />
             <svg width="16" height="11" viewBox="0 0 16 11" fill={tintColor} aria-hidden>
               <path d="M8 0a8 8 0 0 1 5.66 2.34l-1.42 1.42A6 6 0 0 0 8 2a6 6 0 0 0-4.24 1.76L2.34 2.34A8 8 0 0 1 8 0Zm0 4a4 4 0 0 1 2.83 1.17l-1.42 1.42A2 2 0 0 0 8 6a2 2 0 0 0-1.41.59L5.17 5.17A4 4 0 0 1 8 4Zm0 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Z" />
             </svg>

@@ -82,7 +82,7 @@ function PhaseZeroStatus() {
         <Text style={{ color: colors.foreground, fontSize: tokens.fontSize.sm, fontWeight: tokens.fontWeight.semibold }}>
           Phase 0 — Foundation
         </Text>
-        <Badge variant="success" size="sm">✅ Complete</Badge>
+        <Badge variant="success" size="sm">Complete</Badge>
       </View>
       <View style={{ flexDirection: 'row', gap: tokens.spacing[2], flexWrap: 'wrap' }}>
         <Badge variant="neutral" size="sm">Dark mode: {colorScheme}</Badge>
@@ -120,7 +120,7 @@ function BadgeDemo() {
         <Badge variant="warning" dot accessibilityLabel="warning status" />
         <Badge variant="danger"  dot accessibilityLabel="danger status" />
         <Badge variant="info"    dot accessibilityLabel="info status" />
-        <Badge variant="neutral" size="lg">Dot variants →</Badge>
+        <Badge variant="neutral" size="lg">Dot variants</Badge>
       </View>
 
       {/* Long label overflow */}
@@ -310,12 +310,12 @@ function InputDemo() {
         helperText="Interaction is suppressed at 50% opacity"
       />
 
-      {/* With icons (using emoji as stand-in — replace with Ionicons in production) */}
+      {/* With icons (Ionicons from @expo/vector-icons) */}
       <Input
         label="With icons"
         placeholder="Search…"
-        leadingIcon={<Text style={{ fontSize: 16 }}>🔍</Text>}
-        trailingIcon={<Text style={{ fontSize: 16 }}>✕</Text>}
+        leadingIcon={<Ionicons name="search" size={16} color={colors.foregroundMuted} />}
+        trailingIcon={<Ionicons name="close" size={16} color={colors.foregroundMuted} />}
         helperText="leadingIcon + trailingIcon slots"
       />
 
@@ -595,7 +595,7 @@ function CardDemo() {
               backgroundColor: colors.primarySubtle,
               alignItems: 'center', justifyContent: 'center',
             }}>
-              <Text style={{ fontSize: 20 }}>🧩</Text>
+              <Ionicons name="extension-puzzle" size={20} color={colors.primary} />
             </View>
           }
           action={
@@ -607,7 +607,7 @@ function CardDemo() {
         </CardHeader>
         <CardContent>
           <Text style={{ color: colors.foregroundMuted, fontSize: tokens.fontSize.sm }}>
-            CardHeader rows flow: leading → main (title + description) → action.
+            CardHeader rows flow: leading, main (title + description), then action.
           </Text>
         </CardContent>
       </Card>
@@ -620,7 +620,7 @@ function CardDemo() {
         accessibilityLabel="Tappable card — tap to toggle"
       >
         <CardHeader>
-          <CardTitle>{tapped ? '✅ Tapped!' : 'Tappable card'}</CardTitle>
+          <CardTitle>{tapped ? 'Tapped!' : 'Tappable card'}</CardTitle>
           <CardDescription>Pass onPress to make the entire card interactive. Press feedback via opacity.</CardDescription>
         </CardHeader>
         <CardFooter>
@@ -653,7 +653,7 @@ function CardDemo() {
         </CardFooter>
         <CardFooter justify="between">
           <Badge variant="success" size="sm">Between</Badge>
-          <Badge variant="neutral" size="sm">→</Badge>
+          <Badge variant="neutral" size="sm">Right</Badge>
         </CardFooter>
         <CardFooter justify="end">
           <Badge variant="info"    size="sm">End</Badge>
@@ -843,9 +843,12 @@ function DialogDemo() {
           borderRadius:    tokens.radius.md,
           padding:         tokens.spacing[3],
         }}>
-          <Text style={{ color: colors.success, fontSize: tokens.fontSize.sm }}>
-            ✓ {lastAction}
-          </Text>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: tokens.spacing[2] }}>
+            <Ionicons name="checkmark" size={16} color={colors.success} />
+            <Text style={{ color: colors.success, fontSize: tokens.fontSize.sm }}>
+              {lastAction}
+            </Text>
+          </View>
         </View>
       )}
 
@@ -1116,7 +1119,7 @@ function DemoScreen() {
             Atlas Mobile
           </Text>
           <Text style={{ color: colors.foregroundMuted, fontSize: tokens.fontSize.sm, marginBottom: tokens.spacing[2] }}>
-            Phase 1 ✅ · Phase 2 ✅ · Phase 3 ✅ · Phase 4 ✅ · All 12 components complete
+            Phases 1 to 4 complete · All 12 components complete
           </Text>
 
           <SectionHeading>Phase 0 · Foundation</SectionHeading>
