@@ -140,10 +140,20 @@ jobs:
       - run: npm ci --legacy-peer-deps
       - name: Script tests
         run: npm run test:scripts
+      # A push to main has no PR labels in its event, so look up the merged PR of this commit.
+      - name: Merged PR approved new components
+        id: merged-label
+        if: github.event_name == 'push'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          approved=$(gh api "repos/${{ github.repository }}/commits/${{ github.sha }}/pulls" \
+            --jq 'any(.[]; .merged_at != null and any(.labels[]; .name == "atlas-approved-new"))')
+          echo "approved=$approved" >> "$GITHUB_OUTPUT"
       - name: Atlas verify
         env:
           BASE: ${{ github.event_name == 'pull_request' && format('origin/{0}', github.base_ref) || 'HEAD~1' }}
-          ALLOW_NEW: ${{ github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'atlas-approved-new') && '--allow-new-component --allow-new-token' || '' }}
+          ALLOW_NEW: ${{ ((github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'atlas-approved-new')) || steps.merged-label.outputs.approved == 'true') && '--allow-new-component --allow-new-token' || '' }}
         run: npm run atlas:verify -- --base "$BASE" --skip tsc,tests,token-lint $ALLOW_NEW
 
   # ─── Visual regression (sandbox sections, light + dark) ────────────────────
