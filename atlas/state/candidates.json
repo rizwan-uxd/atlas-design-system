@@ -214,6 +214,54 @@
       "composedFrom": "none; search-filter pattern covers in-page search only",
       "occurrences": 0,
       "note": "Linear and Notion expose a Cmd+K command menu. Atlas has no component. Not built."
+    },
+    {
+      "id": "CAND-038",
+      "name": "Figma boolean and icon-slot properties missing from the snapshot",
+      "seenIn": ["atlas/metadata/Input.json", "atlas/metadata/Badge.json", "scripts/atlas-sync.mjs"],
+      "composedFrom": "Figma variant axes only (figmaProperties comes from variant names)",
+      "occurrences": 0,
+      "note": "metadata.figmaProperties lists variant axes only. Input's Leading icon and Trailing icon booleans and the two icon swap slots, and Badge's Removable boolean, are drawn in Figma (PRs #31 and #32) but absent from the snapshot. Closing it needs a generator change (scripts/atlas-sync.mjs reads componentPropertyDefinitions or a pull-file field); deliberately not done yet."
+    },
+    {
+      "id": "CAND-039",
+      "name": "Input prefix and suffix (code only) and per-size icon token",
+      "seenIn": ["packages/ui-web/src/primitives/Input", "docs/HANDOFF-patterns-and-library-gaps-next-session.md"],
+      "composedFrom": "Input affixes in code; icons fixed at 20 px",
+      "occurrences": 0,
+      "note": "Code has prefix and suffix props; Figma has no property for them, only the icon booleans. The icon is 20 px on every size because there is no per-size icon token. Figma needs a decision before either is drawn. CAND-033 covers the show/hide control."
+    },
+    {
+      "id": "CAND-040",
+      "name": "Chart plot width in Figma",
+      "seenIn": ["atlas/metadata/Chart.json", "docs/HANDOFF-patterns-and-library-gaps-next-session.md"],
+      "composedFrom": "plot fixed at 622 px inside the Chart instance",
+      "occurrences": 0,
+      "note": "The Chart plot cannot stretch inside an instance, so the Dashboard pattern places a 670 px plot beside the table. A resizable plot in the Chart component would remove the workaround."
+    },
+    {
+      "id": "CAND-041",
+      "name": "Progress value text does not follow Percent",
+      "seenIn": ["atlas/metadata/Progress.json", "docs/HANDOFF-patterns-and-library-gaps-next-session.md"],
+      "composedFrom": "separate Value text property ('50%' or 'Step 2 of 4')",
+      "occurrences": 0,
+      "note": "After the Percent variant (DEC-059) the Value text property is still free text and does not follow Percent, so a frame can show 70 percent fill with the wrong label."
+    },
+    {
+      "id": "CAND-042",
+      "name": "Search and filter states not drawn",
+      "seenIn": ["docs/HANDOFF-patterns-and-library-gaps-next-session.md"],
+      "composedFrom": "search-filter pattern page frames",
+      "occurrences": 0,
+      "note": "The Figma pattern has no empty-query (recent searches) state and no filter Sheet drawn."
+    },
+    {
+      "id": "CAND-043",
+      "name": "Disabled opacity set by hand in Dropdown, RadioGroup and Slider",
+      "seenIn": ["packages/ui-web/src/patterns/DropdownMenu", "packages/ui-web/src/primitives/RadioGroup", "packages/ui-web/src/primitives/Slider"],
+      "composedFrom": "hand-set 0.5 (DEC-016 and later)",
+      "occurrences": 0,
+      "note": "These three still set disabled 0.5 by hand instead of binding to opacity/disabled. Left out on purpose when DEC-058 fixed the Figma percent-versus-fraction bug."
     }
   ]
 }
