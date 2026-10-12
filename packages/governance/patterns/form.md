@@ -16,7 +16,7 @@ summary: Collect one or more values from the user and submit or save them, inclu
 - Text, email, number, password, search → `Input`. Multi-line → `Textarea`.
 - One of 2–6 options, all visible → `RadioGroup`. One of more than 5, or a long list → `Select`. Never a raw `<select>` or radio input.
 - Value submitted later with the form → `Checkbox`. Applies instantly → `Switch`, and then it is not part of this form.
-- Every text, email, number, password or multi-line field is a `Field`: it renders the `Label`, the control and the help or error text, and spreads `id`, `invalid`, `disabled`, `aria-describedby` and `aria-required` onto the control. Required fields set `required` (never a typed asterisk); optional fields in a mostly-required form set `optional`. Never rely on the placeholder as the label.
+- Every text, email, number, password, multi-line or `Select` field is a `Field`: it renders the `Label`, the control and the help or error text, and spreads `id`, `invalid`, `disabled`, `aria-describedby` and `aria-required` onto the control. Required fields set `required` (never a typed asterisk); optional fields in a mostly-required form set `optional`. Never rely on the placeholder as the label.
 - Validation error on a field → pass it as `error` on the `Field`; it sets `invalid` on the Label and control and links the message with `aria-describedby`. Never use an `Alert` per field error, and do not hand-wire `Label` + `Input` + an error paragraph.
 - `RadioGroup` and `Checkbox` own their label and description; do not wrap them in a `Field`.
 - A form-level failure (submit failed, server rejected) → one `Alert` `variant="danger"` above the actions. For its recovery wording see the Error recovery pattern.
