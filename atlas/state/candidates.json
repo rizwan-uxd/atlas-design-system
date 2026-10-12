@@ -166,14 +166,6 @@
       "composedFrom": "not yet attempted",
       "occurrences": 0,
       "note": "Table has no pagination (its header says so) and the data-table pattern has to tell agents to paginate. CAND-024 mentions Previous/Next as part of a DataTable; this entry covers it standalone."
-    },
-    {
-      "id": "CAND-032",
-      "name": "Field (Label + control + help + error wiring)",
-      "seenIn": ["packages/governance/patterns/form.md"],
-      "composedFrom": "Label + Input with a hand-wired error paragraph and aria-describedby",
-      "occurrences": 0,
-      "note": "The form pattern asks for a Label with htmlFor, invalid, and error text wired by aria-describedby on every field. Atlas has no component that owns that wiring, so each screen repeats it. Not built."
     }
   ]
 }
