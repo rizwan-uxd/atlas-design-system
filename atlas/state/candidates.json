@@ -152,14 +152,6 @@
       "note": "Web ScrollProgress shipped (primitives/ScrollProgress). Native parity is logged here, not built (user, 2026-09-30)."
     },
     {
-      "id": "CAND-030",
-      "name": "EmptyState",
-      "seenIn": ["packages/governance/patterns/empty-state.md", "benchmarks/tasks/T5 (baseline-w1 runs composed their own)"],
-      "composedFrom": "centred stack of an aria-hidden lucide icon, a heading, a line of muted text and a Button, inside role=\"status\"",
-      "occurrences": 1,
-      "note": "Found while writing the empty-state pattern. A component would fix the structure, the status announcement and the first-use / no-results split. It needs its own Figma design and approval first (Wave 1 builds none)."
-    },
-    {
       "id": "CAND-031",
       "name": "Pagination",
       "seenIn": ["packages/governance/patterns/data-table.md"],
