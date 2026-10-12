@@ -1,0 +1,42 @@
+/* =================================================================
+   Atlas StatCard — component styles
+   Semantic tokens only. Logical properties throughout.
+   The surface, header and padding come from Card.
+   ================================================================= */
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--atlas-spacing-2);
+  --stat-value-size: var(--atlas-font-size-3xl);
+}
+
+.stat[data-size="sm"] {
+  --stat-value-size: var(--atlas-font-size-2xl);
+}
+
+.stat[data-size="lg"] {
+  --stat-value-size: var(--atlas-font-size-4xl);
+}
+
+.value {
+  margin: 0;
+  font-family: var(--atlas-font-sans);
+  font-size: var(--stat-value-size);
+  font-weight: var(--atlas-font-weight-semibold);
+  line-height: var(--atlas-line-height-tight);
+  color: var(--atlas-foreground);
+}
+
+/* ── Loading: skeletons take the final content's size ─────────── */
+
+.valueSkeleton {
+  inline-size: calc(var(--atlas-spacing-16) * 1.5);
+  block-size: calc(var(--stat-value-size) * var(--atlas-line-height-tight));
+}
+
+.deltaSkeleton {
+  inline-size: calc(var(--atlas-spacing-16) * 2.5);
+  block-size: calc(var(--atlas-font-size-xs) * var(--atlas-line-height-normal));
+}
