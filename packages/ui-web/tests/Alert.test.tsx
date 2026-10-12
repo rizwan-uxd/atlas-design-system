@@ -7,7 +7,8 @@
  *   3. role switches to "alert" for warning/danger, stays "status" otherwise
  *   4. Dismissible — dismiss button fires onDismiss (after animation end), accessible label
  *   5. hideIcon suppresses the icon; description falls back to children
- *   6. axe accessibility check on each variant
+ *   6. Actions slot — renders in order after the description, keeps the dismiss button
+ *   7. axe accessibility check on each variant, with and without actions
  */
 
 import React from "react"
@@ -111,13 +112,68 @@ describe("Alert — icon and description", () => {
   })
 })
 
-// ─── 6. axe accessibility ───────────────────────────────────────────────────
+// ─── 6. Actions slot ────────────────────────────────────────────────────────
+
+describe("Alert — actions", () => {
+  it("renders the actions inside the alert", () => {
+    render(<Alert variant="danger" title="Failed" description="Try again." actions={<button>Retry</button>} />)
+    expect(screen.getByRole("alert")).toContainElement(screen.getByRole("button", { name: "Retry" }))
+  })
+
+  it("places the actions after the description", () => {
+    render(<Alert title="Failed" description="Try again." actions={<button>Retry</button>} />)
+    const description = screen.getByText("Try again.")
+    const action = screen.getByRole("button", { name: "Retry" })
+    expect(description.compareDocumentPosition(action) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+  })
+
+  it("lets an action handle its own click", () => {
+    const onRetry = vi.fn()
+    render(<Alert title="Failed" actions={<button onClick={onRetry}>Retry</button>} />)
+    fireEvent.click(screen.getByRole("button", { name: "Retry" }))
+    expect(onRetry).toHaveBeenCalledTimes(1)
+  })
+
+  it("renders several actions in order", () => {
+    render(
+      <Alert title="Failed" actions={<><button>Retry</button><button>Cancel</button></>} />
+    )
+    const names = screen.getAllByRole("button").map((b) => b.textContent)
+    expect(names).toEqual(["Retry", "Cancel"])
+  })
+
+  it("renders no buttons when actions is omitted", () => {
+    render(<Alert title="Saved" description="All changes saved." />)
+    expect(screen.queryByRole("button")).toBeNull()
+  })
+
+  it("keeps the dismiss button next to the actions", () => {
+    render(<Alert dismissible title="Failed" actions={<button>Retry</button>} />)
+    expect(screen.getByRole("button", { name: "Retry" })).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: /dismiss/i })).toBeInTheDocument()
+  })
+})
+
+// ─── 7. axe accessibility ───────────────────────────────────────────────────
 
 describe("Alert — a11y (axe)", () => {
   for (const variant of VARIANTS) {
     it(`passes axe for variant="${variant}"`, async () => {
       const { container } = render(
         <Alert variant={variant} title={variant} description="Supporting text" />
+      )
+      const results = await axe(container)
+      expect(results).toHaveNoViolations()
+    })
+
+    it(`passes axe for variant="${variant}" with actions`, async () => {
+      const { container } = render(
+        <Alert
+          variant={variant}
+          title={variant}
+          description="Supporting text"
+          actions={<><button>Retry</button><button>Cancel</button></>}
+        />
       )
       const results = await axe(container)
       expect(results).toHaveNoViolations()

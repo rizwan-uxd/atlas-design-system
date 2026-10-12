@@ -22,6 +22,7 @@
  *   - Status/live: wrap badge in role="status" + aria-live="polite" at call site
  */
 
+import { X } from "lucide-react"
 import React from "react"
 import styles from "./Badge.module.css"
 
@@ -145,7 +146,7 @@ export function Badge({
           tabIndex={disabled ? -1 : 0}
         >
           {/* FIX BUG-067: aria-hidden prevents double-announcement ("Remove item times") */}
-          <span aria-hidden="true">×</span>
+          <X aria-hidden="true" className={styles.removeIcon} />
         </button>
       )}
     </>

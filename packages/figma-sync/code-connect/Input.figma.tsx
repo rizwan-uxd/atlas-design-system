@@ -10,13 +10,17 @@ figma.connect(
       size:     figma.enum("Size",    { sm: "sm", md: "md", lg: "lg" }),
       invalid:  figma.enum("State",   { error: true }),
       disabled: figma.enum("State",   { disabled: true }),
+      leadingIcon:  figma.boolean("Leading icon",  { true: figma.instance("Leading icon slot"),  false: undefined }),
+      trailingIcon: figma.boolean("Trailing icon", { true: figma.instance("Trailing icon slot"), false: undefined }),
     },
-    example: ({ variant, size, invalid, disabled }) => (
+    example: ({ variant, size, invalid, disabled, leadingIcon, trailingIcon }) => (
       <Input
         variant={variant}
         size={size}
         invalid={invalid}
         disabled={disabled}
+        leadingIcon={leadingIcon}
+        trailingIcon={trailingIcon}
         placeholder="Enter value…"
       />
     ),

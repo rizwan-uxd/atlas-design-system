@@ -7,7 +7,7 @@ USE WHEN
 · A form needs a labelled Input, Textarea or Select with help text or a validation message.
 · Every field in a form should name its control, mark required or optional, and announce its error the same way.
 · The error text must be linked to the control, not shown as colour alone.
-DON&#39;T USE WHEN
+DON'T USE WHEN
 · A Checkbox, Radio or Switch is the control. They own their own label and description.
 · The control is a single search box with no label row. Use Input alone.
 · A form-level failure (submit rejected). Use one Alert above the actions.
@@ -19,8 +19,8 @@ HOW TO USE
 · In Figma: turn Help off and Invalid on to show the error; set Required, Optional and the disabled and error states on the nested Label and Control instances.
 DO
 · Keep the Label visible; never use a placeholder as the label.
-· Write the error as what to do next (&quot;Enter a valid email address&quot;).
-DON&#39;T
+· Write the error as what to do next ("Enter a valid email address").
+DON'T
 · Show an error before the user has touched the field, except after a failed submit.
 · Put an Alert in place of a field error.
 RELATED
@@ -30,7 +30,7 @@ RELATED
 PROPERTIES
 Size: sm | md | lg. Help: boolean (default on). Help text: text. Invalid: boolean (default off). Error text: text. The Label and the control are nested instances, edited in place.
 
-CODE    &lt;Field&gt; in @atlas/ui-web/compositions/Field
+CODE    <Field> in @atlas/ui-web/compositions/Field
 
 <!-- BEGIN:generated-structure -->
 

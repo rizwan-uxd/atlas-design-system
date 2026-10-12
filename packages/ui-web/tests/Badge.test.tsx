@@ -100,6 +100,31 @@ describe("Badge — removable", () => {
     expect(onRemove).toHaveBeenCalledTimes(1)
   })
 
+  it("names the remove button from removeLabel, falling back to a string child", () => {
+    // removeLabel names the item; the button label is "Remove <item>"
+    const { rerender } = render(<Badge removable removeLabel="filter Type: PDF">PDF</Badge>)
+    expect(screen.getByRole("button", { name: "Remove filter Type: PDF" })).toBeInTheDocument()
+    rerender(<Badge removable>Tag</Badge>)
+    expect(screen.getByRole("button", { name: "Remove Tag" })).toBeInTheDocument()
+  })
+
+  it("draws the remove control as an aria-hidden icon, not a text glyph", () => {
+    render(<Badge removable>Tag</Badge>)
+    const btn = screen.getByRole("button", { name: /remove tag/i })
+    expect(btn.querySelector("svg")).toHaveAttribute("aria-hidden", "true")
+    expect(btn.textContent).toBe("")
+  })
+
+  it("disables the remove button and does not fire onRemove when the badge is disabled", () => {
+    const onRemove = vi.fn()
+    render(<Badge removable disabled onRemove={onRemove}>Tag</Badge>)
+    const btn = screen.getByRole("button", { name: /remove tag/i })
+    expect(btn).toBeDisabled()
+    expect(btn).toHaveAttribute("tabindex", "-1")
+    fireEvent.click(btn)
+    expect(onRemove).not.toHaveBeenCalled()
+  })
+
   it("warns in dev when removable without a derivable label", () => {
     const warn = vi.spyOn(console, "warn").mockImplementation(() => {})
     render(

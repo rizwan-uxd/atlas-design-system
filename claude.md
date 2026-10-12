@@ -74,7 +74,7 @@ The snapshot was first synced from Figma on 2026-09-12 (`figmaVersion` `lib:Atla
 - Token prefix `--atlas-*`; dark mode via `data-theme="dark"` on `<html>`
 - Radix installed: `@radix-ui/react-checkbox`, `@radix-ui/react-dialog`, `@radix-ui/react-tabs`
 - Dev server runs on port 3030
-- Motion layer: `packages/ui-web/src/motion/` + `animated-icons/` (utility modules, not Figma components; skipped by `atlas:verify`). Motion tokens (duration and easing incl. `emphasized`, `exit`, plus `opacity/pulse`) exist in Figma `Atlas/Primitives` and match the CSS values, checked 2026-09-30. `packages/tokens/atlas.figma.tokens.json` is an older export without them.
+- Motion layer: `packages/ui-web/src/motion/` + `animated-icons/` (utility modules, not Figma components; skipped by `atlas:verify`). Motion tokens (duration and easing incl. `emphasized`, `exit`, plus `opacity/pulse`) exist in Figma `Atlas/Primitives` and match the CSS values, checked 2026-09-30. Figma opacity variables hold percent (50) where CSS holds fractions (0.5), DEC-058. `packages/tokens/atlas.figma.tokens.json` carries the Figma-scale values.
 
 ## Baseline (phase 0, sonnet, 3 runs each)
 | task | context tok | turns | reads | coverage | manual /20 |

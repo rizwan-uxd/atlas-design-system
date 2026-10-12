@@ -137,7 +137,7 @@ test("every authored pattern is generated with its example embedded, listed in t
   const dir = copyInputs("packages/governance")
   try {
     sync(dir)
-    const slugs = ["data-table", "empty-state", "error-recovery", "form", "settings"]
+    const slugs = ["auth", "dashboard", "data-table", "empty-state", "error-recovery", "form", "onboarding", "search-filter", "settings"]
     const index = fs.readFileSync(path.join(dir, "atlas/index.md"), "utf8")
     for (const slug of slugs) {
       const doc = fs.readFileSync(path.join(dir, `atlas/patterns/${slug}.md`), "utf8")
@@ -163,6 +163,19 @@ test("a pattern naming a component, variant or size that does not exist fails th
     assert.match(syncFails(dir), /Button has no variant `sparkly`/)
     fs.writeFileSync(patternFile(dir), original.replace("## Decision rules\n", "## Rules\n"))
     assert.match(syncFails(dir), /missing section "## Decision rules"/)
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+test("a pattern naming a variant that code has but Figma does not draw fails the sync", () => {
+  const dir = copyInputs("packages/governance")
+  try {
+    const meta = path.join(dir, "atlas/metadata/Button.json")
+    const json = JSON.parse(fs.readFileSync(meta, "utf8"))
+    json.figmaProperties.Variant = json.figmaProperties.Variant.filter((v) => v !== "ghost")
+    fs.writeFileSync(meta, JSON.stringify(json, null, 2))
+    assert.match(syncFails(dir), /Button variant `ghost` is not drawn in Figma/)
   } finally {
     fs.rmSync(dir, { recursive: true, force: true })
   }
@@ -203,4 +216,89 @@ test("tokens.md has no component-token section while the CSS has no block", () =
     sync(dir)
     assert.doesNotMatch(fs.readFileSync(path.join(dir, "atlas/tokens.md"), "utf8"), /generated-component-tokens/)
   } finally { fs.rmSync(dir, { recursive: true, force: true }) }
+})
+
+/* ── component selection guidance: index column + required-section guard ── */
+
+const run = (dir, ...a) => {
+  try { return { code: 0, out: execFileSync("node", [path.join(dir, "scripts/atlas-sync.mjs"), ...a], { encoding: "utf8", stdio: "pipe" }) } }
+  catch (e) { return { code: e.status, out: `${e.stdout}${e.stderr}` } }
+}
+const dropSection = (dir, name, heading) => {
+  const doc = path.join(dir, `atlas/${name}.md`)
+  const md = fs.readFileSync(doc, "utf8")
+  assert.match(md, new RegExp(`^${heading}$`, "m"))
+  fs.writeFileSync(doc, md.replace(new RegExp(`^${heading}$`, "m"), `${heading.replace(/ /g, "_")}_RENAMED`))
+}
+const firstLine = (md, heading) => md.match(new RegExp(`^${heading}\\n· (.+)$`, "m"))[1].trim()
+const indexRow = (idx, name) => idx.split("\n").find((l) => l.startsWith(`| ${name} |`))
+
+test("index has a `Use for / Not for` column filled from each component doc, and sync is idempotent", () => {
+  const dir = copyInputs()
+  try {
+    run(dir)
+    const idx = fs.readFileSync(path.join(dir, "atlas/index.md"), "utf8")
+    assert.match(idx, /^\| Component \| Tier \| Import \| Variants \| Sizes \| Use for \/ Not for \|$/m)
+    const names = fs.readdirSync(path.join(dir, "atlas/metadata")).map((f) => f.replace(/\.json$/, ""))
+    assert.ok(names.length > 0)
+    for (const name of names) {
+      const doc = fs.readFileSync(path.join(dir, `atlas/${name}.md`), "utf8")
+      const row = indexRow(idx, name)
+      assert.ok(row, `${name} has an index row`)
+      const cell = row.slice(row.lastIndexOf("| ", row.length - 3) + 2, -2)
+      const use = firstLine(doc, "USE WHEN"), not = firstLine(doc, "DON'T USE WHEN")
+      assert.ok(cell.includes(use.replace(/\|/g, "\\|")), `${name}: USE WHEN first line in row`)
+      assert.ok(cell.includes(not.replace(/\|/g, "\\|")), `${name}: DON'T USE WHEN first line in row`)
+    }
+    assert.equal(run(dir).code, 0)
+    assert.equal(writtenCount(run(dir).out), 0, "second sync writes zero files")
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+test("guidance is taken from the first line only and pipes are escaped", () => {
+  const dir = copyInputs()
+  try {
+    const doc = path.join(dir, "atlas/Switch.md")
+    const md = fs.readFileSync(doc, "utf8")
+    fs.writeFileSync(doc, md.replace(/^USE WHEN\n· .+\n/m, "USE WHEN\n· Toggle a | b setting.\n· SECOND-USE-LINE.\n"))
+    run(dir)
+    const row = indexRow(fs.readFileSync(path.join(dir, "atlas/index.md"), "utf8"), "Switch")
+    assert.match(row, /Toggle a \\\| b setting\./)
+    assert.doesNotMatch(row, /SECOND-USE-LINE/)
+    // escaped pipe keeps the row at the table's seven cells
+    assert.equal(row.replace(/\\\||`[^`]*`/g, "").split("|").length - 2, 6)
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+for (const heading of ["USE WHEN", "DON'T USE WHEN", "HOW TO USE"]) {
+  test(`missing ${heading} fails sync --check, names file and section, and writes nothing`, () => {
+    const dir = copyInputs()
+    try {
+      run(dir)
+      dropSection(dir, "Switch", heading)
+      const before = fs.readFileSync(path.join(dir, "atlas/Switch.md"), "utf8")
+      const res = run(dir, "--check")
+      assert.notEqual(res.code, 0)
+      assert.match(res.out, new RegExp(`atlas/Switch\\.md: missing "${heading}"`))
+      assert.equal(fs.readFileSync(path.join(dir, "atlas/Switch.md"), "utf8"), before, "--check does not modify docs")
+      assert.notEqual(run(dir).code, 0, "plain sync fails too")
+    } finally {
+      fs.rmSync(dir, { recursive: true, force: true })
+    }
+  })
+}
+
+test("the guard covers component docs only, not pattern docs", () => {
+  const dir = copyInputs()
+  try {
+    run(dir)
+    for (const f of fs.readdirSync(path.join(dir, "atlas/patterns"))) assert.doesNotMatch(fs.readFileSync(path.join(dir, "atlas/patterns", f), "utf8"), /^HOW TO USE$/m)
+    assert.equal(run(dir, "--check").code, 0)
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true })
+  }
 })

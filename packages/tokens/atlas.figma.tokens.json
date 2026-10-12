@@ -1,5 +1,6 @@
 {
   "version": "1.1",
+  "notes": ["Figma OPACITY-scoped variables hold percent (50 = 50%). CSS tokens in atlas.tokens.css hold fractions (0.5). An importer must divide opacity/* by 100. See DEC-058."],
   "collections": [
     {
       "name": "Atlas/Primitives",
@@ -100,10 +101,10 @@
         { "name": "font-size/4xl", "type": "FLOAT", "values": { "Default": 36 } },
         { "name": "font-size/5xl", "type": "FLOAT", "values": { "Default": 48 } },
 
-        { "name": "opacity/disabled", "type": "FLOAT", "values": { "Default": 0.5 } },
-        { "name": "opacity/hover", "type": "FLOAT", "values": { "Default": 0.9 } },
-        { "name": "opacity/overlay", "type": "FLOAT", "values": { "Default": 0.6 } },
-        { "name": "opacity/pulse", "type": "FLOAT", "values": { "Default": 0.5 } },
+        { "name": "opacity/disabled", "type": "FLOAT", "values": { "Default": 50 } },
+        { "name": "opacity/hover", "type": "FLOAT", "values": { "Default": 90 } },
+        { "name": "opacity/overlay", "type": "FLOAT", "values": { "Default": 60 } },
+        { "name": "opacity/pulse", "type": "FLOAT", "values": { "Default": 50 } },
 
         { "name": "breakpoint/sm", "type": "FLOAT", "values": { "Default": 640 } },
         { "name": "breakpoint/md", "type": "FLOAT", "values": { "Default": 768 } },

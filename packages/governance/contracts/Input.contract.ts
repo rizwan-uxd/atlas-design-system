@@ -20,6 +20,8 @@ type AssertInputShape = {
   loading?:      boolean
   leadingIcon?:  React.ReactNode
   trailingIcon?: React.ReactNode
+  prefix?:       React.ReactNode
+  suffix?:       React.ReactNode
   disabled?:     boolean
   placeholder?:  string
 }

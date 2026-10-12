@@ -1,5 +1,6 @@
 import figma from "@figma/code-connect"
 import { Alert } from "@atlas/ui-web/compositions/Alert/Alert"
+import { Button } from "@atlas/ui-web/primitives/Button/Button"
 
 figma.connect(
   Alert,
@@ -15,14 +16,19 @@ figma.connect(
       }),
       size:        figma.enum("Size", { sm: "sm", md: "md", lg: "lg" }),
       dismissible: figma.boolean("Dismissible"),
+      actions:     figma.boolean("Actions", {
+        true:  <Button variant="outline" size="sm">Retry</Button>,
+        false: undefined,
+      }),
     },
-    example: ({ variant, size, dismissible }) => (
+    example: ({ variant, size, dismissible, actions }) => (
       <Alert
         variant={variant}
         size={size}
         dismissible={dismissible}
         title="Alert title"
         description="Supporting description text."
+        actions={actions}
       />
     ),
   }

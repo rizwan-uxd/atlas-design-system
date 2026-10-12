@@ -64,6 +64,21 @@ function enabledItems(content: HTMLElement): HTMLElement[] {
   return Array.from(content.querySelectorAll<HTMLElement>(ITEM_SELECTOR))
 }
 
+/**
+ * SelectContent renders nothing while closed, so no SelectItem has mounted to
+ * register its label. Read value and text from the element tree instead so the
+ * trigger can show the selected label before the list is ever opened.
+ */
+function collectItemLabels(children: React.ReactNode, out: Array<[string, string]> = []): Array<[string, string]> {
+  React.Children.forEach(children, (child) => {
+    if (!React.isValidElement<{ value?: unknown; children?: React.ReactNode }>(child)) return
+    const { value, children: inner } = child.props
+    if (child.type === SelectItem && typeof value === "string" && typeof inner === "string") out.push([value, inner])
+    else if (inner !== undefined) collectItemLabels(inner, out)
+  })
+  return out
+}
+
 const useIsoLayoutEffect = typeof window === "undefined" ? React.useEffect : React.useLayoutEffect
 
 /* ── Context ────────────────────────────────────────────────────── */
@@ -79,6 +94,9 @@ interface SelectContextValue {
   disabled: boolean
   focusIntent: React.MutableRefObject<"first" | "last" | "selected" | "content">
   itemLabels: React.MutableRefObject<Map<string, string>>
+  /** Bumps when a label is registered so SelectValue re-renders. */
+  labelVersion: number
+  registerLabels: (entries: Array<[string, string]>) => void
 }
 
 const SelectContext = React.createContext<SelectContextValue | null>(null)
@@ -100,7 +118,19 @@ export function Select({ value: valueProp, defaultValue, onValueChange, name, re
   const triggerRef = React.useRef<HTMLElement | null>(null)
   const focusIntent = React.useRef<"first" | "last" | "selected" | "content">("content")
   const itemLabels = React.useRef<Map<string, string>>(new Map())
+  const [labelVersion, setLabelVersion] = React.useState(0)
   const baseId = React.useId()
+
+  const registerLabels = React.useCallback((entries: Array<[string, string]>) => {
+    let changed = false
+    for (const [v, text] of entries) {
+      if (itemLabels.current.get(v) !== text) {
+        itemLabels.current.set(v, text)
+        changed = true
+      }
+    }
+    if (changed) setLabelVersion((n) => n + 1)
+  }, [])
 
   const setOpen = React.useCallback((next: boolean) => {
     if (disabled && next) return
@@ -125,7 +155,9 @@ export function Select({ value: valueProp, defaultValue, onValueChange, name, re
     disabled,
     focusIntent,
     itemLabels,
-  }), [open, setOpen, value, onSelect, baseId, disabled])
+    labelVersion,
+    registerLabels,
+  }), [open, setOpen, value, onSelect, baseId, disabled, labelVersion, registerLabels])
 
   return (
     <SelectContext.Provider value={ctx}>
@@ -292,6 +324,11 @@ export function SelectContent({ side = "bottom", className, children, onKeyDown,
   }, [ctx])
 
   React.useEffect(() => () => clearTimeout(typeahead.current.timer), [])
+
+  const { registerLabels } = ctx
+  useIsoLayoutEffect(() => {
+    registerLabels(collectItemLabels(children))
+  }, [children, registerLabels])
 
   if (!ctx.open || !mounted || typeof document === "undefined") return null
 

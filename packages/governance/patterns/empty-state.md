@@ -15,7 +15,7 @@ summary: Tell the user why a list or screen has no content and what to do next (
 - Name the cause first. Pick exactly one of:
   - First use (nothing exists yet): say what the thing is in one line, make creating it the single `primary` Button.
   - No results (filters or search exclude everything, items exist): say nothing matches, make clearing the search or filters the primary action (`Button variant="outline"` or `primary` if it is the only action). Do not offer "create" as the main action.
-  - Cleared (user removed the last item): confirm briefly, offer undo or create.
+  - Cleared (user removed the last item): confirm briefly, and make undo the single action (`Button variant="outline"`).
 - Never show an empty state for an error or while loading.
 - At most one primary action. A secondary link or `ghost` Button is allowed for help.
 - Keep the search field visible in the no-results state so the user can edit the query. Hide it in first use (nothing to search).
@@ -25,7 +25,6 @@ summary: Tell the user why a list or screen has no content and what to do next (
 ## Components and variants
 - `Button` variant: `primary`, `outline`, `ghost` · size: `md`
 - `Input` variant: `default` · size: `md`
-- `Tabs` variant: `segmented` · size: `sm`
 
 ## Layout and density
 - Centre horizontally in the content area, title, one-line description, then the action. Space with `--atlas-spacing-3` between lines and `--atlas-spacing-6` before the action.
