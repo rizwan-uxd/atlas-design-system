@@ -15,15 +15,16 @@
 - Text, email, number, password, search → `Input`. Multi-line → `Textarea`.
 - One of 2–6 options, all visible → `RadioGroup`. One of more than 5, or a long list → `Select`. Never a raw `<select>` or radio input.
 - Value submitted later with the form → `Checkbox`. Applies instantly → `Switch`, and then it is not part of this form.
-- Every field has a `Label` with `htmlFor` equal to the control's `id`. Required fields set `required` on the Label (never a typed asterisk); optional fields in a mostly-required form set `optional`. Never rely on the placeholder as the label.
-- Validation error on a field → set `invalid` on the control and render the message in text wired with `aria-describedby`. Never use an `Alert` per field error.
+- Every text, email, number, password or multi-line field is a `Field`: it renders the `Label`, the control and the help or error text, and spreads `id`, `invalid`, `disabled`, `aria-describedby` and `aria-required` onto the control. Required fields set `required` (never a typed asterisk); optional fields in a mostly-required form set `optional`. Never rely on the placeholder as the label.
+- Validation error on a field → pass it as `error` on the `Field`; it sets `invalid` on the Label and control and links the message with `aria-describedby`. Never use an `Alert` per field error, and do not hand-wire `Label` + `Input` + an error paragraph.
+- `RadioGroup` and `Checkbox` own their label and description; do not wrap them in a `Field`.
 - A form-level failure (submit failed, server rejected) → one `Alert` `variant="danger"` above the actions. For its recovery wording see the Error recovery pattern.
 - Validate on blur for format, on submit for required. Do not show errors before the user has touched a field, except after a failed submit.
 - Keep Submit enabled and validate on press, so the user is told what is wrong. Show `loading` on the Button while submitting. Disable Submit only when the amount or choice that makes it meaningful is missing (for example an amount flow's Continue).
 - Skippable optional step → a `Button variant="ghost"` "Skip" beside the primary action, not a link.
 
 ## Components and variants
-- `Label` variant: `default` · size: `md`
+- `Field` size: `md` (wraps `Label` `default` and the control)
 - `Input` variant: `default` · size: `md`
 - `Select` size: `md`
 - `RadioGroup` variant: `default` · size: `md`
@@ -66,10 +67,10 @@
 ```tsx
 import * as React from "react"
 import { Alert } from "@atlas/ui-web/compositions/Alert/Alert"
+import { Field } from "@atlas/ui-web/compositions/Field/Field"
 import { Checkbox } from "@atlas/ui-web/primitives/Checkbox/Checkbox"
 import { Button } from "@atlas/ui-web/primitives/Button/Button"
 import { Input } from "@atlas/ui-web/primitives/Input/Input"
-import { Label } from "@atlas/ui-web/primitives/Label/Label"
 import { RadioGroup, RadioGroupItem } from "@atlas/ui-web/primitives/RadioGroup/RadioGroup"
 
 type Errors = { name?: string; email?: string }
@@ -104,22 +105,15 @@ export function ProfileForm({ onSave }: { onSave: (v: { name: string; email: str
 
   return (
     <form onSubmit={submit} noValidate style={{ display: "grid", gap: "var(--atlas-spacing-4)" }}>
-      <div>
-        <Label htmlFor="name" required>Full name</Label>
-        <Input id="name" value={name} onChange={(e) => setName(e.target.value)}
-          invalid={!!errors.name} aria-describedby={errors.name ? "name-error" : undefined} />
-        {errors.name && <p id="name-error" style={{ color: "var(--atlas-danger)" }}>{errors.name}</p>}
-      </div>
-      <div>
-        <Label htmlFor="email" required>Email</Label>
-        <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)}
-          invalid={!!errors.email} aria-describedby={errors.email ? "email-error" : undefined} />
-        {errors.email && <p id="email-error" style={{ color: "var(--atlas-danger)" }}>{errors.email}</p>}
-      </div>
-      <div>
-        <Label htmlFor="phone" optional>Phone</Label>
-        <Input id="phone" type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} />
-      </div>
+      <Field label="Full name" required error={errors.name}>
+        {(control) => <Input {...control} value={name} onChange={(e) => setName(e.target.value)} />}
+      </Field>
+      <Field label="Email" required error={errors.email}>
+        {(control) => <Input {...control} type="email" value={email} onChange={(e) => setEmail(e.target.value)} />}
+      </Field>
+      <Field label="Phone" optional>
+        {(control) => <Input {...control} type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} />}
+      </Field>
       <RadioGroup aria-label="Plan" value={plan} onValueChange={setPlan}>
         <RadioGroupItem value="personal" label="Personal" description="For one person." />
         <RadioGroupItem value="team" label="Team" description="Share projects with others." />

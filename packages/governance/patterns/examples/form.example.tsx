@@ -1,9 +1,9 @@
 import * as React from "react"
 import { Alert } from "@atlas/ui-web/compositions/Alert/Alert"
+import { Field } from "@atlas/ui-web/compositions/Field/Field"
 import { Checkbox } from "@atlas/ui-web/primitives/Checkbox/Checkbox"
 import { Button } from "@atlas/ui-web/primitives/Button/Button"
 import { Input } from "@atlas/ui-web/primitives/Input/Input"
-import { Label } from "@atlas/ui-web/primitives/Label/Label"
 import { RadioGroup, RadioGroupItem } from "@atlas/ui-web/primitives/RadioGroup/RadioGroup"
 
 type Errors = { name?: string; email?: string }
@@ -38,22 +38,15 @@ export function ProfileForm({ onSave }: { onSave: (v: { name: string; email: str
 
   return (
     <form onSubmit={submit} noValidate style={{ display: "grid", gap: "var(--atlas-spacing-4)" }}>
-      <div>
-        <Label htmlFor="name" required>Full name</Label>
-        <Input id="name" value={name} onChange={(e) => setName(e.target.value)}
-          invalid={!!errors.name} aria-describedby={errors.name ? "name-error" : undefined} />
-        {errors.name && <p id="name-error" style={{ color: "var(--atlas-danger)" }}>{errors.name}</p>}
-      </div>
-      <div>
-        <Label htmlFor="email" required>Email</Label>
-        <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)}
-          invalid={!!errors.email} aria-describedby={errors.email ? "email-error" : undefined} />
-        {errors.email && <p id="email-error" style={{ color: "var(--atlas-danger)" }}>{errors.email}</p>}
-      </div>
-      <div>
-        <Label htmlFor="phone" optional>Phone</Label>
-        <Input id="phone" type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} />
-      </div>
+      <Field label="Full name" required error={errors.name}>
+        {(control) => <Input {...control} value={name} onChange={(e) => setName(e.target.value)} />}
+      </Field>
+      <Field label="Email" required error={errors.email}>
+        {(control) => <Input {...control} type="email" value={email} onChange={(e) => setEmail(e.target.value)} />}
+      </Field>
+      <Field label="Phone" optional>
+        {(control) => <Input {...control} type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} />}
+      </Field>
       <RadioGroup aria-label="Plan" value={plan} onValueChange={setPlan}>
         <RadioGroupItem value="personal" label="Personal" description="For one person." />
         <RadioGroupItem value="team" label="Team" description="Share projects with others." />
