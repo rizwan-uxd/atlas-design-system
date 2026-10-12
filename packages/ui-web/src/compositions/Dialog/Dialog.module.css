@@ -220,6 +220,12 @@
               color            var(--atlas-duration-fast) var(--atlas-easing-standard);
 }
 
+.closeIcon {
+  inline-size: var(--atlas-icon-size-xs);
+  block-size: var(--atlas-icon-size-xs);
+  stroke-width: var(--atlas-icon-stroke-xs);
+}
+
 .closeBtn:hover {
   background-color: var(--atlas-background-subtle);
   color: var(--atlas-foreground);

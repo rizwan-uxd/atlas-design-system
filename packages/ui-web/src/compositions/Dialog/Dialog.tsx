@@ -47,6 +47,7 @@
 
 import React from "react"
 import * as RadixDialog from "@radix-ui/react-dialog"
+import { X } from "lucide-react"
 import styles from "./Dialog.module.css"
 
 /* ── Helpers ────────────────────────────────────────────────────── */
@@ -188,7 +189,7 @@ export function DialogHeader({ showClose = true, className, children }: DialogHe
           className={styles.closeBtn}
           aria-label="Close dialog"
         >
-          ✕
+          <X className={styles.closeIcon} aria-hidden="true" />
         </RadixDialog.Close>
       )}
     </div>

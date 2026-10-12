@@ -106,6 +106,33 @@ describe("Alert — icon and description", () => {
     expect(container.querySelector("[aria-hidden='true']")).toBeNull()
   })
 
+  it.each([
+    ["info", "lucide-info"],
+    ["success", "lucide-circle-check"],
+    ["warning", "lucide-triangle-alert"],
+    ["danger", "lucide-circle-x"],
+    ["neutral", "lucide-info"],
+  ] as const)("renders the Lucide icon for the %s intent", (variant, cls) => {
+    const { container } = render(<Alert variant={variant} title="T" />)
+    const svg = container.querySelector("svg")
+    expect(svg).not.toBeNull()
+    expect(svg).toHaveClass(cls)
+    expect(svg?.closest("[aria-hidden='true']")).not.toBeNull()
+  })
+
+  it("renders the dismiss control as a Lucide X icon, not a text glyph", () => {
+    render(<Alert title="T" dismissible />)
+    const btn = screen.getByRole("button", { name: /dismiss/i })
+    expect(btn.querySelector("svg.lucide-x")).not.toBeNull()
+    expect(btn.textContent).toBe("")
+  })
+
+  it("renders a custom icon instead of the default", () => {
+    const { container } = render(<Alert title="T" icon={<span data-testid="custom">★</span>} />)
+    expect(screen.getByTestId("custom")).toBeInTheDocument()
+    expect(container.querySelector("svg")).toBeNull()
+  })
+
   it("falls back to children when description is not provided", () => {
     render(<Alert title="Title">Child description</Alert>)
     expect(screen.getByText("Child description")).toBeInTheDocument()

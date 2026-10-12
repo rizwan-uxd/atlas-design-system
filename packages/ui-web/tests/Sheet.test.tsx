@@ -104,12 +104,12 @@ describe("SheetContent side", () => {
 describe("SheetContent drag handle", () => {
   it("renders the drag handle for side=bottom", () => {
     render(<Basic defaultOpen side="bottom" />)
-    expect(screen.getByRole("dialog").querySelector('[aria-hidden="true"]')).not.toBeNull()
+    expect(screen.getByRole("dialog").querySelector('div[aria-hidden="true"]')).not.toBeNull()
   })
 
   it.each<SheetSide>(["top", "start", "end"])("omits the drag handle for side=%s", (side) => {
     render(<Basic defaultOpen side={side} />)
-    expect(screen.getByRole("dialog").querySelector('[aria-hidden="true"]')).toBeNull()
+    expect(screen.getByRole("dialog").querySelector('div[aria-hidden="true"]')).toBeNull()
   })
 })
 
