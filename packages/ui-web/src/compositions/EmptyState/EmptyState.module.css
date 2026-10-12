@@ -1,0 +1,94 @@
+/* =================================================================
+   Atlas EmptyState — component styles
+   All values reference semantic tokens only.
+   No surface: transparent, centred, fills the width it is given.
+   ================================================================= */
+
+/* ── Base ─────────────────────────────────────────────────────── */
+
+.emptyState {
+  /* Size-driven values, overridden by .sm and .lg */
+  --_pad: var(--atlas-spacing-12);
+  --_icon-size: var(--atlas-icon-size-lg);
+  --_icon-stroke: var(--atlas-icon-stroke-lg);
+  --_title-size: var(--atlas-text-h3);
+  --_desc-size: var(--atlas-text-body-sm);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--atlas-spacing-6);
+  padding-block: var(--_pad);
+  inline-size: 100%;
+  box-sizing: border-box;
+  text-align: center;
+  font-family: var(--atlas-font-sans);
+}
+
+/* ── Sizes ────────────────────────────────────────────────────── */
+
+.sm {
+  --_pad: var(--atlas-spacing-6);
+  --_icon-size: var(--atlas-icon-size-md);
+  --_icon-stroke: var(--atlas-icon-stroke-md);
+  --_title-size: var(--atlas-text-h4);
+}
+
+.lg {
+  --_title-size: var(--atlas-text-h2);
+  --_desc-size: var(--atlas-text-body);
+}
+
+/* ── Text group ───────────────────────────────────────────────── */
+
+.text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--atlas-spacing-3);
+  inline-size: 100%;
+}
+
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--atlas-foreground-subtle);
+}
+
+.icon svg {
+  inline-size: var(--_icon-size);
+  block-size: var(--_icon-size);
+  stroke-width: var(--_icon-stroke);
+}
+
+.title {
+  margin: 0;
+  inline-size: 100%;
+  color: var(--atlas-foreground);
+  font-size: var(--_title-size);
+  font-weight: var(--atlas-font-weight-semibold);
+  line-height: var(--atlas-line-height-snug);
+  overflow-wrap: break-word;
+}
+
+.description {
+  margin: 0;
+  inline-size: 100%;
+  color: var(--atlas-foreground-muted);
+  font-size: var(--_desc-size);
+  font-weight: var(--atlas-font-weight-regular);
+  line-height: var(--atlas-line-height-normal);
+  overflow-wrap: break-word;
+  text-wrap: pretty;
+}
+
+/* ── Actions ──────────────────────────────────────────────────── */
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--atlas-spacing-3);
+}
