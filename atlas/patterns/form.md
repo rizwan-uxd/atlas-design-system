@@ -24,7 +24,8 @@
 - Skippable optional step → a `Button variant="ghost"` "Skip" beside the primary action, not a link.
 
 ## Components and variants
-- `Field` size: `md` (wraps `Label` `default` and the control)
+- `Field` size: `md`
+- `Label` variant: `default` · size: `md` (inside Field)
 - `Input` variant: `default` · size: `md`
 - `Select` size: `md`
 - `RadioGroup` variant: `default` · size: `md`
