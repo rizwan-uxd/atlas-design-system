@@ -30,6 +30,8 @@
   padding-block: var(--atlas-spacing-4);
   padding-inline: var(--atlas-spacing-4);
   flex-shrink: 0;
+  font-size: var(--atlas-text-body-sm); /* Figma: workspace name SemiBold 14 */
+  font-weight: var(--atlas-font-weight-semibold);
 }
 
 .headerCollapsed {
