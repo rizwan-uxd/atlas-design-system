@@ -1,10 +1,10 @@
 import * as React from "react"
 import { Alert } from "@atlas/ui-web/compositions/Alert/Alert"
 import { Card, CardContent, CardHeader, CardTitle } from "@atlas/ui-web/compositions/Card/Card"
+import { Field } from "@atlas/ui-web/compositions/Field/Field"
 import { ListItem, ListItemActions, ListItemContent, ListItemDescription, ListItemTitle } from "@atlas/ui-web/compositions/ListItem/ListItem"
 import { Button } from "@atlas/ui-web/primitives/Button/Button"
 import { Input } from "@atlas/ui-web/primitives/Input/Input"
-import { Label } from "@atlas/ui-web/primitives/Label/Label"
 import { Progress } from "@atlas/ui-web/primitives/Progress/Progress"
 import { RadioGroup, RadioGroupItem } from "@atlas/ui-web/primitives/RadioGroup/RadioGroup"
 
@@ -61,19 +61,17 @@ export function SetupFlow({ onFinish }: { onFinish: (v: Setup) => Promise<void> 
         <div style={{ display: "grid", gap: "var(--atlas-spacing-4)" }}>
           <h1>Invite your team</h1>
           <p style={{ color: "var(--atlas-foreground-muted)" }}>You can also do this later.</p>
-          <div>
-            <Label htmlFor="teammate" optional>Teammate email</Label>
-            <Input id="teammate" type="email" inputMode="email" value={teammate} onChange={(e) => setTeammate(e.target.value)} />
-          </div>
+          <Field label="Teammate email" optional>
+            {(control) => <Input {...control} type="email" inputMode="email" value={teammate} onChange={(e) => setTeammate(e.target.value)} />}
+          </Field>
         </div>
       ) : (
         <div style={{ display: "grid", gap: "var(--atlas-spacing-4)" }}>
           <h1>Name your workspace</h1>
           <p style={{ color: "var(--atlas-foreground-muted)" }}>This is what your teammates will see.</p>
-          <div>
-            <Label htmlFor="workspace" required>Workspace name</Label>
-            <Input id="workspace" value={workspace} onChange={(e) => setWorkspace(e.target.value)} />
-          </div>
+          <Field label="Workspace name" required>
+            {(control) => <Input {...control} value={workspace} onChange={(e) => setWorkspace(e.target.value)} />}
+          </Field>
         </div>
       )}
       {failed && <Alert variant="danger" title="We couldn't save your setup" description="Your answers are still here. Try again." />}

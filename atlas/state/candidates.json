@@ -214,6 +214,14 @@
       "composedFrom": "not yet attempted",
       "occurrences": 0,
       "note": "Deferred from StatCard v1 (user, 2026-10-12). Chart is a full chart, so a sparkline is its own component with its own Figma design and approval; StatCard would then take it as a slot. Not built."
+    },
+    {
+      "id": "CAND-047",
+      "name": "Field label action (trailing action on the label row)",
+      "seenIn": ["packages/governance/patterns/auth.md", "Figma Pattern / Auth frame 6 (836:203)"],
+      "composedFrom": "hand-wired Label row with a link Button, and an Input with a trailing eye icon (see CAND-033 PasswordInput)",
+      "occurrences": 1,
+      "note": "Auth password step needs \"Forgot password?\" on the Field label row. Field has no slot for it, so that one field stays hand-built. Proposed by the user to review later with CAND-033. Not built; Field unchanged. 2026-10-12."
     }
   ]
 }

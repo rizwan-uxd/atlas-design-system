@@ -1,9 +1,9 @@
 import * as React from "react"
 import { Alert } from "@atlas/ui-web/compositions/Alert/Alert"
+import { Field } from "@atlas/ui-web/compositions/Field/Field"
 import { Button } from "@atlas/ui-web/primitives/Button/Button"
 import { Divider } from "@atlas/ui-web/primitives/Divider/Divider"
 import { Input } from "@atlas/ui-web/primitives/Input/Input"
-import { Label } from "@atlas/ui-web/primitives/Label/Label"
 
 type Props = {
   onRequestCode: (email: string) => Promise<void>
@@ -63,13 +63,12 @@ export function SignIn({ onRequestCode, onVerifyCode, onSocial, onSignUp }: Prop
         <Button type="button" variant="link" onClick={() => { setStep("email"); setCode(""); setCodeError(undefined) }}>
           Use a different email
         </Button>
-        <div>
-          <Label htmlFor="code" required>Code</Label>
-          <Input id="code" inputMode="numeric" autoComplete="one-time-code" value={code}
-            onChange={(e) => setCode(e.target.value)} invalid={!!codeError}
-            aria-describedby={codeError ? "code-error" : undefined} />
-          {codeError && <p id="code-error" style={{ color: "var(--atlas-danger)" }}>{codeError}</p>}
-        </div>
+        <Field label="Code" error={codeError}>
+          {(control) => (
+            <Input {...control} inputMode="numeric" autoComplete="one-time-code" value={code}
+              onChange={(e) => setCode(e.target.value)} />
+          )}
+        </Field>
         <Button type="submit" variant="primary" loading={busy}>Continue</Button>
         <Button type="button" variant="ghost" disabled={cooldown > 0} onClick={() => sendCode()}>
           {cooldown > 0 ? `Resend in ${cooldown}s` : "Resend code"}
@@ -82,13 +81,12 @@ export function SignIn({ onRequestCode, onVerifyCode, onSocial, onSignUp }: Prop
     <form onSubmit={sendCode} noValidate style={{ display: "grid", gap: "var(--atlas-spacing-4)" }}>
       <h1>Sign in</h1>
       <p style={muted}>Enter your email to continue.</p>
-      <div>
-        <Label htmlFor="email" required>Email</Label>
-        <Input id="email" type="email" autoComplete="email" value={email}
-          onChange={(e) => setEmail(e.target.value)} invalid={!!emailError}
-          aria-describedby={emailError ? "email-error" : undefined} />
-        {emailError && <p id="email-error" style={{ color: "var(--atlas-danger)" }}>{emailError}</p>}
-      </div>
+      <Field label="Email" error={emailError}>
+        {(control) => (
+          <Input {...control} type="email" autoComplete="email" value={email}
+            onChange={(e) => setEmail(e.target.value)} />
+        )}
+      </Field>
       {failed && <Alert variant="danger" title="We couldn't send the code" description="Check your connection and try again." />}
       <Button type="submit" variant="primary" loading={busy}>Continue</Button>
       <div style={{ display: "grid", gridTemplateColumns: "1fr auto 1fr", alignItems: "center", gap: "var(--atlas-spacing-3)" }}>
