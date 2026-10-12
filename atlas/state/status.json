@@ -48,6 +48,7 @@
     "DatePicker": { "parity": "match", "figmaMetadata": "description-written", "code": "spec-complete", "verifiedAt": null },
     "CodeBlock": { "parity": "match", "figmaMetadata": "description-written", "code": "spec-complete", "verifiedAt": null },
     "ScrollProgress": { "parity": "match", "figmaMetadata": "description-written", "code": "spec-complete", "verifiedAt": null },
-    "EmptyState": { "parity": "match", "figmaMetadata": "description-written", "code": "scaffolded", "verifiedAt": "2026-10-12T08:19:50.565Z" }
+    "EmptyState": { "parity": "match", "figmaMetadata": "description-written", "code": "scaffolded", "verifiedAt": "2026-10-12T08:19:50.565Z" },
+    "Field": { "parity": "match", "figmaMetadata": "description-written", "code": "spec-complete", "verifiedAt": "2026-10-12T09:55:13.756Z" }
   }
 }

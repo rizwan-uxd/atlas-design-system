@@ -1,0 +1,56 @@
+/* =================================================================
+   Atlas Field — component styles
+   Semantic tokens only. Logical properties throughout.
+   The Label carries its own block-end gap to the control; the
+   message adds the same gap below the control.
+   ================================================================= */
+
+.field {
+  display: flex;
+  flex-direction: column;
+  inline-size: 100%;
+  font-family: var(--atlas-font-sans);
+}
+
+/* The label hugs its text, as in Figma, so only the text is clickable */
+.label {
+  align-self: flex-start;
+}
+
+/* ── Messages ─────────────────────────────────────────────────── */
+
+.message {
+  margin: 0;
+  margin-block-start: var(--atlas-spacing-1_5);
+  font-size: var(--atlas-font-size-sm);
+  font-weight: var(--atlas-font-weight-regular);
+  line-height: var(--atlas-line-height-normal);
+}
+
+.field[data-size="sm"] .message {
+  font-size: var(--atlas-font-size-xs);
+}
+
+.help {
+  color: var(--atlas-foreground-muted);
+}
+
+.field[data-disabled] .help {
+  color: var(--atlas-foreground-disabled);
+}
+
+.error {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--atlas-spacing-1_5);
+  color: var(--atlas-danger);
+}
+
+.icon {
+  flex: none;
+  inline-size: var(--atlas-icon-size-xs);
+  block-size: var(--atlas-icon-size-xs);
+  stroke-width: var(--atlas-icon-stroke-xs);
+  /* centres the glyph on the first text line */
+  margin-block-start: calc((1lh - var(--atlas-icon-size-xs)) / 2);
+}
