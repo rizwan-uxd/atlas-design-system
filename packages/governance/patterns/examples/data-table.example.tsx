@@ -47,7 +47,7 @@ export function InvoiceTable({ rows, loading, onDelete }: { rows: Invoice[]; loa
       {!loading && shown.length === 0 ? (
         <div role="status" style={{ display: "grid", justifyItems: "center", gap: "var(--atlas-spacing-3)", paddingBlock: "var(--atlas-spacing-12)" }}>
           <h2 style={{ fontSize: "var(--atlas-text-h3)" }}>No results for “{query}”</h2>
-          <p style={{ color: "var(--atlas-foreground-muted)" }}>Try a different search, or clear the filters to see every invoice.</p>
+          <p style={{ fontSize: "var(--atlas-text-body-sm)", color: "var(--atlas-foreground-muted)" }}>Try a different search, or clear the filters to see every invoice.</p>
           <Button variant="outline" onClick={() => { setQuery(""); setStatus("all") }}>Clear filters</Button>
         </div>
       ) : (

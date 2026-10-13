@@ -36,6 +36,7 @@ summary: Tell the user something failed, keep their work, and give a clear way t
 ## Hierarchy and composition
 - Failure title → one-sentence cause and next step → actions. Only one Alert per failure; two simultaneous failures stack with the more severe first.
 - Keep the failed step on screen (do not navigate away to a dedicated error page unless the whole flow cannot continue).
+- Typography: Page title `--atlas-text-h1`; the failure title and cause take their type from the Alert, not from local styles. Set every heading and paragraph from `--atlas-text-*` or `--atlas-font-size-*`; never a bare `<h1>` or `<p>`.
 
 ## Responsive behavior
 - Actions wrap under the description on a phone, primary first. Never hide the alternate path behind a menu.

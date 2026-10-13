@@ -39,6 +39,7 @@
 ## Hierarchy and composition
 - The query is the largest control. Tabs scope the same query; they do not start a new search.
 - Chips sit directly above the results they describe.
+- Typography: No-results message `--atlas-text-body`, semibold; its help line `--atlas-text-body-sm` in `foreground-muted`. Set every heading and paragraph from `--atlas-text-*` or `--atlas-font-size-*`; never a bare `<h1>` or `<p>`.
 
 ## Responsive behavior
 - Phone: query on its own row, tabs scroll horizontally, filters open in a `Sheet` from one "Filters" `Button` that shows the active count.
@@ -152,8 +153,8 @@ export function SearchResults({ results, loading, error, onSearch, onRetry }: {
         <div style={{ display: "grid", gap: "var(--atlas-spacing-2)" }}><Skeleton /><Skeleton /><Skeleton /></div>
       ) : results.length === 0 ? (
         <div style={{ display: "grid", gap: "var(--atlas-spacing-3)" }}>
-          <p>No results for “{query}”.</p>
-          <p style={{ color: "var(--atlas-foreground-muted)" }}>Check the spelling, or remove a filter to widen the search.</p>
+          <p style={{ fontSize: "var(--atlas-text-body)", fontWeight: "var(--atlas-font-weight-semibold)" }}>No results for “{query}”.</p>
+          <p style={{ fontSize: "var(--atlas-text-body-sm)", color: "var(--atlas-foreground-muted)" }}>Check the spelling, or remove a filter to widen the search.</p>
           {filters.length > 0 && <Button variant="outline" onClick={() => { setFilters([]); run(query, scope, sort, []) }}>Clear filters</Button>}
         </div>
       ) : (

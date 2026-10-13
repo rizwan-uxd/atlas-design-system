@@ -40,6 +40,7 @@
 - The title states the step ("Check your email", "Enter your password"), not the brand.
 - Show the identifier the user entered on every later step so they can correct it.
 - Do not put the auth form inside a Card on a phone. Use a Card only when the form floats over a busy background.
+- Typography: Step title `--atlas-font-size-2xl`, semibold; help and legal text `--atlas-text-body-sm` in `foreground-muted`. Set every heading and paragraph from `--atlas-text-*` or `--atlas-font-size-*`; never a bare `<h1>` or `<p>`.
 
 ## Responsive behavior
 - Phone is the primary layout. The primary action is pinned to the bottom edge; with the keyboard open it moves up and stays visible above the keyboard, and the alternative methods and legal line scroll away beneath it.
@@ -121,12 +122,13 @@ export function SignIn({ onRequestCode, onVerifyCode, onSocial, onSignUp }: Prop
     if (!ok) setCodeError("The code is incorrect. Check your email or resend.")
   }
 
-  const muted = { color: "var(--atlas-foreground-muted)" }
+  const muted = { color: "var(--atlas-foreground-muted)", fontSize: "var(--atlas-text-body-sm)" }
+  const title = { fontSize: "var(--atlas-font-size-2xl)", fontWeight: "var(--atlas-font-weight-semibold)" }
 
   if (step === "code") {
     return (
       <form onSubmit={verify} noValidate style={{ display: "grid", gap: "var(--atlas-spacing-4)" }}>
-        <h1>Check your email</h1>
+        <h1 style={title}>Check your email</h1>
         <p style={muted}>We sent a 6-digit code to <strong>{email}</strong>.</p>
         <Button type="button" variant="link" onClick={() => { setStep("email"); setCode(""); setCodeError(undefined) }}>
           Use a different email
@@ -147,7 +149,7 @@ export function SignIn({ onRequestCode, onVerifyCode, onSocial, onSignUp }: Prop
 
   return (
     <form onSubmit={sendCode} noValidate style={{ display: "grid", gap: "var(--atlas-spacing-4)" }}>
-      <h1>Sign in</h1>
+      <h1 style={title}>Sign in</h1>
       <p style={muted}>Enter your email to continue.</p>
       <Field label="Email" error={emailError}>
         {(control) => (

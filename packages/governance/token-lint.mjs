@@ -11,6 +11,9 @@
  *   3. No oklch() calls (outside packages/tokens/)
  *   4. No hsl() / hsla() calls (outside packages/tokens/)
  *   5. Component tokens alias semantic tokens (the one exception is --atlas-card-filled-background-hover)
+ *   6. Pattern examples (packages/governance/patterns/examples) set token typography on every
+ *      heading (<h1>-<h6>) and paragraph (<p>): the tag carries a style whose font size is an
+ *      --atlas-text-* or --atlas-font-size-* token, inline or through a style object in the same file
  *
  * Allow-list:
  *   - Lines containing "token-lint-disable-next-line" suppress the NEXT line only.
@@ -156,6 +159,48 @@ for (const dir of SCAN_DIRS) {
           violations.push({ file: rel, line: lineNo, rule: rule.id, text: line.trim() })
         }
       }
+    }
+  }
+}
+
+// ─── Pattern examples (typography rule) ──────────────────────────────────────
+
+const EXAMPLES_DIR = path.join(ROOT, "packages/governance/patterns/examples")
+const TYPE_TOKEN = /--atlas-(?:text|font-size)-[\w-]+/
+const TEXT_TAG = /<(h[1-6]|p)(?=[\s>])([^>]*)>/g
+
+// style objects in the file whose body sets a typography token, e.g. `const title = { fontSize: "var(--atlas-text-h1)" }`
+function typedStyleNames(src) {
+  const names = new Set()
+  for (const m of src.matchAll(/(?:const|let)\s+(\w+)\s*(?::[^=]+)?=\s*\{([^}]*)\}/g)) {
+    if (TYPE_TOKEN.test(m[2])) names.add(m[1])
+  }
+  return names
+}
+
+function hasTokenTypography(attrs, typed) {
+  const style = attrs.match(/style=\{([\s\S]*)\}\s*$/)
+  if (!style) return false
+  const body = style[1]
+  if (TYPE_TOKEN.test(body)) return true
+  return [...typed].some((name) => new RegExp(`(?:^|[{\\s,.])(?:\\.\\.\\.)?${name}\\b`).test(body))
+}
+
+if (fs.existsSync(EXAMPLES_DIR)) {
+  for (const name of fs.readdirSync(EXAMPLES_DIR)) {
+    if (!/\.tsx?$/.test(name)) continue
+    const filePath = path.join(EXAMPLES_DIR, name)
+    const src = fs.readFileSync(filePath, "utf8")
+    const typed = typedStyleNames(src)
+    for (const m of src.matchAll(TEXT_TAG)) {
+      if (hasTokenTypography(m[2], typed)) continue
+      const line = src.slice(0, m.index).split("\n").length
+      violations.push({
+        file: path.relative(ROOT, filePath),
+        line,
+        rule: "pattern-example-typography",
+        text: `<${m[1]}> has no token typography; set a font size from an --atlas-text-* or --atlas-font-size-* token`,
+      })
     }
   }
 }

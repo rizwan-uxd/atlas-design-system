@@ -40,6 +40,7 @@ summary: Show a set of records in rows and columns with search, filtering, row s
 ## Hierarchy and composition
 - Page title above the toolbar. The table is one surface: no Card around it, no nested table.
 - One primary action per view, normally outside the table (for example "New invoice").
+- Typography: Page title `--atlas-text-h1`; no-results title `--atlas-text-h3`; no-results help `--atlas-text-body-sm` in `foreground-muted`. Set every heading and paragraph from `--atlas-text-*` or `--atlas-font-size-*`; never a bare `<h1>` or `<p>`.
 
 ## Responsive behavior
 - Phone: keep the table in its scroll wrapper, pin the identifying column first, hide secondary columns only if the product allows it.

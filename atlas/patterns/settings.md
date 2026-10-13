@@ -36,6 +36,7 @@
 ## Hierarchy and composition
 - Order by frequency of use: profile → notifications → appearance → account actions last.
 - The destructive trigger is a `Button variant="destructive"`, full width, last on the page.
+- Typography: Page title `--atlas-text-h1`; profile name `--atlas-text-h4`; email and row help `--atlas-text-body-sm` in `foreground-muted`. Set every heading and paragraph from `--atlas-text-*` or `--atlas-font-size-*`; never a bare `<h1>` or `<p>`.
 
 ## Responsive behavior
 - Phone: one column, full-width rows. Wider screens keep one column at the content width; do not spread rows into a grid.
@@ -91,7 +92,7 @@ export function SettingsScreen({ onSignOut, onSave, hasPhone }: {
         <Avatar size="lg" initials="AR" alt="" />
         <div>
           <p style={{ fontSize: "var(--atlas-text-h4)" }}>Alex Rivera</p>
-          <p style={{ color: "var(--atlas-foreground-muted)" }}>alex@example.com</p>
+          <p style={{ fontSize: "var(--atlas-text-body-sm)", color: "var(--atlas-foreground-muted)" }}>alex@example.com</p>
         </div>
       </div>
       <Card variant="outlined">

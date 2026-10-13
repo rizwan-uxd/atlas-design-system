@@ -32,7 +32,7 @@ export function SettingsScreen({ onSignOut, onSave, hasPhone }: {
         <Avatar size="lg" initials="AR" alt="" />
         <div>
           <p style={{ fontSize: "var(--atlas-text-h4)" }}>Alex Rivera</p>
-          <p style={{ color: "var(--atlas-foreground-muted)" }}>alex@example.com</p>
+          <p style={{ fontSize: "var(--atlas-text-body-sm)", color: "var(--atlas-foreground-muted)" }}>alex@example.com</p>
         </div>
       </div>
       <Card variant="outlined">

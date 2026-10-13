@@ -35,7 +35,7 @@ export function UsageDashboard({ kpis, series, pages, loading, error, range, onR
     return (
       <div role="status" style={{ display: "grid", justifyItems: "center", textAlign: "center", gap: "var(--atlas-spacing-3)", paddingBlock: "var(--atlas-spacing-12)" }}>
         <h2 style={{ fontSize: "var(--atlas-text-h3)" }}>No data yet</h2>
-        <p style={{ color: "var(--atlas-foreground-muted)" }}>Connect a data source to see visitors, revenue and activity here.</p>
+        <p style={{ fontSize: "var(--atlas-text-body-sm)", color: "var(--atlas-foreground-muted)" }}>Connect a data source to see visitors, revenue and activity here.</p>
         <Button variant="primary" onClick={onConnect}>Connect a data source</Button>
       </div>
     )

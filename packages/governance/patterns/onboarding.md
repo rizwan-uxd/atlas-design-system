@@ -43,6 +43,7 @@ summary: Get a new user from first sign-in to a working account with a short set
 - Step title is a question the user can answer ("How will you use the product?"), help text states why it is asked.
 - Progress sits above the title. Primary action last; Back and Skip on the same row as ghost.
 - The checklist leads with the task that gives value fastest, not a settings task.
+- Typography: Step title `--atlas-font-size-2xl`, semibold; help text `--atlas-text-body-sm` in `foreground-muted`. Set every heading and paragraph from `--atlas-text-*` or `--atlas-font-size-*`; never a bare `<h1>` or `<p>`.
 
 ## Responsive behavior
 - Phone is the primary layout. Single column; the primary action is pinned to the bottom edge with Back and Skip as a row of ghost Buttons below it. Cards stack. Checklist rows keep the action visible; do not hide it in a menu.

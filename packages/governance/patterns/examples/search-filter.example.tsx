@@ -89,8 +89,8 @@ export function SearchResults({ results, loading, error, onSearch, onRetry }: {
         <div style={{ display: "grid", gap: "var(--atlas-spacing-2)" }}><Skeleton /><Skeleton /><Skeleton /></div>
       ) : results.length === 0 ? (
         <div style={{ display: "grid", gap: "var(--atlas-spacing-3)" }}>
-          <p>No results for “{query}”.</p>
-          <p style={{ color: "var(--atlas-foreground-muted)" }}>Check the spelling, or remove a filter to widen the search.</p>
+          <p style={{ fontSize: "var(--atlas-text-body)", fontWeight: "var(--atlas-font-weight-semibold)" }}>No results for “{query}”.</p>
+          <p style={{ fontSize: "var(--atlas-text-body-sm)", color: "var(--atlas-foreground-muted)" }}>Check the spelling, or remove a filter to widen the search.</p>
           {filters.length > 0 && <Button variant="outline" onClick={() => { setFilters([]); run(query, scope, sort, []) }}>Clear filters</Button>}
         </div>
       ) : (

@@ -39,6 +39,7 @@
 ## Hierarchy and composition
 - Page title above the toolbar. The table is one surface: no Card around it, no nested table.
 - One primary action per view, normally outside the table (for example "New invoice").
+- Typography: Page title `--atlas-text-h1`; no-results title `--atlas-text-h3`; no-results help `--atlas-text-body-sm` in `foreground-muted`. Set every heading and paragraph from `--atlas-text-*` or `--atlas-font-size-*`; never a bare `<h1>` or `<p>`.
 
 ## Responsive behavior
 - Phone: keep the table in its scroll wrapper, pin the identifying column first, hide secondary columns only if the product allows it.
@@ -115,7 +116,7 @@ export function InvoiceTable({ rows, loading, onDelete }: { rows: Invoice[]; loa
       {!loading && shown.length === 0 ? (
         <div role="status" style={{ display: "grid", justifyItems: "center", gap: "var(--atlas-spacing-3)", paddingBlock: "var(--atlas-spacing-12)" }}>
           <h2 style={{ fontSize: "var(--atlas-text-h3)" }}>No results for “{query}”</h2>
-          <p style={{ color: "var(--atlas-foreground-muted)" }}>Try a different search, or clear the filters to see every invoice.</p>
+          <p style={{ fontSize: "var(--atlas-text-body-sm)", color: "var(--atlas-foreground-muted)" }}>Try a different search, or clear the filters to see every invoice.</p>
           <Button variant="outline" onClick={() => { setQuery(""); setStatus("all") }}>Clear filters</Button>
         </div>
       ) : (

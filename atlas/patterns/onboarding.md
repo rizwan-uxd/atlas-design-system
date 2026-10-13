@@ -42,6 +42,7 @@
 - Step title is a question the user can answer ("How will you use the product?"), help text states why it is asked.
 - Progress sits above the title. Primary action last; Back and Skip on the same row as ghost.
 - The checklist leads with the task that gives value fastest, not a settings task.
+- Typography: Step title `--atlas-font-size-2xl`, semibold; help text `--atlas-text-body-sm` in `foreground-muted`. Set every heading and paragraph from `--atlas-text-*` or `--atlas-font-size-*`; never a bare `<h1>` or `<p>`.
 
 ## Responsive behavior
 - Phone is the primary layout. Single column; the primary action is pinned to the bottom edge with Back and Skip as a row of ghost Buttons below it. Cards stack. Checklist rows keep the action visible; do not hide it in a menu.
@@ -79,6 +80,9 @@ import { RadioGroup, RadioGroupItem } from "@atlas/ui-web/primitives/RadioGroup/
 
 type Setup = { useCase: string; workspace: string; teammate: string }
 
+const title = { fontSize: "var(--atlas-font-size-2xl)", fontWeight: "var(--atlas-font-weight-semibold)" }
+const help = { fontSize: "var(--atlas-text-body-sm)", color: "var(--atlas-foreground-muted)" }
+
 export function SetupFlow({ onFinish }: { onFinish: (v: Setup) => Promise<void> }) {
   const [step, setStep] = React.useState(0)
   const [useCase, setUseCase] = React.useState("")
@@ -106,8 +110,8 @@ export function SetupFlow({ onFinish }: { onFinish: (v: Setup) => Promise<void> 
   if (complete) {
     return (
       <div role="status" style={{ display: "grid", gap: "var(--atlas-spacing-4)" }}>
-        <h1>You're all set</h1>
-        <p style={{ color: "var(--atlas-foreground-muted)" }}>Your workspace is ready. Your answers are saved.</p>
+        <h1 style={title}>You're all set</h1>
+        <p style={help}>Your workspace is ready. Your answers are saved.</p>
         <Button variant="primary">Go to home</Button>
       </div>
     )
@@ -118,8 +122,8 @@ export function SetupFlow({ onFinish }: { onFinish: (v: Setup) => Promise<void> 
       <Progress value={step + 1} max={total} label="Setup" valueLabel={`Step ${step + 1} of ${total}`} />
       {step === 0 ? (
         <div style={{ display: "grid", gap: "var(--atlas-spacing-4)" }}>
-          <h1>How will you use the product?</h1>
-          <p style={{ color: "var(--atlas-foreground-muted)" }}>We use this to set up your first screen.</p>
+          <h1 style={title}>How will you use the product?</h1>
+          <p style={help}>We use this to set up your first screen.</p>
           <RadioGroup variant="card" aria-label="How you will use the product" value={useCase} onValueChange={setUseCase}>
             <RadioGroupItem value="team" label="For my team" description="Share docs and projects" />
             <RadioGroupItem value="personal" label="For personal use" description="Notes and tasks for you" />
@@ -128,16 +132,16 @@ export function SetupFlow({ onFinish }: { onFinish: (v: Setup) => Promise<void> 
         </div>
       ) : step === 2 ? (
         <div style={{ display: "grid", gap: "var(--atlas-spacing-4)" }}>
-          <h1>Invite your team</h1>
-          <p style={{ color: "var(--atlas-foreground-muted)" }}>You can also do this later.</p>
+          <h1 style={title}>Invite your team</h1>
+          <p style={help}>You can also do this later.</p>
           <Field label="Teammate email" optional>
             {(control) => <Input {...control} type="email" inputMode="email" value={teammate} onChange={(e) => setTeammate(e.target.value)} />}
           </Field>
         </div>
       ) : (
         <div style={{ display: "grid", gap: "var(--atlas-spacing-4)" }}>
-          <h1>Name your workspace</h1>
-          <p style={{ color: "var(--atlas-foreground-muted)" }}>This is what your teammates will see.</p>
+          <h1 style={title}>Name your workspace</h1>
+          <p style={help}>This is what your teammates will see.</p>
           <Field label="Workspace name" required>
             {(control) => <Input {...control} value={workspace} onChange={(e) => setWorkspace(e.target.value)} />}
           </Field>
