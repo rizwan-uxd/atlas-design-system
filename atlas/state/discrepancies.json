@@ -1024,10 +1024,11 @@
     {
       "id": "DISC-084",
       "component": "DatePicker",
-      "side": "code",
-      "status": "open",
+      "side": "closed",
+      "status": "closed",
       "issue": "atlas/metadata/DatePicker.json shows \"props\": [] for the DatePicker root and atlas/DatePicker.md's API block shows \"no own props\", even though DatePickerProps has real fields (value, defaultValue, onValueChange, min, max, disabled, name, required). Cause: scripts/atlas-sync.mjs's props() extractor only matches `export interface <Name>Props { ... }`; DatePickerProps is `export type DatePickerProps = (DatePickerSingleProps | DatePickerRangeProps) & { ... }` — a discriminated union, needed so mode=\"single\" vs mode=\"range\" each get their own correctly-typed value/onValueChange shape (single Date vs [Date, Date] tuple) instead of one loosely-typed union that would let a caller pass a range pair in single mode. DatePickerTrigger and DatePickerContent are plain interfaces and extract correctly; only the root is affected.",
-      "resolution": "Either (a) extend scripts/atlas-sync.mjs's props() to also parse `export type <Name>Props = (A | B) & C` by extracting C's trailing object-literal members (the common/always-present fields; A/B's mode-specific fields would still need a second extraction pass or manual documentation), or (b) accept the metadata gap and keep the prose PROPERTIES section in atlas/DatePicker.md as the source of truth for the root's props. Not fixed in this task — flagged for a maintenance task since scripts/atlas-sync.mjs is outside atlas-component's normal edit scope."
+      "resolution": "Closed 2026-10-11: scripts/atlas-sync.mjs props() now also reads `export type <Name>Props = (A | B) & { ... }`. The union arms are merged (a prop in every arm keeps its type, differing types are joined with `|`, a prop absent from an arm or optional in one becomes optional), then the intersected object literal is appended. DatePicker's root now lists mode, value, defaultValue, onValueChange, min, max, disabled, name, required and children. Covered by a new test in scripts/tests/atlas-sync.test.mjs, written first and red before the change; a second sync writes 0 files and no other component's generated output changed.",
+      "date": "2026-10-11"
     },
     {
       "id": "DISC-085",

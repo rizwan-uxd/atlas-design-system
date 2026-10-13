@@ -41,7 +41,16 @@ import { DatePicker, DatePickerTrigger, DatePickerInput, DatePickerNaturalInput,
 
 **DatePicker**
 - ref: not forwarded — `ref` does not type-check; reach the element by `id`
-- no own props
+- `mode?: "single" | "range"`
+- `value?: Date | DatePickerRange`
+- `defaultValue?: Date | DatePickerRange`
+- `onValueChange?: ((date: Date | undefined) => void) | ((range: DatePickerRange) => void)`
+- `min?: Date`
+- `max?: Date`
+- `disabled?: boolean`
+- `name?: string`
+- `required?: boolean`
+- `children?: React.ReactNode`
 
 **DatePickerTrigger**
 - ref: forwarded

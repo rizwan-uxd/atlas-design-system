@@ -124,23 +124,24 @@ function union(src, typeName) {
   return values.length ? values : null
 }
 
-/** own members of `export interface XProps { ... }` (comments stripped) */
-function props(src, typeName) {
-  const start = src.indexOf(`export interface ${typeName}`)
-  if (start === -1) return []
-  const open = src.indexOf("{", start)
-  let depth = 0, end = open
+/** index just past the `}` that closes the `{` at `open` */
+function closeBrace(src, open) {
+  let depth = 0
   for (let i = open; i < src.length; i++) {
     if (src[i] === "{") depth++
-    else if (src[i] === "}") { depth--; if (depth === 0) { end = i; break } }
+    else if (src[i] === "}") { depth--; if (depth === 0) return i + 1 }
   }
-  const body = src
-    .slice(open + 1, end)
+  return src.length
+}
+
+/** members of an interface or object-type body, one per line: `name?: type` (comments stripped) */
+function members(body) {
+  const clean = body
     .replace(/\/\*\*[\s\S]*?\*\//g, "")   // jsdoc
     .replace(/\/\/[^\n]*/g, "")           // line comments
   const out = []
-  // one member per line: `name?: type` — types here never span lines in this repo
-  for (const line of body.split("\n")) {
+  // types here never span lines in this repo
+  for (const line of clean.split("\n")) {
     const m = line.match(/^\s*(["']?[a-zA-Z][\w-]*["']?)(\?)?\s*:\s*(.+?)\s*$/)
     if (!m) continue
     const type = m[3].replace(/[;,]\s*$/, "").trim()
@@ -148,6 +149,72 @@ function props(src, typeName) {
     out.push({ name: m[1].replace(/["']/g, ""), required: !m[2], type })
   }
   return out
+}
+
+/** members of `interface Name { ... }`, exported or not; null when there is no such interface */
+function interfaceMembers(src, name) {
+  const at = src.search(new RegExp(`(?:export\\s+)?interface\\s+${name}\\b`))
+  if (at === -1) return null
+  const open = src.indexOf("{", at)
+  return members(src.slice(open + 1, closeBrace(src, open) - 1))
+}
+
+/** a prop that is the same in every arm of a union keeps its type; differing types are joined with `|` */
+function mergeArms(arms) {
+  const byName = new Map()
+  for (const arm of arms) {
+    for (const p of arm) {
+      const seen = byName.get(p.name) ?? { name: p.name, required: true, types: [], count: 0 }
+      seen.required = seen.required && p.required
+      if (!seen.types.includes(p.type)) seen.types.push(p.type)
+      seen.count++
+      byName.set(p.name, seen)
+    }
+  }
+  return [...byName.values()].map((p) => ({
+    name: p.name,
+    required: p.required && p.count === arms.length,   // absent from an arm → optional overall
+    type: p.types.length === 1 ? p.types[0] : p.types.map((t) => (t.includes("=>") ? `(${t})` : t)).join(" | "),
+  }))
+}
+
+/** members of `export type XProps = (A | B) & { ... }`: the union arms merged, then the intersected parts */
+function aliasMembers(src, typeName) {
+  const m = src.match(new RegExp(`export type ${typeName}\\s*=`))
+  if (!m) return []
+  const from = m.index + m[0].length
+  let end = src.length, depth = 0
+  for (let i = from; i < src.length; i++) {
+    const ch = src[i]
+    if (ch === "{") depth++
+    else if (ch === "}") {
+      depth--
+      if (depth === 0 && !/^\s*[&|]/.test(src.slice(i + 1))) { end = i + 1; break }
+    } else if (depth === 0 && (ch === ";" || (ch === "\n" && src[i + 1] === "\n"))) { end = i; break }
+  }
+  const rhs = src.slice(from, end)
+  // split into `{...}` literals and the text around them
+  const literals = []
+  let outside = "", at = 0
+  for (let i = rhs.indexOf("{"); i !== -1; i = rhs.indexOf("{", at)) {
+    const stop = closeBrace(rhs, i)
+    outside += rhs.slice(at, i)
+    literals.push(members(rhs.slice(i + 1, stop - 1)))
+    at = stop
+  }
+  outside += rhs.slice(at)
+  const group = outside.match(/\(([^()]*\|[^()]*)\)/)
+  const ids = (text) => [...text.matchAll(/\b[A-Z]\w*\b/g)].map((x) => x[0])
+  const resolve = (names) => names.map((n) => interfaceMembers(src, n)).filter(Boolean)
+  const arms = group ? mergeArms(resolve(ids(group[1]))) : []
+  const parts = resolve(ids(group ? outside.replace(group[0], "") : outside)).flat()
+  const seen = new Set()
+  return [...arms, ...parts, ...literals.flat()].filter((p) => !seen.has(p.name) && seen.add(p.name))
+}
+
+/** own members of `export interface XProps { ... }` or of `export type XProps = (A | B) & { ... }` */
+function props(src, typeName) {
+  return interfaceMembers(src, typeName) ?? aliasMembers(src, typeName)
 }
 
 /** native element a Props interface extends, e.g. `button (omits size)` — null when it extends nothing */
