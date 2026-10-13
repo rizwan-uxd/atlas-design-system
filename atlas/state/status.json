@@ -26,6 +26,7 @@
     "Avatar": { "parity": "match", "figmaMetadata": "description-written", "code": "spec-complete", "verifiedAt": null },
     "Breadcrumb": { "parity": "match", "figmaMetadata": "description-written", "code": "spec-complete", "verifiedAt": null },
     "Pagination": { "parity": "match", "figmaMetadata": "description-written", "code": "scaffolded", "verifiedAt": "2026-10-13T08:59:52.560Z" },
+    "PasswordInput": { "parity": "match", "figmaMetadata": "description-written", "code": "scaffolded", "verifiedAt": "2026-10-13T09:20:21.501Z" },
     "Divider": { "parity": "match", "figmaMetadata": "description-written", "code": "spec-complete", "verifiedAt": null },
     "ListItem": { "parity": "match", "figmaMetadata": "description-written", "code": "spec-complete", "verifiedAt": null },
     "DropdownMenu": { "parity": "match", "figmaMetadata": "description-written", "code": "spec-complete", "verifiedAt": null },
