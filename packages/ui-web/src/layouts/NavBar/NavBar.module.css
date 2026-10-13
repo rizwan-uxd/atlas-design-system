@@ -99,12 +99,16 @@
 /* ── Brand ────────────────────────────────────────────────────── */
 
 .brand {
-  font-size: var(--atlas-text-h4);
-  font-weight: var(--atlas-font-weight-bold);
+  font-size: var(--atlas-font-size-lg); /* Figma: 18 at md and lg */
+  font-weight: var(--atlas-font-weight-semibold); /* Figma: SemiBold */
   color: var(--atlas-foreground);
   text-decoration: none;
   white-space: nowrap;
   flex-shrink: 0;
+}
+
+.sm .brand {
+  font-size: var(--atlas-text-h4); /* Figma: 16 at sm */
 }
 
 /* ── Breadcrumb slot (dashboard mode) ────────────────────────── */
@@ -141,6 +145,10 @@
 }
 
 /* ── Link ─────────────────────────────────────────────────────── */
+
+.lg .link {
+  font-size: var(--atlas-text-body); /* Figma: 16 at lg */
+}
 
 .link {
   display: inline-flex;
@@ -314,7 +322,7 @@
 .navbarHidden {
   transform: translateY(-100%);
   transition:
-    transform            var(--atlas-duration-normal) var(--atlas-easing-standard),
+    transform            var(--atlas-duration-base)   var(--atlas-easing-standard),
     background-color     var(--atlas-duration-fast)   var(--atlas-easing-standard),
     box-shadow           var(--atlas-duration-fast)   var(--atlas-easing-standard),
     border-color         var(--atlas-duration-fast)   var(--atlas-easing-standard);

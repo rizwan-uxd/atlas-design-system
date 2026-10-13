@@ -20,6 +20,7 @@
   width: 100%;
   box-sizing: border-box;
   font-family: var(--atlas-font-sans);
+  line-height: var(--atlas-line-height-normal); /* Figma: 150% for multi-line text */
   color: var(--atlas-textarea-foreground);
   background-color: var(--atlas-textarea-background);
   border: var(--atlas-border-width-1) solid var(--atlas-textarea-border);

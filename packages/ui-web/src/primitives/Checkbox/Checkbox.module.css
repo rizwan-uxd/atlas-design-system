@@ -208,7 +208,7 @@
 
 .label {
   font-family: var(--atlas-font-sans);
-  font-weight: var(--atlas-font-weight-medium);
+  font-weight: var(--atlas-font-weight-semibold); /* Figma: SemiBold label */
   color: var(--atlas-checkbox-label-foreground);
   line-height: var(--atlas-line-height-normal);
   cursor: pointer;
