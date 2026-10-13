@@ -14,7 +14,7 @@
 ## Decision rules
 - Identifier-first. Step 1 asks for one email (or phone) and shows one primary `Button` "Continue". Do not show the password field until the account is known. Why: Uber, Notion, Linear and Claude all lead with one identifier field.
 - Social and SSO choices (Google, Apple, passkey) go below the primary action, after an "or" divider made of two `Divider`s around the word. Each is `Button variant="outline"` with the provider name in the label ("Continue with Google"). Why: Notion, Uber, Perplexity.
-- Prefer a code or magic link over a password. Offer password only as a secondary path (`Button variant="ghost"` "Use a password instead"). A password `Input` gets a visible show/hide control and a "Forgot password?" `Button variant="link"` on the label row. `Field` has no label-row action slot yet, so this is the one field that keeps a hand-wired `Label` row and `Input` (candidate: a `Field` label action plus a `PasswordInput`); wrong password still shows its message in text under the control, wired with `aria-describedby`. Why: Linear and Claude are passwordless; Descript, Amazon and Uber keep password as a fallback.
+- Prefer a code or magic link over a password. Offer password only as a secondary path (`Button variant="ghost"` "Use a password instead"). The password step is a `Field` with a `PasswordInput` (its show/hide toggle is built in) and a "Forgot password?" `Button variant="link" size="xs"` passed as `labelAction`. Use `autoComplete="current-password"` and no strength meter on sign-in (`showStrength` and `new-password` belong on create-account). A wrong password shows its message in the Field error text, wired with `aria-describedby`. Why: Linear and Claude are passwordless; Descript, Amazon and Uber keep password as a fallback.
 - Code step: say where the code was sent and show that address, with a "Use a different email" `Button variant="link"`. One `Input` with `inputMode="numeric"` and `autoComplete="one-time-code"`. Do not split the code into per-digit boxes until Atlas has an OTP component (see candidates).
 - Resend: a `Button variant="ghost"` that is disabled with a live countdown ("Resend in 30s") and re-enables at 0. Why: Notion ("Resend in 16s") and Wise ("Resend email 0:59").
 - Every email and code field is a `Field`: it renders the `Label`, the control and the error text and wires them together. Wrong or expired code, or a malformed email → pass the message as `error` on the `Field` (it sets `invalid` on the Label and control and links the text with `aria-describedby`), and keep the entered value. Say what to do ("The code is incorrect. Check your email or resend."). Never an `Alert` per field error.
@@ -24,9 +24,10 @@
 
 ## Components and variants
 - `Field` size: `md`
-- `Label` variant: `default` · size: `md` (inside Field; the password row with its "Forgot password?" action is hand-wired)
+- `Label` variant: `default` · size: `md` (inside Field)
 - `Input` variant: `default` · size: `md`
-- `Button` variant: `primary`, `outline`, `ghost`, `link` · size: `md`
+- `PasswordInput` size: `md` · no strength meter on sign-in
+- `Button` variant: `primary`, `outline`, `ghost`, `link` · size: `md` (`xs` for the Field label action)
 - `Divider`
 - `Alert` variant: `danger` · size: `md`
 - `Checkbox` variant: `default` · size: `md`
@@ -70,6 +71,7 @@
 import * as React from "react"
 import { Alert } from "@atlas/ui-web/compositions/Alert/Alert"
 import { Field } from "@atlas/ui-web/compositions/Field/Field"
+import { PasswordInput } from "@atlas/ui-web/compositions/PasswordInput/PasswordInput"
 import { Button } from "@atlas/ui-web/primitives/Button/Button"
 import { Divider } from "@atlas/ui-web/primitives/Divider/Divider"
 import { Input } from "@atlas/ui-web/primitives/Input/Input"
@@ -79,12 +81,16 @@ type Props = {
   onVerifyCode: (email: string, code: string) => Promise<boolean>
   onSocial: (provider: "google" | "apple" | "passkey") => void
   onSignUp: () => void
+  onVerifyPassword: (email: string, password: string) => Promise<boolean>
+  onForgotPassword: (email: string) => void
 }
 
-export function SignIn({ onRequestCode, onVerifyCode, onSocial, onSignUp }: Props) {
-  const [step, setStep] = React.useState<"email" | "code">("email")
+export function SignIn({ onRequestCode, onVerifyCode, onSocial, onSignUp, onVerifyPassword, onForgotPassword }: Props) {
+  const [step, setStep] = React.useState<"email" | "code" | "password">("email")
   const [email, setEmail] = React.useState("")
   const [code, setCode] = React.useState("")
+  const [password, setPassword] = React.useState("")
+  const [passwordError, setPasswordError] = React.useState<string>()
   const [emailError, setEmailError] = React.useState<string>()
   const [codeError, setCodeError] = React.useState<string>()
   const [failed, setFailed] = React.useState(false)
@@ -97,10 +103,15 @@ export function SignIn({ onRequestCode, onVerifyCode, onSocial, onSignUp }: Prop
     return () => window.clearTimeout(t)
   }, [cooldown])
 
+  function emailValid() {
+    if (/^\S+@\S+\.\S+$/.test(email)) { setEmailError(undefined); return true }
+    setEmailError("Enter a valid email address.")
+    return false
+  }
+
   async function sendCode(e?: React.FormEvent) {
     e?.preventDefault()
-    if (!/^\S+@\S+\.\S+$/.test(email)) return setEmailError("Enter a valid email address.")
-    setEmailError(undefined)
+    if (!emailValid()) return
     setBusy(true)
     setFailed(false)
     try {
@@ -122,8 +133,39 @@ export function SignIn({ onRequestCode, onVerifyCode, onSocial, onSignUp }: Prop
     if (!ok) setCodeError("The code is incorrect. Check your email or resend.")
   }
 
+  async function verifyPassword(e: React.FormEvent) {
+    e.preventDefault()
+    setBusy(true)
+    const ok = await onVerifyPassword(email, password)
+    setBusy(false)
+    if (!ok) setPasswordError("The password is incorrect. Try again or reset it.")
+  }
+
   const muted = { color: "var(--atlas-foreground-muted)", fontSize: "var(--atlas-text-body-sm)" }
   const title = { fontSize: "var(--atlas-font-size-2xl)", fontWeight: "var(--atlas-font-weight-semibold)" }
+
+  if (step === "password") {
+    return (
+      <form onSubmit={verifyPassword} noValidate style={{ display: "grid", gap: "var(--atlas-spacing-4)" }}>
+        <h1 style={title}>Enter your password</h1>
+        <p style={muted}>Signing in as <strong>{email}</strong>.</p>
+        <Button type="button" variant="link" onClick={() => { setStep("email"); setPassword(""); setPasswordError(undefined) }}>
+          Use a different email
+        </Button>
+        <Field
+          label="Password"
+          error={passwordError}
+          labelAction={<Button type="button" variant="link" size="xs" onClick={() => onForgotPassword(email)}>Forgot password?</Button>}
+        >
+          {(control) => (
+            <PasswordInput {...control} autoComplete="current-password" value={password}
+              onChange={(e) => setPassword(e.target.value)} />
+          )}
+        </Field>
+        <Button type="submit" variant="primary" loading={busy}>Continue</Button>
+      </form>
+    )
+  }
 
   if (step === "code") {
     return (
@@ -167,6 +209,7 @@ export function SignIn({ onRequestCode, onVerifyCode, onSocial, onSignUp }: Prop
       <Button type="button" variant="outline" onClick={() => onSocial("google")}>Continue with Google</Button>
       <Button type="button" variant="outline" onClick={() => onSocial("apple")}>Continue with Apple</Button>
       <Button type="button" variant="outline" onClick={() => onSocial("passkey")}>Continue with a passkey</Button>
+      <Button type="button" variant="ghost" onClick={() => emailValid() && setStep("password")}>Use a password instead</Button>
       <p style={{ ...muted, textAlign: "center" }}>By continuing you agree to the Terms and Privacy Policy.</p>
       <p style={{ ...muted, textAlign: "center" }}>
         Don't have an account? <Button type="button" variant="link" onClick={onSignUp}>Sign up</Button>
