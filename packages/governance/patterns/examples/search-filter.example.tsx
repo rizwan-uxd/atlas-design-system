@@ -47,7 +47,7 @@ export function SearchResults({ results, loading, error, onSearch, onRetry }: {
       </TabsRoot>
 
       <div style={{ display: "flex", gap: "var(--atlas-spacing-3)", alignItems: "center", justifyContent: "space-between" }}>
-        <span aria-live="polite">{loading ? "Searching…" : `${results.length} results`}</span>
+        <span aria-live="polite" style={{ whiteSpace: "nowrap" }}>{loading ? "Searching…" : `${results.length} results`}</span>
         <Select value={sort} onValueChange={(v) => { setSort(v); run(query, scope, v) }}>
           <SelectTrigger aria-label="Sort by"><SelectValue /></SelectTrigger>
           <SelectContent>
