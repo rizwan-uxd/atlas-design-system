@@ -2,6 +2,7 @@
 
 import { useRef, useState, type ReactNode } from "react"
 import Link from "next/link"
+import { ArrowLeft } from "lucide-react"
 import { AnimatedIcon } from "@atlas/ui-web/animated-icons"
 import { usePrefersReducedMotion } from "@atlas/ui-web/motion"
 import type { AnimatedIconProps } from "@atlas/ui-web/animated-icons"
@@ -569,7 +570,7 @@ const sections: Section[] = [
         stateExplained: "A modal layer is now active / dismissed",
         useCase: "Modal",
         trigger: "open, close",
-        motion: "fade + scale 0.98 → 1, emphasized / exit easing",
+        motion: "fade + scale 0.98 to 1, emphasized / exit easing",
         a11y: "Focus trap and return focus are unaffected; exit must not delay focus return.",
         decision: "adapt",
         status: "n/a",
@@ -613,8 +614,8 @@ const sections: Section[] = [
       },
       {
         name: "Text swap on state change",
-        stateExplained: "Save → Saved",
-        useCase: "Button label: Save → Saved",
+        stateExplained: "Save, then Saved",
+        useCase: "Button label: Save, then Saved",
         trigger: "success",
         motion: "cross-fade",
         a11y: "Announce via live region; label width must not jump.",
@@ -712,7 +713,7 @@ const sections: Section[] = [
         useCase: "Stroke draw for completion",
         stateExplained: "Completed (draw once); loop only while work runs",
         trigger: "success, load",
-        motion: "pathLength 0→1, or 1→0→1",
+        motion: "pathLength 0 to 1, or 1 to 0 to 1",
         a11y: "Loop variant must stop when work ends; static end state under reduced motion.",
         decision: "adapt",
         status: "n/a",
@@ -1086,9 +1087,10 @@ export default function MotionCanvasPage() {
         <header>
           <Link
             href="/"
-            style={{ fontSize: "var(--atlas-font-size-sm)", color: "var(--atlas-foreground-muted)", textDecoration: "none" }}
+            style={{ display: "inline-flex", alignItems: "center", gap: "var(--atlas-spacing-1)", fontSize: "var(--atlas-font-size-sm)", color: "var(--atlas-foreground-muted)", textDecoration: "none" }}
           >
-            ← Sandbox
+            <ArrowLeft size={16} aria-hidden="true" />
+            Sandbox
           </Link>
           <h1 style={{ margin: "var(--atlas-spacing-3) 0 var(--atlas-spacing-2)", fontSize: "var(--atlas-font-size-3xl)", fontWeight: 700 }}>
             Motion Canvas

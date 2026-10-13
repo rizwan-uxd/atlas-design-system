@@ -14,16 +14,17 @@
 ## Decision rules
 - Identifier-first. Step 1 asks for one email (or phone) and shows one primary `Button` "Continue". Do not show the password field until the account is known. Why: Uber, Notion, Linear and Claude all lead with one identifier field.
 - Social and SSO choices (Google, Apple, passkey) go below the primary action, after an "or" divider made of two `Divider`s around the word. Each is `Button variant="outline"` with the provider name in the label ("Continue with Google"). Why: Notion, Uber, Perplexity.
-- Prefer a code or magic link over a password. Offer password only as a secondary path (`Button variant="ghost"` "Use a password instead"). A password `Input` gets a visible show/hide control and a "Forgot password?" `Button variant="link"` on the label row. Why: Linear and Claude are passwordless; Descript, Amazon and Uber keep password as a fallback.
+- Prefer a code or magic link over a password. Offer password only as a secondary path (`Button variant="ghost"` "Use a password instead"). A password `Input` gets a visible show/hide control and a "Forgot password?" `Button variant="link"` on the label row. `Field` has no label-row action slot yet, so this is the one field that keeps a hand-wired `Label` row and `Input` (candidate: a `Field` label action plus a `PasswordInput`); wrong password still shows its message in text under the control, wired with `aria-describedby`. Why: Linear and Claude are passwordless; Descript, Amazon and Uber keep password as a fallback.
 - Code step: say where the code was sent and show that address, with a "Use a different email" `Button variant="link"`. One `Input` with `inputMode="numeric"` and `autoComplete="one-time-code"`. Do not split the code into per-digit boxes until Atlas has an OTP component (see candidates).
 - Resend: a `Button variant="ghost"` that is disabled with a live countdown ("Resend in 30s") and re-enables at 0. Why: Notion ("Resend in 16s") and Wise ("Resend email 0:59").
-- Wrong or expired code, or wrong password → `invalid` on the control, the message in text under it wired with `aria-describedby`, and the entered value kept. Say what to do ("The code is incorrect. Check your email or resend."). Never an `Alert` per field error.
+- Every email and code field is a `Field`: it renders the `Label`, the control and the error text and wires them together. Wrong or expired code, or a malformed email → pass the message as `error` on the `Field` (it sets `invalid` on the Label and control and links the text with `aria-describedby`), and keep the entered value. Say what to do ("The code is incorrect. Check your email or resend."). Never an `Alert` per field error.
 - Account blocked or request failed server-side → one `Alert variant="danger"` above the action, or an `AlertDialog` with a single action when the user must pick another route. Why: Uber ("Choose another option").
 - Terms and privacy are one line of muted text under the actions, not a checkbox, unless law requires explicit consent (then `Checkbox` with `required`).
 - Cross-link the opposite flow in one line ("Don't have an account? Sign up"). Use `Button variant="link"`.
 
 ## Components and variants
-- `Label` variant: `default` · size: `md`
+- `Field` size: `md`
+- `Label` variant: `default` · size: `md` (inside Field; the password row with its "Forgot password?" action is hand-wired)
 - `Input` variant: `default` · size: `md`
 - `Button` variant: `primary`, `outline`, `ghost`, `link` · size: `md`
 - `Divider`
@@ -39,6 +40,7 @@
 - The title states the step ("Check your email", "Enter your password"), not the brand.
 - Show the identifier the user entered on every later step so they can correct it.
 - Do not put the auth form inside a Card on a phone. Use a Card only when the form floats over a busy background.
+- Typography: Step title `--atlas-font-size-2xl`, semibold; help and legal text `--atlas-text-body-sm` in `foreground-muted`. Set every heading and paragraph from `--atlas-text-*` or `--atlas-font-size-*`; never a bare `<h1>` or `<p>`.
 
 ## Responsive behavior
 - Phone is the primary layout. The primary action is pinned to the bottom edge; with the keyboard open it moves up and stays visible above the keyboard, and the alternative methods and legal line scroll away beneath it.
@@ -50,7 +52,7 @@
 - success: move straight to the destination; do not show a "success" screen.
 
 ## Accessibility
-- Every control has a `Label` with `htmlFor`. The code field sets `autoComplete="one-time-code"` so the OS can fill it.
+- Every control has a visible `Label` (a `Field` supplies it and its `htmlFor`). The code field sets `autoComplete="one-time-code"` so the OS can fill it.
 - On a failed submit move focus to the first invalid field. Announce the resend countdown result politely, not every second.
 - Show/hide password is a real button with an accessible name and `aria-pressed`. Do not block paste in any field.
 - Error text is referenced with `aria-describedby`, never conveyed by colour alone.
@@ -58,6 +60,7 @@
 ## Anti-patterns
 - Asking for email and password on the first screen when a code or passkey is available.
 - Per-field `Alert`s, red borders with no text, or clearing the user's input after an error.
+- Hand-wiring `Label` + `Input` + an error paragraph for an email or code field instead of `Field`.
 - A disabled Continue with no explanation.
 - Split OTP digit boxes built from raw inputs.
 - Hand-rolled social buttons instead of `Button`.
@@ -66,10 +69,10 @@
 ```tsx
 import * as React from "react"
 import { Alert } from "@atlas/ui-web/compositions/Alert/Alert"
+import { Field } from "@atlas/ui-web/compositions/Field/Field"
 import { Button } from "@atlas/ui-web/primitives/Button/Button"
 import { Divider } from "@atlas/ui-web/primitives/Divider/Divider"
 import { Input } from "@atlas/ui-web/primitives/Input/Input"
-import { Label } from "@atlas/ui-web/primitives/Label/Label"
 
 type Props = {
   onRequestCode: (email: string) => Promise<void>
@@ -119,23 +122,23 @@ export function SignIn({ onRequestCode, onVerifyCode, onSocial, onSignUp }: Prop
     if (!ok) setCodeError("The code is incorrect. Check your email or resend.")
   }
 
-  const muted = { color: "var(--atlas-foreground-muted)" }
+  const muted = { color: "var(--atlas-foreground-muted)", fontSize: "var(--atlas-text-body-sm)" }
+  const title = { fontSize: "var(--atlas-font-size-2xl)", fontWeight: "var(--atlas-font-weight-semibold)" }
 
   if (step === "code") {
     return (
       <form onSubmit={verify} noValidate style={{ display: "grid", gap: "var(--atlas-spacing-4)" }}>
-        <h1>Check your email</h1>
+        <h1 style={title}>Check your email</h1>
         <p style={muted}>We sent a 6-digit code to <strong>{email}</strong>.</p>
         <Button type="button" variant="link" onClick={() => { setStep("email"); setCode(""); setCodeError(undefined) }}>
           Use a different email
         </Button>
-        <div>
-          <Label htmlFor="code" required>Code</Label>
-          <Input id="code" inputMode="numeric" autoComplete="one-time-code" value={code}
-            onChange={(e) => setCode(e.target.value)} invalid={!!codeError}
-            aria-describedby={codeError ? "code-error" : undefined} />
-          {codeError && <p id="code-error" style={{ color: "var(--atlas-danger)" }}>{codeError}</p>}
-        </div>
+        <Field label="Code" error={codeError}>
+          {(control) => (
+            <Input {...control} inputMode="numeric" autoComplete="one-time-code" value={code}
+              onChange={(e) => setCode(e.target.value)} />
+          )}
+        </Field>
         <Button type="submit" variant="primary" loading={busy}>Continue</Button>
         <Button type="button" variant="ghost" disabled={cooldown > 0} onClick={() => sendCode()}>
           {cooldown > 0 ? `Resend in ${cooldown}s` : "Resend code"}
@@ -146,15 +149,14 @@ export function SignIn({ onRequestCode, onVerifyCode, onSocial, onSignUp }: Prop
 
   return (
     <form onSubmit={sendCode} noValidate style={{ display: "grid", gap: "var(--atlas-spacing-4)" }}>
-      <h1>Sign in</h1>
+      <h1 style={title}>Sign in</h1>
       <p style={muted}>Enter your email to continue.</p>
-      <div>
-        <Label htmlFor="email" required>Email</Label>
-        <Input id="email" type="email" autoComplete="email" value={email}
-          onChange={(e) => setEmail(e.target.value)} invalid={!!emailError}
-          aria-describedby={emailError ? "email-error" : undefined} />
-        {emailError && <p id="email-error" style={{ color: "var(--atlas-danger)" }}>{emailError}</p>}
-      </div>
+      <Field label="Email" error={emailError}>
+        {(control) => (
+          <Input {...control} type="email" autoComplete="email" value={email}
+            onChange={(e) => setEmail(e.target.value)} />
+        )}
+      </Field>
       {failed && <Alert variant="danger" title="We couldn't send the code" description="Check your connection and try again." />}
       <Button type="submit" variant="primary" loading={busy}>Continue</Button>
       <div style={{ display: "grid", gridTemplateColumns: "1fr auto 1fr", alignItems: "center", gap: "var(--atlas-spacing-3)" }}>

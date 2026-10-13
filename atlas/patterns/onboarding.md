@@ -15,7 +15,7 @@
 - Two stages. Stage 1 is a short blocking setup flow of 3 to 5 steps, one question per step. Stage 2 is a non-blocking "Get started" checklist on the home screen. Why: Linear and Vercel use a short setup, then a checklist; Notion and Perplexity add a use-case question first.
 - One primary `Button` per step ("Continue"). Back is `Button variant="ghost"` and always available except on step 1. Show progress as labelled steps (`Progress` with `label` and `valueLabel`, for example "Step 2 of 4"). Why: Wise labels its steps; Linear and Perplexity use dots.
 - A choice between 2 to 4 named paths ("For my team", "Personal", "School") → `RadioGroup variant="card"`, each item with `label` and a one-line `description`. Selecting a card does not advance; Continue does. Why: Notion, Perplexity and Vercel plan type.
-- Free-text answers → `Label` + `Input`. Role or company size → `Select`. Never ask for something the product can infer.
+- Free-text answers → `Field` around an `Input`. Role or company size → `Field` around a `Select`. Required answers set `required`; an optional step's field sets `optional`. Do not hand-wire `Label` + `Input`. Never ask for something the product can infer.
 - Every optional step has a visible "Skip" (`Button variant="ghost"`) or "I'll do this later" on invite steps. Skipping must not trap the user in a half-set-up state. Why: Linear "I'll do this later".
 - Checklist: a `Card variant="outlined"` titled "Get started" with a `Progress` ("3 of 6 complete"). Each row is a `ListItem` with title, one line of why, and an action; done rows show a check and strike through. The checklist can be dismissed and comes back from a menu. Why: Vercel Production Checklist, Klaviyo and HoneyBook setup guides, Dropbox "Get to know".
 - Completion: replace the checklist with one confirmation line and one primary action ("Go to home"), not a full-screen celebration. Why: Klaviyo "Set up complete".
@@ -25,7 +25,8 @@
 ## Components and variants
 - `Progress`
 - `RadioGroup` variant: `card` · size: `md`
-- `Label` variant: `default` · size: `md`
+- `Field` size: `md`
+- `Label` variant: `default` · size: `md` (inside Field)
 - `Input` variant: `default` · size: `md`
 - `Select` size: `md`
 - `Button` variant: `primary`, `ghost` · size: `md`
@@ -41,6 +42,7 @@
 - Step title is a question the user can answer ("How will you use the product?"), help text states why it is asked.
 - Progress sits above the title. Primary action last; Back and Skip on the same row as ghost.
 - The checklist leads with the task that gives value fastest, not a settings task.
+- Typography: Step title `--atlas-font-size-2xl`, semibold; help text `--atlas-text-body-sm` in `foreground-muted`. Set every heading and paragraph from `--atlas-text-*` or `--atlas-font-size-*`; never a bare `<h1>` or `<p>`.
 
 ## Responsive behavior
 - Phone is the primary layout. Single column; the primary action is pinned to the bottom edge with Back and Skip as a row of ghost Buttons below it. Cards stack. Checklist rows keep the action visible; do not hide it in a menu.
@@ -69,14 +71,17 @@
 import * as React from "react"
 import { Alert } from "@atlas/ui-web/compositions/Alert/Alert"
 import { Card, CardContent, CardHeader, CardTitle } from "@atlas/ui-web/compositions/Card/Card"
+import { Field } from "@atlas/ui-web/compositions/Field/Field"
 import { ListItem, ListItemActions, ListItemContent, ListItemDescription, ListItemTitle } from "@atlas/ui-web/compositions/ListItem/ListItem"
 import { Button } from "@atlas/ui-web/primitives/Button/Button"
 import { Input } from "@atlas/ui-web/primitives/Input/Input"
-import { Label } from "@atlas/ui-web/primitives/Label/Label"
 import { Progress } from "@atlas/ui-web/primitives/Progress/Progress"
 import { RadioGroup, RadioGroupItem } from "@atlas/ui-web/primitives/RadioGroup/RadioGroup"
 
 type Setup = { useCase: string; workspace: string; teammate: string }
+
+const title = { fontSize: "var(--atlas-font-size-2xl)", fontWeight: "var(--atlas-font-weight-semibold)" }
+const help = { fontSize: "var(--atlas-text-body-sm)", color: "var(--atlas-foreground-muted)" }
 
 export function SetupFlow({ onFinish }: { onFinish: (v: Setup) => Promise<void> }) {
   const [step, setStep] = React.useState(0)
@@ -105,8 +110,8 @@ export function SetupFlow({ onFinish }: { onFinish: (v: Setup) => Promise<void> 
   if (complete) {
     return (
       <div role="status" style={{ display: "grid", gap: "var(--atlas-spacing-4)" }}>
-        <h1>You're all set</h1>
-        <p style={{ color: "var(--atlas-foreground-muted)" }}>Your workspace is ready. Your answers are saved.</p>
+        <h1 style={title}>You're all set</h1>
+        <p style={help}>Your workspace is ready. Your answers are saved.</p>
         <Button variant="primary">Go to home</Button>
       </div>
     )
@@ -117,8 +122,8 @@ export function SetupFlow({ onFinish }: { onFinish: (v: Setup) => Promise<void> 
       <Progress value={step + 1} max={total} label="Setup" valueLabel={`Step ${step + 1} of ${total}`} />
       {step === 0 ? (
         <div style={{ display: "grid", gap: "var(--atlas-spacing-4)" }}>
-          <h1>How will you use the product?</h1>
-          <p style={{ color: "var(--atlas-foreground-muted)" }}>We use this to set up your first screen.</p>
+          <h1 style={title}>How will you use the product?</h1>
+          <p style={help}>We use this to set up your first screen.</p>
           <RadioGroup variant="card" aria-label="How you will use the product" value={useCase} onValueChange={setUseCase}>
             <RadioGroupItem value="team" label="For my team" description="Share docs and projects" />
             <RadioGroupItem value="personal" label="For personal use" description="Notes and tasks for you" />
@@ -127,21 +132,19 @@ export function SetupFlow({ onFinish }: { onFinish: (v: Setup) => Promise<void> 
         </div>
       ) : step === 2 ? (
         <div style={{ display: "grid", gap: "var(--atlas-spacing-4)" }}>
-          <h1>Invite your team</h1>
-          <p style={{ color: "var(--atlas-foreground-muted)" }}>You can also do this later.</p>
-          <div>
-            <Label htmlFor="teammate" optional>Teammate email</Label>
-            <Input id="teammate" type="email" inputMode="email" value={teammate} onChange={(e) => setTeammate(e.target.value)} />
-          </div>
+          <h1 style={title}>Invite your team</h1>
+          <p style={help}>You can also do this later.</p>
+          <Field label="Teammate email" optional>
+            {(control) => <Input {...control} type="email" inputMode="email" value={teammate} onChange={(e) => setTeammate(e.target.value)} />}
+          </Field>
         </div>
       ) : (
         <div style={{ display: "grid", gap: "var(--atlas-spacing-4)" }}>
-          <h1>Name your workspace</h1>
-          <p style={{ color: "var(--atlas-foreground-muted)" }}>This is what your teammates will see.</p>
-          <div>
-            <Label htmlFor="workspace" required>Workspace name</Label>
-            <Input id="workspace" value={workspace} onChange={(e) => setWorkspace(e.target.value)} />
-          </div>
+          <h1 style={title}>Name your workspace</h1>
+          <p style={help}>This is what your teammates will see.</p>
+          <Field label="Workspace name" required>
+            {(control) => <Input {...control} value={workspace} onChange={(e) => setWorkspace(e.target.value)} />}
+          </Field>
         </div>
       )}
       {failed && <Alert variant="danger" title="We couldn't save your setup" description="Your answers are still here. Try again." />}

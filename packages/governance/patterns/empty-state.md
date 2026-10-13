@@ -34,6 +34,7 @@ summary: Tell the user why a list or screen has no content and what to do next (
 ## Hierarchy and composition
 - Title (`--atlas-text-h3`, `foreground`) → description (`foreground-muted`, `--atlas-text-body-sm`) → action.
 - Write the title as a statement, not a question ("No projects yet", "No results for “alpha”").
+- Typography: Title `--atlas-text-h3`; description `--atlas-text-body-sm` in `foreground-muted`. Set every heading and paragraph from `--atlas-text-*` or `--atlas-font-size-*`; never a bare `<h1>` or `<p>`.
 
 ## Responsive behavior
 - Same structure on every width. Constrain the description to a readable width; the action never wraps below the description on a phone.

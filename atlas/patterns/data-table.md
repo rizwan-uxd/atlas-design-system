@@ -11,15 +11,17 @@
 - Mixed or nested content per row.
 
 ## Decision rules
-- Build from the `Table` parts: `Table`, `TableHeader`, `TableBody`, `TableRow`, `TableHead`, `TableCell`. Table has no selection, sorting state, filtering or pagination: you supply them.
+- Build from the `Table` parts: `Table`, `TableHeader`, `TableBody`, `TableRow`, `TableHead`, `TableCell`. Table has no selection, sorting state or filtering: you supply them. Pagination is its own component.
 - Filters and search go in a toolbar above the table, never inside a header cell. Search is an `Input`, a fixed set of statuses is a `Select` (or `Tabs` `segmented` for 2–4 named views).
 - Row selection: a `Checkbox` in the first cell of every row with an `aria-label` naming the row, and a select-all `Checkbox` in the header (`TableHead` Content checkbox). The select-all uses `checked="indeterminate"` when some but not all visible rows are selected. Set `selected` on `TableRow` for selected rows.
-- Selection scope is the visible (filtered) rows. Changing the filter keeps selection only for rows still visible, or clears it; state which.
+- Select-all covers the rows on the current page; selection is kept across pages and the bulk bar counts every selected row. Changing the filter keeps selection only for rows still visible, or clears it; state which.
 - Bulk actions appear only when at least one row is selected, in a bar showing the count ("2 selected") with an `aria-live="polite"` region. At most two or three actions.
 - A destructive bulk action (delete) opens an `AlertDialog variant="destructive"` that names the count and the consequence. Non-destructive actions apply directly and confirm with a `Toast`.
 - Numeric and currency columns: `align="end"`. Text columns: start. One sorted column at a time with `sort` / `onSort`.
 - Status column → `Badge` (`success`, `warning`, `danger`, `neutral`) with the status word, never colour alone.
-- Long tables: paginate or virtualise; Atlas has no Pagination component, so log the gap.
+- Long tables: `Pagination` below the table, aligned to the end, with a "Showing 21 to 25 of 50 invoices" line; or a Load more `Button` that grows the list. Use one, not both.
+- Pagination: keep the page size constant, and go back to page 1 when the search or a filter changes. Hide it when everything fits on one page.
+- Load more: a `Button variant="outline"` shown only while more rows exist, with `loading` while it fetches. The count line is an `aria-live="polite"` region, and focus stays on the Button. Atlas has no infinite scroll (candidate CAND-048).
 
 ## Components and variants
 - `Table`
@@ -27,21 +29,24 @@
 - `Input` variant: `default` · size: `md`
 - `Select` size: `md`
 - `Badge` variant: `success`, `warning`, `danger`, `neutral` · size: `sm`
-- `Button` variant: `ghost`, `destructive`, `primary` · size: `sm`
+- `Button` variant: `ghost`, `destructive`, `primary`, `outline` · size: `sm`
+- `Pagination` size: `sm`
 - `AlertDialog` variant: `destructive` · size: `md`
 - `Skeleton`
 
 ## Layout and density
-- Toolbar (search, filter) → bulk bar under it, only while rows are selected → table. Row height from the Table tokens; do not override.
+- Toolbar (search, filter) → bulk bar under it, only while rows are selected → table → footer row. Row height from the Table tokens; do not override.
+- Footer row: the count line at the start and `Pagination` (or Load more) at the end.
 - Dense by default: toolbar controls and bulk buttons use `sm`; keep Table cell content to one line and truncate.
 - The table scrolls horizontally inside its own wrapper on small screens; do not shrink fonts to fit.
 
 ## Hierarchy and composition
 - Page title above the toolbar. The table is one surface: no Card around it, no nested table.
 - One primary action per view, normally outside the table (for example "New invoice").
+- Typography: Page title `--atlas-text-h1`; no-results title `--atlas-text-h3`; no-results help `--atlas-text-body-sm` in `foreground-muted`. Set every heading and paragraph from `--atlas-text-*` or `--atlas-font-size-*`; never a bare `<h1>` or `<p>`.
 
 ## Responsive behavior
-- Phone: keep the table in its scroll wrapper, pin the identifying column first, hide secondary columns only if the product allows it.
+- Phone: keep the table in its scroll wrapper, pin the identifying column first, hide secondary columns only if the product allows it. The footer row stacks the count line above the paging control.
 - Bulk bar stacks the count above the actions when narrower than the tablet breakpoint.
 
 ## States
@@ -63,6 +68,7 @@
 - Colour-only status.
 - Raw `<table>`, `<input type="checkbox">` or `<select>`.
 - Bulk bar always visible with disabled buttons.
+- Pagination and Load more on one table, a page control with no total, or infinite scroll.
 
 ## Example
 ```tsx
@@ -73,11 +79,13 @@ import { Badge } from "@atlas/ui-web/primitives/Badge/Badge"
 import { Button } from "@atlas/ui-web/primitives/Button/Button"
 import { Checkbox } from "@atlas/ui-web/primitives/Checkbox/Checkbox"
 import { Input } from "@atlas/ui-web/primitives/Input/Input"
+import { Pagination } from "@atlas/ui-web/patterns/Pagination/Pagination"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@atlas/ui-web/primitives/Select/Select"
 import { Skeleton } from "@atlas/ui-web/primitives/Skeleton/Skeleton"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@atlas/ui-web/primitives/Table/Table"
 
 type Invoice = { id: string; customer: string; amount: string; status: "Paid" | "Pending" | "Overdue" }
+const PAGE_SIZE = 5
 const tone = { Paid: "success", Pending: "warning", Overdue: "danger" } as const
 
 export function InvoiceTable({ rows, loading, onDelete }: { rows: Invoice[]; loading?: boolean; onDelete: (ids: string[]) => void }) {
@@ -85,17 +93,23 @@ export function InvoiceTable({ rows, loading, onDelete }: { rows: Invoice[]; loa
   const [status, setStatus] = React.useState("all")
   const [selected, setSelected] = React.useState<Set<string>>(new Set())
   const [confirming, setConfirming] = React.useState(false)
+  const [page, setPage] = React.useState(1)
   // Selection scope is the visible (filtered) rows
   const shown = rows.filter((r) => (status === "all" || r.status === status) && r.customer.toLowerCase().includes(query.toLowerCase()))
+  // Paging: select-all covers the current page, selection survives page changes, the bulk bar counts every selected row
+  const pageCount = Math.max(1, Math.ceil(shown.length / PAGE_SIZE))
+  const current = Math.min(page, pageCount)
+  const pageRows = shown.slice((current - 1) * PAGE_SIZE, current * PAGE_SIZE)
   const visible = shown.filter((r) => selected.has(r.id))
-  const all: boolean | "indeterminate" = visible.length === shown.length && shown.length > 0 ? true : visible.length > 0 ? "indeterminate" : false
+  const onPage = pageRows.filter((r) => selected.has(r.id))
+  const all: boolean | "indeterminate" = onPage.length === pageRows.length && pageRows.length > 0 ? true : onPage.length > 0 ? "indeterminate" : false
   const toggle = (id: string) => setSelected((s) => { const n = new Set(s); n.has(id) ? n.delete(id) : n.add(id); return n })
 
   return (
     <>
       <div style={{ display: "flex", flexWrap: "wrap", gap: "var(--atlas-spacing-3)" }}>
-        <Input aria-label="Search invoices" placeholder="Search invoices" value={query} onChange={(e) => setQuery(e.target.value)} />
-        <Select value={status} onValueChange={setStatus}>
+        <Input aria-label="Search invoices" placeholder="Search invoices" value={query} onChange={(e) => { setQuery(e.target.value); setPage(1) }} />
+        <Select value={status} onValueChange={(v) => { setStatus(v); setPage(1) }}>
           <SelectTrigger aria-label="Status"><SelectValue placeholder="All statuses" /></SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All statuses</SelectItem>
@@ -115,8 +129,8 @@ export function InvoiceTable({ rows, loading, onDelete }: { rows: Invoice[]; loa
       {!loading && shown.length === 0 ? (
         <div role="status" style={{ display: "grid", justifyItems: "center", gap: "var(--atlas-spacing-3)", paddingBlock: "var(--atlas-spacing-12)" }}>
           <h2 style={{ fontSize: "var(--atlas-text-h3)" }}>No results for “{query}”</h2>
-          <p style={{ color: "var(--atlas-foreground-muted)" }}>Try a different search, or clear the filters to see every invoice.</p>
-          <Button variant="outline" onClick={() => { setQuery(""); setStatus("all") }}>Clear filters</Button>
+          <p style={{ fontSize: "var(--atlas-text-body-sm)", color: "var(--atlas-foreground-muted)" }}>Try a different search, or clear the filters to see every invoice.</p>
+          <Button variant="outline" onClick={() => { setQuery(""); setStatus("all"); setPage(1) }}>Clear filters</Button>
         </div>
       ) : (
       <div style={{ overflowX: "auto" }} aria-busy={loading}>
@@ -124,7 +138,7 @@ export function InvoiceTable({ rows, loading, onDelete }: { rows: Invoice[]; loa
         <TableHeader>
           <TableRow>
             <TableHead><Checkbox aria-label="Select all" checked={all}
-              onCheckedChange={(c) => setSelected(c === true ? new Set(shown.map((r) => r.id)) : new Set())} /></TableHead>
+              onCheckedChange={(c) => setSelected((s) => { const n = new Set(s); pageRows.forEach((r) => (c === true ? n.add(r.id) : n.delete(r.id))); return n })} /></TableHead>
             <TableHead>Customer</TableHead>
             <TableHead align="end">Amount</TableHead>
             <TableHead>Status</TableHead>
@@ -133,7 +147,7 @@ export function InvoiceTable({ rows, loading, onDelete }: { rows: Invoice[]; loa
         <TableBody>
           {loading ? Array.from({ length: 5 }, (_, i) => (
             <TableRow key={i}><TableCell><Skeleton /></TableCell><TableCell><Skeleton /></TableCell><TableCell><Skeleton /></TableCell><TableCell><Skeleton /></TableCell></TableRow>
-          )) : shown.map((r) => (
+          )) : pageRows.map((r) => (
             <TableRow key={r.id} selected={selected.has(r.id)}>
               <TableCell><Checkbox aria-label={`Select ${r.customer}`} checked={selected.has(r.id)} onCheckedChange={() => toggle(r.id)} /></TableCell>
               <TableCell>{r.customer}</TableCell>
@@ -144,6 +158,14 @@ export function InvoiceTable({ rows, loading, onDelete }: { rows: Invoice[]; loa
         </TableBody>
       </Table>
       </div>
+      )}
+      {!loading && shown.length > 0 && (
+        <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: "var(--atlas-spacing-3)" }}>
+          <span aria-live="polite" style={{ fontSize: "var(--atlas-text-body-sm)", color: "var(--atlas-foreground-muted)" }}>
+            Showing {(current - 1) * PAGE_SIZE + 1} to {(current - 1) * PAGE_SIZE + pageRows.length} of {shown.length} invoices.
+          </span>
+          {pageCount > 1 && <Pagination size="sm" page={current} pageCount={pageCount} onPageChange={setPage} aria-label="Invoices pages" />}
+        </div>
       )}
       <AlertDialog open={confirming} onOpenChange={setConfirming}>
         <AlertDialogContent variant="destructive">

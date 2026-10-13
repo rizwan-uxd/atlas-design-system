@@ -27,6 +27,7 @@
  */
 
 import React, { useState } from "react"
+import { CircleCheck, CircleX, Info, TriangleAlert, X, type LucideIcon } from "lucide-react"
 import styles from "./Alert.module.css"
 
 /* ── Types ──────────────────────────────────────────────────────── */
@@ -73,12 +74,12 @@ function prefersReducedMotion(): boolean {
 
 /* ── Default icons per variant ──────────────────────────────────── */
 
-const DEFAULT_ICONS: Record<AlertVariant, string> = {
-  info:    "ℹ",
-  success: "✓",
-  warning: "⚠",
-  danger:  "⊗",
-  neutral: "●",
+const DEFAULT_ICONS: Record<AlertVariant, LucideIcon> = {
+  info:    Info,
+  success: CircleCheck,
+  warning: TriangleAlert,
+  danger:  CircleX,
+  neutral: Info,
 }
 
 /* ── Component ──────────────────────────────────────────────────── */
@@ -106,7 +107,8 @@ export function Alert({
   const descContent = description ?? children
 
   /* icon — prefer override, fall back to default */
-  const iconContent = icon ?? DEFAULT_ICONS[variant]
+  const DefaultIcon = DEFAULT_ICONS[variant]
+  const iconContent = icon ?? <DefaultIcon className={styles.glyph} />
 
   const classes = cx(
     styles.alert,
@@ -168,7 +170,7 @@ export function Alert({
           onClick={handleDismiss}
           disabled={isDismissing}
         >
-          ✕
+          <X className={styles.dismissIcon} aria-hidden="true" />
         </button>
       )}
     </div>

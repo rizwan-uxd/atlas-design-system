@@ -40,6 +40,7 @@ summary: Search a set of records with a query, scope tabs, filters, sort and rem
 ## Hierarchy and composition
 - The query is the largest control. Tabs scope the same query; they do not start a new search.
 - Chips sit directly above the results they describe.
+- Typography: No-results message `--atlas-text-body`, semibold; its help line `--atlas-text-body-sm` in `foreground-muted`. Set every heading and paragraph from `--atlas-text-*` or `--atlas-font-size-*`; never a bare `<h1>` or `<p>`.
 
 ## Responsive behavior
 - Phone: query on its own row, tabs scroll horizontally, filters open in a `Sheet` from one "Filters" `Button` that shows the active count.

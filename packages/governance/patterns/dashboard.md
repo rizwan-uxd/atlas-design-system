@@ -15,7 +15,7 @@ summary: Show the state of a product or account at a glance with filters, KPI ca
 ## Decision rules
 - Order top to bottom: filters (date range first) → KPI row → chart and detail table. On desktop the chart and the table share one row; on a phone they stack, chart first. Every number on the screen answers to the filters at the top. Why: Zoho, Mintlify and StackAI lead with a date range and KPI row.
 - Filters: a `Select` of range presets (Last 24 hours, Last 7 days, Last 30 days, Custom range), a `DatePicker` for the custom range, a `Switch` labelled "Compare to previous period", and an outline `Button` for Export.
-- Each KPI is a `Card variant="outlined"` with the label as title, the period as description, and the value and delta in the content slot: a delta with its comparison period ("Up 12% vs previous period"). Show the delta in a `Badge` (`success` up-good, `danger` down-bad, `neutral` flat) with the word up or down, not colour alone.
+- Each KPI is a `StatCard`: the label, the period, the value and a delta with its comparison period ("Up 12% vs previous period") with the word up or down, not colour alone. `StatCard` supplies the Card, the delta Badge and the loading skeletons; do not rebuild them.
 - Always state the period of a metric ("6h", "Last 7 days"). Why: Vercel overview cards label each period.
 - Chart: one `Chart` per question at its natural width (the plot is fixed), a title that says what it shows, `ChartBar` with an `aria-label` describing the data. Use `Table` for exact values. Never more than one series per chart unless a legend is shown.
 - Detail table: `Table` with `TableCaption`, numbers aligned `end`. Link to the Data table pattern when rows exceed one screen.
@@ -29,8 +29,7 @@ summary: Show the state of a product or account at a glance with filters, KPI ca
 - `DatePicker`
 - `Switch` size: `md`
 - `Button` variant: `primary`, `ghost`, `outline` · size: `md`
-- `Card` variant: `outlined` · size: `md`
-- `Badge` variant: `success`, `danger`, `neutral` · size: `sm`
+- `StatCard` size: `md`
 - `Chart`
 - `Table`
 - `Skeleton`
@@ -38,12 +37,13 @@ summary: Show the state of a product or account at a glance with filters, KPI ca
 - `Tabs` variant: `line` · size: `md`
 
 ## Layout and density
-- A responsive grid: KPI cards in an auto-fit row (minimum width from `--atlas-content-width-sm`), spacing `--atlas-spacing-4` between cards and `--atlas-spacing-6` between sections.
+- A responsive grid: `StatCard`s in an auto-fit row (minimum width from `--atlas-content-width-sm`), spacing `--atlas-spacing-4` between cards and `--atlas-spacing-6` between sections.
 - Below the KPIs, the chart (670 px) and the table fill one row, `--atlas-spacing-6` apart. Do not nest Cards.
 
 ## Hierarchy and composition
 - One page title, then the filter row. The value is the largest text in a KPI; labels and periods are muted.
 - The most important metric comes first. Group by question, not by data source.
+- Typography: Page title `--atlas-text-h1`; section titles `--atlas-text-h4`; labels, periods and empty-state help `--atlas-text-body-sm` in `foreground-muted`. Set every heading and paragraph from `--atlas-text-*` or `--atlas-font-size-*`; never a bare `<h1>` or `<p>`.
 
 ## Responsive behavior
 - Phone: filters wrap and stack, KPI cards stack one per row, the chart drops its stats, and the table scrolls horizontally.

@@ -16,15 +16,17 @@ summary: Collect one or more values from the user and submit or save them, inclu
 - Text, email, number, password, search → `Input`. Multi-line → `Textarea`.
 - One of 2–6 options, all visible → `RadioGroup`. One of more than 5, or a long list → `Select`. Never a raw `<select>` or radio input.
 - Value submitted later with the form → `Checkbox`. Applies instantly → `Switch`, and then it is not part of this form.
-- Every field has a `Label` with `htmlFor` equal to the control's `id`. Required fields set `required` on the Label (never a typed asterisk); optional fields in a mostly-required form set `optional`. Never rely on the placeholder as the label.
-- Validation error on a field → set `invalid` on the control and render the message in text wired with `aria-describedby`. Never use an `Alert` per field error.
+- Every text, email, number, password, multi-line or `Select` field is a `Field`: it renders the `Label`, the control and the help or error text, and spreads `id`, `invalid`, `disabled`, `aria-describedby` and `aria-required` onto the control. Required fields set `required` (never a typed asterisk); optional fields in a mostly-required form set `optional`. Never rely on the placeholder as the label.
+- Validation error on a field → pass it as `error` on the `Field`; it sets `invalid` on the Label and control and links the message with `aria-describedby`. Never use an `Alert` per field error, and do not hand-wire `Label` + `Input` + an error paragraph.
+- `RadioGroup` and `Checkbox` own their label and description; do not wrap them in a `Field`.
 - A form-level failure (submit failed, server rejected) → one `Alert` `variant="danger"` above the actions. For its recovery wording see the Error recovery pattern.
 - Validate on blur for format, on submit for required. Do not show errors before the user has touched a field, except after a failed submit.
 - Keep Submit enabled and validate on press, so the user is told what is wrong. Show `loading` on the Button while submitting. Disable Submit only when the amount or choice that makes it meaningful is missing (for example an amount flow's Continue).
 - Skippable optional step → a `Button variant="ghost"` "Skip" beside the primary action, not a link.
 
 ## Components and variants
-- `Label` variant: `default` · size: `md`
+- `Field` size: `md`
+- `Label` variant: `default` · size: `md` (inside Field)
 - `Input` variant: `default` · size: `md`
 - `Select` size: `md`
 - `RadioGroup` variant: `default` · size: `md`
@@ -41,6 +43,7 @@ summary: Collect one or more values from the user and submit or save them, inclu
 - Order: step title and one line of help → fields → form-level Alert (when present) → actions.
 - Group related fields in a `Card variant="outlined"` only when the screen has more than one group. A single group sits directly on the page.
 - Do not nest Cards.
+- Typography: Step title `--atlas-text-h1`; one line of help `--atlas-text-body-sm` in `foreground-muted`. Set every heading and paragraph from `--atlas-text-*` or `--atlas-font-size-*`; never a bare `<h1>` or `<p>`.
 
 ## Responsive behavior
 - Phone: one column, actions pinned below the fields. Wider than the tablet breakpoint: keep one column up to the content width token; put short paired fields (expiry and CVC) side by side only.

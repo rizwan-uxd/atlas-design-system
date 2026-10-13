@@ -152,38 +152,6 @@
       "note": "Web ScrollProgress shipped (primitives/ScrollProgress). Native parity is logged here, not built (user, 2026-09-30)."
     },
     {
-      "id": "CAND-030",
-      "name": "EmptyState",
-      "seenIn": ["packages/governance/patterns/empty-state.md", "benchmarks/tasks/T5 (baseline-w1 runs composed their own)"],
-      "composedFrom": "centred stack of an aria-hidden lucide icon, a heading, a line of muted text and a Button, inside role=\"status\"",
-      "occurrences": 1,
-      "note": "Found while writing the empty-state pattern. A component would fix the structure, the status announcement and the first-use / no-results split. It needs its own Figma design and approval first (Wave 1 builds none)."
-    },
-    {
-      "id": "CAND-031",
-      "name": "Pagination",
-      "seenIn": ["packages/governance/patterns/data-table.md"],
-      "composedFrom": "not yet attempted",
-      "occurrences": 0,
-      "note": "Table has no pagination (its header says so) and the data-table pattern has to tell agents to paginate. CAND-024 mentions Previous/Next as part of a DataTable; this entry covers it standalone."
-    },
-    {
-      "id": "CAND-032",
-      "name": "Field (Label + control + help + error wiring)",
-      "seenIn": ["packages/governance/patterns/form.md"],
-      "composedFrom": "Label + Input with a hand-wired error paragraph and aria-describedby",
-      "occurrences": 0,
-      "note": "The form pattern asks for a Label with htmlFor, invalid, and error text wired by aria-describedby on every field. Atlas has no component that owns that wiring, so each screen repeats it. Not built."
-    },
-    {
-      "id": "CAND-033",
-      "name": "PasswordInput (show/hide toggle)",
-      "seenIn": ["packages/governance/patterns/auth.md"],
-      "composedFrom": "Input with a trailing Button for show/hide and aria-pressed",
-      "occurrences": 0,
-      "note": "Auth pattern asks for a visible show/hide control on password fields (Uber, Descript, Amazon). Atlas has no component that owns it. Not built."
-    },
-    {
       "id": "CAND-034",
       "name": "OTP / verification code input",
       "seenIn": ["packages/governance/patterns/auth.md"],
@@ -198,14 +166,6 @@
       "composedFrom": "Progress with a 'Step n of N' valueLabel",
       "occurrences": 0,
       "note": "Wise labels each step in a step bar; Atlas Progress has no per-step labels. Not built."
-    },
-    {
-      "id": "CAND-036",
-      "name": "Stat / metric card",
-      "seenIn": ["packages/governance/patterns/dashboard.md"],
-      "composedFrom": "Card with CardDescription, a value paragraph and a Badge delta",
-      "occurrences": 0,
-      "note": "Dashboard KPI cards (Vercel, Zoho, Mintlify) repeat this composition. Not built."
     },
     {
       "id": "CAND-037",
@@ -262,6 +222,38 @@
       "composedFrom": "hand-set 0.5 (DEC-016 and later)",
       "occurrences": 0,
       "note": "These three still set disabled 0.5 by hand instead of binding to opacity/disabled. Left out on purpose when DEC-058 fixed the Figma percent-versus-fraction bug."
+    },
+    {
+      "id": "CAND-044",
+      "name": "StatCard leading icon",
+      "seenIn": ["atlas/StatCard.md"],
+      "composedFrom": "an icon placed beside the StatCard label by hand",
+      "occurrences": 0,
+      "note": "Deferred from StatCard v1 (user, 2026-10-12). Needs an instance-swap slot drawn in Figma first. Not built."
+    },
+    {
+      "id": "CAND-045",
+      "name": "StatCard clickable (drill-down)",
+      "seenIn": ["atlas/StatCard.md"],
+      "composedFrom": "Card interactive with the StatCard content, composed by hand",
+      "occurrences": 0,
+      "note": "Deferred from StatCard v1 (user, 2026-10-12). Needs hover, focus-visible and active states drawn in Figma first; Card already has interactive. Not built."
+    },
+    {
+      "id": "CAND-046",
+      "name": "Sparkline (mini trend chart)",
+      "seenIn": ["atlas/StatCard.md", "packages/governance/patterns/dashboard.md"],
+      "composedFrom": "not yet attempted",
+      "occurrences": 0,
+      "note": "Deferred from StatCard v1 (user, 2026-10-12). Chart is a full chart, so a sparkline is its own component with its own Figma design and approval; StatCard would then take it as a slot. Not built."
+    },
+    {
+      "id": "CAND-048",
+      "name": "Load more and infinite scroll (lazy loading a list)",
+      "seenIn": ["packages/governance/patterns/data-table.md"],
+      "composedFrom": "a Button with loading and a 'Showing 20 of 240' line (Load more); infinite scroll has no composition, it needs a scroll sentinel",
+      "occurrences": 0,
+      "note": "Raised by the user while scoping Pagination (2026-10-13). Decision: Pagination shipped first; Load more is now documented guidance in data-table.md and the Figma Pattern / Data table page (frame 8), composed from Button (2026-10-13); infinite scroll is a behaviour, not a visual, and is not built."
     }
   ]
 }

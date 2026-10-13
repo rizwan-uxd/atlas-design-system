@@ -1,9 +1,8 @@
 import * as React from "react"
 import { Alert } from "@atlas/ui-web/compositions/Alert/Alert"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@atlas/ui-web/compositions/Card/Card"
 import { DatePicker, DatePickerContent, DatePickerTrigger, type DatePickerRange } from "@atlas/ui-web/compositions/DatePicker/DatePicker"
+import { StatCard } from "@atlas/ui-web/compositions/StatCard/StatCard"
 import { Chart, ChartContent, ChartDescription, ChartHeader, ChartTitle, ChartBar } from "@atlas/ui-web/compositions/Chart/Chart"
-import { Badge } from "@atlas/ui-web/primitives/Badge/Badge"
 import { Button } from "@atlas/ui-web/primitives/Button/Button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@atlas/ui-web/primitives/Select/Select"
 import { Switch } from "@atlas/ui-web/primitives/Switch/Switch"
@@ -35,7 +34,7 @@ export function UsageDashboard({ kpis, series, pages, loading, error, range, onR
     return (
       <div role="status" style={{ display: "grid", justifyItems: "center", textAlign: "center", gap: "var(--atlas-spacing-3)", paddingBlock: "var(--atlas-spacing-12)" }}>
         <h2 style={{ fontSize: "var(--atlas-text-h3)" }}>No data yet</h2>
-        <p style={{ color: "var(--atlas-foreground-muted)" }}>Connect a data source to see visitors, revenue and activity here.</p>
+        <p style={{ fontSize: "var(--atlas-text-body-sm)", color: "var(--atlas-foreground-muted)" }}>Connect a data source to see visitors, revenue and activity here.</p>
         <Button variant="primary" onClick={onConnect}>Connect a data source</Button>
       </div>
     )
@@ -69,19 +68,14 @@ export function UsageDashboard({ kpis, series, pages, loading, error, range, onR
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(var(--atlas-content-width-sm), 1fr))", gap: "var(--atlas-spacing-4)" }}>
         {kpis.map((k) => (
-          <Card key={k.label} variant="outlined">
-            <CardHeader><CardTitle>{k.label}</CardTitle><CardDescription>{periodLabel}</CardDescription></CardHeader>
-            <CardContent>
-              {loading ? <Skeleton /> : (
-                <>
-                  <p style={{ fontSize: "var(--atlas-font-size-2xl)" }}>{k.value}</p>
-                  <Badge size="sm" variant={k.delta > 0 ? "success" : k.delta < 0 ? "danger" : "neutral"}>
-                    {k.delta > 0 ? "Up " : k.delta < 0 ? "Down " : "Flat "}{Math.abs(k.delta)}% vs previous period
-                  </Badge>
-                </>
-              )}
-            </CardContent>
-          </Card>
+          <StatCard
+            key={k.label}
+            label={k.label}
+            period={periodLabel}
+            value={k.value}
+            loading={loading}
+            delta={{ text: k.delta === 0 ? "vs previous period" : `${Math.abs(k.delta)}% vs previous period`, trend: k.delta > 0 ? "up" : k.delta < 0 ? "down" : "flat" }}
+          />
         ))}
       </div>
 

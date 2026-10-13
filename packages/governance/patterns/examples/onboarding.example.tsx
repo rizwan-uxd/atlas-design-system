@@ -1,14 +1,17 @@
 import * as React from "react"
 import { Alert } from "@atlas/ui-web/compositions/Alert/Alert"
 import { Card, CardContent, CardHeader, CardTitle } from "@atlas/ui-web/compositions/Card/Card"
+import { Field } from "@atlas/ui-web/compositions/Field/Field"
 import { ListItem, ListItemActions, ListItemContent, ListItemDescription, ListItemTitle } from "@atlas/ui-web/compositions/ListItem/ListItem"
 import { Button } from "@atlas/ui-web/primitives/Button/Button"
 import { Input } from "@atlas/ui-web/primitives/Input/Input"
-import { Label } from "@atlas/ui-web/primitives/Label/Label"
 import { Progress } from "@atlas/ui-web/primitives/Progress/Progress"
 import { RadioGroup, RadioGroupItem } from "@atlas/ui-web/primitives/RadioGroup/RadioGroup"
 
 type Setup = { useCase: string; workspace: string; teammate: string }
+
+const title = { fontSize: "var(--atlas-font-size-2xl)", fontWeight: "var(--atlas-font-weight-semibold)" }
+const help = { fontSize: "var(--atlas-text-body-sm)", color: "var(--atlas-foreground-muted)" }
 
 export function SetupFlow({ onFinish }: { onFinish: (v: Setup) => Promise<void> }) {
   const [step, setStep] = React.useState(0)
@@ -37,8 +40,8 @@ export function SetupFlow({ onFinish }: { onFinish: (v: Setup) => Promise<void> 
   if (complete) {
     return (
       <div role="status" style={{ display: "grid", gap: "var(--atlas-spacing-4)" }}>
-        <h1>You're all set</h1>
-        <p style={{ color: "var(--atlas-foreground-muted)" }}>Your workspace is ready. Your answers are saved.</p>
+        <h1 style={title}>You're all set</h1>
+        <p style={help}>Your workspace is ready. Your answers are saved.</p>
         <Button variant="primary">Go to home</Button>
       </div>
     )
@@ -49,8 +52,8 @@ export function SetupFlow({ onFinish }: { onFinish: (v: Setup) => Promise<void> 
       <Progress value={step + 1} max={total} label="Setup" valueLabel={`Step ${step + 1} of ${total}`} />
       {step === 0 ? (
         <div style={{ display: "grid", gap: "var(--atlas-spacing-4)" }}>
-          <h1>How will you use the product?</h1>
-          <p style={{ color: "var(--atlas-foreground-muted)" }}>We use this to set up your first screen.</p>
+          <h1 style={title}>How will you use the product?</h1>
+          <p style={help}>We use this to set up your first screen.</p>
           <RadioGroup variant="card" aria-label="How you will use the product" value={useCase} onValueChange={setUseCase}>
             <RadioGroupItem value="team" label="For my team" description="Share docs and projects" />
             <RadioGroupItem value="personal" label="For personal use" description="Notes and tasks for you" />
@@ -59,21 +62,19 @@ export function SetupFlow({ onFinish }: { onFinish: (v: Setup) => Promise<void> 
         </div>
       ) : step === 2 ? (
         <div style={{ display: "grid", gap: "var(--atlas-spacing-4)" }}>
-          <h1>Invite your team</h1>
-          <p style={{ color: "var(--atlas-foreground-muted)" }}>You can also do this later.</p>
-          <div>
-            <Label htmlFor="teammate" optional>Teammate email</Label>
-            <Input id="teammate" type="email" inputMode="email" value={teammate} onChange={(e) => setTeammate(e.target.value)} />
-          </div>
+          <h1 style={title}>Invite your team</h1>
+          <p style={help}>You can also do this later.</p>
+          <Field label="Teammate email" optional>
+            {(control) => <Input {...control} type="email" inputMode="email" value={teammate} onChange={(e) => setTeammate(e.target.value)} />}
+          </Field>
         </div>
       ) : (
         <div style={{ display: "grid", gap: "var(--atlas-spacing-4)" }}>
-          <h1>Name your workspace</h1>
-          <p style={{ color: "var(--atlas-foreground-muted)" }}>This is what your teammates will see.</p>
-          <div>
-            <Label htmlFor="workspace" required>Workspace name</Label>
-            <Input id="workspace" value={workspace} onChange={(e) => setWorkspace(e.target.value)} />
-          </div>
+          <h1 style={title}>Name your workspace</h1>
+          <p style={help}>This is what your teammates will see.</p>
+          <Field label="Workspace name" required>
+            {(control) => <Input {...control} value={workspace} onChange={(e) => setWorkspace(e.target.value)} />}
+          </Field>
         </div>
       )}
       {failed && <Alert variant="danger" title="We couldn't save your setup" description="Your answers are still here. Try again." />}
