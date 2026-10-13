@@ -43,6 +43,7 @@ summary: Collect one or more values from the user and submit or save them, inclu
 - Order: step title and one line of help → fields → form-level Alert (when present) → actions.
 - Group related fields in a `Card variant="outlined"` only when the screen has more than one group. A single group sits directly on the page.
 - Do not nest Cards.
+- Typography: Step title `--atlas-text-h1`; one line of help `--atlas-text-body-sm` in `foreground-muted`. Set every heading and paragraph from `--atlas-text-*` or `--atlas-font-size-*`; never a bare `<h1>` or `<p>`.
 
 ## Responsive behavior
 - Phone: one column, actions pinned below the fields. Wider than the tablet breakpoint: keep one column up to the content width token; put short paired fields (expiry and CVC) side by side only.

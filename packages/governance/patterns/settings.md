@@ -37,6 +37,7 @@ summary: A screen of preferences and account actions: instant toggles, a few sav
 ## Hierarchy and composition
 - Order by frequency of use: profile → notifications → appearance → account actions last.
 - The destructive trigger is a `Button variant="destructive"`, full width, last on the page.
+- Typography: Page title `--atlas-text-h1`; profile name `--atlas-text-h4`; email and row help `--atlas-text-body-sm` in `foreground-muted`. Set every heading and paragraph from `--atlas-text-*` or `--atlas-font-size-*`; never a bare `<h1>` or `<p>`.
 
 ## Responsive behavior
 - Phone: one column, full-width rows. Wider screens keep one column at the content width; do not spread rows into a grid.

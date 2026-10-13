@@ -41,6 +41,7 @@ summary: Sign the user in or create an account with email, social or passkey opt
 - The title states the step ("Check your email", "Enter your password"), not the brand.
 - Show the identifier the user entered on every later step so they can correct it.
 - Do not put the auth form inside a Card on a phone. Use a Card only when the form floats over a busy background.
+- Typography: Step title `--atlas-font-size-2xl`, semibold; help and legal text `--atlas-text-body-sm` in `foreground-muted`. Set every heading and paragraph from `--atlas-text-*` or `--atlas-font-size-*`; never a bare `<h1>` or `<p>`.
 
 ## Responsive behavior
 - Phone is the primary layout. The primary action is pinned to the bottom edge; with the keyboard open it moves up and stays visible above the keyboard, and the alternative methods and legal line scroll away beneath it.

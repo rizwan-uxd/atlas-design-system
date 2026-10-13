@@ -44,6 +44,7 @@ summary: Show the state of a product or account at a glance with filters, KPI ca
 ## Hierarchy and composition
 - One page title, then the filter row. The value is the largest text in a KPI; labels and periods are muted.
 - The most important metric comes first. Group by question, not by data source.
+- Typography: Page title `--atlas-text-h1`; section titles `--atlas-text-h4`; KPI value `--atlas-font-size-2xl`; labels, periods and empty-state help `--atlas-text-body-sm` in `foreground-muted`. Set every heading and paragraph from `--atlas-text-*` or `--atlas-font-size-*`; never a bare `<h1>` or `<p>`.
 
 ## Responsive behavior
 - Phone: filters wrap and stack, KPI cards stack one per row, the chart drops its stats, and the table scrolls horizontally.

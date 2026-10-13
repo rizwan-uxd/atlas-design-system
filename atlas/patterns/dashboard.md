@@ -43,6 +43,7 @@
 ## Hierarchy and composition
 - One page title, then the filter row. The value is the largest text in a KPI; labels and periods are muted.
 - The most important metric comes first. Group by question, not by data source.
+- Typography: Page title `--atlas-text-h1`; section titles `--atlas-text-h4`; KPI value `--atlas-font-size-2xl`; labels, periods and empty-state help `--atlas-text-body-sm` in `foreground-muted`. Set every heading and paragraph from `--atlas-text-*` or `--atlas-font-size-*`; never a bare `<h1>` or `<p>`.
 
 ## Responsive behavior
 - Phone: filters wrap and stack, KPI cards stack one per row, the chart drops its stats, and the table scrolls horizontally.
@@ -102,7 +103,7 @@ export function UsageDashboard({ kpis, series, pages, loading, error, range, onR
     return (
       <div role="status" style={{ display: "grid", justifyItems: "center", textAlign: "center", gap: "var(--atlas-spacing-3)", paddingBlock: "var(--atlas-spacing-12)" }}>
         <h2 style={{ fontSize: "var(--atlas-text-h3)" }}>No data yet</h2>
-        <p style={{ color: "var(--atlas-foreground-muted)" }}>Connect a data source to see visitors, revenue and activity here.</p>
+        <p style={{ fontSize: "var(--atlas-text-body-sm)", color: "var(--atlas-foreground-muted)" }}>Connect a data source to see visitors, revenue and activity here.</p>
         <Button variant="primary" onClick={onConnect}>Connect a data source</Button>
       </div>
     )
