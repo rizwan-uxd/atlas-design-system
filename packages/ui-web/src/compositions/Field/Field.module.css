@@ -17,6 +17,22 @@
   align-self: flex-start;
 }
 
+/* Label row: the Label hugs the start, the action sits at the end. A link
+   Button has no inline padding, so its text lines up with the control's
+   edge, as in Figma. */
+.labelRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--atlas-spacing-2);
+}
+
+.labelAction {
+  display: flex;
+  align-items: center;
+  flex: none;
+}
+
 /* ── Messages ─────────────────────────────────────────────────── */
 
 .message {

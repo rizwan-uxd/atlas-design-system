@@ -17,6 +17,7 @@ type AssertFieldShape = {
   error?: React.ReactNode
   disabled?: boolean
   id?: string
+  labelAction?: React.ReactNode
   children: (control: FieldControlProps) => React.ReactNode
 }
 type _CheckFieldProps = AssertFieldShape extends Pick<FieldProps, keyof AssertFieldShape & keyof FieldProps> ? true : never

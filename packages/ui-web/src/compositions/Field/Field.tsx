@@ -6,7 +6,7 @@
  * Sizes:     sm | md | lg   (mirror the Label and the control inside)
  * States:    default · invalid (error text) · disabled
  *
- * Anatomy:   [Label] [control — render prop] [help text | error text]
+ * Anatomy:   [Label  labelAction?] [control — render prop] [help text | error text]
  *
  * Accessibility:
  *   - Label htmlFor = the control's id (generated with useId unless `id` is passed)
@@ -15,6 +15,8 @@
  *   - aria-describedby points at the error text when there is an error, otherwise
  *     at the help text; the error replaces the help text
  *   - Error text is role="alert", with an icon so the error is not colour alone
+ *   - labelAction sits beside the Label, outside the <label> element, so the
+ *     action is not part of the control's accessible name or click target
  *
  * Rules:
  *   - required wins over optional (Label rule); the marker is decorative
@@ -54,6 +56,8 @@ export interface FieldProps
   disabled?: boolean
   /** Id for the control; generated when omitted */
   id?: string
+  /** Trailing action on the label row, e.g. a link Button ("Forgot password?") */
+  labelAction?: React.ReactNode
   /** Receives the wiring props and returns the control */
   children: (control: FieldControlProps) => React.ReactNode
 }
@@ -69,6 +73,7 @@ export function Field({
   error,
   disabled = false,
   id,
+  labelAction,
   children,
   className,
   ...rest
@@ -81,7 +86,23 @@ export function Field({
   const hasError = error !== undefined && error !== null && error !== false && error !== ""
   const hasHelp = !hasError && helpText !== undefined && helpText !== null && helpText !== false && helpText !== ""
 
+  const hasAction = labelAction !== undefined && labelAction !== null && labelAction !== false
+
   const describedBy = hasError ? errorId : hasHelp ? helpId : undefined
+
+  const labelEl = (
+    <Label
+      htmlFor={controlId}
+      size={size}
+      required={required}
+      optional={optional}
+      disabled={disabled}
+      invalid={hasError}
+      className={styles.label}
+    >
+      {label}
+    </Label>
+  )
 
   const classes = [styles.field, className].filter(Boolean).join(" ")
 
@@ -93,17 +114,14 @@ export function Field({
       data-invalid={hasError || undefined}
       data-disabled={disabled || undefined}
     >
-      <Label
-        htmlFor={controlId}
-        size={size}
-        required={required}
-        optional={optional}
-        disabled={disabled}
-        invalid={hasError}
-        className={styles.label}
-      >
-        {label}
-      </Label>
+      {hasAction ? (
+        <div className={styles.labelRow}>
+          {labelEl}
+          <div className={styles.labelAction}>{labelAction}</div>
+        </div>
+      ) : (
+        labelEl
+      )}
 
       {children({
         id: controlId,
