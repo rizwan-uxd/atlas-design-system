@@ -103,6 +103,20 @@
   margin-block-start: var(--atlas-spacing-0_5);
 }
 
+/* Default Lucide glyph: xs (16) at sm and md, sm (20) at lg, with the matching stroke */
+.glyph {
+  flex-shrink: 0;
+  inline-size: var(--atlas-icon-size-xs);
+  block-size: var(--atlas-icon-size-xs);
+  stroke-width: var(--atlas-icon-stroke-xs);
+}
+
+.lg .glyph {
+  inline-size: var(--atlas-icon-size-sm);
+  block-size: var(--atlas-icon-size-sm);
+  stroke-width: var(--atlas-icon-stroke-sm);
+}
+
 /* ── Body ─────────────────────────────────────────────────────── */
 
 .body {
@@ -180,6 +194,18 @@
   border-radius: var(--atlas-radius-sm);
   opacity: var(--atlas-opacity-hover);
   outline: none;
+}
+
+.dismissIcon {
+  inline-size: var(--atlas-icon-size-xs);
+  block-size: var(--atlas-icon-size-xs);
+  stroke-width: var(--atlas-icon-stroke-xs);
+}
+
+.lg .dismissIcon {
+  inline-size: var(--atlas-icon-size-sm);
+  block-size: var(--atlas-icon-size-sm);
+  stroke-width: var(--atlas-icon-stroke-sm);
 }
 
 .dismissBtn:hover {

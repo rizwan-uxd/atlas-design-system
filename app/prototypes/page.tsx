@@ -1,4 +1,5 @@
 import Link from "next/link"
+import { ArrowLeft } from "lucide-react"
 import { flows } from "./_shared/flowRegistry"
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@atlas/ui-web/compositions/Card/Card"
 import { Badge } from "@atlas/ui-web/primitives/Badge/Badge"
@@ -27,12 +28,16 @@ export default function PrototypesIndex() {
           <Link
             href="/"
             style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "var(--atlas-spacing-1)",
               fontSize: "var(--atlas-font-size-sm)",
               color: "var(--atlas-foreground-muted)",
               textDecoration: "none",
             }}
           >
-            ← Sandbox
+            <ArrowLeft size={16} aria-hidden="true" />
+            Sandbox
           </Link>
           <h1
             style={{
