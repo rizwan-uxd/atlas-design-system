@@ -16,6 +16,7 @@ HOW TO USE
 · Set required or optional, never both and never a typed asterisk; required wins.
 · Give helpText for guidance and error for a failed check. The error replaces the help text and sets the Label and control to invalid.
 · Match the control size to the Field size (sm, md or lg; Select has sm and md).
+· Turn Action on to show a link Button at the end of the label row, for example Forgot password?; edit its text on the nested instance.
 · In Figma: turn Help off and Invalid on to show the error; set Required, Optional and the disabled and error states on the nested Label and Control instances.
 DO
 · Keep the Label visible; never use a placeholder as the label.
@@ -28,7 +29,7 @@ RELATED
 · Alert. A form-level failure, not a field error.
 
 PROPERTIES
-Size: sm | md | lg. Help: boolean (default on). Help text: text. Invalid: boolean (default off). Error text: text. The Label and the control are nested instances, edited in place.
+Size: sm | md | lg. Help: boolean (default on). Help text: text. Invalid: boolean (default off). Error text: text. Action: boolean (default off). The Label and the control are nested instances, edited in place.
 
 CODE    <Field> in @atlas/ui-web/compositions/Field
 
@@ -56,5 +57,6 @@ import { Field } from "@atlas/ui-web/compositions/Field/Field"
 - `error?: React.ReactNode`
 - `disabled?: boolean`
 - `id?: string`
+- `labelAction?: React.ReactNode`
 - `children: (control: FieldControlProps) => React.ReactNode`
 <!-- END:generated-api -->

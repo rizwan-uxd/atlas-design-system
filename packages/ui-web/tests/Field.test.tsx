@@ -9,7 +9,8 @@
  *   5. required / optional markers; aria-required reaches the control
  *   6. disabled reaches the control and the Label
  *   7. Works with Textarea; explicit id is honoured
- *   8. axe has no violations per state
+ *   8. labelAction renders beside the Label, outside the <label>
+ *   9. axe has no violations per state
  */
 
 import React from "react"
@@ -18,6 +19,7 @@ import { render, screen } from "@testing-library/react"
 import { axe } from "jest-axe"
 import { Field, type FieldSize } from "@atlas/ui-web/compositions/Field/Field"
 import { Input } from "@atlas/ui-web/primitives/Input/Input"
+import { Button } from "@atlas/ui-web/primitives/Button/Button"
 import { Textarea } from "@atlas/ui-web/primitives/Textarea/Textarea"
 
 const SIZES: FieldSize[] = ["sm", "md", "lg"]
@@ -99,6 +101,27 @@ describe("Field — markers and states", () => {
   })
 })
 
+describe("Field — label action", () => {
+  it("renders the action on the label row, outside the label", () => {
+    render(
+      <Field label="Password" labelAction={<Button variant="link">Forgot password?</Button>}>
+        {(c) => <Input {...c} />}
+      </Field>,
+    )
+    const action = screen.getByRole("button", { name: "Forgot password?" })
+    const label = screen.getByText("Password").closest("label")!
+    expect(label.contains(action)).toBe(false)
+    expect(action.parentElement?.parentElement).toBe(label.parentElement)
+    expect(screen.getByLabelText("Password").tagName).toBe("INPUT")
+  })
+
+  it("adds no label row without an action", () => {
+    const { container } = render(<Field label="Email">{(c) => <Input {...c} />}</Field>)
+    const label = container.querySelector("label")!
+    expect(label.parentElement).toBe(container.firstElementChild)
+  })
+})
+
 describe("Field — accessibility", () => {
   it.each([
     ["default", {}],
@@ -106,6 +129,7 @@ describe("Field — accessibility", () => {
     ["error", { error: "Error" }],
     ["required", { required: true }],
     ["disabled", { disabled: true }],
+    ["label action", { labelAction: <Button variant="link">Forgot password?</Button> }],
   ] as const)("has no axe violations: %s", async (_name, props) => {
     const { container } = render(
       <Field label="Email" {...props}>{(c) => <Input {...c} />}</Field>,

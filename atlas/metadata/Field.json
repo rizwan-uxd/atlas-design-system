@@ -16,10 +16,11 @@
     { "name": "error", "required": false, "type": "React.ReactNode" },
     { "name": "disabled", "required": false, "type": "boolean" },
     { "name": "id", "required": false, "type": "string" },
+    { "name": "labelAction", "required": false, "type": "React.ReactNode" },
     { "name": "children", "required": true, "type": "(control: FieldControlProps) => React.ReactNode" }
   ],
   "subcomponents": [],
-  "tokensUsed": ["--atlas-danger", "--atlas-font-sans", "--atlas-font-size-sm", "--atlas-font-size-xs", "--atlas-font-weight-regular", "--atlas-foreground-disabled", "--atlas-foreground-muted", "--atlas-icon-size-xs", "--atlas-icon-stroke-xs", "--atlas-line-height-normal", "--atlas-spacing-1_5"],
+  "tokensUsed": ["--atlas-danger", "--atlas-font-sans", "--atlas-font-size-sm", "--atlas-font-size-xs", "--atlas-font-weight-regular", "--atlas-foreground-disabled", "--atlas-foreground-muted", "--atlas-icon-size-xs", "--atlas-icon-stroke-xs", "--atlas-line-height-normal", "--atlas-spacing-1_5", "--atlas-spacing-2"],
   "figmaNodeId": "863:254",
   "figmaFileKey": "cKYhfaHLCoyMHi9nKr63Ig",
   "figmaProperties": { "Size": ["sm", "md", "lg"] },
