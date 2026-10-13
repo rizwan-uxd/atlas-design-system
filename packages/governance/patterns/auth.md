@@ -15,7 +15,7 @@ summary: Sign the user in or create an account with email, social or passkey opt
 ## Decision rules
 - Identifier-first. Step 1 asks for one email (or phone) and shows one primary `Button` "Continue". Do not show the password field until the account is known. Why: Uber, Notion, Linear and Claude all lead with one identifier field.
 - Social and SSO choices (Google, Apple, passkey) go below the primary action, after an "or" divider made of two `Divider`s around the word. Each is `Button variant="outline"` with the provider name in the label ("Continue with Google"). Why: Notion, Uber, Perplexity.
-- Prefer a code or magic link over a password. Offer password only as a secondary path (`Button variant="ghost"` "Use a password instead"). A password `Input` gets a visible show/hide control and a "Forgot password?" `Button variant="link"` on the label row. `Field` has no label-row action slot yet, so this is the one field that keeps a hand-wired `Label` row and `Input` (candidate: a `Field` label action plus a `PasswordInput`); wrong password still shows its message in text under the control, wired with `aria-describedby`. Why: Linear and Claude are passwordless; Descript, Amazon and Uber keep password as a fallback.
+- Prefer a code or magic link over a password. Offer password only as a secondary path (`Button variant="ghost"` "Use a password instead"). The password step is a `Field` with a `PasswordInput` (its show/hide toggle is built in) and a "Forgot password?" `Button variant="link" size="xs"` passed as `labelAction`. Use `autoComplete="current-password"` and no strength meter on sign-in (`showStrength` and `new-password` belong on create-account). A wrong password shows its message in the Field error text, wired with `aria-describedby`. Why: Linear and Claude are passwordless; Descript, Amazon and Uber keep password as a fallback.
 - Code step: say where the code was sent and show that address, with a "Use a different email" `Button variant="link"`. One `Input` with `inputMode="numeric"` and `autoComplete="one-time-code"`. Do not split the code into per-digit boxes until Atlas has an OTP component (see candidates).
 - Resend: a `Button variant="ghost"` that is disabled with a live countdown ("Resend in 30s") and re-enables at 0. Why: Notion ("Resend in 16s") and Wise ("Resend email 0:59").
 - Every email and code field is a `Field`: it renders the `Label`, the control and the error text and wires them together. Wrong or expired code, or a malformed email → pass the message as `error` on the `Field` (it sets `invalid` on the Label and control and links the text with `aria-describedby`), and keep the entered value. Say what to do ("The code is incorrect. Check your email or resend."). Never an `Alert` per field error.
@@ -25,9 +25,10 @@ summary: Sign the user in or create an account with email, social or passkey opt
 
 ## Components and variants
 - `Field` size: `md`
-- `Label` variant: `default` · size: `md` (inside Field; the password row with its "Forgot password?" action is hand-wired)
+- `Label` variant: `default` · size: `md` (inside Field)
 - `Input` variant: `default` · size: `md`
-- `Button` variant: `primary`, `outline`, `ghost`, `link` · size: `md`
+- `PasswordInput` size: `md` · no strength meter on sign-in
+- `Button` variant: `primary`, `outline`, `ghost`, `link` · size: `md` (`xs` for the Field label action)
 - `Divider`
 - `Alert` variant: `danger` · size: `md`
 - `Checkbox` variant: `default` · size: `md`

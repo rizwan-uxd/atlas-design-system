@@ -1,6 +1,7 @@
 import * as React from "react"
 import { Alert } from "@atlas/ui-web/compositions/Alert/Alert"
 import { Field } from "@atlas/ui-web/compositions/Field/Field"
+import { PasswordInput } from "@atlas/ui-web/compositions/PasswordInput/PasswordInput"
 import { Button } from "@atlas/ui-web/primitives/Button/Button"
 import { Divider } from "@atlas/ui-web/primitives/Divider/Divider"
 import { Input } from "@atlas/ui-web/primitives/Input/Input"
@@ -10,12 +11,16 @@ type Props = {
   onVerifyCode: (email: string, code: string) => Promise<boolean>
   onSocial: (provider: "google" | "apple" | "passkey") => void
   onSignUp: () => void
+  onVerifyPassword: (email: string, password: string) => Promise<boolean>
+  onForgotPassword: (email: string) => void
 }
 
-export function SignIn({ onRequestCode, onVerifyCode, onSocial, onSignUp }: Props) {
-  const [step, setStep] = React.useState<"email" | "code">("email")
+export function SignIn({ onRequestCode, onVerifyCode, onSocial, onSignUp, onVerifyPassword, onForgotPassword }: Props) {
+  const [step, setStep] = React.useState<"email" | "code" | "password">("email")
   const [email, setEmail] = React.useState("")
   const [code, setCode] = React.useState("")
+  const [password, setPassword] = React.useState("")
+  const [passwordError, setPasswordError] = React.useState<string>()
   const [emailError, setEmailError] = React.useState<string>()
   const [codeError, setCodeError] = React.useState<string>()
   const [failed, setFailed] = React.useState(false)
@@ -28,10 +33,15 @@ export function SignIn({ onRequestCode, onVerifyCode, onSocial, onSignUp }: Prop
     return () => window.clearTimeout(t)
   }, [cooldown])
 
+  function emailValid() {
+    if (/^\S+@\S+\.\S+$/.test(email)) { setEmailError(undefined); return true }
+    setEmailError("Enter a valid email address.")
+    return false
+  }
+
   async function sendCode(e?: React.FormEvent) {
     e?.preventDefault()
-    if (!/^\S+@\S+\.\S+$/.test(email)) return setEmailError("Enter a valid email address.")
-    setEmailError(undefined)
+    if (!emailValid()) return
     setBusy(true)
     setFailed(false)
     try {
@@ -53,8 +63,39 @@ export function SignIn({ onRequestCode, onVerifyCode, onSocial, onSignUp }: Prop
     if (!ok) setCodeError("The code is incorrect. Check your email or resend.")
   }
 
+  async function verifyPassword(e: React.FormEvent) {
+    e.preventDefault()
+    setBusy(true)
+    const ok = await onVerifyPassword(email, password)
+    setBusy(false)
+    if (!ok) setPasswordError("The password is incorrect. Try again or reset it.")
+  }
+
   const muted = { color: "var(--atlas-foreground-muted)", fontSize: "var(--atlas-text-body-sm)" }
   const title = { fontSize: "var(--atlas-font-size-2xl)", fontWeight: "var(--atlas-font-weight-semibold)" }
+
+  if (step === "password") {
+    return (
+      <form onSubmit={verifyPassword} noValidate style={{ display: "grid", gap: "var(--atlas-spacing-4)" }}>
+        <h1 style={title}>Enter your password</h1>
+        <p style={muted}>Signing in as <strong>{email}</strong>.</p>
+        <Button type="button" variant="link" onClick={() => { setStep("email"); setPassword(""); setPasswordError(undefined) }}>
+          Use a different email
+        </Button>
+        <Field
+          label="Password"
+          error={passwordError}
+          labelAction={<Button type="button" variant="link" size="xs" onClick={() => onForgotPassword(email)}>Forgot password?</Button>}
+        >
+          {(control) => (
+            <PasswordInput {...control} autoComplete="current-password" value={password}
+              onChange={(e) => setPassword(e.target.value)} />
+          )}
+        </Field>
+        <Button type="submit" variant="primary" loading={busy}>Continue</Button>
+      </form>
+    )
+  }
 
   if (step === "code") {
     return (
@@ -98,6 +139,7 @@ export function SignIn({ onRequestCode, onVerifyCode, onSocial, onSignUp }: Prop
       <Button type="button" variant="outline" onClick={() => onSocial("google")}>Continue with Google</Button>
       <Button type="button" variant="outline" onClick={() => onSocial("apple")}>Continue with Apple</Button>
       <Button type="button" variant="outline" onClick={() => onSocial("passkey")}>Continue with a passkey</Button>
+      <Button type="button" variant="ghost" onClick={() => emailValid() && setStep("password")}>Use a password instead</Button>
       <p style={{ ...muted, textAlign: "center" }}>By continuing you agree to the Terms and Privacy Policy.</p>
       <p style={{ ...muted, textAlign: "center" }}>
         Don't have an account? <Button type="button" variant="link" onClick={onSignUp}>Sign up</Button>
