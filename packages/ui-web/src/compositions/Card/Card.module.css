@@ -109,13 +109,13 @@
     border-color     var(--atlas-duration-fast) var(--atlas-easing-standard);
 }
 
-/* Default and outlined hover */
+/* Default and outlined hover — soft shadow, fill unchanged (Figma, DISC-093); active is drawn the same as default */
 .interactive.default:hover {
-  background-color: var(--atlas-card-default-background-hover);
+  box-shadow: var(--atlas-shadow-sm);
 }
 
 .interactive.outlined:hover {
-  background-color: var(--atlas-card-outlined-background-hover);
+  box-shadow: var(--atlas-shadow-sm);
 }
 
 /* Filled hover lightens the resting fill in both themes (background-hovered); retired the dark-only color-mix from BUG-054. */

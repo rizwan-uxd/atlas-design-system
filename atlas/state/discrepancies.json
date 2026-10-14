@@ -1121,10 +1121,10 @@
     {
       "id": "DISC-093",
       "component": "Card",
-      "side": "code",
-      "status": "open",
+      "side": "closed",
+      "status": "closed",
       "issue": "Card default and outlined interactive states differ between Figma and code. Hover: Figma keeps the fill and adds a soft shadow (5% black, blur 6); code changes the background to --atlas-background-hovered with no shadow. Active: Figma draws it identical to default; code has no :active rule. Focus-visible (2 px ring) and disabled (0.5) agree. Found 2026-10-14 while drawing the clickable StatCard states (CAND-045), which follow Card in both Figma and code.",
-      "resolution": "Open. Decide which side is right in a Card task (Figma wins by AGENTS.md section 1): either make the code hover a shadow, or redraw the Figma hover as the background change. Not fixed in the StatCard task.",
+      "resolution": "Closed 2026-10-14 (DEC-066). Figma won: Card default and outlined hover is a soft shadow with the fill unchanged, and active equals default. Code now applies --atlas-shadow-sm on hover (the two unused *-background-hover component tokens are removed) and has no :active rule. Figma unchanged.",
       "firstSeen": "2026-10-14",
       "lastSeen": "2026-10-14"
     }

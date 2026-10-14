@@ -127,10 +127,10 @@ test("the old Card color-mix exception is now rejected", () => {
   assert.match(v.join("\n"), /must be var\(--atlas-/)
 })
 
-test("the real block defines card-default-background-hover as background-hovered", () => {
-  const t = parseComponentTokens(REAL_CSS).find((x) => x.name === "--atlas-card-default-background-hover")
+test("the real block defines card-default-background as surface", () => {
+  const t = parseComponentTokens(REAL_CSS).find((x) => x.name === "--atlas-card-default-background")
   assert.ok(t)
-  assert.equal(t.value, "var(--atlas-background-hovered)")
+  assert.equal(t.value, "var(--atlas-surface)")
 })
 
 test("every semantic alias target in the real block is defined in the token file", () => {

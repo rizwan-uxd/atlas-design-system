@@ -13,6 +13,8 @@
  */
 
 import React from "react"
+import { readFileSync } from "node:fs"
+import { join } from "node:path"
 import { describe, it, expect, vi } from "vitest"
 import { render, screen, fireEvent } from "@testing-library/react"
 import { axe } from "jest-axe"
@@ -204,6 +206,24 @@ describe("Card — content and footer", () => {
       </Card>
     )
     expect(screen.getByRole("button", { name: "Go" })).toBeInTheDocument()
+  })
+})
+
+// ─── Hover and active styling (DISC-093) ───────────────────────────────────
+
+describe("Card — interactive hover", () => {
+  const css = readFileSync(join(__dirname, "../src/compositions/Card/Card.module.css"), "utf8")
+  const rule = (sel: string) => css.match(new RegExp(`${sel.replace(/\./g, "\\.")}:hover\\s*\\{([^}]*)\\}`))?.[1] ?? ""
+
+  for (const variant of ["default", "outlined"]) {
+    it(`${variant} hover adds a shadow and keeps the fill; active has no rule`, () => {
+      const body = rule(`.interactive.${variant}`)
+      expect(body).toContain("box-shadow: var(--atlas-shadow-sm)")
+      expect(body).not.toContain("background")
+    })
+  }
+  it("has no :active rule on the interactive card (Figma draws active as default)", () => {
+    expect(css).not.toMatch(/\.interactive[^{]*:active/)
   })
 })
 
