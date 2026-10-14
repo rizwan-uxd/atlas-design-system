@@ -17,9 +17,9 @@
       "id": "CAND-006",
       "name": "Link",
       "seenIn": ["packages/ui-web/src/patterns/Breadcrumb (BreadcrumbLink)"],
-      "composedFrom": "plain <a> styled with Atlas tokens",
+      "composedFrom": "Button asChild variant=\"link\" around an <a> or a router link (standalone links); Breadcrumb keeps its own styled anchor",
       "occurrences": 1,
-      "note": "Breadcrumb links are a plain anchor by plan; a shared Link component is not built."
+      "note": "Resolved as a composition (user, 2026-10-14, DEC-073): not built as a component. Button asChild was broken for any child (Slot got several children) and is fixed with Slottable in the same change."
     },
     {
       "id": "CAND-007",
