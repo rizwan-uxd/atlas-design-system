@@ -184,14 +184,6 @@
       "note": "Code has prefix and suffix props; Figma has no property for them, only the icon booleans. The icon is 20 px on every size because there is no per-size icon token. Figma needs a decision before either is drawn. CAND-033 covers the show/hide control."
     },
     {
-      "id": "CAND-040",
-      "name": "Chart plot width in Figma",
-      "seenIn": ["atlas/metadata/Chart.json", "docs/HANDOFF-patterns-and-library-gaps-next-session.md"],
-      "composedFrom": "plot fixed at 622 px inside the Chart instance",
-      "occurrences": 0,
-      "note": "The Chart plot cannot stretch inside an instance, so the Dashboard pattern places a 670 px plot beside the table. A resizable plot in the Chart component would remove the workaround."
-    },
-    {
       "id": "CAND-042",
       "name": "Search and filter states not drawn",
       "seenIn": ["docs/HANDOFF-patterns-and-library-gaps-next-session.md"],
