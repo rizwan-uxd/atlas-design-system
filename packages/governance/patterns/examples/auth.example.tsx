@@ -1,6 +1,7 @@
 import * as React from "react"
 import { Alert } from "@atlas/ui-web/compositions/Alert/Alert"
 import { Field } from "@atlas/ui-web/compositions/Field/Field"
+import { OtpInput } from "@atlas/ui-web/compositions/OtpInput/OtpInput"
 import { PasswordInput } from "@atlas/ui-web/compositions/PasswordInput/PasswordInput"
 import { Button } from "@atlas/ui-web/primitives/Button/Button"
 import { Divider } from "@atlas/ui-web/primitives/Divider/Divider"
@@ -107,8 +108,7 @@ export function SignIn({ onRequestCode, onVerifyCode, onSocial, onSignUp, onVeri
         </Button>
         <Field label="Code" error={codeError}>
           {(control) => (
-            <Input {...control} inputMode="numeric" autoComplete="one-time-code" value={code}
-              onChange={(e) => setCode(e.target.value)} />
+            <OtpInput {...control} length={6} value={code} onValueChange={setCode} />
           )}
         </Field>
         <Button type="submit" variant="primary" loading={busy}>Continue</Button>
