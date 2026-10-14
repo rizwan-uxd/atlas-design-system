@@ -425,6 +425,12 @@
       "topic": "OtpInput (promotes CAND-034)",
       "decision": "Owner-approved 2026-10-14. OtpInput is a web composition: one real, visually hidden input (inputMode numeric, autoComplete one-time-code) over aria-hidden per-digit slots, so paste, autofill and Field wiring work as for Input. Length is a value, 4 to 8, default 6; Figma draws all five as a Length variant. Sizes sm|md|lg follow Input (slot side = input height). No group separator. Figma: OTP Slot (Size x State x Filled, 30) and OTP Input (Size x State x Length, 75) on the OTP Input page, bound to existing input/* tokens, spacing/2 gap and the focus-ring shadow; no new token. Digits only: other characters are dropped and the value is cut to length. Native parity is logged as CAND-052, not built. The Auth pattern text that says to use one Input until an OTP component exists is a follow-up, not part of this change.",
       "date": "2026-10-14"
+    },
+    {
+      "id": "DEC-071",
+      "topic": "Stepper (promotes CAND-035)",
+      "decision": "Owner-approved 2026-10-14. Stepper is a web pattern: numbered markers joined by connectors, display only (no hover, focus or press state; markers are not buttons). Orientation horizontal|vertical, Size sm|md|lg (marker spacing-6|8|10). Status complete|current|upcoming is derived from a 1-based `current` (above the count marks every step complete); steps is a value, any count from 2, Figma draws 3 to 5. Complete markers use primary, no error status. Figma: Step Marker (Status x Size, 9), Step (Orientation x Status x Size, 18, booleans Connector and Description) and Stepper (Orientation x Size x Steps x Current, 72) on the Stepper page; only Stepper is a code component. Bound to existing semantic tokens, no new token and no stepper/* component tokens. The vertical connector is a fixed 16 (spacing-4) in Figma and stretches in code. Accessibility: an ol named by aria-label, aria-current=\"step\", status also written for assistive technology. Native parity is logged as CAND-053. The Onboarding pattern text that composes Progress for step labels is a follow-up, not part of this change.",
+      "date": "2026-10-14"
     }
   ]
 }

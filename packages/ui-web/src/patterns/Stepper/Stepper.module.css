@@ -1,0 +1,178 @@
+/* =================================================================
+   Atlas Stepper — component styles
+   Semantic tokens only. Logical properties throughout. Display only: no
+   hover, focus or press state, and no motion.
+   ================================================================= */
+
+.root {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-family: var(--atlas-font-sans);
+}
+
+.horizontal {
+  flex-direction: row;
+  align-items: flex-start;
+}
+
+.vertical {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--atlas-spacing-1);
+}
+
+/* ── Step ─────────────────────────────────────────────────────── */
+
+.step {
+  display: flex;
+  min-inline-size: 0;
+}
+
+/* Horizontal: marker, label, then a connector that fills what is left */
+.horizontal .step {
+  flex: 1 1 0;
+  align-items: center;
+  gap: var(--atlas-spacing-2);
+}
+
+.horizontal .step[data-last] {
+  flex: 0 0 auto;
+}
+
+/* Vertical: a rail (marker over connector) beside the text */
+.vertical .step {
+  align-items: stretch;
+  gap: var(--atlas-spacing-3);
+}
+
+.rail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--atlas-spacing-1);
+}
+
+/* ── Marker ───────────────────────────────────────────────────── */
+
+.marker {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  border-radius: var(--atlas-radius-full);
+  font-weight: var(--atlas-font-weight-medium);
+  font-variant-numeric: tabular-nums;
+}
+
+.sm .marker {
+  inline-size: var(--atlas-spacing-6);
+  block-size: var(--atlas-spacing-6);
+  font-size: var(--atlas-font-size-xs);
+}
+
+.md .marker {
+  inline-size: var(--atlas-spacing-8);
+  block-size: var(--atlas-spacing-8);
+  font-size: var(--atlas-font-size-sm);
+}
+
+.lg .marker {
+  inline-size: var(--atlas-spacing-10);
+  block-size: var(--atlas-spacing-10);
+  font-size: var(--atlas-font-size-base);
+}
+
+.check {
+  inline-size: var(--atlas-spacing-4);
+  block-size: var(--atlas-spacing-4);
+}
+
+.lg .check {
+  inline-size: var(--atlas-spacing-5);
+  block-size: var(--atlas-spacing-5);
+}
+
+.step[data-status="complete"] .marker {
+  color: var(--atlas-primary-foreground);
+  background-color: var(--atlas-primary);
+}
+
+.step[data-status="current"] .marker {
+  color: var(--atlas-primary);
+  background-color: var(--atlas-background);
+  border: var(--atlas-border-width-2) solid var(--atlas-primary);
+}
+
+.step[data-status="upcoming"] .marker {
+  color: var(--atlas-foreground-muted);
+  background-color: var(--atlas-background-muted);
+  border: var(--atlas-border-width-1) solid var(--atlas-border);
+}
+
+/* ── Text ─────────────────────────────────────────────────────── */
+
+.text {
+  display: flex;
+  flex-direction: column;
+  min-inline-size: 0;
+}
+
+.vertical .text {
+  padding-block-start: var(--atlas-spacing-1);
+}
+
+.label {
+  position: relative;
+  font-size: var(--atlas-text-body-sm);
+  font-weight: var(--atlas-font-weight-medium);
+  line-height: var(--atlas-line-height-normal);
+  color: var(--atlas-foreground);
+}
+
+.step[data-status="upcoming"] .label {
+  color: var(--atlas-foreground-muted);
+}
+
+.description {
+  font-size: var(--atlas-text-caption);
+  font-weight: var(--atlas-font-weight-regular);
+  line-height: var(--atlas-line-height-normal);
+  color: var(--atlas-foreground-muted);
+}
+
+/* Status is written for assistive technology; the marker and colour carry it visually */
+.status {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ── Connector ────────────────────────────────────────────────── */
+
+.connector {
+  flex: 1 1 auto;
+  background-color: var(--atlas-border);
+}
+
+.step[data-status="complete"] .connector {
+  background-color: var(--atlas-primary);
+}
+
+.horizontal .connector {
+  min-inline-size: var(--atlas-spacing-4);
+  block-size: var(--atlas-border-width-2);
+}
+
+.vertical .connector {
+  inline-size: var(--atlas-border-width-2);
+  min-block-size: var(--atlas-spacing-4);
+}

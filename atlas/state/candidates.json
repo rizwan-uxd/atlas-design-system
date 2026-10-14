@@ -160,12 +160,12 @@
       "note": "Web OtpInput shipped (compositions/OtpInput; promoted from CAND-034, 2026-10-14). Native parity is logged here, not built."
     },
     {
-      "id": "CAND-035",
-      "name": "Stepper (labelled steps)",
+      "id": "CAND-053",
+      "name": "Stepper (Atlas/Mobile-Native)",
       "seenIn": ["packages/governance/patterns/onboarding.md"],
-      "composedFrom": "Progress with a 'Step n of N' valueLabel",
+      "composedFrom": "not yet attempted",
       "occurrences": 0,
-      "note": "Wise labels each step in a step bar; Atlas Progress has no per-step labels. Not built."
+      "note": "Web Stepper shipped (patterns/Stepper; promoted from CAND-035, 2026-10-14). Native parity is logged here, not built."
     },
     {
       "id": "CAND-037",
