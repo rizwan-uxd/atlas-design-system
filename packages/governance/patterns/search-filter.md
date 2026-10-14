@@ -20,6 +20,7 @@ summary: Search a set of records with a query, scope tabs, filters, sort and rem
 - Every applied filter appears as a removable `Badge` chip (`removable`, `onRemove`, `removeLabel`), plus one "Clear all" `Button variant="ghost"`. Why: Dropbox "Reset filters", Selfridges "Unselect all filters".
 - Results are `ListItem`s (title, one line of match context, metadata) or a `Table` for dense data. Highlight the matched text with the foreground token, not a hardcoded colour.
 - No results → echo the query ("No results for 'desig'"), say what to try (check spelling, remove a filter), and offer "Clear filters" `Button`. Why: Linear echoes the query in its empty state.
+- Empty query → hide the scope tabs, count, sort and filters. Show "Recent searches" with a "Clear recent" `Button variant="ghost"` and up to 3 `ListItem`s (clock icon, past query as title); choosing one runs that search. Why: nothing to scope yet, and recent queries beat a blank list.
 - Searching → `Skeleton` rows in the shape of results; keep the previous results visible until new ones arrive.
 - A failed search → one `Alert variant="danger"` with Retry. Keep the query and filters.
 
@@ -30,6 +31,7 @@ summary: Search a set of records with a query, scope tabs, filters, sort and rem
 - `Badge` variant: `neutral` · size: `md`
 - `Button` variant: `ghost`, `outline` · size: `md`
 - `ListItem` variant: `default` · size: `md`
+- `Sheet` side: `bottom` (phone filter panel)
 - `Skeleton`
 - `Alert` variant: `danger` · size: `md`
 
@@ -43,11 +45,11 @@ summary: Search a set of records with a query, scope tabs, filters, sort and rem
 - Typography: No-results message `--atlas-text-body`, semibold; its help line `--atlas-text-body-sm` in `foreground-muted`. Set every heading and paragraph from `--atlas-text-*` or `--atlas-font-size-*`; never a bare `<h1>` or `<p>`.
 
 ## Responsive behavior
-- Phone: query on its own row, tabs scroll horizontally, filters open in a `Sheet` from one "Filters" `Button` that shows the active count.
+- Phone: query on its own row, tabs scroll horizontally, filters open in a `Sheet side="bottom"` from one "Filters" `Button` that shows the active count. The Sheet is titled "Filters", stacks one labelled `Select` per attribute at `--atlas-spacing-4`, and its footer has a primary `Button` "Show N results" and a ghost "Clear all". The results behind it stay visible, dimmed by the overlay.
 
 ## States
 - default · loading (Skeleton rows) · results · no results (recovery) · error (Alert with Retry) · filtered (chips and Clear all visible).
-- empty query: show recent searches or suggestions, not an empty list.
+- empty query (recent searches) · filter sheet (phone).
 
 ## Accessibility
 - The search `Input` has a `Label` or `aria-label`. The result count is announced politely when it changes.
