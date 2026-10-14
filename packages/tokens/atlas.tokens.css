@@ -419,13 +419,11 @@
   /* Card · colour and elevation */
   --atlas-card-default-background: var(--atlas-surface);
   --atlas-card-default-border: var(--atlas-border);
-  --atlas-card-default-background-hover: var(--atlas-background-hovered);
   --atlas-card-elevated-background: var(--atlas-surface-raised);
   --atlas-card-elevated-shadow: var(--atlas-shadow-md);
   --atlas-card-elevated-shadow-hover: var(--atlas-shadow-lg);
   --atlas-card-outlined-background: var(--atlas-surface);
   --atlas-card-outlined-border: var(--atlas-border-strong);
-  --atlas-card-outlined-background-hover: var(--atlas-background-hovered);
   --atlas-card-filled-background: var(--atlas-background-muted);
   --atlas-card-filled-background-hover: var(--atlas-background-hovered);
   --atlas-card-selected-border: var(--atlas-primary);

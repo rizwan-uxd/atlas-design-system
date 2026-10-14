@@ -395,6 +395,12 @@
       "topic": "Sparkline: new primitive (promotes CAND-046), plain SVG, line and area, three tones",
       "decision": "Owner-approved 2026-10-14 (CAND-046). A new primitives-tier component, Sparkline: one series drawn as an inline SVG path, no chart dependency (Recharts stays in Chart only). Figma: page Sparkline (953:2), set 953:48, Variant line | area x Tone neutral | positive | negative x Size sm | md | lg (18 variants); 120 px wide, heights 24, 32 and 40 bound to spacing/6, 8 and 10; line 2 px (border-width/2), round caps; line colours foreground-muted, success, danger; area fills background-muted, success-subtle, danger-subtle (owner chose subtle over muted: the muted fills are slabs in Dark). No new token. Code: values (time order, left to right, not mirrored in RTL), variant, tone, size and a required label (role img); fewer than two finite values renders nothing; width fills the container, the drawing is stretched and the stroke is not (preserveAspectRatio none, non-scaling stroke). Tone says whether the trend is good, not its direction, so the words Up, Down or Flat must sit nearby. Out of scope and still open as a follow-up: a StatCard sparkline slot.",
       "date": "2026-10-14"
+    },
+    {
+      "id": "DEC-066",
+      "topic": "Card default and outlined hover is a shadow, matching Figma (closes DISC-093)",
+      "decision": "Owner-approved 2026-10-14. Figma wins: interactive Card default and outlined hover keep the fill and add a soft shadow; active is drawn the same as default, so code has no :active rule. Figma draws the hover as an unbound 0 2px 6px 5% black drop shadow; owner chose the existing --atlas-shadow-sm (0 1px 2px, 5%, dark-mode aware) over a new token or shadow-md. The component tokens card-default-background-hover and card-outlined-background-hover are removed (nothing else used them) and the CSS reads --atlas-shadow-sm directly, so no new token is added. Filled (fill change) and elevated (shadow lift) hover are unchanged. Clickable StatCard follows Card. No Figma edit.",
+      "date": "2026-10-14"
     }
   ]
 }
