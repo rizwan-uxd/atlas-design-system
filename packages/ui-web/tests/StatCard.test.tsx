@@ -7,7 +7,8 @@
  *   3. Delta words per trend, sentiment defaults and override, trendLabel
  *   4. Loading: skeletons in place of the value and delta, aria-busy on the content
  *   5. No delta renders no badge
- *   6. axe has no violations per state
+ *   6. Leading icon: rendered decorative above the value, kept while loading, absent by default
+ *   7. axe has no violations per state
  */
 
 import React from "react"
@@ -83,12 +84,35 @@ describe("StatCard — loading", () => {
   })
 })
 
+describe("StatCard — leading icon", () => {
+  const Icon = () => <svg data-testid="stat-icon" viewBox="0 0 24 24" />
+
+  it("renders the icon decorative, above the value", () => {
+    render(<StatCard {...base} icon={<Icon />} />)
+    const icon = screen.getByTestId("stat-icon")
+    expect(icon.parentElement).toHaveAttribute("aria-hidden", "true")
+    const value = screen.getByText("12,480")
+    expect(icon.compareDocumentPosition(value) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+  })
+
+  it("keeps the icon while loading", () => {
+    render(<StatCard {...base} loading icon={<Icon />} />)
+    expect(screen.getByTestId("stat-icon")).toBeInTheDocument()
+  })
+
+  it("renders no icon wrapper by default", () => {
+    render(<StatCard {...base} />)
+    expect(screen.queryByTestId("stat-icon")).toBeNull()
+  })
+})
+
 describe("StatCard — accessibility", () => {
   it.each([
     ["default", {}],
     ["delta up", { delta: { text: "12% vs previous period", trend: "up" as const } }],
     ["delta down good", { delta: { text: "3%", trend: "down" as const, sentiment: "positive" as const } }],
     ["loading", { loading: true }],
+    ["icon", { icon: <svg viewBox="0 0 24 24" /> }],
   ])("has no axe violations: %s", async (_name, props) => {
     const { container } = render(<StatCard {...base} {...props} />)
     expect(await axe(container)).toHaveNoViolations()

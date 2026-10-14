@@ -9,12 +9,14 @@
  *            (Badge success | danger | neutral). Sentiment defaults from the trend;
  *            set it when down is good (error rate, latency).
  *
- * Anatomy:   [Card: title (label) · description (period) · value · delta badge]
+ * Anatomy:   [Card: title (label) · description (period) · icon · value · delta badge]
+ * Icon:      optional leading icon (16 px, muted) above the value; decorative, stays while loading
  *
  * Accessibility:
  *   - The delta text starts with the word Up, Down or Flat, so it never relies on colour
  *   - While loading, the content region has aria-busy and the skeletons are aria-hidden
  *   - The value is plain text; an empty metric is passed as "—"
+ *   - The icon is decorative (aria-hidden); the label carries the meaning
  *
  * Rules:
  *   - Always pass a period; a metric without one is ambiguous
@@ -52,6 +54,8 @@ export interface StatCardProps {
   /** The headline number, formatted by the caller */
   value: React.ReactNode
   delta?: StatCardDelta
+  /** Optional leading icon above the value, e.g. <Users />. Decorative; stays while loading */
+  icon?: React.ReactNode
   /** Shows skeletons in place of the value and the delta */
   loading?: boolean
   className?: string
@@ -76,6 +80,7 @@ export function StatCard({
   period,
   value,
   delta,
+  icon,
   loading = false,
   className,
   id,
@@ -90,6 +95,7 @@ export function StatCard({
       </CardHeader>
       <CardContent>
         <div className={styles.stat} data-size={size} aria-busy={loading || undefined}>
+          {icon && <span className={styles.icon} aria-hidden="true">{icon}</span>}
           {loading ? (
             <>
               <Skeleton className={styles.valueSkeleton} />

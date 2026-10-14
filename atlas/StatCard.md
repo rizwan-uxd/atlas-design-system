@@ -20,6 +20,7 @@ HOW TO USE
 · No data is content, not a state: show an em dash as the value and leave the delta out.
 · Use sm in dense grids, md by default, lg for hero metrics. Keep the same size in a row.
 · In Figma the label, period, value and delta text are edited in the nested Card; hide the Delta layer to omit it.
+· Set Leading icon to on for a 16 px icon above the value, then swap the icon on the instance. The icon is decorative and stays while the card is loading.
 DO
 · Keep at most four cards in the first view.
 · Stack one card per row on a phone.
@@ -33,7 +34,7 @@ RELATED
 · Chart — for a series over time.
 
 PROPERTIES
-Size: sm | md | lg. State: default | loading. Sentiment: positive | negative | neutral (the delta Badge: success, danger, neutral).
+Size: sm | md | lg. State: default | loading. Sentiment: positive | negative | neutral (the delta Badge: success, danger, neutral). Leading icon: off | on.
 
 CODE    <StatCard> in @atlas/ui-web/compositions/StatCard
 
@@ -58,6 +59,7 @@ import { StatCard } from "@atlas/ui-web/compositions/StatCard/StatCard"
 - `period: React.ReactNode`
 - `value: React.ReactNode`
 - `delta?: StatCardDelta`
+- `icon?: React.ReactNode`
 - `loading?: boolean`
 - `className?: string`
 - `id?: string`

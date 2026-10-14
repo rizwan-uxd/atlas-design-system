@@ -176,14 +176,6 @@
       "note": "Linear and Notion expose a Cmd+K command menu. Atlas has no component. Not built."
     },
     {
-      "id": "CAND-044",
-      "name": "StatCard leading icon",
-      "seenIn": ["atlas/StatCard.md"],
-      "composedFrom": "an icon placed beside the StatCard label by hand",
-      "occurrences": 0,
-      "note": "Deferred from StatCard v1 (user, 2026-10-12). Needs an instance-swap slot drawn in Figma first. Not built."
-    },
-    {
       "id": "CAND-045",
       "name": "StatCard clickable (drill-down)",
       "seenIn": ["atlas/StatCard.md"],

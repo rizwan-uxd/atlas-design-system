@@ -4,7 +4,7 @@ Written: 2026-10-13, updated 2026-10-14 (second update: candidate cleanup). Read
 
 ## State
 - **`main` was at `c0dd0fc` (PR #56) before CAND-042, no open PRs.** After the PRs below, #51 to #55 closed the Figma debt candidates (CAND-038, 041, 040, 039; see item 4). Merged since the first draft of this doc, each after the user's "merge N": #34 (handoff docs, Progress.Percent sync, CAND-038 to 043), #19 (sync extracts props from an intersected union type, DISC-084 now closed), #15 (dashboard coverage audit), #14 (search result count on one line), #48 (Field `labelAction` slot, CAND-047 promoted), #49 (CI re-runs on `labeled`, so the old close-and-reopen workaround for `atlas-approved-new` is no longer needed), #50 (auth password step uses Field `labelAction` and `PasswordInput`). Earlier this session: #40 to #47.
-- Latest ids: DEC-062, CAND-049, DISC-092.
+- Latest ids: DEC-063, CAND-049, DISC-092.
 - Working branch for this cloud session is `claude/laughing-albattani-t6a27v`, level with `origin/main`. Branch from `origin/main` after `git fetch`.
 - The four stale handoff docs this file superseded are now tracked on `main`; the `atlas:verify` `paths` workaround for untracked docs no longer applies.
 - `.atlas-pull/pull.json` (gitignored scratch, local machine only) holds hand-patched entries for Pagination (`903:537`) and PasswordInput (`909:770`). A full `--pull` would rewrite older components from stale text; patch one entry instead and keep the original `pulledAt`.
@@ -15,7 +15,7 @@ Written: 2026-10-13, updated 2026-10-14 (second update: candidate cleanup). Read
 The auth password row, the item the user kept coming back to, is done. Nothing is in flight. Candidates, all needing the user's go-ahead:
 1. **Batch-2 patterns** (navigation shell, detail view, chat, notifications center, payment and billing, members and permissions, command menu): still a proposal, pick one.
 2. **Components on hold:** OTP (CAND-034), Stepper (CAND-035), CommandMenu (CAND-037).
-3. **Deferred:** CAND-044 StatCard leading icon, CAND-045 StatCard clickable, CAND-046 Sparkline, CAND-048 infinite scroll.
+3. **Deferred:** CAND-045 StatCard clickable, CAND-046 Sparkline, CAND-048 infinite scroll, CAND-049 Sheet content and footer slots. CAND-044 (StatCard leading icon) is done: a `Leading icon` off | on variant, icon above the value (DEC-063); a header-row icon would need a leading-icon slot on Card first.
 4. **Snapshot and Figma debt from #34:** cleared. Closed: CAND-038 (sync carries Figma boolean and instance-swap properties), CAND-041 (Progress value text is free text, Percent is listed), CAND-040 (Chart plot resizable in Figma, Figma edit only), CAND-039 (Input Prefix and Suffix drawn in Figma on set `43:111`, mapped in Code Connect, DEC-060). Also closed: **CAND-042** (Search and filter frames 7 Empty query and 8 Filter sheet drawn, DEC-061; the Sheet has no content slot, so frame 8 uses a detached Sheet, logged as CAND-049). Also closed: **CAND-043** (code already used the token; the 20 disabled variants in Dropdown Menu Item, Radio Group Item and Slider are now bound to `opacity/disabled` in Figma, DEC-062). No candidate from #34 is left open. The Figma MCP connects in some cloud sessions and not others; Figma screenshots there need `enableBase64Response` because the proxy blocks the asset URL. Note for sync runs: `get_metadata` cannot see component properties; read them with a read-only `use_figma` (see the `atlas-figma-sync` skill).
 5. **Housekeeping:** the local cleanup above.
 

@@ -29,6 +29,21 @@
   color: var(--atlas-foreground);
 }
 
+/* ── Leading icon: decorative, 16 px, muted, above the value ───── */
+
+.icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  inline-size: var(--atlas-icon-size-xs);
+  block-size: var(--atlas-icon-size-xs);
+  color: var(--atlas-foreground-muted);
+}
+
+.icon > svg {
+  inline-size: 100%;
+  block-size: 100%;
+}
+
 /* ── Loading: skeletons take the final content's size ─────────── */
 
 .valueSkeleton {
