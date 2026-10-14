@@ -389,6 +389,12 @@
       "topic": "StatCard is clickable through Card interactive; Interaction variant in Figma",
       "decision": "Owner-approved 2026-10-14 (CAND-045). StatCard takes onClick and disabled and renders Card interactive, one <button> named by the label (CardTitle), when onClick is set and the card is not loading; disabled applies only together with onClick; a loading card is never clickable. No Card change and no link variant: a drill-down that must be an <a href> needs Card link support first. Figma: the Stat card set (867:351) gains an Interaction variant property, static | hover | focus-visible | active | disabled (36 existing variants become static; 12 new at sm, md and lg, positive, default content, no icon, each setting the nested Card State; switching the nested State keeps the slot content). The description's 'not supported in v1' line is replaced. Card's own hover and active are not what code does (DISC-093, open): StatCard follows Card on both sides, so it matches Card until that is decided. Code Connect maps Interaction to onClick (a handler for every non-static value) and disabled. Known limit: a Card button is named by its title only, so the value and delta are not in the accessible name; the label should say what opens.",
       "date": "2026-10-14"
+    },
+    {
+      "id": "DEC-065",
+      "topic": "Sparkline: new primitive (promotes CAND-046), plain SVG, line and area, three tones",
+      "decision": "Owner-approved 2026-10-14 (CAND-046). A new primitives-tier component, Sparkline: one series drawn as an inline SVG path, no chart dependency (Recharts stays in Chart only). Figma: page Sparkline (953:2), set 953:48, Variant line | area x Tone neutral | positive | negative x Size sm | md | lg (18 variants); 120 px wide, heights 24, 32 and 40 bound to spacing/6, 8 and 10; line 2 px (border-width/2), round caps; line colours foreground-muted, success, danger; area fills background-muted, success-subtle, danger-subtle (owner chose subtle over muted: the muted fills are slabs in Dark). No new token. Code: values (time order, left to right, not mirrored in RTL), variant, tone, size and a required label (role img); fewer than two finite values renders nothing; width fills the container, the drawing is stretched and the stroke is not (preserveAspectRatio none, non-scaling stroke). Tone says whether the trend is good, not its direction, so the words Up, Down or Flat must sit nearby. Out of scope and still open as a follow-up: a StatCard sparkline slot.",
+      "date": "2026-10-14"
     }
   ]
 }
