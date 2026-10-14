@@ -16,6 +16,7 @@ HOW TO USE
 · Default variant is default, size md; filled suits tinted surfaces; unstyled only inside a bordered container.
 · Set invalid with a visible error message linked by aria-describedby; set loading while validating or searching.
 · Put units and currencies in prefix or suffix, not in the placeholder.
+· Prefix and Suffix show short text at the edge of the field. In code a prefix is hidden when a leading icon is set, and a suffix when a trailing icon is set, so use one or the other on each side.
 · Use native input attributes (disabled, readOnly, required, name, autoComplete).
 DO
 · Keep placeholders as example formats only.
@@ -41,7 +42,7 @@ CODE    <Input> in @atlas/ui-web/primitives/Input
 `sm` · `md` · `lg`
 
 ## Figma toggles
-`Leading icon` · `Trailing icon` (with slots, off by default)
+`Leading icon` · `Trailing icon` · `Prefix` · `Suffix` (with slots, off by default)
 
 <!-- END:generated-structure -->
 
