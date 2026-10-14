@@ -365,6 +365,12 @@
       "topic": "Input prefix and suffix are drawn in Figma; the icon stays 20 px at every size",
       "decision": "Owner-approved 2026-10-14 (CAND-039). Input prefix and suffix existed only in code; the Input set (43:111) gains Prefix and Suffix booleans (off by default) and Prefix text (\"$\") and Suffix text (\".com\") text properties, with a hidden Prefix and Suffix text node in all 45 variants between the icon slots and the placeholder: font-size/sm, font-family/sans, font-weight/regular and fill input/affix-foreground, the same tokens code uses; no new token. In code a prefix is not rendered when a leading icon is set and a suffix is not rendered when a trailing icon is set, so the description says to use one or the other on each side; Figma cannot enforce that. The per-size icon token half of the candidate is closed as not needed: the icon is 20 px at every size in both Figma and code (input/icon-size = spacing/5, DEC unchanged), and the file already has icon/size/xs|sm|md|lg for other uses. Input.figma.tsx maps Prefix with Prefix text to prefix and Suffix with Suffix text to suffix.",
       "date": "2026-10-14"
+    },
+    {
+      "id": "DEC-061",
+      "topic": "Search and filter draws an empty-query state and a mobile filter Sheet; the Sheet is detached there",
+      "decision": "Owner-approved 2026-10-14 (CAND-042). Pattern / Search and filter gains frame 7 Empty query (empty Input, Recent searches label, ghost Clear recent Button, 3 List Items with a clock icon; tabs, count, sort and filters hidden) and frame 8 Filter sheet, mobile 390 (frame 6 dimmed by the overlay token and opacity/overlay, a bottom Sheet titled Filters with Type and Date Selects under Labels, a primary Show 12 results Button and a ghost Clear all Button). Sheet has no content slot, so frame 8 uses one detached Sheet copy; the slots are logged as CAND-049. No new component or token. The doc and example code are unchanged for the example: search-filter.example.tsx does not implement recent searches or the Sheet.",
+      "date": "2026-10-14"
     }
   ]
 }
