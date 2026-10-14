@@ -184,20 +184,20 @@
       "note": "Raised by the user while scoping Pagination (2026-10-13). Decision: Pagination shipped first; Load more is now documented guidance in data-table.md and the Figma Pattern / Data table page (frame 8), composed from Button (2026-10-13); infinite scroll is a behaviour, not a visual, and is not built."
     },
     {
-      "id": "CAND-049",
-      "name": "Sheet content and footer slots",
-      "seenIn": ["Figma Pattern / Search and filter, frame 8 (Filter sheet)"],
-      "composedFrom": "a detached Sheet side=bottom with the Filters content and footer built inside it",
-      "occurrences": 1,
-      "note": "The Sheet component set (583:2861, Side only) has plain text placeholders for content and footer, so an instance cannot hold components; frame 8 uses one detached copy (user, 2026-10-14, CAND-042). Needs Content and Footer slots drawn in the Sheet set and approved first. Not built."
-    },
-    {
       "id": "CAND-050",
       "name": "StatCard sparkline slot",
       "seenIn": ["atlas/Sparkline.md", "atlas/StatCard.md"],
       "composedFrom": "a Sparkline placed beside a StatCard by hand",
       "occurrences": 0,
       "note": "Follow-up to Sparkline (CAND-046, DEC-065), kept out of that task by the owner (2026-10-14). Figma cannot bind a property to a layer inside the nested Card slot (the Leading icon needed a variant property for the same reason), so this needs its own Figma design and approval first. Not built."
+    },
+    {
+      "id": "CAND-051",
+      "name": "Drawer content and footer slots",
+      "seenIn": ["Figma Drawer page, set 577:24"],
+      "composedFrom": "the Drawer set draws Content Placeholder and Footer Placeholder frames, so an instance cannot hold components",
+      "occurrences": 0,
+      "note": "Same gap as Sheet had (CAND-049, closed by DEC-067), found 2026-10-14 and kept out of that task by the owner (one component per task). The fix is the same shape: Content slot and Footer slot plus Content and Footer booleans. Not built."
     }
   ]
 }

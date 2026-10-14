@@ -17,6 +17,7 @@ HOW TO USE
 · Only `side="bottom"` shows the drag handle; do not add one to the others.
 · `closeOnEscape` and `closeOnOverlayClick` are on SheetContent; keep both on unless unsaved input would be lost.
 · Include a header title; focus trap, scroll lock, and Escape work as in Dialog.
+· In Figma, put the body in the Content slot and the actions in the Footer slot; the Content and Footer toggles hide either. The title and description are edited as text.
 DO
 · Default to `bottom` for mobile; `end` for desktop detail panels.
 · Keep content short enough to scan in one scroll.
@@ -32,6 +33,9 @@ RELATED
 
 ## Sizes
 `sm` · `md` · `lg` · `xl` · `full`
+
+## Figma toggles
+`Content` (on) · `Footer` (on)
 
 <!-- END:generated-structure -->
 

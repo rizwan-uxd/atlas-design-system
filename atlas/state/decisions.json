@@ -401,6 +401,12 @@
       "topic": "Card default and outlined hover is a shadow, matching Figma (closes DISC-093)",
       "decision": "Owner-approved 2026-10-14. Figma wins: interactive Card default and outlined hover keep the fill and add a soft shadow; active is drawn the same as default, so code has no :active rule. Figma draws the hover as an unbound 0 2px 6px 5% black drop shadow; owner chose the existing --atlas-shadow-sm (0 1px 2px, 5%, dark-mode aware) over a new token or shadow-md. The component tokens card-default-background-hover and card-outlined-background-hover are removed (nothing else used them) and the CSS reads --atlas-shadow-sm directly, so no new token is added. Filled (fill change) and elevated (shadow lift) hover are unchanged. Clickable StatCard follows Card. No Figma edit.",
       "date": "2026-10-14"
+    },
+    {
+      "id": "DEC-067",
+      "topic": "Sheet gets Content and Footer slots in Figma (closes CAND-049)",
+      "decision": "Owner-approved 2026-10-14. The Sheet set (583:2861, Side bottom | top | start | end) replaces its Content Placeholder and Footer Placeholder frames with SLOT layers, Content slot and Footer slot, bound to set-level SLOT properties of the same names and to two booleans, Content and Footer (both on by default), the way Card does it (visible and slotContentId references). Default content is a text layer Sheet content and a primary Button labelled Action; the footer keeps its vertical layout and 12 px vertical padding (spacing/3). Header, title, close, description and drag handle are unchanged. Code needs no change: SheetBody and SheetFooter are Dialog's parts and already take any children; Code Connect maps the booleans to them with figma.boolean. The detached Sheet in Search and filter frame 8 (DEC-061) is replaced by a real Sheet instance with the Filters content in its slots; the instance shows the Description line, since the description has no toggle, and has a fixed 448 px height because an instance keeps the component's fixed height. Drawer has the same placeholder gap and is logged as CAND-051, not changed. How: component.createSlot() makes a SLOT layer and a set-level property; renaming the layer renames the property; slots on the other variants are re-pointed at the first variant's properties and the orphaned properties are deleted by hand.",
+      "date": "2026-10-14"
     }
   ]
 }
