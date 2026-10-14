@@ -16,7 +16,7 @@ The auth password row, the item the user kept coming back to, is done. Nothing i
 1. **Batch-2 patterns** (navigation shell, detail view, chat, notifications center, payment and billing, members and permissions, command menu): still a proposal, pick one.
 2. **Components on hold:** OTP (CAND-034), Stepper (CAND-035), CommandMenu (CAND-037).
 3. **Deferred:** CAND-044 StatCard leading icon, CAND-045 StatCard clickable, CAND-046 Sparkline, CAND-048 infinite scroll.
-4. **Snapshot and Figma debt from #34:** CAND-038 to 043 (missing boolean and icon-slot properties in the snapshot, Input prefix and suffix, chart plot width, Progress value text, search and filter states, hand-set disabled opacity).
+4. **Snapshot and Figma debt from #34:** CAND-038 is closed (the sync now carries Figma boolean and instance-swap properties as `figmaComponentProperties` and a `## Figma toggles` doc line; Input and Badge regenerated). Still open: CAND-039 (Input prefix and suffix), 040 (chart plot width), 041 (Progress value text), 042 (search and filter states), each waiting on a Figma decision or drawing; CAND-043 (hand-set disabled opacity) is blocked pending Figma verification, with DEC-058 untouched. Note for sync runs: `get_metadata` cannot see component properties; read them with a read-only `use_figma` (see the `atlas-figma-sync` skill).
 5. **Housekeeping:** the local cleanup above.
 
 ## What was built this session (Figma file `cKYhfaHLCoyMHi9nKr63Ig`)
