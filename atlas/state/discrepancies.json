@@ -1117,6 +1117,16 @@
       "resolution": "Closed 2026-10-09 (DEC-054): Button outline disabled stroke is border-strong, with Figma rebound.",
       "firstSeen": "2026-10-09",
       "lastSeen": "2026-10-09"
+    },
+    {
+      "id": "DISC-093",
+      "component": "Card",
+      "side": "code",
+      "status": "open",
+      "issue": "Card default and outlined interactive states differ between Figma and code. Hover: Figma keeps the fill and adds a soft shadow (5% black, blur 6); code changes the background to --atlas-background-hovered with no shadow. Active: Figma draws it identical to default; code has no :active rule. Focus-visible (2 px ring) and disabled (0.5) agree. Found 2026-10-14 while drawing the clickable StatCard states (CAND-045), which follow Card in both Figma and code.",
+      "resolution": "Open. Decide which side is right in a Card task (Figma wins by AGENTS.md section 1): either make the code hover a shadow, or redraw the Figma hover as the background change. Not fixed in the StatCard task.",
+      "firstSeen": "2026-10-14",
+      "lastSeen": "2026-10-14"
     }
   ]
 }

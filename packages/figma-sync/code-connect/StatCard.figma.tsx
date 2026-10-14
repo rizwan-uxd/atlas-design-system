@@ -11,12 +11,16 @@ figma.connect(
       loading:   figma.enum("State", { default: false, loading: true }),
       sentiment: figma.enum("Sentiment", { positive: "positive", negative: "negative", neutral: "neutral" }),
       icon:      figma.enum("Leading icon", { off: undefined, on: <Activity /> }),
+      onClick:   figma.enum("Interaction", { static: undefined, hover: () => {}, "focus-visible": () => {}, active: () => {}, disabled: () => {} }),
+      disabled:  figma.enum("Interaction", { static: false, hover: false, "focus-visible": false, active: false, disabled: true }),
     },
-    example: ({ size, loading, sentiment, icon }) => (
+    example: ({ size, loading, sentiment, icon, onClick, disabled }) => (
       <StatCard
         size={size}
         loading={loading}
         icon={icon}
+        onClick={onClick}
+        disabled={disabled}
         label="Visitors"
         period="Last 7 days"
         value="12,480"

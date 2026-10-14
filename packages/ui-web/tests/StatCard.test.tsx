@@ -8,12 +8,13 @@
  *   4. Loading: skeletons in place of the value and delta, aria-busy on the content
  *   5. No delta renders no badge
  *   6. Leading icon: rendered decorative above the value, kept while loading, absent by default
- *   7. axe has no violations per state
+ *   7. Clickable: one button named by the label, onClick, disabled, loading and static cases
+ *   8. axe has no violations per state
  */
 
 import React from "react"
-import { describe, it, expect } from "vitest"
-import { render, screen } from "@testing-library/react"
+import { describe, it, expect, vi } from "vitest"
+import { render, screen, fireEvent } from "@testing-library/react"
 import { axe } from "jest-axe"
 import { StatCard, type StatCardSize, type StatCardTrend } from "@atlas/ui-web/compositions/StatCard/StatCard"
 
@@ -106,6 +107,42 @@ describe("StatCard — leading icon", () => {
   })
 })
 
+describe("StatCard — clickable", () => {
+  it("is not a button without onClick", () => {
+    render(<StatCard {...base} />)
+    expect(screen.queryByRole("button")).toBeNull()
+  })
+
+  it("renders one button named by the label and calls onClick", () => {
+    const onClick = vi.fn()
+    render(<StatCard {...base} onClick={onClick} />)
+    const button = screen.getByRole("button", { name: "Visitors" })
+    fireEvent.click(button)
+    expect(onClick).toHaveBeenCalledTimes(1)
+    expect(screen.getAllByRole("button")).toHaveLength(1)
+  })
+
+  it("disabled blocks the click and marks the button disabled", () => {
+    const onClick = vi.fn()
+    render(<StatCard {...base} onClick={onClick} disabled />)
+    const button = screen.getByRole("button", { name: "Visitors" })
+    expect(button).toHaveAttribute("aria-disabled", "true")
+    fireEvent.click(button)
+    expect(onClick).not.toHaveBeenCalled()
+  })
+
+  it("disabled without onClick stays a static card", () => {
+    render(<StatCard {...base} disabled />)
+    expect(screen.queryByRole("button")).toBeNull()
+  })
+
+  it("a loading card is not clickable", () => {
+    const onClick = vi.fn()
+    render(<StatCard {...base} loading onClick={onClick} />)
+    expect(screen.queryByRole("button")).toBeNull()
+  })
+})
+
 describe("StatCard — accessibility", () => {
   it.each([
     ["default", {}],
@@ -113,6 +150,8 @@ describe("StatCard — accessibility", () => {
     ["delta down good", { delta: { text: "3%", trend: "down" as const, sentiment: "positive" as const } }],
     ["loading", { loading: true }],
     ["icon", { icon: <svg viewBox="0 0 24 24" /> }],
+    ["clickable", { onClick: () => {} }],
+    ["clickable disabled", { onClick: () => {}, disabled: true }],
   ])("has no axe violations: %s", async (_name, props) => {
     const { container } = render(<StatCard {...base} {...props} />)
     expect(await axe(container)).toHaveNoViolations()

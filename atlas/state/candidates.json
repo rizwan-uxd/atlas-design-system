@@ -176,14 +176,6 @@
       "note": "Linear and Notion expose a Cmd+K command menu. Atlas has no component. Not built."
     },
     {
-      "id": "CAND-045",
-      "name": "StatCard clickable (drill-down)",
-      "seenIn": ["atlas/StatCard.md"],
-      "composedFrom": "Card interactive with the StatCard content, composed by hand",
-      "occurrences": 0,
-      "note": "Deferred from StatCard v1 (user, 2026-10-12). Needs hover, focus-visible and active states drawn in Figma first; Card already has interactive. Not built."
-    },
-    {
       "id": "CAND-046",
       "name": "Sparkline (mini trend chart)",
       "seenIn": ["atlas/StatCard.md", "packages/governance/patterns/dashboard.md"],

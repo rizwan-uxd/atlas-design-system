@@ -10,7 +10,7 @@ USE WHEN
 DON'T USE WHEN
 · A trend or many values over time are the point → Chart.
 · Exact rows of data → Table.
-· The card must be clicked to drill down → not supported in v1; compose a Card with interactive.
+· The card must open a link rather than run an action → needs Card link support, not built.
 · One record's fields are shown → Card.
 HOW TO USE
 · Set the label as the metric name and the period on every card (Last 7 days); a metric with no period is ambiguous.
@@ -21,6 +21,7 @@ HOW TO USE
 · Use sm in dense grids, md by default, lg for hero metrics. Keep the same size in a row.
 · In Figma the label, period, value and delta text are edited in the nested Card; hide the Delta layer to omit it.
 · Set Leading icon to on for a 16 px icon above the value, then swap the icon on the instance. The icon is decorative and stays while the card is loading.
+· A clickable card drills down to detail: set onClick and the card becomes one button named by its label. Interaction shows the hover, focus-visible, active and disabled surface (outlined Card states). A loading card is not clickable.
 DO
 · Keep at most four cards in the first view.
 · Stack one card per row on a phone.
@@ -34,7 +35,7 @@ RELATED
 · Chart — for a series over time.
 
 PROPERTIES
-Size: sm | md | lg. State: default | loading. Sentiment: positive | negative | neutral (the delta Badge: success, danger, neutral). Leading icon: off | on.
+Size: sm | md | lg. State: default | loading. Sentiment: positive | negative | neutral (the delta Badge: success, danger, neutral). Leading icon: off | on. Interaction: static | hover | focus-visible | active | disabled (drawn at default content, positive, no icon).
 
 CODE    <StatCard> in @atlas/ui-web/compositions/StatCard
 
@@ -60,6 +61,8 @@ import { StatCard } from "@atlas/ui-web/compositions/StatCard/StatCard"
 - `value: React.ReactNode`
 - `delta?: StatCardDelta`
 - `icon?: React.ReactNode`
+- `onClick?: React.MouseEventHandler<HTMLElement>`
+- `disabled?: boolean`
 - `loading?: boolean`
 - `className?: string`
 - `id?: string`

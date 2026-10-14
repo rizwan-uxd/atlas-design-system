@@ -383,6 +383,12 @@
       "topic": "StatCard leading icon is a Leading icon variant (off | on), above the value",
       "decision": "Owner-approved 2026-10-14 (CAND-044). The Stat card set (867:351) gains a Leading icon variant property, off | on, so 18 variants become 36. The icon is a free-standing 16 px instance, muted foreground, as the first row of the Card content slot above the value, with spacing/2 below it; it stays while loading. It is not beside the label: the label and period are the nested Card instance's own text with no header row, and an instance cannot take extra children. Figma also cannot bind a boolean or instance-swap property to a layer inside a nested instance's slot, so a variant property is used and the icon is swapped by hand on an instance (default: activity). All 33 existing instances resolve to off. Code: StatCard icon?: React.ReactNode, rendered first in the stat block, aria-hidden, 16 px (--atlas-icon-size-xs), --atlas-foreground-muted. Code Connect maps Leading icon on to an Activity icon. A header-row icon would need a leading-icon slot on Card first (not built).",
       "date": "2026-10-14"
+    },
+    {
+      "id": "DEC-064",
+      "topic": "StatCard is clickable through Card interactive; Interaction variant in Figma",
+      "decision": "Owner-approved 2026-10-14 (CAND-045). StatCard takes onClick and disabled and renders Card interactive, one <button> named by the label (CardTitle), when onClick is set and the card is not loading; disabled applies only together with onClick; a loading card is never clickable. No Card change and no link variant: a drill-down that must be an <a href> needs Card link support first. Figma: the Stat card set (867:351) gains an Interaction variant property, static | hover | focus-visible | active | disabled (36 existing variants become static; 12 new at sm, md and lg, positive, default content, no icon, each setting the nested Card State; switching the nested State keeps the slot content). The description's 'not supported in v1' line is replaced. Card's own hover and active are not what code does (DISC-093, open): StatCard follows Card on both sides, so it matches Card until that is decided. Code Connect maps Interaction to onClick (a handler for every non-static value) and disabled. Known limit: a Card button is named by its title only, so the value and delta are not in the accessible name; the label should say what opens.",
+      "date": "2026-10-14"
     }
   ]
 }

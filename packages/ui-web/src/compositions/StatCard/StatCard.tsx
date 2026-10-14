@@ -10,6 +10,9 @@
  *            set it when down is good (error rate, latency).
  *
  * Anatomy:   [Card: title (label) · description (period) · icon · value · delta badge]
+ * Clickable: onClick makes the whole card one Card interactive <button> named by its label
+ *            (hover, focus-visible, active, disabled follow Card); disabled blocks it.
+ *            A loading card is never clickable.
  * Icon:      optional leading icon (16 px, muted) above the value; decorative, stays while loading
  *
  * Accessibility:
@@ -17,6 +20,8 @@
  *   - While loading, the content region has aria-busy and the skeletons are aria-hidden
  *   - The value is plain text; an empty metric is passed as "—"
  *   - The icon is decorative (aria-hidden); the label carries the meaning
+ *   - Clickable: the button's name is the label, so make the label say what opens
+ *     ("Visitors", not "Card"); do not put other buttons or links inside
  *
  * Rules:
  *   - Always pass a period; a metric without one is ambiguous
@@ -56,6 +61,10 @@ export interface StatCardProps {
   delta?: StatCardDelta
   /** Optional leading icon above the value, e.g. <Users />. Decorative; stays while loading */
   icon?: React.ReactNode
+  /** Makes the card clickable (drill down to detail). Ignored while loading */
+  onClick?: React.MouseEventHandler<HTMLElement>
+  /** Blocks a clickable card; only applies together with onClick */
+  disabled?: boolean
   /** Shows skeletons in place of the value and the delta */
   loading?: boolean
   className?: string
@@ -81,14 +90,26 @@ export function StatCard({
   value,
   delta,
   icon,
+  onClick,
+  disabled = false,
   loading = false,
   className,
   id,
 }: StatCardProps) {
   const sentiment = delta ? (delta.sentiment ?? DEFAULT_SENTIMENT[delta.trend]) : undefined
 
+  const interactive = Boolean(onClick) && !loading
+
   return (
-    <Card variant="outlined" size={size} className={className} id={id}>
+    <Card
+      variant="outlined"
+      size={size}
+      interactive={interactive}
+      disabled={interactive && disabled}
+      onClick={interactive ? onClick : undefined}
+      className={className}
+      id={id}
+    >
       <CardHeader>
         <CardTitle>{label}</CardTitle>
         <CardDescription>{period}</CardDescription>
