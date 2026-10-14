@@ -192,14 +192,6 @@
       "note": "The Chart plot cannot stretch inside an instance, so the Dashboard pattern places a 670 px plot beside the table. A resizable plot in the Chart component would remove the workaround."
     },
     {
-      "id": "CAND-041",
-      "name": "Progress value text does not follow Percent",
-      "seenIn": ["atlas/metadata/Progress.json", "docs/HANDOFF-patterns-and-library-gaps-next-session.md"],
-      "composedFrom": "separate Value text property ('50%' or 'Step 2 of 4')",
-      "occurrences": 0,
-      "note": "After the Percent variant (DEC-059) the Value text property is still free text and does not follow Percent, so a frame can show 70 percent fill with the wrong label."
-    },
-    {
       "id": "CAND-042",
       "name": "Search and filter states not drawn",
       "seenIn": ["docs/HANDOFF-patterns-and-library-gaps-next-session.md"],
