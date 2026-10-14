@@ -1127,6 +1127,16 @@
       "resolution": "Closed 2026-10-14 (DEC-066). Figma won: Card default and outlined hover is a soft shadow with the fill unchanged, and active equals default. Code now applies --atlas-shadow-sm on hover (the two unused *-background-hover component tokens are removed) and has no :active rule. Figma unchanged.",
       "firstSeen": "2026-10-14",
       "lastSeen": "2026-10-14"
+    },
+    {
+      "id": "DISC-094",
+      "component": "Onboarding (pattern)",
+      "side": "figma",
+      "status": "open",
+      "issue": "The Onboarding pattern doc and example now show setup progress with Stepper (CAND-035 shipped, DEC-071), but the Figma page Pattern / Onboarding (832:2) still draws it as a Progress bar with the text Step N of 4 in 7 frames (832:36, 832:102, 832:155, 834:211, 834:249, 832:188, 832:371) and its guideline bullet reads Show labelled progress (Step 2 of 4). Found 2026-10-14 while updating the pattern. The Auth page has the same kind of gap for OtpInput: Pattern / Auth (836:2) has no OtpInput instance.",
+      "resolution": "Open. Redraw the setup frames with a Stepper instance and update the guideline bullet (Figma first, owner approval; the checklist Progress stays). The doc and example were updated first at the owner's request, as for the Auth OtpInput follow-up, so the doc is ahead of Figma until this is done.",
+      "firstSeen": "2026-10-14",
+      "lastSeen": "2026-10-14"
     }
   ]
 }

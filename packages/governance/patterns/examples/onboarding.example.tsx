@@ -7,8 +7,11 @@ import { Button } from "@atlas/ui-web/primitives/Button/Button"
 import { Input } from "@atlas/ui-web/primitives/Input/Input"
 import { Progress } from "@atlas/ui-web/primitives/Progress/Progress"
 import { RadioGroup, RadioGroupItem } from "@atlas/ui-web/primitives/RadioGroup/RadioGroup"
+import { Stepper } from "@atlas/ui-web/patterns/Stepper/Stepper"
 
 type Setup = { useCase: string; workspace: string; teammate: string }
+
+const steps = [{ label: "Use case" }, { label: "Workspace" }, { label: "Teammates" }]
 
 const title = { fontSize: "var(--atlas-font-size-2xl)", fontWeight: "var(--atlas-font-weight-semibold)" }
 const help = { fontSize: "var(--atlas-text-body-sm)", color: "var(--atlas-foreground-muted)" }
@@ -49,7 +52,7 @@ export function SetupFlow({ onFinish }: { onFinish: (v: Setup) => Promise<void> 
 
   return (
     <div style={{ display: "grid", gap: "var(--atlas-spacing-6)" }}>
-      <Progress value={step + 1} max={total} label="Setup" valueLabel={`Step ${step + 1} of ${total}`} />
+      <Stepper aria-label="Setup" steps={steps} current={step + 1} />
       {step === 0 ? (
         <div style={{ display: "grid", gap: "var(--atlas-spacing-4)" }}>
           <h1 style={title}>How will you use the product?</h1>
