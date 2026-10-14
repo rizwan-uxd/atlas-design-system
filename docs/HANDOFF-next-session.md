@@ -1,22 +1,23 @@
-# Handoff: candidate cleanup finished, library state after the Sheet slots, next session
+# Handoff: next session (library state after PR #66)
 
-Written: 2026-10-14. Read this, `AGENTS.md` and the `atlas-component` skill first. This is the only handoff doc: the eight earlier ones were deleted (they stay in git history) and their useful gotchas and rules are folded in below.
+Written: 2026-10-14. Read this, `AGENTS.md` and the `atlas-component` skill first. This is the only handoff doc: every earlier one was deleted (they stay in git history) and their useful gotchas and rules are folded in below.
 
 ## State
-- **`main` is at `f691d0a` (PR #64, Sheet slots). The Drawer-slots PR (CAND-051) is open or just merged: check `pull_request_read` before assuming.** CI for every merge from #49 to #64 finished green. Ask "check CI" before building on the newest `main`: a run can still be going when you start.
-- Latest ids: **DEC-068, CAND-050, DISC-093 (closed).** 1286 vitest tests in 46 files pass locally; `atlas:verify` is 13 of 13.
-- Snapshot: 44 components, 27 with `verifiedAt`. 93 discrepancies closed, **0 open**. 23 candidates open (none is Figma debt).
-- Working branch for this cloud session: `claude/atlas-handoff-documentation-0hzyod`. After each merge, branch from `origin/main` after `git fetch` (or reset the branch to it).
+- **`main` is at `be0d38c` (PR #66, StatCard sparkline). No open PRs when this was written.** CI for every merge from #49 to #64 finished green, and PR #66 had 9 of 9 checks green before the merge; the run on the merge commit was not checked. Ask "check CI" before building on the newest `main`.
+- Latest ids: **DEC-069, CAND-051 (closed), DISC-093 (closed).** CAND-050 is closed and removed. 1299 vitest tests in 46 files pass locally; `atlas:verify` is 13 of 13.
+- Snapshot: 44 components, 27 with `verifiedAt`. 93 discrepancies closed, **0 open**. 22 candidates open (none is Figma debt).
+- Working branch for this cloud session: `claude/atlas-handoff-documentation-0hzyod`. After each merge, reset it to `origin/main` after `git fetch` (`git checkout -B claude/atlas-handoff-documentation-0hzyod origin/main`).
+- **The branch reset can be blocked.** In the session that wrote this, the auto-mode classifier denied `git fetch origin main` plus `git checkout -B <branch> origin/main` (reason "Merge Without Review") even after the user said "reset the branch". Do not work around it: ask the user for a Bash permission rule or to run the two commands. A doc commit made on the stale branch is still valid (it carries only merged history), but push only after the reset.
 - The stop hook reports "1 unpushed commit" after each merge: it is only the merge commit, because the local branch was reset to `origin/main`; `git push` then fast-forwards the remote branch with no new content. If the push is **rejected**, the remote has a commit you do not have: fetch and read it, never force.
 - `.atlas-pull/` (gitignored scratch) does not exist in a fresh cloud session: see the sync recipe in the gotchas.
 
 ## Start here (new session)
-1. `git fetch origin`, then compare `origin/main` with this doc's claim above and read the open PR list. If the Drawer-slots PR is still open, leave it until the user says "merge N"; if it is merged, reset your branch to `origin/main` (`git checkout -B claude/atlas-handoff-documentation-0hzyod origin/main`).
-2. Before the first push of the session, `git fetch origin claude/atlas-handoff-documentation-0hzyod` and compare. If the remote branch has a commit you did not make, **do not force-push**: read it, verify it, tell the user, and let them choose (this happened once: a Card commit appeared on the branch after #62 merged; it was legitimate, reviewed and merged as #63).
+1. `git fetch origin`, compare `origin/main` with the sha above, and read the open PR list. Leave any open PR alone until the user says "merge N".
+2. Before the first push of the session, fetch the branch and compare. If the remote branch has a commit you did not make, **do not force-push**: read it, verify it, tell the user, and let them choose (this happened once: a Card commit appeared on the branch after #62 merged; it was legitimate, reviewed and merged as #63).
 3. Ask the user which item in "Do next" to start. A candidate runs the four gates in "Rules"; a new component needs their explicit request.
 4. No Figma work is in flight and nothing is half-built. The working tree should be clean; `git status` before you start.
 
-## Done this session (PRs #56 to #64 merged, plus the Drawer-slots PR, each after "merge N")
+## Done this session (PRs #56 to #66, each after "merge N")
 | PR | Candidate | What |
 |---|---|---|
 | #56 | handoff | Closed CAND-038 to 041 recorded, `claude.md` pointer |
@@ -25,22 +26,24 @@ Written: 2026-10-14. Read this, `AGENTS.md` and the `atlas-component` skill firs
 | #59 | CAND-044 | StatCard `Leading icon` off \| on variant (18 to 36 variants), 16 px muted icon above the value; code `icon?: ReactNode`. DEC-063 |
 | #60 | CAND-045 | StatCard clickable: `onClick` and `disabled` render Card `interactive`; `Interaction` variant (static, hover, focus-visible, active, disabled; 48 variants). DEC-064. Opened DISC-093 |
 | #61 | CAND-046 | **Sparkline**, new primitive: Figma page `953:2`, set `953:48`, review frame `954:2`; plain SVG, `values` `variant` `tone` `size` and required `label`. DEC-065. Logged follow-up **CAND-050** |
-| #62 | handoff | This doc: the one handoff, eight stale ones deleted, CAND-050 logged |
+| #62 | handoff | The one handoff doc, eight stale ones deleted, CAND-050 logged |
 | #63 | DISC-093 | Card default and outlined hover is `--atlas-shadow-sm` with the fill unchanged and no `:active` rule, as Figma draws it (nearest existing token, not an exact match). Two unused `*-background-hover` component tokens removed. DEC-066. No Figma change |
 | #64 | CAND-049 | **Sheet** Content slot and Footer slot (SLOT layers) plus Content and Footer booleans on all 4 sides; the detached Sheet in Search and filter frame 8 is now a real instance. No code change; Code Connect maps the booleans. DEC-067. Logged CAND-051 (Drawer, same gap) |
-| this PR | CAND-051 | **Drawer** Content slot and Footer slot plus Content and Footer booleans on `Side=start` and `Side=end`, same design as Sheet; no instances to rebuild, no code change; Code Connect maps the booleans. DEC-068 |
+| #65 | CAND-051 | **Drawer** Content slot and Footer slot plus Content and Footer booleans on `Side=start` and `Side=end`, same design as Sheet; no instances to rebuild, no code change; Code Connect maps the booleans. DEC-068 |
+| #66 | CAND-050 | **StatCard sparkline**: `Sparkline` variant `off \| on` on the Stat card set (48 to 84 variants; the 36 static variants get an `on` twin, the 12 non-static Interaction variants stay `off`). Full-width Sparkline row below the value and delta, size from the card size, tone from the sentiment, kept while loading. Code `sparkline?: { values, label }`. DEC-069 |
 
 ## Do next (the user decides)
-1. **CAND-050, StatCard sparkline slot.** Needs its own Figma design (variant property, not a boolean, see gotchas).
-2. **On hold:** OTP (CAND-034), Stepper (CAND-035), CommandMenu (CAND-037). **Deferred:** Load more and infinite scroll (CAND-048). **Mobile-Native parity** for shipped web components (CAND-005, 007, 009, 010, 013, 015 to 019, 028, 029) is logged, not built.
-3. **Verification debt:** 17 components have `verifiedAt: null` (Avatar, Breadcrumb, CodeBlock, DatePicker, Divider, Drawer, DropdownMenu, Image, ListItem, RadioGroup, ScrollProgress, Sheet, SidebarMenuRow, Skeleton, Slider, Spinner, Tooltip). Sparkline is stamped.
-4. **Batch-2 patterns** (navigation shell, detail view, chat, notifications center, payment and billing, members and permissions): still a proposal, pick one.
-5. Known gaps: `search-filter.example.tsx` does not implement recent searches or the filter Sheet; a Card button's accessible name is its title only, so a clickable StatCard's value and delta are not in the name (the label should say what opens).
+1. **On hold:** OTP (CAND-034), Stepper (CAND-035), CommandMenu (CAND-037). **Deferred:** Load more and infinite scroll (CAND-048). **Mobile-Native parity** for shipped web components (CAND-005, 007, 009, 010, 013, 015 to 019, 028, 029) is logged, not built.
+2. **Verification debt:** 17 components have `verifiedAt: null` (Avatar, Breadcrumb, CodeBlock, DatePicker, Divider, Drawer, DropdownMenu, Image, ListItem, RadioGroup, ScrollProgress, Sheet, SidebarMenuRow, Skeleton, Slider, Spinner, Tooltip). Sparkline is stamped.
+3. **Batch-2 patterns** (navigation shell, detail view, chat, notifications center, payment and billing, members and permissions): still a proposal, pick one.
+4. Known gaps: `search-filter.example.tsx` does not implement recent searches or the filter Sheet; a Card button's accessible name is its title only, so a clickable StatCard's value and delta are not in the name (the label should say what opens). The StatCard sparkline art in Figma is one fixed rising path for every tone and loading cards keep it; a flat or per-tone path would need a change to the Sparkline set. No Dark screenshot was taken for the Sparkline variants.
 
 ## Gotchas learned (they will bite again)
 - **The session can restart or run in parallel.** After a worker restart or a long gap, re-read `git log origin/<branch>` and the open PR list before assuming your last state; a commit or decision (DEC id) may exist that you do not remember. Pick the next DEC, CAND and DISC ids from `atlas/state/*.json` on the fetched branch, not from memory.
 - **Slots on a component (Sheet pattern):** `component.createSlot()` makes a SLOT layer and a set-level SLOT property; `figma.createSlot` does not exist. Renaming the slot layer renames its property (`Slot#id` becomes `Content slot#id`). For the other variants, create the slot, then set `componentPropertyReferences = { visible, slotContentId }` to the first variant's keys: the property each `createSlot` made is left orphaned under its renamed key, so delete every SLOT property you do not keep (`set.deleteComponentProperty`). Naming the layer is enough to name the property: read the keys from `slot.componentPropertyReferences.slotContentId` (done for Sheet and again for Drawer, DEC-068). An instance keeps the component's fixed height; `resize` it to fit its slot content.
 - **No property bindings inside a nested instance's slot.** `componentPropertyReferences` throws "instance sublayer" for a layer inside the Card slot of a Stat card. Use a **variant property** (Leading icon off|on, Interaction), not a boolean or instance swap. The icon is then swapped by hand on an instance.
+- **Adding a variant property with a twin set (StatCard Sparkline, DEC-069):** rename the existing variants first (insert `Sparkline=off` before `Interaction=`), then clone the sources, change the children, `set.appendChild(clone)` and rename to `...Sparkline=on...`. Clones land below the set bounds and render blank in screenshots until `resizeWithoutConstraints` grows the set; lay them out in a grid, resize, move the Review frame down by the same delta, and check for overlaps. The set description is edited in Figma, then the same text is applied to the StatCard entry in `.atlas-pull/pull.json` before `atlas:sync`.
+- **`atlas:verify --stamp` fails the scope check on unrelated dirty files** (it did for the handoff files). List them in `--scope` for the stamp run, then commit only the component's files with a pathspec.
 - **Cloning variants:** `variant.clone()` lands on the page, not in the set. Change its children first, then `set.appendChild(clone)` and rename; a `findOne(SLOT)` right after moving into the set returned null, so reach the slot by path (`clone.children[0].children`). Renaming existing variants to add a property keeps existing instances on the original (off/static) variant.
 - **Component set bounds do not grow** when variants are added: `resizeWithoutConstraints` to fit, then move neighbouring frames (the Review frame) down so they do not overlap.
 - **Nested Card `State` swap** (`card.setProperties({ State })`) keeps the slot content.
