@@ -41,6 +41,9 @@ CODE    <Badge> in @atlas/ui-web/primitives/Badge
 ## Sizes
 `sm` · `md` · `lg`
 
+## Figma toggles
+`Removable` (off by default)
+
 <!-- END:generated-structure -->
 
 <!-- BEGIN:generated-api -->

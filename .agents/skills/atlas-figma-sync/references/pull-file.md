@@ -19,6 +19,10 @@ gitignored, rewritten every run, and read by `scripts/atlas-sync.mjs` exactly on
         "Checked": ["unchecked", "checked", "indeterminate"],
         "Size": ["sm", "md", "lg"],
         "State": ["default", "hover", "focus-visible", "active", "disabled"]
+      },
+      "componentProperties": {               // optional — booleans / instance-swap slots, see below
+        "Leading icon": { "type": "BOOLEAN", "default": false },
+        "Leading icon slot": { "type": "INSTANCE_SWAP" }
       }
     }
   },
@@ -32,6 +36,7 @@ gitignored, rewritten every run, and read by `scripts/atlas-sync.mjs` exactly on
 |---|---|
 | `nodeId` | the `node-id=<a>-<b>` in `packages/figma-sync/code-connect/<Name>.figma.tsx`, rewritten `a:b` |
 | `properties` | `mcp__figma__get_metadata(fileKey, nodeId)` — parse each `<symbol name="…">` |
+| `componentProperties` | `mcp__figma__use_figma` (read-only) → `node.componentPropertyDefinitions` on the component set; `get_metadata` cannot see them |
 | `description` | `mcp__figma__search_design_system` (`entity: component`), Atlas library result |
 | `figmaVersion` | newest `updatedAt` among the Atlas-library results seen this run |
 | `pulledAt` | now, ISO 8601 |
@@ -52,6 +57,14 @@ uses them, and they are the bulk of the tokens.
 Sparse matrices are normal: Checkbox draws `card` at `md` only, so `Size` still reads
 `["sm","md","lg"]` even though `card` exists at one size. The property value set is the fact; the
 matrix is not.
+
+### Component properties
+
+`componentPropertyDefinitions` keys look like `Leading icon#845:0`. Copy the entries whose `type` is
+`BOOLEAN`, `INSTANCE_SWAP` or `TEXT` (skip `VARIANT`, those are `properties`). The generator strips the
+`#id` suffix and keeps only `type` plus, for a `BOOLEAN`, its `default`; an instance-swap default is a
+node id and is dropped. Omit the field when a component has none. The generator writes it to
+`figmaComponentProperties` and renders the booleans as `## Figma toggles`.
 
 ### Descriptions
 

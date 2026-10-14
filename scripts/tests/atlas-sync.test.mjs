@@ -328,3 +328,103 @@ test("the guard covers component docs only, not pattern docs", () => {
     fs.rmSync(dir, { recursive: true, force: true })
   }
 })
+
+// ── Figma component properties (CAND-038): booleans and instance-swap slots ──
+
+/** a pull built from the snapshot itself, so nothing changes except what `extra` adds */
+function pullFromSnapshot(dir, extra = {}) {
+  const components = {}
+  let meta
+  for (const f of fs.readdirSync(path.join(dir, "atlas/metadata"))) {
+    meta = JSON.parse(fs.readFileSync(path.join(dir, "atlas/metadata", f), "utf8"))
+    components[meta.name] = { nodeId: meta.figmaNodeId, properties: meta.figmaProperties, componentProperties: meta.figmaComponentProperties, ...(extra[meta.name] ?? {}) }
+  }
+  const file = path.join(dir, "pull.json")
+  fs.writeFileSync(file, JSON.stringify({ fileKey: meta.figmaFileKey, pulledAt: meta.syncedAt, figmaVersion: meta.figmaVersion, components }))
+  return file
+}
+// start from a snapshot with no component properties, whatever the committed one holds
+const NONE = { Input: { componentProperties: undefined }, Badge: { componentProperties: undefined } }
+const bare = (dir) => syncPull(dir, pullFromSnapshot(dir, NONE))
+const syncPull = (dir, file) => execFileSync("node", [path.join(dir, "scripts/atlas-sync.mjs"), "--pull", file], { encoding: "utf8" })
+const meta = (dir, name) => JSON.parse(fs.readFileSync(path.join(dir, `atlas/metadata/${name}.json`), "utf8"))
+const doc = (dir, name) => fs.readFileSync(path.join(dir, `atlas/${name}.md`), "utf8")
+
+// the raw shape of `componentPropertyDefinitions` as read from Figma for Input (43:111) and Badge (123:24)
+const FIGMA_DEFS = {
+  Input: { componentProperties: {
+    "Leading icon#845:0": { type: "BOOLEAN", defaultValue: false, default: false },
+    "Trailing icon#845:46": { type: "BOOLEAN", default: false },
+    "Leading icon slot#845:92": { type: "INSTANCE_SWAP", default: "322:10321" },
+    "Trailing icon slot#845:138": { type: "INSTANCE_SWAP", default: "322:12805" },
+    Variant: { type: "VARIANT", default: "default" },
+    Size: { type: "VARIANT", default: "sm" },
+  } },
+  Badge: { componentProperties: { "Removable#841:0": { type: "BOOLEAN", default: false }, Variant: { type: "VARIANT", default: "neutral" } } },
+}
+
+test("a pull without componentProperties changes nothing", () => {
+  const dir = copyInputs()
+  try {
+    bare(dir)
+    assert.equal(writtenCount(syncPull(dir, pullFromSnapshot(dir))), 0)
+    assert.equal("figmaComponentProperties" in meta(dir, "Input"), false)
+    assert.doesNotMatch(doc(dir, "Input"), /Figma toggles/)
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+test("componentProperties land in metadata and a `## Figma toggles` line, ids and swap defaults stripped, and a second sync writes nothing", () => {
+  const dir = copyInputs()
+  try {
+    bare(dir)
+    const file = pullFromSnapshot(dir, FIGMA_DEFS)
+    assert.ok(writtenCount(syncPull(dir, file)) > 0)
+
+    assert.deepEqual(meta(dir, "Input").figmaComponentProperties, {
+      "Leading icon": { type: "BOOLEAN", default: false },
+      "Trailing icon": { type: "BOOLEAN", default: false },
+      "Leading icon slot": { type: "INSTANCE_SWAP" },
+      "Trailing icon slot": { type: "INSTANCE_SWAP" },
+    }, "first-seen order, no #id, no VARIANT entries, no swap node id")
+    assert.deepEqual(meta(dir, "Badge").figmaComponentProperties, { Removable: { type: "BOOLEAN", default: false } })
+    assert.deepEqual(meta(dir, "Input").figmaProperties, JSON.parse(fs.readFileSync(path.join(REPO, "atlas/metadata/Input.json"), "utf8")).figmaProperties, "variant axes untouched")
+
+    assert.match(block(doc(dir, "Input")), /## Sizes\n`sm` · `md` · `lg`\n\n## Figma toggles\n`Leading icon` · `Trailing icon` \(with slots, off by default\)\n/)
+    assert.match(block(doc(dir, "Badge")), /## Figma toggles\n`Removable` \(off by default\)\n/)
+    assert.equal("figmaComponentProperties" in meta(dir, "Button"), false)
+    assert.doesNotMatch(doc(dir, "Button"), /Figma toggles/)
+
+    assert.equal(writtenCount(syncPull(dir, file)), 0, "second sync writes zero files")
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+test("a toggle that defaults on is marked, and a toggles line is dropped when the pull no longer has any", () => {
+  const dir = copyInputs()
+  try {
+    bare(dir)
+    syncPull(dir, pullFromSnapshot(dir, { Badge: { componentProperties: { "Removable#1:1": { type: "BOOLEAN", default: false }, "Dismissed#1:2": { type: "BOOLEAN", default: true } } } }))
+    assert.match(block(doc(dir, "Badge")), /`Removable` · `Dismissed` \(on\)\n/)
+    bare(dir)
+    assert.equal("figmaComponentProperties" in meta(dir, "Badge"), false)
+    assert.doesNotMatch(doc(dir, "Badge"), /Figma toggles/)
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+test("a sync without --pull carries figmaComponentProperties forward", () => {
+  const dir = copyInputs()
+  try {
+    bare(dir)
+    syncPull(dir, pullFromSnapshot(dir, FIGMA_DEFS))
+    assert.equal(writtenCount(sync(dir)), 0)
+    assert.ok(meta(dir, "Input").figmaComponentProperties["Leading icon"])
+    assert.match(block(doc(dir, "Input")), /Figma toggles/)
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true })
+  }
+})

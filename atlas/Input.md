@@ -40,6 +40,9 @@ CODE    <Input> in @atlas/ui-web/primitives/Input
 ## Sizes
 `sm` · `md` · `lg`
 
+## Figma toggles
+`Leading icon` · `Trailing icon` (with slots, off by default)
+
 <!-- END:generated-structure -->
 
 <!-- BEGIN:generated-api -->
