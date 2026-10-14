@@ -190,6 +190,14 @@
       "composedFrom": "a detached Sheet side=bottom with the Filters content and footer built inside it",
       "occurrences": 1,
       "note": "The Sheet component set (583:2861, Side only) has plain text placeholders for content and footer, so an instance cannot hold components; frame 8 uses one detached copy (user, 2026-10-14, CAND-042). Needs Content and Footer slots drawn in the Sheet set and approved first. Not built."
+    },
+    {
+      "id": "CAND-050",
+      "name": "StatCard sparkline slot",
+      "seenIn": ["atlas/Sparkline.md", "atlas/StatCard.md"],
+      "composedFrom": "a Sparkline placed beside a StatCard by hand",
+      "occurrences": 0,
+      "note": "Follow-up to Sparkline (CAND-046, DEC-065), kept out of that task by the owner (2026-10-14). Figma cannot bind a property to a layer inside the nested Card slot (the Leading icon needed a variant property for the same reason), so this needs its own Figma design and approval first. Not built."
     }
   ]
 }
