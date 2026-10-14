@@ -1,35 +1,38 @@
-# Handoff: candidate cleanup finished, library state after PR #61, next session
+# Handoff: candidate cleanup finished, library state after the Sheet slots, next session
 
 Written: 2026-10-14. Read this, `AGENTS.md` and the `atlas-component` skill first. This is the only handoff doc: the eight earlier ones were deleted (they stay in git history) and their useful gotchas and rules are folded in below.
 
 ## State
-- **`main` is at `8281f39` (PR #61, Sparkline), no open PRs.** CI for every merge from #49 to #60 finished green. The run for `8281f39` was still in progress when this was written: ask "check CI" before building on it. PR #61 itself passed all 9 checks on the run triggered by the `atlas-approved-new` label; its first run (opened, no label yet) failed Atlas Verify's `no-new-components`, which is expected and harmless.
-- Latest ids: **DEC-065, CAND-050, DISC-093.** 1283 vitest tests in 46 files pass locally; `atlas:verify` is 13 of 13.
-- Snapshot: 44 components, 27 with `verifiedAt`. 92 discrepancies closed, **1 open (DISC-093)**. 23 candidates open (none is Figma debt).
+- **`main` was at `1609faf` (PR #63, Card hover) before the Sheet-slots PR; no other open PRs.** CI for every merge from #49 to #63 finished green. Ask "check CI" before building on the newest `main`: a run can still be going when you start.
+- Latest ids: **DEC-067, CAND-051, DISC-093 (closed).** 1286 vitest tests in 46 files pass locally; `atlas:verify` is 13 of 13.
+- Snapshot: 44 components, 27 with `verifiedAt`. 93 discrepancies closed, **0 open**. 24 candidates open (none is Figma debt).
 - Working branch for this cloud session: `claude/atlas-handoff-documentation-0hzyod`. After each merge, branch from `origin/main` after `git fetch` (or reset the branch to it).
 - The stop hook reports "1 unpushed commit" after each merge: it is only the merge commit, because the local branch was reset to `origin/main`. `git push` fast-forwards the remote branch with no new content.
 - `.atlas-pull/` (gitignored scratch) does not exist in a fresh cloud session: see the sync recipe in the gotchas.
 
-## Done this session (PRs #56 to #61, each after "merge N")
+## Done this session (PRs #56 to #63, plus the Sheet-slots PR, each after "merge N")
 | PR | Candidate | What |
 |---|---|---|
 | #56 | handoff | Closed CAND-038 to 041 recorded, `claude.md` pointer |
 | #57 | CAND-042 | Search and filter: frame 7 Empty query, frame 8 Filter sheet (mobile). Sheet has no content slot, so frame 8 uses a detached Sheet (CAND-049). DEC-061 |
 | #58 | CAND-043 | Code already used `--atlas-opacity-disabled`; the 20 disabled variants in Dropdown Menu Item, Radio Group Item and Slider are now bound to `opacity/disabled` in Figma. DEC-062 |
 | #59 | CAND-044 | StatCard `Leading icon` off \| on variant (18 to 36 variants), 16 px muted icon above the value; code `icon?: ReactNode`. DEC-063 |
-| #60 | CAND-045 | StatCard clickable: `onClick` and `disabled` render Card `interactive`; `Interaction` variant (static, hover, focus-visible, active, disabled; 48 variants). DEC-064. Opened **DISC-093** |
+| #60 | CAND-045 | StatCard clickable: `onClick` and `disabled` render Card `interactive`; `Interaction` variant (static, hover, focus-visible, active, disabled; 48 variants). DEC-064. Opened DISC-093 |
 | #61 | CAND-046 | **Sparkline**, new primitive: Figma page `953:2`, set `953:48`, review frame `954:2`; plain SVG, `values` `variant` `tone` `size` and required `label`. DEC-065. Logged follow-up **CAND-050** |
+| #62 | handoff | This doc: the one handoff, eight stale ones deleted, CAND-050 logged |
+| #63 | DISC-093 | Card default and outlined hover is `--atlas-shadow-sm` with the fill unchanged and no `:active` rule, as Figma draws it (nearest existing token, not an exact match). Two unused `*-background-hover` component tokens removed. DEC-066. No Figma change |
+| this PR | CAND-049 | **Sheet** Content slot and Footer slot (SLOT layers) plus Content and Footer booleans on all 4 sides; the detached Sheet in Search and filter frame 8 is now a real instance. No code change; Code Connect maps the booleans. DEC-067. Logged **CAND-051** (Drawer, same gap) |
 
 ## Do next (the user decides)
-1. **DISC-093, Card default and outlined hover and active.** Figma hover is a soft shadow with the fill unchanged and active equals default; code hover is `--atlas-background-hovered` and has no `:active`. Decide which side is right (Figma wins by AGENTS.md section 1), Figma first. Clickable StatCard follows Card on both sides.
-2. **CAND-049, Sheet content and footer slots.** Unblocks the detached Sheet in search-and-filter frame 8. Same nested-slot limits as below.
-3. **CAND-050, StatCard sparkline slot.** Needs its own Figma design (variant property, not a boolean, see gotchas).
-4. **On hold:** OTP (CAND-034), Stepper (CAND-035), CommandMenu (CAND-037). **Deferred:** Load more and infinite scroll (CAND-048). **Mobile-Native parity** for shipped web components (CAND-005, 007, 009, 010, 013, 015 to 019, 028, 029) is logged, not built.
-5. **Verification debt:** 17 components have `verifiedAt: null` (Avatar, Breadcrumb, CodeBlock, DatePicker, Divider, Drawer, DropdownMenu, Image, ListItem, RadioGroup, ScrollProgress, Sheet, SidebarMenuRow, Skeleton, Slider, Spinner, Tooltip). Sparkline is stamped.
-6. **Batch-2 patterns** (navigation shell, detail view, chat, notifications center, payment and billing, members and permissions): still a proposal, pick one.
-7. Known gaps: `search-filter.example.tsx` does not implement recent searches or the filter Sheet; a Card button's accessible name is its title only, so a clickable StatCard's value and delta are not in the name (the label should say what opens).
+1. **CAND-050, StatCard sparkline slot.** Needs its own Figma design (variant property, not a boolean, see gotchas).
+2. **CAND-051, Drawer content and footer slots.** Same recipe as Sheet (`createSlot`, see gotchas).
+3. **On hold:** OTP (CAND-034), Stepper (CAND-035), CommandMenu (CAND-037). **Deferred:** Load more and infinite scroll (CAND-048). **Mobile-Native parity** for shipped web components (CAND-005, 007, 009, 010, 013, 015 to 019, 028, 029) is logged, not built.
+4. **Verification debt:** 17 components have `verifiedAt: null` (Avatar, Breadcrumb, CodeBlock, DatePicker, Divider, Drawer, DropdownMenu, Image, ListItem, RadioGroup, ScrollProgress, Sheet, SidebarMenuRow, Skeleton, Slider, Spinner, Tooltip). Sparkline is stamped.
+5. **Batch-2 patterns** (navigation shell, detail view, chat, notifications center, payment and billing, members and permissions): still a proposal, pick one.
+6. Known gaps: `search-filter.example.tsx` does not implement recent searches or the filter Sheet; a Card button's accessible name is its title only, so a clickable StatCard's value and delta are not in the name (the label should say what opens).
 
 ## Gotchas learned (they will bite again)
+- **Slots on a component (Sheet pattern):** `component.createSlot()` makes a SLOT layer and a set-level SLOT property; `figma.createSlot` does not exist. Renaming the slot layer renames its property (`Slot#id` becomes `Content slot#id`). For the other variants, create the slot, then set `componentPropertyReferences = { visible, slotContentId }` to the first variant's keys: the property each `createSlot` made is left orphaned under its renamed key, so delete every SLOT property you do not keep (`set.deleteComponentProperty`). An instance keeps the component's fixed height; `resize` it to fit its slot content.
 - **No property bindings inside a nested instance's slot.** `componentPropertyReferences` throws "instance sublayer" for a layer inside the Card slot of a Stat card. Use a **variant property** (Leading icon off|on, Interaction), not a boolean or instance swap. The icon is then swapped by hand on an instance.
 - **Cloning variants:** `variant.clone()` lands on the page, not in the set. Change its children first, then `set.appendChild(clone)` and rename; a `findOne(SLOT)` right after moving into the set returned null, so reach the slot by path (`clone.children[0].children`). Renaming existing variants to add a property keeps existing instances on the original (off/static) variant.
 - **Component set bounds do not grow** when variants are added: `resizeWithoutConstraints` to fit, then move neighbouring frames (the Review frame) down so they do not overlap.

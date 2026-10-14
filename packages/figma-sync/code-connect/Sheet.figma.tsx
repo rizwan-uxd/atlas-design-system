@@ -1,5 +1,5 @@
 import figma from "@figma/code-connect"
-import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetBody } from "@atlas/ui-web/compositions/Sheet/Sheet"
+import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetBody, SheetFooter } from "@atlas/ui-web/compositions/Sheet/Sheet"
 import { Button } from "@atlas/ui-web/primitives/Button/Button"
 
 figma.connect(
@@ -8,8 +8,10 @@ figma.connect(
   {
     props: {
       side: figma.enum("Side", { bottom: "bottom", top: "top", start: "start", end: "end" }),
+      content: figma.boolean("Content", { true: <SheetBody>Content placeholder</SheetBody>, false: undefined }),
+      footer: figma.boolean("Footer", { true: <SheetFooter><Button>Action</Button></SheetFooter>, false: undefined }),
     },
-    example: ({ side }) => (
+    example: ({ side, content, footer }) => (
       <Sheet>
         <SheetTrigger asChild>
           <Button>Open sheet</Button>
@@ -19,7 +21,8 @@ figma.connect(
             <SheetTitle>Menu</SheetTitle>
             <SheetDescription>Sheet description</SheetDescription>
           </SheetHeader>
-          <SheetBody>Content placeholder</SheetBody>
+          {content}
+          {footer}
         </SheetContent>
       </Sheet>
     ),
