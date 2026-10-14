@@ -168,12 +168,12 @@
       "note": "Web Stepper shipped (patterns/Stepper; promoted from CAND-035, 2026-10-14). Native parity is logged here, not built."
     },
     {
-      "id": "CAND-037",
-      "name": "CommandMenu (command palette)",
+      "id": "CAND-054",
+      "name": "CommandMenu (Atlas/Mobile-Native)",
       "seenIn": ["packages/governance/patterns/search-filter.md"],
-      "composedFrom": "none; search-filter pattern covers in-page search only",
+      "composedFrom": "not yet attempted",
       "occurrences": 0,
-      "note": "Linear and Notion expose a Cmd+K command menu. Atlas has no component. Not built."
+      "note": "Web CommandMenu shipped (compositions/CommandMenu; promoted from CAND-037, 2026-10-14). Native parity is logged here, not built: it needs a Figma design on the Mobile-Native page first, and a touch device has no Cmd+K, so it would open from a button."
     },
     {
       "id": "CAND-048",
