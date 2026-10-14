@@ -371,6 +371,12 @@
       "topic": "Search and filter draws an empty-query state and a mobile filter Sheet; the Sheet is detached there",
       "decision": "Owner-approved 2026-10-14 (CAND-042). Pattern / Search and filter gains frame 7 Empty query (empty Input, Recent searches label, ghost Clear recent Button, 3 List Items with a clock icon; tabs, count, sort and filters hidden) and frame 8 Filter sheet, mobile 390 (frame 6 dimmed by the overlay token and opacity/overlay, a bottom Sheet titled Filters with Type and Date Selects under Labels, a primary Show 12 results Button and a ghost Clear all Button). Sheet has no content slot, so frame 8 uses one detached Sheet copy; the slots are logged as CAND-049. No new component or token. The doc and example code are unchanged for the example: search-filter.example.tsx does not implement recent searches or the Sheet.",
       "date": "2026-10-14"
+    },
+    {
+      "id": "DEC-062",
+      "topic": "Disabled opacity is bound to opacity/disabled in Dropdown Menu Item, Radio Group Item and Slider",
+      "decision": "Owner-approved 2026-10-14 (CAND-043). Read-only check first: code already used var(--atlas-opacity-disabled) (0.5) in DropdownMenu, RadioGroup and Slider, so the candidate's 'set by hand' wording was stale on the code side; only Figma held a plain 0.5. The opacity of the 20 disabled variants (Dropdown Menu Item 515:81 x4, Radio Group Item 544:283 x8, .Slider / Bar 550:96 x4, Slider 550:241 x4) is now bound to opacity/disabled (50 in Atlas/Primitives, DEC-058 unchanged). Rendered value is still 0.5, so nothing changes visually and no code changes. DEC-016's 'set directly because Figma opacity variables are percentages' no longer applies.",
+      "date": "2026-10-14"
     }
   ]
 }
