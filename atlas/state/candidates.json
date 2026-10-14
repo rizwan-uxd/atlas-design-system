@@ -176,14 +176,6 @@
       "note": "Linear and Notion expose a Cmd+K command menu. Atlas has no component. Not built."
     },
     {
-      "id": "CAND-046",
-      "name": "Sparkline (mini trend chart)",
-      "seenIn": ["atlas/StatCard.md", "packages/governance/patterns/dashboard.md"],
-      "composedFrom": "not yet attempted",
-      "occurrences": 0,
-      "note": "Deferred from StatCard v1 (user, 2026-10-12). Chart is a full chart, so a sparkline is its own component with its own Figma design and approval; StatCard would then take it as a slot. Not built."
-    },
-    {
       "id": "CAND-048",
       "name": "Load more and infinite scroll (lazy loading a list)",
       "seenIn": ["packages/governance/patterns/data-table.md"],

@@ -1,0 +1,54 @@
+/* =================================================================
+   Atlas Sparkline — component styles
+   Semantic tokens only. The width fills the container; the height
+   comes from the size. The drawing is stretched, the stroke is not.
+   ================================================================= */
+
+.sparkline {
+  --sparkline-height: var(--atlas-spacing-8);
+  --sparkline-line: var(--atlas-foreground-muted);
+  --sparkline-area: var(--atlas-background-muted);
+
+  display: block;
+  box-sizing: border-box;
+  inline-size: 100%;
+  block-size: var(--sparkline-height);
+  /* keeps the line inside the box: half the stroke on every side */
+  padding: calc(var(--atlas-border-width-2) / 2);
+}
+
+.sparkline[data-size="sm"] {
+  --sparkline-height: var(--atlas-spacing-6);
+}
+
+.sparkline[data-size="lg"] {
+  --sparkline-height: var(--atlas-spacing-10);
+}
+
+/* ── Tone: whether the trend is good ─────────────────────────── */
+
+.sparkline[data-tone="positive"] {
+  --sparkline-line: var(--atlas-success);
+  --sparkline-area: var(--atlas-success-subtle);
+}
+
+.sparkline[data-tone="negative"] {
+  --sparkline-line: var(--atlas-danger);
+  --sparkline-area: var(--atlas-danger-subtle);
+}
+
+/* ── Drawing ─────────────────────────────────────────────────── */
+
+.line {
+  fill: none;
+  stroke: var(--sparkline-line);
+  stroke-width: var(--atlas-border-width-2);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.area {
+  fill: var(--sparkline-area);
+  stroke: none;
+}
