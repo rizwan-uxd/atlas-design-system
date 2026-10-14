@@ -13,6 +13,10 @@
   "figmaNodeId": "577:24",
   "figmaFileKey": "cKYhfaHLCoyMHi9nKr63Ig",
   "figmaProperties": { "Side": ["start", "end"] },
+  "figmaComponentProperties": {
+    "Content": { "type": "BOOLEAN", "default": true },
+    "Footer": { "type": "BOOLEAN", "default": true }
+  },
   "syncedAt": "2026-10-10T17:05:52.269Z",
   "figmaVersion": "lib:Atlas Design System v1@2026-07-06T03:42:12Z",
   "source": "figma-synced"

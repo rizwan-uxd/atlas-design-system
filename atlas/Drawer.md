@@ -17,6 +17,7 @@ HOW TO USE
 · Keep the flush edge flat and the free edge rounded (handled by the component).
 · `closeOnEscape` and `closeOnOverlayClick` are available on DrawerContent; keep both on unless the panel holds unsaved input.
 · Include a title in the header so the panel is named for assistive tech.
+· In Figma, put the body in the Content slot and the actions in the Footer slot; the Content and Footer toggles hide either. The title and description are edited as text.
 DO
 · Use `start` for navigation, `end` for details and settings.
 · Keep one drawer open at a time.
@@ -32,6 +33,9 @@ RELATED
 
 ## Sizes
 `sm` · `md` · `lg` · `xl` · `full`
+
+## Figma toggles
+`Content` (on) · `Footer` (on)
 
 <!-- END:generated-structure -->
 

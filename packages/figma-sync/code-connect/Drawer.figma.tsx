@@ -1,5 +1,5 @@
 import figma from "@figma/code-connect"
-import { Drawer, DrawerTrigger, DrawerContent, DrawerHeader, DrawerTitle, DrawerDescription, DrawerBody } from "@atlas/ui-web/compositions/Drawer/Drawer"
+import { Drawer, DrawerTrigger, DrawerContent, DrawerHeader, DrawerTitle, DrawerDescription, DrawerBody, DrawerFooter } from "@atlas/ui-web/compositions/Drawer/Drawer"
 import { Button } from "@atlas/ui-web/primitives/Button/Button"
 
 figma.connect(
@@ -8,8 +8,10 @@ figma.connect(
   {
     props: {
       side: figma.enum("Side", { start: "start", end: "end" }),
+      content: figma.boolean("Content", { true: <DrawerBody>Content placeholder</DrawerBody>, false: undefined }),
+      footer: figma.boolean("Footer", { true: <DrawerFooter><Button>Action</Button></DrawerFooter>, false: undefined }),
     },
-    example: ({ side }) => (
+    example: ({ side, content, footer }) => (
       <Drawer>
         <DrawerTrigger asChild>
           <Button>Open drawer</Button>
@@ -19,7 +21,8 @@ figma.connect(
             <DrawerTitle>Menu</DrawerTitle>
             <DrawerDescription>Drawer description</DrawerDescription>
           </DrawerHeader>
-          <DrawerBody>Content placeholder</DrawerBody>
+          {content}
+          {footer}
         </DrawerContent>
       </Drawer>
     ),
