@@ -9,7 +9,8 @@
  *   5. No delta renders no badge
  *   6. Leading icon: rendered decorative above the value, kept while loading, absent by default
  *   7. Clickable: one button named by the label, onClick, disabled, loading and static cases
- *   8. axe has no violations per state
+ *   8. Sparkline: below the value and delta, size from the card, tone from the sentiment, kept while loading
+ *   9. axe has no violations per state
  */
 
 import React from "react"
@@ -143,6 +144,46 @@ describe("StatCard — clickable", () => {
   })
 })
 
+describe("StatCard — sparkline", () => {
+  const sparkline = { values: [1, 3, 2, 5], label: "Visitors, last 7 days, rising" }
+  const delta = { text: "12% vs previous period", trend: "up" as const }
+
+  it("renders an image named by its label, after the value and delta", () => {
+    render(<StatCard {...base} delta={delta} sparkline={sparkline} />)
+    const img = screen.getByRole("img", { name: sparkline.label })
+    const badge = screen.getByText(/Up 12%/)
+    expect(badge.compareDocumentPosition(img) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+  })
+
+  it.each(SIZES)("takes the card size %s", (size) => {
+    render(<StatCard {...base} size={size} sparkline={sparkline} />)
+    expect(screen.getByRole("img")).toHaveAttribute("data-size", size)
+  })
+
+  it.each([
+    [{ text: "1%", trend: "up" as const }, "positive"],
+    [{ text: "1%", trend: "down" as const }, "negative"],
+    [{ text: "1%", trend: "flat" as const }, "neutral"],
+    [{ text: "1%", trend: "down" as const, sentiment: "positive" as const }, "positive"],
+    [undefined, "neutral"],
+  ])("takes the tone from the sentiment: %# -> %s", (d, tone) => {
+    render(<StatCard {...base} delta={d} sparkline={sparkline} />)
+    expect(screen.getByRole("img")).toHaveAttribute("data-tone", tone)
+  })
+
+  it("keeps the sparkline while loading", () => {
+    render(<StatCard {...base} loading sparkline={sparkline} />)
+    expect(screen.getByRole("img", { name: sparkline.label })).toBeInTheDocument()
+  })
+
+  it("renders nothing for fewer than two values, and by default", () => {
+    const { rerender } = render(<StatCard {...base} sparkline={{ values: [1], label: "x" }} />)
+    expect(screen.queryByRole("img")).toBeNull()
+    rerender(<StatCard {...base} />)
+    expect(screen.queryByRole("img")).toBeNull()
+  })
+})
+
 describe("StatCard — accessibility", () => {
   it.each([
     ["default", {}],
@@ -150,6 +191,8 @@ describe("StatCard — accessibility", () => {
     ["delta down good", { delta: { text: "3%", trend: "down" as const, sentiment: "positive" as const } }],
     ["loading", { loading: true }],
     ["icon", { icon: <svg viewBox="0 0 24 24" /> }],
+    ["sparkline", { sparkline: { values: [1, 3, 2, 5], label: "Visitors, rising" } }],
+    ["sparkline loading", { loading: true, sparkline: { values: [1, 3, 2, 5], label: "Visitors, rising" } }],
     ["clickable", { onClick: () => {} }],
     ["clickable disabled", { onClick: () => {}, disabled: true }],
   ])("has no axe violations: %s", async (_name, props) => {

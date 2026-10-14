@@ -21,6 +21,7 @@ HOW TO USE
 · Use sm in dense grids, md by default, lg for hero metrics. Keep the same size in a row.
 · In Figma the label, period, value and delta text are edited in the nested Card; hide the Delta layer to omit it.
 · Set Leading icon to on for a 16 px icon above the value, then swap the icon on the instance. The icon is decorative and stays while the card is loading.
+· Set Sparkline to on for a small trend line below the value and delta, then swap its data on the instance. Its size follows the card size and its tone follows the delta sentiment, so the line and the delta agree. Say what it shows in words (Up, Down or Flat) in the delta, never by colour alone. When the series itself is the point, use Chart.
 · A clickable card drills down to detail: set onClick and the card becomes one button named by its label. Interaction shows the hover, focus-visible, active and disabled surface (outlined Card states). A loading card is not clickable.
 DO
 · Keep at most four cards in the first view.
@@ -35,7 +36,7 @@ RELATED
 · Chart — for a series over time.
 
 PROPERTIES
-Size: sm | md | lg. State: default | loading. Sentiment: positive | negative | neutral (the delta Badge: success, danger, neutral). Leading icon: off | on. Interaction: static | hover | focus-visible | active | disabled (drawn at default content, positive, no icon).
+Size: sm | md | lg. State: default | loading. Sentiment: positive | negative | neutral (the delta Badge: success, danger, neutral). Leading icon: off | on. Sparkline: off | on. Interaction: static | hover | focus-visible | active | disabled (drawn at default content, positive, no icon, no sparkline).
 
 CODE    <StatCard> in @atlas/ui-web/compositions/StatCard
 
@@ -61,6 +62,7 @@ import { StatCard } from "@atlas/ui-web/compositions/StatCard/StatCard"
 - `value: React.ReactNode`
 - `delta?: StatCardDelta`
 - `icon?: React.ReactNode`
+- `sparkline?: StatCardSparkline`
 - `onClick?: React.MouseEventHandler<HTMLElement>`
 - `disabled?: boolean`
 - `loading?: boolean`

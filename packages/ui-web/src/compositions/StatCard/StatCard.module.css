@@ -44,6 +44,12 @@
   block-size: 100%;
 }
 
+/* ── Sparkline: full width below the value and delta ──────────── */
+
+.sparkline {
+  align-self: stretch;
+}
+
 /* ── Loading: skeletons take the final content's size ─────────── */
 
 .valueSkeleton {
