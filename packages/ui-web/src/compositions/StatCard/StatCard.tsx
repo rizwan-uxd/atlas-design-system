@@ -14,12 +14,15 @@
  *            (hover, focus-visible, active, disabled follow Card); disabled blocks it.
  *            A loading card is never clickable.
  * Icon:      optional leading icon (16 px, muted) above the value; decorative, stays while loading
+ * Sparkline: optional trend line below the value and delta, full width; its size follows the
+ *            card size and its tone follows the delta sentiment (neutral without a delta); stays while loading
  *
  * Accessibility:
  *   - The delta text starts with the word Up, Down or Flat, so it never relies on colour
  *   - While loading, the content region has aria-busy and the skeletons are aria-hidden
  *   - The value is plain text; an empty metric is passed as "—"
  *   - The icon is decorative (aria-hidden); the label carries the meaning
+ *   - The sparkline is role="img" named by its required label; the delta text carries Up, Down or Flat
  *   - Clickable: the button's name is the label, so make the label say what opens
  *     ("Visitors", not "Card"); do not put other buttons or links inside
  *
@@ -32,6 +35,7 @@ import React from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@atlas/ui-web/compositions/Card/Card"
 import { Badge } from "@atlas/ui-web/primitives/Badge/Badge"
 import { Skeleton } from "@atlas/ui-web/primitives/Skeleton/Skeleton"
+import { Sparkline } from "@atlas/ui-web/primitives/Sparkline/Sparkline"
 import styles from "./StatCard.module.css"
 
 /* ── Types ──────────────────────────────────────────────────── */
@@ -50,6 +54,13 @@ export interface StatCardDelta {
   trendLabel?: string
 }
 
+export interface StatCardSparkline {
+  /** The series, in time order. Fewer than two finite values draws nothing */
+  values: number[]
+  /** Text alternative that says what the trend shows: "Visitors, last 7 days, rising" */
+  label: string
+}
+
 export interface StatCardProps {
   size?: StatCardSize
   /** The metric name */
@@ -61,6 +72,8 @@ export interface StatCardProps {
   delta?: StatCardDelta
   /** Optional leading icon above the value, e.g. <Users />. Decorative; stays while loading */
   icon?: React.ReactNode
+  /** Optional trend line below the value and delta. Tone follows the delta sentiment; stays while loading */
+  sparkline?: StatCardSparkline
   /** Makes the card clickable (drill down to detail). Ignored while loading */
   onClick?: React.MouseEventHandler<HTMLElement>
   /** Blocks a clickable card; only applies together with onClick */
@@ -90,6 +103,7 @@ export function StatCard({
   value,
   delta,
   icon,
+  sparkline,
   onClick,
   disabled = false,
   loading = false,
@@ -131,6 +145,15 @@ export function StatCard({
                 </Badge>
               )}
             </>
+          )}
+          {sparkline && (
+            <Sparkline
+              className={styles.sparkline}
+              values={sparkline.values}
+              label={sparkline.label}
+              size={size}
+              tone={sentiment ?? "neutral"}
+            />
           )}
         </div>
       </CardContent>

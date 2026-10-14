@@ -11,14 +11,16 @@ figma.connect(
       loading:   figma.enum("State", { default: false, loading: true }),
       sentiment: figma.enum("Sentiment", { positive: "positive", negative: "negative", neutral: "neutral" }),
       icon:      figma.enum("Leading icon", { off: undefined, on: <Activity /> }),
+      sparkline: figma.enum("Sparkline", { off: undefined, on: { values: [4, 6, 5, 8, 7, 10, 9, 12], label: "Visitors, last 7 days, rising" } }),
       onClick:   figma.enum("Interaction", { static: undefined, hover: () => {}, "focus-visible": () => {}, active: () => {}, disabled: () => {} }),
       disabled:  figma.enum("Interaction", { static: false, hover: false, "focus-visible": false, active: false, disabled: true }),
     },
-    example: ({ size, loading, sentiment, icon, onClick, disabled }) => (
+    example: ({ size, loading, sentiment, icon, sparkline, onClick, disabled }) => (
       <StatCard
         size={size}
         loading={loading}
         icon={icon}
+        sparkline={sparkline}
         onClick={onClick}
         disabled={disabled}
         label="Visitors"

@@ -8,6 +8,7 @@ import type {
   StatCardTrend,
   StatCardSentiment,
   StatCardDelta,
+  StatCardSparkline,
 } from "@atlas/ui-web/compositions/StatCard/StatCard"
 import type React from "react"
 
@@ -24,12 +25,18 @@ type AssertDeltaShape = { text: string; trend: StatCardTrend; sentiment?: StatCa
 type _CheckDelta = AssertDeltaShape extends StatCardDelta ? (StatCardDelta extends AssertDeltaShape ? true : never) : never
 const _d: _CheckDelta = true; void _d
 
+type AssertSparklineShape = { values: number[]; label: string }
+type _CheckSparkline = AssertSparklineShape extends StatCardSparkline ? (StatCardSparkline extends AssertSparklineShape ? true : never) : never
+const _sp: _CheckSparkline = true; void _sp
+
 type AssertStatCardShape = {
   size?: StatCardSize
   label: React.ReactNode
   period: React.ReactNode
   value: React.ReactNode
   delta?: StatCardDelta
+  icon?: React.ReactNode
+  sparkline?: StatCardSparkline
   loading?: boolean
   className?: string
   id?: string
