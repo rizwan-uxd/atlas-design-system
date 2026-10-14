@@ -176,14 +176,6 @@
       "note": "Linear and Notion expose a Cmd+K command menu. Atlas has no component. Not built."
     },
     {
-      "id": "CAND-039",
-      "name": "Input prefix and suffix (code only) and per-size icon token",
-      "seenIn": ["packages/ui-web/src/primitives/Input", "docs/HANDOFF-patterns-and-library-gaps-next-session.md"],
-      "composedFrom": "Input affixes in code; icons fixed at 20 px",
-      "occurrences": 0,
-      "note": "Code has prefix and suffix props; Figma has no property for them, only the icon booleans. The icon is 20 px on every size because there is no per-size icon token. Figma needs a decision before either is drawn. CAND-033 covers the show/hide control."
-    },
-    {
       "id": "CAND-042",
       "name": "Search and filter states not drawn",
       "seenIn": ["docs/HANDOFF-patterns-and-library-gaps-next-session.md"],

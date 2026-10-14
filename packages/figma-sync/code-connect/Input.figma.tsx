@@ -12,8 +12,10 @@ figma.connect(
       disabled: figma.enum("State",   { disabled: true }),
       leadingIcon:  figma.boolean("Leading icon",  { true: figma.instance("Leading icon slot"),  false: undefined }),
       trailingIcon: figma.boolean("Trailing icon", { true: figma.instance("Trailing icon slot"), false: undefined }),
+      prefix: figma.boolean("Prefix", { true: figma.string("Prefix text"), false: undefined }),
+      suffix: figma.boolean("Suffix", { true: figma.string("Suffix text"), false: undefined }),
     },
-    example: ({ variant, size, invalid, disabled, leadingIcon, trailingIcon }) => (
+    example: ({ variant, size, invalid, disabled, leadingIcon, trailingIcon, prefix, suffix }) => (
       <Input
         variant={variant}
         size={size}
@@ -21,6 +23,8 @@ figma.connect(
         disabled={disabled}
         leadingIcon={leadingIcon}
         trailingIcon={trailingIcon}
+        prefix={prefix}
+        suffix={suffix}
         placeholder="Enter value…"
       />
     ),

@@ -26,7 +26,11 @@
     "Leading icon": { "type": "BOOLEAN", "default": false },
     "Trailing icon": { "type": "BOOLEAN", "default": false },
     "Leading icon slot": { "type": "INSTANCE_SWAP" },
-    "Trailing icon slot": { "type": "INSTANCE_SWAP" }
+    "Trailing icon slot": { "type": "INSTANCE_SWAP" },
+    "Prefix": { "type": "BOOLEAN", "default": false },
+    "Prefix text": { "type": "TEXT" },
+    "Suffix": { "type": "BOOLEAN", "default": false },
+    "Suffix text": { "type": "TEXT" }
   },
   "syncedAt": "2026-10-10T17:05:52.269Z",
   "figmaVersion": "lib:Atlas Design System v1@2026-07-06T03:42:12Z",
