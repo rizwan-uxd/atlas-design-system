@@ -6,7 +6,7 @@
 
 ## Status
 Monorepo restructured; all 12 v1 components live in `packages/ui-web/src/` classified by tier, with a visual sandbox at `app/page.tsx` and the prototype scaffold under `app/prototypes/_shared/` (no flows currently).
-**Current work:** component batches per `docs/componentlist plan _next6_2026-09-25.md` (batch 2 complete, phases 1 to 6; current next steps in `docs/HANDOFF-candidate-cleanup-next-session.md`). The harness (phases 0 to 9) is finished and documented in `docs/HARNESS.md`; H3 is integrated on `main`.
+**Current work:** component batches per `docs/componentlist plan _next6_2026-09-25.md` (batch 2 complete, phases 1 to 6; current next steps in `docs/HANDOFF-next-session.md`). The harness (phases 0 to 9) is finished and documented in `docs/HARNESS.md`; H3 is integrated on `main`.
 
 ## What this is
 A monorepo holding: the visual sandbox (Next.js 16, `app/page.tsx`), the web component library (`packages/ui-web/src/`), a React Native library (`packages/ui-native/`), design tokens (`packages/tokens/`), Figma sync (`packages/figma-sync/`), governance checks (`packages/governance/`), and the agent benchmark (`benchmarks/`).
@@ -60,7 +60,7 @@ scripts/               convert-tokens.mjs · atlas-sync.mjs (regenerates atlas/)
 benchmarks/            agent cost/quality benchmark · tasks/ · results/ · rubric.md
 docs/
 ├── HARNESS.md                 the one harness record: what was built, benchmark results
-├── componentlist plan _next6…  batch 2 plan + progress log · HANDOFF-candidate-cleanup-next-session.md (the one handoff)
+├── componentlist plan _next6…  batch 2 plan + progress log · HANDOFF-next-session.md (the one handoff)
 ├── audits/                    QA-REPORT.md · FIGMA-CODE-PARITY.md
 ├── architecture/ATLAS-SPEC/   per-component specs
 └── decisions/                 ATLAS-COMPONENTS-V1.md (locked v1 decisions)
