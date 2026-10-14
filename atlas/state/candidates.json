@@ -152,12 +152,12 @@
       "note": "Web ScrollProgress shipped (primitives/ScrollProgress). Native parity is logged here, not built (user, 2026-09-30)."
     },
     {
-      "id": "CAND-034",
-      "name": "OTP / verification code input",
+      "id": "CAND-052",
+      "name": "OtpInput (Atlas/Mobile-Native)",
       "seenIn": ["packages/governance/patterns/auth.md"],
-      "composedFrom": "One Input with inputMode numeric and autoComplete one-time-code",
+      "composedFrom": "not yet attempted",
       "occurrences": 0,
-      "note": "Uber and others use per-digit boxes; Atlas composes a single Input instead. Not built."
+      "note": "Web OtpInput shipped (compositions/OtpInput; promoted from CAND-034, 2026-10-14). Native parity is logged here, not built."
     },
     {
       "id": "CAND-035",

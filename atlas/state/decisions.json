@@ -419,6 +419,12 @@
       "topic": "StatCard gets a Sparkline variant (off | on), below the value and delta (closes CAND-050)",
       "decision": "Owner-approved 2026-10-14. The Stat card set (867:351) gains a Sparkline variant property, off | on, so 48 variants become 84: the 36 static variants (Size x State x Sentiment x Leading icon) each get an on twin; the 12 non-static Interaction variants stay off. The on variants add a Sparkline row frame as the last row of the Card content slot, below the Stat block, with spacing/2 above (padding bound to the variable), holding a full-width Sparkline instance (Variant line) whose Size follows the card Size and whose Tone follows the Sentiment. The sparkline stays while loading. Like Leading icon (DEC-063) it is a variant property because Figma cannot bind a boolean or instance swap inside a nested instance's slot; the data is the fixed art of the Sparkline set (same rising shape for every tone) and is swapped by hand on an instance. Code: StatCard sparkline?: { values: number[]; label: string }, rendered after the delta inside the stat block, size from the card size, tone from the delta sentiment (neutral without a delta), kept while loading, nothing for fewer than two values; the label is required and the delta text still carries Up, Down or Flat. Code Connect maps Sparkline on to a sample series. No new token, no new component. A slot on Card itself is not built.",
       "date": "2026-10-14"
+    },
+    {
+      "id": "DEC-070",
+      "topic": "OtpInput (promotes CAND-034)",
+      "decision": "Owner-approved 2026-10-14. OtpInput is a web composition: one real, visually hidden input (inputMode numeric, autoComplete one-time-code) over aria-hidden per-digit slots, so paste, autofill and Field wiring work as for Input. Length is a value, 4 to 8, default 6; Figma draws all five as a Length variant. Sizes sm|md|lg follow Input (slot side = input height). No group separator. Figma: OTP Slot (Size x State x Filled, 30) and OTP Input (Size x State x Length, 75) on the OTP Input page, bound to existing input/* tokens, spacing/2 gap and the focus-ring shadow; no new token. Digits only: other characters are dropped and the value is cut to length. Native parity is logged as CAND-052, not built. The Auth pattern text that says to use one Input until an OTP component exists is a follow-up, not part of this change.",
+      "date": "2026-10-14"
     }
   ]
 }

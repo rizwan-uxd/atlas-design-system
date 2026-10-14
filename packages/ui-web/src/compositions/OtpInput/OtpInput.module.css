@@ -1,0 +1,103 @@
+/* =================================================================
+   Atlas OtpInput — component styles
+   Semantic tokens only. Logical properties throughout.
+   The real <input> sits over the slots with no visible paint, so
+   clicks and focus land on it; the slots only display its value.
+   ================================================================= */
+
+.root {
+  position: relative;
+  display: inline-flex;
+}
+
+.slots {
+  display: inline-flex;
+  gap: var(--atlas-spacing-2);
+}
+
+/* ── Hidden input ─────────────────────────────────────────────── */
+
+.input {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: transparent;
+  caret-color: transparent;
+  opacity: 0;
+  outline: none;
+  cursor: text;
+}
+
+.input:disabled {
+  cursor: not-allowed;
+}
+
+/* ── Slot ─────────────────────────────────────────────────────── */
+
+.slot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  font-family: var(--atlas-font-sans);
+  font-variant-numeric: tabular-nums;
+  color: var(--atlas-input-foreground);
+  background-color: var(--atlas-input-background);
+  border: var(--atlas-border-width-1) solid var(--atlas-input-border);
+  border-radius: var(--atlas-input-radius);
+  transition: border-color var(--atlas-duration-fast) var(--atlas-easing-standard);
+}
+
+/* Sizes: a slot is a square as wide as the Input is tall */
+.sm .slot {
+  inline-size: var(--atlas-input-size-sm-height);
+  block-size: var(--atlas-input-size-sm-height);
+  font-size: var(--atlas-input-size-sm-font-size);
+}
+
+.md .slot {
+  inline-size: var(--atlas-input-size-md-height);
+  block-size: var(--atlas-input-size-md-height);
+  font-size: var(--atlas-input-size-md-font-size);
+}
+
+.lg .slot {
+  inline-size: var(--atlas-input-size-lg-height);
+  block-size: var(--atlas-input-size-lg-height);
+  font-size: var(--atlas-input-size-lg-font-size);
+}
+
+/* Hover */
+.root:hover:not([data-disabled]):not([data-invalid]) .slot {
+  border-color: var(--atlas-input-border-hover);
+}
+
+/* Focus-visible: the slot that takes the next digit */
+.root:has(.input:focus-visible) .slot[data-active] {
+  border-color: var(--atlas-input-border-focus);
+  outline: var(--atlas-border-width-2) solid var(--atlas-focus-ring);
+  outline-offset: var(--atlas-spacing-0_5);
+}
+
+/* Invalid */
+.root[data-invalid] .slot {
+  border-color: var(--atlas-input-border-invalid);
+}
+
+/* Disabled */
+.root[data-disabled] .slot {
+  background-color: var(--atlas-input-background-disabled);
+  color: var(--atlas-input-foreground-disabled);
+  cursor: not-allowed;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .slot {
+    transition: none;
+  }
+}
