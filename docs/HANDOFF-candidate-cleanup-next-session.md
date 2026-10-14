@@ -3,14 +3,20 @@
 Written: 2026-10-14. Read this, `AGENTS.md` and the `atlas-component` skill first. This is the only handoff doc: the eight earlier ones were deleted (they stay in git history) and their useful gotchas and rules are folded in below.
 
 ## State
-- **`main` was at `1609faf` (PR #63, Card hover) before the Sheet-slots PR; no other open PRs.** CI for every merge from #49 to #63 finished green. Ask "check CI" before building on the newest `main`: a run can still be going when you start.
+- **`main` is at `1609faf` (PR #63, Card hover). PR #64 (Sheet slots, CAND-049) is open, CI green (all 9 checks), no review comments, waiting on the user's "merge 64".** CI for every merge from #49 to #63 finished green. Ask "check CI" before building on the newest `main`: a run can still be going when you start.
 - Latest ids: **DEC-067, CAND-051, DISC-093 (closed).** 1286 vitest tests in 46 files pass locally; `atlas:verify` is 13 of 13.
 - Snapshot: 44 components, 27 with `verifiedAt`. 93 discrepancies closed, **0 open**. 24 candidates open (none is Figma debt).
 - Working branch for this cloud session: `claude/atlas-handoff-documentation-0hzyod`. After each merge, branch from `origin/main` after `git fetch` (or reset the branch to it).
-- The stop hook reports "1 unpushed commit" after each merge: it is only the merge commit, because the local branch was reset to `origin/main`. `git push` fast-forwards the remote branch with no new content.
+- The stop hook reports "1 unpushed commit" after each merge: it is only the merge commit, because the local branch was reset to `origin/main`; `git push` then fast-forwards the remote branch with no new content. If the push is **rejected**, the remote has a commit you do not have: fetch and read it, never force.
 - `.atlas-pull/` (gitignored scratch) does not exist in a fresh cloud session: see the sync recipe in the gotchas.
 
-## Done this session (PRs #56 to #63, plus the Sheet-slots PR, each after "merge N")
+## Start here (new session)
+1. `git fetch origin`, then compare `origin/main` with this doc's claim above. Read PR #64 (`pull_request_read`): if it is merged, reset your branch to `origin/main` (`git checkout -B claude/atlas-handoff-documentation-0hzyod origin/main`) and treat the "this PR" row below as #64; if it is still open, do nothing to it until the user says "merge 64" (or asks for a change).
+2. Before the first push of the session, `git fetch origin claude/atlas-handoff-documentation-0hzyod` and compare. If the remote branch has a commit you did not make, **do not force-push**: read it, verify it, tell the user, and let them choose (this happened once: a Card commit appeared on the branch after #62 merged; it was legitimate, reviewed and merged as #63).
+3. Ask the user which item in "Do next" to start. A candidate runs the four gates in "Rules"; a new component needs their explicit request.
+4. No Figma work is in flight and nothing is half-built. The working tree should be clean; `git status` before you start.
+
+## Done this session (PRs #56 to #63 merged, #64 open, each after "merge N")
 | PR | Candidate | What |
 |---|---|---|
 | #56 | handoff | Closed CAND-038 to 041 recorded, `claude.md` pointer |
@@ -21,7 +27,7 @@ Written: 2026-10-14. Read this, `AGENTS.md` and the `atlas-component` skill firs
 | #61 | CAND-046 | **Sparkline**, new primitive: Figma page `953:2`, set `953:48`, review frame `954:2`; plain SVG, `values` `variant` `tone` `size` and required `label`. DEC-065. Logged follow-up **CAND-050** |
 | #62 | handoff | This doc: the one handoff, eight stale ones deleted, CAND-050 logged |
 | #63 | DISC-093 | Card default and outlined hover is `--atlas-shadow-sm` with the fill unchanged and no `:active` rule, as Figma draws it (nearest existing token, not an exact match). Two unused `*-background-hover` component tokens removed. DEC-066. No Figma change |
-| this PR | CAND-049 | **Sheet** Content slot and Footer slot (SLOT layers) plus Content and Footer booleans on all 4 sides; the detached Sheet in Search and filter frame 8 is now a real instance. No code change; Code Connect maps the booleans. DEC-067. Logged **CAND-051** (Drawer, same gap) |
+| #64 (open) | CAND-049 | **Sheet** Content slot and Footer slot (SLOT layers) plus Content and Footer booleans on all 4 sides; the detached Sheet in Search and filter frame 8 is now a real instance. No code change; Code Connect maps the booleans. DEC-067. Logged **CAND-051** (Drawer, same gap) |
 
 ## Do next (the user decides)
 1. **CAND-050, StatCard sparkline slot.** Needs its own Figma design (variant property, not a boolean, see gotchas).
@@ -32,6 +38,7 @@ Written: 2026-10-14. Read this, `AGENTS.md` and the `atlas-component` skill firs
 6. Known gaps: `search-filter.example.tsx` does not implement recent searches or the filter Sheet; a Card button's accessible name is its title only, so a clickable StatCard's value and delta are not in the name (the label should say what opens).
 
 ## Gotchas learned (they will bite again)
+- **The session can restart or run in parallel.** After a worker restart or a long gap, re-read `git log origin/<branch>` and the open PR list before assuming your last state; a commit or decision (DEC id) may exist that you do not remember. Pick the next DEC, CAND and DISC ids from `atlas/state/*.json` on the fetched branch, not from memory.
 - **Slots on a component (Sheet pattern):** `component.createSlot()` makes a SLOT layer and a set-level SLOT property; `figma.createSlot` does not exist. Renaming the slot layer renames its property (`Slot#id` becomes `Content slot#id`). For the other variants, create the slot, then set `componentPropertyReferences = { visible, slotContentId }` to the first variant's keys: the property each `createSlot` made is left orphaned under its renamed key, so delete every SLOT property you do not keep (`set.deleteComponentProperty`). An instance keeps the component's fixed height; `resize` it to fit its slot content.
 - **No property bindings inside a nested instance's slot.** `componentPropertyReferences` throws "instance sublayer" for a layer inside the Card slot of a Stat card. Use a **variant property** (Leading icon off|on, Interaction), not a boolean or instance swap. The icon is then swapped by hand on an instance.
 - **Cloning variants:** `variant.clone()` lands on the page, not in the set. Change its children first, then `set.appendChild(clone)` and rename; a `findOne(SLOT)` right after moving into the set returned null, so reach the slot by path (`clone.children[0].children`). Renaming existing variants to add a property keeps existing instances on the original (off/static) variant.
