@@ -17,7 +17,7 @@
  */
 
 import React from "react"
-import { Slot } from "@radix-ui/react-slot"
+import { Slot, Slottable } from "@radix-ui/react-slot"
 import styles from "./Button.module.css"
 
 /* ── Types ──────────────────────────────────────────────── */
@@ -54,7 +54,9 @@ export interface ButtonProps
   /**
    * Web only — Radix Slot pattern.
    * Renders styles onto the child element instead of a <button>.
-   * Useful for wrapping <a> tags with button styles.
+   * Useful for wrapping <a> tags with button styles; pass exactly one element as `children`.
+   * The icons and the loading spinner are placed inside that element.
+   * A disabled or loading link keeps aria-disabled and does not navigate.
    */
   asChild?: boolean
   children?: React.ReactNode
@@ -140,10 +142,11 @@ export function Button({
       /* native type only applies to real <button>; Slot forwards to child */
       type={asChild ? undefined : type}
       className={classes}
-      disabled={disabled}
+      /* the native attribute is not valid on the child element (an <a>) */
+      disabled={asChild ? undefined : disabled}
       aria-disabled={isAriaDisabled}
       aria-busy={loading || undefined}
-      onClick={disabled || loading ? undefined : onClick}
+      onClick={disabled || loading ? (asChild ? (e: React.MouseEvent) => e.preventDefault() : undefined) : onClick}
     >
       {/* Leading icon slot — replaced by spinner when loading */}
       {loading ? (
@@ -155,7 +158,8 @@ export function Button({
         leadingIcon
       )}
 
-      {children}
+      {/* Slottable marks the child element for Slot; the icons around it go inside that element */}
+      <Slottable>{children}</Slottable>
 
       {/* Trailing icon: visibility:hidden while loading preserves its layout
           width so the button doesn't reflow between states. */}

@@ -10,6 +10,7 @@
  *   5. iconOnly — warns in dev when aria-label is missing (skipped in prod)
  *   6. axe accessibility check on each variant
  *   7. AnimatedIcon in the icon slots — plays from the button, not while disabled or loading
+ *   8. asChild — a link takes the button styles, keeps its icons, and honours disabled and loading
  *
  * Pattern: copy this file to test other components (~15 min each).
  */
@@ -142,6 +143,63 @@ describe("Button — disabled state", () => {
     )
     fireEvent.click(screen.getByRole("button"))
     expect(onClick).not.toHaveBeenCalled()
+  })
+})
+
+// ─── 4b. asChild ──────────────────────────────────────────────────────────
+
+describe("Button — asChild", () => {
+  it("renders the child link instead of a <button>, with its href", () => {
+    render(<Button asChild variant="link"><a href="/docs">Docs</a></Button>)
+    const link = screen.getByRole("link", { name: "Docs" })
+    expect(link.tagName).toBe("A")
+    expect(link).toHaveAttribute("href", "/docs")
+    expect(link.className).not.toBe("")
+    expect(screen.queryByRole("button")).not.toBeInTheDocument()
+  })
+
+  it("puts the icons inside the child element", () => {
+    render(
+      <Button asChild leadingIcon={<svg data-testid="lead" />} trailingIcon={<svg data-testid="trail" />}>
+        <a href="/x">Go</a>
+      </Button>
+    )
+    const link = screen.getByRole("link")
+    expect(link).toContainElement(screen.getByTestId("lead"))
+    expect(link).toContainElement(screen.getByTestId("trail"))
+    expect(link).toHaveTextContent("Go")
+  })
+
+  it("sets aria-busy on the link and shows the spinner inside it while loading", () => {
+    const { container } = render(<Button asChild loading><a href="/x">Go</a></Button>)
+    const link = screen.getByRole("link")
+    expect(link).toHaveAttribute("aria-busy", "true")
+    expect(link).toHaveAttribute("aria-disabled", "true")
+    expect(link.querySelector("span")).not.toBeNull()
+    expect(container.querySelector("button")).toBeNull()
+  })
+
+  it("does not navigate or fire onClick when disabled, and writes no disabled attribute", () => {
+    const onClick = vi.fn()
+    render(<Button asChild disabled onClick={onClick}><a href="/x">Go</a></Button>)
+    const link = screen.getByRole("link")
+    expect(link).toHaveAttribute("aria-disabled", "true")
+    expect(link).not.toHaveAttribute("disabled")
+    // fireEvent.click returns false when the default action (navigation) was prevented
+    expect(fireEvent.click(link)).toBe(false)
+    expect(onClick).not.toHaveBeenCalled()
+  })
+
+  it("fires onClick and lets the link navigate when enabled", () => {
+    const onClick = vi.fn((e: React.MouseEvent) => e.preventDefault())
+    render(<Button asChild onClick={onClick}><a href="/x">Go</a></Button>)
+    fireEvent.click(screen.getByRole("link"))
+    expect(onClick).toHaveBeenCalledTimes(1)
+  })
+
+  it("has no axe violations for a link", async () => {
+    const { container } = render(<Button asChild variant="link"><a href="/docs">Docs</a></Button>)
+    expect(await axe(container)).toHaveNoViolations()
   })
 })
 

@@ -437,6 +437,12 @@
       "topic": "CommandMenu (promotes CAND-037)",
       "decision": "Owner-approved 2026-10-14. CommandMenu is a web composition on top of Dialog: a search Input (variant unstyled, leading search icon) over a grouped list, sizes md|lg follow Dialog. Compound API CommandMenu, CommandMenuContent, CommandMenuGroup, CommandMenuItem. Opens with Cmd or Ctrl + K (hotkey prop, false turns it off). Typing filters items by their text and keywords (filter prop, false when the list is filtered elsewhere); Arrow Up/Down, Home, End move the highlighted row, Enter runs it, Escape closes; running an item closes the menu unless closeOnSelect is false. Accessibility: combobox over listbox with aria-activedescendant, groups named by heading, empty and loading announced as status. Figma: one new component set, Command Menu (Size md|lg x State default|empty|loading, 6 variants) on the Command Menu page, with a Results slot in the default state; no Command Item or Command Group component, because Dropdown Menu Item (State focus is the highlighted row) and Dropdown Menu Label already draw them. Bound to existing semantic tokens, no new token. Figma draws the widths 500 and 600 like Figma Dialog, code uses the Dialog tokens (dialog-md 560, dialog-lg 720); that gap is Dialog's, not new. Native parity is logged as CAND-054, not built (Figma first on the Mobile-Native page).",
       "date": "2026-10-14"
+    },
+    {
+      "id": "DEC-073",
+      "topic": "Link is composed from Button, not built (resolves CAND-006)",
+      "decision": "Owner-approved 2026-10-14. A standalone link is `<Button asChild variant=\"link\"><a href>` (or the router's link as the child); there is no Link component. Button already draws the link variant in Figma and has the button-link tokens, and atlas/Button.md already says to use asChild for a link. Breadcrumb keeps its own styled anchor (DEC-011) and NavBar its own anchors. Button asChild threw `React.Children.only` for every child because Button rendered the icons and the child side by side into Slot; it now wraps the child in Slottable so the icons and the loading spinner go inside the child element. For asChild, the native disabled attribute is not written on the child, and a disabled or loading link keeps aria-disabled and does not navigate (the click default is prevented). Code-only, no Figma change, no new component or token.",
+      "date": "2026-10-14"
     }
   ]
 }
