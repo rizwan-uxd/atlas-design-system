@@ -183,8 +183,8 @@ test("a pattern naming a component, variant or size that does not exist fails th
   const dir = copyInputs("packages/governance")
   try {
     const original = fs.readFileSync(patternFile(dir), "utf8")
-    fs.writeFileSync(patternFile(dir), original.replace("- `Label` variant:", "- `Stepper` variant: `default` · size: `md`\n- `Label` variant:"))
-    assert.match(syncFails(dir), /component Stepper does not exist/)
+    fs.writeFileSync(patternFile(dir), original.replace("- `Label` variant:", "- `Marquee` variant: `default` · size: `md`\n- `Label` variant:"))
+    assert.match(syncFails(dir), /component Marquee does not exist/)
     fs.writeFileSync(patternFile(dir), original.replace("- `Button` variant: `primary`, `ghost`", "- `Button` variant: `primary`, `sparkly`"))
     assert.match(syncFails(dir), /Button has no variant `sparkly`/)
     fs.writeFileSync(patternFile(dir), original.replace("## Decision rules\n", "## Rules\n"))
