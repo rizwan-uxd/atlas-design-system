@@ -22,6 +22,12 @@
   "figmaNodeId": "43:111",
   "figmaFileKey": "cKYhfaHLCoyMHi9nKr63Ig",
   "figmaProperties": { "Variant": ["default", "filled", "unstyled"], "Size": ["sm", "md", "lg"], "State": ["default", "hover", "focus-visible", "disabled", "error"] },
+  "figmaComponentProperties": {
+    "Leading icon": { "type": "BOOLEAN", "default": false },
+    "Trailing icon": { "type": "BOOLEAN", "default": false },
+    "Leading icon slot": { "type": "INSTANCE_SWAP" },
+    "Trailing icon slot": { "type": "INSTANCE_SWAP" }
+  },
   "syncedAt": "2026-10-10T17:05:52.269Z",
   "figmaVersion": "lib:Atlas Design System v1@2026-07-06T03:42:12Z",
   "source": "figma-synced"

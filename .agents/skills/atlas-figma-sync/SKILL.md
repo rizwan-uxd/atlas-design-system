@@ -22,6 +22,11 @@ Figma and code disagree. It **reads** Figma and **writes** `atlas/` — never th
    `fileKey: cKYhfaHLCoyMHi9nKr63Ig` and that node id. One call per component, no `get_design_context`
    (you are not implementing anything). Each child name is `Prop=value, Prop=value, …` — collect the
    **set of values per property**, nothing else.
+   `get_metadata` shows variant axes only. For a component that draws boolean or instance-swap
+   properties (Input: Leading/Trailing icon; Badge: Removable), also read
+   `componentPropertyDefinitions` with one read-only `mcp__figma__use_figma` call (load `figma-use`
+   first; no writes) on the component set, and record them as `componentProperties` (see
+   `references/pull-file.md`).
 
 3. **Pull descriptions only where they exist** — for components whose `atlas/state/status.json`
    entry has `figmaMetadata` other than `none`, one `mcp__figma__search_design_system` call

@@ -317,7 +317,11 @@ function carriedForward() {
     if (!m.syncedAt) continue
     syncedAt = syncedAt ?? m.syncedAt
     figmaVersion = figmaVersion ?? m.figmaVersion
-    components[m.name] = { nodeId: m.figmaNodeId, properties: m.figmaProperties ?? undefined }
+    components[m.name] = {
+      nodeId: m.figmaNodeId,
+      properties: m.figmaProperties ?? undefined,
+      componentProperties: m.figmaComponentProperties ?? undefined,
+    }
   }
   return syncedAt ? { fileKey: FILE_KEY, pulledAt: syncedAt, figmaVersion, components, carried: true } : null
 }
@@ -350,10 +354,25 @@ const deprecatedVariantsOf = (name) =>
   deprecations.filter((d) => d.kind === "variant" && d.name.startsWith(`${name}.`))
     .map((d) => ({ variant: d.name.slice(name.length + 1), ...depDetail(d) }))
 
+/**
+ * Figma's `componentPropertyDefinitions` key is `Name#<id>` and an instance-swap default is a node id.
+ * The cache keeps neither: the id suffix is stripped and only a BOOLEAN keeps its default.
+ * Variant properties are not repeated here (they live in `properties`). Returns null for no entries.
+ */
+function normalizeComponentProperties(defs) {
+  const out = {}
+  for (const [key, d] of Object.entries(defs ?? {})) {
+    if (!d || d.type === "VARIANT") continue
+    out[key.replace(/#\d+:\d+$/, "")] = d.type === "BOOLEAN" ? { type: d.type, default: d.default === true } : { type: d.type }
+  }
+  return Object.keys(out).length ? out : null
+}
+
 const comps = components().map((c) => {
   const src = read(c.tsx)
   const { nodeId, enums } = codeConnect(c.name)
-  const figma = pull?.components?.[c.name] ?? null
+  const raw = pull?.components?.[c.name] ?? null
+  const figma = raw ? { ...raw, componentProperties: normalizeComponentProperties(raw.componentProperties) } : null
   return {
     ...c,
     variants: union(src, `${c.name}Variant`),
@@ -458,6 +477,8 @@ for (const c of comps) {
     figmaNodeId: c.nodeId,
     figmaFileKey: FILE_KEY,
     figmaProperties: c.figma?.properties ?? null,
+    // boolean / instance-swap / text properties, absent from `figmaProperties` (variant axes only)
+    ...(c.figma?.componentProperties ? { figmaComponentProperties: c.figma.componentProperties } : {}),
     syncedAt,
     figmaVersion,
     source,
@@ -595,6 +616,17 @@ function oldStructure(body) {
   return out
 }
 
+/** `## Figma toggles` — the BOOLEAN component properties; absent when the pull carries none */
+function togglesPart(c) {
+  const defs = Object.entries(c.figma?.componentProperties ?? {})
+  const toggles = defs.filter(([, d]) => d.type === "BOOLEAN")
+  if (!toggles.length) return []
+  const allOff = toggles.every(([, d]) => d.default === false)
+  const names = toggles.map(([n, d]) => (allOff || d.default === false ? `\`${n}\`` : `\`${n}\` (on)`)).join(" · ")
+  const notes = [defs.some(([, d]) => d.type === "INSTANCE_SWAP") && "with slots", allOff && "off by default"].filter(Boolean)
+  return ["", "## Figma toggles", notes.length ? `${names} (${notes.join(", ")})` : names]
+}
+
 function structureSection(c, old = {}) {
   const part = (key, codeValues, figmaValues) => {
     if (!codeValues?.length) return []
@@ -607,7 +639,7 @@ function structureSection(c, old = {}) {
     return lines
   }
   const props = c.figma?.properties ?? {}
-  return [STRUCT_BEGIN, ...part("Variants", c.variants, props.Variant), ...part("Sizes", c.sizes, props.Size), "", STRUCT_END].join("\n")
+  return [STRUCT_BEGIN, ...part("Variants", c.variants, props.Variant), ...part("Sizes", c.sizes, props.Size), ...togglesPart(c), "", STRUCT_END].join("\n")
 }
 
 /** replace the generated block, or on first run swap the legacy prose sections for it in place */

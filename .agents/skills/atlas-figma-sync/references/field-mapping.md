@@ -13,11 +13,12 @@ What `scripts/atlas-sync.mjs` regenerates, from what, and how it decides somethi
 | `tokensUsed` | every `--atlas-*` in the component's `.tsx` + `.module.css`, minus `--atlas-color-*` | primitive ramps are not app-facing |
 | `figmaNodeId` | the pull, else the Code Connect URL | |
 | `figmaProperties` | the pull — the value set per Figma property | this is the design authority |
+| `figmaComponentProperties` | the pull's `componentProperties` — boolean / instance-swap / text properties, `#id` stripped | absent when the pull has none; carried forward without `--pull` |
 | `syncedAt`, `figmaVersion`, `source` | the pull | `null` + `repo-derived` means never read from Figma |
 | `index.md` | all of the above, one row per component | |
 | `tokens.json` / `tokens.md` | `packages/tokens/atlas.tokens.css` | Figma MCP has no variable table (see `pull-file.md`) |
 | `<Name>.md` | the Figma description **if it reads as guidance**, else preserved | see below |
-| `<Name>.md` `## Variants` / `## Sizes` | `variants` / `sizes` above, plus a `Figma:` line when `figmaProperties` differs — between `generated-structure` markers, regenerated on every run, with or without a Figma description. A short hint after a value (`` `md` default ``) is carried forward | a missing Figma description stays a phase 3 gap |
+| `<Name>.md` `## Variants` / `## Sizes` | `variants` / `sizes` above, plus a `Figma:` line when `figmaProperties` differs — between `generated-structure` markers, regenerated on every run, with or without a Figma description. A short hint after a value (`` `md` default ``) is carried forward. A `## Figma toggles` line lists the `BOOLEAN` component properties when the pull has any | a missing Figma description stays a phase 3 gap |
 | `<Name>.md` `## API` block | `<Name>Props` and each subcomponent's `<Sub>Props` (own members, extended native element) — between `generated-api` markers, regenerated on every run | |
 
 `atlas/README.md`, `atlas/tokens.md` and preserved `<Name>.md` files keep their body; only the
