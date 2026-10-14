@@ -377,6 +377,12 @@
       "topic": "Disabled opacity is bound to opacity/disabled in Dropdown Menu Item, Radio Group Item and Slider",
       "decision": "Owner-approved 2026-10-14 (CAND-043). Read-only check first: code already used var(--atlas-opacity-disabled) (0.5) in DropdownMenu, RadioGroup and Slider, so the candidate's 'set by hand' wording was stale on the code side; only Figma held a plain 0.5. The opacity of the 20 disabled variants (Dropdown Menu Item 515:81 x4, Radio Group Item 544:283 x8, .Slider / Bar 550:96 x4, Slider 550:241 x4) is now bound to opacity/disabled (50 in Atlas/Primitives, DEC-058 unchanged). Rendered value is still 0.5, so nothing changes visually and no code changes. DEC-016's 'set directly because Figma opacity variables are percentages' no longer applies.",
       "date": "2026-10-14"
+    },
+    {
+      "id": "DEC-063",
+      "topic": "StatCard leading icon is a Leading icon variant (off | on), above the value",
+      "decision": "Owner-approved 2026-10-14 (CAND-044). The Stat card set (867:351) gains a Leading icon variant property, off | on, so 18 variants become 36. The icon is a free-standing 16 px instance, muted foreground, as the first row of the Card content slot above the value, with spacing/2 below it; it stays while loading. It is not beside the label: the label and period are the nested Card instance's own text with no header row, and an instance cannot take extra children. Figma also cannot bind a boolean or instance-swap property to a layer inside a nested instance's slot, so a variant property is used and the icon is swapped by hand on an instance (default: activity). All 33 existing instances resolve to off. Code: StatCard icon?: React.ReactNode, rendered first in the stat block, aria-hidden, 16 px (--atlas-icon-size-xs), --atlas-foreground-muted. Code Connect maps Leading icon on to an Activity icon. A header-row icon would need a leading-icon slot on Card first (not built).",
+      "date": "2026-10-14"
     }
   ]
 }

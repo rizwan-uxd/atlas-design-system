@@ -13,15 +13,16 @@
     { "name": "period", "required": true, "type": "React.ReactNode" },
     { "name": "value", "required": true, "type": "React.ReactNode" },
     { "name": "delta", "required": false, "type": "StatCardDelta" },
+    { "name": "icon", "required": false, "type": "React.ReactNode" },
     { "name": "loading", "required": false, "type": "boolean" },
     { "name": "className", "required": false, "type": "string" },
     { "name": "id", "required": false, "type": "string" }
   ],
   "subcomponents": [],
-  "tokensUsed": ["--atlas-font-sans", "--atlas-font-size-2xl", "--atlas-font-size-3xl", "--atlas-font-size-4xl", "--atlas-font-size-xs", "--atlas-font-weight-semibold", "--atlas-foreground", "--atlas-line-height-normal", "--atlas-line-height-tight", "--atlas-spacing-16", "--atlas-spacing-2"],
+  "tokensUsed": ["--atlas-font-sans", "--atlas-font-size-2xl", "--atlas-font-size-3xl", "--atlas-font-size-4xl", "--atlas-font-size-xs", "--atlas-font-weight-semibold", "--atlas-foreground", "--atlas-foreground-muted", "--atlas-icon-size-xs", "--atlas-line-height-normal", "--atlas-line-height-tight", "--atlas-spacing-16", "--atlas-spacing-2"],
   "figmaNodeId": "867:351",
   "figmaFileKey": "cKYhfaHLCoyMHi9nKr63Ig",
-  "figmaProperties": { "Size": ["sm", "md", "lg"], "State": ["default", "loading"], "Sentiment": ["positive", "negative", "neutral"] },
+  "figmaProperties": { "Size": ["sm", "md", "lg"], "State": ["default", "loading"], "Sentiment": ["positive", "negative", "neutral"], "Leading icon": ["off", "on"] },
   "syncedAt": "2026-10-10T17:05:52.269Z",
   "figmaVersion": "lib:Atlas Design System v1@2026-07-06T03:42:12Z",
   "source": "figma-synced"
