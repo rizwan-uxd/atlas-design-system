@@ -176,6 +176,14 @@
       "note": "Web CommandMenu shipped (compositions/CommandMenu; promoted from CAND-037, 2026-10-14). Native parity is logged here, not built: it needs a Figma design on the Mobile-Native page first, and a touch device has no Cmd+K, so it would open from a button."
     },
     {
+      "id": "CAND-055",
+      "name": "AppShell (layouts/AppShell: Sidebar + content column + skip link)",
+      "seenIn": ["packages/governance/patterns/navigation-shell.md"],
+      "composedFrom": "a local two-column grid in examples/navigation-shell.example.tsx around Sidebar, Breadcrumb, a visually hidden skip link and a <main> region",
+      "occurrences": 1,
+      "note": "Raised by the Navigation shell pattern (2026-10-15). Composed locally in the example; not a component until it is designed in Figma and the user asks for it. The skip link also has no component."
+    },
+    {
       "id": "CAND-048",
       "name": "Load more and infinite scroll (lazy loading a list)",
       "seenIn": ["packages/governance/patterns/data-table.md"],

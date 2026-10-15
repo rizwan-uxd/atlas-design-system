@@ -1131,10 +1131,10 @@
     {
       "id": "DISC-094",
       "component": "Onboarding (pattern)",
-      "side": "figma",
-      "status": "open",
+      "side": "closed",
+      "status": "closed",
       "issue": "The Onboarding pattern doc and example now show setup progress with Stepper (CAND-035 shipped, DEC-071), but the Figma page Pattern / Onboarding (832:2) still draws it as a Progress bar with the text Step N of 4 in 7 frames (832:36, 832:102, 832:155, 834:211, 834:249, 832:188, 832:371) and its guideline bullet reads Show labelled progress (Step 2 of 4). Found 2026-10-14 while updating the pattern. The Auth page has the same kind of gap for OtpInput: Pattern / Auth (836:2) has no OtpInput instance.",
-      "resolution": "Open. Redraw the setup frames with a Stepper instance and update the guideline bullet (Figma first, owner approval; the checklist Progress stays). The doc and example were updated first at the owner's request, as for the Auth OtpInput follow-up, so the doc is ahead of Figma until this is done.",
+      "resolution": "Closed 2026-10-15 (DEC-074). Onboarding page: the six setup Progress instances (frames 1 to 6) and the desktop reference are now Stepper instances (phone frames use the mobile ring summary, the 480 px reference uses tablet), guideline bullets rewritten, the checklist Progress kept. Auth page: the two code-step Field instances are now a Label and an OTP Input (default, and error with the kept value and the danger message). The doc and example already matched.",
       "firstSeen": "2026-10-14",
       "lastSeen": "2026-10-14"
     }

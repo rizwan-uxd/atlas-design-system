@@ -3,15 +3,19 @@
 /**
  * Atlas Stepper — numbered markers joined by connectors, showing where someone is in a multi-step flow
  *
- * Figma:       Stepper (Orientation × Size × Steps × Current) built from Step (Orientation × Status × Size)
- *              and Step Marker (Status × Size)
+ * Figma:       Stepper (Orientation × Viewport × Steps × Current) built from Step (Orientation × Status × Viewport)
+ *              and Step Marker (Status × Viewport)
  * Orientation: horizontal (default) | vertical
- * Sizes:       sm | md | lg (the marker is spacing-6 | spacing-8 | spacing-10)
+ * Viewport:    no prop. CSS follows the screen width. Horizontal on mobile (< 640px) is a compact summary instead
+ *              of the marker row: a ring filled to the current step with "N of M" inside, the current label
+ *              and a muted "Next: ..." line (none on the last step). Tablet (640px up) shows the markers at
+ *              spacing-8 and desktop (1024px up) at spacing-10. Vertical keeps the markers at every width.
  * Status:      complete | current | upcoming — derived from `current`, never passed in
  * Steps:       a value (`steps`), any count from 2; Figma draws 3 to 5
  *
  * Anatomy:     <ol> of <li> steps: marker (number, or a check when complete) · label · optional description
- *              · connector to the next step (not on the last)
+ *              · connector to the next step (not on the last). Horizontal also renders the mobile summary
+ *              (aria-hidden) next to the list.
  *
  * Display only: it shows progress through a flow the page controls with Back and Continue. The markers are
  * not buttons, so there is no hover, focus or press state.
@@ -24,6 +28,8 @@
  *   - Each status is also written for assistive technology ("completed", "current step", "upcoming"),
  *     so it never relies on colour or the check alone
  *   - The marker is aria-hidden; the label and description carry the content
+ *   - The mobile summary is aria-hidden and repeats what the list already says; below 640px the list is
+ *     visually hidden (clipped, not display: none) so every step name and status is still read out once
  *   - Logical properties, so the row and the connectors flip in RTL; no motion
  */
 
@@ -34,7 +40,6 @@ import styles from "./Stepper.module.css"
 /* ── Types ──────────────────────────────────────────────────── */
 
 export type StepperOrientation = "horizontal" | "vertical"
-export type StepperSize = "sm" | "md" | "lg"
 export type StepperStatus = "complete" | "current" | "upcoming"
 
 export interface StepperStep {
@@ -50,7 +55,6 @@ export interface StepperProps extends Omit<React.ComponentProps<"ol">, "children
   /** The current step, 1-based. Above the step count marks every step complete. */
   current: number
   orientation?: StepperOrientation
-  size?: StepperSize
 }
 
 /* ── Helpers ────────────────────────────────────────────────── */
@@ -74,7 +78,6 @@ export function Stepper({
   steps,
   current,
   orientation = "horizontal",
-  size = "md",
   className,
   ...rest
 }: StepperProps) {
@@ -84,12 +87,16 @@ export function Stepper({
     }
   }
 
-  return (
+  const count = steps.length
+  const position = Math.min(Math.max(current, 1), Math.max(count, 1))
+  const here = steps[position - 1]
+  const next = steps[position]
+
+  const list = (
     <ol
       {...rest}
-      className={[styles.root, styles[orientation], styles[size], className].filter(Boolean).join(" ")}
+      className={[styles.root, styles[orientation], className].filter(Boolean).join(" ")}
       data-orientation={orientation}
-      data-size={size}
     >
       {steps.map((step, index) => {
         const position = index + 1
@@ -121,5 +128,25 @@ export function Stepper({
         )
       })}
     </ol>
+  )
+
+  if (orientation === "vertical" || !here) return list
+
+  return (
+    <>
+      <div className={styles.summary} aria-hidden="true">
+        <span className={styles.ring} style={{ "--stepper-progress": (position / count) * 100 } as React.CSSProperties}>
+          <span className={styles.arc} />
+          <span className={styles.count}>
+            {position} of {count}
+          </span>
+        </span>
+        <span className={styles.summaryText}>
+          <span className={styles.summaryLabel}>{here.label}</span>
+          {next && <span className={styles.summaryNext}>Next: {next.label}</span>}
+        </span>
+      </div>
+      {list}
+    </>
   )
 }

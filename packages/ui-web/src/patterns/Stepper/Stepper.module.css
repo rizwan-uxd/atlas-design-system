@@ -67,22 +67,11 @@
   font-variant-numeric: tabular-nums;
 }
 
-.sm .marker {
+/* Marker size follows the viewport: mobile (< 640px), tablet, desktop (>= 1024px) */
+.marker {
   inline-size: var(--atlas-spacing-6);
   block-size: var(--atlas-spacing-6);
   font-size: var(--atlas-font-size-xs);
-}
-
-.md .marker {
-  inline-size: var(--atlas-spacing-8);
-  block-size: var(--atlas-spacing-8);
-  font-size: var(--atlas-font-size-sm);
-}
-
-.lg .marker {
-  inline-size: var(--atlas-spacing-10);
-  block-size: var(--atlas-spacing-10);
-  font-size: var(--atlas-font-size-base);
 }
 
 .check {
@@ -90,9 +79,25 @@
   block-size: var(--atlas-spacing-4);
 }
 
-.lg .check {
-  inline-size: var(--atlas-spacing-5);
-  block-size: var(--atlas-spacing-5);
+@media (min-width: 640px) {
+  .marker {
+    inline-size: var(--atlas-spacing-8);
+    block-size: var(--atlas-spacing-8);
+    font-size: var(--atlas-font-size-sm);
+  }
+}
+
+@media (min-width: 1024px) {
+  .marker {
+    inline-size: var(--atlas-spacing-10);
+    block-size: var(--atlas-spacing-10);
+    font-size: var(--atlas-font-size-base);
+  }
+
+  .check {
+    inline-size: var(--atlas-spacing-5);
+    block-size: var(--atlas-spacing-5);
+  }
 }
 
 .step[data-status="complete"] .marker {
@@ -175,4 +180,78 @@
 .vertical .connector {
   inline-size: var(--atlas-border-width-2);
   min-block-size: var(--atlas-spacing-4);
+}
+
+/* ── Mobile summary (horizontal) ──────────────────────────────── */
+/* Below 640px the marker row is replaced by a ring, the current label and the next label. The list stays in
+   the page for assistive technology (clipped, not display: none), so every name and status is read out once. */
+
+.summary {
+  display: none;
+  align-items: center;
+  gap: var(--atlas-spacing-3);
+  font-family: var(--atlas-font-sans);
+}
+
+.ring {
+  position: relative;
+  display: grid;
+  flex: none;
+  place-items: center;
+  inline-size: var(--atlas-spacing-12);
+  block-size: var(--atlas-spacing-12);
+}
+
+/* The arc is a conic gradient cut into a ring; the hole stays transparent, so any surface shows through */
+.arc {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--atlas-radius-full);
+  background: conic-gradient(var(--atlas-primary) calc(var(--stepper-progress) * 1%), var(--atlas-border) 0);
+  mask: radial-gradient(farthest-side, transparent calc(100% - var(--atlas-spacing-1)), var(--atlas-foreground) 0);
+}
+
+.count {
+  position: relative;
+  font-size: var(--atlas-font-size-xs);
+  font-weight: var(--atlas-font-weight-medium);
+  font-variant-numeric: tabular-nums;
+  color: var(--atlas-foreground);
+}
+
+.summaryText {
+  display: flex;
+  flex-direction: column;
+  min-inline-size: 0;
+}
+
+.summaryLabel {
+  font-size: var(--atlas-font-size-base);
+  font-weight: var(--atlas-font-weight-semibold);
+  line-height: var(--atlas-line-height-normal);
+  color: var(--atlas-foreground);
+}
+
+.summaryNext {
+  font-size: var(--atlas-font-size-sm);
+  line-height: var(--atlas-line-height-normal);
+  color: var(--atlas-foreground-muted);
+}
+
+@media (max-width: 639px) {
+  .summary {
+    display: flex;
+  }
+
+  .horizontal {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+  }
 }

@@ -6,16 +6,12 @@ import type React from "react"
 import type {
   StepperOrientation,
   StepperProps,
-  StepperSize,
   StepperStatus,
   StepperStep,
 } from "@atlas/ui-web/patterns/Stepper/Stepper"
 
 type AssertStepperOrientation = StepperOrientation extends "horizontal" | "vertical" ? true : false
 const _o: AssertStepperOrientation = true; void _o
-
-type AssertStepperSize = StepperSize extends "sm" | "md" | "lg" ? true : false
-const _s: AssertStepperSize = true; void _s
 
 type AssertStepperStatus = StepperStatus extends "complete" | "current" | "upcoming" ? true : false
 const _st: AssertStepperStatus = true; void _st
@@ -28,7 +24,6 @@ type AssertStepperShape = {
   steps: StepperStep[]
   current: number
   orientation?: StepperOrientation
-  size?: StepperSize
   className?: string
   "aria-label"?: string
 }
@@ -40,3 +35,9 @@ type AssertNoStatus = "status" extends keyof StepperProps ? never : true
 const _ns: AssertNoStatus = true; void _ns
 type AssertNoChildren = "children" extends keyof StepperProps ? never : true
 const _nc: AssertNoChildren = true; void _nc
+
+/** The viewport is chosen by CSS, never by a prop (DEC-074). */
+type AssertNoSize = "size" extends keyof StepperProps ? never : true
+const _nz: AssertNoSize = true; void _nz
+type AssertNoViewport = "viewport" extends keyof StepperProps ? never : true
+const _nv: AssertNoViewport = true; void _nv
