@@ -83,7 +83,8 @@ export function createButtonStyles(
   const s = sizeTokens[size]
   const c = getButtonColors(variant, colors)
 
-  return StyleSheet.create({
+  return {
+    ...StyleSheet.create({
     pressable: {
       alignSelf: fullWidth ? 'stretch' : 'flex-start',
     },
@@ -109,7 +110,8 @@ export function createButtonStyles(
       fontWeight: tokens.fontWeight.semibold,
       lineHeight: s.fontSize * tokens.lineHeight.tight,
     },
+    }),
     iconSize: s.iconSize,
     iconColor: c.text,
-  })
+  }
 }

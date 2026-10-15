@@ -256,7 +256,7 @@ function ButtonDemo() {
 // ─── M5 · Input demo ─────────────────────────────────────────────────────────
 
 function InputDemo() {
-  const { tokens } = useTheme()
+  const { colors, tokens } = useTheme()
   const [text, setText] = useState('')
   const [password, setPassword] = useState('')
 
