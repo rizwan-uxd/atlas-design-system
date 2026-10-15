@@ -63,6 +63,7 @@ Composition rules for common screens. When a request matches one, read `atlas/pa
 | Pattern | File | Use for |
 |---|---|---|
 | Auth | `atlas/patterns/auth.md` | Sign the user in or create an account with email, social or passkey options and a one-time code step, including errors and resend. |
+| Chat | `atlas/patterns/chat.md` | A conversation between people or with an assistant: a scrolling message list of grouped bubbles, a composer pinned below it, and sending, failed, empty and new-message states. |
 | Dashboard | `atlas/patterns/dashboard.md` | Show the state of a product or account at a glance with filters, KPI cards, a chart and a detail table, including loading and empty states. |
 | Data table | `atlas/patterns/data-table.md` | Show a set of records in rows and columns with search, filtering, row selection and bulk actions. |
 | Detail view | `atlas/patterns/detail-view.md` | Show everything about one record on its own page: a header with status and actions, peer views in tabs, grouped read-only facts, and loading, not-found and error states. |
