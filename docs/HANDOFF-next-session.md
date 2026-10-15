@@ -1,24 +1,24 @@
-# Handoff: next session (library state after PR #68)
+# Handoff: next session (library state after PR #70)
 
-Written: 2026-10-14. Read this, `AGENTS.md` and the `atlas-component` skill first. This is the only handoff doc: every earlier one was deleted (they stay in git history) and their useful gotchas and rules are folded in below.
+Written: 2026-10-15. Read this, `AGENTS.md` and the `atlas-component` skill first. This is the only handoff doc: every earlier one was deleted (they stay in git history) and their useful gotchas and rules are folded in below.
 
 ## State
-- **`main` is at `f36a43d` (PR #68: OtpInput, Stepper, the Auth and Onboarding pattern follow-ups, and the test fix).** All 9 checks on the PR were green before the merge, and the CI run on `main` for `f36a43d` (run 190) finished green. **CommandMenu (CAND-037) is committed and pushed on the working branch, no PR yet** (see "Start here" 1).
-- Latest ids: **DEC-072, CAND-054, DISC-094 (open).** 1385 vitest tests in 49 files pass locally. The Figma Onboarding page still draws Progress, not Stepper (see Do next 1).
-- Snapshot: 47 components, 30 with `verifiedAt`. 93 discrepancies closed, **1 open (DISC-094)**. 22 candidates open (none is Figma debt).
+- **`main` is at `56aedca` (PR #70).** PR #69 merged CommandMenu (CAND-037, DEC-072); PR #70 fixed Button `asChild` (single child) and resolved CAND-006 (Link) as a composition of Button, not a component (DEC-073). No PRs were open at the start of the 2026-10-15 session.
+- Latest ids: **DEC-073, CAND-054, DISC-094 (open).** 1391 vitest tests in 49 files pass locally. The Figma Onboarding page still draws Progress, not Stepper (see Do next 1).
+- Snapshot: 47 components, **all 47 with `verifiedAt`**. 93 discrepancies closed, **1 open (DISC-094)**. 22 entries in `candidates.json` (the DEC-073 resolution of CAND-006 is recorded as a note on its entry; none is Figma debt).
 - Working branch for this cloud session: `claude/atlas-handoff-documentation-0hzyod`. After each merge, reset it to `origin/main` after `git fetch` (`git checkout -B claude/atlas-handoff-documentation-0hzyod origin/main`).
 - **The branch reset can be blocked.** In the session that wrote this, the auto-mode classifier denied `git fetch origin main` plus `git checkout -B <branch> origin/main` (reason "Merge Without Review") even after the user said "reset the branch". Do not work around it: ask the user for a Bash permission rule or to run the two commands. A doc commit made on the stale branch is still valid (it carries only merged history), but push only after the reset.
 - The stop hook reports "1 unpushed commit" after each merge: it is only the merge commit, because the local branch was reset to `origin/main`; `git push` then fast-forwards the remote branch with no new content. If the push is **rejected**, the remote has a commit you do not have: fetch and read it, never force.
 - `.atlas-pull/` (gitignored scratch) does not exist in a fresh cloud session: see the sync recipe in the gotchas.
 
 ## Start here (new session)
-1. **CommandMenu (CAND-037) is done and committed on the branch; no PR is open.** Figma: page `Command Menu` `990:2`, set `990:211` (Size md|lg x State default|empty|loading, 6 variants, a Results slot in the default state), reusing Dropdown Menu Item and Label, Input unstyled, Divider and Spinner. Code: `packages/ui-web/src/compositions/CommandMenu/`, with Code Connect, contract, `tests/CommandMenu.test.tsx` (23 tests), the synced snapshot, DEC-072, a stamped `status.json` row and CAND-054 (native parity, logged not built, because it needs a Figma design on Mobile-Native first). Verified: full vitest, `tsc`, `npm run test:scripts`, Code Connect parse, `atlas:verify --allow-new-component --stamp` (13 pass). **Next:** open the PR only when the user asks (new component, so add the `atlas-approved-new` label right after), watch it, merge only on "merge N". Not checked in a browser: that the CSS hides a group heading when all its items are filtered out.
+1. **Nothing is in flight.** CommandMenu and the Button/Link change are merged. The 17 `verifiedAt: null` components were stamped on 2026-10-15 with `node scripts/atlas-verify.mjs --stamp-components <names> --scope atlas/state/status.json` (13 checks passed). That checks code against the synced snapshot and runs tests; it did not compare with Figma (the Figma MCP was down that session), so a Figma re-check of those 17 is still open if wanted. Not checked in a browser: that the CommandMenu CSS hides a group heading when all its items are filtered out.
 2. `git fetch origin`, compare `origin/main` with the sha above, and read the open PR list. Leave any open PR alone until the user says "merge N".
 3. Before the first push of the session, fetch the branch and compare. If the remote branch has a commit you did not make, **do not force-push**: read it, verify it, tell the user, and let them choose (this happened once: a Card commit appeared on the branch after #62 merged; it was legitimate, reviewed and merged as #63).
 4. Ask the user which item in "Do next" to start. A candidate runs the four gates in "Rules"; a new component needs their explicit request.
 5. No Figma work is in flight and nothing is half-built. The working tree should be clean; `git status` before you start.
 
-## Done this session (PRs #56 to #68, each after "merge N")
+## Done in earlier sessions (PRs #56 to #70, each after "merge N")
 | PR | Candidate | What |
 |---|---|---|
 | #56 | handoff | Closed CAND-038 to 041 recorded, `claude.md` pointer |
@@ -35,12 +35,14 @@ Written: 2026-10-14. Read this, `AGENTS.md` and the `atlas-component` skill firs
 | #68 | CAND-034 | **OtpInput**, new composition: Figma page `979:2`, sets OTP Slot `979:63` (30) and OTP Input `979:1039` (75, Length 4 to 8). One hidden real input over aria-hidden digit slots; `length` `size` `value` `onValueChange` `onComplete` `invalid`. Auth pattern and its example now use it. DEC-070. Logged **CAND-052** (native parity) |
 | #68 | CAND-035 | **Stepper**, new pattern: Figma page Stepper, sets Step Marker `983:48`, Step `983:13426` and Stepper `984:3356` (Orientation horizontal \| vertical x Size x Steps 3 to 5 x Current, 72 variants). Numbered markers with connectors, display only; status derived from a 1-based `current`. DEC-071. Logged **CAND-053** (native parity) |
 | #68 | onboarding | The Onboarding pattern doc and example use `Stepper` for the setup progress (the checklist keeps `Progress`). Docs only, like the Auth OtpInput follow-up; Figma still draws Progress, logged as **DISC-094** |
+| #69 | CAND-037 | **CommandMenu**, new composition on Dialog (Figma page `990:2`, set `990:211`). DEC-072. Logged CAND-054 (native parity) |
+| #70 | CAND-006 | Button `asChild` works with a single child; Link is composed from Button, not built. DEC-073 |
 | #68 | CI fix | `atlas-sync.test.mjs` used `Stepper` as its "component that does not exist"; it now uses `Marquee` |
 
 ## Do next (the user decides)
 1. **DISC-094, Figma Onboarding page.** Redraw the 7 setup frames (`832:36`, `832:102`, `832:155`, `834:211`, `834:249`, `832:188`, `832:371`) with a Stepper instance and update the guideline bullet `832:20`; the Auth page (`836:2`) likewise has no OtpInput instance yet. Figma first, owner approval.
 2. **Deferred:** Load more and infinite scroll (CAND-048). **Mobile-Native parity** for shipped web components (CAND-005, 007, 009, 010, 013, 015 to 019, 028, 029, 052, 053, 054) is logged, not built.
-3. **Verification debt:** 17 components have `verifiedAt: null` (Avatar, Breadcrumb, CodeBlock, DatePicker, Divider, Drawer, DropdownMenu, Image, ListItem, RadioGroup, ScrollProgress, Sheet, SidebarMenuRow, Skeleton, Slider, Spinner, Tooltip). Sparkline is stamped.
+3. **Verification debt: cleared** (all 47 stamped, see Start here 1). Optional: re-check the 17 stamped on 2026-10-15 against Figma once the MCP connects.
 4. **Batch-2 patterns** (navigation shell, detail view, chat, notifications center, payment and billing, members and permissions): still a proposal, pick one.
 5. Known gaps: `search-filter.example.tsx` does not implement recent searches or the filter Sheet; a Card button's accessible name is its title only, so a clickable StatCard's value and delta are not in the name (the label should say what opens). The StatCard sparkline art in Figma is one fixed rising path for every tone and loading cards keep it; a flat or per-tone path would need a change to the Sparkline set. No Dark screenshot was taken for the Sparkline variants.
 
