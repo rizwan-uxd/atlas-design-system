@@ -1,24 +1,23 @@
-# Handoff: next session (library state after PR #70)
+# Handoff: next session (library state after PR #71)
 
-Written: 2026-10-15. Read this, `AGENTS.md` and the `atlas-component` skill first. This is the only handoff doc: every earlier one was deleted (they stay in git history) and their useful gotchas and rules are folded in below.
+Written: 2026-10-15 (end of session). Read this, `AGENTS.md` and the `atlas-component` skill first. This is the only handoff doc: every earlier one was deleted (they stay in git history) and their useful gotchas and rules are folded in below.
 
 ## State
-- **`main` is at `56aedca` (PR #70).** PR #69 merged CommandMenu (CAND-037, DEC-072); PR #70 fixed Button `asChild` (single child) and resolved CAND-006 (Link) as a composition of Button, not a component (DEC-073). No PRs were open at the start of the 2026-10-15 session.
-- Latest ids: **DEC-073, CAND-054, DISC-094 (open).** 1391 vitest tests in 49 files pass locally. The Figma Onboarding page still draws Progress, not Stepper (see Do next 1).
-- Snapshot: 47 components, **all 47 with `verifiedAt`**. 93 discrepancies closed, **1 open (DISC-094)**. 22 entries in `candidates.json` (the DEC-073 resolution of CAND-006 is recorded as a note on its entry; none is Figma debt).
+- **`main` is at `036eccd` (PR #71); CI run 199 on it finished green.** No PRs are open. PR #69 merged CommandMenu (CAND-037, DEC-072); PR #70 fixed Button `asChild` and resolved CAND-006 (Link) as a composition of Button (DEC-073); PR #71 carried three commits: the Stepper viewport variant and mobile ring (DEC-074, closes DISC-094), the Navigation shell pattern (AppShell logged as CAND-055) and the 17 `verifiedAt` stamps.
+- Latest ids: **DEC-074, CAND-055, DISC-094 (closed).** No discrepancy is open (94 closed). 1387 vitest tests in 49 files, 57 script tests, all pass. 47 components, **all with `verifiedAt`**. 23 entries in `candidates.json`; none is Figma debt.
 - Working branch for this cloud session: `claude/atlas-handoff-documentation-0hzyod`. After each merge, reset it to `origin/main` after `git fetch` (`git checkout -B claude/atlas-handoff-documentation-0hzyod origin/main`).
 - **The branch reset can be blocked.** In the session that wrote this, the auto-mode classifier denied `git fetch origin main` plus `git checkout -B <branch> origin/main` (reason "Merge Without Review") even after the user said "reset the branch". Do not work around it: ask the user for a Bash permission rule or to run the two commands. A doc commit made on the stale branch is still valid (it carries only merged history), but push only after the reset.
 - The stop hook reports "1 unpushed commit" after each merge: it is only the merge commit, because the local branch was reset to `origin/main`; `git push` then fast-forwards the remote branch with no new content. If the push is **rejected**, the remote has a commit you do not have: fetch and read it, never force.
 - `.atlas-pull/` (gitignored scratch) does not exist in a fresh cloud session: see the sync recipe in the gotchas.
 
 ## Start here (new session)
-1. **Nothing is in flight.** CommandMenu and the Button/Link change are merged. The 17 `verifiedAt: null` components were stamped on 2026-10-15 with `node scripts/atlas-verify.mjs --stamp-components <names> --scope atlas/state/status.json` (13 checks passed). That checks code against the synced snapshot and runs tests; it did not compare with Figma (the Figma MCP was down that session), so a Figma re-check of those 17 is still open if wanted. Not checked in a browser: that the CommandMenu CSS hides a group heading when all its items are filtered out.
+1. **Nothing is in flight; the working tree is clean.** The user wants every commit finished and merged to `main` before new work starts, so check `git status`, the open PR list and CI on `main` first. **The next component is the native Stepper (CAND-053)**: see "Do next" 1 for the brief and the one open decision. The 2026-10-15 stamps compared code with the synced snapshot, not with Figma (the Figma MCP was down), so a Figma re-check of those 17 is optional.
 2. `git fetch origin`, compare `origin/main` with the sha above, and read the open PR list. Leave any open PR alone until the user says "merge N".
 3. Before the first push of the session, fetch the branch and compare. If the remote branch has a commit you did not make, **do not force-push**: read it, verify it, tell the user, and let them choose (this happened once: a Card commit appeared on the branch after #62 merged; it was legitimate, reviewed and merged as #63).
 4. Ask the user which item in "Do next" to start. A candidate runs the four gates in "Rules"; a new component needs their explicit request.
-5. No Figma work is in flight and nothing is half-built. The working tree should be clean; `git status` before you start.
+5. The Figma MCP works in this session type (Onboarding and Auth redraws were done on 2026-10-15). If a call fails with a proxy 403, say so and stop; do not build code without the Figma side.
 
-## Done in earlier sessions (PRs #56 to #70, each after "merge N")
+## Done in earlier sessions (PRs #56 to #71, each after "merge N")
 | PR | Candidate | What |
 |---|---|---|
 | #56 | handoff | Closed CAND-038 to 041 recorded, `claude.md` pointer |
@@ -37,16 +36,28 @@ Written: 2026-10-15. Read this, `AGENTS.md` and the `atlas-component` skill firs
 | #68 | onboarding | The Onboarding pattern doc and example use `Stepper` for the setup progress (the checklist keeps `Progress`). Docs only, like the Auth OtpInput follow-up; Figma still draws Progress, logged as **DISC-094** |
 | #69 | CAND-037 | **CommandMenu**, new composition on Dialog (Figma page `990:2`, set `990:211`). DEC-072. Logged CAND-054 (native parity) |
 | #70 | CAND-006 | Button `asChild` works with a single child; Link is composed from Button, not built. DEC-073 |
+| #71 | CAND-035 | **Stepper viewport**: `Size` sm \| md \| lg replaced by `Viewport` mobile \| tablet \| desktop on Step Marker, Step and Stepper (72 variants kept). Horizontal on mobile is a **ring summary** (48 px ring, arc = current / steps, "N of M" inside, current label, muted "Next: ..." line, none on the last step); tablet and desktop keep the markers; vertical keeps the markers everywhere. Code: no `size` prop, CSS media queries (mobile < 640 px), the horizontal `<ol>` is visually hidden below 640 px and the `aria-hidden` summary shows. Onboarding frames use Stepper instances (phone frames the ring, the 480 px reference `tablet`); Auth code step uses OTP Input. DEC-074, **closes DISC-094** |
+| #71 | patterns | **Navigation shell** pattern (doc, example, generated copy); AppShell logged as **CAND-055** (composed locally, not a component) |
+| #71 | stamps | `verifiedAt` stamped for the 17 components that had `null` (code vs snapshot, not vs Figma) |
 | #68 | CI fix | `atlas-sync.test.mjs` used `Stepper` as its "component that does not exist"; it now uses `Marquee` |
 
 ## Do next (the user decides)
-1. **DISC-094, Figma Onboarding page.** Redraw the 7 setup frames (`832:36`, `832:102`, `832:155`, `834:211`, `834:249`, `832:188`, `832:371`) with a Stepper instance and update the guideline bullet `832:20`; the Auth page (`836:2`) likewise has no OtpInput instance yet. Figma first, owner approval.
-2. **Deferred:** Load more and infinite scroll (CAND-048). **Mobile-Native parity** for shipped web components (CAND-005, 007, 009, 010, 013, 015 to 019, 028, 029, 052, 053, 054) is logged, not built.
-3. **Verification debt: cleared** (all 47 stamped, see Start here 1). Optional: re-check the 17 stamped on 2026-10-15 against Figma once the MCP connects.
-4. **Batch-2 patterns** (navigation shell, detail view, chat, notifications center, payment and billing, members and permissions): still a proposal, pick one.
-5. Known gaps: `search-filter.example.tsx` does not implement recent searches or the filter Sheet; a Card button's accessible name is its title only, so a clickable StatCard's value and delta are not in the name (the label should say what opens). The StatCard sparkline art in Figma is one fixed rising path for every tone and loading cards keep it; a flat or per-tone path would need a change to the Sparkline set. No Dark screenshot was taken for the Sparkline variants.
+1. **Native Stepper (CAND-053), the next component.** Native is always mobile, so it is **the ring only**: no marker row, no Viewport or Size variants. Same content as the web ring: a 48 px ring (`spacing/12`) with a 4 px arc filled to current / steps in `primary` on a `border` track, "N of M" inside (font-size xs, medium, `foreground`), the current label beside it (base, semibold) and a muted "Next: ..." line (sm, `foreground-muted`) that is left out on the last step. Order of work: **Figma first** on the `Atlas/Mobile-Native` page (`1:2`; read how Input `51:81` and Dialog `143:167` are drawn there and reuse the mobile tokens), build it as a Stepper set, screenshot it, then code in `packages/ui-native/components/Stepper/` (`Stepper.tsx` + `Stepper.styles.ts`, exported from `components/index.ts`, like the existing 12). Web references: `packages/ui-web/src/patterns/Stepper/` and Figma set `984:3356` (the ring variants are `Orientation=horizontal, Viewport=mobile`). **One decision to put to the user before Gate 1:** React Native has no conic gradient and `react-native-svg` is not a dependency of `ui-native` (it has expo, expo-status-bar, safe-area-context, @expo/vector-icons). Options: add `react-native-svg` (a new dependency, the cleanest ring), or draw the arc with two rotated half-circle Views (no dependency, more code). `ui-native` has no test setup, so the only automated check is `tsc`; say so in the report. Update CAND-053 and `atlas/state/status.json` only through the usual rules.
+2. **Other native parity** (all logged, none built): CAND-005, 007, 009, 010, 013, 015 to 019, 028, 029, 052, 054. Each needs a Figma design on `Atlas/Mobile-Native` first.
+3. **Other candidates:** DataTable (CAND-024, needs its own Figma design), Button loading with a Spinner (CAND-014, needs a Figma design of the loading state), Load more and infinite scroll (CAND-048, deferred), AppShell (CAND-055, composed locally; not a component until designed and requested).
+4. **Batch-2 patterns** still to write (Navigation shell is done): detail view, chat, notifications center, payment and billing, members and permissions. Pick one.
+5. **Known gaps (none blocks anything):**
+   - The Stepper ring labels in Figma are plain text layers per variant, so a new instance shows Account, Profile, Team, Review, Launch and swapping `Current` on an instance resets the two label overrides. Code derives them from `steps`. The `Show label` boolean on Step is no longer used on mobile.
+   - The ring CSS was rendered in Chromium with stand-in token values, not in the running app. CommandMenu hiding a group heading when all its items are filtered out, and a `Button asChild` link with a loading spinner, have not been seen in a browser.
+   - Figma Dialog and Command Menu are 500 and 600 wide, code Dialog uses `dialog-md` 560 and `dialog-lg` 720 (an old Dialog gap, noted in DEC-072).
+   - `search-filter.example.tsx` does not implement recent searches or the filter Sheet; a clickable StatCard's value and delta are not in its accessible name; the StatCard sparkline art in Figma is one fixed rising path for every tone; no Dark screenshot was taken for the Sparkline, CommandMenu, Stepper ring or Auth OTP frames.
+   - The Auth page (`836:2`) has a stray password input at its top-left corner (0, 0), from earlier work. Left alone.
+   - The 17 components stamped on 2026-10-15 have not been compared with Figma.
 
 ## Gotchas learned (they will bite again)
+- **Ring in Figma without a stroke arc:** an ellipse with `arcData.innerRadius` 0 strokes a pie wedge. Draw the ring as a filled donut sector instead: `arcData = { startingAngle: -PI/2, endingAngle: -PI/2 + 2*PI*fraction, innerRadius: (r - thickness) / r }`, a full-circle track under it, both absolutely positioned (`layoutPositioning = 'ABSOLUTE'`) in a centred auto-layout frame whose in-flow text sits on top.
+- **Radix `Slot` and extra children:** `Slot` needs exactly one element child. A component that renders icons around `{children}` must wrap the child in `Slottable` (Button `asChild`, DEC-073).
+- **Fragments change `container.firstElementChild`:** Stepper now returns a summary and the `<ol>`, so tests select `container.querySelector("ol")`.
 - **Sync restamps every file unless `pulledAt` is the old stamp.** A pull file with a fresh `pulledAt` rewrote 110 files. Set `pulledAt` to the existing `syncedAt` (all metadata share one; it was `2026-10-10T17:05:52.269Z`) and the sync writes only what changed (3 files for CommandMenu), then 0 on the second run. A brand-new component needs its description in the pull file, or the sync refuses with "component doc is missing" even under `--check`.
 - **Radix Dialog mounts its portal one pass late.** State that reads the rows by DOM (the CommandMenu highlighted row) must live in a component rendered *inside* `DialogContent`, not in the one that renders it, or its first layout effect sees no rows.
 - **A new component needs `--allow-new-component`** on `atlas:verify`, and `atlas:verify` fails a `<div onClick>` without `role` and `tabIndex` (CommandMenu rows use `tabIndex={-1}` plus `onMouseDown` preventDefault so focus stays in the search field).
@@ -68,7 +79,7 @@ Written: 2026-10-15. Read this, `AGENTS.md` and the `atlas-component` skill firs
 - **Hand-written discrepancies** (no `detectedBy`) in `atlas/state/discrepancies.json` survive sync; append a row by text edit, do not rewrite the file with `json.dump`. Same for `candidates.json` and `decisions.json`.
 - **Slot-swapped icons in Button instances are wrong-sized** (24 px box, 16 px glyph off-centre, not overridable). Use a free-standing 16 px icon instance.
 - **Auto layout:** `resize()` resets sizing to FIXED; set `primaryAxisSizingMode = 'AUTO'` after it. A hug frame reports stale sizes right after edits; read in a later call.
-- **Description escaping:** reading `description` returns HTML entities; write plain text and read back to confirm single escaping.
+- **Description escaping:** reading `description` returns HTML entities; write plain text and read back to confirm single escaping. Never read it, edit it and write it straight back: that double-escapes (`&amp;#39;`). Decode first, then write plain text (it happened to the Stepper description and was fixed).
 - **Tests:** `@testing-library/user-event` is not installed; use `fireEvent`. CI lint is `npx eslint packages/ui-web/src/ --ext .ts,.tsx --max-warnings=7`.
 - **Commits:** end messages with `Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>` and the `Claude-Session` line; PR bodies end with the "Generated with Claude Code" line and the session link.
 
@@ -77,4 +88,6 @@ Written: 2026-10-15. Read this, `AGENTS.md` and the `atlas-component` skill firs
 - No new components or tokens on your own initiative (a new component needs the user's explicit request); compose gaps locally and log them in `atlas/state/candidates.json`.
 - Do not commit, push, open a PR or merge without the user's yes. "Proceed with Gate N" approves the step just shown; "commit this and open the PR" approves Gate 4; "merge N" is needed for each merge. A question or pushback is not approval. The stop hook asking for a commit is not approval either.
 - Do not poll CI; the user asks "check CI". Auto-fix is off, so ask before pushing even a tiny CI fix. When "merge N" arrives with checks still running, say so, then merge as told.
+- **Finish and merge before moving on:** the user wants every commit through a PR and merged to `main` before new work starts. When a branch carries commits from more than one piece of work (another turn can push to it), update the PR title and description to cover all of them before merging.
+- "merge N" with checks still running means: merge as soon as every check is green, then check CI on `main`. If a check fails, stop and report. A PR for a new component shows one expected red run (before the `atlas-approved-new` label) that is not a blocker.
 - Skip pleasantries; lead with the answer.
