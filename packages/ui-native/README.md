@@ -6,7 +6,7 @@ Stack: React Native · Expo · Atlas token bridge (`tokens/atlas.tokens.ts`)
 
 ## Structure
 ```
-components/   — 14 Atlas components (native implementations)
+components/   — 15 Atlas components (native implementations)
 theme/        — ThemeProvider, useTheme hook
 tokens/       — atlas.tokens.ts (CSS vars bridged to JS object)
 utils/        — shadowHelper, useReducedMotion
