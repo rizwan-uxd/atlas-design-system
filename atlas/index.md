@@ -65,6 +65,7 @@ Composition rules for common screens. When a request matches one, read `atlas/pa
 | Auth | `atlas/patterns/auth.md` | Sign the user in or create an account with email, social or passkey options and a one-time code step, including errors and resend. |
 | Dashboard | `atlas/patterns/dashboard.md` | Show the state of a product or account at a glance with filters, KPI cards, a chart and a detail table, including loading and empty states. |
 | Data table | `atlas/patterns/data-table.md` | Show a set of records in rows and columns with search, filtering, row selection and bulk actions. |
+| Detail view | `atlas/patterns/detail-view.md` | Show everything about one record on its own page: a header with status and actions, peer views in tabs, grouped read-only facts, and loading, not-found and error states. |
 | Empty state | `atlas/patterns/empty-state.md` | Tell the user why a list or screen has no content and what to do next (first use, no results, cleared). |
 | Error recovery | `atlas/patterns/error-recovery.md` | Tell the user something failed, keep their work, and give a clear way to recover (retry, fix, or go another way). |
 | Form | `atlas/patterns/form.md` | Collect one or more values from the user and submit or save them, including multi-step forms and validation. |
