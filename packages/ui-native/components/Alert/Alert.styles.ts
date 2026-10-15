@@ -20,7 +20,8 @@ export function getAlertColors(variant: AlertVariant, colors: Theme) {
 export function createAlertStyles(variant: AlertVariant, colors: Theme) {
   const c = getAlertColors(variant, colors)
 
-  return StyleSheet.create({
+  return {
+    ...StyleSheet.create({
     container: {
       flexDirection:   'row',
       backgroundColor: c.background,
@@ -55,6 +56,7 @@ export function createAlertStyles(variant: AlertVariant, colors: Theme) {
       marginTop:    -2,
       marginRight:  -2,
     },
+    }),
     iconColor: c.icon,                     // expose for icon component
-  })
+  }
 }
