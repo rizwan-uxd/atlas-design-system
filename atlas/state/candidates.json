@@ -46,14 +46,6 @@
       "note": "Web DropdownMenu shipped on feat/dropdown-menu (v1.1, phase 6). Native parity is logged here, not built. It promotes CAND-008."
     },
     {
-      "id": "CAND-013",
-      "name": "Spinner (Atlas/Mobile-Native)",
-      "seenIn": ["docs/componentlist plan _next6_2026-09-25.md"],
-      "composedFrom": "not yet attempted",
-      "occurrences": 0,
-      "note": "Web Spinner shipped on feat/spinner (batch 2, phase 1). Native parity is logged here, not built."
-    },
-    {
       "id": "CAND-014",
       "name": "Button loading slot uses Spinner",
       "seenIn": ["packages/ui-web/src/primitives/Button"],

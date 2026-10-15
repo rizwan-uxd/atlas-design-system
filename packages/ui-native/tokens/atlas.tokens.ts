@@ -214,6 +214,7 @@ export const duration = {
   fast:    120,
   base:    200,
   slow:    320,
+  spin:    1000,
 } as const
 
 // ─── Opacity ──────────────────────────────────────────────────────────────────
@@ -235,6 +236,22 @@ export const borderWidth = {
   0: 0,
   1: 1,
   2: 2,
+} as const
+
+// ─── Icon size (--atlas-icon-size-*, px) and stroke (--atlas-icon-stroke-*) ───
+// Stroke is in a 24-unit glyph space: the drawn stroke is stroke x size / 24.
+export const iconSize = {
+  xs: 16,
+  sm: 20,
+  md: 24,
+  lg: 32,
+} as const
+
+export const iconStroke = {
+  xs: 1.5,
+  sm: 1.75,
+  md: 2,
+  lg: 2.25,
 } as const
 
 // ─── Text roles (--atlas-text-*) ──────────────────────────────────────────────
@@ -269,6 +286,8 @@ const tokens = {
   opacity,
   touchTarget,
   borderWidth,
+  iconSize,
+  iconStroke,
   textRole,
   letterSpacing,
 } as const

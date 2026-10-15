@@ -51,7 +51,7 @@ Ring only (no marker row, no Viewport, Size or Orientation); the arc is two clip
 
 ## Do next (the user decides)
 1. **Native `letterSpacing` is in points.** The CSS em values (`-0.01`, `0`, `0.02`) are converted at a 16 px base in `scripts/convert-tokens.mjs` (`-0.16`, `0`, `0.32`), decided by the user. The base is fixed, so a 12 px Badge gets 0.32 pt, not 0.02 em of its own size.
-2. **Other native parity** (all logged, none built): CAND-005, 007, 009, 010, 013, 015 to 019, 028, 029, 052, 054. Each needs a Figma design on `Atlas/Mobile-Native` first.
+2. **Other native parity** (all logged, none built): CAND-005, 007, 009, 010, 015 to 019, 028, 029, 052, 054. Each needs a Figma design on `Atlas/Mobile-Native` first. **CAND-013 (Spinner) is built** (DEC-076): Figma set `1020:237`, review frames `1020:15627` (Light) and `1020:15710` (Dark), code in `packages/ui-native/components/Spinner/`. It has not been run on a device; the geometry was checked in a Chromium mirror at 3x density, and the Spinner has no colour prop yet (Button loading, CAND-014, would need one).
 3. **Other candidates:** DataTable (CAND-024, needs its own Figma design), Button loading with a Spinner (CAND-014, needs a Figma design of the loading state), Load more and infinite scroll (CAND-048, deferred), AppShell (CAND-055, composed locally; not a component until designed and requested).
 4. **Batch-2 patterns** still to write (Navigation shell is done): detail view, chat, notifications center, payment and billing, members and permissions. Pick one.
 5. **Known gaps (none blocks anything):**
