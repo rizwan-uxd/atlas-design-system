@@ -6,18 +6,17 @@
   "deprecated": null,
   "import": "@atlas/ui-web/patterns/Stepper/Stepper",
   "variants": [],
-  "sizes": ["sm", "md", "lg"],
+  "sizes": [],
   "props": [
     { "name": "steps", "required": true, "type": "StepperStep[]" },
     { "name": "current", "required": true, "type": "number" },
-    { "name": "orientation", "required": false, "type": "StepperOrientation" },
-    { "name": "size", "required": false, "type": "StepperSize" }
+    { "name": "orientation", "required": false, "type": "StepperOrientation" }
   ],
   "subcomponents": [],
-  "tokensUsed": ["--atlas-background", "--atlas-background-muted", "--atlas-border", "--atlas-border-width-1", "--atlas-border-width-2", "--atlas-font-sans", "--atlas-font-size-base", "--atlas-font-size-sm", "--atlas-font-size-xs", "--atlas-font-weight-medium", "--atlas-font-weight-regular", "--atlas-foreground", "--atlas-foreground-muted", "--atlas-line-height-normal", "--atlas-primary", "--atlas-primary-foreground", "--atlas-radius-full", "--atlas-spacing-1", "--atlas-spacing-10", "--atlas-spacing-2", "--atlas-spacing-3", "--atlas-spacing-4", "--atlas-spacing-5", "--atlas-spacing-6", "--atlas-spacing-8", "--atlas-text-body-sm", "--atlas-text-caption"],
+  "tokensUsed": ["--atlas-background", "--atlas-background-muted", "--atlas-border", "--atlas-border-width-1", "--atlas-border-width-2", "--atlas-font-sans", "--atlas-font-size-base", "--atlas-font-size-sm", "--atlas-font-size-xs", "--atlas-font-weight-medium", "--atlas-font-weight-regular", "--atlas-font-weight-semibold", "--atlas-foreground", "--atlas-foreground-muted", "--atlas-line-height-normal", "--atlas-primary", "--atlas-primary-foreground", "--atlas-radius-full", "--atlas-spacing-1", "--atlas-spacing-10", "--atlas-spacing-12", "--atlas-spacing-2", "--atlas-spacing-3", "--atlas-spacing-4", "--atlas-spacing-5", "--atlas-spacing-6", "--atlas-spacing-8", "--atlas-text-body-sm", "--atlas-text-caption"],
   "figmaNodeId": "984:3356",
   "figmaFileKey": "cKYhfaHLCoyMHi9nKr63Ig",
-  "figmaProperties": { "Orientation": ["horizontal", "vertical"], "Size": ["sm", "md", "lg"], "Steps": ["3", "4", "5"], "Current": ["1", "2", "3", "4", "5"] },
+  "figmaProperties": { "Orientation": ["horizontal", "vertical"], "Viewport": ["mobile", "tablet", "desktop"], "Steps": ["3", "4", "5"], "Current": ["1", "2", "3", "4", "5"] },
   "syncedAt": "2026-10-10T17:05:52.269Z",
   "figmaVersion": "lib:Atlas Design System v1@2026-07-06T03:42:12Z",
   "source": "figma-synced"

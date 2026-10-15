@@ -23,7 +23,7 @@
 - A failed save → one `Alert variant="danger"` above Continue; keep the answers. See the Error recovery pattern.
 
 ## Components and variants
-- `Stepper` orientation: `horizontal` · size: `md` (setup flow)
+- `Stepper` orientation: `horizontal` (setup flow)
 - `Progress` (checklist)
 - `RadioGroup` variant: `card` · size: `md`
 - `Field` size: `md`
@@ -47,6 +47,7 @@
 
 ## Responsive behavior
 - Phone is the primary layout. Single column; the primary action is pinned to the bottom edge with Back and Skip as a row of ghost Buttons below it. Cards stack. Checklist rows keep the action visible; do not hide it in a menu.
+- The `Stepper` follows the viewport. On a phone only the current step shows its label (the others are still read out); tablet and desktop label every step.
 - When the keyboard is open, the pinned actions move up and stay visible above it. Never let the keyboard cover Continue.
 - Back returns to the previous step with its answer still filled in. Leaving and returning resumes the same step.
 - Wider screens centre the same column at the content width; the primary action sits at the end of the row.
