@@ -52,6 +52,8 @@ export type { TabBarProps, TabBarVariant, TabItem, TabIconRenderer } from './Nav
 
 export { Dialog } from './Dialog/Dialog'
 export { Tabs }   from './Tabs/Tabs'
+export { Stepper } from './Stepper/Stepper'
 
 export type { DialogProps, DialogVariant }       from './Dialog/Dialog'
 export type { TabsProps, TabsItem, TabsVariant } from './Tabs/Tabs'
+export type { StepperProps, StepperStep }     from './Stepper/Stepper'
