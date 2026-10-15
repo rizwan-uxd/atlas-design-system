@@ -148,7 +148,7 @@ export const dark = {
 } as const
 
 export type SemanticColor = keyof typeof light
-export type Theme = typeof light
+export type Theme = { [K in keyof typeof light]: string }
 
 // ─── Spacing (px numbers for RN) ─────────────────────────────────────────────
 export const spacing = {
@@ -236,3 +236,39 @@ export const borderWidth = {
   1: 1,
   2: 2,
 } as const
+
+// ─── Text roles (--atlas-text-*) ──────────────────────────────────────────────
+export const textRole = {
+  h3:      18,
+  h4:      16,
+  body:    16,
+  bodySm:  14,
+  caption: 12,
+} as const
+
+// ─── Letter spacing (--atlas-letter-spacing-*, em values as authored) ─────────
+export const letterSpacing = {
+  tight:  -0.01,
+  normal:  0,
+  wide:    0.02,
+} as const
+
+// ─── Default export — components use `import tokens from ...` ──────────────
+const tokens = {
+  primitive,
+  light,
+  dark,
+  spacing,
+  radius,
+  fontSize,
+  fontWeight,
+  lineHeight,
+  duration,
+  opacity,
+  touchTarget,
+  borderWidth,
+  textRole,
+  letterSpacing,
+} as const
+
+export default tokens
