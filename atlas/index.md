@@ -71,6 +71,7 @@ Composition rules for common screens. When a request matches one, read `atlas/pa
 | Error recovery | `atlas/patterns/error-recovery.md` | Tell the user something failed, keep their work, and give a clear way to recover (retry, fix, or go another way). |
 | Form | `atlas/patterns/form.md` | Collect one or more values from the user and submit or save them, including multi-step forms and validation. |
 | Navigation shell | `atlas/patterns/navigation-shell.md` | Frame an app with a persistent sidebar, a content column with breadcrumb and page title, and one named main region, including collapsed and loading states. |
+| Notifications center | `atlas/patterns/notifications-center.md` | A place to review what happened while the user was away: a list of notifications split into All and Unread, with read state, mark-all-read, per-item actions, and empty, loading and error states. |
 | Onboarding | `atlas/patterns/onboarding.md` | Get a new user from first sign-in to a working account with a short setup flow, then a get-started checklist inside the product. |
 | Search and filter | `atlas/patterns/search-filter.md` | Search a set of records with a query, scope tabs, filters, sort and removable filter chips, including no-results recovery. |
 | Settings | `atlas/patterns/settings.md` | A screen of preferences and account actions: instant toggles, a few saved fields, appearance choice, and a destructive action. |
