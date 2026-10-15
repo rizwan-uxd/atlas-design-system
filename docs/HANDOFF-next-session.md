@@ -21,7 +21,7 @@ Written: 2026-10-15, updated at the end of the native Stepper Figma session. Rea
 Ring only (no marker row, no Viewport, Size or Orientation); the arc is two clipped half-circle Views (no `react-native-svg`); the fill animates to the new step through one `Animated.Value` with `duration.base` and `useReducedMotion`. Code: `packages/ui-native/components/Stepper/` (`Stepper.tsx`, `Stepper.styles.ts`), exported from `components/index.ts`. Props: `steps: { label }[]`, `current` (1-based, clamped), optional `accessibilityLabel`; one `progressbar` with an `accessibilityValue`.
 - **Figma (live, not in git), page `Atlas/Mobile-Native` (`1:2`):** set **Stepper `1012:296`** (12 variants: `Steps` 3 | 4 | 5 x `Current`), review frames **"Stepper (Mobile) Demo - Light" `1013:191`** and **"... - Dark" `1013:218`**. The donut ring's inner radius is a fraction of the radius (0.833 for a 4 px band), not of the diameter.
 - **Not verified:** the ring has not been run on a device or simulator, and the arc rotation maths was worked out on paper. The user's Gate 3 visual check of the Light and Dark frames against the running ring is still owed.
-- **Native checks:** `ui-native` has no test setup. After #74 (tokens) and #75 (Alert, Button, App demo types), `npx tsc --noEmit` in `packages/ui-native` is expected to report 0 errors (checked on a throwaway merge of the branches). A CI type-check step for `ui-native` does not exist yet.
+- **Native checks:** `ui-native` has no test setup. After #74 (tokens) and #75 (Alert, Button, App demo types), `npx tsc --noEmit -p packages/ui-native` reports 0 errors, and the CI job `Typecheck (native)` runs it (the root `tsc` excludes `packages/ui-native`).
 
 ## Done in earlier sessions (PRs #56 to #74, each after "merge N")
 | PR | Candidate | What |
@@ -51,7 +51,6 @@ Ring only (no marker row, no Viewport, Size or Orientation); the arc is two clip
 
 ## Do next (the user decides)
 1. **Open decision: native `letterSpacing` units.** `letterSpacing` in `atlas.tokens.ts` holds the CSS em values (`-0.01`, `0`, `0.02`), but React Native reads points, so Badge tracking is about 0.24 px instead of the CSS 0.02 em. #74 merged with the CSS values; converting (e.g. times a 16 px base: `-0.16`, `0`, `0.32`) is a change to `scripts/convert-tokens.mjs` plus regeneration. The user has not chosen.
-1b. **Add a `ui-native` `tsc` step to CI** once #75 is merged (a workflow change, so the user decides).
 2. **Other native parity** (all logged, none built): CAND-005, 007, 009, 010, 013, 015 to 019, 028, 029, 052, 054. Each needs a Figma design on `Atlas/Mobile-Native` first.
 3. **Other candidates:** DataTable (CAND-024, needs its own Figma design), Button loading with a Spinner (CAND-014, needs a Figma design of the loading state), Load more and infinite scroll (CAND-048, deferred), AppShell (CAND-055, composed locally; not a component until designed and requested).
 4. **Batch-2 patterns** still to write (Navigation shell is done): detail view, chat, notifications center, payment and billing, members and permissions. Pick one.
