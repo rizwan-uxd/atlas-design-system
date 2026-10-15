@@ -50,7 +50,7 @@ Ring only (no marker row, no Viewport, Size or Orientation); the arc is two clip
 | #68 | CI fix | `atlas-sync.test.mjs` used `Stepper` as its "component that does not exist"; it now uses `Marquee` |
 
 ## Do next (the user decides)
-1. **Open decision: native `letterSpacing` units.** `letterSpacing` in `atlas.tokens.ts` holds the CSS em values (`-0.01`, `0`, `0.02`), but React Native reads points, so Badge tracking is about 0.24 px instead of the CSS 0.02 em. #74 merged with the CSS values; converting (e.g. times a 16 px base: `-0.16`, `0`, `0.32`) is a change to `scripts/convert-tokens.mjs` plus regeneration. The user has not chosen.
+1. **Native `letterSpacing` is in points.** The CSS em values (`-0.01`, `0`, `0.02`) are converted at a 16 px base in `scripts/convert-tokens.mjs` (`-0.16`, `0`, `0.32`), decided by the user. The base is fixed, so a 12 px Badge gets 0.32 pt, not 0.02 em of its own size.
 2. **Other native parity** (all logged, none built): CAND-005, 007, 009, 010, 013, 015 to 019, 028, 029, 052, 054. Each needs a Figma design on `Atlas/Mobile-Native` first.
 3. **Other candidates:** DataTable (CAND-024, needs its own Figma design), Button loading with a Spinner (CAND-014, needs a Figma design of the loading state), Load more and infinite scroll (CAND-048, deferred), AppShell (CAND-055, composed locally; not a component until designed and requested).
 4. **Batch-2 patterns** still to write (Navigation shell is done): detail view, chat, notifications center, payment and billing, members and permissions. Pick one.

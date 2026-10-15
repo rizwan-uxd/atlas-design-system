@@ -246,11 +246,13 @@ export const textRole = {
   caption: 12,
 } as const
 
-// ─── Letter spacing (--atlas-letter-spacing-*, em values as authored) ─────────
+// ─── Letter spacing (--atlas-letter-spacing-*) ────────────────────────────────
+// CSS authors these in em (-0.01em, 0em, 0.02em); React Native reads points, so
+// they are converted at a 16 px base: em x 16.
 export const letterSpacing = {
-  tight:  -0.01,
+  tight:  -0.16,
   normal:  0,
-  wide:    0.02,
+  wide:    0.32,
 } as const
 
 // ─── Default export — components use `import tokens from ...` ──────────────
