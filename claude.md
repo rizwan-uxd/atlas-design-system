@@ -5,7 +5,7 @@
 **Rules live in `AGENTS.md`.** This file is current state only — no rules, no conventions.
 
 ## Status
-Monorepo restructured; all 12 v1 components live in `packages/ui-web/src/` classified by tier, with a visual sandbox at `app/page.tsx` and the prototype scaffold under `app/prototypes/_shared/` (no flows currently).
+Monorepo restructured; 47 web components are tracked in `atlas/state/status.json` (32 spec-complete, 15 scaffolded) and live in `packages/ui-web/src/` by tier, with 13 native components in `packages/ui-native/components/`. A visual sandbox is at `app/page.tsx` and the prototype scaffold is under `app/prototypes/_shared/` (no flows currently).
 **Current work:** component batches per `docs/componentlist plan _next6_2026-09-25.md` (batch 2 complete, phases 1 to 6; current next steps in `docs/HANDOFF-next-session.md`). The harness (phases 0 to 9) is finished and documented in `docs/HARNESS.md`; H3 is integrated on `main`.
 
 ## What this is
@@ -21,7 +21,7 @@ npm run atlas:sync # regenerate atlas/ (add --pull for a Figma sync; see the atl
 ```
 
 ## Component status
-All 12 are scaffolded and functional; each needs a refinement pass to full spec compliance (one per session).
+47 web components are tracked in `atlas/state/status.json`: 32 spec-complete and 15 scaffolded. The 15 are the 12 v1 components below plus Pagination, PasswordInput and EmptyState; each needs a refinement pass to full spec compliance (one per session). The table lists the 12 v1 components only; `atlas/index.md` and `status.json` hold the rest.
 🟡 Scaffolded · 🟢 Spec-complete · ✅ Code Connect verified
 
 | Component | Tier | Status | Remaining focus |
@@ -65,7 +65,7 @@ docs/
 ├── architecture/ATLAS-SPEC/   per-component specs
 └── decisions/                 ATLAS-COMPONENTS-V1.md (locked v1 decisions)
 ```
-The snapshot was first synced from Figma on 2026-09-12 (`figmaVersion` `lib:Atlas Design System v1@2026-07-06T03:42:12Z`); 17 drift entries are open in `atlas/state/discrepancies.json`.
+The snapshot was first synced from Figma on 2026-09-12 and last on 2026-10-10 (`figmaVersion` `lib:Atlas Design System v1@2026-07-06T03:42:12Z`); `atlas/state/discrepancies.json` holds 94 entries, none open.
 
 `atlas/` holds the generated snapshot the agent reads: `index.md`, per-component docs and metadata, semantic tokens, and `state/` (status, discrepancies, decisions, candidates). Generated — never hand-edited.
 
