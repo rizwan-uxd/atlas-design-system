@@ -32,8 +32,7 @@ export type ButtonVariant =
 
 export type ButtonSize = "xs" | "sm" | "md" | "lg"
 
-export interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ButtonProps extends React.ComponentProps<"button"> {
   variant?: ButtonVariant
   /**
    * Size of the button.
@@ -126,7 +125,8 @@ export function Button({
    *                               (preserves tab-stop during loading)
    *   - aria-disabled            → true when disabled OR loading
    *   - aria-busy                → true only when loading
-   *   - onClick                  → suppressed when disabled or loading
+   *   - onClick                  → suppressed when disabled or loading; the default
+ *                               action (form submit, navigation) is cancelled too
    *
    * We do NOT set the native `disabled` attr when loading so the button
    * remains keyboard-focusable and screen readers can announce aria-busy.
@@ -146,7 +146,9 @@ export function Button({
       disabled={asChild ? undefined : disabled}
       aria-disabled={isAriaDisabled}
       aria-busy={loading || undefined}
-      onClick={disabled || loading ? (asChild ? (e: React.MouseEvent) => e.preventDefault() : undefined) : onClick}
+      /* Cancel the default action too: a loading submit button stays focusable, so a keyboard
+         click would otherwise still submit the form (or follow the link when asChild). */
+      onClick={disabled || loading ? (e: React.MouseEvent) => e.preventDefault() : onClick}
     >
       {/* Leading icon slot — replaced by spinner when loading */}
       {loading ? (

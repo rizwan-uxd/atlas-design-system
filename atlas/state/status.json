@@ -10,9 +10,9 @@
     "verifiedAt": "ISO date of the last atlas-verify pass"
   },
   "components": {
-    "Button": { "parity": "match", "figmaMetadata": "description-written", "code": "scaffolded", "verifiedAt": "2026-10-14T15:27:33.599Z" },
+    "Button": { "parity": "match", "figmaMetadata": "description-written", "code": "spec-complete", "verifiedAt": "2026-10-16T03:00:44.912Z" },
     "Input": { "parity": "match", "figmaMetadata": "description-written", "code": "scaffolded", "verifiedAt": "2026-10-11T17:56:54.750Z" },
-    "Label": { "parity": "match", "figmaMetadata": "description-written", "code": "scaffolded", "verifiedAt": "2026-10-09T03:29:08.502Z" },
+    "Label": { "parity": "match", "figmaMetadata": "description-written", "code": "spec-complete", "verifiedAt": "2026-10-09T03:29:08.502Z" },
     "Textarea": { "parity": "match", "figmaMetadata": "description-written", "code": "scaffolded", "verifiedAt": "2026-10-12T17:27:26.123Z" },
     "Checkbox": { "parity": "code-applied", "figmaMetadata": "description-written", "code": "scaffolded", "verifiedAt": "2026-10-12T17:27:26.123Z" },
     "Switch": { "parity": "match", "figmaMetadata": "description-written", "code": "scaffolded", "verifiedAt": "2026-10-09T03:29:08.502Z" },
