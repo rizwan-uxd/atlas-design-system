@@ -473,6 +473,12 @@
       "topic": "Native OtpInput: one hidden TextInput over digit slots, native Input props (promotes CAND-052)",
       "decision": "Owner-approved 2026-10-16. The native OtpInput mirrors the web OtpInput: one real, visually hidden TextInput (number pad, textContentType oneTimeCode, autoComplete sms-otp) over aria-hidden digit slots, so paste, autofill and the screen-reader label work on the single input. Length 4 to 8 (default 6), size sm | md | lg with slots 36 / 44 / 52 (the native Input heights, md meets the 44 pt touch target), slots flex to fill the row up to that cap. Props follow the native Input, not the web: state default | error | disabled, label, required, helperText, errorText, value, onChangeText, onComplete, accessibilityLabel. No hover on touch. Value is digits only, cut to length. Figma on Atlas/Mobile-Native: OTP Slot 1037:391 (24 variants) and OTP Input 1037:452 (60 variants), review frames 1037:17923 (Light) and 1037:17999 (Dark). Not run on a device.",
       "date": "2026-10-16"
+    },
+    {
+      "id": "DEC-079",
+      "topic": "Native Progress: determinate bar and indeterminate slide on existing motion tokens (promotes CAND-017)",
+      "decision": "Owner-approved 2026-10-16. The native Progress mirrors the web Progress: State determinate | indeterminate, Percent 0 to 100 in steps of 10 (code props value and max), optional label, valueLabel and helperText as strings, same prop names as web plus accessibilityLabel and accessibilityValueText. Track background-muted, fill primary, height spacing-1, full radius, fills its container; label row, bar and helper stack with spacing-2. The determinate fill animates its width with duration.base and easing.standard (not native-driven); the indeterminate segment (40 percent of the track) slides with duration.pulse and linear easing in a loop; under Reduce Motion both stop and the segment rests at 30 percent. Exposed as a progressbar with accessibilityValue (omitted when indeterminate) and busy state. No new tokens. Figma on Atlas/Mobile-Native: Progress 1038:867 (12 variants), .Progress / Bar 1038:842, review frames 1038:964 (Light) and 1038:1008 (Dark). Not run on a device.",
+      "date": "2026-10-16"
     }
   ]
 }
