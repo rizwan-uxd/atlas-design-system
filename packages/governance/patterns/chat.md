@@ -15,7 +15,7 @@ summary: A conversation between people or with an assistant: a scrolling message
 ## Decision rules
 - Each message is a `Bubble`. The current user's messages use `align="end"` and `variant="primary"`; everyone else's use `align="start"` and `variant="secondary"`. One variant per sender within a group.
 - Consecutive messages from one sender go in one `BubbleGroup`, with the sender's `Avatar` and name once above or beside the group, not on every bubble. A new group starts when the sender changes or after a long pause.
-- Time is shown once per group (and as a date divider between days with `Divider`), not on every bubble. Exact time is available as the text of the group's `<time>`.
+- Do not repeat a timestamp on every bubble. If the product shows time, show it once per group, as muted text beside the sender's name (not drawn in Figma yet).
 - A failed message uses `Bubble variant="destructive"` with a visible "Not sent" text and a "Retry" `Button variant="ghost"` next to it. `destructive` is for failed messages only.
 - A message that is still being sent stays in place with a muted "Sending" text; do not move it when it is confirmed.
 - The composer is a `Textarea` with `autoGrow` and `maxRows`, plus an icon-only Send `Button variant="primary"` with an `aria-label`. Enter sends and Shift+Enter inserts a new line; say so in the composer's placeholder or help text. Disable Send, not the textarea, while the draft is empty.

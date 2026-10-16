@@ -15,7 +15,7 @@
 ## Decision rules
 - Two views, `All` and `Unread`, as `Tabs variant="line"`. The Unread tab shows its count in its label ("Unread 3"). No more tabs; filter further with the Search and filter pattern if the list grows.
 - Each notification is a `ListItem` rendered as `li` inside one `ul`: a `ListItemMedia` (the actor's `Avatar` size `sm`, or an icon), `ListItemContent` with a `ListItemTitle` (what happened) and a `ListItemDescription` (where and when), and `ListItemActions`.
-- Unread is shown by a `Badge dot` with the text "Unread" visible to assistive technology and a stronger title, never by colour alone. Read items drop the dot and use `variant="default"`; unread items use `variant="muted"`.
+- Unread is shown by the visible word "Unread" at the start of the description, never by colour alone, and by the row variant: unread items use `variant="muted"` and read items `variant="default"`.
 - Opening a notification (activating its link) marks it read and navigates to the thing it is about. The title is a real link (`<a href>`); do not put `onClick` on the row.
 - Per-item actions are at most two: a "Mark as read" or "Mark as unread" `Button variant="ghost"`, and, where the event is actionable, one `Button variant="outline"` for that action (Approve, Review). A destructive action never lives on a notification row.
 - "Mark all as read" is one `Button variant="ghost"` in the header, disabled when nothing is unread. It acts on the whole list and needs no confirmation, because it is reversible per item and does not delete anything.
@@ -27,7 +27,6 @@
 ## Components and variants
 - `ListItem` variant: `default`, `muted` · size: `md`
 - `Avatar` size: `sm`
-- `Badge` variant: `primary`, `neutral` · size: `sm`
 - `Tabs` variant: `line` · size: `md`
 - `Button` variant: `ghost`, `outline` · size: `sm`
 - `Toast` variant: `default`
@@ -53,7 +52,7 @@
 - default · unread / read · hover and focus on the row's link · loading (`Skeleton` rows in the list only; the header and tabs stay) · empty All (`EmptyState`: "You're all caught up", no action) · empty Unread (`EmptyState`: "No unread notifications", with a "View all" action) · error loading (`Alert variant="danger"` with a Retry button above an empty list) · updating (the row's action `Button` shows `loading`) · new arrivals (the "N new" button).
 
 ## Accessibility
-- The list is a `ul` with an accessible name; the count in the Unread tab is part of its text. Unread is conveyed by the visible "Unread" label or the dot's text alternative, not by weight or colour alone.
+- The list is a `ul` with an accessible name; the count in the Unread tab is part of its text. Unread is conveyed by the visible "Unread" word, not by weight or colour alone.
 - Each row's link has a meaningful name from its title; the action buttons name their notification (`aria-label="Mark “Invoice failed” as read"`), so they are not ambiguous in a list of identical buttons.
 - When an item is marked read on the Unread tab, it leaves the list: announce that with a polite live region ("Marked as read") and move focus to the next row, never to the page top.
 - `Tabs` list has an `aria-label`; arrow keys move between tabs.
@@ -61,7 +60,7 @@
 
 ## Anti-patterns
 - Inserting new rows above what the user is reading.
-- Unread shown only by a coloured dot or bold text.
+- Unread shown only by a dot, a row tint or bold text.
 - `onClick` on a row instead of a link.
 - Identical unnamed "Mark as read" buttons.
 - A confirmation dialog for mark-all-read, or a delete without Undo.
@@ -75,7 +74,6 @@ import { Bell } from "lucide-react"
 import { EmptyState } from "@atlas/ui-web/compositions/EmptyState/EmptyState"
 import { ListItem, ListItemActions, ListItemContent, ListItemDescription, ListItemMedia, ListItemTitle } from "@atlas/ui-web/compositions/ListItem/ListItem"
 import { Avatar } from "@atlas/ui-web/primitives/Avatar/Avatar"
-import { Badge } from "@atlas/ui-web/primitives/Badge/Badge"
 import { Button } from "@atlas/ui-web/primitives/Button/Button"
 import { Skeleton } from "@atlas/ui-web/primitives/Skeleton/Skeleton"
 import { TabsList, TabsRoot, TabsTrigger } from "@atlas/ui-web/patterns/Tabs/Tabs"
@@ -153,7 +151,7 @@ export function NotificationsCenter({ items, loading, onChange, onMarkAllRead }:
                   <a href={n.href} onClick={() => { if (!n.read) onChange(n.id, true) }}>{n.title}</a>
                 </ListItemTitle>
                 <ListItemDescription>
-                  {!n.read && <Badge variant="primary" size="sm" dot>Unread</Badge>}{" "}
+                  {!n.read && "Unread \u00b7 "}
                   <time>{n.when}</time>
                 </ListItemDescription>
               </ListItemContent>
