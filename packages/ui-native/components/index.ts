@@ -56,6 +56,7 @@ export { Stepper } from './Stepper/Stepper'
 export { Spinner } from './Spinner/Spinner'
 export { Skeleton } from './Skeleton/Skeleton'
 export { OtpInput } from './OtpInput/OtpInput'
+export { Progress } from './Progress/Progress'
 
 export type { DialogProps, DialogVariant }       from './Dialog/Dialog'
 export type { TabsProps, TabsItem, TabsVariant } from './Tabs/Tabs'
@@ -64,3 +65,4 @@ export type { SpinnerProps, SpinnerVariant, SpinnerSize } from './Spinner/Spinne
 export type { SkeletonProps, SkeletonShape } from './Skeleton/Skeleton'
 export type { OtpInputProps } from './OtpInput/OtpInput'
 export type { OtpInputSize, OtpInputState } from './OtpInput/OtpInput.styles'
+export type { ProgressProps } from './Progress/Progress'
