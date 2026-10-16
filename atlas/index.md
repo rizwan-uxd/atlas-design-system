@@ -70,6 +70,7 @@ Composition rules for common screens. When a request matches one, read `atlas/pa
 | Empty state | `atlas/patterns/empty-state.md` | Tell the user why a list or screen has no content and what to do next (first use, no results, cleared). |
 | Error recovery | `atlas/patterns/error-recovery.md` | Tell the user something failed, keep their work, and give a clear way to recover (retry, fix, or go another way). |
 | Form | `atlas/patterns/form.md` | Collect one or more values from the user and submit or save them, including multi-step forms and validation. |
+| Members and permissions | `atlas/patterns/members-permissions.md` | Manage who has access to a workspace and what each person can do: a table of members with role and status, and the sensitive actions (invite, change role, remove), with protected-owner and loading states. |
 | Navigation shell | `atlas/patterns/navigation-shell.md` | Frame an app with a persistent sidebar, a content column with breadcrumb and page title, and one named main region, including collapsed and loading states. |
 | Notifications center | `atlas/patterns/notifications-center.md` | A place to review what happened while the user was away: a list of notifications split into All and Unread, with read state, mark-all-read, per-item actions, and empty, loading and error states. |
 | Onboarding | `atlas/patterns/onboarding.md` | Get a new user from first sign-in to a working account with a short setup flow, then a get-started checklist inside the product. |
