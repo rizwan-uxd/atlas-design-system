@@ -22,7 +22,7 @@ Read in this order and stop as soon as you can act:
 1. The request itself
 2. These rules + the routing table below
 3. `atlas/index.md`, then `atlas/state/*.json` (was this already decided?)
-4. `atlas/metadata/<Name>.json` and `atlas/<Name>.md` — only for components you will touch
+4. `atlas/metadata/<Name>.json` and `atlas/<Name>.md` — only for components you will touch; `atlas/patterns/<slug>.md` when the request matches a pattern in the index
 5. `atlas/tokens.md` — only when custom layout is needed
 6. Component source in `packages/ui-web/src` — only when the snapshot is insufficient
 7. An existing prototype in `app/prototypes/` — only as a pattern example (shell, registry, frame)
@@ -39,7 +39,7 @@ Prefer one targeted read over a sweep, Grep over Read when you need a single fac
 - No unrelated refactors, renames, reformatting, or drive-by "improvements".
 - **Never add a new component or a new token** on your own initiative. A gap is composed locally from primitives and logged in `atlas/state/candidates.json`.
 - Prototypes never modify the library. Library changes never happen inside a prototype task.
-- Write web components into their tier: `primitives/` (Button, Input, Label, Textarea, Checkbox, Switch, Badge), `compositions/` (Alert, Card, Dialog), `patterns/` (Tabs), `layouts/` (NavBar) — all under `packages/ui-web/src/<tier>/<Name>/`. Native: `packages/ui-native/components/<Name>/`.
+- Write web components into their tier — `primitives/`, `compositions/`, `patterns/` or `layouts/`; each component's tier is in the table in `atlas/index.md` — all under `packages/ui-web/src/<tier>/<Name>/`. Native: `packages/ui-native/components/<Name>/`.
 - Never introduce a deprecated Atlas asset (`atlas/state/deprecations.json`, `deprecated` in `atlas/metadata/<Name>.json`). When one has a documented replacement, use the replacement and follow its migration note. `atlas-verify` fails new uses.
 - Edit existing files in place. No duplicate or parallel implementations, no `/outputs`, no session scratch folders in the repo.
 
@@ -78,6 +78,7 @@ Skills are **authored** in `.agents/skills/<name>/` (`SKILL.md` + `references/`)
 |---|---|
 | Build a prototype flow or screen | `atlas-prototype` skill |
 | Create or change a library component | `atlas-component` skill |
+| Write or change a screen pattern (doc + example, Figma frames first) | `atlas-pattern` skill |
 | Refresh the snapshot from Figma | `atlas-figma-sync` skill + `scripts/atlas-sync.mjs` |
 | Check work before reporting done | `atlas-verify` skill + `scripts/atlas-verify.mjs` (`npm run atlas:verify -- --scope "<globs>"`) |
 | QA audit of a component | `docs/audits/QA-REPORT.md` only — never a new per-session file. Append the bug log (BUG-NNN: guard, location, description, fix) and the checklist, then update the Summary, Component Results and Session Progress tables. |
