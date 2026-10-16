@@ -21,7 +21,7 @@
 - Editing a single fact is an explicit `Button variant="ghost"` ("Edit") that opens a `Dialog` or a `Sheet` with the Form pattern. Never turn the read-only view into inputs in place.
 - A related list inside a tab (Activity, Members) uses `ListItem` rows for 10 or fewer, and the Data table pattern for more.
 - The page sits below the Navigation shell: top-level is the list, this page adds a `Breadcrumb` whose parent is the list and whose last segment is `BreadcrumbPage` with the record name.
-- If the record does not exist or the user may not see it, replace the whole body with the Error recovery pattern. Do not show an empty page.
+- If the record does not exist or the user may not see it, replace the whole body with an `EmptyState` that names the problem ("Order not found"), gives the likely reason, and has one action back to the list. If loading failed for another reason, use the Error recovery pattern with Retry. Do not show an empty page.
 
 ## Components and variants
 - `Badge` variant: `success`, `warning`, `danger`, `info`, `neutral` · size: `md`
@@ -31,6 +31,7 @@
 - `Divider`
 - `Breadcrumb`
 - `AlertDialog` variant: `destructive` · size: `md`
+- `EmptyState` size: `md`
 - `Skeleton`
 
 ## Layout and density
@@ -45,10 +46,10 @@
 - Put the actions in the header only. Do not repeat them inside cards, except a card's own "Edit".
 
 ## Responsive behavior
-- Phone: the header stacks (title and status, then actions). More than two actions collapse the extras into a `DropdownMenu`; the primary action stays visible. Cards are one column, fact rows stack label above value. Tabs scroll horizontally rather than wrapping.
+- Phone: the header stacks (title and status, then actions). Cards are one column, fact rows stack label above value. Tabs scroll horizontally rather than wrapping.
 
 ## States
-- default · loading (`Skeleton` for the title, status and each card; the Breadcrumb and tabs stay) · not found or forbidden (Error recovery) · error loading (Error recovery with Retry) · empty tab (Empty state pattern) · action pending (the triggering `Button` shows `loading`, other actions stay enabled unless they conflict) · archived or read-only (a `Badge variant="neutral"` and the edit actions removed, with the reason in the status text).
+- default · loading (`Skeleton` for the title, the status and the values inside each card; the tabs and card titles stay) · not found or forbidden (`EmptyState` with a back action) · error loading (Error recovery with Retry; not drawn in Figma) · empty tab (Empty state pattern) · action pending (the triggering `Button` shows `loading`, other actions stay enabled unless they conflict) · archived or read-only (a `Badge variant="neutral"` and the edit actions removed, with the reason in the status text).
 
 ## Accessibility
 - One `<h1>` for the record name. Each card title is a heading one level below.

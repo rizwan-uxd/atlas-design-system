@@ -3,7 +3,6 @@ import { Bell } from "lucide-react"
 import { EmptyState } from "@atlas/ui-web/compositions/EmptyState/EmptyState"
 import { ListItem, ListItemActions, ListItemContent, ListItemDescription, ListItemMedia, ListItemTitle } from "@atlas/ui-web/compositions/ListItem/ListItem"
 import { Avatar } from "@atlas/ui-web/primitives/Avatar/Avatar"
-import { Badge } from "@atlas/ui-web/primitives/Badge/Badge"
 import { Button } from "@atlas/ui-web/primitives/Button/Button"
 import { Skeleton } from "@atlas/ui-web/primitives/Skeleton/Skeleton"
 import { TabsList, TabsRoot, TabsTrigger } from "@atlas/ui-web/patterns/Tabs/Tabs"
@@ -81,7 +80,7 @@ export function NotificationsCenter({ items, loading, onChange, onMarkAllRead }:
                   <a href={n.href} onClick={() => { if (!n.read) onChange(n.id, true) }}>{n.title}</a>
                 </ListItemTitle>
                 <ListItemDescription>
-                  {!n.read && <Badge variant="primary" size="sm" dot>Unread</Badge>}{" "}
+                  {!n.read && "Unread \u00b7 "}
                   <time>{n.when}</time>
                 </ListItemDescription>
               </ListItemContent>

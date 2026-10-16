@@ -17,7 +17,7 @@ summary: Manage a paid plan: current plan and renewal, payment method, invoice h
 - Plan group: the plan name, the price and interval, the next renewal date (or end date if cancelling) and a status `Badge`. State the exact amount and date ("$24.00 on 12 Nov 2026"), never "soon". Primary action is "Change plan"; it is a `Button variant="outline"`, because nothing on this page is more urgent than a failed payment.
 - Payment method group: show only what the provider returns for display (brand, last four digits, expiry) in a `ListItem`. The "Update" `Button variant="outline"` opens a `Dialog`.
 - **Never collect or store raw card numbers in Atlas inputs.** Card number, expiry and CVC are entered in the payment provider's hosted fields inside the Dialog body; your code receives a token. Atlas `Input` is for the name on the card, billing email and address only. Why: raw card data in your own fields puts your whole app in PCI scope.
-- Invoices are a `Table` with date, description, amount, status `Badge` and a "Download" `Button variant="ghost"` per row. Right-align amounts (`TableCell align="end"`) and format with the user's locale and currency. Show the 12 latest; link to the full list with the Data table pattern.
+- Invoices are a `Table` with date, description, amount and status `Badge` columns. Where the table has room, add a "Download" `Button variant="ghost"` per row as a fifth column (not drawn in Figma yet). Right-align amounts (`TableCell align="end"`) and format with the user's locale and currency. Show the 12 latest; link to the full list with the Data table pattern.
 - Status mapping for `Badge`: `success` Paid, `warning` Due soon, `danger` Failed or Past due, `neutral` Refunded or Void, `info` Processing.
 - A payment problem is an `Alert variant="danger"` at the top of the page (above the groups) with the reason in plain words and a single action ("Update payment method"). It stays until fixed; do not use a `Toast` for it.
 - Cancelling is last and apart from the groups. It opens an `AlertDialog variant="destructive"` that states the consequence and the date access ends ("You keep access until 12 Nov 2026."), and names the data that will be lost if any. Offer pause or downgrade as a text alternative, not as a way to hide Cancel.
@@ -50,7 +50,7 @@ summary: Manage a paid plan: current plan and renewal, payment method, invoice h
 - Do not use a destructive or red style for anything except failure and the Cancel action.
 
 ## Responsive behavior
-- Phone: groups are full width; the invoice `Table` switches to one `ListItem` per invoice (date and amount, status Badge, Download) because a five-column table does not fit. Actions stack under the text.
+- Phone: groups are full width; the invoice `Table` switches to one `ListItem` per invoice (date and amount as the title, status as the description) because a table does not fit. Actions stack under the text.
 
 ## States
 - default · active / trialing / cancelling (end date shown) / past due (danger Alert) · updating payment method (Dialog; its confirm `Button` shows `loading`, other controls disabled) · payment failed (error in the Dialog, values kept) · loading (`Skeleton` in each group, the title stays) · no invoices (`EmptyState`: "No invoices yet") · no payment method (the group says so with a primary "Add payment method") · error loading (`Alert variant="danger"` with Retry above the page body).
