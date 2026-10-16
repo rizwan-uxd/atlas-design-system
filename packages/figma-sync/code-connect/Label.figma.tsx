@@ -10,9 +10,11 @@ figma.connect(
       size:     figma.enum("Size",           { sm: "sm", md: "md", lg: "lg" }),
       required: figma.boolean("Required"),
       optional: figma.boolean("Optional"),
+      disabled: figma.enum("State",          { disabled: true }),
+      invalid:  figma.enum("State",          { error: true }),
     },
-    example: ({ variant, size, required, optional }) => (
-      <Label variant={variant} size={size} required={required} optional={optional}>Field label</Label>
+    example: ({ variant, size, required, optional, disabled, invalid }) => (
+      <Label variant={variant} size={size} required={required} optional={optional} disabled={disabled} invalid={invalid}>Field label</Label>
     ),
   }
 )

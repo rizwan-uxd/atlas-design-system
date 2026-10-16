@@ -28,7 +28,7 @@ npm run atlas:sync # regenerate atlas/ (add --pull for a Figma sync; see the atl
 |---|---|---|---|
 | Button | primitives | 🟡 | Hover/focus/active via CSS, icon-only a11y, CVA class variants |
 | Input | primitives | 🟡 | Prefix/suffix affixes, exact sm/md heights, focus ring |
-| Label | primitives | 🟡 | Size inheritance from parent control, inline variant |
+| Label | primitives | 🟢 | Spec-complete: Code Connect maps State, ref/className/state tests, contract covers ref |
 | Textarea | primitives | 🟡 | Resize handle, exact min-heights, sm/md padding |
 | Checkbox | primitives | 🟡 | Focus ring on box only, indeterminate dash, error+checked colour |
 | Switch | primitives | 🟡 | Exact track/thumb sizes, focus ring, reduced motion |

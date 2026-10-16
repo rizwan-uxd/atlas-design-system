@@ -21,6 +21,7 @@ type AssertLabelShape = {
   disabled?: boolean
   invalid?:  boolean
   children:  React.ReactNode
+  ref?:      React.Ref<HTMLLabelElement>
 }
 
 type _CheckLabelProps = AssertLabelShape extends Pick<LabelProps, keyof AssertLabelShape & keyof LabelProps>

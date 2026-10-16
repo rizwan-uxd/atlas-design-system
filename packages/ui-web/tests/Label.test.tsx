@@ -12,7 +12,7 @@
  * Pattern: packages/ui-web/tests/Button.test.tsx
  */
 
-import React from "react"
+import React, { createRef } from "react"
 import { describe, it, expect } from "vitest"
 import { render, screen } from "@testing-library/react"
 import { axe } from "jest-axe"
@@ -81,7 +81,57 @@ describe("Label — states", () => {
   })
 })
 
+describe("Label — ref, className and combined states", () => {
+  it("forwards ref to the label element", () => {
+    const ref = createRef<HTMLLabelElement>()
+    render(<Label ref={ref}>Name</Label>)
+    expect(ref.current).toBeInstanceOf(HTMLLabelElement)
+  })
+
+  it("merges className with the component classes", () => {
+    render(<Label className="extra">Name</Label>)
+    expect(screen.getByText("Name")).toHaveClass("extra")
+  })
+
+  it("passes native label props through", () => {
+    render(<Label htmlFor="x" data-testid="lbl">Name</Label>)
+    expect(screen.getByTestId("lbl")).toHaveAttribute("for", "x")
+  })
+
+  it("sets both data attributes when disabled and invalid", () => {
+    render(<Label disabled invalid>Name</Label>)
+    const el = screen.getByText("Name")
+    expect(el).toHaveAttribute("data-disabled")
+    expect(el).toHaveAttribute("data-invalid")
+  })
+
+  it("keeps required and optional markers out of the accessible name", () => {
+    render(
+      <>
+        <Label htmlFor="a" required>Email</Label>
+        <input id="a" />
+        <Label htmlFor="b" optional>Phone</Label>
+        <input id="b" />
+      </>
+    )
+    expect(screen.getByRole("textbox", { name: "Email" })).toBeInTheDocument()
+    expect(screen.getByRole("textbox", { name: "Phone" })).toBeInTheDocument()
+  })
+})
+
 describe("Label — accessibility", () => {
+  it("has no axe violations in disabled and invalid states", async () => {
+    const { container } = render(
+      <>
+        <Label htmlFor="d" disabled>Disabled</Label>
+        <input id="d" disabled />
+        <Label htmlFor="e" invalid optional>Invalid</Label>
+        <input id="e" aria-invalid="true" />
+      </>
+    )
+    expect(await axe(container)).toHaveNoViolations()
+  })
+
   it("has no axe violations", async () => {
     const { container } = render(
       <>
