@@ -23,6 +23,7 @@ Figma -> sync -> atlas/metadata + atlas/state -> progressive disclosure -> agent
 | 7 | `atlas-prototype` and `atlas-component` task skills (progressive disclosure: description, SKILL.md, references) | done |
 | 8 | Context diet: stale plans archived, `atlas-context` and `atlas-ui-system` retired, re-benchmark | done |
 | 9 | Benchmark and tighten the component workflow (`atlas-component`) | closed |
+| post-9 | `atlas-pattern` skill (2026-10-16): Figma frames, then the pattern doc and compiled example, then sync and verify; routed from `AGENTS.md` §9. Added after the 15 screen patterns existed; **not benchmarked** | done |
 
 Architecture decisions: `atlas/` is generated only, skills are authored in `.agents/skills/` (symlinked as `.claude/skills`); the snapshot is JSON facts plus Markdown guidance; no repo restructure; agents call Figma MCP only when the snapshot lacks a field, is stale, or verification finds a mismatch, and must say so. Figma plan is Professional (no Code Connect in Dev Mode); `.figma.tsx` files are the prop-mapping source the sync reads.
 
@@ -105,7 +106,7 @@ tsc, token-lint, raw elements and primitive token refs were 0 in all nine runs. 
 | What | Where |
 |---|---|
 | Rules | `AGENTS.md` |
-| Skills | `.agents/skills/` (atlas-figma-sync, atlas-verify, atlas-prototype, atlas-component) |
+| Skills | `.agents/skills/` (atlas-figma-sync, atlas-verify, atlas-prototype, atlas-component, atlas-pattern) |
 | Scripts | `scripts/atlas-sync.mjs`, `scripts/atlas-verify.mjs` |
 | Benchmark runner, tasks, rubrics, pins | `benchmarks/` (`run.sh`, `tasks/T1-T4`, `rubric.md`, `rubric-component.md`, `phase-9/`) |
 | Per-run metrics | `benchmarks/results/SUMMARY.md` |
