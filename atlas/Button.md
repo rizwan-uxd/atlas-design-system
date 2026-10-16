@@ -50,8 +50,8 @@ CODE    <Button> in @atlas/ui-web/primitives/Button
 import { Button } from "@atlas/ui-web/primitives/Button/Button"
 ```
 
-**Button** — also accepts native `<button>` attributes
-- ref: not forwarded — `ref` does not type-check; reach the element by `id`
+**Button**
+- ref: forwarded
 - `variant?: ButtonVariant`
 - `size?: ButtonSize`
 - `iconOnly?: boolean`

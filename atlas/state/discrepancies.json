@@ -1137,6 +1137,16 @@
       "resolution": "Closed 2026-10-15 (DEC-074). Onboarding page: the six setup Progress instances (frames 1 to 6) and the desktop reference are now Stepper instances (phone frames use the mobile ring summary, the 480 px reference uses tablet), guideline bullets rewritten, the checklist Progress kept. Auth page: the two code-step Field instances are now a Label and an OTP Input (default, and error with the kept value and the danger message). The doc and example already matched.",
       "firstSeen": "2026-10-14",
       "lastSeen": "2026-10-14"
+    },
+    {
+      "id": "DISC-095",
+      "component": "Button",
+      "side": "both",
+      "status": "open",
+      "issue": "Button variant link ignores size in code and draws it in Figma. Code skips the size class for variant=link (Button.tsx), so a link has no fixed height or size-driven font-size, and link + iconOnly gets no width (the .icon width rules need a size class). Figma set 19:2 draws Variant=link at Size xs 24, sm 32, md 40, lg 48 (widths 39, 51, 62, 78) and as Icon only=true at every size. Found 2026-10-16 in the Button refinement pass.",
+      "resolution": "Needs a decision (owner, 2026-10-16: deferred, option C). Either links stay inline in code and Figma drops link sizes and link icon-only (Figma edit, own plan), or code applies size to links. DEC-073 documents a standalone link as Button asChild variant=link inline in text.",
+      "firstSeen": "2026-10-16",
+      "lastSeen": "2026-10-16"
     }
   ]
 }

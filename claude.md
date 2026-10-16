@@ -26,7 +26,7 @@ npm run atlas:sync # regenerate atlas/ (add --pull for a Figma sync; see the atl
 
 | Component | Tier | Status | Remaining focus |
 |---|---|---|---|
-| Button | primitives | 🟡 | Hover/focus/active via CSS, icon-only a11y, CVA class variants |
+| Button | primitives | 🟢 | Spec-complete. Open: DISC-095 (link variant ignores size; needs a decision) |
 | Input | primitives | 🟡 | Prefix/suffix affixes, exact sm/md heights, focus ring |
 | Label | primitives | 🟢 | Spec-complete: Code Connect maps State, ref/className/state tests, contract covers ref |
 | Textarea | primitives | 🟡 | Resize handle, exact min-heights, sm/md padding |

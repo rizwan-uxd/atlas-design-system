@@ -15,7 +15,7 @@
  * Pattern: copy this file to test other components (~15 min each).
  */
 
-import React from "react"
+import React, { createRef } from "react"
 import { describe, it, expect, vi, beforeEach } from "vitest"
 import { render, screen, fireEvent } from "@testing-library/react"
 import { axe } from "jest-axe"
@@ -292,5 +292,80 @@ describe("Button — AnimatedIcon in icon slots", () => {
       </div>
     )
     expect(await axe(container)).toHaveNoViolations()
+  })
+})
+
+// ─── 10. Form submission, ref, className, icon-only warning ─────
+
+describe("Button — form submission and type", () => {
+  it("defaults to type=button so it never submits a form by accident", () => {
+    render(<Button>Go</Button>)
+    expect(screen.getByRole("button")).toHaveAttribute("type", "button")
+  })
+
+  it("submits the form when type=submit and enabled", () => {
+    const onSubmit = vi.fn((e: React.FormEvent) => e.preventDefault())
+    render(<form onSubmit={onSubmit}><Button type="submit">Save</Button></form>)
+    fireEvent.click(screen.getByRole("button"))
+    expect(onSubmit).toHaveBeenCalledTimes(1)
+  })
+
+  it("does not submit the form while loading (keyboard keeps focus, default action is cancelled)", () => {
+    const onSubmit = vi.fn((e: React.FormEvent) => e.preventDefault())
+    render(<form onSubmit={onSubmit}><Button type="submit" loading>Save</Button></form>)
+    fireEvent.click(screen.getByRole("button"))
+    expect(onSubmit).not.toHaveBeenCalled()
+  })
+
+  it("does not submit the form when disabled", () => {
+    const onSubmit = vi.fn((e: React.FormEvent) => e.preventDefault())
+    render(<form onSubmit={onSubmit}><Button type="submit" disabled>Save</Button></form>)
+    fireEvent.click(screen.getByRole("button"))
+    expect(onSubmit).not.toHaveBeenCalled()
+  })
+
+  it("stays keyboard-focusable while loading", () => {
+    render(<Button loading>Save</Button>)
+    const btn = screen.getByRole("button")
+    btn.focus()
+    expect(btn).toHaveFocus()
+    expect(btn).not.toBeDisabled()
+  })
+})
+
+describe("Button — ref and className", () => {
+  it("forwards ref to the button element", () => {
+    const ref = createRef<HTMLButtonElement>()
+    render(<Button ref={ref}>Go</Button>)
+    expect(ref.current).toBeInstanceOf(HTMLButtonElement)
+  })
+
+  it("merges className with the component classes", () => {
+    render(<Button className="extra">Go</Button>)
+    expect(screen.getByRole("button")).toHaveClass("extra")
+  })
+})
+
+describe("Button — icon-only accessible name", () => {
+  it("warns in development when iconOnly has no accessible name", () => {
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {})
+    render(<Button iconOnly>✕</Button>)
+    expect(warn).toHaveBeenCalledWith(expect.stringContaining("aria-label"))
+    warn.mockRestore()
+  })
+
+  it("does not warn with aria-label", () => {
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {})
+    render(<Button iconOnly aria-label="Close">✕</Button>)
+    expect(warn).not.toHaveBeenCalled()
+    warn.mockRestore()
+  })
+
+  it("does not warn with aria-labelledby", () => {
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {})
+    render(<><span id="n">Close</span><Button iconOnly aria-labelledby="n">✕</Button></>)
+    expect(warn).not.toHaveBeenCalled()
+    expect(screen.getByRole("button", { name: "Close" })).toBeInTheDocument()
+    warn.mockRestore()
   })
 })

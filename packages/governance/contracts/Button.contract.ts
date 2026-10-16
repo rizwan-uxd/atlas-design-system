@@ -35,6 +35,7 @@ type AssertButtonShape = {
   children?:     React.ReactNode
   disabled?:     boolean
   onClick?:      React.MouseEventHandler<HTMLButtonElement>
+  ref?:          React.Ref<HTMLButtonElement>
 }
 
 // ButtonProps must be assignable to the contract shape (all contract keys must exist)
