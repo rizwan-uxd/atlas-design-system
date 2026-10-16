@@ -204,6 +204,12 @@ export const duration = {
   base:    200,
   slow:    320,
   spin:    1000,
+  pulse:   2000,
+} as const
+
+// ─── Motion · easing (--atlas-easing-*, cubic-bezier x1 y1 x2 y2) ─────────────
+export const easing = {
+  standard: [0.2, 0, 0, 1],
 } as const
 
 // ─── Opacity ──────────────────────────────────────────────────────────────────
@@ -211,6 +217,7 @@ export const opacity = {
   disabled: 0.5,
   hover:    0.9,
   overlay:  0.6,
+  pulse:    0.5,
 } as const
 
 // ─── Touch targets ────────────────────────────────────────────────────────────
@@ -272,6 +279,7 @@ const tokens = {
   fontWeight,
   lineHeight,
   duration,
+  easing,
   opacity,
   touchTarget,
   borderWidth,

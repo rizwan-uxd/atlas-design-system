@@ -54,14 +54,6 @@
       "note": "Spinner is standalone (Q12). Button is not changed; a loading state that shows a Spinner inside Button needs its own Figma design and task."
     },
     {
-      "id": "CAND-015",
-      "name": "Skeleton (Atlas/Mobile-Native)",
-      "seenIn": ["docs/componentlist plan _next6_2026-09-25.md"],
-      "composedFrom": "not yet attempted",
-      "occurrences": 0,
-      "note": "Web Skeleton shipped on feat/skeleton (batch 2, phase 2). Native parity is logged here, not built."
-    },
-    {
       "id": "CAND-016",
       "name": "Image (Atlas/Mobile-Native)",
       "seenIn": ["docs/componentlist plan _next6_2026-09-25.md"],
