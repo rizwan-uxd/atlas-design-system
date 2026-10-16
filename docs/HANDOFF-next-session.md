@@ -1,17 +1,17 @@
-# Handoff: next session (library state after PR #83, PR #84 open)
+# Handoff: next session (library state after PR #84)
 
 Written: 2026-10-16. Read this, `AGENTS.md` and the `atlas-component` skill first. **This is the only handoff doc**: every earlier one was deleted (they stay in git history) and their useful gotchas and rules are folded in below.
 
 ## State
-- **`main` is at `215f247` (PR #83).** [#84](https://github.com/rizwan-uxd/atlas-design-system/pull/84) (Members and permissions pattern, drawn in Figma first) was **open and unmerged** when this was written; leave it alone until the user says "merge 84". CI on `main` for #83 and CI on #84 had not finished when last looked at: check both first.
-- **All five batch-2 patterns now exist** (`packages/governance/patterns/`): Navigation shell, Detail view, Chat, Notifications center, Payment and billing, Members and permissions. Each has its doc, a compiled example, a generated `atlas/patterns/<slug>.md`, an `atlas/index.md` row and a README entry. Patterns add no DEC, CAND or DISC ids.
+- **`main` is at `ca58da1` (PR #84).** CI on `main` was green for #83 (run 228) and #84 (run 231). **No PR is open.** #82 to #84 merged the batch-2 patterns, the Figma-first corrections and this handoff.
+- **All batch-2 patterns now exist (six, including Navigation shell)** (`packages/governance/patterns/`): Navigation shell, Detail view, Chat, Notifications center, Payment and billing, Members and permissions. Each has its doc, a compiled example, a generated `atlas/patterns/<slug>.md`, an `atlas/index.md` row and a README entry. Patterns add no DEC, CAND or DISC ids.
 - Latest ids: **DEC-077, CAND-055, DISC-094 (closed).** No discrepancy is open. 47 web components, **all with `verifiedAt`**; 15 native components (Button, Input, Label, Textarea, Checkbox, Switch, Badge, Alert, Card, Dialog, Tabs, NavBar, Stepper, Spinner, Skeleton). About 20 entries in `candidates.json`; none is Figma debt.
 - Working branch for this cloud session: `ccr-3e75bb8c-9r4ah8` (earlier sessions used `claude/...` names). **After a merge, bring the branch up to date with `git fetch origin main && git merge --ff-only origin/main`** (works when the branch's commits are already in `main`). `git checkout -B <branch> origin/main` was blocked by the auto-mode classifier ("Merge Without Review"): do not work around it, ask the user for a Bash permission rule or to run it.
 - If a push is **rejected**, the remote has a commit you do not have: fetch and read it, never force.
 - `.atlas-pull/` (gitignored scratch) does not exist in a fresh cloud session: see the sync recipe in the gotchas.
 
 ## Start here (new session)
-1. `git status`, the open PR list (#84) and CI on `main`. The user wants every commit finished and merged to `main` before new work starts. Leave an open PR alone until "merge N". Run `npm ci` once before any local `tsc` or `atlas:verify`.
+1. `git status`, the open PR list and CI on `main`. The user wants every commit finished and merged to `main` before new work starts. Leave an open PR alone until "merge N". Run `npm ci` once before any local `tsc` or `atlas:verify`.
 2. Before the first push, fetch the branch and compare. Do not force-push over a commit you did not make.
 3. Ask the user which item in "Do next" to start. A candidate runs the four gates in "Rules"; a new component needs their explicit request.
 4. **Figma access:** use the tool server named `Figma` (capital F; load with `ToolSearch select:mcp__Figma__use_figma,...`; load the `figma-use` skill first). A lowercase `figma` server listed as failing (proxy 403) is a different entry: ignore it. If `whoami` fails, say so and stop; do not build code without the Figma side. File key `cKYhfaHLCoyMHi9nKr63Ig`. Screenshots: pass `enableBase64Response: true`.
