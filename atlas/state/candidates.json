@@ -136,14 +136,6 @@
       "note": "Web ScrollProgress shipped (primitives/ScrollProgress). Native parity is logged here, not built (user, 2026-09-30)."
     },
     {
-      "id": "CAND-052",
-      "name": "OtpInput (Atlas/Mobile-Native)",
-      "seenIn": ["packages/governance/patterns/auth.md"],
-      "composedFrom": "not yet attempted",
-      "occurrences": 0,
-      "note": "Web OtpInput shipped (compositions/OtpInput; promoted from CAND-034, 2026-10-14). Native parity is logged here, not built."
-    },
-    {
       "id": "CAND-054",
       "name": "CommandMenu (Atlas/Mobile-Native)",
       "seenIn": ["packages/governance/patterns/search-filter.md"],
