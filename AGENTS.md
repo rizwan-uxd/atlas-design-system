@@ -21,7 +21,7 @@ Read in this order and stop as soon as you can act:
 
 1. The request itself
 2. These rules + the routing table below
-3. `atlas/index.md`, then `atlas/state/*.json` (was this already decided?)
+3. `atlas/index.md` (scripts read `atlas/index.json`, the same index as fields), then `atlas/state/*.json` (was this already decided?)
 4. `atlas/metadata/<Name>.json` and `atlas/<Name>.md` — only for components you will touch; `atlas/patterns/<slug>.md` when the request matches a pattern in the index
 5. `atlas/tokens.md` — only when custom layout is needed
 6. Component source in `packages/ui-web/src` — only when the snapshot is insufficient
