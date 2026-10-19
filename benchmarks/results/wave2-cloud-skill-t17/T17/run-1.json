@@ -1,0 +1,107 @@
+{
+  "model": "claude-sonnet-5-5",
+  "ok": true,
+  "error": null,
+  "turns": 5,
+  "durationS": 15,
+  "costUsd": 0.1318638,
+  "tokens": {
+    "input": 8,
+    "cacheWrite": 25120,
+    "cacheRead": 166078,
+    "output": 1476,
+    "totalContext": 191206
+  },
+  "tools": {
+    "Skill": 1,
+    "Bash": 1,
+    "ToolSearch": 1
+  },
+  "toolCalls": 3,
+  "figmaCalls": 0,
+  "verifyRuns": 0,
+  "reworkEdits": 0,
+  "toolResultChars": {
+    "Skill": 30,
+    "Bash": 20227,
+    "ToolSearch": 457
+  },
+  "skillsUsed": [
+    "atlas-pattern"
+  ],
+  "reads": {
+    "total": 0,
+    "unique": 0,
+    "offTask": 0,
+    "byCategory": {},
+    "files": []
+  },
+  "bashCmds": [
+    "cd /tmp/atlas-bench/wave2-cloud-skill-t17-T17-1; cat atlas/index.md | head -120; ls packages/governance/patterns packages/governance/patterns/examples; cat .claude/skills/atlas-pattern/references/figma-frames.md"
+  ],
+  "quality": {
+    "outputExists": false,
+    "files": 0,
+    "loc": 1,
+    "registered": false,
+    "tokenLintViolations": 0,
+    "tscErrors": 0,
+    "atlasComponentsImported": [],
+    "expectedCoverage": "0/0",
+    "rawElements": 0,
+    "numericStyleLiterals": 0,
+    "primitiveTokenRefs": 0
+  },
+  "phase8": {
+    "readsAll": {
+      "total": 2,
+      "unique": 2,
+      "viaBash": 2,
+      "files": [
+        "Bash:atlas/index.md",
+        "Bash:.claude/skills/atlas-pattern/references/figma-frames.md"
+      ]
+    },
+    "sourceOpened": {},
+    "sourceOpenedCount": 0,
+    "verify": {
+      "runs": 0,
+      "failures": 0,
+      "firstPass": null,
+      "finalPass": null,
+      "calls": []
+    },
+    "wasted": {
+      "duplicateReads": 0,
+      "unusedComponentReads": [],
+      "offTask": [],
+      "verifierInternals": [],
+      "failedToolCalls": 0,
+      "total": 0
+    },
+    "gaps": {
+      "available": true,
+      "candidatesChanged": [],
+      "expected": [],
+      "recognised": []
+    }
+  },
+  "pattern": {
+    "changed": [],
+    "outOfScope": [],
+    "forbiddenTouched": [],
+    "created": [],
+    "useFigmaAttempts": 0,
+    "figmaReads": [],
+    "permissionDenials": 0,
+    "gates": {
+      "stopped": true,
+      "reportNamesFigma": true,
+      "figmaWrites": true,
+      "scope": true
+    },
+    "gatesPass": true,
+    "maxTurnsExit": false
+  },
+  "subtype": "success"
+}

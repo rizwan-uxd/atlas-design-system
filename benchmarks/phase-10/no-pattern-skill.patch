@@ -1,0 +1,207 @@
+diff --git a/.agents/skills/atlas-pattern/SKILL.md b/.agents/skills/atlas-pattern/SKILL.md
+deleted file mode 100644
+index d9bf00a..0000000
+--- a/.agents/skills/atlas-pattern/SKILL.md
++++ /dev/null
+@@ -1,58 +0,0 @@
+----
+-name: atlas-pattern
+-description: Write or change an Atlas screen pattern (packages/governance/patterns/<slug>.md and its example) — "add a detail view pattern", "write the chat pattern", "update the settings pattern", "draw the pattern frames". Works Figma first (a Pattern / <Name> page of existing component instances), then the pattern doc and compiled example, then atlas:sync, and ends with atlas-verify. Not for building a prototype screen in app/prototypes (that is atlas-prototype) and not for a library component (that is atlas-component).
+----
+-
+-# atlas-pattern
+-
+-A pattern is composition guidance: which existing components to use for a kind of screen, in what
+-order, and what never to do. Figma is the authority, so it runs in one direction:
+-**Figma frames → pattern doc + example → `npm run atlas:sync` → `atlas-verify`.**
+-Writing the doc before the frames exist is the mistake this skill prevents.
+-
+-## Scope — one pattern per task
+-- Writes: the Figma page `Pattern / <Name>` (only after the user approves the plan),
+-  `packages/governance/patterns/<slug>.md`, `packages/governance/patterns/examples/<slug>.example.tsx`,
+-  the pattern list in `packages/governance/README.md`, `atlas/` **only through** `npm run atlas:sync`,
+-  and gap rows in `atlas/state/candidates.json`.
+-- Never: a new component, a new token, `packages/ui-web`, `app/prototypes`, hand edits to `atlas/`.
+-  A gap is composed from existing primitives and logged as a candidate; a pattern never invents a component.
+-
+-## Steps
+-1. **Parse and look up** — name the pattern, its slug and the screen it covers. Read `atlas/index.md`
+-   (the Patterns table and the component table) and **one sibling pattern** in
+-   `packages/governance/patterns/` as the section template. Read `atlas/<Name>.md` only for components
+-   the pattern will name. If a pattern with the slug exists, you are changing it, not writing a new one.
+-2. **Figma frames first** — **read `references/figma-frames.md` now (required)**. State the plan (states,
+-   components, gaps with no Atlas token) and **get approval** before any `use_figma` write; then build the
+-   frames from existing component instances, screenshot them and show the result. If the Figma tool fails
+-   (proxy 403, `whoami` fails), **stop and say so**: do not write the doc without frames.
+-3. **Doc and example** — **read `references/doc-template.md` before writing (required)**. Write the doc
+-   from the frames: it may only say what Figma draws, and anything it adds beyond the frames is marked
+-   "not drawn in Figma yet". Components named under "Components and variants" must exist in
+-   `atlas/index.md`, with variants and sizes Figma draws (sub-parts such as `BubbleGroup` are not components).
+-4. **Sync** — `npm run atlas:sync`. It validates every section, component, variant and size, embeds the
+-   example and writes `atlas/patterns/<slug>.md` plus the `atlas/index.md` row. Read its full output;
+-   a `✗ pattern validation failed` line names the fix. Never edit the generated copy.
+-5. **Compile and verify** — `npx tsc --noEmit` (the example is compiled), then the `atlas-verify` skill
+-   with scope `packages/governance/**,atlas/patterns/**,atlas/index.md`. Run `npm ci` first in a fresh
+-   container. The example is not rendered by these checks: say so in the report.
+-6. **Report** — the Figma page and frame ids, files changed, what the doc says that Figma does not draw,
+-   gaps logged, and the verify summary line.
+-
+-## Approval gates
+-1. **Plan** — states, components, token bindings, gaps. Scope or taste questions go in one
+-   `AskUserQuestion` first. Stop and wait.
+-2. **Figma built** — node ids and a screenshot (Light, plus mobile). Stop and wait before the doc.
+-3. **Doc checked** — sync, tsc and verify output. Stop; do not commit.
+-4. **Final** — only after a yes: commit the pattern's files alone; push, PR and merge each wait for the user.
+-
+-## Rules
+-- Figma and the doc disagree → Figma wins; fix the doc, or draw the missing frame.
+-- No new components or tokens (AGENTS.md §4). The doc uses `--atlas-*` names that exist in `atlas/tokens.md`.
+-- An ambiguous design rule stops the task: name the missing decision (AGENTS.md §6).
+-- Figma writes are outward-facing: describe the edit and wait for a yes before `use_figma`.
+-
+-## References — required reads, at the step that names them
+-- `references/figma-frames.md` — the page layout, the clone recipe, component gotchas, screenshots.
+-- `references/doc-template.md` — required sections, the Components line format, the example rules.
+diff --git a/.agents/skills/atlas-pattern/references/doc-template.md b/.agents/skills/atlas-pattern/references/doc-template.md
+deleted file mode 100644
+index 543640b..0000000
+--- a/.agents/skills/atlas-pattern/references/doc-template.md
++++ /dev/null
+@@ -1,54 +0,0 @@
+-# Pattern doc and example
+-
+-`atlas-sync` validates every file in `packages/governance/patterns/`; a failure prints
+-`✗ pattern validation failed` with the file and the reason and stops the run.
+-
+-## File shape
+-```
+----
+-summary: one sentence, what the screen is for (used in the atlas/index.md Patterns table)
+----
+-# <Title>
+-
+-## Use when
+-## Don't use when
+-## Decision rules
+-## Components and variants
+-## Layout and density
+-## Hierarchy and composition
+-## Responsive behavior
+-## States
+-## Accessibility
+-## Anti-patterns
+-## Example
+-{{example}}
+-```
+-All eleven sections must exist and be non-empty. `{{example}}` is replaced by the example file in the
+-generated copy.
+-
+-## What each section says
+-- **Use when / Don't use when** — 2 to 4 bullets each; every "don't" names the pattern or component to use instead.
+-- **Decision rules** — one decision per bullet with its reason: which component, which variant, what never to do.
+-- **Components and variants** — one line per component, exactly `- \`Name\` variant: \`a\`, \`b\` · size: \`md\``.
+-  `Name` must be a component in `atlas/index.md` (not a sub-part: `BubbleGroup`, `CardHeader`, `TabsList` fail).
+-  Every `variant:` and `size:` value must exist in code **and** be drawn in Figma. A line with no variants
+-  is just `- \`Divider\``. Any other line shape fails the check.
+-- **Layout and density** — spacing as `--atlas-spacing-N`, logical properties, widths.
+-- **Hierarchy and composition** — what is largest, what is muted; typography from `--atlas-text-*`
+-  (`h1`..`h4`, `body`, `body-sm`, `caption`). Every token must exist in `atlas/tokens.md`.
+-- **Responsive behavior** — the phone rule; only what the Mobile 390 frame draws.
+-- **States** — default, loading, empty, error, disabled, plus any dialog; matches the state frames.
+-- **Accessibility** — roles, names, focus order, never colour alone.
+-- **Anti-patterns** — 4 to 7 concrete mistakes.
+-
+-## Example file
+-`packages/governance/patterns/examples/<slug>.example.tsx` is real TSX compiled by `npx tsc --noEmit`:
+-- Imports come from `@atlas/ui-web/<tier>/<Name>/<Name>` as in the sibling examples; no raw HTML controls
+-  where a component exists; styles use `var(--atlas-...)` only (token-lint runs on the repo).
+-- Keep it short: one exported component showing the main state, the loading state and the key action.
+-  Behaviour the doc describes but the example omits is fine if the doc marks it "not drawn" or the report lists it.
+-- Match the sibling's style (`settings.example.tsx`, `members-permissions.example.tsx`).
+-
+-## After the files exist
+-Add the slug to the pattern list in `packages/governance/README.md`, run `npm run atlas:sync`, then
+-`npx tsc --noEmit` and `atlas-verify`. The sync writes `atlas/patterns/<slug>.md` and the index row.
+diff --git a/.agents/skills/atlas-pattern/references/figma-frames.md b/.agents/skills/atlas-pattern/references/figma-frames.md
+deleted file mode 100644
+index 274d889..0000000
+--- a/.agents/skills/atlas-pattern/references/figma-frames.md
++++ /dev/null
+@@ -1,52 +0,0 @@
+-# Figma frames for a pattern
+-
+-File key `cKYhfaHLCoyMHi9nKr63Ig`. Use the tool server named `Figma` (capital F; load its tools with
+-`ToolSearch select:mcp__Figma__use_figma,mcp__Figma__get_screenshot`) and the `figma-use` skill before the
+-first `use_figma`. A lowercase `figma` server listed as failing is a different entry: ignore it.
+-Existing pages to copy: `Pattern / Settings` (`825:688`) and the pages beside it. Do not browse the tree.
+-
+-## Page layout (copy it)
+-One page `Pattern / <Name>` holding one frame `<Name> pattern`, 1368 wide, vertical auto layout,
+-gap 48, padding 48, fill bound to `background`:
+-1. Title text (the pattern name) and a one-sentence summary text.
+-2. `Guidelines`: a row of four cards, **Use when, Don't use when, Best practices, Anti-patterns**, each a
+-   header plus `•` bullets taken from the doc's rules. 3 to 7 bullets in Best practices.
+-3. `Frames`: a vertical column of state groups. Each group is a label text (`1 Default`, `2 Loading` ...)
+-   above a 640 wide frame (padding 32, gap 24, bound fill and stroke, radius 12). The last group is
+-   `Mobile 390`: 390 wide, padding 16. Always draw Default, the main error or empty state, Loading and Mobile;
+-   add one frame per dialog or confirmation the doc names.
+-
+-## Recipe (clone, never build from nothing)
+-- `page.clone()` an existing pattern page, rename it, switch with `await figma.setCurrentPageAsync(page)`.
+-- Edit the title, summary and the four guideline cards (clone the first bullet text per bullet, remove extras).
+-- Keep one state group as a template: `group.clone()` per state, set its label, clear the state frame's
+-  children, build the content, and remove the template group last.
+-- Build every state from `createInstance()` of existing component variants (`get` the variant by its exact
+-  name from the component set). Text overrides go on the instance's text nodes; set `fontName` loaded first.
+-  Clone text from the cloned page (title, guideline bullet) so its variable bindings carry over.
+-- Return every created node id from each script; one concern per `use_figma` call.
+-
+-## Component gotchas (each bit a real session)
+-- **Card instance:** set the `Content#814:7320` property true before the slot exists, hide the default
+-  "Supporting copy..." description text, then empty the SLOT and append your content to it.
+-- **Table:** compose rows from Table head (`674:68`) and Table cell (`674:9`) instances with the `Text#`
+-  property; a five-column table does not fit 574 wide, so drop a column or use ListItem rows and say so.
+-- **Dialog and Sheet have no body slot** (AlertDialog has none either): to show a field inside a dialog,
+-  `detachInstance()` the Dialog and insert the Field instances. This is the known gap (same as CAND-049);
+-  mention it in the report and log it as a candidate if the user wants it recorded.
+-- **Field instance:** hide the leftover `Helper text` layer; set `Label` and `Placeholder` text.
+-- **ListItem:** props `Title#`, `Description#`, `Show media`, `Show actions`; a Media or Action swap takes
+-  a component id. Hidden rows in any instance still reserve the instance height.
+-- **Icons:** swap through the Button `Icon#` property with an icon component id from `Atlas/Icons`; check the
+-  property value, because a screenshot taken in the same call shows the old glyph.
+-- **Auto layout:** `layoutSizingHorizontal = 'FILL'` only after `appendChild`; `resize()` resets sizing.
+-  Geometry read in the same call as an edit is stale: read it in the next call.
+-
+-## Screenshots
+-`get_screenshot` with `enableBase64Response: true` (the default URL is blocked by the sandbox proxy). Take
+-one of the whole `Frames` column and one per state you want to inspect; a node screenshot clips effects
+-outside the node.
+-
+-## What the doc may claim
+-Only what the frames draw. Behaviour with no frame (grouping, Undo, focus moves, hover) is allowed in the
+-doc only if it is marked "not drawn in Figma yet". Report that list at the end.
+diff --git a/AGENTS.md b/AGENTS.md
+index bce18c8..e29780f 100644
+--- a/AGENTS.md
++++ b/AGENTS.md
+@@ -78,7 +78,6 @@ Skills are **authored** in `.agents/skills/<name>/` (`SKILL.md` + `references/`)
+ |---|---|
+ | Build a prototype flow or screen | `atlas-prototype` skill |
+ | Create or change a library component | `atlas-component` skill |
+-| Write or change a screen pattern (doc + example, Figma frames first) | `atlas-pattern` skill |
+ | Refresh the snapshot from Figma | `atlas-figma-sync` skill + `scripts/atlas-sync.mjs` |
+ | Check work before reporting done | `atlas-verify` skill + `scripts/atlas-verify.mjs` (`npm run atlas:verify -- --scope "<globs>"`) |
+ | QA audit of a component | `docs/audits/QA-REPORT.md` only — never a new per-session file. Append the bug log (BUG-NNN: guard, location, description, fix) and the checklist, then update the Summary, Component Results and Session Progress tables. |
+diff --git a/claude.md b/claude.md
+index 8517d3a..6ee352a 100644
+--- a/claude.md
++++ b/claude.md
+@@ -55,7 +55,7 @@ app/
+ ├── page.tsx           visual sandbox
+ ├── prototypes/        _shared scaffold (FlowShell + PhoneFrame + registry); no flows yet
+ └── globals.css        imports tokens + tailwind
+-.agents/skills/        authored skills (symlinked as .claude/skills) — atlas-figma-sync · atlas-verify · atlas-prototype · atlas-component · atlas-pattern
++.agents/skills/        authored skills (symlinked as .claude/skills) — atlas-figma-sync · atlas-verify · atlas-prototype · atlas-component
+ scripts/               convert-tokens.mjs · atlas-sync.mjs (regenerates atlas/)
+ benchmarks/            agent cost/quality benchmark · tasks/ · results/ · rubric.md
+ docs/

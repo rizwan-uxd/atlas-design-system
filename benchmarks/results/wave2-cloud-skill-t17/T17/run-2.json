@@ -1,0 +1,113 @@
+{
+  "model": "claude-sonnet-5-5",
+  "ok": true,
+  "error": null,
+  "turns": 7,
+  "durationS": 16,
+  "costUsd": 0.1272016,
+  "tokens": {
+    "input": 8,
+    "cacheWrite": 24435,
+    "cacheRead": 167456,
+    "output": 1270,
+    "totalContext": 191899
+  },
+  "tools": {
+    "Skill": 1,
+    "Read": 2,
+    "Glob": 1,
+    "ToolSearch": 1
+  },
+  "toolCalls": 5,
+  "figmaCalls": 0,
+  "verifyRuns": 0,
+  "reworkEdits": 0,
+  "toolResultChars": {
+    "Skill": 30,
+    "Read": 19945,
+    "Glob": 662,
+    "ToolSearch": 457
+  },
+  "skillsUsed": [
+    "atlas-pattern"
+  ],
+  "reads": {
+    "total": 2,
+    "unique": 2,
+    "offTask": 0,
+    "byCategory": {
+      "atlas-snapshot": 1,
+      "skills": 1
+    },
+    "files": [
+      "atlas/index.md",
+      ".claude/skills/atlas-pattern/references/figma-frames.md"
+    ]
+  },
+  "bashCmds": [],
+  "quality": {
+    "outputExists": false,
+    "files": 0,
+    "loc": 1,
+    "registered": false,
+    "tokenLintViolations": 0,
+    "tscErrors": 0,
+    "atlasComponentsImported": [],
+    "expectedCoverage": "0/0",
+    "rawElements": 0,
+    "numericStyleLiterals": 0,
+    "primitiveTokenRefs": 0
+  },
+  "phase8": {
+    "readsAll": {
+      "total": 2,
+      "unique": 2,
+      "viaBash": 0,
+      "files": [
+        "atlas/index.md",
+        ".claude/skills/atlas-pattern/references/figma-frames.md"
+      ]
+    },
+    "sourceOpened": {},
+    "sourceOpenedCount": 0,
+    "verify": {
+      "runs": 0,
+      "failures": 0,
+      "firstPass": null,
+      "finalPass": null,
+      "calls": []
+    },
+    "wasted": {
+      "duplicateReads": 0,
+      "unusedComponentReads": [],
+      "offTask": [],
+      "verifierInternals": [],
+      "failedToolCalls": 0,
+      "total": 0
+    },
+    "gaps": {
+      "available": true,
+      "candidatesChanged": [],
+      "expected": [],
+      "recognised": []
+    }
+  },
+  "pattern": {
+    "changed": [],
+    "outOfScope": [],
+    "forbiddenTouched": [],
+    "created": [],
+    "useFigmaAttempts": 0,
+    "figmaReads": [],
+    "permissionDenials": 0,
+    "gates": {
+      "stopped": true,
+      "reportNamesFigma": true,
+      "figmaWrites": true,
+      "scope": true
+    },
+    "gatesPass": true,
+    "maxTurnsExit": false
+  },
+  "subtype": "success"
+}

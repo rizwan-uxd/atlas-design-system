@@ -52,3 +52,33 @@ The first `patternChecks` were presence checks and the baseline passed all of th
 
 ### Regex fix applied to both arms
 After `patterns-w1` finished, two strict checks were found to under-count both arms: `[^>]*` stopped at the `=>` in `onClick={() => …}` (T9 `support-secondary`, `timeout-primary-retry`, and T8 `skip-ghost`). All strict patterns now use `(?:[^>]|=>)*` and both arms were re-scored from their saved workspaces. Strict adherence before and after the fix: baseline 0.796 to 0.812, patterns 0.944 to 0.981; T9 baseline 0.407 to 0.444, T9 patterns 0.815 to 1.000.
+
+## Wave 2 (pattern authoring, `atlas-pattern` skill)
+Tasks T17 and T18 measure whether the `atlas-pattern` skill changes what an agent does when asked to author a pattern. Arms: **skill** (the repo at `BENCH_COMMIT`) and **no-skill** (the same tree with `phase-10/no-pattern-skill.patch`: the skill and its `AGENTS.md` / `claude.md` mentions removed). Rubric: `rubric-pattern.md`. Spend cap **$15**, ledger `results/wave-2-spend.json` (`BENCH_CAP` overrides), pins `phase-10/pins.json` (recorded by your first dry run).
+
+| Task | What it tests | Right answer |
+|---|---|---|
+| T17 | "Add a File upload pattern" with every Figma tool removed | Stop. No pattern doc or example, report names Figma as the reason, no Figma write |
+| T18 | "Write the Members and permissions pattern from its Figma frames" (frames exist, doc deleted from the throwaway copy) | Read the frames first, write doc and example, sync, tsc and verify clean, README listed, in scope |
+
+T18 deletes the pattern's doc, example, generated copy, index row and README mention from the throwaway workspace only (`phase-10/apply-fixture.mjs`); the original content is kept out of the workspace and its rules are the `strictChecks` in `tasks/T18/meta.json`. Gates are in `phase-10/pattern-metrics.mjs`. A rule that is not a gate (not-drawn marking, report accuracy) is scored by hand.
+
+**Labels are per task** (pins are per tree, and T18's tree differs from T17's): `wave2-skill-t17`, `wave2-noskill-t17`, `wave2-skill-t18`, `wave2-noskill-t18`.
+
+```bash
+git pull; export DISABLE_AUTOUPDATER=1
+export BENCH_COMMIT=$(git rev-parse HEAD) BENCH_PIN_MODEL=claude-sonnet-5-5   # the model id you pass below
+M=claude-sonnet-5-5; PATCH=benchmarks/phase-10/no-pattern-skill.patch
+
+# 1. $0: build the workspaces, run the fixture gate, record pins
+BENCH_DRY=1 benchmarks/run.sh wave2-skill-t17 T17 1 $M
+BENCH_DRY=1 BENCH_PATCH=$PATCH benchmarks/run.sh wave2-noskill-t17 T17 1 $M
+BENCH_DRY=1 benchmarks/run.sh wave2-skill-t18 T18 1 $M
+BENCH_DRY=1 BENCH_PATCH=$PATCH benchmarks/run.sh wave2-noskill-t18 T18 1 $M
+# 2. paid, cheapest first (3 reps each, about $11 in total)
+benchmarks/run.sh wave2-skill-t17 T17 3 $M
+BENCH_PATCH=$PATCH benchmarks/run.sh wave2-noskill-t17 T17 3 $M
+benchmarks/run.sh wave2-skill-t18 T18 3 $M
+BENCH_PATCH=$PATCH benchmarks/run.sh wave2-noskill-t18 T18 3 $M
+```
+Before step 2, open the Figma page `Pattern / Members and permissions` (node `1035:2`, frame `1035:3`): the fixture gate does not check live Figma, and a run without frames would test the wrong thing. Check `ls ~/.claude/skills` has not regrown account-synced Atlas skills (they contaminated phase 9; `pins.mjs` catches a change between runs, not one before the first record). `budget.mjs status` with the same `BENCH_LEDGER` shows spend. A run over $2.50, a max-turns exit or three `use_figma` attempts stops the batch; an agent-behaviour stop is a failed result and is never re-run.

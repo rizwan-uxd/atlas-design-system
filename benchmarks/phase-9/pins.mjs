@@ -6,13 +6,13 @@
 import fs from "fs"; import path from "path"; import os from "os"; import crypto from "crypto"; import { execSync } from "child_process"; import { fileURLToPath } from "url"
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..")
-const FILE = path.join(ROOT, "benchmarks/phase-9/pins.json")
+const FILE = process.env.BENCH_PINS || path.join(ROOT, "benchmarks/phase-9/pins.json")
 const [cmd, a1, a2] = process.argv.slice(2); const RECORD = process.argv.includes("--record")
-const pins = fs.existsSync(FILE) ? JSON.parse(fs.readFileSync(FILE, "utf8")) : { model: "claude-sonnet-5", cli: "2.1.270", common: null, labels: {}, runtime: null }
+const pins = fs.existsSync(FILE) ? JSON.parse(fs.readFileSync(FILE, "utf8")) : { model: process.env.BENCH_PIN_MODEL || "claude-sonnet-5", cli: null, common: null, labels: {}, runtime: null }
 const out = (c, cwd) => { try { return execSync(c, { cwd, encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] }).trim() } catch { return "absent" } }
 const sha = p => fs.existsSync(p) ? crypto.createHash("sha256").update(fs.readFileSync(p)).digest("hex").slice(0, 16) : "absent"
 
-const WS_PATHS = [".agents/skills/atlas-component", ".agents/skills/atlas-verify", ".agents/skills/atlas-prototype", ".agents/skills/atlas-figma-sync",
+const WS_PATHS = [".agents/skills/atlas-pattern", "packages/governance/patterns", "packages/governance/README.md", "atlas/index.md", "atlas/patterns", ".agents/skills/atlas-component", ".agents/skills/atlas-verify", ".agents/skills/atlas-prototype", ".agents/skills/atlas-figma-sync",
   "AGENTS.md", "claude.md", "scripts/atlas-verify.mjs", "scripts/atlas-sync.mjs", "scripts/lib", "packages/governance/token-lint.mjs",
   "atlas/metadata/Switch.json", "atlas/metadata/Badge.json", "atlas/Switch.md", "atlas/Badge.md", "atlas/state",
   "packages/ui-web/src/primitives/Switch", "packages/ui-web/src/primitives/Badge", "packages/ui-web/tests",
@@ -23,7 +23,8 @@ const TOOLING = ["benchmarks/run.sh", "benchmarks/analyze.mjs", "benchmarks/summ
   "benchmarks/phase-9/pins.mjs", "benchmarks/phase-9/no-skill.patch", "benchmarks/phase-9/live-figma.json",
   "benchmarks/phase-9/stale-row-metric.mjs", "benchmarks/phase-9/stale-row-metric.test.mjs",
   "benchmarks/tasks/T3/prompt.md", "benchmarks/tasks/T3/meta.json", "benchmarks/tasks/T4/prompt.md", "benchmarks/tasks/T4/meta.json",
-  "scripts/lib/quality-checks.mjs"]
+  "scripts/lib/quality-checks.mjs",
+  ...(process.env.BENCH_PINS ? ["benchmarks/phase-10/pattern-metrics.mjs", "benchmarks/phase-10/validate-fixtures.mjs", "benchmarks/phase-10/apply-fixture.mjs", "benchmarks/phase-10/no-pattern-skill.patch", "benchmarks/rubric-pattern.md", "benchmarks/tasks/T17/prompt.md", "benchmarks/tasks/T17/meta.json", "benchmarks/tasks/T18/prompt.md", "benchmarks/tasks/T18/meta.json"] : [])]
 const settings = (() => { try { return JSON.parse(fs.readFileSync(path.join(os.homedir(), ".claude/settings.json"), "utf8")) } catch { return {} } })()
 
 const diffs = (want, got, pre = "") => Object.keys({ ...want, ...got }).flatMap(k =>
@@ -44,6 +45,7 @@ if (cmd === "check") {
       plugins: Object.keys(settings.enabledPlugins || {}).filter(k => settings.enabledPlugins[k]).sort().join(" "),
       projectSettingsLocal: sha(path.join(ROOT, ".claude/settings.local.json")) },
   }
+  if (!pins.cli && RECORD) pins.cli = common.cli
   if (common.cli !== pins.cli) { console.error(`✗ pins: claude CLI ${common.cli} ≠ pinned ${pins.cli}`); process.exit(1) }
   settle({ get: () => pins.common, set: v => { pins.common = v } }, common, "common (tooling, CLI, user context)")
   const lab = { tree: out("git rev-parse HEAD^{tree}", ws), figmaVersion: JSON.parse(fs.readFileSync(path.join(ws, "atlas/metadata/Switch.json"), "utf8")).figmaVersion,
@@ -64,7 +66,7 @@ if (cmd === "check") {
   // servers (user + project; names, not statuses) is what shapes context, so that is pinned.
   const status = figma?.status || "absent"
   const runtime = { mcpServers: (init.mcp_servers || []).map(s => s.name).sort().join(" | ") }
-  if (!["connected", "pending"].includes(status)) { console.error(`✗ pins: figma MCP ${status} in ${label} (infrastructure failure)`); process.exit(1) }
+  if (!["connected", "pending"].includes(status) && !(process.env.BENCH_ALLOW_FIGMA_FAILED && status === "failed")) { console.error(`✗ pins: figma MCP ${status} in ${label} (infrastructure failure)`); process.exit(1) }
   // only a real run can observe these, so the first run of each task type records them
   const type = process.argv[5] || "component"; pins.runtime = pins.runtime || {}
   if (!pins.runtime[type]) { pins.runtime[type] = runtime; save(); console.log(`  • pinned runtime.${type}`) }

@@ -1,0 +1,60 @@
+{
+  "cap": 5,
+  "runs": [
+    {
+      "label": "wave2-cloud-skill-t17",
+      "task": "T17",
+      "run": 1,
+      "costUsd": 0.1318638,
+      "date": "2026-10-19T05:50:22.218Z",
+      "stop": [],
+      "infra": false
+    },
+    {
+      "label": "wave2-cloud-noskill-t17",
+      "task": "T17",
+      "run": 1,
+      "costUsd": 0.43203690000000006,
+      "date": "2026-10-19T05:53:07.409Z",
+      "stop": [],
+      "infra": false
+    },
+    {
+      "label": "wave2-cloud-skill-t17",
+      "task": "T17",
+      "run": 2,
+      "costUsd": 0.1272016,
+      "date": "2026-10-19T05:58:22.842Z",
+      "stop": [],
+      "infra": false
+    },
+    {
+      "label": "wave2-cloud-noskill-t17",
+      "task": "T17",
+      "run": 2,
+      "costUsd": 0.17869279999999998,
+      "date": "2026-10-19T05:59:16.864Z",
+      "stop": [],
+      "infra": false
+    },
+    {
+      "label": "wave2-cloud-skill-t17",
+      "task": "T17",
+      "run": 3,
+      "costUsd": 0.1289721,
+      "date": "2026-10-19T05:59:55.177Z",
+      "stop": [],
+      "infra": false
+    },
+    {
+      "label": "wave2-cloud-noskill-t17",
+      "task": "T17",
+      "run": 3,
+      "costUsd": 0.4596438,
+      "date": "2026-10-19T06:02:57.011Z",
+      "stop": [],
+      "infra": false
+    }
+  ],
+  "interactive": []
+}

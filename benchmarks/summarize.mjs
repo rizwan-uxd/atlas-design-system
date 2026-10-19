@@ -8,7 +8,7 @@ const big = x => x >= 1e6 ? (x / 1e6).toFixed(2) + "M" : x >= 1e4 ? (x / 1e3).to
 const mr = (a, f = fmt) => { const s = nums(a); if (!s.length) return "–"; const m = s.reduce((p, c) => p + c, 0) / s.length; const lo = Math.min(...s), hi = Math.max(...s); return lo === hi ? f(m) : `${f(m)} (${f(lo)}–${f(hi)})` }
 const count = (runs, f) => `${runs.filter(f).length}/${runs.length}`
 
-const rows = [], compRows = [], w1Rows = []
+const rows = [], compRows = [], w1Rows = [], patRows = []
 for (const label of fs.readdirSync(dir).filter(d => fs.statSync(path.join(dir, d)).isDirectory()))
   for (const task of fs.readdirSync(path.join(dir, label)).filter(d => fs.statSync(path.join(dir, label, d)).isDirectory())) {
     const tdir = path.join(dir, label, task)
@@ -31,6 +31,23 @@ for (const label of fs.readdirSync(dir).filter(d => fs.statSync(path.join(dir, d
         mr(runs.map(r => r.turns)), mr(runs.map(r => r.costUsd)),
         manual ? `${manual.total ?? "–"} (run ${manual.run})` : "–", "unavailable",
       ] })
+    }
+    if (runs.every(r => r.pattern)) {
+      const G = k => count(runs, r => r.pattern.gates[k])
+      const write = runs.every(r => "docAndExample" in r.pattern.gates)
+      patRows.push({ label, task, cells: write ? [
+        runs.length, count(runs, r => r.ok), count(runs, r => r.pattern.gatesPass),
+        G("docAndExample"), G("syncValid"), G("syncCurrent"), G("tsc"), G("verify"), G("figmaFirst"), G("scope"), G("readmeListed"),
+        mr(runs.map(r => r.pattern.componentRecall)), mr(runs.map(r => r.pattern.strict.passed / r.pattern.strict.total)), mr(runs.map(r => r.pattern.notDrawnMarks)),
+        manual ? `${manual.total ?? "–"} (run ${manual.run})` : "–",
+        mr(runs.map(r => r.turns)), mr(runs.map(r => r.costUsd)), mr(runs.map(r => r.tokens.cacheRead), big),
+      ] : [
+        runs.length, count(runs, r => r.ok), count(runs, r => r.pattern.gatesPass),
+        G("stopped"), G("reportNamesFigma"), G("figmaWrites"), G("scope"),
+        manual ? `${manual.total ?? "–"} (run ${manual.run})` : "–",
+        mr(runs.map(r => r.turns)), mr(runs.map(r => r.costUsd)), mr(runs.map(r => r.tokens.cacheRead), big),
+      ], write })
+      continue
     }
     if (runs.every(r => r.component)) {
       const C = f => runs.map(r => f(r.component))
@@ -70,6 +87,9 @@ const H = ["runs", "completed", "registered", "coverage", "lint", "tsc", "raw el
 const CH = ["runs", "completed", "all gates", "figma writes", "stop decision ok", "tests", "tsc", "verify ok", "stamped", "in scope", "manual /20",
   "H1 state-file reads [runs]", "H2 other tests [runs]", "H3 sync runs [runs over limit]", "H4 invalid DISC [runs]", "H5 other components [runs]",
   "turns", "cost $", "cache read", "files opened", "figma reads", "max-turns exits"]
+const PH_WRITE = ["runs", "completed", "all gates", "doc + example", "sync valid", "sync current", "tsc", "verify", "figma first", "in scope", "README",
+  "component recall", "strict rules (fraction)", "not-drawn marks", "manual /20", "turns", "cost $", "cache read"]
+const PH_STOP = ["runs", "completed", "all gates", "stopped (no files)", "report names Figma", "figma writes 0", "in scope", "manual /20", "turns", "cost $", "cache read"]
 const WH = ["runs", "completed", "token accuracy", "component accuracy", "pattern adherence 0–2 (loose)", "pattern adherence strict (fraction)", "raw els", "a11y pass", "deprecated usage",
   "audit recall / precision", "migrated", "turns", "cost $", "manual /20", "human corrections"]
 const table = (rs, h = H) => `| task | label | ${h.join(" | ")} |\n|${["", "", ...h].map(() => "---").join("|")}|\n` +
@@ -137,6 +157,16 @@ Gates first (proposal §8.1); a count is runs passing. H columns are the §5B so
 signal is present] — a hypothesis reproduces at ≥2/3 in harness-v2. Effort columns are reported, not used for acceptance.
 
 ${table(compRows, CH)}
+` : ""}${patRows.length ? `
+## Wave 2 — pattern authoring, mean (min–max) across runs
+
+Gates first; a count is runs passing. T18 writes a pattern from existing Figma frames; T17 has no Figma tool and the right answer is to stop.
+Component recall and strict rules are compared with the deleted pattern's content (kept in \`tasks/T18/meta.json\`); effort columns are reported, not used for acceptance.
+
+### T18 — write from frames
+${table(patRows.filter(r => r.write), PH_WRITE)}
+### T17 — Figma unavailable, stop
+${table(patRows.filter(r => !r.write), PH_STOP)}
 ` : ""}${w1Rows.length ? `
 ## Wave 1 — AI-readiness metrics, mean (min–max) across runs
 

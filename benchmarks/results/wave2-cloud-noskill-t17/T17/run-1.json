@@ -1,0 +1,182 @@
+{
+  "model": "claude-sonnet-5-5",
+  "ok": true,
+  "error": null,
+  "turns": 17,
+  "durationS": 155,
+  "costUsd": 0.43203690000000006,
+  "tokens": {
+    "input": 30,
+    "cacheWrite": 51304,
+    "cacheRead": 913609,
+    "output": 13540,
+    "totalContext": 964943
+  },
+  "tools": {
+    "Skill": 1,
+    "Bash": 12,
+    "Write": 2
+  },
+  "toolCalls": 15,
+  "figmaCalls": 0,
+  "verifyRuns": 1,
+  "reworkEdits": 0,
+  "toolResultChars": {
+    "Skill": 32,
+    "Bash": 53596,
+    "Write": 390
+  },
+  "skillsUsed": [
+    "atlas-component"
+  ],
+  "reads": {
+    "total": 0,
+    "unique": 0,
+    "offTask": 0,
+    "byCategory": {},
+    "files": []
+  },
+  "bashCmds": [
+    "cd /tmp/atlas-bench/wave2-cloud-noskill-t17-T17-1; cat atlas/state/decisions.json | head -60; ls atlas atlas/patterns atlas/state; grep -n -i \"upload\\|pattern\" atlas/index.md | head -30; cat atlas/state/candidates.json | head -40",
+    "cd /tmp/atlas-bench/wave2-cloud-noskill-t17-T17-1; grep -n -i \"patterns/\" -r scripts/*.mjs .agents/skills/*/SKILL.md .agents/skills/*/references/*.md | head -30; grep -n -i \"pattern\" atlas/state/decisions.json | head; head -5 atlas/patterns/error-recovery.md; git log --oneline -5 -- atlas/patterns",
+    "cd /tmp/atlas-bench/wave2-cloud-noskill-t17-T17-1; ls packages/governance/patterns; cat packages/governance/patterns/error-recovery.md; sed -n 485,560p scripts/atlas-sync.mjs; grep -n -i \"pattern\" .agents/skills/atlas-component/references/*.md | head",
+    "cd /tmp/atlas-bench/wave2-cloud-noskill-t17-T17-1; cat packages/governance/patterns/examples/error-recovery.example.tsx; cat atlas/Progress.md | head -60; cat atlas/ListItem.md | head -70; grep -n \"^| \\(Progress\\|ListItem\\|Button\\|Alert\\|Spinner\\|Field\\|Badge\\|Toast\\) \" atlas/index.md | cut -c1-200; grep -n \"upload\" -i atlas/state/candidates.json | head",
+    "cd /tmp/atlas-bench/wave2-cloud-noskill-t17-T17-1; sed -n 70,110p atlas/ListItem.md; grep -n \"variant\\|loading\\|icon\\|Icon\" atlas/Button.md | head -20; grep -n \"Alert\" atlas/Alert.md | grep -n \"actions\\|title\\|description\" | head -5; ls packages/ui-web/src/*/ | head -80 | grep -i \"icon\"; grep -rn \"lucide-react\" packages/governance/patterns/examples | head -3; grep -n \"Badge\" atlas/Badge.md | grep -i \"props\\|children\" | head -3",
+    "cd /tmp/atlas-bench/wave2-cloud-noskill-t17-T17-1; grep -n \"style=\" packages/governance/patterns/examples/*.tsx | head -5; grep -o \"\\-\\-atlas-\\(surface\\|border\\|radius\\|spacing\\|text\\|foreground\\|muted\\)[a-z0-9-]*\" atlas/tokens.md | sort -u | head -50",
+    "cd /tmp/atlas-bench/wave2-cloud-noskill-t17-T17-1; sed -n 1,30p packages/governance/patterns/examples/auth.example.tsx | grep -n \"title\\|muted\"; grep -o \"\\-\\-atlas-[a-z0-9-]*\" atlas/tokens.md | sort -u | grep -E \"border|surface|muted|radius|text-|primary\" | head -40",
+    "cd /tmp/atlas-bench/wave2-cloud-noskill-t17-T17-1; grep -n \"const title\\|const muted\" packages/governance/patterns/examples/*.tsx | head -4; grep -oh \"var(--atlas-[a-z0-9-]*\" packages/governance/patterns/examples/*.tsx | sort | uniq -c | sort -rn | head -25",
+    "cd /tmp/atlas-bench/wave2-cloud-noskill-t17-T17-1; grep -oh \"var(--atlas-[a-z0-9-]*\" -r packages/ui-web/src/primitives/*/*.css | sort -u | grep -E \"border|surface|background|radius-(md|lg)|primary|danger\" | head -20",
+    "cd /tmp/atlas-bench/wave2-cloud-noskill-t17-T17-1; cat > packages/governance/patterns/file-upload.md <<'EOF'\n---\nsummary: Let the user add files by choosing or dropping them, see progress for each file, and recover from failed uploads with retry.\n---\n# File upload\n\n## Use when\n- The user attaches one or more files to a record, message or form: documents, images, imports.\n- Each file uploads on its own and can succeed or fail independently.\n\n## Don't use when\n- The user types a value. Use the Form pattern.\n- Only the whole page is busy, with no per-file status. Use `Progress` or `Spinner` alone.\n- The list of already-saved files is the whole screen. Use the Data table pattern.\n\n## Decision rules\n- Offer two ways in, always: a `Button` (\"Choose files\") that opens the native picker, and a drop area. The Button is the accessible path; dropping is an extra, never the only way.\n- State the limits before the user picks (accepted types, maximum size, maximum count) as helper text in the drop area. Check them on selection and reject a file at once with its reason; do not start an upload you know will be refused.\n- One `ListItem` per file in a list, in the order chosen. Media is a file-type `icon`, the title is the file name, the description carries status text, and the action is the one control that applies to the current status.\n- Status drives the row, in this order:\n  - queued or uploading: `Progress` with `value`, `valueLabel` (\"42%\") and the file name as `aria-label`; the action is \"Cancel\" (`Button variant=\"ghost\"`, `iconOnly`).\n  - uploading with unknown size: `Progress` with `indeterminate`.\n  - done: description \"Uploaded\", a `Badge variant=\"success\"`; the action is \"Remove\".\n  - failed: description states the cause and what to do (\"Upload failed. Check your connection and try again.\"), a `Badge variant=\"danger\"`; the action is \"Retry\" (`Button variant=\"outline\" size=\"sm\"`), then \"Remove\".\n- Classify the failure like Error recovery does. The request failed (network, timeout, 5xx): offer Retry. The file is the problem (too large, wrong type, rejected by the server): no Retry, because the same file fails again; offer Remove and say what to change.\n- Retry re-uploads that file only: it keeps its place in the list, resets its progress to 0, and shows `loading` on the Retry Button. Other files are not touched, and successful files are never re-sent.\n- When two or more files failed, add one `Alert variant=\"danger\"` above the list with a \"Retry all\" action for the retryable ones. One failed file needs only its own row.\n- Never clear the list because an upload failed. Failed files stay until the user retries or removes them.\n- Removing an uploaded file that is already saved is destructive; confirm with an `AlertDialog`. Removing a failed or queued file needs no confirmation.\n- Upload starts when files are chosen unless the surrounding form submits them; in a form, the form's submit is blocked while any file is uploading and the reason is said.\n- Wording: use the file name, say what happened, no \"Oops\". Do not show raw error codes as the message.\n\n## Components and variants\n- `Button` variant: `primary`, `outline`, `ghost` · size: `sm`, `md`\n- `ListItem` variant: `outline` · size: `md`\n- `Progress`\n- `Badge` variant: `success`, `danger` · size: `sm`\n- `Alert` variant: `danger` · size: `md`\n\n## Layout and density\n- Drop area on top, full width of the content column, with the Choose files Button and the limits text centred inside it; the file list sits directly below with `--atlas-spacing-3` between rows.\n- Use the same `ListItem` variant and size for every row. Titles stay on one line and truncate in the middle of the name, keeping the extension visible.\n- The drop area is a dashed `--atlas-border-strong` region on `--atlas-background-subtle`; while a file is dragged over it, switch the border to `--atlas-primary` and the fill to `--atlas-background-muted`. This is local composition, not a component; log it as a candidate if it recurs.\n\n## Hierarchy and composition\n- Drop area → limits text → (summary Alert when several failed) → file list → the form's own actions.\n- Typography: the drop-area prompt takes `--atlas-text-body`; limits and status text take `--atlas-text-body-sm` in `--atlas-foreground-muted`. Never a bare `<h1>` or `<p>`.\n\n## Responsive behavior\n- On a phone the drop area shrinks to the Choose files Button and the limits text; drag and drop does not exist on touch, so do not promise it there.\n- Row actions stay on the row; if a row gets too narrow, the status text wraps under the file name, never behind a menu.\n\n## States\n- drop area: default · drag-over · disabled (limit reached or form submitting) · error (rejected file, shown with its reason).\n- file row: queued · uploading (determinate or indeterminate) · done · failed (retryable) · failed (not retryable) · cancelled (row removed).\n- list: empty (no rows, only the drop area) · partial failure · all done.\n\n## Accessibility\n- The hidden `<input type=\"file\">` is the real control. The Choose files Button calls `input.click()`; the input is visually hidden but not `display: none` so the picker, focus return and `accept` keep working. Give the input `multiple` only when more than one file is allowed.\n- The drop area is not focusable and has no role of its own; keyboard and screen-reader users use the Button. Do not add `tabindex` to it.\n- Each `Progress` is named by its file (`aria-label=\"Uploading report.pdf\"`) and carries `aria-valuetext` such as \"42 percent\".\n- Announce status changes in one polite live region for the list (\"report.pdf uploaded\", \"report.pdf failed\"), not one per row. A failure summary `Alert` already has `role=\"alert\"`; do not duplicate it in the live region.\n- After Retry, focus stays on the Retry Button (now loading). After Remove, move focus to the next row, or to the Choose files Button when the list is empty.\n- Colour is not the only signal: failed rows have a `Badge` and a status sentence.\n- Icon-only actions have an `aria-label` that includes the file name (\"Remove report.pdf\").\n\n## Anti-patterns\n- Drag-and-drop as the only way to add files.\n- A single progress bar for the whole batch when files can fail independently.\n- Retry offered for a file that was rejected for size or type.\n- Retrying re-sends the whole batch, or moves the failed file to the end of the list.\n- Clearing the list, or the form, after a failure.\n- Showing \"Failed\" with no cause or next step.\n- Starting an upload for a file the limits already rule out.\n- A Toast as the only failure signal.\n\n## Example\n{{example}}\nEOF\ncat > packages/governance/patterns/examples/file-upload.example.tsx <<'EOF'\nimport { useRef, useState } from \"react\"\nimport { File as FileIcon, Trash2, X } from \"lucide-react\"\nimport { Alert } from \"@atlas/ui-web/compositions/Alert/Alert\"\nimport { ListItem, ListItemMedia, ListItemContent, ListItemTitle, ListItemDescription, ListItemActions } from \"@atlas/ui-web/compositions/ListItem/ListItem\"\nimport { Badge } from \"@atlas/ui-web/primitives/Badge/Badge\"\nimport { Button } from \"@atlas/ui-web/primitives/Button/Button\"\nimport { Progress } from \"@atlas/ui-web/primitives/Progress/Progress\"\n\ntype Status = \"uploading\" | \"done\" | \"failed\"\ntype Item = { id: number; file: File; status: Status; progress: number; retryable: boolean; reason?: string; retrying?: boolean }\n\nconst MAX_BYTES = 10 * 1024 * 1024\nconst muted = { fontSize: \"var(--atlas-text-body-sm)\", color: \"var(--atlas-foreground-muted)\" }\n\n// `send` is the app's upload call: it reports progress 0-100 and rejects with { retryable } on failure.\nexport function FileUpload({ send }: { send: (file: File, onProgress: (pct: number) => void) => Promise<void> }) {\n  const input = useRef<HTMLInputElement>(null)\n  const next = useRef(0)\n  const [items, setItems] = useState<Item[]>([])\n  const [over, setOver] = useState(false)\n  const [rejected, setRejected] = useState<string[]>([])\n  const [live, setLive] = useState(\"\")\n\n  const patch = (id: number, change: Partial<Item>) =>\n    setItems((all) => all.map((i) => (i.id === id ? { ...i, ...change } : i)))\n\n  async function run(id: number, file: File) {\n    patch(id, { status: \"uploading\", progress: 0, retrying: false })\n    try {\n      await send(file, (progress) => patch(id, { progress }))\n      patch(id, { status: \"done\", progress: 100 })\n      setLive(`${file.name} uploaded`)\n    } catch (e) {\n      const retryable = (e as { retryable?: boolean })?.retryable !== false\n      patch(id, { status: \"failed\", retryable, reason: retryable ? \"Upload failed. Check your connection and try again.\" : \"The server rejected this file. Remove it and choose another.\" })\n      setLive(`${file.name} failed`)\n    }\n  }\n\n  function add(list: FileList | null) {\n    if (!list) return\n    const refused: string[] = []\n    for (const file of Array.from(list)) {\n      // Check the limits first: never start an upload that is already ruled out.\n      if (file.size > MAX_BYTES) { refused.push(`${file.name} is larger than 10 MB.`); continue }\n      const id = next.current++\n      setItems((all) => [...all, { id, file, status: \"uploading\", progress: 0, retryable: true }])\n      void run(id, file)\n    }\n    setRejected(refused)\n  }\n\n  const retryable = items.filter((i) => i.status === \"failed\" && i.retryable)\n  const failed = items.filter((i) => i.status === \"failed\")\n\n  return (\n    <div style={{ display: \"grid\", gap: \"var(--atlas-spacing-4)\" }}>\n      <div\n        onDragOver={(e) => { e.preventDefault(); setOver(true) }}\n        onDragLeave={() => setOver(false)}\n        onDrop={(e) => { e.preventDefault(); setOver(false); add(e.dataTransfer.files) }}\n        style={{\n          display: \"grid\", justifyItems: \"center\", gap: \"var(--atlas-spacing-3)\", padding: \"var(--atlas-spacing-6)\",\n          border: `var(--atlas-border-width-1) dashed ${over ? \"var(--atlas-primary)\" : \"var(--atlas-border-strong)\"}`,\n          borderRadius: \"var(--atlas-radius-base)\",\n          background: over ? \"var(--atlas-background-muted)\" : \"var(--atlas-background-subtle)\",\n        }}\n      >\n        <span style={{ fontSize: \"var(--atlas-text-body)\" }}>Drop files here, or</span>\n        <Button variant=\"outline\" onClick={() => input.current?.click()}>Choose files</Button>\n        <span style={muted}>PDF, PNG or JPG, up to 10 MB each.</span>\n        {/* Visually hidden, still focusable-by-click and honouring `accept`; the Button is the keyboard path. */}\n        <input ref={input} type=\"file\" multiple accept=\".pdf,.png,.jpg,.jpeg\" tabIndex={-1} aria-hidden=\"true\"\n          style={{ position: \"absolute\", width: 1, height: 1, opacity: 0, overflow: \"hidden\", pointerEvents: \"none\" }}\n          onChange={(e) => { add(e.target.files); e.target.value = \"\" }} />\n      </div>\n\n      {rejected.length > 0 && (\n        <Alert variant=\"danger\" title=\"Some files were not added\" description={rejected.join(\" \")} />\n      )}\n\n      {failed.length > 1 && retryable.length > 0 && (\n        <Alert variant=\"danger\" title={`${failed.length} files failed to upload`}\n          description=\"Your other files were not affected. Try the failed ones again.\"\n          actions={<Button size=\"sm\" variant=\"outline\" onClick={() => retryable.forEach((i) => void run(i.id, i.file))}>Retry all</Button>} />\n      )}\n\n      <ul style={{ display: \"grid\", gap: \"var(--atlas-spacing-3)\", listStyle: \"none\", margin: 0, padding: 0 }}>\n        {items.map((i) => (\n          <ListItem as=\"li\" key={i.id} variant=\"outline\">\n            <ListItemMedia type=\"icon\" decorative><FileIcon /></ListItemMedia>\n            <ListItemContent>\n              <ListItemTitle>{i.file.name}</ListItemTitle>\n              {i.status === \"uploading\" ? (\n                <Progress value={i.progress} valueLabel={`${i.progress}%`} aria-label={`Uploading ${i.file.name}`} aria-valuetext={`${i.progress} percent`} />\n              ) : (\n                <ListItemDescription>{i.status === \"done\" ? \"Uploaded\" : i.reason}</ListItemDescription>\n              )}\n            </ListItemContent>\n            <ListItemActions>\n              {i.status === \"done\" && <Badge variant=\"success\" size=\"sm\">Done</Badge>}\n              {i.status === \"failed\" && <Badge variant=\"danger\" size=\"sm\">Failed</Badge>}\n              {i.status === \"failed\" && i.retryable && (\n                <Button size=\"sm\" variant=\"outline\" loading={i.retrying}\n                  onClick={() => { patch(i.id, { retrying: true }); void run(i.id, i.file) }}>Retry</Button>\n              )}\n              <Button iconOnly size=\"sm\" variant=\"ghost\"\n                aria-label={`${i.status === \"uploading\" ? \"Cancel\" : \"Remove\"} ${i.file.name}`}\n                onClick={() => setItems((all) => all.filter((x) => x.id !== i.id))}>\n                {i.status === \"uploading\" ? <X /> : <Trash2 />}\n              </Button>\n            </ListItemActions>\n          </ListItem>\n        ))}\n      </ul>\n\n      <div role=\"status\" aria-live=\"polite\" style={{ position: \"absolute\", width: 1, height: 1, overflow: \"hidden\", clipPath: \"inset(50%)\" }}>{live}</div>\n    </div>\n  )\n}\nEOF\nnpm run atlas:sync 2>&1 | head -30",
+    "cd /tmp/atlas-bench/wave2-cloud-noskill-t17-T17-1; npm run atlas:sync 2>&1 | head -30; git status --short",
+    "cd /tmp/atlas-bench/wave2-cloud-noskill-t17-T17-1; npm run atlas:verify -- --scope \"packages/governance/patterns/**,atlas/**\" 2>&1 | tail -40"
+  ],
+  "quality": {
+    "outputExists": false,
+    "files": 0,
+    "loc": 1,
+    "registered": false,
+    "tokenLintViolations": 0,
+    "tscErrors": 0,
+    "atlasComponentsImported": [],
+    "expectedCoverage": "0/0",
+    "rawElements": 0,
+    "numericStyleLiterals": 0,
+    "primitiveTokenRefs": 0
+  },
+  "phase8": {
+    "readsAll": {
+      "total": 21,
+      "unique": 16,
+      "viaBash": 21,
+      "files": [
+        "Bash:atlas/state/decisions.json",
+        "Bash:atlas/index.md",
+        "Bash:atlas/state/candidates.json",
+        "Bash:atlas/state/decisions.json",
+        "Bash:atlas/patterns/error-recovery.md",
+        "Bash:packages/governance/patterns/error-recovery.md",
+        "Bash:scripts/atlas-sync.mjs",
+        "Bash:packages/governance/patterns/examples/error-recovery.example.tsx",
+        "Bash:atlas/Progress.md",
+        "Bash:atlas/ListItem.md",
+        "Bash:atlas/index.md",
+        "Bash:atlas/state/candidates.json",
+        "Bash:atlas/ListItem.md",
+        "Bash:atlas/Button.md",
+        "Bash:atlas/Alert.md",
+        "Bash:atlas/Badge.md",
+        "Bash:atlas/tokens.md",
+        "Bash:packages/governance/patterns/examples/auth.example.tsx",
+        "Bash:atlas/tokens.md",
+        "Bash:packages/governance/patterns/file-upload.md",
+        "Bash:packages/governance/patterns/examples/file-upload.example.tsx"
+      ]
+    },
+    "sourceOpened": {
+      "verifier-internals": [
+        "packages/governance/patterns/error-recovery.md",
+        "scripts/atlas-sync.mjs",
+        "packages/governance/patterns/examples/error-recovery.example.tsx",
+        "packages/governance/patterns/examples/auth.example.tsx",
+        "packages/governance/patterns/file-upload.md",
+        "packages/governance/patterns/examples/file-upload.example.tsx"
+      ]
+    },
+    "sourceOpenedCount": 6,
+    "verify": {
+      "runs": 1,
+      "failures": 0,
+      "firstPass": true,
+      "finalPass": true,
+      "calls": [
+        {
+          "cmd": "cd /tmp/atlas-bench/wave2-cloud-noskill-t17-T17-1; npm run atlas:verify -- --scope \"packages/governance/patterns/**,atla",
+          "failed": false
+        }
+      ]
+    },
+    "wasted": {
+      "duplicateReads": 5,
+      "unusedComponentReads": [
+        "atlas/Progress.md",
+        "atlas/ListItem.md",
+        "atlas/Button.md",
+        "atlas/Alert.md",
+        "atlas/Badge.md"
+      ],
+      "offTask": [],
+      "verifierInternals": [
+        "packages/governance/patterns/error-recovery.md",
+        "scripts/atlas-sync.mjs",
+        "packages/governance/patterns/examples/error-recovery.example.tsx",
+        "packages/governance/patterns/examples/auth.example.tsx",
+        "packages/governance/patterns/file-upload.md",
+        "packages/governance/patterns/examples/file-upload.example.tsx"
+      ],
+      "failedToolCalls": 1,
+      "total": 17
+    },
+    "gaps": {
+      "available": true,
+      "candidatesChanged": [],
+      "expected": [],
+      "recognised": []
+    }
+  },
+  "pattern": {
+    "changed": [
+      "atlas/index.md",
+      "atlas/patterns/file-upload.md",
+      "packages/governance/patterns/examples/file-upload.example.tsx",
+      "packages/governance/patterns/file-upload.md"
+    ],
+    "outOfScope": [
+      "atlas/index.md",
+      "atlas/patterns/file-upload.md",
+      "packages/governance/patterns/examples/file-upload.example.tsx",
+      "packages/governance/patterns/file-upload.md"
+    ],
+    "forbiddenTouched": [
+      "atlas/index.md",
+      "atlas/patterns/file-upload.md",
+      "packages/governance/patterns/examples/file-upload.example.tsx",
+      "packages/governance/patterns/file-upload.md"
+    ],
+    "created": [
+      "packages/governance/patterns/file-upload.md",
+      "packages/governance/patterns/examples/file-upload.example.tsx"
+    ],
+    "useFigmaAttempts": 0,
+    "figmaReads": [],
+    "permissionDenials": 1,
+    "gates": {
+      "stopped": false,
+      "reportNamesFigma": true,
+      "figmaWrites": true,
+      "scope": false
+    },
+    "gatesPass": false,
+    "maxTurnsExit": false
+  },
+  "subtype": "success"
+}
