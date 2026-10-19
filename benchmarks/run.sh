@@ -20,6 +20,12 @@ command -v claude >/dev/null || { echo "claude CLI not found"; exit 1; }
 COMMIT=${BENCH_COMMIT:-}; PATCH=${BENCH_PATCH:-}; DRY=${BENCH_DRY:-}; ONLY=${BENCH_ONLY:-}
 P9="$ROOT/benchmarks/phase-9"
 TYPE=$(node -e 'console.log(require(process.argv[1]).type || "prototype")' "$TDIR/meta.json")
+FIGMA_OFF=$(node -e 'console.log(!!require(process.argv[1]).figmaUnavailable)' "$TDIR/meta.json")
+# Wave 2 (pattern authoring, T17/T18): ledger, cap and pins are separate from phase 9; see benchmarks/README.md "Wave 2"
+if [ "$TYPE" = "pattern" ]; then
+  [ -n "${BENCH_COMMIT:-}" ] || { echo "pattern tasks need BENCH_COMMIT"; exit 1; }
+  export BENCH_LEDGER="${BENCH_LEDGER:-$ROOT/benchmarks/results/wave-2-spend.json}" BENCH_CAP="${BENCH_CAP:-15}" BENCH_PINS="${BENCH_PINS:-$ROOT/benchmarks/phase-10/pins.json}"
+fi
 
 SRC="$ROOT"
 if [ -n "$COMMIT" ]; then
@@ -43,10 +49,18 @@ fi
 
 TOOLS="Read,Glob,Grep,Write,Edit,MultiEdit,Skill,TodoWrite,Bash(npm run:*),Bash(npx tsc:*),Bash(node:*),Bash(ls:*)"
 EXTRA=()
+FIGMA_READ="mcp__figma__get_metadata,mcp__figma__get_design_context,mcp__figma__get_variable_defs,mcp__figma__get_screenshot,mcp__figma__search_design_system,mcp__figma__get_code_connect_map,mcp__figma__get_libraries,mcp__figma__whoami"
 if [ "$TYPE" = "component" ]; then
-  TOOLS="$TOOLS,Bash(npx vitest:*),mcp__figma__get_metadata,mcp__figma__get_design_context,mcp__figma__get_variable_defs,mcp__figma__get_screenshot,mcp__figma__search_design_system,mcp__figma__get_code_connect_map,mcp__figma__get_libraries,mcp__figma__whoami"
+  TOOLS="$TOOLS,Bash(npx vitest:*),$FIGMA_READ"
   # a Figma write can't be approved headless, so it isn't offered at all
   EXTRA=(--disallowedTools "mcp__figma__use_figma" --max-turns 60)
+elif [ "$TYPE" = "pattern" ]; then
+  if [ "$FIGMA_OFF" = "true" ]; then
+    # T17: the Figma tool is unavailable, the case the skill says to stop on
+    EXTRA=(--disallowedTools "mcp__figma__use_figma,$FIGMA_READ" --max-turns 60)
+  else
+    TOOLS="$TOOLS,$FIGMA_READ"; EXTRA=(--disallowedTools "mcp__figma__use_figma" --max-turns 60)
+  fi
 fi
 
 for i in $(seq 1 "$REPS"); do
@@ -62,12 +76,21 @@ for i in $(seq 1 "$REPS"); do
   if [ "$(node -e 'console.log(!!(require(process.argv[1]).fixtureSync))' "$TDIR/meta.json")" = "true" ]; then
     ( cd "$WS" && node scripts/atlas-sync.mjs >/dev/null ) || { echo "  ✗ fixture sync failed"; exit 1; }
   fi
+  # Wave 2 fixture (T18): remove one pattern's files, its index row and its README mention from the throwaway copy only
+  if [ "$TYPE" = "pattern" ]; then
+    node "$ROOT/benchmarks/phase-10/apply-fixture.mjs" "$WS" "$TDIR/meta.json" || { echo "  ✗ fixture apply failed"; exit 1; }
+  fi
   # atlas-verify diffs against git HEAD, so the copy is committed as-is (phase 8; phase 0 copies had no .git)
   ( cd "$WS" && git init -q && printf '/node_modules\n/.next\n' >> .git/info/exclude && git add -A \
       && git -c user.name=bench -c user.email=bench@local commit -qm "bench base" )
   if [ -n "$COMMIT" ]; then
     if [ "$TYPE" = "component" ]; then
       node "$P9/validate-fixtures.mjs" "$WS" "$TASK" --live "$P9/live-figma.json" ${PATCH:+--no-skill} > "$OUT/run-$i.fixtures.json" \
+        || { echo "  ✗ fixture gate failed — see results/$LABEL/$TASK/run-$i.fixtures.json"; exit 1; }
+      echo "  ✓ fixture gate"
+    fi
+    if [ "$TYPE" = "pattern" ]; then
+      node "$ROOT/benchmarks/phase-10/validate-fixtures.mjs" "$WS" "$TASK" ${PATCH:+--no-skill} > "$OUT/run-$i.fixtures.json" \
         || { echo "  ✗ fixture gate failed — see results/$LABEL/$TASK/run-$i.fixtures.json"; exit 1; }
       echo "  ✓ fixture gate"
     fi

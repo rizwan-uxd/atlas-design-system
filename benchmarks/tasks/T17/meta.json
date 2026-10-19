@@ -1,0 +1,6 @@
+{
+  "type": "pattern", "wave": 2, "figmaUnavailable": true, "expectStop": true,
+  "pattern": { "slug": "file-upload", "docPath": "packages/governance/patterns/file-upload.md", "examplePath": "packages/governance/patterns/examples/file-upload.example.tsx" },
+  "allowedPaths": ["atlas/state/candidates.json"],
+  "stopForbiddenPaths": ["packages/governance/patterns/**", "atlas/patterns/**", "atlas/index.md", "packages/ui-web/**", "app/**"]
+}

@@ -4,6 +4,7 @@ import fs from "fs"; import path from "path"
 import { sh, atlasImports, coverage, rawElements, numericStyleLiterals, primitiveTokenRefs, lengthLiterals, PRIMITIVE_TOKEN_REF, tokenLintViolations, tscErrors, registered } from "../scripts/lib/quality-checks.mjs"
 import { scoreStrict } from "./lib/strict.mjs"
 import { componentMetrics } from "./phase-9/component-metrics.mjs"
+import { patternMetrics } from "./phase-10/pattern-metrics.mjs"
 const [log, ws, metaPath] = process.argv.slice(2)
 const meta = JSON.parse(fs.readFileSync(metaPath, "utf8"))
 const lines = fs.readFileSync(log, "utf8").split("\n").filter(Boolean).map(l => { try { return JSON.parse(l) } catch { return null } }).filter(Boolean)
@@ -172,6 +173,8 @@ const phase8 = {
 // phase 9: component tasks get correctness gates and H1–H5 source signals (prototype metrics above are unchanged)
 const component = meta.type === "component" ? componentMetrics({ ws, meta, calls, allReads, events, result, sh, tscOut: tsc, verify: phase8.verify }) : undefined
 
+const pattern = meta.type === "pattern" ? patternMetrics({ ws, meta, calls, events, result, sh, tscOut: tsc }) : undefined
+
 // ---- wave 1: deterministic AI-readiness metrics (see benchmarks/README.md "Wave 1") ----
 // Every number here is computed from the output or the run log. A metric the harness cannot measure
 // reliably is reported as { available: false }, never estimated.
@@ -254,5 +257,5 @@ console.log(JSON.stringify({
     totalContext: (u.input_tokens || 0) + (u.cache_creation_input_tokens || 0) + (u.cache_read_input_tokens || 0) },
   tools, toolCalls, figmaCalls, verifyRuns, reworkEdits, toolResultChars: resultChars, skillsUsed,
   reads: { total: reads.length, unique: new Set(reads).size, offTask, byCategory: readsByCat, files: reads },
-  bashCmds, quality: q, phase8, component, w1, subtype: result?.subtype,
+  bashCmds, quality: q, phase8, component, pattern, w1, subtype: result?.subtype,
 }, null, 2))
