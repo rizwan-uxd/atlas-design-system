@@ -9,7 +9,7 @@ import { Badge } from "@atlas/ui-web/primitives/Badge/Badge"
 import { Button } from "@atlas/ui-web/primitives/Button/Button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@atlas/ui-web/primitives/Select/Select"
 import { Skeleton } from "@atlas/ui-web/primitives/Skeleton/Skeleton"
-import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@atlas/ui-web/primitives/Table/Table"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@atlas/ui-web/primitives/Table/Table"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@atlas/ui-web/patterns/DropdownMenu/DropdownMenu"
 
 type Role = "Owner" | "Admin" | "Member"
@@ -66,8 +66,7 @@ export function MembersPage({ members, loading, onInvite, onChangeRole, onRemove
         <Card variant="outlined">
           <CardHeader><CardTitle>Members</CardTitle></CardHeader>
           <CardContent>
-            <Table>
-              <TableCaption>Members</TableCaption>
+            <Table aria-label="Members">
               <TableHeader>
                 <TableRow>
                   <TableHead>Member</TableHead>

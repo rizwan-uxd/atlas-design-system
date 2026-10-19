@@ -56,7 +56,7 @@
 
 ## Accessibility
 - Amounts and dates are read as text, with `<time dateTime>` for dates. A status Badge has visible text, never colour alone.
-- The Invoices table has a `TableCaption` ("Invoices"), column headers with `scope="col"`, and each Download button's `aria-label` names its invoice ("Download invoice from 12 Oct 2026").
+- The Invoices table is named with `aria-label="Invoices"` (Figma draws no visible caption), column headers with `scope="col"`, and each Download button's `aria-label` names its invoice ("Download invoice from 12 Oct 2026").
 - The Dialog and AlertDialog trap focus, name the action in the title, and return focus to their trigger. Provider hosted fields need visible labels and are reachable by Tab like any input.
 - The payment Alert uses `role="alert"` only when it appears after load; the one present on first render is read in order.
 - Errors are text next to the field or in the Alert, not colour alone.
@@ -85,7 +85,7 @@ import { Badge } from "@atlas/ui-web/primitives/Badge/Badge"
 import { Button } from "@atlas/ui-web/primitives/Button/Button"
 import { Input } from "@atlas/ui-web/primitives/Input/Input"
 import { Skeleton } from "@atlas/ui-web/primitives/Skeleton/Skeleton"
-import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@atlas/ui-web/primitives/Table/Table"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@atlas/ui-web/primitives/Table/Table"
 
 type Invoice = { id: string; date: string; description: string; amount: string; status: "Paid" | "Failed" | "Refunded" }
 
@@ -200,8 +200,7 @@ export function BillingPage({ plan, card, invoices, pastDue, loading, onUpdateCa
           <Card variant="outlined">
             <CardHeader><CardTitle>Invoices</CardTitle></CardHeader>
             <CardContent>
-              <Table>
-                <TableCaption>Invoices</TableCaption>
+              <Table aria-label="Invoices">
                 <TableHeader>
                   <TableRow>
                     <TableHead>Date</TableHead>
@@ -228,19 +227,22 @@ export function BillingPage({ plan, card, invoices, pastDue, loading, onUpdateCa
             </CardContent>
           </Card>
 
-          <AlertDialog>
-            <AlertDialogTrigger asChild><Button variant="destructive">Cancel plan</Button></AlertDialogTrigger>
-            <AlertDialogContent variant="destructive">
-              <AlertDialogTitle>Cancel your plan?</AlertDialogTitle>
-              <AlertDialogDescription>
-                You keep access until {plan.renews}. After that your workspace becomes read-only and you will not be charged again.
-              </AlertDialogDescription>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Keep plan</AlertDialogCancel>
-                <AlertDialogAction onClick={onCancel}>Cancel plan</AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
+          {/* Cancel sits last and apart, at its own width: a grid item would stretch to the full column. */}
+          <div style={{ justifySelf: "start" }}>
+            <AlertDialog>
+              <AlertDialogTrigger asChild><Button variant="destructive">Cancel plan</Button></AlertDialogTrigger>
+              <AlertDialogContent variant="destructive">
+                <AlertDialogTitle>Cancel your plan?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  You keep access until {plan.renews}. After that your workspace becomes read-only and you will not be charged again.
+                </AlertDialogDescription>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Keep plan</AlertDialogCancel>
+                  <AlertDialogAction onClick={onCancel}>Cancel plan</AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          </div>
         </>
       )}
     </div>

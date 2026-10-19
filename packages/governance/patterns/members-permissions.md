@@ -56,9 +56,9 @@ summary: Manage who has access to a workspace and what each person can do: a tab
 - default · role changed (the Select shows the new role and a success Toast) · role change failed (revert and a danger Toast) · pending invite · last Owner protected (disabled controls and an info Alert) · inviting (the Dialog's confirm `Button` shows `loading`) · removing (the AlertDialog's confirm shows loading) · loading (`Skeleton` rows, the header stays).
 
 ## Accessibility
-- The table has a caption or accessible name ("Members"), column headers with `scope="col"`, and every row's controls name the person ("Role for Sam Ortiz", "Actions for Sam Ortiz").
+- The table has an accessible name (`aria-label="Members"`; Figma draws no visible caption), column headers with `scope="col"`, and every row's controls name the person ("Role for Sam Ortiz", "Actions for Sam Ortiz").
 - A disabled `Select` or menu explains itself in visible text, not only in a tooltip.
-- The Dialog and AlertDialog trap focus, name the action in the title, and return focus to their trigger. After a member is removed, move focus to the table caption.
+- The Dialog and AlertDialog trap focus, name the action in the title, and return focus to their trigger. After a member is removed, move focus to the table.
 - Status is read as text ("Active", "Pending"), never colour alone.
 
 ## Anti-patterns

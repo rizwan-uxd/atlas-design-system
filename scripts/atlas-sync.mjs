@@ -710,6 +710,7 @@ const bullet = (l) => l.replace(/^[·•-]\s*/, "")
 const cell = (t) => t.replace(/\|/g, "\\|")
 
 const guidance = new Map()
+const guidanceRaw = new Map()
 const guidanceErrors = []
 for (const c of comps) {
   const rel = `atlas/${c.name}.md`
@@ -723,6 +724,7 @@ for (const c of comps) {
   }
   const use = guidanceSection(body, "USE WHEN")?.[0], not = guidanceSection(body, "DON'T USE WHEN")?.[0]
   if (use && not) guidance.set(c.name, `**Use:** ${cell(bullet(use))} **Not:** ${cell(bullet(not))}`)
+  if (use && not) guidanceRaw.set(c.name, { use: bullet(use), notUse: bullet(not) })
 }
 if (guidanceErrors.length) {
   console.error(`✗ component guidance validation failed:\n${guidanceErrors.map((e) => `  ${e}`).join("\n")}`)
@@ -764,6 +766,38 @@ write("atlas/index.md", [
     : "Deprecated: none. Never introduce a deprecated asset; the registry is `state/deprecations.json`. Owners: `state/ownership.json`.",
   "",
 ].join("\n"))
+
+/* ── index.json — the same index for tools: fields, not Markdown ── */
+
+write("atlas/index.json", compactJson({
+  _generated: HEADER,
+  syncedAt,
+  figmaVersion,
+  note: "Machine-readable twin of index.md. Open a component's doc or metadata only when you will use it.",
+  components: comps.map((c) => ({
+    name: c.name,
+    tier: c.tier,
+    status: deprecationOf(c.name) ? "deprecated" : "stable",
+    import: `@atlas/ui-web/${c.tier}/${c.name}/${c.name}`,
+    variants: c.variants ?? [],
+    sizes: c.sizes ?? [],
+    use: guidanceRaw.get(c.name)?.use ?? null,
+    notUse: guidanceRaw.get(c.name)?.notUse ?? null,
+    doc: `atlas/${c.name}.md`,
+    metadata: `atlas/metadata/${c.name}.json`,
+  })),
+  patterns: patterns.map((p) => ({ slug: p.slug, title: p.title, summary: p.summary, doc: `atlas/patterns/${p.slug}.md` })),
+  deprecations: deprecations.map((d) => ({ name: d.name, kind: d.kind ?? null, replacement: d.replacement ?? null })),
+  tokens: "atlas/tokens.json",
+  state: {
+    status: "atlas/state/status.json",
+    decisions: "atlas/state/decisions.json",
+    discrepancies: "atlas/state/discrepancies.json",
+    candidates: "atlas/state/candidates.json",
+    deprecations: "atlas/state/deprecations.json",
+    ownership: "atlas/state/ownership.json",
+  },
+}))
 
 /* ── tokens ─────────────────────────────────────────────── */
 
