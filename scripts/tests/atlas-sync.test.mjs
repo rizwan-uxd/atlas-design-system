@@ -283,6 +283,29 @@ test("index has a `Use for / Not for` column filled from each component doc, and
   }
 })
 
+test("index.json lists every component and pattern of index.md with the raw first lines of its guidance", () => {
+  const dir = copyInputs()
+  try {
+    run(dir)
+    const idx = fs.readFileSync(path.join(dir, "atlas/index.md"), "utf8")
+    const json = JSON.parse(fs.readFileSync(path.join(dir, "atlas/index.json"), "utf8"))
+    const names = fs.readdirSync(path.join(dir, "atlas/metadata")).map((f) => f.replace(/\.json$/, "")).sort()
+    assert.deepEqual(json.components.map((c) => c.name).sort(), names)
+    for (const c of json.components) {
+      assert.ok(indexRow(idx, c.name), `${c.name} is in index.md too`)
+      assert.equal(c.import, `@atlas/ui-web/${c.tier}/${c.name}/${c.name}`)
+      const doc = fs.readFileSync(path.join(dir, c.doc), "utf8")
+      assert.equal(c.use, firstLine(doc, "USE WHEN"), `${c.name}: raw USE WHEN, pipes unescaped`)
+      assert.equal(c.notUse, firstLine(doc, "DON'T USE WHEN"))
+      assert.ok(fs.existsSync(path.join(dir, c.metadata)), `${c.name} metadata path exists`)
+    }
+    for (const p of json.patterns) assert.ok(fs.existsSync(path.join(dir, p.doc)), `${p.slug} doc path exists`)
+    for (const f of [json.tokens, ...Object.values(json.state)]) assert.ok(fs.existsSync(path.join(dir, f)), `${f} exists`)
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true })
+  }
+})
+
 test("guidance is taken from the first line only and pipes are escaped", () => {
   const dir = copyInputs()
   try {
