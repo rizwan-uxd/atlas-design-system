@@ -1,0 +1,8 @@
+{
+  "ok": true,
+  "failures": [],
+  "facts": {
+    "skill": false,
+    "routingRow": false
+  }
+}
