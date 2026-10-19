@@ -71,10 +71,10 @@ export BENCH_COMMIT=$(git rev-parse HEAD) BENCH_PIN_MODEL=claude-sonnet-5-5   # 
 M=claude-sonnet-5-5; PATCH=benchmarks/phase-10/no-pattern-skill.patch
 
 # 1. $0: build the workspaces, run the fixture gate, record pins
-for t in T17 T18; do
-  BENCH_DRY=1 benchmarks/run.sh wave2-skill-${t,,} $t 1 $M
-  BENCH_DRY=1 BENCH_PATCH=$PATCH benchmarks/run.sh wave2-noskill-${t,,} $t 1 $M
-done
+BENCH_DRY=1 benchmarks/run.sh wave2-skill-t17 T17 1 $M
+BENCH_DRY=1 BENCH_PATCH=$PATCH benchmarks/run.sh wave2-noskill-t17 T17 1 $M
+BENCH_DRY=1 benchmarks/run.sh wave2-skill-t18 T18 1 $M
+BENCH_DRY=1 BENCH_PATCH=$PATCH benchmarks/run.sh wave2-noskill-t18 T18 1 $M
 # 2. paid, cheapest first (3 reps each, about $11 in total)
 benchmarks/run.sh wave2-skill-t17 T17 3 $M
 BENCH_PATCH=$PATCH benchmarks/run.sh wave2-noskill-t17 T17 3 $M
