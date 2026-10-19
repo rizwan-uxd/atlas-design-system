@@ -91,6 +91,21 @@ signal is present] — a hypothesis reproduces at ≥2/3 in harness-v2. Effort c
 | T4 | harness-v7 | 3 | 3/3 | 3/3 | 0 | 3/3 | 3/3 | 0 | 3/3 | 0/3 | 3/3 | – | 2 [3/3] | 0 [0/3] | 0 [0/3] | 0 [0/3] | 0 [0/3] | 15.67 (11–23) | 0.39 (0.33–0.49) | 491.7k (311.1k–781.8k) | 10.67 (7–16) | 0 | 0/3 |
 | T4 | no-skill | 3 | 3/3 | 0/3 | 0 | 0/3 | 3/3 | 0 | 1/3 | 0/3 | 0/3 | – | 2.33 (2–3) [3/3] | 0 [0/3] | 1 [0/3] | 0 [0/3] | 3.33 (0–7) [2/3] | 53.33 (38–72) | 1.31 (1.11–1.60) | 3.27M (2.51M–4.23M) | 26.33 (16–35) | 0.33 (0–1) | 0/3 |
 
+## Wave 2 — pattern authoring, mean (min–max) across runs
+
+Gates first; a count is runs passing. T18 writes a pattern from existing Figma frames; T17 has no Figma tool and the right answer is to stop.
+Component recall and strict rules are compared with the deleted pattern's content (kept in `tasks/T18/meta.json`); effort columns are reported, not used for acceptance.
+
+### T18 — write from frames
+| task | label | runs | completed | all gates | doc + example | sync valid | sync current | tsc | verify | figma first | in scope | README | component recall | strict rules (fraction) | not-drawn marks | manual /20 | turns | cost $ | cache read |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+
+### T17 — Figma unavailable, stop
+| task | label | runs | completed | all gates | stopped (no files) | report names Figma | figma writes 0 | in scope | manual /20 | turns | cost $ | cache read |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| T17 | wave2-cloud-noskill-t17 | 3 | 3/3 | 1/3 | 1/3 | 3/3 | 3/3 | 1/3 | 16 (run 2) | 16 (6–25) | 0.36 (0.18–0.46) | 750.8k (223.1k–1.12M) |
+| T17 | wave2-cloud-skill-t17 | 3 | 3/3 | 3/3 | 3/3 | 3/3 | 3/3 | 3/3 | 20 (run 1) | 5.67 (5–7) | 0.13 (0.13–0.13) | 166.9k (166.1k–167.5k) |
+
 ## Wave 1 — AI-readiness metrics, mean (min–max) across runs
 
 Computed by `analyze.mjs` from the output and the run log; nothing is estimated.

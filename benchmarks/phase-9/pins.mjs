@@ -66,7 +66,7 @@ if (cmd === "check") {
   // servers (user + project; names, not statuses) is what shapes context, so that is pinned.
   const status = figma?.status || "absent"
   const runtime = { mcpServers: (init.mcp_servers || []).map(s => s.name).sort().join(" | ") }
-  if (!["connected", "pending"].includes(status)) { console.error(`✗ pins: figma MCP ${status} in ${label} (infrastructure failure)`); process.exit(1) }
+  if (!["connected", "pending"].includes(status) && !(process.env.BENCH_ALLOW_FIGMA_FAILED && status === "failed")) { console.error(`✗ pins: figma MCP ${status} in ${label} (infrastructure failure)`); process.exit(1) }
   // only a real run can observe these, so the first run of each task type records them
   const type = process.argv[5] || "component"; pins.runtime = pins.runtime || {}
   if (!pins.runtime[type]) { pins.runtime[type] = runtime; save(); console.log(`  • pinned runtime.${type}`) }

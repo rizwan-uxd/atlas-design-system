@@ -1,0 +1,113 @@
+{
+  "model": "claude-sonnet-5-5",
+  "ok": true,
+  "error": null,
+  "turns": 6,
+  "durationS": 33,
+  "costUsd": 0.17869279999999998,
+  "tokens": {
+    "input": 10,
+    "cacheWrite": 33194,
+    "cacheRead": 223068,
+    "output": 2359,
+    "totalContext": 256272
+  },
+  "tools": {
+    "Skill": 1,
+    "Bash": 3
+  },
+  "toolCalls": 4,
+  "figmaCalls": 0,
+  "verifyRuns": 0,
+  "reworkEdits": 0,
+  "toolResultChars": {
+    "Skill": 32,
+    "Bash": 41479
+  },
+  "skillsUsed": [
+    "atlas-component"
+  ],
+  "reads": {
+    "total": 0,
+    "unique": 0,
+    "offTask": 0,
+    "byCategory": {},
+    "files": []
+  },
+  "bashCmds": [
+    "cd /tmp/atlas-bench/wave2-cloud-noskill-t17-T17-2; grep -il \"upload\" -r atlas | head; ls atlas atlas/patterns atlas/state; cat atlas/state/decisions.json | head -60; cat .claude/skills/atlas-component/references/figma-first.md | head -60",
+    "cd /tmp/atlas-bench/wave2-cloud-noskill-t17-T17-2; grep -in \"upload\\|dropzone\\|file\" atlas/index.md atlas/state/candidates.json atlas/state/decisions.json | head -20; sed -n 60,200p atlas/state/decisions.json | grep -i -B1 -A3 \"pattern\"; ls packages/ui-web/src/patterns",
+    "cd /tmp/atlas-bench/wave2-cloud-noskill-t17-T17-2; sed -n 60,90p atlas/index.md | cut -c1-300; grep -n \"Progress\\|ListItem\\|Alert \" atlas/index.md | cut -c1-400 | head"
+  ],
+  "quality": {
+    "outputExists": false,
+    "files": 0,
+    "loc": 1,
+    "registered": false,
+    "tokenLintViolations": 0,
+    "tscErrors": 0,
+    "atlasComponentsImported": [],
+    "expectedCoverage": "0/0",
+    "rawElements": 0,
+    "numericStyleLiterals": 0,
+    "primitiveTokenRefs": 0
+  },
+  "phase8": {
+    "readsAll": {
+      "total": 8,
+      "unique": 4,
+      "viaBash": 8,
+      "files": [
+        "Bash:atlas/state/decisions.json",
+        "Bash:.claude/skills/atlas-component/references/figma-first.md",
+        "Bash:atlas/index.md",
+        "Bash:atlas/state/candidates.json",
+        "Bash:atlas/state/decisions.json",
+        "Bash:atlas/state/decisions.json",
+        "Bash:atlas/index.md",
+        "Bash:atlas/index.md"
+      ]
+    },
+    "sourceOpened": {},
+    "sourceOpenedCount": 0,
+    "verify": {
+      "runs": 0,
+      "failures": 0,
+      "firstPass": null,
+      "finalPass": null,
+      "calls": []
+    },
+    "wasted": {
+      "duplicateReads": 4,
+      "unusedComponentReads": [],
+      "offTask": [],
+      "verifierInternals": [],
+      "failedToolCalls": 0,
+      "total": 4
+    },
+    "gaps": {
+      "available": true,
+      "candidatesChanged": [],
+      "expected": [],
+      "recognised": []
+    }
+  },
+  "pattern": {
+    "changed": [],
+    "outOfScope": [],
+    "forbiddenTouched": [],
+    "created": [],
+    "useFigmaAttempts": 0,
+    "figmaReads": [],
+    "permissionDenials": 0,
+    "gates": {
+      "stopped": true,
+      "reportNamesFigma": true,
+      "figmaWrites": true,
+      "scope": true
+    },
+    "gatesPass": true,
+    "maxTurnsExit": false
+  },
+  "subtype": "success"
+}

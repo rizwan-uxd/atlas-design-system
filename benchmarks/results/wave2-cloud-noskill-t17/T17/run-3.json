@@ -1,0 +1,243 @@
+{
+  "model": "claude-sonnet-5-5",
+  "ok": true,
+  "error": null,
+  "turns": 25,
+  "durationS": 171,
+  "costUsd": 0.4596438,
+  "tokens": {
+    "input": 36,
+    "cacheWrite": 52852,
+    "cacheRead": 1115738,
+    "output": 13659,
+    "totalContext": 1168626
+  },
+  "tools": {
+    "Skill": 1,
+    "Bash": 15,
+    "Read": 3,
+    "Grep": 2,
+    "Write": 2
+  },
+  "toolCalls": 23,
+  "figmaCalls": 0,
+  "verifyRuns": 5,
+  "reworkEdits": 2,
+  "toolResultChars": {
+    "Skill": 32,
+    "Bash": 43844,
+    "Read": 9411,
+    "Grep": 1052,
+    "Write": 390
+  },
+  "skillsUsed": [
+    "atlas-component"
+  ],
+  "reads": {
+    "total": 3,
+    "unique": 3,
+    "offTask": 1,
+    "byCategory": {
+      "skills": 1,
+      "other": 1,
+      "governance": 1
+    },
+    "files": [
+      ".claude/skills/atlas-component/references/figma-first.md",
+      "scripts/atlas-sync.mjs",
+      "packages/governance/patterns/examples/error-recovery.example.tsx"
+    ]
+  },
+  "bashCmds": [
+    "cd /tmp/atlas-bench/wave2-cloud-noskill-t17-T17-3; cat atlas/index.md | head -80; ls atlas atlas/patterns atlas/state; cat atlas/state/decisions.json | head -60; grep -il \"upload\" -r atlas | head",
+    "cd /tmp/atlas-bench/wave2-cloud-noskill-t17-T17-3; grep -n -i -B2 -A8 \"upload\\|dropzone\\|file\" atlas/state/candidates.json | head -60; sed -n 60,200p atlas/state/decisions.json; head -30 atlas/patterns/error-recovery.md; grep -rn \"patterns/\" scripts/atlas-sync.mjs | head",
+    "cd /tmp/atlas-bench/wave2-cloud-noskill-t17-T17-3; grep -n -i \"upload\\|dropzone\\|file-upload\\|FileUpload\" atlas/state/*.json | cut -c1-300 | head -20; sed -n 1,25p atlas/patterns/error-recovery.md; git status --short | head",
+    "cd /tmp/atlas-bench/wave2-cloud-noskill-t17-T17-3; ls packages/governance/patterns; grep -rn \"governance/patterns\\|error-recovery\" --include=*.mjs --include=*.ts --include=*.json --include=*.md . -l 2>/dev/null | grep -v node_modules | head; sed -n 25,80p atlas/patterns/error-recovery.md; cat atlas/Progress.md | head -40",
+    "cd /tmp/atlas-bench/wave2-cloud-noskill-t17-T17-3; grep -n \"patterns\" scripts/atlas-sync.mjs | head -20; ls packages/governance/patterns/examples; head -5 packages/governance/patterns/error-recovery.md; grep -n \"error-recovery\" claude.md packages/governance/token-lint.mjs scripts/tests/atlas-sync.test.mjs | head; for c in ListItem Progress Button; do echo \"== $c\"; sed -n '/generated-api/,/END:generated-api/p' atlas/$c.md | head -40; done",
+    "cd /tmp/atlas-bench/wave2-cloud-noskill-t17-T17-3; grep -n \"patterns\" scripts/atlas-sync.mjs | head -20; ls packages/governance/patterns/examples; head -5 packages/governance/patterns/error-recovery.md; grep -n \"error-recovery\" claude.md packages/governance/token-lint.mjs scripts/tests/atlas-sync.test.mjs | head",
+    "cd /tmp/atlas-bench/wave2-cloud-noskill-t17-T17-3; sed -n '/generated-api/,/END:generated-api/p' atlas/ListItem.md | head -40; sed -n '/generated-api/,/END:generated-api/p' atlas/Progress.md | head -30; sed -n '/generated-api/,/END:generated-api/p' atlas/Alert.md | head -30",
+    "cd /tmp/atlas-bench/wave2-cloud-noskill-t17-T17-3/packages/ui-web/src; sed -n 15,48p compositions/ListItem/ListItem.tsx; sed -n 84,100p compositions/ListItem/ListItem.tsx; grep -n \"loading\\|iconOnly\\|asChild\\|ButtonVariant =\\|ButtonSize =\" primitives/Button/Button.tsx | head; ls ../../../packages/ui-web/src/*/ | grep -i \"icon\\|file\" | head; sed -n 1,30p primitives/Badge/Badge.tsx | grep -n \"Variant\\|Size\"; grep -n \"export\" ../../../packages/governance/patterns/examples/form.example.tsx | head -3; ls ../../../node_modules/lucide-react >/dev/null && echo lucide ok",
+    "cd /tmp/atlas-bench/wave2-cloud-noskill-t17-T17-3/packages/ui-web/src; sed -n 15,48p compositions/ListItem/ListItem.tsx; sed -n 84,100p compositions/ListItem/ListItem.tsx; grep -n \"loading\\|iconOnly\\|asChild\\|ButtonVariant =\\|ButtonSize =\" primitives/Button/Button.tsx",
+    "cd /tmp/atlas-bench/wave2-cloud-noskill-t17-T17-3; sed -n 36,52p packages/ui-web/src/primitives/Button/Button.tsx; grep -n \"^\\s\\+\\w\\+?\\?:\" packages/ui-web/src/compositions/Alert/Alert.tsx packages/ui-web/src/compositions/Card/Card.tsx packages/ui-web/src/compositions/EmptyState/EmptyState.tsx | head -30; grep -n \"Atlas-sync\\|atlas:sync\\|\\\"atlas\" package.json; grep -n \"token-lint\\|examples\" packages/governance/token-lint.mjs | head -5",
+    "cd /tmp/atlas-bench/wave2-cloud-noskill-t17-T17-3; sed -n 8,20p packages/governance/token-lint.mjs; grep -n \"atlas-text\\|style=\" packages/governance/patterns/examples/empty-state.example.tsx | head -8; grep -n \"Spinner\\|Badge\" atlas/index.md | head -0; grep -n \"^export\\|^  [a-z]\" packages/ui-web/src/primitives/Badge/Badge.tsx | head -12",
+    "cd /tmp/atlas-bench/wave2-cloud-noskill-t17-T17-3/packages/governance/patterns; cat > file-upload.md <<'EOF'\n---\nsummary: Let the user choose or drop files, see per-file upload progress, and recover from failed uploads with retry.\n---\n# File upload\n\n## Use when\n- The user attaches one or more files to a record, message or form: documents, images, imports.\n- Each file uploads on its own and the user needs to see which succeeded, which are running and which failed.\n\n## Don't use when\n- The user only needs to type a value. Use the Form pattern.\n- A whole request failed, not one file. Use the Error recovery pattern.\n- The list of already-stored files is the point, with no new uploads. Use a `Table` or a list of `ListItem`s.\n\n## Decision rules\n- Two ways in, always both: a drop target and a \"Choose files\" `Button` that opens the native picker. Dropping is a shortcut, never the only path (keyboard, touch and assistive tech use the button).\n- State the limits before the user picks: accepted types, maximum size, maximum count, as helper text under the drop target. Reject a file that breaks a limit immediately, per file, with the reason; do not start its upload and do not reject the others.\n- Each chosen file becomes one `ListItem` row (`variant=\"outline\"`, `size=\"sm\"`) below the drop target: file name as title, size or status as description, one trailing action. Files upload in parallel and independently.\n- Per-file status decides the row:\n  - queued / uploading: a determinate `Progress` (`value` from the real byte count, `valueLabel` \"42%\") under the name; trailing action is a Cancel icon `Button`. Use `indeterminate` only while the size is unknown.\n  - done: a `Badge variant=\"success\"` \"Uploaded\"; trailing action is Remove.\n  - failed: a `Badge variant=\"danger\"` \"Failed\", the cause in the row description (\"Connection lost\", \"Larger than 10 MB\"), no progress bar; trailing action is a `Button variant=\"outline\" size=\"sm\"` \"Retry\" (`loading` while it retries) beside Remove.\n- Classify the failure as in Error recovery. A transient failure (network, timeout, 5xx) offers Retry with the same file. A rejected file (too large, wrong type) offers only Remove: retrying the same file will fail again.\n- Retry re-uploads only that file; the others are untouched. Keep the failed row in place and in order. Never clear the list on failure.\n- When two or more files have failed, add one `Alert variant=\"danger\"` above the list (\"2 files didn't upload\") with a \"Retry all\" action for the retryable ones. One failed file needs no Alert, its row is enough.\n- Removing an uploaded file is undoable by re-adding it; do not confirm. Only use `AlertDialog` if removal deletes data on the server that cannot be restored.\n- A submit action that depends on the files (Save, Send) stays disabled while any file is uploading, and is enabled with failed files present only when the form allows submitting without them; say so in the Alert.\n\n## Components and variants\n- `Alert` variant: `danger` · size: `md`\n- `Badge` variant: `success`, `danger` · size: `sm`\n- `Button` variant: `outline`, `ghost` · size: `sm`, `md`\n- `Card` variant: `outlined` · size: `md`\n- `ListItem` variant: `outline` · size: `sm`\n- `Progress`\n\n## Layout and density\n- Drop target on top, full width of the content column: a `Card variant=\"outlined\"` holding an icon, one instruction line, the limits as helper text and the \"Choose files\" Button. Highlight it while a drag is over it using the existing selected treatment; do not add a new colour.\n- File rows stack below with `--atlas-spacing-2` between them; the Alert, when present, sits between the drop target and the rows.\n- Row actions are `size=\"sm\"`; icon-only actions are `iconOnly` with an `aria-label` that names the file (\"Remove report.pdf\").\n\n## Hierarchy and composition\n- Drop target → limits → (Alert) → file rows → form actions. The drop target stays visible after files are added so more can be added.\n- Within a row: file name, then status or progress, then actions at the end edge.\n- Typography: the instruction line `--atlas-text-body`, limits and row descriptions `--atlas-text-body-sm`. Set every heading and paragraph from `--atlas-text-*` or `--atlas-font-size-*`; never a bare `<p>`.\n\n## Responsive behavior\n- On a phone there is no drag: the drop target collapses to the \"Choose files\" Button with the limits underneath. Rows stay one per line; the name truncates with an ellipsis and the full name stays in the accessible name.\n- Retry and Remove stay visible on the row, not behind a menu.\n\n## States\n- empty (drop target only) · drag-over · queued · uploading (per file) · done · failed (retryable) · rejected (not retryable) · retrying (`loading` on that row's Retry) · cancelled (row removed).\n- Disabled (the form is read-only or the file count limit is reached): the picker Button is `disabled` and the drop target ignores drops; helper text says why.\n\n## Accessibility\n- The native `<input type=\"file\">` is visually hidden but stays in the tab order through its `Button`; the Button label is the control's name. Do not make the drop target the only focusable path.\n- Each `Progress` is named after its file (`label` or `aria-label` \"Uploading report.pdf\") and exposes `aria-valuenow`. Do not announce every percentage: announce start, completion and failure only.\n- Announce results through one polite live region (\"report.pdf uploaded\", \"report.pdf failed to upload\") next to the list; the optional `Alert variant=\"danger\"` already has `role=\"alert\"`, so do not duplicate it there.\n- After Retry or Remove, focus moves to the next row's action, or to the \"Choose files\" Button when the list is empty; never lost to the page.\n- Status is never colour alone: Badges carry text, and failed rows state the cause.\n\n## Anti-patterns\n- A drop target as the only way to add files.\n- Rejecting the whole batch because one file is invalid.\n- Clearing the list or the form when an upload fails.\n- Retry offered for a file that was rejected for size or type.\n- A progress bar that jumps to 100% or runs on a timer instead of real progress.\n- \"Upload failed\" with no cause.\n- Per-percentage screen reader announcements.\n- A new bespoke dropzone colour, border style or progress colour.\n\n## Example\n{{example}}\nEOF\ncat > examples/file-upload.example.tsx <<'EOF'\nimport { useRef, useState } from \"react\"\nimport { Alert } from \"@atlas/ui-web/compositions/Alert/Alert\"\nimport { Card } from \"@atlas/ui-web/compositions/Card/Card\"\nimport { ListItem, ListItemContent, ListItemDescription, ListItemActions, ListItemTitle } from \"@atlas/ui-web/compositions/ListItem/ListItem\"\nimport { Badge } from \"@atlas/ui-web/primitives/Badge/Badge\"\nimport { Button } from \"@atlas/ui-web/primitives/Button/Button\"\nimport { Progress } from \"@atlas/ui-web/primitives/Progress/Progress\"\n\ntype FileStatus = \"uploading\" | \"done\" | \"failed\" | \"rejected\"\ntype UploadFile = { id: string; name: string; progress: number; status: FileStatus; retrying?: boolean; reason?: string }\n\nconst MAX_BYTES = 10 * 1024 * 1024\n\nexport function FileUpload({ files, onAdd, onRetry, onRetryAll, onRemove }:\n  { files: UploadFile[]; onAdd: (picked: File[]) => void; onRetry: (id: string) => void; onRetryAll: () => void; onRemove: (id: string) => void }) {\n  const input = useRef<HTMLInputElement>(null)\n  const [over, setOver] = useState(false)\n  // Rejected files cannot be retried (the same file fails again); only transient failures can.\n  const retryable = files.filter((f) => f.status === \"failed\")\n  const failed = files.filter((f) => f.status === \"failed\" || f.status === \"rejected\")\n\n  return (\n    <div style={{ display: \"grid\", gap: \"var(--atlas-spacing-4)\" }}>\n      <Card variant=\"outlined\" selected={over}\n        onDragOver={(e: React.DragEvent) => { e.preventDefault(); setOver(true) }}\n        onDragLeave={() => setOver(false)}\n        onDrop={(e: React.DragEvent) => { e.preventDefault(); setOver(false); onAdd(Array.from(e.dataTransfer.files)) }}>\n        <div style={{ display: \"grid\", justifyItems: \"center\", gap: \"var(--atlas-spacing-2)\", textAlign: \"center\" }}>\n          <p style={{ fontSize: \"var(--atlas-text-body)\", color: \"var(--atlas-foreground)\" }}>Drag files here, or</p>\n          <input ref={input} type=\"file\" multiple hidden accept=\".pdf,.png,.jpg\"\n            onChange={(e) => { onAdd(Array.from(e.target.files ?? [])); e.target.value = \"\" }} />\n          <Button variant=\"outline\" onClick={() => input.current?.click()}>Choose files</Button>\n          <p id=\"upload-limits\" style={{ fontSize: \"var(--atlas-text-body-sm)\", color: \"var(--atlas-foreground-muted)\" }}>\n            PDF, PNG or JPG. Up to {MAX_BYTES / 1024 / 1024} MB each.\n          </p>\n        </div>\n      </Card>\n\n      {failed.length > 1 && (\n        <Alert variant=\"danger\" title={`${failed.length} files didn't upload`}\n          description=\"Your other files are kept. Retry the ones that lost connection, or remove the rest.\"\n          actions={retryable.length > 0 && <Button size=\"sm\" variant=\"primary\" onClick={onRetryAll}>Retry all</Button>} />\n      )}\n\n      <ul aria-label=\"Files\" style={{ display: \"grid\", gap: \"var(--atlas-spacing-2)\", listStyle: \"none\", padding: 0 }}>\n        {files.map((f) => (\n          <ListItem as=\"li\" key={f.id} variant=\"outline\" size=\"sm\">\n            <ListItemContent>\n              <ListItemTitle>{f.name}</ListItemTitle>\n              {f.status === \"uploading\" && (\n                <Progress aria-label={`Uploading ${f.name}`} value={f.progress} valueLabel={`${f.progress}%`} />\n              )}\n              {f.status === \"done\" && <ListItemDescription>Uploaded</ListItemDescription>}\n              {(f.status === \"failed\" || f.status === \"rejected\") && <ListItemDescription>{f.reason}</ListItemDescription>}\n            </ListItemContent>\n            <ListItemActions>\n              {f.status === \"done\" && <Badge variant=\"success\" size=\"sm\">Uploaded</Badge>}\n              {f.status !== \"done\" && f.status !== \"uploading\" && <Badge variant=\"danger\" size=\"sm\">Failed</Badge>}\n              {f.status === \"failed\" && (\n                <Button size=\"sm\" variant=\"outline\" loading={f.retrying} onClick={() => onRetry(f.id)}>Retry</Button>\n              )}\n              <Button size=\"sm\" variant=\"ghost\" onClick={() => onRemove(f.id)}>\n                {f.status === \"uploading\" ? \"Cancel\" : \"Remove\"}<span hidden> {f.name}</span>\n              </Button>\n            </ListItemActions>\n          </ListItem>\n        ))}\n      </ul>\n      <p role=\"status\" aria-live=\"polite\" hidden />\n    </div>\n  )\n}\nEOF\ncd ../../..; npm run atlas:sync 2>&1 | head -30",
+    "cd /tmp/atlas-bench/wave2-cloud-noskill-t17-T17-3; git status --short",
+    "cd /tmp/atlas-bench/wave2-cloud-noskill-t17-T17-3; npm run atlas:sync 2>&1 | head -40; git status --short",
+    "cd /tmp/atlas-bench/wave2-cloud-noskill-t17-T17-3; npm run atlas:verify -- --scope \"packages/governance/patterns/**,atlas/**\" 2>&1 | tail -40"
+  ],
+  "quality": {
+    "outputExists": false,
+    "files": 0,
+    "loc": 1,
+    "registered": false,
+    "tokenLintViolations": 0,
+    "tscErrors": 0,
+    "atlasComponentsImported": [],
+    "expectedCoverage": "0/0",
+    "rawElements": 0,
+    "numericStyleLiterals": 0,
+    "primitiveTokenRefs": 0
+  },
+  "phase8": {
+    "readsAll": {
+      "total": 37,
+      "unique": 23,
+      "viaBash": 32,
+      "files": [
+        "Bash:atlas/index.md",
+        "Bash:atlas/state/decisions.json",
+        ".claude/skills/atlas-component/references/figma-first.md",
+        "Bash:atlas/state/candidates.json",
+        "Bash:atlas/state/decisions.json",
+        "Bash:atlas/patterns/error-recovery.md",
+        "Bash:scripts/atlas-sync.mjs",
+        "Bash:atlas/patterns/error-recovery.md",
+        "Bash:atlas/patterns/error-recovery.md",
+        "Bash:atlas/Progress.md",
+        "Bash:scripts/atlas-sync.mjs",
+        "Bash:packages/governance/patterns/error-recovery.md",
+        "Bash:claude.md",
+        "Bash:packages/governance/token-lint.mjs",
+        "Bash:scripts/tests/atlas-sync.test.mjs",
+        "Bash:scripts/atlas-sync.mjs",
+        "Bash:packages/governance/patterns/error-recovery.md",
+        "Bash:claude.md",
+        "Bash:packages/governance/token-lint.mjs",
+        "Bash:scripts/tests/atlas-sync.test.mjs",
+        "Bash:atlas/ListItem.md",
+        "Bash:atlas/Progress.md",
+        "Bash:atlas/Alert.md",
+        "scripts/atlas-sync.mjs",
+        "packages/governance/patterns/examples/error-recovery.example.tsx",
+        "Grep:packages/ui-web/src/compositions/ListItem/ListItem.tsx",
+        "Grep:packages/ui-web/src/primitives/Progress/Progress.tsx",
+        "Bash:packages/ui-web/src/primitives/Button/Button.tsx",
+        "Bash:packages/ui-web/src/compositions/Alert/Alert.tsx",
+        "Bash:packages/ui-web/src/compositions/Card/Card.tsx",
+        "Bash:packages/ui-web/src/compositions/EmptyState/EmptyState.tsx",
+        "Bash:package.json",
+        "Bash:packages/governance/token-lint.mjs",
+        "Bash:packages/governance/token-lint.mjs",
+        "Bash:packages/governance/patterns/examples/empty-state.example.tsx",
+        "Bash:atlas/index.md",
+        "Bash:packages/ui-web/src/primitives/Badge/Badge.tsx"
+      ]
+    },
+    "sourceOpened": {
+      "verifier-internals": [
+        "scripts/atlas-sync.mjs",
+        "packages/governance/patterns/error-recovery.md",
+        "packages/governance/token-lint.mjs",
+        "scripts/tests/atlas-sync.test.mjs",
+        "packages/governance/patterns/examples/error-recovery.example.tsx",
+        "packages/governance/patterns/examples/empty-state.example.tsx"
+      ],
+      "component-source": [
+        "packages/ui-web/src/compositions/ListItem/ListItem.tsx",
+        "packages/ui-web/src/primitives/Progress/Progress.tsx",
+        "packages/ui-web/src/primitives/Button/Button.tsx",
+        "packages/ui-web/src/compositions/Alert/Alert.tsx",
+        "packages/ui-web/src/compositions/Card/Card.tsx",
+        "packages/ui-web/src/compositions/EmptyState/EmptyState.tsx",
+        "packages/ui-web/src/primitives/Badge/Badge.tsx"
+      ]
+    },
+    "sourceOpenedCount": 13,
+    "verify": {
+      "runs": 5,
+      "failures": 1,
+      "firstPass": false,
+      "finalPass": true,
+      "calls": [
+        {
+          "cmd": "cd /tmp/atlas-bench/wave2-cloud-noskill-t17-T17-3; grep -n \"patterns\" scripts/atlas-sync.mjs | head -20; ls packages/gov",
+          "failed": true
+        },
+        {
+          "cmd": "cd /tmp/atlas-bench/wave2-cloud-noskill-t17-T17-3; grep -n \"patterns\" scripts/atlas-sync.mjs | head -20; ls packages/gov",
+          "failed": false
+        },
+        {
+          "cmd": "cd /tmp/atlas-bench/wave2-cloud-noskill-t17-T17-3; sed -n 36,52p packages/ui-web/src/primitives/Button/Button.tsx; grep ",
+          "failed": false
+        },
+        {
+          "cmd": "cd /tmp/atlas-bench/wave2-cloud-noskill-t17-T17-3; sed -n 8,20p packages/governance/token-lint.mjs; grep -n \"atlas-text\\",
+          "failed": false
+        },
+        {
+          "cmd": "cd /tmp/atlas-bench/wave2-cloud-noskill-t17-T17-3; npm run atlas:verify -- --scope \"packages/governance/patterns/**,atla",
+          "failed": false
+        }
+      ]
+    },
+    "wasted": {
+      "duplicateReads": 14,
+      "unusedComponentReads": [
+        "atlas/Progress.md",
+        "atlas/ListItem.md",
+        "atlas/Alert.md",
+        "packages/ui-web/src/compositions/ListItem/ListItem.tsx",
+        "packages/ui-web/src/primitives/Progress/Progress.tsx",
+        "packages/ui-web/src/primitives/Button/Button.tsx",
+        "packages/ui-web/src/compositions/Alert/Alert.tsx",
+        "packages/ui-web/src/compositions/Card/Card.tsx",
+        "packages/ui-web/src/compositions/EmptyState/EmptyState.tsx",
+        "packages/ui-web/src/primitives/Badge/Badge.tsx"
+      ],
+      "offTask": [],
+      "verifierInternals": [
+        "scripts/atlas-sync.mjs",
+        "packages/governance/patterns/error-recovery.md",
+        "packages/governance/token-lint.mjs",
+        "scripts/tests/atlas-sync.test.mjs",
+        "packages/governance/patterns/examples/error-recovery.example.tsx",
+        "packages/governance/patterns/examples/empty-state.example.tsx"
+      ],
+      "failedToolCalls": 3,
+      "total": 33
+    },
+    "gaps": {
+      "available": true,
+      "candidatesChanged": [],
+      "expected": [],
+      "recognised": []
+    }
+  },
+  "pattern": {
+    "changed": [
+      "atlas/index.md",
+      "atlas/patterns/file-upload.md",
+      "packages/governance/patterns/examples/file-upload.example.tsx",
+      "packages/governance/patterns/file-upload.md"
+    ],
+    "outOfScope": [
+      "atlas/index.md",
+      "atlas/patterns/file-upload.md",
+      "packages/governance/patterns/examples/file-upload.example.tsx",
+      "packages/governance/patterns/file-upload.md"
+    ],
+    "forbiddenTouched": [
+      "atlas/index.md",
+      "atlas/patterns/file-upload.md",
+      "packages/governance/patterns/examples/file-upload.example.tsx",
+      "packages/governance/patterns/file-upload.md"
+    ],
+    "created": [
+      "packages/governance/patterns/file-upload.md",
+      "packages/governance/patterns/examples/file-upload.example.tsx"
+    ],
+    "useFigmaAttempts": 0,
+    "figmaReads": [],
+    "permissionDenials": 4,
+    "gates": {
+      "stopped": false,
+      "reportNamesFigma": true,
+      "figmaWrites": true,
+      "scope": false
+    },
+    "gatesPass": false,
+    "maxTurnsExit": false
+  },
+  "subtype": "success"
+}

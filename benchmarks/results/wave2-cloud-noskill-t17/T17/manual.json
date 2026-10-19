@@ -1,0 +1,1 @@
+{ "run": 2, "A": 3, "B": 5, "C": 3, "D": 5, "total": 16, "notes": "Only run passing all gates (6 turns). Stops, but treats the request as a new component and asks a pattern-versus-component question; names the Figma failure but gives no component or state plan. Runs 1 and 3 wrote the pattern anyway. Not blind." }

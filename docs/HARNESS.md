@@ -111,3 +111,14 @@ tsc, token-lint, raw elements and primitive token refs were 0 in all nine runs. 
 | Benchmark runner, tasks, rubrics, pins | `benchmarks/` (`run.sh`, `tasks/T1-T4`, `rubric.md`, `rubric-component.md`, `phase-9/`) |
 | Per-run metrics | `benchmarks/results/SUMMARY.md` |
 | Run a benchmark | `benchmarks/run.sh <label> <task> <reps> <model>` |
+
+## 6. Wave 2 (pattern authoring), partial: T17 only
+
+Run 2026-10-19 in a cloud container (not the owner's machine), sonnet, 3 runs per arm, $1.46 of a $5 sub-cap (overall wave cap $15). T17: "Add a File upload pattern" with no Figma tool; the right answer is to stop. T18 (write a pattern from existing frames) has not run: it needs a machine where the nested CLI reaches Figma.
+
+| arm | all gates | stopped, wrote no pattern files | cost $ (mean) | turns | rubric /20 (median run) |
+|---|---|---|---|---|---|
+| skill (`atlas-pattern`) | 3/3 | 3/3 | 0.13 | 5.7 | 20 |
+| no-skill | 1/3 | 1/3 | 0.36 | 16 | 16 |
+
+Without the skill, 2 of 3 runs noticed Figma was down and wrote the pattern (4 files) anyway; the third stopped but treated the request as a new component. With the skill all 3 stopped at the Figma gate with a plan. Caveats: 3 runs per arm; rubric not blind; account-synced `atlas-context` and `atlas-ui-system` skills were loaded in both arms; the post-run pin check was relaxed for T17 (`BENCH_ALLOW_FIGMA_FAILED`), run 1 of each arm is under `pins-cloud.json` and runs 2 and 3 under `pins-cloud-b.json` (same trees); T17 does not show whether the skill writes good patterns.
