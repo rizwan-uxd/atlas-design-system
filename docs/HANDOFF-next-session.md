@@ -1,4 +1,4 @@
-# Handoff: next session (library state after PR #84)
+# Handoff: next session (library state after PR #89; wave 2 benchmark in progress)
 
 Written: 2026-10-16. Read this, `AGENTS.md` and the `atlas-component` skill first. **This is the only handoff doc**: every earlier one was deleted (they stay in git history) and their useful gotchas and rules are folded in below.
 
@@ -11,6 +11,16 @@ Written: 2026-10-16. Read this, `AGENTS.md` and the `atlas-component` skill firs
 - `.atlas-pull/` (gitignored scratch) does not exist in a fresh cloud session: see the sync recipe in the gotchas.
 
 - **Agent-ready harness, post-phase-9 work (2026-10-16):** `atlas-pattern` skill added and routed from `AGENTS.md` §9 (patterns are Figma-first), `atlas-prototype` points at the Patterns table, `claude.md` counts refreshed (47 web components: 34 spec-complete, 13 scaffolded; 17 native; 15 patterns), `docs/HARNESS.md` notes the skill (not benchmarked). Later options the user has not chosen: a Wave 2 benchmark of the new patterns (costs spend; earlier cap $42), refinement passes on the 13 scaffolded components, a machine-readable `atlas/index.json` / `llms.txt` layer.
+
+## Session 2026-10-16 to 10-19 (branch `claude/zealous-keller-vcfb6s`, no PR open yet)
+- **Batch-2 pattern examples rendered in Chromium** (Navigation shell, Detail view, Chat, Notifications, Billing, Members) through a throwaway page, since deleted: no console errors; Notifications Unread tab and Mark all as read worked. Not tested: dialogs, loading and error states, dark mode, role revert on failure. Seen, not changed: the Billing "Cancel plan" button stretches full width, and the Billing and Members `TableCaption` shows as visible text. Fix only in the example `.tsx` files if wanted.
+- **Wave 2 benchmark of the `atlas-pattern` skill built** (`benchmarks/README.md` "Wave 2", `benchmarks/phase-10/`, `benchmarks/rubric-pattern.md`, tasks T17 and T18, `no-pattern-skill.patch`). Cap $15, ledgers `results/wave-2-spend*.json`. `run.sh`, `budget.mjs`, `pins.mjs`, `analyze.mjs` and `summarize.mjs` gained a `pattern` task type; phase 9 defaults are unchanged (budget and pins read `BENCH_LEDGER`, `BENCH_CAP`, `BENCH_PINS`; `BENCH_ALLOW_FIGMA_FAILED` tolerates a failed figma server for T17 only).
+- **T17 (Figma unavailable, the right answer is to stop) ran in a cloud container**: skill 3/3 gates, no-skill 1/3, $1.46 spent. Result and caveats are in `docs/HARNESS.md` §6.
+- **T18 (write the Members pattern from its frames) has NOT run.** It needs a machine where the nested `claude` CLI reaches Figma; the cloud nested CLI cannot (its `figma` server is blocked). Runbook: `benchmarks/README.md` Wave 2, about $8 for 6 runs. Frame `1035:3` was confirmed to exist with six frames on 2026-10-19.
+- **Figma access:** the capital-F `Figma` server works from the cloud session (`whoami` passes). The runner uses the lowercase `mcp__figma__*` names, which only connect on the owner's machine.
+- **Auto-mode classifier** denied one edit to a pinned hash in `pins-cloud.json` (tampering with an integrity record). It was not worked around: a fresh `pins-cloud-b.json` was recorded instead, and run 1 of each arm stays under the old file.
+- **Cannot run remotely on the owner's machine** from a cloud session: no local session is reachable and both environments are Anthropic cloud. Remote Control or a self-hosted environment would have to be set up there first (`read_documentation` topic `remote_control.setup`).
+- **Next, in order:** (1) the owner runs T18 on their machine and the session scores it with `rubric-pattern.md`; (2) decide the Billing and caption example nits; (3) the options already listed under "Do next".
 
 ## Start here (new session)
 1. `git status`, the open PR list and CI on `main`. The user wants every commit finished and merged to `main` before new work starts. Leave an open PR alone until "merge N". Run `npm ci` once before any local `tsc` or `atlas:verify`.
