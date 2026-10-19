@@ -57,7 +57,7 @@ summary: Manage a paid plan: current plan and renewal, payment method, invoice h
 
 ## Accessibility
 - Amounts and dates are read as text, with `<time dateTime>` for dates. A status Badge has visible text, never colour alone.
-- The Invoices table has a `TableCaption` ("Invoices"), column headers with `scope="col"`, and each Download button's `aria-label` names its invoice ("Download invoice from 12 Oct 2026").
+- The Invoices table is named with `aria-label="Invoices"` (Figma draws no visible caption), column headers with `scope="col"`, and each Download button's `aria-label` names its invoice ("Download invoice from 12 Oct 2026").
 - The Dialog and AlertDialog trap focus, name the action in the title, and return focus to their trigger. Provider hosted fields need visible labels and are reachable by Tab like any input.
 - The payment Alert uses `role="alert"` only when it appears after load; the one present on first render is read in order.
 - Errors are text next to the field or in the Alert, not colour alone.

@@ -10,7 +10,7 @@ import { Badge } from "@atlas/ui-web/primitives/Badge/Badge"
 import { Button } from "@atlas/ui-web/primitives/Button/Button"
 import { Input } from "@atlas/ui-web/primitives/Input/Input"
 import { Skeleton } from "@atlas/ui-web/primitives/Skeleton/Skeleton"
-import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@atlas/ui-web/primitives/Table/Table"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@atlas/ui-web/primitives/Table/Table"
 
 type Invoice = { id: string; date: string; description: string; amount: string; status: "Paid" | "Failed" | "Refunded" }
 
@@ -125,8 +125,7 @@ export function BillingPage({ plan, card, invoices, pastDue, loading, onUpdateCa
           <Card variant="outlined">
             <CardHeader><CardTitle>Invoices</CardTitle></CardHeader>
             <CardContent>
-              <Table>
-                <TableCaption>Invoices</TableCaption>
+              <Table aria-label="Invoices">
                 <TableHeader>
                   <TableRow>
                     <TableHead>Date</TableHead>
@@ -153,19 +152,22 @@ export function BillingPage({ plan, card, invoices, pastDue, loading, onUpdateCa
             </CardContent>
           </Card>
 
-          <AlertDialog>
-            <AlertDialogTrigger asChild><Button variant="destructive">Cancel plan</Button></AlertDialogTrigger>
-            <AlertDialogContent variant="destructive">
-              <AlertDialogTitle>Cancel your plan?</AlertDialogTitle>
-              <AlertDialogDescription>
-                You keep access until {plan.renews}. After that your workspace becomes read-only and you will not be charged again.
-              </AlertDialogDescription>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Keep plan</AlertDialogCancel>
-                <AlertDialogAction onClick={onCancel}>Cancel plan</AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
+          {/* Cancel sits last and apart, at its own width: a grid item would stretch to the full column. */}
+          <div style={{ justifySelf: "start" }}>
+            <AlertDialog>
+              <AlertDialogTrigger asChild><Button variant="destructive">Cancel plan</Button></AlertDialogTrigger>
+              <AlertDialogContent variant="destructive">
+                <AlertDialogTitle>Cancel your plan?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  You keep access until {plan.renews}. After that your workspace becomes read-only and you will not be charged again.
+                </AlertDialogDescription>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Keep plan</AlertDialogCancel>
+                  <AlertDialogAction onClick={onCancel}>Cancel plan</AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          </div>
         </>
       )}
     </div>
