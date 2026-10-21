@@ -108,5 +108,9 @@
       }
     }
   },
-  "runtime": null
+  "runtime": {
+    "pattern": {
+      "mcpServers": "figma"
+    }
+  }
 }

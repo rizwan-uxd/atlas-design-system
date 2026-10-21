@@ -1,0 +1,271 @@
+{
+  "model": "claude-sonnet-5-5",
+  "ok": true,
+  "error": null,
+  "turns": 26,
+  "durationS": 198,
+  "costUsd": 0.5360081999999999,
+  "tokens": {
+    "input": 36,
+    "cacheWrite": 59559,
+    "cacheRead": 1236596,
+    "output": 17390,
+    "totalContext": 1296191
+  },
+  "tools": {
+    "Skill": 1,
+    "Read": 3,
+    "Bash": 16,
+    "Write": 2,
+    "Edit": 2
+  },
+  "toolCalls": 24,
+  "figmaCalls": 0,
+  "verifyRuns": 5,
+  "reworkEdits": 1,
+  "toolResultChars": {
+    "Skill": 30,
+    "Read": 25256,
+    "Bash": 39356,
+    "Write": 414,
+    "Edit": 342
+  },
+  "skillsUsed": [
+    "atlas-pattern"
+  ],
+  "reads": {
+    "total": 3,
+    "unique": 3,
+    "offTask": 1,
+    "byCategory": {
+      "other": 1,
+      "skills": 1,
+      "atlas-snapshot": 1
+    },
+    "files": [
+      "figma-export/members-and-permissions/frame-tree.txt",
+      ".claude/skills/atlas-pattern/references/doc-template.md",
+      "atlas/index.md"
+    ]
+  },
+  "bashCmds": [
+    "cd /tmp/atlas-bench/wave2-cloud-skill-t18c-T18c-2; ls packages/governance/patterns packages/governance/patterns/examples; git status --short | head",
+    "cd /tmp/atlas-bench/wave2-cloud-skill-t18c-T18c-2/packages/governance; cat patterns/payment-billing.md; cat patterns/examples/payment-billing.example.tsx; grep -n -i -B2 -A2 \"payment\" README.md; ls ../../atlas/Table.md ../../atlas/Select.md ../../atlas/Dialog.md",
+    "cd /tmp/atlas-bench/wave2-cloud-skill-t18c-T18c-2/packages/governance; cat patterns/payment-billing.md; cat patterns/examples/payment-billing.example.tsx; grep -n -i -B2 -A2 \"payment\" README.md",
+    "cd /tmp/atlas-bench/wave2-cloud-skill-t18c-T18c-2; for n in Select DropdownMenu Avatar Toast; do echo \"=== $n\"; sed -n 1,60p atlas/$n.md | cut -c1-220; done; grep -rn \"Toast\\|DropdownMenu\\|Select\" packages/governance/patterns/examples/*.tsx | head -20; grep -n \"spacing-\\|text-\" atlas/tokens.md | head -5",
+    "cd /tmp/atlas-bench/wave2-cloud-skill-t18c-T18c-2 && head -60 atlas/Select.md atlas/DropdownMenu.md atlas/Avatar.md atlas/Toast.md | cut -c1-220; grep -rn \"Toast\\|DropdownMenu\\|Select\" packages/governance/patterns/examples/*.tsx | head -20",
+    "grep -n \"export\" packages/ui-web/src/compositions/Toast/Toast.tsx | head -20; grep -n \"destructive\" packages/ui-web/src/patterns/DropdownMenu/DropdownMenu.tsx | head -5; grep -n \"ghost\\|MoreHorizontal\" packages/governance/patterns/examples/*.tsx | grep -i \"lucide\\|icon\" | head -3; grep -n \"'--atlas-spacing-[0-9]*'\\|atlas-text-body-sm\\|atlas-text-h1\\|atlas-foreground-muted\" atlas/tokens.md | head -4",
+    "sed -n 155,170p packages/ui-web/src/compositions/Toast/Toast.tsx; grep -n \"spacing-\\|text-h1\\|text-body-sm\\|foreground-muted\" atlas/tokens.md | head -6; grep -n \"interface TableHeadProps\\|scope\" packages/ui-web/src/primitives/Table/Table.tsx | head",
+    "cd /tmp/atlas-bench/wave2-cloud-skill-t18c-T18c-2/packages/governance && cat > patterns/members-and-permissions.md <<'EOF'\n---\nsummary: Manage who has access to a workspace and what each person can do: a list of members with role and status, and the sensitive actions (invite, change role, remove), with protected-owner, empty and loading states.\n---\n# Members and permissions\n\n## Use when\n- People share a workspace and an admin must see who has access, change roles, invite people and remove them.\n- Every member has one role from a short list (for example Owner, Admin, Member).\n\n## Don't use when\n- Personal preferences. Use the Settings pattern.\n- A long, filterable audit log. Use the Data table pattern.\n- One person's full profile. Use the Detail view pattern.\n\n## Decision rules\n- The members list is a `Table` inside a `Card variant=\"outlined\"` titled \"Members\", with columns Member, Role and Status plus a row-actions menu. Member is an `Avatar`, the name and the email. The row-actions menu is not drawn in Figma yet.\n- Change a role in place with a `Select` of 2 to 4 roles. It saves at once and a `Toast` confirms, so the user never wonders whether it saved. The `Select` and the `Toast` are not drawn in Figma yet; Figma draws the role as text.\n- Invite is the one primary `Button` (\"Invite member\") in the header, at the inline-end. It opens a `Dialog` with an email `Field` (\"Email address\") and a role `Field` (\"Role\", default \"Member\"). The Dialog body says what each role can do (\"Owners can manage billing; Admins can manage members; Members can edit content.\"), so the role list needs no per-row explanation. The role control inside the Dialog should be a `Select` (Figma draws a `Field` showing \"Member\").\n- Dialog actions are \"Cancel\" (`Button variant=\"ghost\"`) and \"Send invite\" (`Button variant=\"primary\"`).\n- A pending invite shows a \"Pending\" `Badge`, the text \"Invited as Member\" in place of the role control, and offers Resend and Revoke instead of a role change. Resend and Revoke are not drawn in Figma yet.\n- Removing a member opens an `AlertDialog variant=\"destructive\"`. The title names the person (\"Remove Sam Ortiz?\"), the body says what they lose and what stays (\"Sam loses access to this workspace and its projects immediately. Their work stays. You can invite them again later.\"). Actions are \"Cancel\" and a confirm button that names the person (\"Remove Sam\").\n- The last Owner cannot be demoted or removed. The role control and the remove action for that row are disabled, and the reason is written in an `Alert variant=\"info\"` above the list (\"Dana Lee is the only Owner\" / \"Make another member an Owner before changing this role or removing Dana.\"). Never a disabled control with no stated reason.\n- The current user's row says \"You\" after the name (\"Dana Lee (You)\"). Leaving the workspace is a separate action, not part of the row menu (not drawn in Figma yet).\n- No permissions matrix. A role is one fixed value from a short list; do not put checkboxes per permission in each row.\n\n## Components and variants\n- `Card` variant: `outlined` · size: `md`\n- `Table`\n- `Avatar`\n- `Badge`\n- `Select`\n- `DropdownMenu`\n- `Button` variant: `primary`, `ghost` · size: `md`\n- `Dialog`\n- `Field` size: `md`\n- `AlertDialog` variant: `destructive` · size: `md`\n- `Alert` variant: `info` · size: `md`\n- `Toast`\n- `Skeleton`\n\n## Layout and density\n- Single column inside the Navigation shell content column. The header row holds the title \"Members\" at the inline-start and the Invite button at the inline-end. Figma draws it 574px wide on desktop. The Alert, when present, sits between the header and the list, and the list is one Card below it.\n- Header, Alert and list are separated by `--atlas-spacing-4`; Dialog fields by `--atlas-spacing-4`, Dialog actions at the inline-end with `--atlas-spacing-2` between them.\n- Use logical properties (`inline-size`, `padding-inline`, `justify-content: space-between`) so the header and actions mirror in RTL.\n\n## Hierarchy and composition\n- The Invite button is the only primary action on the page. Per-row actions are quiet; Remove is the only destructive style, and it appears only in the AlertDialog.\n- Typography: page title `--atlas-text-h1`; member name `--atlas-text-body`; email, \"Invited as Member\" and Dialog helper text `--atlas-text-body-sm` in `--atlas-foreground-muted`.\n- The Status `Badge` carries the state in text (\"Active\", \"Pending\"); the role is plain text or the `Select`.\n\n## Responsive behavior\n- Phone (390): the header stacks, title above the Invite button (Figma draws the header 356px wide). The table does not fit, so each member is one row in the Card: Avatar, name, and \"Role · Status\" as one muted line (\"Owner · Active\"). Pending invites and the row-actions menu are not drawn on the phone frame yet.\n\n## States\n- default (Owner, Admin and Member rows Active, one Pending invite) · invite Dialog open · remove AlertDialog open · last Owner protected (info Alert above the list, that row's controls disabled) · loading (the header stays; four full-width `Skeleton` rows replace the list) · phone (compact rows).\n- Not drawn in Figma yet: empty (no members besides the current user: the user sees only their own row; an `EmptyState` would be needed to invite the first teammate), error loading (`Alert variant=\"danger\"` with Retry), invite sending (confirm `Button` `loading`), invalid email (`Field` invalid with its message), role saved (`Toast variant=\"success\"`) and role save failed (`Toast variant=\"danger\"` and the previous role restored).\n\n## Accessibility\n- The member list is a real table named \"Members\"; column headers use `scope=\"col\"`. The row-actions trigger is an icon-only button whose `aria-label` names the person (\"Actions for Sam Ortiz\").\n- Each role `Select` has an accessible name that includes the person (\"Role for Sam Ortiz\"). Avatar is decorative (`alt=\"\"`) because the name is beside it.\n- The Dialog and AlertDialog trap focus, name their action in the title, close with Escape and return focus to their trigger. The AlertDialog's initial focus is on Cancel.\n- A disabled control is paired with visible text for the reason (the Alert), and the control is `aria-describedby` that Alert so the reason is read with it.\n- Status is text in a Badge, never colour alone. A saved role is announced by the Toast (`role=\"status\"`).\n\n## Anti-patterns\n- Removing a member without naming them and the consequence.\n- A disabled control with no stated reason.\n- Role as free text instead of a `Select` of fixed roles.\n- Letting the last Owner be removed or demoted.\n- A permissions matrix of many checkboxes inside each row.\n- Changing someone's role with no confirmation that it saved.\n- A second primary button beside Invite.\n\n## Example\n{{example}}\nEOF\ncat > patterns/examples/members-and-permissions.example.tsx <<'EOF'\nimport * as React from \"react\"\nimport { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription,\n  AlertDialogFooter, AlertDialogTitle } from \"@atlas/ui-web/compositions/AlertDialog/AlertDialog\"\nimport { Alert } from \"@atlas/ui-web/compositions/Alert/Alert\"\nimport { Card, CardContent, CardHeader, CardTitle } from \"@atlas/ui-web/compositions/Card/Card\"\nimport { Dialog, DialogBody, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from \"@atlas/ui-web/compositions/Dialog/Dialog\"\nimport { Field } from \"@atlas/ui-web/compositions/Field/Field\"\nimport { toast } from \"@atlas/ui-web/compositions/Toast/Toast\"\nimport { Avatar } from \"@atlas/ui-web/primitives/Avatar/Avatar\"\nimport { Badge } from \"@atlas/ui-web/primitives/Badge/Badge\"\nimport { Button } from \"@atlas/ui-web/primitives/Button/Button\"\nimport { Input } from \"@atlas/ui-web/primitives/Input/Input\"\nimport { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from \"@atlas/ui-web/primitives/Select/Select\"\nimport { Skeleton } from \"@atlas/ui-web/primitives/Skeleton/Skeleton\"\nimport { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from \"@atlas/ui-web/primitives/Table/Table\"\n\ntype Role = \"Owner\" | \"Admin\" | \"Member\"\ntype Member = { id: string; name: string; email: string; role: Role; pending?: boolean; you?: boolean }\n\nconst ROLES: Role[] = [\"Owner\", \"Admin\", \"Member\"]\n\nconst title = { fontSize: \"var(--atlas-text-h1)\" }\nconst muted = { fontSize: \"var(--atlas-text-body-sm)\", color: \"var(--atlas-foreground-muted)\" }\n\nexport function MembersPage({ members, loading, onInvite, onChangeRole, onRemove }: {\n  members: Member[]\n  loading?: boolean\n  onInvite: (email: string, role: Role) => Promise<void>\n  onChangeRole: (id: string, role: Role) => Promise<void>\n  onRemove: (id: string) => Promise<void>\n}) {\n  const [inviteOpen, setInviteOpen] = React.useState(false)\n  const [email, setEmail] = React.useState(\"\")\n  const [inviteRole, setInviteRole] = React.useState<Role>(\"Member\")\n  const [removing, setRemoving] = React.useState<Member | null>(null)\n\n  // The last Owner cannot be demoted or removed; the Alert below states why.\n  const owners = members.filter((m) => m.role === \"Owner\" && !m.pending)\n  const lastOwner = owners.length === 1 ? owners[0] : undefined\n\n  const changeRole = async (m: Member, role: Role) => {\n    await onChangeRole(m.id, role)\n    toast({ variant: \"success\", title: `${m.name} is now ${role}` })\n  }\n\n  const invite = async () => {\n    await onInvite(email, inviteRole)\n    setInviteOpen(false)\n    setEmail(\"\")\n  }\n\n  return (\n    <div style={{ display: \"grid\", gap: \"var(--atlas-spacing-4)\", maxInlineSize: \"48rem\" }}>\n      <div style={{ display: \"flex\", flexWrap: \"wrap\", alignItems: \"center\", justifyContent: \"space-between\", gap: \"var(--atlas-spacing-4)\" }}>\n        <h1 style={title}>Members</h1>\n        <Button variant=\"primary\" onClick={() => setInviteOpen(true)}>Invite member</Button>\n      </div>\n\n      {lastOwner && (\n        <Alert\n          variant=\"info\"\n          id=\"last-owner\"\n          title={`${lastOwner.name} is the only Owner`}\n          description={`Make another member an Owner before changing this role or removing ${lastOwner.name.split(\" \")[0]}.`}\n        />\n      )}\n\n      {loading ? (\n        <div role=\"status\" aria-label=\"Loading members\" style={{ display: \"grid\", gap: \"var(--atlas-spacing-4)\" }}>\n          <Skeleton /><Skeleton /><Skeleton /><Skeleton />\n        </div>\n      ) : (\n        <Card variant=\"outlined\">\n          <CardHeader><CardTitle>Members</CardTitle></CardHeader>\n          <CardContent>\n            <Table aria-label=\"Members\">\n              <TableHeader>\n                <TableRow>\n                  <TableHead>Member</TableHead>\n                  <TableHead>Role</TableHead>\n                  <TableHead>Status</TableHead>\n                  <TableHead><span style={{ position: \"absolute\", inlineSize: 1, blockSize: 1, overflow: \"hidden\", clipPath: \"inset(50%)\" }}>Actions</span></TableHead>\n                </TableRow>\n              </TableHeader>\n              <TableBody>\n                {members.map((m) => {\n                  const protectedRow = m.id === lastOwner?.id\n                  return (\n                    <TableRow key={m.id}>\n                      <TableCell>\n                        <span style={{ display: \"flex\", alignItems: \"center\", gap: \"var(--atlas-spacing-3)\" }}>\n                          <Avatar size=\"sm\" alt=\"\" initials={m.name.split(\" \").map((p) => p[0]).join(\"\")} />\n                          <span style={{ display: \"grid\" }}>\n                            <span>{m.name}{m.you ? \" (You)\" : \"\"}</span>\n                            <span style={muted}>{m.email}</span>\n                          </span>\n                        </span>\n                      </TableCell>\n                      <TableCell>\n                        {m.pending ? (\n                          <span style={muted}>Invited as {m.role}</span>\n                        ) : (\n                          <Select value={m.role} disabled={protectedRow} onValueChange={(v) => changeRole(m, v as Role)}>\n                            <SelectTrigger size=\"sm\" aria-label={`Role for ${m.name}`} aria-describedby={protectedRow ? \"last-owner\" : undefined}>\n                              <SelectValue />\n                            </SelectTrigger>\n                            <SelectContent>\n                              {ROLES.map((r) => <SelectItem key={r} value={r}>{r}</SelectItem>)}\n                            </SelectContent>\n                          </Select>\n                        )}\n                      </TableCell>\n                      <TableCell><Badge variant={m.pending ? \"warning\" : \"success\"} size=\"md\">{m.pending ? \"Pending\" : \"Active\"}</Badge></TableCell>\n                      <TableCell align=\"end\">\n                        {!m.you && (\n                          <Button variant=\"ghost\" size=\"sm\" disabled={protectedRow}\n                            aria-describedby={protectedRow ? \"last-owner\" : undefined}\n                            aria-label={`${m.pending ? \"Revoke invite for\" : \"Remove\"} ${m.name}`}\n                            onClick={() => setRemoving(m)}>\n                            {m.pending ? \"Revoke\" : \"Remove\"}\n                          </Button>\n                        )}\n                      </TableCell>\n                    </TableRow>\n                  )\n                })}\n              </TableBody>\n            </Table>\n          </CardContent>\n        </Card>\n      )}\n\n      <Dialog open={inviteOpen} onOpenChange={setInviteOpen}>\n        <DialogContent size=\"md\">\n          <DialogHeader><DialogTitle>Invite member</DialogTitle></DialogHeader>\n          <DialogBody>\n            <DialogDescription>\n              They will get an email with a link to join. Owners can manage billing; Admins can manage members; Members can edit content.\n            </DialogDescription>\n            <Field label=\"Email address\" required>\n              {(control) => <Input {...control} type=\"email\" placeholder=\"name@company.com\" value={email} onChange={(e) => setEmail(e.target.value)} />}\n            </Field>\n            <Field label=\"Role\">\n              {(control) => (\n                <Select value={inviteRole} onValueChange={(v) => setInviteRole(v as Role)}>\n                  <SelectTrigger id={control.id}><SelectValue /></SelectTrigger>\n                  <SelectContent>\n                    {ROLES.map((r) => <SelectItem key={r} value={r}>{r}</SelectItem>)}\n                  </SelectContent>\n                </Select>\n              )}\n            </Field>\n          </DialogBody>\n          <DialogFooter>\n            <DialogClose><Button variant=\"ghost\">Cancel</Button></DialogClose>\n            <Button variant=\"primary\" disabled={!email.trim()} onClick={invite}>Send invite</Button>\n          </DialogFooter>\n        </DialogContent>\n      </Dialog>\n\n      <AlertDialog open={!!removing} onOpenChange={(o) => !o && setRemoving(null)}>\n        <AlertDialogContent variant=\"destructive\">\n          <AlertDialogTitle>Remove {removing?.name}?</AlertDialogTitle>\n          <AlertDialogDescription>\n            {removing?.name.split(\" \")[0]} loses access to this workspace and its projects immediately. Their work stays. You can invite them again later.\n          </AlertDialogDescription>\n          <AlertDialogFooter>\n            <AlertDialogCancel>Cancel</AlertDialogCancel>\n            <AlertDialogAction onClick={() => removing && onRemove(removing.id)}>Remove {removing?.name.split(\" \")[0]}</AlertDialogAction>\n          </AlertDialogFooter>\n        </AlertDialogContent>\n      </AlertDialog>\n    </div>\n  )\n}\nEOF\ncd ../.. && sed -i 's/payment and billing, onboarding/members and permissions, payment and billing, onboarding/' packages/governance/README.md && npm run atlas:sync 2>&1 | tail -25",
+    "ls packages/governance/patterns | grep members; git status --short",
+    "sed -i 's/payment and billing, onboarding/members and permissions, payment and billing, onboarding/' packages/governance/README.md && npm run atlas:sync 2>&1 | tail -25",
+    "npm run atlas:sync 2>&1 | tail -25",
+    "npx tsc --noEmit 2>&1 | tail -20",
+    "python3 - <<'EOF'\np='packages/governance/patterns/examples/members-and-permissions.example.tsx'\ns=open(p).read()\na=s.index('      {lastOwner && (')\nb=s.index('      )}\\n',a)+len('      )}\\n')\nnew='''      {lastOwner && (\n        <div id=\"last-owner\">\n          <Alert\n            variant=\"info\"\n            title={`${lastOwner.name} is the only Owner`}\n            description={`Make another member an Owner before changing this role or removing ${lastOwner.name.split(\" \")[0]}.`}\n          />\n        </div>\n      )}\n'''\nopen(p,'w').write(s[:a]+new+s[b:])\nEOF\nnpx tsc --noEmit 2>&1 | tail; npm run atlas:sync 2>&1 | grep -i \"✗\\|written\" ; npm run atlas:verify -- --scope \"packages/governance/**,atlas/patterns/**,atlas/index.md\" 2>&1 | tail -25",
+    "npx tsc --noEmit 2>&1 | tail",
+    "npm run atlas:sync 2>&1 | grep -i \"✗\\|written\\|·\"; npm run atlas:verify -- --scope \"packages/governance/**,atlas/patterns/**,atlas/index.md\" 2>&1 | tail -25",
+    "npm run atlas:verify -- --scope \"packages/governance/**,atlas/patterns/**,atlas/index.md,atlas/index.json\" 2>&1 | tail -4; git status --short"
+  ],
+  "quality": {
+    "outputExists": false,
+    "files": 0,
+    "loc": 1,
+    "registered": false,
+    "tokenLintViolations": 0,
+    "tscErrors": 0,
+    "atlasComponentsImported": [],
+    "expectedCoverage": "0/12",
+    "rawElements": 0,
+    "numericStyleLiterals": 0,
+    "primitiveTokenRefs": 0
+  },
+  "phase8": {
+    "readsAll": {
+      "total": 19,
+      "unique": 14,
+      "viaBash": 16,
+      "files": [
+        "figma-export/members-and-permissions/frame-tree.txt",
+        ".claude/skills/atlas-pattern/references/doc-template.md",
+        "atlas/index.md",
+        "Bash:README.md",
+        "Bash:README.md",
+        "Bash:atlas/tokens.md",
+        "Bash:atlas/Select.md",
+        "Bash:atlas/DropdownMenu.md",
+        "Bash:atlas/Avatar.md",
+        "Bash:atlas/Toast.md",
+        "Bash:packages/ui-web/src/compositions/Toast/Toast.tsx",
+        "Bash:packages/ui-web/src/patterns/DropdownMenu/DropdownMenu.tsx",
+        "Bash:atlas/tokens.md",
+        "Bash:packages/ui-web/src/compositions/Toast/Toast.tsx",
+        "Bash:atlas/tokens.md",
+        "Bash:packages/ui-web/src/primitives/Table/Table.tsx",
+        "Bash:packages/governance/README.md",
+        "Bash:packages/governance/README.md",
+        "Bash:packages/governance/patterns/examples/members-and-permissions.example.tsx"
+      ]
+    },
+    "sourceOpened": {
+      "component-source": [
+        "packages/ui-web/src/compositions/Toast/Toast.tsx",
+        "packages/ui-web/src/patterns/DropdownMenu/DropdownMenu.tsx",
+        "packages/ui-web/src/primitives/Table/Table.tsx"
+      ],
+      "verifier-internals": [
+        "packages/governance/README.md",
+        "packages/governance/patterns/examples/members-and-permissions.example.tsx"
+      ]
+    },
+    "sourceOpenedCount": 5,
+    "verify": {
+      "runs": 5,
+      "failures": 3,
+      "firstPass": false,
+      "finalPass": true,
+      "calls": [
+        {
+          "cmd": "npx tsc --noEmit 2>&1 | tail -20",
+          "failed": true
+        },
+        {
+          "cmd": "python3 - <<'EOF'\np='packages/governance/patterns/examples/members-and-permissions.example.tsx'\ns=open(p).read()\na=s.ind",
+          "failed": true
+        },
+        {
+          "cmd": "npx tsc --noEmit 2>&1 | tail",
+          "failed": false
+        },
+        {
+          "cmd": "npm run atlas:sync 2>&1 | grep -i \"✗\\|written\\|·\"; npm run atlas:verify -- --scope \"packages/governance/**,atlas/pattern",
+          "failed": true
+        },
+        {
+          "cmd": "npm run atlas:verify -- --scope \"packages/governance/**,atlas/patterns/**,atlas/index.md,atlas/index.json\" 2>&1 | tail -",
+          "failed": false
+        }
+      ]
+    },
+    "wasted": {
+      "duplicateReads": 5,
+      "unusedComponentReads": [
+        "atlas/Select.md",
+        "atlas/DropdownMenu.md",
+        "atlas/Avatar.md",
+        "atlas/Toast.md",
+        "packages/ui-web/src/compositions/Toast/Toast.tsx",
+        "packages/ui-web/src/patterns/DropdownMenu/DropdownMenu.tsx",
+        "packages/ui-web/src/primitives/Table/Table.tsx"
+      ],
+      "offTask": [
+        "README.md"
+      ],
+      "verifierInternals": [
+        "packages/governance/README.md",
+        "packages/governance/patterns/examples/members-and-permissions.example.tsx"
+      ],
+      "failedToolCalls": 4,
+      "total": 19
+    },
+    "gaps": {
+      "available": true,
+      "candidatesChanged": [],
+      "expected": [],
+      "recognised": []
+    }
+  },
+  "pattern": {
+    "changed": [
+      "atlas/index.json",
+      "atlas/index.md",
+      "packages/governance/README.md",
+      "atlas/patterns/members-and-permissions.md",
+      "packages/governance/patterns/examples/members-and-permissions.example.tsx",
+      "packages/governance/patterns/members-and-permissions.md"
+    ],
+    "outOfScope": [
+      "atlas/patterns/members-and-permissions.md",
+      "packages/governance/patterns/examples/members-and-permissions.example.tsx",
+      "packages/governance/patterns/members-and-permissions.md"
+    ],
+    "useFigmaAttempts": 0,
+    "figmaReads": [],
+    "permissionDenials": 5,
+    "sectionsMissing": [
+      "Use when",
+      "Don't use when",
+      "Decision rules",
+      "Components and variants",
+      "Layout and density",
+      "Hierarchy and composition",
+      "Responsive behavior",
+      "States",
+      "Accessibility",
+      "Anti-patterns",
+      "Example"
+    ],
+    "namedComponents": [],
+    "componentRecall": 0,
+    "componentsMissing": [
+      "Card",
+      "Table",
+      "Avatar",
+      "Select",
+      "Badge",
+      "Button",
+      "DropdownMenu",
+      "Dialog",
+      "AlertDialog",
+      "Field",
+      "Alert",
+      "Skeleton"
+    ],
+    "strict": {
+      "passed": 0,
+      "total": 8,
+      "failed": [
+        "single-primary-invite",
+        "role-select-fixed-roles",
+        "revert-on-failure",
+        "status-text-not-colour",
+        "remove-destructive-alertdialog",
+        "last-owner-protected",
+        "disabled-has-reason",
+        "loading-skeleton"
+      ]
+    },
+    "notDrawnMarks": 0,
+    "example": {
+      "rawElements": 0,
+      "numericStyleLiterals": 0,
+      "primitiveTokenRefs": 0,
+      "loc": 1
+    },
+    "syncTail": [
+      "    DISC-097 Card [figma] Code has CardFooter justify = start | between | end; Figma Card set 110:24 draws the Footer slot with one fixed alignment and no justify property. Found 2026-10-21 in the Card refinement pass.",
+      "",
+      "  ⚠ no --pull: Figma-side facts were last read 2026-10-10T17:05:52.269Z — re-run the atlas-figma-sync skill to refresh them."
+    ],
+    "tscErrors": 0,
+    "verifyFails": [
+      "paths"
+    ],
+    "generatedHandEdits": [],
+    "gates": {
+      "docAndExample": false,
+      "sectionsComplete": false,
+      "syncValid": true,
+      "syncCurrent": true,
+      "tsc": true,
+      "verify": false,
+      "figmaFirst": true,
+      "figmaWrites": true,
+      "scope": false,
+      "noGeneratedHandEdits": true,
+      "readmeListed": true
+    },
+    "gatesPass": false,
+    "maxTurnsExit": false
+  },
+  "subtype": "success"
+}
