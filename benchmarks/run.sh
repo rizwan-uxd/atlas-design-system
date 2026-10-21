@@ -49,7 +49,7 @@ fi
 
 TOOLS="Read,Glob,Grep,Write,Edit,MultiEdit,Skill,TodoWrite,Bash(npm run:*),Bash(npx tsc:*),Bash(node:*),Bash(ls:*)"
 EXTRA=()
-FIGMA_READ="mcp__figma__get_metadata,mcp__figma__get_design_context,mcp__figma__get_variable_defs,mcp__figma__get_screenshot,mcp__figma__search_design_system,mcp__figma__get_code_connect_map,mcp__figma__get_libraries,mcp__figma__whoami"
+FIGMA_READ="mcp__figma__create_session,mcp__figma__get_metadata,mcp__figma__get_design_context,mcp__figma__get_variable_defs,mcp__figma__get_screenshot,mcp__figma__search_design_system,mcp__figma__get_code_connect_map,mcp__figma__get_libraries,mcp__figma__whoami"
 if [ "$TYPE" = "component" ]; then
   TOOLS="$TOOLS,Bash(npx vitest:*),$FIGMA_READ"
   # a Figma write can't be approved headless, so it isn't offered at all
