@@ -10,12 +10,14 @@
  *   6. CardTitle level, and the title id that names an interactive card
  *   7. CardHeader leading and action slots; CardContent and CardFooter
  *   8. axe accessibility check on each variant, and on an interactive card
+ *   9. Accessible name of an interactive card without a CardTitle: aria-label, or a dev warning
+ *  10. Selected styling uses the card-selected tokens on every variant (Figma State = selected)
  */
 
 import React from "react"
 import { readFileSync } from "node:fs"
 import { join } from "node:path"
-import { describe, it, expect, vi } from "vitest"
+import { describe, it, expect, vi, afterEach } from "vitest"
 import { render, screen, fireEvent } from "@testing-library/react"
 import { axe } from "jest-axe"
 import {
@@ -225,6 +227,51 @@ describe("Card — interactive hover", () => {
   it("has no :active rule on the interactive card (Figma draws active as default)", () => {
     expect(css).not.toMatch(/\.interactive[^{]*:active/)
   })
+})
+
+// ─── 9. Accessible name without a CardTitle ────────────────────────────────
+
+describe("Card — name of an interactive card", () => {
+  afterEach(() => vi.restoreAllMocks())
+
+  it("uses aria-label and drops the title reference", () => {
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {})
+    render(
+      <Card interactive aria-label="Choose the Pro plan">
+        <CardContent>Pro</CardContent>
+      </Card>
+    )
+    const card = screen.getByRole("button", { name: "Choose the Pro plan" })
+    expect(card).not.toHaveAttribute("aria-labelledby")
+    expect(warn).not.toHaveBeenCalled()
+  })
+
+  it("warns in development when an interactive card has neither a CardTitle nor an aria-label", () => {
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {})
+    render(<Card interactive><CardContent>Pro</CardContent></Card>)
+    expect(warn).toHaveBeenCalledWith(expect.stringContaining("needs a name"))
+  })
+
+  it("does not warn when the card has a CardTitle, or is not interactive", () => {
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {})
+    render(<Basic interactive />)
+    render(<Card><CardContent>Static</CardContent></Card>)
+    expect(warn).not.toHaveBeenCalled()
+  })
+})
+
+// ─── 10. Selected styling (Figma State = selected) ─────────────────────────
+
+describe("Card — selected styling", () => {
+  const css = readFileSync(join(__dirname, "../src/compositions/Card/Card.module.css"), "utf8")
+
+  for (const variant of VARIANTS) {
+    it(`${variant} selected uses the selected border and background tokens`, () => {
+      const rules = css.split("}").filter((r) => new RegExp(`\\.selected\\.${variant}\\b`).test(r)).join("}")
+      expect(rules).toContain("var(--atlas-card-selected-border)")
+      expect(rules).toContain("var(--atlas-card-selected-background)")
+    })
+  }
 })
 
 // ─── 8. axe accessibility ──────────────────────────────────────────────────

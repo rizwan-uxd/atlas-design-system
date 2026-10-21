@@ -6,7 +6,8 @@
  * Variants:  default | elevated | outlined | filled
  * Sizes:     sm | md | lg
  * States:    default · hover (interactive) · focus-visible (interactive)
- *            · selected · disabled
+ *            · selected · disabled   (Figma draws all six: State = default | hover |
+ *            focus-visible | active | disabled | selected; active looks like default)
  *
  * Compound API:
  *   <Card>
@@ -20,7 +21,8 @@
  *
  * Accessibility:
  *   - Non-interactive: <article> (semantic landmark)
- *   - Interactive: <button type="button">, aria-labelledby → CardTitle id (via context)
+ *   - Interactive: <button type="button">, named by its CardTitle (aria-labelledby, via context)
+ *     or by an `aria-label` when the card has no CardTitle; with neither, a dev warning
  *   - Selected: aria-pressed="true" (toggle) or aria-selected (listbox/grid)
  *   - Disabled: aria-disabled, pointer-events suppressed
  *   - Focus ring via CSS :focus-visible on the card root
@@ -28,7 +30,7 @@
  * Logical properties and token-only values in Card.module.css.
  */
 
-import React, { createContext, useContext, useId } from "react"
+import React, { createContext, useContext, useEffect, useId } from "react"
 import styles from "./Card.module.css"
 
 /* ── Helpers ─────────────────────────────────────────────────── */
@@ -64,6 +66,8 @@ export interface CardProps {
   selected?:    boolean
   /** Suppresses interaction; applies opacity-disabled */
   disabled?:    boolean
+  /** Accessible name of an interactive Card that has no CardTitle; it replaces the title reference */
+  "aria-label"?: string
   onClick?:     React.MouseEventHandler<HTMLElement>
   className?:   string
   children?:    React.ReactNode
@@ -78,6 +82,7 @@ export function Card({
   interactive = false,
   selected    = false,
   disabled    = false,
+  "aria-label": ariaLabel,
   onClick,
   className,
   children,
@@ -86,6 +91,14 @@ export function Card({
   const generatedId = useId()
   const uid      = id ?? generatedId
   const titleId  = `${uid}-title`
+
+  // An interactive card is a button, so it needs a name: its CardTitle, or `aria-label`.
+  // The title is a child, so the check waits until it has mounted.
+  useEffect(() => {
+    if (process.env.NODE_ENV !== "production" && interactive && !ariaLabel && !document.getElementById(titleId)) {
+      console.warn("[Atlas Card] An interactive Card needs a name: add a CardTitle or pass aria-label.")
+    }
+  }, [interactive, ariaLabel, titleId])
 
   const classes = cx(
     styles.card,
@@ -112,7 +125,8 @@ export function Card({
         <button
           id={uid}
           type="button"
-          aria-labelledby={titleId}
+          aria-label={ariaLabel}
+          aria-labelledby={ariaLabel ? undefined : titleId}
           aria-disabled={disabled || undefined}
           aria-pressed={selected || undefined}
           onClick={disabled ? undefined : onClick}

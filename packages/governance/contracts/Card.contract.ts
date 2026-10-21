@@ -30,6 +30,7 @@ type AssertCardShape = {
   interactive?: boolean
   selected?:    boolean
   disabled?:    boolean
+  "aria-label"?: string
   onClick?:     React.MouseEventHandler<HTMLElement>
   className?:   string
   children?:    React.ReactNode
