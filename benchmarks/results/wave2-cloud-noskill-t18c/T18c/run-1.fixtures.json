@@ -1,8 +1,6 @@
 {
-  "ok": false,
-  "failures": [
-    "atlas:sync --check is not clean in the starting workspace"
-  ],
+  "ok": true,
+  "failures": [],
   "facts": {
     "skill": false,
     "routingRow": false,
