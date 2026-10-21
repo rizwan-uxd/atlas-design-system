@@ -13,6 +13,7 @@
     { "name": "interactive", "required": false, "type": "boolean" },
     { "name": "selected", "required": false, "type": "boolean" },
     { "name": "disabled", "required": false, "type": "boolean" },
+    { "name": "aria-label", "required": false, "type": "string" },
     { "name": "onClick", "required": false, "type": "React.MouseEventHandler<HTMLElement>" },
     { "name": "className", "required": false, "type": "string" },
     { "name": "children", "required": false, "type": "React.ReactNode" },
@@ -22,7 +23,11 @@
   "tokensUsed": ["--atlas-background", "--atlas-background-subtle", "--atlas-border-width-1", "--atlas-border-width-2", "--atlas-card-default-background", "--atlas-card-default-border", "--atlas-card-description-foreground", "--atlas-card-elevated-background", "--atlas-card-elevated-shadow", "--atlas-card-elevated-shadow-hover", "--atlas-card-filled-background", "--atlas-card-filled-background-hover", "--atlas-card-outlined-background", "--atlas-card-outlined-border", "--atlas-card-radius", "--atlas-card-selected-background", "--atlas-card-selected-border", "--atlas-card-size-lg-gap", "--atlas-card-size-lg-padding", "--atlas-card-size-md-gap", "--atlas-card-size-md-padding", "--atlas-card-size-sm-gap", "--atlas-card-size-sm-padding", "--atlas-card-title-foreground", "--atlas-duration-fast", "--atlas-easing-standard", "--atlas-focus-ring", "--atlas-font-sans", "--atlas-font-weight-semibold", "--atlas-line-height-normal", "--atlas-line-height-snug", "--atlas-opacity-disabled", "--atlas-shadow-sm", "--atlas-spacing-0_5", "--atlas-spacing-1", "--atlas-spacing-2", "--atlas-spacing-3", "--atlas-surface-raised", "--atlas-text-body-sm", "--atlas-text-h4"],
   "figmaNodeId": "110:24",
   "figmaFileKey": "cKYhfaHLCoyMHi9nKr63Ig",
-  "figmaProperties": { "Variant": ["default", "outlined", "elevated", "filled"], "Size": ["sm", "md", "lg"], "State": ["default", "hover", "focus-visible", "active", "disabled"] },
+  "figmaProperties": {
+    "Variant": ["default", "outlined", "elevated", "filled"],
+    "Size": ["sm", "md", "lg"],
+    "State": ["default", "hover", "focus-visible", "active", "disabled", "selected"]
+  },
   "syncedAt": "2026-10-10T17:05:52.269Z",
   "figmaVersion": "lib:Atlas Design System v1@2026-07-06T03:42:12Z",
   "source": "figma-synced"

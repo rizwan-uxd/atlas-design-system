@@ -1147,6 +1147,26 @@
       "resolution": "Needs a decision (owner, 2026-10-16: deferred, option C). Either links stay inline in code and Figma drops link sizes and link icon-only (Figma edit, own plan), or code applies size to links. DEC-073 documents a standalone link as Button asChild variant=link inline in text.",
       "firstSeen": "2026-10-16",
       "lastSeen": "2026-10-16"
+    },
+    {
+      "id": "DISC-096",
+      "component": "Card",
+      "side": "figma",
+      "status": "open",
+      "issue": "Code has CardHeader leading and action slots (an inline-start icon or avatar and an inline-end menu or button); Figma Card set 110:24 draws only a title and supporting copy, so they have no Figma design. Found 2026-10-21 in the Card refinement pass, after State = selected was added to Figma.",
+      "resolution": "Open. Either draw the two header slots in Figma (a Leading and an Action boolean with an instance swap each, default off; StatCard instances must not break) or drop them from code. Needs an owner decision and its own plan.",
+      "firstSeen": "2026-10-21",
+      "lastSeen": "2026-10-21"
+    },
+    {
+      "id": "DISC-097",
+      "component": "Card",
+      "side": "figma",
+      "status": "open",
+      "issue": "Code has CardFooter justify = start | between | end; Figma Card set 110:24 draws the Footer slot with one fixed alignment and no justify property. Found 2026-10-21 in the Card refinement pass.",
+      "resolution": "Open. Either draw the three alignments in Figma (a Footer align property) or drop justify from code and let the footer content set its own alignment. Needs an owner decision and its own plan.",
+      "firstSeen": "2026-10-21",
+      "lastSeen": "2026-10-21"
     }
   ]
 }
