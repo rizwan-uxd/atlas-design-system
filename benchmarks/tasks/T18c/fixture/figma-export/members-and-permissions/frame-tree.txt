@@ -1,0 +1,84 @@
+Figma export (read-only), file cKYhfaHLCoyMHi9nKr63Ig, page "Pattern / Members and permissions" (1035:2), frame 1035:3. Exported 2026-10-21 with the Plugin API. Format: FRAME/TEXT lines with sizes; INSTANCE lines read <component set | variant properties> props{component properties} text: visible text overrides, width x height. Screenshots could not be exported from the cloud container.
+
+FRAME "Members and permissions pattern" 1368x4006
+  TEXT "Members and permissions"
+  TEXT "Manage who has access to a workspace and what each person can do: a list of members with role and status, and the sensitive actions (invite, change role, remove), with protected-owner, empty and loading states."
+  FRAME "Guidelines" 1272x587
+    FRAME "Use when" 300x223
+      TEXT "USE WHEN"
+      TEXT "• People share a workspace and an admin must see who has access, change roles, invite people and remove them."
+      TEXT "• Every member has one role from a short list (for example Owner, Admin, Member)."
+    FRAME "Don't use when" 300x216
+      TEXT "DON'T USE WHEN"
+      TEXT "• Personal preferences. Use the Settings pattern."
+      TEXT "• A long, filterable audit log. Use the Data table pattern."
+      TEXT "• One person's full profile. Use the Detail view pattern."
+    FRAME "Best practices" 300x587
+      TEXT "BEST PRACTICES"
+      TEXT "• A Table of members: person (Avatar, name, email), Role, Status Badge and a row-actions menu."
+      TEXT "• Change a role in place with a Select of 2 to 4 roles. It saves at once and a Toast confirms; the invite dialog explains each role."
+      TEXT "• Invite is the one primary Button in the header. It opens a Dialog with an email Field and a role Select."
+      TEXT "• A pending invite shows a Pending Badge and offers Resend and Revoke instead of a role change."
+      TEXT "• Removing a member opens a destructive AlertDialog that names the person and what they lose."
+      TEXT "• The last Owner cannot be demoted or removed. The controls are disabled and the reason is written next to them in an Alert."
+      TEXT "• The current user's row says You. Leaving the workspace is a separate action."
+    FRAME "Anti-patterns" 300x347
+      TEXT "ANTI-PATTERNS"
+      TEXT "• Removing a member without naming them and the consequence."
+      TEXT "• A disabled control with no stated reason."
+      TEXT "• Role as free text instead of a Select of fixed roles."
+      TEXT "• Letting the last Owner be removed."
+      TEXT "• A permissions matrix of many checkboxes inside each row."
+      TEXT "• Changing someone's role with no confirmation that it saved."
+  FRAME "Frames" 640x3121
+    FRAME "Group 1 Default" 640x526
+      TEXT "1 Default"
+      FRAME "1 Default" 640x495
+        FRAME "Frame" 574x40
+          TEXT "Members"
+          INSTANCE Button <Button | Variant=primary, Size=md, Icon only=false, State=default> props{Trailing icon=false, Leading icon=false} text:"Invite member" 136x40
+        INSTANCE Card <Card | Variant=outlined, Size=md, State=default> props{Footer=false, Content=true} text:"Members" "Member" "Role" "Status" "DL" "Dana Lee (You)" "dana@acme.co" "Owner" "Active" "SO" "Sam Ortiz" "sam@acme.co" "Admin" "Active" "PN" "Priya Nair" "priya@acme.co" "Member" "Active" "LC" "Lee Chen" "lee@acme.co" "Invited as Member" "Pending" 574x373
+    FRAME "Group 2 Invite member" 640x485
+      TEXT "2 Invite member"
+      FRAME "2 Invite member" 640x454
+        FRAME "Dialog" 500x388
+          FRAME "Frame" 452x22
+            TEXT "Invite member"
+            FRAME "Frame" 20x20
+              LINE "Line" 14x0
+              LINE "Line" 14x0
+          TEXT "They will get an email with a link to join. Owners can manage billing; Admins can manage members; Members can edit content."
+          INSTANCE Field <Field | Size=md> props{Action=false, Invalid=false, Help=false} text:"Email address" "name@company.com" 452x67
+          INSTANCE Field <Field | Size=md> props{Action=false, Invalid=false, Help=false} text:"Role" "Member" 452x67
+          FRAME "Frame" 452x48
+            INSTANCE Button <Button | Variant=ghost, Size=md, Icon only=false, State=default> text:"Cancel" 81x40
+            INSTANCE Button <Button | Variant=primary, Size=md, Icon only=false, State=default> text:"Send invite" 113x40
+    FRAME "Group 3 Remove member" 640x295
+      TEXT "3 Remove member"
+      FRAME "3 Remove member" 640x264
+        INSTANCE AlertDialog <AlertDialog | Variant=destructive, Size=md, State=default> text:"Remove Sam Ortiz?" "Sam loses access to this workspace and its projects immediately. Their work stays. You can invite them again later." "Cancel" "Remove Sam" 500x198
+    FRAME "Group 4 Last owner protected" 640x608
+      TEXT "4 Last owner protected"
+      FRAME "4 Last owner protected" 640x577
+        FRAME "Frame" 574x40
+          TEXT "Members"
+          INSTANCE Button <Button | Variant=primary, Size=md, Icon only=false, State=default> text:"Invite member" 136x40
+        INSTANCE Alert <Alert | Variant=info, Size=md> props{Actions=false, Dismissible=false} text:"Dana Lee is the only Owner" "Make another member an Owner before changing this role or removing Dana." 574x66
+        INSTANCE Card <Card | Variant=outlined, Size=md, State=default> props{Footer=false, Content=true} text:"Members" "Member" "Role" "Status" "DL" "Dana Lee (You)" "dana@acme.co" "Owner" "Active" "SO" "Sam Ortiz" "sam@acme.co" "Admin" "Active" "PN" "Priya Nair" "priya@acme.co" "Member" "Active" "LC" "Lee Chen" "lee@acme.co" "Invited as Member" "Pending" 574x373
+    FRAME "Group 5 Loading" 640x425
+      TEXT "5 Loading"
+      FRAME "5 Loading" 640x394
+        FRAME "Frame" 574x40
+          TEXT "Members"
+          INSTANCE Button <Button | Variant=primary, Size=md, Icon only=false, State=default> text:"Invite member" 136x40
+        INSTANCE Skeleton <Skeleton | Shape=rect> 574x56
+        INSTANCE Skeleton <Skeleton | Shape=rect> 574x56
+        INSTANCE Skeleton <Skeleton | Shape=rect> 574x56
+        INSTANCE Skeleton <Skeleton | Shape=rect> 574x56
+    FRAME "Group 6 Mobile · 390" 390x462
+      TEXT "6 Mobile · 390"
+      FRAME "6 Mobile · 390" 390x431
+        FRAME "Frame" 356x90
+          TEXT "Members"
+          INSTANCE Button <Button | Variant=primary, Size=md, Icon only=false, State=default> text:"Invite member" 136x40
+        INSTANCE Card <Card | Variant=outlined, Size=md, State=default> props{Footer=false, Content=true} text:"Members" "JD" "Dana Lee (You)" "Owner · Active" "JD" "Sam Ortiz" "Admin · Active" "JD" "Priya Nair" "Member · Active" 356x291

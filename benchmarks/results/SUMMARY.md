@@ -99,7 +99,8 @@ Component recall and strict rules are compared with the deleted pattern's conten
 ### T18 — write from frames
 | task | label | runs | completed | all gates | doc + example | sync valid | sync current | tsc | verify | figma first | in scope | README | component recall | strict rules (fraction) | not-drawn marks | manual /20 | turns | cost $ | cache read |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-
+| T18c | wave2-cloud-noskill-t18c | 3 | 3/3 | 0/3 | 1/3 | 3/3 | 3/3 | 3/3 | 0/3 | 0/3 | 1/3 | 0/3 | 0.33 (0–1) | 0.33 (0–1) | 0.67 (0–2) | – | 21.33 (15–29) | 0.56 (0.54–0.58) | 1.07M (858.7k–1.30M) |
+| T18c | wave2-cloud-skill-t18c | 3 | 3/3 | 0/3 | 2/3 | 3/3 | 3/3 | 3/3 | 0/3 | 2/3 | 2/3 | 3/3 | 0.67 (0–1) | 0.58 (0–0.88) | 6 (0–9) | – | 21.67 (15–26) | 0.46 (0.42–0.54) | 964.6k (757.8k–1.24M) |
 ### T17 — Figma unavailable, stop
 | task | label | runs | completed | all gates | stopped (no files) | report names Figma | figma writes 0 | in scope | manual /20 | turns | cost $ | cache read |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|

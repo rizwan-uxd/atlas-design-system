@@ -24,7 +24,7 @@ const TOOLING = ["benchmarks/run.sh", "benchmarks/analyze.mjs", "benchmarks/summ
   "benchmarks/phase-9/stale-row-metric.mjs", "benchmarks/phase-9/stale-row-metric.test.mjs",
   "benchmarks/tasks/T3/prompt.md", "benchmarks/tasks/T3/meta.json", "benchmarks/tasks/T4/prompt.md", "benchmarks/tasks/T4/meta.json",
   "scripts/lib/quality-checks.mjs",
-  ...(process.env.BENCH_PINS ? ["benchmarks/phase-10/pattern-metrics.mjs", "benchmarks/phase-10/validate-fixtures.mjs", "benchmarks/phase-10/apply-fixture.mjs", "benchmarks/phase-10/no-pattern-skill.patch", "benchmarks/rubric-pattern.md", "benchmarks/tasks/T17/prompt.md", "benchmarks/tasks/T17/meta.json", "benchmarks/tasks/T18/prompt.md", "benchmarks/tasks/T18/meta.json"] : [])]
+  ...(process.env.BENCH_PINS ? ["benchmarks/phase-10/pattern-metrics.mjs", "benchmarks/phase-10/validate-fixtures.mjs", "benchmarks/phase-10/apply-fixture.mjs", "benchmarks/phase-10/no-pattern-skill.patch", "benchmarks/rubric-pattern.md", "benchmarks/tasks/T17/prompt.md", "benchmarks/tasks/T17/meta.json", "benchmarks/tasks/T18/prompt.md", "benchmarks/tasks/T18/meta.json", "benchmarks/tasks/T18c/prompt.md", "benchmarks/tasks/T18c/meta.json"] : [])]
 const settings = (() => { try { return JSON.parse(fs.readFileSync(path.join(os.homedir(), ".claude/settings.json"), "utf8")) } catch { return {} } })()
 
 const diffs = (want, got, pre = "") => Object.keys({ ...want, ...got }).flatMap(k =>

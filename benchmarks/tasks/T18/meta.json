@@ -13,6 +13,7 @@
       "atlas/patterns/members-permissions.md"
     ],
     "lines": { "atlas/index.md": "members-permissions" },
+    "patternsJson": { "atlas/index.json": "members-permissions" },
     "replace": { "packages/governance/README.md": [", members and permissions", ""] }
   },
   "allowedPaths": [
@@ -21,6 +22,7 @@
     "packages/governance/README.md",
     "atlas/patterns/members-permissions.md",
     "atlas/index.md",
+    "atlas/index.json",
     "atlas/state/candidates.json"
   ],
   "verifyScope": "packages/governance/**,atlas/patterns/**,atlas/index.md",

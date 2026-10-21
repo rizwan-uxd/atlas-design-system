@@ -1,0 +1,237 @@
+{
+  "model": "claude-sonnet-5-5",
+  "ok": true,
+  "error": null,
+  "turns": 24,
+  "durationS": 163,
+  "costUsd": 0.42152029999999996,
+  "tokens": {
+    "input": 28,
+    "cacheWrite": 55937,
+    "cacheRead": 899457,
+    "output": 10763,
+    "totalContext": 955422
+  },
+  "tools": {
+    "Skill": 1,
+    "Read": 7,
+    "Bash": 9,
+    "Grep": 2,
+    "Write": 2,
+    "Edit": 1
+  },
+  "toolCalls": 22,
+  "figmaCalls": 0,
+  "verifyRuns": 3,
+  "reworkEdits": 1,
+  "toolResultChars": {
+    "Skill": 30,
+    "Read": 36284,
+    "Bash": 33123,
+    "Grep": 879,
+    "Write": 406,
+    "Edit": 116
+  },
+  "skillsUsed": [
+    "atlas-pattern"
+  ],
+  "reads": {
+    "total": 7,
+    "unique": 7,
+    "offTask": 1,
+    "byCategory": {
+      "other": 1,
+      "skills": 1,
+      "atlas-snapshot": 1,
+      "components": 3,
+      "governance": 1
+    },
+    "files": [
+      "figma-export/members-and-permissions/frame-tree.txt",
+      ".claude/skills/atlas-pattern/references/doc-template.md",
+      "atlas/index.md",
+      "packages/ui-web/src/primitives/Avatar/Avatar.tsx",
+      "packages/ui-web/src/compositions/Toast/Toast.tsx",
+      "packages/ui-web/src/patterns/DropdownMenu/DropdownMenu.tsx",
+      "packages/governance/patterns/examples/data-table.example.tsx"
+    ]
+  },
+  "bashCmds": [
+    "cd /tmp/atlas-bench/wave2-cloud-skill-t18c-T18c-3/packages/governance && ls patterns patterns/examples; grep -n -i pattern README.md | head -20",
+    "cd /tmp/atlas-bench/wave2-cloud-skill-t18c-T18c-3/packages/governance/patterns && cat payment-billing.md examples/payment-billing.example.tsx; ls examples; git status --short | head",
+    "cd /tmp/atlas-bench/wave2-cloud-skill-t18c-T18c-3/packages/governance/patterns && cat payment-billing.md examples/payment-billing.example.tsx",
+    "cd /tmp/atlas-bench/wave2-cloud-skill-t18c-T18c-3 && cat atlas/Select.md | head -60; grep -n \"export\" packages/ui-web/src/primitives/Select/Select.tsx packages/ui-web/src/primitives/Avatar/Avatar.tsx packages/ui-web/src/patterns/DropdownMenu/DropdownMenu.tsx; grep -n \"Select\\|DropdownMenu\" packages/governance/patterns/examples/*.tsx | head -12; grep -n \"Skeleton\" -r packages/ui-web/src/primitives/Skeleton/Skeleton.tsx | head -5; grep -n \"text-h\\|text-body\\|spacing-\" atlas/tokens.md | head -5",
+    "cd /tmp/atlas-bench/wave2-cloud-skill-t18c-T18c-3/packages/ui-web/src && sed -n 41,63p primitives/Avatar/Avatar.tsx; grep -n \"export\" compositions/Toast/Toast.tsx | head; grep -n \"export function\\|variant\" primitives/Badge/Badge.tsx | head -5; grep -rn \"DropdownMenuTrigger\" ../../governance/patterns/examples/*.tsx | head -3",
+    "sed -i 's/settings, and/settings, members and permissions, and/;' /dev/null; sed -i 's/payment and billing, onboarding, search and filter, settings)/payment and billing, members and permissions, onboarding, search and filter, settings)/' packages/governance/README.md && grep -c \"members and permissions\" packages/governance/README.md; npm run atlas:sync 2>&1 | tail -25; npx tsc --noEmit 2>&1 | tail -20",
+    "npm run atlas:sync 2>&1 | tail -25",
+    "npx tsc --noEmit 2>&1 | tail -20; npm run atlas:verify -- --scope \"packages/governance/**,atlas/patterns/**,atlas/index.md\" 2>&1 | tail -30",
+    "npm run atlas:verify -- --scope \"packages/governance/**,atlas/patterns/**,atlas/index.md,atlas/index.json\" 2>&1 | tail -4"
+  ],
+  "quality": {
+    "outputExists": false,
+    "files": 0,
+    "loc": 1,
+    "registered": false,
+    "tokenLintViolations": 0,
+    "tscErrors": 0,
+    "atlasComponentsImported": [],
+    "expectedCoverage": "0/12",
+    "rawElements": 0,
+    "numericStyleLiterals": 0,
+    "primitiveTokenRefs": 0
+  },
+  "phase8": {
+    "readsAll": {
+      "total": 17,
+      "unique": 13,
+      "viaBash": 9,
+      "files": [
+        "figma-export/members-and-permissions/frame-tree.txt",
+        ".claude/skills/atlas-pattern/references/doc-template.md",
+        "atlas/index.md",
+        "Bash:README.md",
+        "Bash:atlas/Select.md",
+        "Bash:packages/ui-web/src/primitives/Select/Select.tsx",
+        "Bash:packages/ui-web/src/primitives/Avatar/Avatar.tsx",
+        "Bash:packages/ui-web/src/patterns/DropdownMenu/DropdownMenu.tsx",
+        "Bash:packages/ui-web/src/primitives/Skeleton/Skeleton.tsx",
+        "Bash:atlas/tokens.md",
+        "packages/ui-web/src/primitives/Avatar/Avatar.tsx",
+        "Grep:packages/ui-web/src/compositions/Toast/Toast.tsx",
+        "packages/ui-web/src/compositions/Toast/Toast.tsx",
+        "packages/ui-web/src/patterns/DropdownMenu/DropdownMenu.tsx",
+        "packages/governance/patterns/examples/data-table.example.tsx",
+        "Bash:packages/governance/README.md",
+        "Bash:packages/governance/README.md"
+      ]
+    },
+    "sourceOpened": {
+      "component-source": [
+        "packages/ui-web/src/primitives/Select/Select.tsx",
+        "packages/ui-web/src/primitives/Avatar/Avatar.tsx",
+        "packages/ui-web/src/patterns/DropdownMenu/DropdownMenu.tsx",
+        "packages/ui-web/src/primitives/Skeleton/Skeleton.tsx",
+        "packages/ui-web/src/compositions/Toast/Toast.tsx"
+      ],
+      "verifier-internals": [
+        "packages/governance/patterns/examples/data-table.example.tsx",
+        "packages/governance/README.md"
+      ]
+    },
+    "sourceOpenedCount": 7,
+    "verify": {
+      "runs": 2,
+      "failures": 1,
+      "firstPass": false,
+      "finalPass": true,
+      "calls": [
+        {
+          "cmd": "npx tsc --noEmit 2>&1 | tail -20; npm run atlas:verify -- --scope \"packages/governance/**,atlas/patterns/**,atlas/index.",
+          "failed": true
+        },
+        {
+          "cmd": "npm run atlas:verify -- --scope \"packages/governance/**,atlas/patterns/**,atlas/index.md,atlas/index.json\" 2>&1 | tail -",
+          "failed": false
+        }
+      ]
+    },
+    "wasted": {
+      "duplicateReads": 4,
+      "unusedComponentReads": [
+        "atlas/Select.md",
+        "packages/ui-web/src/primitives/Select/Select.tsx",
+        "packages/ui-web/src/primitives/Avatar/Avatar.tsx",
+        "packages/ui-web/src/patterns/DropdownMenu/DropdownMenu.tsx",
+        "packages/ui-web/src/primitives/Skeleton/Skeleton.tsx",
+        "packages/ui-web/src/compositions/Toast/Toast.tsx"
+      ],
+      "offTask": [
+        "README.md"
+      ],
+      "verifierInternals": [
+        "packages/governance/patterns/examples/data-table.example.tsx",
+        "packages/governance/README.md"
+      ],
+      "failedToolCalls": 3,
+      "total": 16
+    },
+    "gaps": {
+      "available": true,
+      "candidatesChanged": [],
+      "expected": [],
+      "recognised": []
+    }
+  },
+  "pattern": {
+    "changed": [
+      "atlas/index.json",
+      "atlas/index.md",
+      "packages/governance/README.md",
+      "atlas/patterns/members-permissions.md",
+      "packages/governance/patterns/examples/members-permissions.example.tsx",
+      "packages/governance/patterns/members-permissions.md"
+    ],
+    "outOfScope": [],
+    "useFigmaAttempts": 0,
+    "figmaReads": [],
+    "permissionDenials": 3,
+    "sectionsMissing": [],
+    "namedComponents": [
+      "Card",
+      "Table",
+      "Avatar",
+      "Badge",
+      "Select",
+      "DropdownMenu",
+      "Button",
+      "Dialog",
+      "Field",
+      "AlertDialog",
+      "Alert",
+      "Toast",
+      "Skeleton"
+    ],
+    "componentRecall": 1,
+    "componentsMissing": [],
+    "strict": {
+      "passed": 7,
+      "total": 8,
+      "failed": [
+        "revert-on-failure"
+      ]
+    },
+    "notDrawnMarks": 9,
+    "example": {
+      "rawElements": 0,
+      "numericStyleLiterals": 3,
+      "primitiveTokenRefs": 0,
+      "loc": 169
+    },
+    "syncTail": [
+      "    DISC-097 Card [figma] Code has CardFooter justify = start | between | end; Figma Card set 110:24 draws the Footer slot with one fixed alignment and no justify property. Found 2026-10-21 in the Card refinement pass.",
+      "",
+      "  ⚠ no --pull: Figma-side facts were last read 2026-10-10T17:05:52.269Z — re-run the atlas-figma-sync skill to refresh them."
+    ],
+    "tscErrors": 0,
+    "verifyFails": [
+      "paths"
+    ],
+    "generatedHandEdits": [],
+    "gates": {
+      "docAndExample": true,
+      "sectionsComplete": true,
+      "syncValid": true,
+      "syncCurrent": true,
+      "tsc": true,
+      "verify": false,
+      "figmaFirst": true,
+      "figmaWrites": true,
+      "scope": true,
+      "noGeneratedHandEdits": true,
+      "readmeListed": true
+    },
+    "gatesPass": false,
+    "maxTurnsExit": false
+  },
+  "subtype": "success"
+}

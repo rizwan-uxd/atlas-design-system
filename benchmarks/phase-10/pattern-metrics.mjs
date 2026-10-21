@@ -38,7 +38,10 @@ export function patternMetrics({ ws, meta, calls, events, result, sh, tscOut }) 
   }
 
   // ---- T18: write the doc and example from existing frames ----
-  const doc = readWs(P.docPath), example = readWs(P.examplePath)
+  // an agent may pick another slug for the same pattern (meta.pattern.altSlug); score it and report which slug was used
+  const alt = P.altSlug && !exists(P.docPath) && exists(P.docPath.replace(P.slug, P.altSlug)) ? P.altSlug : null
+  const docPath = alt ? P.docPath.replace(P.slug, alt) : P.docPath, examplePath = alt ? P.examplePath.replace(P.slug, alt) : P.examplePath
+  const doc = readWs(docPath), example = readWs(examplePath)
   const sections = [...doc.matchAll(/^## (.+)$/gm)].map(m => m[1].trim())
   const required = meta.requiredSections
   const sectionsMissing = required.filter(s => !sections.includes(s))
@@ -63,8 +66,13 @@ export function patternMetrics({ ws, meta, calls, events, result, sh, tscOut }) 
 
   // Figma-first: a Figma read must precede the first write of the doc
   const firstFigma = calls.findIndex(c => /^mcp__figma/.test(c.name) && !/use_figma/.test(c.name))
-  const firstDocWrite = calls.findIndex(c => ["Write", "Edit", "MultiEdit"].includes(c.name) && /patterns\/members-permissions\.md$/.test(c.input?.file_path || ""))
-  const figmaFirst = firstFigma > -1 && (firstDocWrite === -1 || firstFigma < firstDocWrite)
+  const firstDocWrite = calls.findIndex(c => ["Write", "Edit", "MultiEdit"].includes(c.name) && /patterns\/members-(and-)?permissions\.md$/.test(c.input?.file_path || ""))
+  // T18c (cloud variant): meta.exportDir replaces the Figma read with a Read of a file under that directory
+  // a Read of the export, or a shell command that opens it (cat, head, sed); an agent may use either
+  const firstExportRead = meta.exportDir ? calls.findIndex(c => (c.name === "Read" && (c.input?.file_path || "").includes(meta.exportDir)) || (c.name === "Bash" && (c.input?.command || "").includes(meta.exportDir))) : -1
+  const figmaFirst = meta.exportDir
+    ? firstExportRead > -1 && (firstDocWrite === -1 || firstExportRead < firstDocWrite) && useFigmaAttempts === 0
+    : firstFigma > -1 && (firstDocWrite === -1 || firstFigma < firstDocWrite)
 
   const generatedHandEdits = [...new Set(events.filter(e => e.kind === "write" && GENERATED.test(e.file)).map(e => e.file))]
   const readme = readWs("packages/governance/README.md")
@@ -82,6 +90,7 @@ export function patternMetrics({ ws, meta, calls, events, result, sh, tscOut }) 
   }
   return {
     changed, outOfScope, useFigmaAttempts, figmaReads, permissionDenials: denials.length,
+    slugUsed: alt || P.slug, slugAsExpected: !alt,
     sectionsMissing, namedComponents: [...named], componentRecall: +(componentRecall.length / meta.expectedComponents.length).toFixed(3),
     componentsMissing: meta.expectedComponents.filter(c => !named.has(c)),
     strict: { passed: strict.filter(s => s.pass).length, total: strict.length, failed: strict.filter(s => !s.pass).map(s => s.id) },

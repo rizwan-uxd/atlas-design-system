@@ -1,0 +1,123 @@
+{
+  "type": "pattern",
+  "wave": 2,
+  "figmaUnavailable": true,
+  "expectStop": false,
+  "pattern": {
+    "slug": "members-permissions",
+    "docPath": "packages/governance/patterns/members-permissions.md",
+    "examplePath": "packages/governance/patterns/examples/members-permissions.example.tsx",
+    "readmeNeedle": "members and permissions",
+    "altSlug": "members-and-permissions"
+  },
+  "fixtureRemove": {
+    "files": [
+      "packages/governance/patterns/members-permissions.md",
+      "packages/governance/patterns/examples/members-permissions.example.tsx",
+      "atlas/patterns/members-permissions.md"
+    ],
+    "lines": {
+      "atlas/index.md": "members-permissions"
+    },
+    "replace": {
+      "packages/governance/README.md": [
+        ", members and permissions",
+        ""
+      ]
+    },
+    "patternsJson": {
+      "atlas/index.json": "members-permissions"
+    }
+  },
+  "allowedPaths": [
+    "packages/governance/patterns/members-permissions.md",
+    "packages/governance/patterns/examples/members-permissions.example.tsx",
+    "packages/governance/README.md",
+    "atlas/patterns/members-permissions.md",
+    "atlas/index.md",
+    "atlas/state/candidates.json",
+    "atlas/index.json",
+    "packages/governance/patterns/members-and-permissions.md",
+    "packages/governance/patterns/examples/members-and-permissions.example.tsx",
+    "atlas/patterns/members-and-permissions.md"
+  ],
+  "verifyScope": "packages/governance/**,atlas/patterns/**,atlas/index.md,atlas/index.json",
+  "requiredSections": [
+    "Use when",
+    "Don't use when",
+    "Decision rules",
+    "Components and variants",
+    "Layout and density",
+    "Hierarchy and composition",
+    "Responsive behavior",
+    "States",
+    "Accessibility",
+    "Anti-patterns",
+    "Example"
+  ],
+  "expectedComponents": [
+    "Card",
+    "Table",
+    "Avatar",
+    "Select",
+    "Badge",
+    "Button",
+    "DropdownMenu",
+    "Dialog",
+    "AlertDialog",
+    "Field",
+    "Alert",
+    "Skeleton"
+  ],
+  "strictChecks": [
+    {
+      "id": "single-primary-invite",
+      "type": "match",
+      "pattern": "Invite member",
+      "flags": "i"
+    },
+    {
+      "id": "role-select-fixed-roles",
+      "type": "match",
+      "pattern": "`Select`[^\\n]{0,200}(role|fixed)|role[^\\n]{0,200}`Select`",
+      "flags": "i"
+    },
+    {
+      "id": "revert-on-failure",
+      "type": "match",
+      "pattern": "revert|roll ?back|put (it|the old role) back",
+      "flags": "i"
+    },
+    {
+      "id": "status-text-not-colour",
+      "type": "match",
+      "pattern": "colou?r (alone|only)|never colou?r",
+      "flags": "i"
+    },
+    {
+      "id": "remove-destructive-alertdialog",
+      "type": "match",
+      "pattern": "AlertDialog[^\\n]{0,80}destructive|destructive[^\\n]{0,80}AlertDialog",
+      "flags": "i"
+    },
+    {
+      "id": "last-owner-protected",
+      "type": "match",
+      "pattern": "only Owner|last Owner|sole Owner",
+      "flags": "i"
+    },
+    {
+      "id": "disabled-has-reason",
+      "type": "match",
+      "pattern": "disabled[^\\n]{0,200}(reason|why|explain|text)",
+      "flags": "i"
+    },
+    {
+      "id": "loading-skeleton",
+      "type": "match",
+      "pattern": "Skeleton",
+      "flags": ""
+    }
+  ],
+  "exportDir": "figma-export/"
+}

@@ -1,0 +1,234 @@
+{
+  "model": "claude-sonnet-5-5",
+  "ok": true,
+  "error": null,
+  "turns": 29,
+  "durationS": 176,
+  "costUsd": 0.5820902,
+  "tokens": {
+    "input": 36,
+    "cacheWrite": 71412,
+    "cacheRead": 1300296,
+    "output": 16620,
+    "totalContext": 1371744
+  },
+  "tools": {
+    "Bash": 10,
+    "Skill": 1,
+    "Grep": 7,
+    "Read": 6,
+    "Write": 2,
+    "Edit": 1
+  },
+  "toolCalls": 27,
+  "figmaCalls": 0,
+  "verifyRuns": 1,
+  "reworkEdits": 0,
+  "toolResultChars": {
+    "Bash": 56960,
+    "Skill": 32,
+    "Grep": 23792,
+    "Read": 9848,
+    "Write": 418,
+    "Edit": 228
+  },
+  "skillsUsed": [
+    "atlas-component"
+  ],
+  "reads": {
+    "total": 6,
+    "unique": 5,
+    "offTask": 0,
+    "byCategory": {
+      "components": 5,
+      "governance": 1
+    },
+    "files": [
+      "packages/ui-web/src/primitives/Avatar/Avatar.tsx",
+      "packages/ui-web/src/compositions/Alert/Alert.tsx",
+      "packages/ui-web/src/compositions/Toast/Toast.tsx",
+      "packages/governance/patterns/examples/data-table.example.tsx",
+      "packages/ui-web/src/patterns/DropdownMenu/DropdownMenu.tsx",
+      "packages/ui-web/src/patterns/DropdownMenu/DropdownMenu.tsx"
+    ]
+  },
+  "bashCmds": [
+    "cd /tmp/atlas-bench/wave2-cloud-noskill-t18c-T18c-3; cat figma-export/members-and-permissions/frame-tree.txt; ls; ls atlas atlas/state atlas/patterns packages/ui-web/src packages/ui-web/src/patterns; cat atlas/index.md | head -80",
+    "cd /tmp/atlas-bench/wave2-cloud-noskill-t18c-T18c-3; cat atlas/patterns/payment-billing.md; grep -n -i \"pattern\" scripts/atlas-sync.mjs | head -40; grep -n -i pattern atlas/state/decisions.json | head; git status --short; ls figma-export figma-export/*; grep -rn -i \"payment-billing\" --include=* -l . 2>/dev/null | grep -v node_modules | head",
+    "cd /tmp/atlas-bench/wave2-cloud-noskill-t18c-T18c-3; ls packages/governance packages/governance/patterns; cat packages/governance/patterns/payment-billing.md; grep -rn \"payment-billing\" --exclude-dir=node_modules --exclude-dir=.next . -l | head -20; git status --short",
+    "cd /tmp/atlas-bench/wave2-cloud-noskill-t18c-T18c-3; cat packages/governance/README.md | head -60; ls packages/governance/patterns/examples; grep -n -i \"patterns\\|example\" scripts/atlas-sync.mjs | head -40; grep -rn \"settings.md\\|patterns/examples\" --include=*.mjs --include=*.ts --include=*.json --include=*.md -l . --exclude-dir=node_modules --exclude-dir=.next | head",
+    "cd /tmp/atlas-bench/wave2-cloud-noskill-t18c-T18c-3; sed -n 485,545p scripts/atlas-sync.mjs; cat packages/governance/patterns/examples/payment-billing.example.tsx; ls atlas/metadata | tr '\\n' ' '; cat atlas/state/decisions.json | head -60; ls packages/ui-web/src/compositions/Table packages/ui-web/src/primitives/Table 2>&1 | head",
+    "cd /tmp/atlas-bench/wave2-cloud-noskill-t18c-T18c-3/packages/ui-web/src; cat primitives/Select/Select.tsx | head -90; grep -n \"export\" primitives/Avatar/Avatar.tsx compositions/Toast/Toast.tsx patterns/DropdownMenu/DropdownMenu.tsx compositions/Alert/Alert.tsx primitives/Skeleton/Skeleton.tsx compositions/AlertDialog/AlertDialog.tsx compositions/Field/Field.tsx primitives/Badge/Badge.tsx primitives/Table/Table.tsx; cat ../../../atlas/Select.md | head -50; sed -n 1,200p ../../../packages/governance/patterns/examples/settings.example.tsx | grep -n -i \"toast\\|Select\" ",
+    "cd /tmp/atlas-bench/wave2-cloud-noskill-t18c-T18c-3/packages/ui-web/src; grep -n \"export\" primitives/Select/Select.tsx primitives/Avatar/Avatar.tsx compositions/Toast/Toast.tsx patterns/DropdownMenu/DropdownMenu.tsx compositions/Alert/Alert.tsx primitives/Skeleton/Skeleton.tsx compositions/Field/Field.tsx; grep -n -i \"toast\\|Select\" ../../governance/patterns/examples/settings.example.tsx | head -30",
+    "cd /tmp/atlas-bench/wave2-cloud-noskill-t18c-T18c-3/packages/governance/patterns; cat > members-and-permissions.md <<'EOF'\n---\nsummary: Manage who has access to a workspace and what each person can do: a list of members with role and status, and the sensitive actions (invite, change role, remove), with protected-owner, empty and loading states.\n---\n# Members and permissions\n\n## Use when\n- People share a workspace and an admin must see who has access, change roles, invite people and remove them.\n- Every member has one role from a short list (for example Owner, Admin, Member).\n\n## Don't use when\n- Personal preferences. Use the Settings pattern.\n- A long, filterable audit log. Use the Data table pattern.\n- One person's full profile. Use the Detail view pattern.\n\n## Decision rules\n- The page is a header row (title \"Members\" at the inline-start, one primary `Button` \"Invite member\" at the inline-end) above one `Card variant=\"outlined\"` titled \"Members\" that holds a `Table`. Invite is the only primary action on the page.\n- Table columns: Member, Role, Status, and a row-actions column. The Member cell is an `Avatar` with initials, the name, and the email beneath it. The current user's name is followed by \"(You)\".\n- Change a role in place with a `Select` of 2 to 4 fixed roles. It saves at once, and a `Toast variant=\"success\"` confirms (\"Sam Ortiz is now an Admin\"). On failure the `Select` reverts and a `Toast variant=\"danger\"` says so. Role is never free text.\n- The row-actions menu is a `DropdownMenu` opened from an icon-only `Button variant=\"ghost\"` (not drawn in Figma yet; Figma draws the Role as text). Its items: \"Remove from workspace\" as a `destructive` item. The current user's row offers \"Leave workspace\" instead, a separate action from removing.\n- Invite opens a `Dialog` titled \"Invite member\". The body says what happens (\"They will get an email with a link to join.\") and what each role can do (Owners manage billing; Admins manage members; Members edit content). It has an email `Field` and a role `Field` holding a `Select`, defaulting to the least-privileged role. The footer is `Button variant=\"ghost\"` \"Cancel\" and `Button variant=\"primary\"` \"Send invite\"; Send shows `loading` while the request runs. A failed invite keeps the Dialog open and the typed values, and shows the reason in an `Alert variant=\"danger\"` inside it.\n- A pending invite shows a `Badge` \"Pending\" and the role as text (\"Invited as Member\"). Its row menu offers \"Resend invite\" and \"Revoke invite\" instead of a role change.\n- Removing a member opens an `AlertDialog variant=\"destructive\"` titled with the person's name (\"Remove Sam Ortiz?\"). The description says what they lose and what they keep (\"Sam loses access to this workspace and its projects immediately. Their work stays. You can invite them again later.\"). Cancel is first; the confirm action names the person (\"Remove Sam\"). Its action shows the AlertDialog `loading` state while the request runs.\n- The last Owner cannot be demoted or removed. Their role `Select` and their remove item are `disabled`, and the reason is written in an `Alert variant=\"info\"` above the table with a title (\"Dana Lee is the only Owner\") and the way out (\"Make another member an Owner before changing this role or removing Dana.\"). The Alert is in the page flow, not a Toast or a Tooltip, and stays until another Owner exists.\n- Status mapping for `Badge`: `success` Active, `warning` Pending. Status is always visible text.\n- Loading replaces the table with `Skeleton` rows (four, `shape=\"rect\"`), the header and Invite button stay.\n- Roles are fixed per workspace and described once, in the invite Dialog. Do not build a permissions matrix of checkboxes inside a row.\n\n## Components and variants\n- `Card` variant: `outlined` · size: `md`\n- `Table`\n- `Avatar`\n- `Badge` variant: `success`, `warning` · size: `md`\n- `Button` variant: `primary`, `ghost` · size: `md`\n- `Select` size: `md`\n- `DropdownMenu`\n- `Dialog` variant: `default` · size: `md`\n- `Field` size: `md`\n- `AlertDialog` variant: `destructive` · size: `md`\n- `Alert` variant: `info`, `danger` · size: `md`\n- `Toast` variant: `success`, `danger`\n- `Skeleton`\n- `EmptyState` size: `md`\n\n## Layout and density\n- Single column inside the Navigation shell content column. The header row is a flex row with the title at the inline-start and Invite at the inline-end; the info Alert and the Card follow, separated by `--atlas-spacing-4`.\n- Table rows keep one line per cell; the email sits under the name inside the Member cell, not in its own column.\n- Build with logical properties so the inline-end action stays at the end in both text directions.\n\n## Hierarchy and composition\n- Invite is the single primary `Button`; row actions are ghost and quiet. Red (`destructive`) appears only on the remove actions.\n- Typography: page title `--atlas-text-h1`; name `--atlas-text-body`; email and helper text `--atlas-text-body-sm` in `foreground-muted`. Set every heading and paragraph from `--atlas-text-*` or `--atlas-font-size-*`; never a bare `<h1>` or `<p>`.\n\n## Responsive behavior\n- Phone (390): the header wraps, the title above the Invite button. The table gives way to a list in the same Card, one row per member: `Avatar`, name with \"(You)\", and \"Role · Status\" as a single muted line (\"Owner · Active\"). The row-actions menu stays at the inline-end of each row. The role `Select` moves into the row menu or a `Sheet`, because it does not fit inline.\n\n## States\n- default · invite open (Dialog; Send shows `loading`, failure keeps values) · remove confirm (AlertDialog; action `loading`) · last Owner protected (info Alert, controls `disabled`) · pending invite (Pending Badge, Resend and Revoke) · role saved (success Toast) · role save failed (control reverts, danger Toast) · loading (`Skeleton` rows, header stays) · only you (`EmptyState`: \"You're the only member\" with an Invite action) · error loading (`Alert variant=\"danger\"` with Retry above the table).\n\n## Accessibility\n- The Table is named with `aria-label=\"Members\"` (the Card title is visible, but the table needs its own name), column headers use `scope=\"col\"`, and the row-actions header has visually hidden text \"Actions\".\n- Each role `Select` has an `aria-label` naming the person (\"Role for Sam Ortiz\"). Each row-actions button has an `aria-label` naming the person (\"Actions for Sam Ortiz\").\n- A `disabled` control is explained in visible text next to the page, not only by its disabled look. Link the reason to the control with `aria-describedby`.\n- Dialog and AlertDialog trap focus, name the action in the title and return focus to the trigger. After a removal, move focus to the table heading or the next row.\n- The Toast confirming a role change is announced politely; the Avatar is decorative (`alt=\"\"`) next to the visible name. Status is text, never colour alone.\n\n## Anti-patterns\n- Removing a member without naming them and the consequence.\n- A disabled control with no stated reason.\n- Role as free text instead of a Select of fixed roles.\n- Letting the last Owner be removed.\n- A permissions matrix of many checkboxes inside each row.\n- Changing someone's role with no confirmation that it saved.\n\n## Example\n{{example}}\nEOF",
+    "npm run atlas:sync 2>&1 | head -40; git status --short",
+    "npm run atlas:verify -- --scope \"packages/governance/patterns/**,atlas/**\" 2>&1 | tail -40"
+  ],
+  "quality": {
+    "outputExists": false,
+    "files": 0,
+    "loc": 1,
+    "registered": false,
+    "tokenLintViolations": 0,
+    "tscErrors": 0,
+    "atlasComponentsImported": [],
+    "expectedCoverage": "0/12",
+    "rawElements": 0,
+    "numericStyleLiterals": 0,
+    "primitiveTokenRefs": 0
+  },
+  "phase8": {
+    "readsAll": {
+      "total": 18,
+      "unique": 14,
+      "viaBash": 10,
+      "files": [
+        "Bash:atlas/index.md",
+        "Bash:atlas/patterns/payment-billing.md",
+        "Bash:scripts/atlas-sync.mjs",
+        "Bash:atlas/state/decisions.json",
+        "Bash:packages/governance/patterns/payment-billing.md",
+        "Bash:packages/governance/README.md",
+        "Bash:scripts/atlas-sync.mjs",
+        "Bash:scripts/atlas-sync.mjs",
+        "Bash:packages/governance/patterns/examples/payment-billing.example.tsx",
+        "Bash:atlas/state/decisions.json",
+        "packages/ui-web/src/primitives/Avatar/Avatar.tsx",
+        "packages/ui-web/src/compositions/Alert/Alert.tsx",
+        "packages/ui-web/src/compositions/Toast/Toast.tsx",
+        "packages/governance/patterns/examples/data-table.example.tsx",
+        "Grep:packages/ui-web/src/primitives/Button/Button.tsx",
+        "packages/ui-web/src/patterns/DropdownMenu/DropdownMenu.tsx",
+        "packages/ui-web/src/patterns/DropdownMenu/DropdownMenu.tsx",
+        "Grep:packages/ui-web/src/primitives/Select/Select.tsx"
+      ]
+    },
+    "sourceOpened": {
+      "verifier-internals": [
+        "scripts/atlas-sync.mjs",
+        "packages/governance/patterns/payment-billing.md",
+        "packages/governance/README.md",
+        "packages/governance/patterns/examples/payment-billing.example.tsx",
+        "packages/governance/patterns/examples/data-table.example.tsx"
+      ],
+      "component-source": [
+        "packages/ui-web/src/primitives/Avatar/Avatar.tsx",
+        "packages/ui-web/src/compositions/Alert/Alert.tsx",
+        "packages/ui-web/src/compositions/Toast/Toast.tsx",
+        "packages/ui-web/src/primitives/Button/Button.tsx",
+        "packages/ui-web/src/patterns/DropdownMenu/DropdownMenu.tsx",
+        "packages/ui-web/src/primitives/Select/Select.tsx"
+      ]
+    },
+    "sourceOpenedCount": 11,
+    "verify": {
+      "runs": 1,
+      "failures": 0,
+      "firstPass": true,
+      "finalPass": true,
+      "calls": [
+        {
+          "cmd": "npm run atlas:verify -- --scope \"packages/governance/patterns/**,atlas/**\" 2>&1 | tail -40",
+          "failed": false
+        }
+      ]
+    },
+    "wasted": {
+      "duplicateReads": 4,
+      "unusedComponentReads": [
+        "packages/ui-web/src/primitives/Avatar/Avatar.tsx",
+        "packages/ui-web/src/compositions/Alert/Alert.tsx",
+        "packages/ui-web/src/compositions/Toast/Toast.tsx",
+        "packages/ui-web/src/primitives/Button/Button.tsx",
+        "packages/ui-web/src/patterns/DropdownMenu/DropdownMenu.tsx",
+        "packages/ui-web/src/primitives/Select/Select.tsx"
+      ],
+      "offTask": [],
+      "verifierInternals": [
+        "scripts/atlas-sync.mjs",
+        "packages/governance/patterns/payment-billing.md",
+        "packages/governance/README.md",
+        "packages/governance/patterns/examples/payment-billing.example.tsx",
+        "packages/governance/patterns/examples/data-table.example.tsx"
+      ],
+      "failedToolCalls": 3,
+      "total": 18
+    },
+    "gaps": {
+      "available": true,
+      "candidatesChanged": [],
+      "expected": [],
+      "recognised": []
+    }
+  },
+  "pattern": {
+    "changed": [
+      "atlas/index.json",
+      "atlas/index.md",
+      "atlas/patterns/members-and-permissions.md",
+      "packages/governance/patterns/examples/members-and-permissions.example.tsx",
+      "packages/governance/patterns/members-and-permissions.md"
+    ],
+    "outOfScope": [],
+    "useFigmaAttempts": 0,
+    "figmaReads": [],
+    "permissionDenials": 3,
+    "slugUsed": "members-and-permissions",
+    "slugAsExpected": false,
+    "sectionsMissing": [],
+    "namedComponents": [
+      "Card",
+      "Table",
+      "Avatar",
+      "Badge",
+      "Button",
+      "Select",
+      "DropdownMenu",
+      "Dialog",
+      "Field",
+      "AlertDialog",
+      "Alert",
+      "Toast",
+      "Skeleton",
+      "EmptyState"
+    ],
+    "componentRecall": 1,
+    "componentsMissing": [],
+    "strict": {
+      "passed": 8,
+      "total": 8,
+      "failed": []
+    },
+    "notDrawnMarks": 1,
+    "example": {
+      "rawElements": 0,
+      "numericStyleLiterals": 3,
+      "primitiveTokenRefs": 0,
+      "loc": 224
+    },
+    "syncTail": [
+      "    DISC-097 Card [figma] Code has CardFooter justify = start | between | end; Figma Card set 110:24 draws the Footer slot with one fixed alignment and no justify property. Found 2026-10-21 in the Card refinement pass.",
+      "",
+      "  ⚠ no --pull: Figma-side facts were last read 2026-10-10T17:05:52.269Z — re-run the atlas-figma-sync skill to refresh them."
+    ],
+    "tscErrors": 0,
+    "verifyFails": [],
+    "generatedHandEdits": [],
+    "gates": {
+      "docAndExample": true,
+      "sectionsComplete": true,
+      "syncValid": true,
+      "syncCurrent": true,
+      "tsc": true,
+      "verify": true,
+      "figmaFirst": true,
+      "figmaWrites": true,
+      "scope": true,
+      "noGeneratedHandEdits": true,
+      "readmeListed": false
+    },
+    "gatesPass": false,
+    "maxTurnsExit": false
+  },
+  "subtype": "success"
+}

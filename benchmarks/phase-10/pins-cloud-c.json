@@ -1,0 +1,116 @@
+{
+  "model": "claude-sonnet-5-5",
+  "cli": "2.1.306",
+  "common": {
+    "cli": "2.1.306",
+    "tooling": {
+      "benchmarks/run.sh": "df0df7fd33924e86e94e22b7284c3bdbdc371c2c",
+      "benchmarks/analyze.mjs": "8d96ea0cf6d65009a3a9fc06ab11aeb562bb945d",
+      "benchmarks/summarize.mjs": "16c788f0a438df5793b2e75c9001c8418bc1c4d7",
+      "benchmarks/rubric-component.md": "e2a6cae85a3b319793123ced36c20fa4de10b782",
+      "benchmarks/phase-9/validate-fixtures.mjs": "1ac7b2dd2771af1ec4fd633e48952a04bf1acec8",
+      "benchmarks/phase-9/component-metrics.mjs": "c8138a919aa8b1b30ef44971dde91176500c0366",
+      "benchmarks/phase-9/budget.mjs": "c131eb59660a41460e131d7228bf093e61a320d8",
+      "benchmarks/phase-9/pins.mjs": "d8842f64b1dc964d9d981ba429e93b528b3eafe7",
+      "benchmarks/phase-9/no-skill.patch": "ccfc67bf092ec93312f8a337528db6865f47e8e5",
+      "benchmarks/phase-9/live-figma.json": "d763a353f63094e4d49ca1aa81f46a203cede249",
+      "benchmarks/phase-9/stale-row-metric.mjs": "c7f238c3044153778ada7f1c8aa079aae653cc36",
+      "benchmarks/phase-9/stale-row-metric.test.mjs": "5b68647b2c9ea5443f8300e5b9e49c3678f41fbe",
+      "benchmarks/tasks/T3/prompt.md": "2b5082e20e1ae9b5623f58beb817f2357cf6c546",
+      "benchmarks/tasks/T3/meta.json": "099110ad13d6d9a32822c974eec47bbd3c6f4413",
+      "benchmarks/tasks/T4/prompt.md": "60bd5bc0d379061aba363754e601f58ac7f78f8e",
+      "benchmarks/tasks/T4/meta.json": "6d144c18bc6f8b8c7970d1af245ad5c493c07225",
+      "scripts/lib/quality-checks.mjs": "9d416b38948bb6edd4b920a212b60b64d9691830",
+      "benchmarks/phase-10/pattern-metrics.mjs": "8c6208b99b87c663a33fc0c21060e5cec75d1389",
+      "benchmarks/phase-10/validate-fixtures.mjs": "cb25f1e8f338d41a56ffeefebf33fcbacdeb112f",
+      "benchmarks/phase-10/apply-fixture.mjs": "f2ecdfb8fb3ba75dbaab3a6b790e215d010527e8",
+      "benchmarks/phase-10/no-pattern-skill.patch": "a847dc3eaa19a29d620f3f8c08054e2c899ec7c4",
+      "benchmarks/rubric-pattern.md": "b5456922b2d45f80fe28c62bbc559d62e63945d9",
+      "benchmarks/tasks/T17/prompt.md": "014197b90406c5760ef53a7aa8f9aa64545b163d",
+      "benchmarks/tasks/T17/meta.json": "b73a07c97188058d5dd0184a9fc7ec57d3935ce5",
+      "benchmarks/tasks/T18/prompt.md": "8b25e0c721cff8525e0c061403a54039e7480a47",
+      "benchmarks/tasks/T18/meta.json": "b150de83bb71db719beb6fcf74012b86f01e702e",
+      "benchmarks/tasks/T18c/prompt.md": "b30c3272e3d8817851a8035052d2ecb9ebf126e1",
+      "benchmarks/tasks/T18c/meta.json": "cfd26933d991c46a2861f25ba81ea68f4ea4e89c"
+    },
+    "user": {
+      "claudeMd": "absent",
+      "skills": "session-start-hook synced",
+      "plugins": "",
+      "projectSettingsLocal": "absent"
+    }
+  },
+  "labels": {
+    "wave2-cloud-skill-t18c": {
+      "tree": "32b824f270668b38f23078ed025556fa066d0892",
+      "figmaVersion": "lib:Atlas Design System v1@2026-07-06T03:42:12Z",
+      "paths": {
+        ".agents/skills/atlas-pattern": "de03db88dd4b22308188bdd28ca8ec4305d8c96d",
+        "packages/governance/patterns": "23d573a36ed69457e8080f66ec42894c4f4657df",
+        "packages/governance/README.md": "d14ff17d7ad03810b44eae9cfd6e24ba74334a28",
+        "atlas/index.md": "4b8aa85f73d0e456561323e183483b0ded0c18d9",
+        "atlas/patterns": "75d2c96ef29fd2b6d9f388867b795902241d5af9",
+        ".agents/skills/atlas-component": "4d8baf0a691d0c5de56680c09595df8dd80332b4",
+        ".agents/skills/atlas-verify": "edd3edb24044d9706a0cb095cca12706a281aeaa",
+        ".agents/skills/atlas-prototype": "aa6b3838d708e19e2c0b019949c3ced64e8eff18",
+        ".agents/skills/atlas-figma-sync": "5a38dbd16743eb00a1bc1e67cbb6bfa72cda8762",
+        "AGENTS.md": "85c26004bfe2673ed83af4a8dfc4bd177d6056d6",
+        "claude.md": "62ea1211f3b0d3f446bebd7b4e801e01e0edeba4",
+        "scripts/atlas-verify.mjs": "c8ff86152672f0fdc7dd5d46a7bd77d516612fc1",
+        "scripts/atlas-sync.mjs": "31b4b0de40f9d21d7c7d11febb976ef9e4a6fe81",
+        "scripts/lib": "8d96696b409cc430b7db05607bf2b2e03b570fe3",
+        "packages/governance/token-lint.mjs": "7e2dc966180a5f13f78efa09fee6dfa127f75f45",
+        "atlas/metadata/Switch.json": "88d3a6ca9ac07152b7cd683a34ed20548bafd438",
+        "atlas/metadata/Badge.json": "842474a2a6c674f44b7846103c7b8b190ea8f152",
+        "atlas/Switch.md": "48ac1c55101477be1ed50d617577569cfb0c243b",
+        "atlas/Badge.md": "91f7eda7f5ac84479a7d8d49b5f81b594cd8ab7d",
+        "atlas/state": "efa08f30d41f05eedd8bc7549bb292eb7e1ea411",
+        "packages/ui-web/src/primitives/Switch": "ef6328877c62dd384ace393e3cba11f73e808ccd",
+        "packages/ui-web/src/primitives/Badge": "1a98e3ee90c14a31c9fb130fb8581708a01be608",
+        "packages/ui-web/tests": "fd9066c01f7511b9cf03cd00552c16230fa6437b",
+        "packages/figma-sync/code-connect/Switch.figma.tsx": "a22e9f9152ddb557f7e223166e3ea228c68be15f",
+        "packages/figma-sync/code-connect/Badge.figma.tsx": "9e6a792581db9d30832a22bf9e41bd7c876201b7",
+        "packages/governance/contracts/Switch.contract.ts": "562db5b83b030fa0e670befaab4dcdcb3dd97c5d",
+        "packages/governance/contracts/Badge.contract.ts": "50ce8e53653288f29c7d5643a8f65c4cd5958ce0"
+      }
+    },
+    "wave2-cloud-noskill-t18c": {
+      "tree": "6d1804ef1c13c33b71fadd93351e452622e2dab5",
+      "figmaVersion": "lib:Atlas Design System v1@2026-07-06T03:42:12Z",
+      "paths": {
+        ".agents/skills/atlas-pattern": "absent",
+        "packages/governance/patterns": "23d573a36ed69457e8080f66ec42894c4f4657df",
+        "packages/governance/README.md": "d14ff17d7ad03810b44eae9cfd6e24ba74334a28",
+        "atlas/index.md": "4b8aa85f73d0e456561323e183483b0ded0c18d9",
+        "atlas/patterns": "75d2c96ef29fd2b6d9f388867b795902241d5af9",
+        ".agents/skills/atlas-component": "4d8baf0a691d0c5de56680c09595df8dd80332b4",
+        ".agents/skills/atlas-verify": "edd3edb24044d9706a0cb095cca12706a281aeaa",
+        ".agents/skills/atlas-prototype": "aa6b3838d708e19e2c0b019949c3ced64e8eff18",
+        ".agents/skills/atlas-figma-sync": "5a38dbd16743eb00a1bc1e67cbb6bfa72cda8762",
+        "AGENTS.md": "ca8dc63ee7edc4de4f9bfd7cd00413e0532eaa75",
+        "claude.md": "1656874251dd70ac6b9dd7e0b28189a0aac1cf71",
+        "scripts/atlas-verify.mjs": "c8ff86152672f0fdc7dd5d46a7bd77d516612fc1",
+        "scripts/atlas-sync.mjs": "31b4b0de40f9d21d7c7d11febb976ef9e4a6fe81",
+        "scripts/lib": "8d96696b409cc430b7db05607bf2b2e03b570fe3",
+        "packages/governance/token-lint.mjs": "7e2dc966180a5f13f78efa09fee6dfa127f75f45",
+        "atlas/metadata/Switch.json": "88d3a6ca9ac07152b7cd683a34ed20548bafd438",
+        "atlas/metadata/Badge.json": "842474a2a6c674f44b7846103c7b8b190ea8f152",
+        "atlas/Switch.md": "48ac1c55101477be1ed50d617577569cfb0c243b",
+        "atlas/Badge.md": "91f7eda7f5ac84479a7d8d49b5f81b594cd8ab7d",
+        "atlas/state": "efa08f30d41f05eedd8bc7549bb292eb7e1ea411",
+        "packages/ui-web/src/primitives/Switch": "ef6328877c62dd384ace393e3cba11f73e808ccd",
+        "packages/ui-web/src/primitives/Badge": "1a98e3ee90c14a31c9fb130fb8581708a01be608",
+        "packages/ui-web/tests": "fd9066c01f7511b9cf03cd00552c16230fa6437b",
+        "packages/figma-sync/code-connect/Switch.figma.tsx": "a22e9f9152ddb557f7e223166e3ea228c68be15f",
+        "packages/figma-sync/code-connect/Badge.figma.tsx": "9e6a792581db9d30832a22bf9e41bd7c876201b7",
+        "packages/governance/contracts/Switch.contract.ts": "562db5b83b030fa0e670befaab4dcdcb3dd97c5d",
+        "packages/governance/contracts/Badge.contract.ts": "50ce8e53653288f29c7d5643a8f65c4cd5958ce0"
+      }
+    }
+  },
+  "runtime": {
+    "pattern": {
+      "mcpServers": "figma"
+    }
+  }
+}
