@@ -64,7 +64,11 @@ export function patternMetrics({ ws, meta, calls, events, result, sh, tscOut }) 
   // Figma-first: a Figma read must precede the first write of the doc
   const firstFigma = calls.findIndex(c => /^mcp__figma/.test(c.name) && !/use_figma/.test(c.name))
   const firstDocWrite = calls.findIndex(c => ["Write", "Edit", "MultiEdit"].includes(c.name) && /patterns\/members-permissions\.md$/.test(c.input?.file_path || ""))
-  const figmaFirst = firstFigma > -1 && (firstDocWrite === -1 || firstFigma < firstDocWrite)
+  // T18c (cloud variant): meta.exportDir replaces the Figma read with a Read of a file under that directory
+  const firstExportRead = meta.exportDir ? calls.findIndex(c => c.name === "Read" && (c.input?.file_path || "").includes(meta.exportDir)) : -1
+  const figmaFirst = meta.exportDir
+    ? firstExportRead > -1 && (firstDocWrite === -1 || firstExportRead < firstDocWrite) && useFigmaAttempts === 0
+    : firstFigma > -1 && (firstDocWrite === -1 || firstFigma < firstDocWrite)
 
   const generatedHandEdits = [...new Set(events.filter(e => e.kind === "write" && GENERATED.test(e.file)).map(e => e.file))]
   const readme = readWs("packages/governance/README.md")

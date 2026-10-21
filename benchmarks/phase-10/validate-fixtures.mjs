@@ -24,12 +24,20 @@ const skill = has(".agents/skills/atlas-pattern/SKILL.md"), row = /`atlas-patter
 facts.skill = skill; facts.routingRow = row
 must(skill === !NO_SKILL && row === !NO_SKILL, NO_SKILL ? "no-skill arm still has the atlas-pattern skill or its routing row" : "skill arm is missing the atlas-pattern skill or its routing row")
 
+if (meta.exportDir) {
+  // T18c: the text export must be present in the workspace, and the prompt must point at it
+  const dir = path.join("figma-export", "members-and-permissions")
+  facts.export = has(path.join(dir, "frame-tree.txt"))
+  must(facts.export, "figma-export/members-and-permissions/frame-tree.txt is missing from the workspace")
+  must(prompt.includes(meta.exportDir), "prompt does not point at the export directory")
+}
+
 const P = meta.pattern
 must(!has(P.docPath) && !has(P.examplePath), `${P.slug} doc or example already exists in the starting workspace`)
 must(!has(`atlas/patterns/${P.slug}.md`), `generated atlas/patterns/${P.slug}.md already exists`)
 must(!read("atlas/index.md").includes(P.slug), `atlas/index.md still lists ${P.slug}`)
 
-if (task === "T18") {
+if (task === "T18" || task === "T18c") {
   // the workspace must be a clean starting point: sync validates and has nothing left to write
   let out = ""; try { out = execSync("node scripts/atlas-sync.mjs --check", { cwd: ws, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] }) } catch (e) { out = (e.stdout || "") + (e.stderr || "") }
   facts.syncCheck = out.trim().split("\n").slice(-2)
