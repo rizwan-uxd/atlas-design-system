@@ -1,0 +1,290 @@
+{
+  "model": "claude-sonnet-5-5",
+  "ok": true,
+  "error": null,
+  "turns": 22,
+  "durationS": 89,
+  "costUsd": 0.459959,
+  "tokens": {
+    "input": 16,
+    "cacheWrite": 69427,
+    "cacheRead": 429345,
+    "output": 9520,
+    "totalContext": 498788
+  },
+  "tools": {
+    "Skill": 1,
+    "Read": 12,
+    "Bash": 2,
+    "Write": 4,
+    "Edit": 1
+  },
+  "toolCalls": 20,
+  "figmaCalls": 0,
+  "verifyRuns": 1,
+  "reworkEdits": 0,
+  "toolResultChars": {
+    "Skill": 32,
+    "Read": 57906,
+    "Bash": 748,
+    "Write": 952,
+    "Edit": 240
+  },
+  "skillsUsed": [
+    "atlas-prototype"
+  ],
+  "reads": {
+    "total": 12,
+    "unique": 12,
+    "offTask": 0,
+    "byCategory": {
+      "atlas-snapshot": 10,
+      "skills": 1,
+      "prototype-shell": 1
+    },
+    "files": [
+      "atlas/index.md",
+      ".claude/skills/atlas-prototype/references/flow-scaffold.md",
+      "atlas/Tabs.md",
+      "atlas/ListItem.md",
+      "atlas/EmptyState.md",
+      "atlas/Alert.md",
+      "atlas/Skeleton.md",
+      "atlas/Badge.md",
+      "atlas/Button.md",
+      "atlas/tokens.md",
+      "atlas/Avatar.md",
+      "app/prototypes/_shared/flowRegistry.ts"
+    ]
+  },
+  "bashCmds": [
+    "cd app/prototypes && mkdir -p notifications/steps && cat _shared/mockApi.ts | head -40; ls _shared",
+    "npm run atlas:verify -- --scope \"app/prototypes/notifications/**,app/prototypes/_shared/flowRegistry.ts\" 2>&1 | tail -40"
+  ],
+  "quality": {
+    "outputExists": true,
+    "files": 4,
+    "loc": 327,
+    "registered": true,
+    "tokenLintViolations": 0,
+    "tscErrors": 0,
+    "atlasComponentsImported": [
+      "Alert",
+      "Badge",
+      "Button",
+      "EmptyState",
+      "Skeleton",
+      "TabsList",
+      "TabsPanel",
+      "TabsRoot",
+      "TabsTrigger",
+      "ListItem",
+      "ListItemActions",
+      "ListItemContent",
+      "ListItemDescription",
+      "ListItemMedia",
+      "ListItemTitle"
+    ],
+    "expectedCoverage": "6/7",
+    "rawElements": 0,
+    "numericStyleLiterals": 3,
+    "primitiveTokenRefs": 0
+  },
+  "phase8": {
+    "readsAll": {
+      "total": 12,
+      "unique": 12,
+      "viaBash": 0,
+      "files": [
+        "atlas/index.md",
+        ".claude/skills/atlas-prototype/references/flow-scaffold.md",
+        "atlas/Tabs.md",
+        "atlas/ListItem.md",
+        "atlas/EmptyState.md",
+        "atlas/Alert.md",
+        "atlas/Skeleton.md",
+        "atlas/Badge.md",
+        "atlas/Button.md",
+        "atlas/tokens.md",
+        "atlas/Avatar.md",
+        "app/prototypes/_shared/flowRegistry.ts"
+      ]
+    },
+    "sourceOpened": {},
+    "sourceOpenedCount": 0,
+    "verify": {
+      "runs": 1,
+      "failures": 0,
+      "firstPass": true,
+      "finalPass": true,
+      "calls": [
+        {
+          "cmd": "npm run atlas:verify -- --scope \"app/prototypes/notifications/**,app/prototypes/_shared/flowRegistry.ts\" 2>&1 | tail -40",
+          "failed": false
+        }
+      ]
+    },
+    "wasted": {
+      "duplicateReads": 0,
+      "unusedComponentReads": [
+        "atlas/Avatar.md"
+      ],
+      "offTask": [],
+      "verifierInternals": [],
+      "failedToolCalls": 1,
+      "total": 2
+    },
+    "gaps": {
+      "available": true,
+      "candidatesChanged": [],
+      "expected": [],
+      "recognised": []
+    }
+  },
+  "w1": {
+    "tokenAccuracy": {
+      "value": 1,
+      "valid": 20,
+      "invalid": 0,
+      "primitive": 0,
+      "hardcoded": 0
+    },
+    "componentAccuracy": {
+      "value": 0.857,
+      "covered": 6,
+      "expected": 7,
+      "rawElements": 0
+    },
+    "a11yPass": true,
+    "deprecatedUsage": 0,
+    "humanCorrections": {
+      "available": false
+    },
+    "patternAdherence": {
+      "pattern": "notifications-center",
+      "score": 2,
+      "passed": 5,
+      "total": 5,
+      "results": [
+        {
+          "id": "list-item",
+          "pass": true
+        },
+        {
+          "id": "tabs",
+          "pass": true
+        },
+        {
+          "id": "empty-state",
+          "pass": true
+        },
+        {
+          "id": "skeleton",
+          "pass": true
+        },
+        {
+          "id": "alert",
+          "pass": true
+        }
+      ]
+    },
+    "patternStrict": {
+      "passed": 9,
+      "total": 18,
+      "fraction": 0.5,
+      "results": [
+        {
+          "id": "tabs-line",
+          "rule": "Two views as Tabs variant=line",
+          "pass": false
+        },
+        {
+          "id": "tabs-unread-count",
+          "rule": "Unread tab label carries the count",
+          "pass": false
+        },
+        {
+          "id": "tabs-aria-label",
+          "rule": "Tabs list has an aria-label",
+          "pass": true
+        },
+        {
+          "id": "list-ul-aria-label",
+          "rule": "Notifications are a ul with an accessible name",
+          "pass": true
+        },
+        {
+          "id": "row-muted-unread",
+          "rule": "Unread rows use ListItem variant muted",
+          "pass": false
+        },
+        {
+          "id": "unread-word",
+          "rule": "Unread is a visible word, not colour alone",
+          "pass": true
+        },
+        {
+          "id": "title-real-link",
+          "rule": "Title is a real link (a href or Link)",
+          "pass": false
+        },
+        {
+          "id": "no-row-onclick",
+          "rule": "No onClick on the ListItem row",
+          "pass": true
+        },
+        {
+          "id": "mark-all-ghost",
+          "rule": "Mark all as read is a ghost Button",
+          "pass": false
+        },
+        {
+          "id": "mark-all-disabled",
+          "rule": "Mark all as read is disabled when nothing is unread",
+          "pass": false
+        },
+        {
+          "id": "action-aria-label",
+          "rule": "Row action buttons name their notification",
+          "pass": true
+        },
+        {
+          "id": "no-destructive-row",
+          "rule": "No destructive action on a notification row",
+          "pass": true
+        },
+        {
+          "id": "no-confirm-dialog",
+          "rule": "No confirmation dialog (mark all is reversible)",
+          "pass": true
+        },
+        {
+          "id": "empty-all-caught-up",
+          "rule": "Empty All says the user is all caught up",
+          "pass": true
+        },
+        {
+          "id": "empty-unread-view-all",
+          "rule": "Empty Unread offers View all",
+          "pass": true
+        },
+        {
+          "id": "error-alert-retry",
+          "rule": "Error is Alert variant=danger with a Retry action",
+          "pass": false
+        },
+        {
+          "id": "live-region",
+          "rule": "Marking read is announced in a live region",
+          "pass": false
+        },
+        {
+          "id": "time-element",
+          "rule": "Time is a time element with dateTime",
+          "pass": false
+        }
+      ]
+    }
+  },
+  "subtype": "success"
+}

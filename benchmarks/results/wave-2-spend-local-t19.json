@@ -1,0 +1,60 @@
+{
+  "cap": 7,
+  "runs": [
+    {
+      "label": "wave3-patterns-t19",
+      "task": "T19",
+      "run": 1,
+      "costUsd": 0.4832204,
+      "date": "2026-10-21T13:01:08.673Z",
+      "stop": [],
+      "infra": false
+    },
+    {
+      "label": "wave3-nopatterns-t19",
+      "task": "T19",
+      "run": 1,
+      "costUsd": 0.45995,
+      "date": "2026-10-21T13:03:01.299Z",
+      "stop": [],
+      "infra": false
+    },
+    {
+      "label": "wave3-patterns-t19",
+      "task": "T19",
+      "run": 2,
+      "costUsd": 0.48423060000000007,
+      "date": "2026-10-21T13:04:44.580Z",
+      "stop": [],
+      "infra": false
+    },
+    {
+      "label": "wave3-nopatterns-t19",
+      "task": "T19",
+      "run": 2,
+      "costUsd": 0.5186466000000001,
+      "date": "2026-10-21T13:06:45.451Z",
+      "stop": [],
+      "infra": false
+    },
+    {
+      "label": "wave3-patterns-t19",
+      "task": "T19",
+      "run": 3,
+      "costUsd": 0.4726324,
+      "date": "2026-10-21T13:08:25.715Z",
+      "stop": [],
+      "infra": false
+    },
+    {
+      "label": "wave3-nopatterns-t19",
+      "task": "T19",
+      "run": 3,
+      "costUsd": 0.459959,
+      "date": "2026-10-21T13:10:01.175Z",
+      "stop": [],
+      "infra": false
+    }
+  ],
+  "interactive": []
+}

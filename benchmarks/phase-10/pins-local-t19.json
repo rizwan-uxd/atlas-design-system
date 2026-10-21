@@ -108,5 +108,9 @@
       }
     }
   },
-  "runtime": null
+  "runtime": {
+    "prototype": {
+      "mcpServers": "claude.ai Claude Docs | claude.ai Firecrawl | claude.ai Gmail | claude.ai Google Calendar | claude.ai Google Drive | claude.ai Mobbin | figma | figma-desktop | graft | plugin:claude-mem:mcp-search | plugin:vercel:vercel"
+    }
+  }
 }
