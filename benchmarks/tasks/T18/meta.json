@@ -25,7 +25,7 @@
     "atlas/index.json",
     "atlas/state/candidates.json"
   ],
-  "verifyScope": "packages/governance/**,atlas/patterns/**,atlas/index.md",
+  "verifyScope": "packages/governance/**,atlas/patterns/**,atlas/index.md,atlas/index.json",
   "requiredSections": ["Use when", "Don't use when", "Decision rules", "Components and variants", "Layout and density", "Hierarchy and composition", "Responsive behavior", "States", "Accessibility", "Anti-patterns", "Example"],
   "expectedComponents": ["Card", "Table", "Avatar", "Select", "Badge", "Button", "DropdownMenu", "Dialog", "AlertDialog", "Field", "Alert", "Skeleton"],
   "strictChecks": [

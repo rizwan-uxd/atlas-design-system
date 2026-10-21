@@ -1,0 +1,267 @@
+{
+  "model": "claude-sonnet-5-5",
+  "ok": true,
+  "error": null,
+  "turns": 38,
+  "durationS": 182,
+  "costUsd": 0.9999942,
+  "tokens": {
+    "input": 38,
+    "cacheWrite": 125470,
+    "cacheRead": 1801591,
+    "output": 13668,
+    "totalContext": 1927099
+  },
+  "tools": {
+    "Skill": 2,
+    "Read": 7,
+    "Glob": 1,
+    "ToolSearch": 1,
+    "mcp__figma__create_session": 1,
+    "mcp__figma__get_metadata": 1,
+    "mcp__figma__get_screenshot": 1,
+    "mcp__figma__get_design_context": 4,
+    "Grep": 8,
+    "Bash": 6,
+    "Write": 2,
+    "Edit": 1
+  },
+  "toolCalls": 35,
+  "figmaCalls": 7,
+  "verifyRuns": 3,
+  "reworkEdits": 1,
+  "toolResultChars": {
+    "Skill": 59,
+    "Read": 32886,
+    "Glob": 1473,
+    "ToolSearch": 271,
+    "mcp__figma__create_session": 95,
+    "mcp__figma__get_metadata": 25587,
+    "mcp__figma__get_screenshot": 572,
+    "mcp__figma__get_design_context": 96385,
+    "Grep": 11645,
+    "Bash": 11535,
+    "Write": 494,
+    "Edit": 160
+  },
+  "skillsUsed": [
+    "atlas-pattern",
+    "atlas-verify"
+  ],
+  "reads": {
+    "total": 7,
+    "unique": 7,
+    "offTask": 0,
+    "byCategory": {
+      "atlas-snapshot": 1,
+      "skills": 2,
+      "governance": 2,
+      "components": 2
+    },
+    "files": [
+      "atlas/index.md",
+      ".claude/skills/atlas-pattern/references/doc-template.md",
+      ".claude/skills/atlas-pattern/references/figma-frames.md",
+      "packages/governance/patterns/settings.md",
+      "packages/governance/patterns/examples/settings.example.tsx",
+      "packages/ui-web/src/compositions/Alert/Alert.tsx",
+      "packages/ui-web/src/compositions/Field/Field.tsx"
+    ]
+  },
+  "bashCmds": [
+    "sed -n 12p packages/governance/README.md; sed -n 41,52p atlas/Badge.md; cat packages/governance/patterns/examples/detail-view.example.tsx | head -60; grep -n \"export\" packages/ui-web/src/compositions/Dialog/Dialog.tsx packages/ui-web/src/compositions/Field/Field.tsx packages/ui-web/src/compositions/ListItem/ListItem.tsx packages/ui-web/src/compositions/Alert/Alert.tsx | cut -c1-220; grep -n \"iconOnly\\|icon\" packages/ui-web/src/primitives/Button/Button.tsx | head",
+    "cd /private/var/folders/mj/4bm9y0256pbc4jdsdqsm5zs00000gn/T/atlas-bench/wave2-skill-t18-T18-2/packages/ui-web/src && grep -n \"size-sm\\|size-md\\|font-size\\|padding-block\" primitives/Badge/Badge.module.css 2>/dev/null | head; ls primitives/Badge; sed -n 38,66p compositions/Alert/Alert.tsx; sed -n 43,66p compositions/Field/Field.tsx; grep -n \"export\" primitives/Table/Table.tsx | cut -c1-120; grep -n \"interface AvatarProps\" -A14 primitives/Avatar/Avatar.tsx; ls primitives/Skeleton; grep -n \"tsx\\|TabsPanel\" /dev/null; grep -n \"text-h1\\|text-body-sm\\|text-h4\\|spacing-6\\b\\|foreground-muted\\|text-caption\" ../../../atlas/tokens.md | head",
+    "sed -i '' 's/notifications center, payment and billing/notifications center, members and permissions, payment and billing/' packages/governance/README.md && npm run atlas:sync 2>&1 | tail -30 && npx tsc --noEmit 2>&1 | tail -20",
+    "npm run atlas:sync 2>&1 | tail -30",
+    "npx tsc --noEmit 2>&1 | tail -20",
+    "node scripts/atlas-verify.mjs --scope \"packages/governance/**,atlas/patterns/**,atlas/index.md,atlas/index.json\" 2>&1 | tail -40"
+  ],
+  "quality": {
+    "outputExists": false,
+    "files": 0,
+    "loc": 1,
+    "registered": false,
+    "tokenLintViolations": 0,
+    "tscErrors": 0,
+    "atlasComponentsImported": [],
+    "expectedCoverage": "0/12",
+    "rawElements": 0,
+    "numericStyleLiterals": 0,
+    "primitiveTokenRefs": 0
+  },
+  "phase8": {
+    "readsAll": {
+      "total": 22,
+      "unique": 16,
+      "viaBash": 9,
+      "files": [
+        "atlas/index.md",
+        ".claude/skills/atlas-pattern/references/doc-template.md",
+        ".claude/skills/atlas-pattern/references/figma-frames.md",
+        "packages/governance/patterns/settings.md",
+        "packages/governance/patterns/examples/settings.example.tsx",
+        "Grep:atlas/Badge.md",
+        "Grep:packages/governance/README.md",
+        "Bash:packages/governance/README.md",
+        "Bash:atlas/Badge.md",
+        "Bash:packages/governance/patterns/examples/detail-view.example.tsx",
+        "Bash:packages/ui-web/src/compositions/Dialog/Dialog.tsx",
+        "Bash:packages/ui-web/src/compositions/Field/Field.tsx",
+        "Bash:packages/ui-web/src/compositions/ListItem/ListItem.tsx",
+        "Bash:packages/ui-web/src/compositions/Alert/Alert.tsx",
+        "Bash:packages/ui-web/src/primitives/Button/Button.tsx",
+        "Grep:atlas/Badge.md",
+        "packages/ui-web/src/compositions/Alert/Alert.tsx",
+        "packages/ui-web/src/compositions/Field/Field.tsx",
+        "Grep:packages/ui-web/src/primitives/Table/Table.tsx",
+        "Grep:atlas/tokens.md",
+        "Grep:atlas/Avatar.md",
+        "Bash:packages/governance/README.md"
+      ]
+    },
+    "sourceOpened": {
+      "verifier-internals": [
+        "packages/governance/patterns/settings.md",
+        "packages/governance/patterns/examples/settings.example.tsx",
+        "packages/governance/README.md",
+        "packages/governance/patterns/examples/detail-view.example.tsx"
+      ],
+      "component-source": [
+        "packages/ui-web/src/compositions/Dialog/Dialog.tsx",
+        "packages/ui-web/src/compositions/Field/Field.tsx",
+        "packages/ui-web/src/compositions/ListItem/ListItem.tsx",
+        "packages/ui-web/src/compositions/Alert/Alert.tsx",
+        "packages/ui-web/src/primitives/Button/Button.tsx",
+        "packages/ui-web/src/primitives/Table/Table.tsx"
+      ]
+    },
+    "sourceOpenedCount": 10,
+    "verify": {
+      "runs": 2,
+      "failures": 0,
+      "firstPass": true,
+      "finalPass": true,
+      "calls": [
+        {
+          "cmd": "npx tsc --noEmit 2>&1 | tail -20",
+          "failed": false
+        },
+        {
+          "cmd": "node scripts/atlas-verify.mjs --scope \"packages/governance/**,atlas/patterns/**,atlas/index.md,atlas/index.json\" 2>&1 | ",
+          "failed": false
+        }
+      ]
+    },
+    "wasted": {
+      "duplicateReads": 6,
+      "unusedComponentReads": [
+        "atlas/Badge.md",
+        "packages/ui-web/src/compositions/Dialog/Dialog.tsx",
+        "packages/ui-web/src/compositions/Field/Field.tsx",
+        "packages/ui-web/src/compositions/ListItem/ListItem.tsx",
+        "packages/ui-web/src/compositions/Alert/Alert.tsx",
+        "packages/ui-web/src/primitives/Button/Button.tsx",
+        "packages/ui-web/src/primitives/Table/Table.tsx",
+        "atlas/Avatar.md"
+      ],
+      "offTask": [],
+      "verifierInternals": [
+        "packages/governance/patterns/settings.md",
+        "packages/governance/patterns/examples/settings.example.tsx",
+        "packages/governance/README.md",
+        "packages/governance/patterns/examples/detail-view.example.tsx"
+      ],
+      "failedToolCalls": 3,
+      "total": 21
+    },
+    "gaps": {
+      "available": true,
+      "candidatesChanged": [],
+      "expected": [],
+      "recognised": []
+    }
+  },
+  "pattern": {
+    "changed": [
+      "atlas/index.json",
+      "atlas/index.md",
+      "packages/governance/README.md",
+      "atlas/patterns/members-permissions.md",
+      "packages/governance/patterns/examples/members-permissions.example.tsx",
+      "packages/governance/patterns/members-permissions.md"
+    ],
+    "outOfScope": [],
+    "useFigmaAttempts": 0,
+    "figmaReads": [
+      "mcp__figma__create_session",
+      "mcp__figma__get_metadata",
+      "mcp__figma__get_screenshot",
+      "mcp__figma__get_design_context",
+      "mcp__figma__get_design_context",
+      "mcp__figma__get_design_context",
+      "mcp__figma__get_design_context"
+    ],
+    "permissionDenials": 3,
+    "slugUsed": "members-permissions",
+    "slugAsExpected": true,
+    "sectionsMissing": [],
+    "namedComponents": [
+      "Card",
+      "Table",
+      "Avatar",
+      "Select",
+      "Badge",
+      "Button",
+      "Dialog",
+      "Field",
+      "AlertDialog",
+      "Alert",
+      "Skeleton",
+      "ListItem"
+    ],
+    "componentRecall": 0.917,
+    "componentsMissing": [
+      "DropdownMenu"
+    ],
+    "strict": {
+      "passed": 7,
+      "total": 8,
+      "failed": [
+        "single-primary-invite"
+      ]
+    },
+    "notDrawnMarks": 3,
+    "example": {
+      "rawElements": 0,
+      "numericStyleLiterals": 0,
+      "primitiveTokenRefs": 0,
+      "loc": 157
+    },
+    "syncTail": [
+      "    DISC-097 Card [figma] Code has CardFooter justify = start | between | end; Figma Card set 110:24 draws the Footer slot with one fixed alignment and no justify property. Found 2026-10-21 in the Card refinement pass.",
+      "",
+      "  ⚠ no --pull: Figma-side facts were last read 2026-10-10T17:05:52.269Z — re-run the atlas-figma-sync skill to refresh them."
+    ],
+    "tscErrors": 0,
+    "verifyFails": [
+      "paths"
+    ],
+    "generatedHandEdits": [],
+    "gates": {
+      "docAndExample": true,
+      "sectionsComplete": true,
+      "syncValid": true,
+      "syncCurrent": true,
+      "tsc": true,
+      "verify": false,
+      "figmaFirst": true,
+      "figmaWrites": true,
+      "scope": true,
+      "noGeneratedHandEdits": true,
+      "readmeListed": true
+    },
+    "gatesPass": false,
+    "maxTurnsExit": false
+  },
+  "subtype": "success"
+}
