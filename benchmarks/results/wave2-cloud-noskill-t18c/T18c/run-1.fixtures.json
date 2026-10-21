@@ -1,0 +1,16 @@
+{
+  "ok": false,
+  "failures": [
+    "atlas:sync --check is not clean in the starting workspace"
+  ],
+  "facts": {
+    "skill": false,
+    "routingRow": false,
+    "export": true,
+    "syncCheck": [
+      "",
+      "  ⚠ no --pull: Figma-side facts were last read 2026-10-10T17:05:52.269Z — re-run the atlas-figma-sync skill to refresh them."
+    ],
+    "siblingPatterns": 14
+  }
+}

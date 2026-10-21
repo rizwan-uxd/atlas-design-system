@@ -23,6 +23,9 @@
         ", members and permissions",
         ""
       ]
+    },
+    "patternsJson": {
+      "atlas/index.json": "members-permissions"
     }
   },
   "allowedPaths": [
@@ -31,7 +34,8 @@
     "packages/governance/README.md",
     "atlas/patterns/members-permissions.md",
     "atlas/index.md",
-    "atlas/state/candidates.json"
+    "atlas/state/candidates.json",
+    "atlas/index.json"
   ],
   "verifyScope": "packages/governance/**,atlas/patterns/**,atlas/index.md",
   "requiredSections": [

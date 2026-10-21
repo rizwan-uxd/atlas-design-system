@@ -11,6 +11,12 @@ for (const [f, needle] of Object.entries(fx.lines || {})) {
   const src = fs.readFileSync(at(f), "utf8")
   fs.writeFileSync(at(f), src.split("\n").filter(l => !l.includes(needle)).join("\n"))
 }
+// the machine-readable index (atlas/index.json) lists patterns as an array: drop the entry by slug
+for (const [f, slug] of Object.entries(fx.patternsJson || {})) {
+  const j = JSON.parse(fs.readFileSync(at(f), "utf8"))
+  j.patterns = j.patterns.filter(p => p.slug !== slug)
+  fs.writeFileSync(at(f), JSON.stringify(j, null, 2) + "\n")
+}
 for (const [f, [from, to]] of Object.entries(fx.replace || {})) {
   const src = fs.readFileSync(at(f), "utf8")
   if (!src.includes(from)) { console.error(`✗ fixture: "${from}" not found in ${f}`); process.exit(1) }
