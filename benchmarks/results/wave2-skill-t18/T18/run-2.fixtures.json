@@ -1,0 +1,13 @@
+{
+  "ok": true,
+  "failures": [],
+  "facts": {
+    "skill": true,
+    "routingRow": true,
+    "syncCheck": [
+      "",
+      "  ⚠ no --pull: Figma-side facts were last read 2026-10-10T17:05:52.269Z — re-run the atlas-figma-sync skill to refresh them."
+    ],
+    "siblingPatterns": 14
+  }
+}

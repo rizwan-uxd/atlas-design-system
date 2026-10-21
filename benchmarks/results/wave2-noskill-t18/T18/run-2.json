@@ -1,0 +1,254 @@
+{
+  "model": "claude-sonnet-5-5",
+  "ok": true,
+  "error": null,
+  "turns": 25,
+  "durationS": 122,
+  "costUsd": 0.6410889999999999,
+  "tokens": {
+    "input": 30,
+    "cacheWrite": 80332,
+    "cacheRead": 974455,
+    "output": 12377,
+    "totalContext": 1054817
+  },
+  "tools": {
+    "ToolSearch": 1,
+    "Bash": 9,
+    "Skill": 1,
+    "mcp__figma-desktop__get_metadata": 2,
+    "mcp__figma-desktop__get_design_context": 1,
+    "mcp__figma-desktop__get_screenshot": 1,
+    "Grep": 1,
+    "Read": 5,
+    "Write": 2
+  },
+  "toolCalls": 23,
+  "figmaCalls": 4,
+  "verifyRuns": 2,
+  "reworkEdits": 0,
+  "toolResultChars": {
+    "ToolSearch": 228,
+    "Bash": 37594,
+    "Skill": 43,
+    "mcp__figma-desktop__get_design_context": 107,
+    "mcp__figma-desktop__get_metadata": 16784,
+    "mcp__figma-desktop__get_screenshot": 63104,
+    "Grep": 12281,
+    "Read": 10549,
+    "Write": 498
+  },
+  "skillsUsed": [
+    "figma:figma-design-to-code"
+  ],
+  "reads": {
+    "total": 5,
+    "unique": 5,
+    "offTask": 0,
+    "byCategory": {
+      "governance": 1,
+      "components": 4
+    },
+    "files": [
+      "packages/governance/patterns/examples/notifications-center.example.tsx",
+      "packages/ui-web/src/primitives/Select/Select.tsx",
+      "packages/ui-web/src/patterns/DropdownMenu/DropdownMenu.tsx",
+      "packages/ui-web/src/compositions/Alert/Alert.tsx",
+      "packages/ui-web/src/compositions/Toast/Toast.tsx"
+    ]
+  },
+  "bashCmds": [
+    "ls packages/governance packages/governance/patterns atlas/patterns | head -80 && grep -n -i \"pattern\" atlas/index.md | head -40",
+    "cat packages/governance/patterns/notifications-center.md && ls packages/governance/patterns/examples && diff -q packages/governance/patterns/notifications-center.md atlas/patterns/notifications-center.md; cat packages/governance/README.md | head -60; grep -rn \"patterns\" scripts/atlas-sync.mjs | head -20",
+    "sed -n 485,560p scripts/atlas-sync.mjs && cat packages/governance/patterns/examples/payment-billing.example.tsx && sed -n 1,12p packages/governance/patterns/payment-billing.md && ls packages/ui-web/src/*/ && grep -n \"Table\\|Select\\|AlertDialog\\|Field\\|Badge\" atlas/index.md | cut -c1-260",
+    "cd /private/var/folders/mj/4bm9y0256pbc4jdsdqsm5zs00000gn/T/atlas-bench/wave2-noskill-t18-T18-2/packages/ui-web/src && grep -n \"^export\" primitives/Select/Select.tsx patterns/DropdownMenu/DropdownMenu.tsx primitives/Avatar/Avatar.tsx compositions/Toast/Toast.tsx compositions/Alert/Alert.tsx primitives/Table/Table.tsx primitives/Skeleton/Skeleton.tsx | cut -c1-200; sed -n 1,60p primitives/Select/Select.tsx; grep -n \"Toast\\|toast\" ../../../packages/governance/patterns/examples/settings.example.tsx | head; grep -n \"DropdownMenu\" ../../../packages/governance/patterns/examples/*.tsx | head -5; grep -n \"Avatar\" ../../../packages/governance/patterns/examples/notifications-center.example.tsx | head -3",
+    "for c in Button Badge Card Alert Select Dialog AlertDialog Skeleton Avatar; do echo \"== $c\"; grep -E '\"(variants|sizes|properties)\"' -A3 atlas/metadata/$c.json | head -12; done; grep -n \"icon\\|iconOnly\" packages/ui-web/src/primitives/Button/Button.tsx | head -8; grep -n \"DropdownMenu\" -r packages/governance/patterns/examples | head -3",
+    "node -e '\nfor (const c of [\"Button\",\"Badge\",\"Card\",\"Alert\",\"Select\",\"Dialog\",\"AlertDialog\",\"Skeleton\",\"Avatar\"]) {\n  const j = JSON.parse(require(\"fs\").readFileSync(`atlas/metadata/${c}.json`,\"utf8\"));\n  console.log(c, JSON.stringify({v:j.variants,s:j.sizes,f:j.figma?.properties}))\n}'; grep -n \"icon\" packages/ui-web/src/primitives/Button/Button.tsx | head -8",
+    "grep -n \"export\" packages/ui-web/src/compositions/Card/Card.tsx | head -12; grep -rn \"Toaster\\|toast(\" packages/governance/patterns/examples | head -4; grep -n \"AlertDialogContent\\|variant\" packages/ui-web/src/compositions/AlertDialog/AlertDialog.tsx | head -8; grep -n \"Skeleton\" packages/ui-web/src/primitives/Skeleton/Skeleton.tsx | head -5; grep -n \"MoreHorizontal\\|Ellipsis\" -r packages/ui-web/src --include=*.tsx -l | head -3",
+    "npm run atlas:sync 2>&1 | tail -15; git status --short; npx tsc --noEmit 2>&1 | head -20",
+    "npm run atlas:verify -- --scope \"packages/governance/patterns/**\" 2>&1 | tail -25; git diff --stat"
+  ],
+  "quality": {
+    "outputExists": false,
+    "files": 0,
+    "loc": 1,
+    "registered": false,
+    "tokenLintViolations": 0,
+    "tscErrors": 0,
+    "atlasComponentsImported": [],
+    "expectedCoverage": "0/12",
+    "rawElements": 0,
+    "numericStyleLiterals": 0,
+    "primitiveTokenRefs": 0
+  },
+  "phase8": {
+    "readsAll": {
+      "total": 20,
+      "unique": 16,
+      "viaBash": 15,
+      "files": [
+        "Bash:atlas/index.md",
+        "Bash:packages/governance/patterns/notifications-center.md",
+        "Bash:packages/governance/patterns/notifications-center.md",
+        "Bash:atlas/patterns/notifications-center.md",
+        "Bash:packages/governance/README.md",
+        "Bash:scripts/atlas-sync.mjs",
+        "Bash:scripts/atlas-sync.mjs",
+        "Bash:packages/governance/patterns/examples/payment-billing.example.tsx",
+        "Bash:packages/governance/patterns/payment-billing.md",
+        "Bash:atlas/index.md",
+        "packages/governance/patterns/examples/notifications-center.example.tsx",
+        "packages/ui-web/src/primitives/Select/Select.tsx",
+        "packages/ui-web/src/patterns/DropdownMenu/DropdownMenu.tsx",
+        "packages/ui-web/src/compositions/Alert/Alert.tsx",
+        "packages/ui-web/src/compositions/Toast/Toast.tsx",
+        "Bash:packages/ui-web/src/primitives/Button/Button.tsx",
+        "Bash:packages/ui-web/src/primitives/Button/Button.tsx",
+        "Bash:packages/ui-web/src/compositions/Card/Card.tsx",
+        "Bash:packages/ui-web/src/compositions/AlertDialog/AlertDialog.tsx",
+        "Bash:packages/ui-web/src/primitives/Skeleton/Skeleton.tsx"
+      ]
+    },
+    "sourceOpened": {
+      "verifier-internals": [
+        "packages/governance/patterns/notifications-center.md",
+        "packages/governance/README.md",
+        "scripts/atlas-sync.mjs",
+        "packages/governance/patterns/examples/payment-billing.example.tsx",
+        "packages/governance/patterns/payment-billing.md",
+        "packages/governance/patterns/examples/notifications-center.example.tsx"
+      ],
+      "component-source": [
+        "packages/ui-web/src/primitives/Select/Select.tsx",
+        "packages/ui-web/src/patterns/DropdownMenu/DropdownMenu.tsx",
+        "packages/ui-web/src/compositions/Alert/Alert.tsx",
+        "packages/ui-web/src/compositions/Toast/Toast.tsx",
+        "packages/ui-web/src/primitives/Button/Button.tsx",
+        "packages/ui-web/src/compositions/Card/Card.tsx",
+        "packages/ui-web/src/compositions/AlertDialog/AlertDialog.tsx",
+        "packages/ui-web/src/primitives/Skeleton/Skeleton.tsx"
+      ]
+    },
+    "sourceOpenedCount": 14,
+    "verify": {
+      "runs": 2,
+      "failures": 1,
+      "firstPass": true,
+      "finalPass": false,
+      "calls": [
+        {
+          "cmd": "npm run atlas:sync 2>&1 | tail -15; git status --short; npx tsc --noEmit 2>&1 | head -20",
+          "failed": false
+        },
+        {
+          "cmd": "npm run atlas:verify -- --scope \"packages/governance/patterns/**\" 2>&1 | tail -25; git diff --stat",
+          "failed": true
+        }
+      ]
+    },
+    "wasted": {
+      "duplicateReads": 4,
+      "unusedComponentReads": [
+        "packages/ui-web/src/primitives/Select/Select.tsx",
+        "packages/ui-web/src/patterns/DropdownMenu/DropdownMenu.tsx",
+        "packages/ui-web/src/compositions/Alert/Alert.tsx",
+        "packages/ui-web/src/compositions/Toast/Toast.tsx",
+        "packages/ui-web/src/primitives/Button/Button.tsx",
+        "packages/ui-web/src/compositions/Card/Card.tsx",
+        "packages/ui-web/src/compositions/AlertDialog/AlertDialog.tsx",
+        "packages/ui-web/src/primitives/Skeleton/Skeleton.tsx"
+      ],
+      "offTask": [],
+      "verifierInternals": [
+        "packages/governance/patterns/notifications-center.md",
+        "packages/governance/README.md",
+        "scripts/atlas-sync.mjs",
+        "packages/governance/patterns/examples/payment-billing.example.tsx",
+        "packages/governance/patterns/payment-billing.md",
+        "packages/governance/patterns/examples/notifications-center.example.tsx"
+      ],
+      "failedToolCalls": 3,
+      "total": 21
+    },
+    "gaps": {
+      "available": true,
+      "candidatesChanged": [],
+      "expected": [],
+      "recognised": []
+    }
+  },
+  "pattern": {
+    "changed": [
+      "atlas/index.json",
+      "atlas/index.md",
+      "atlas/patterns/members-permissions.md",
+      "packages/governance/patterns/examples/members-permissions.example.tsx",
+      "packages/governance/patterns/members-permissions.md"
+    ],
+    "outOfScope": [],
+    "useFigmaAttempts": 0,
+    "figmaReads": [
+      "mcp__figma-desktop__get_metadata",
+      "mcp__figma-desktop__get_design_context",
+      "mcp__figma-desktop__get_screenshot",
+      "mcp__figma-desktop__get_metadata"
+    ],
+    "permissionDenials": 3,
+    "slugUsed": "members-permissions",
+    "slugAsExpected": true,
+    "sectionsMissing": [],
+    "namedComponents": [
+      "Card",
+      "Table",
+      "Avatar",
+      "Select",
+      "Badge",
+      "Button",
+      "DropdownMenu",
+      "Dialog",
+      "Field",
+      "AlertDialog",
+      "Alert",
+      "Toast",
+      "Skeleton"
+    ],
+    "componentRecall": 1,
+    "componentsMissing": [],
+    "strict": {
+      "passed": 8,
+      "total": 8,
+      "failed": []
+    },
+    "notDrawnMarks": 0,
+    "example": {
+      "rawElements": 0,
+      "numericStyleLiterals": 5,
+      "primitiveTokenRefs": 0,
+      "loc": 203
+    },
+    "syncTail": [
+      "    DISC-097 Card [figma] Code has CardFooter justify = start | between | end; Figma Card set 110:24 draws the Footer slot with one fixed alignment and no justify property. Found 2026-10-21 in the Card refinement pass.",
+      "",
+      "  ⚠ no --pull: Figma-side facts were last read 2026-10-10T17:05:52.269Z — re-run the atlas-figma-sync skill to refresh them."
+    ],
+    "tscErrors": 0,
+    "verifyFails": [],
+    "generatedHandEdits": [],
+    "gates": {
+      "docAndExample": true,
+      "sectionsComplete": true,
+      "syncValid": true,
+      "syncCurrent": true,
+      "tsc": true,
+      "verify": true,
+      "figmaFirst": true,
+      "figmaWrites": true,
+      "scope": true,
+      "noGeneratedHandEdits": true,
+      "readmeListed": false
+    },
+    "gatesPass": false,
+    "maxTurnsExit": false
+  },
+  "subtype": "success"
+}

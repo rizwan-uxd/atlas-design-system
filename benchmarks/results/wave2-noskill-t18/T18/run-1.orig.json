@@ -1,0 +1,304 @@
+{
+  "model": "claude-sonnet-5-5",
+  "ok": true,
+  "error": null,
+  "turns": 31,
+  "durationS": 159,
+  "costUsd": 1.0074995999999998,
+  "tokens": {
+    "input": 42,
+    "cacheWrite": 121861,
+    "cacheRead": 1848158,
+    "output": 14930,
+    "totalContext": 1970061
+  },
+  "tools": {
+    "Bash": 16,
+    "ToolSearch": 1,
+    "mcp__figma__create_session": 1,
+    "Skill": 1,
+    "mcp__figma__get_metadata": 1,
+    "mcp__figma__get_screenshot": 1,
+    "mcp__figma__get_design_context": 3,
+    "Read": 2,
+    "Grep": 1,
+    "Write": 2
+  },
+  "toolCalls": 29,
+  "figmaCalls": 6,
+  "verifyRuns": 3,
+  "reworkEdits": 0,
+  "toolResultChars": {
+    "Bash": 57751,
+    "ToolSearch": 271,
+    "mcp__figma__create_session": 95,
+    "Skill": 43,
+    "mcp__figma__get_metadata": 25587,
+    "mcp__figma__get_screenshot": 572,
+    "mcp__figma__get_design_context": 223352,
+    "Read": 10987,
+    "Grep": 571,
+    "Write": 498
+  },
+  "skillsUsed": [
+    "figma:figma-design-to-code"
+  ],
+  "reads": {
+    "total": 2,
+    "unique": 2,
+    "offTask": 0,
+    "byCategory": {
+      "governance": 1,
+      "components": 1
+    },
+    "files": [
+      "packages/governance/patterns/examples/payment-billing.example.tsx",
+      "packages/ui-web/src/compositions/Field/Field.tsx"
+    ]
+  },
+  "bashCmds": [
+    "ls packages/governance/patterns atlas/patterns | head -50; grep -n -i \"pattern\" atlas/index.md | head -30",
+    "cat packages/governance/patterns/notifications-center.md; ls packages/governance/patterns/examples | head; grep -n -i \"pattern\" scripts/atlas-sync.mjs | head -30; cat atlas/state/decisions.json | head -c 600",
+    "sed -n 489,545p scripts/atlas-sync.mjs; cat packages/governance/patterns/examples/notifications-center.example.tsx | head -80; ls atlas/*.md | tr '\\n' ' '",
+    "curl -s -f -L -o /tmp/mp.png \"https://www.figma.com/api/mcp/asset/7d267f77-8603-49e0-aa45-d6659fc27e91.png\"; for c in Table Select Badge AlertDialog Field Dialog Alert Card Avatar Skeleton ListItem; do echo \"== $c\"; grep -E \"^\\| $c \" atlas/index.md; done; sed -n 1,200p atlas/Badge.md | head -60; tail -80 packages/governance/patterns/examples/notifications-center.example.tsx",
+    "curl -s -f -L -o /tmp/mp.png \"https://www.figma.com/api/mcp/asset/7d267f77-8603-49e0-aa45-d6659fc27e91.png\"; grep -E \"^\\| (Table|Select|Badge|AlertDialog|Field|Dialog|Alert|Card|Avatar|Skeleton|ListItem|Button|Toast|DropdownMenu) \" atlas/index.md",
+    "tail -75 packages/governance/patterns/examples/notifications-center.example.tsx",
+    "grep -E \"^\\| (Table|Select|Badge|AlertDialog|Field|Dialog|Alert|Card|Avatar|Skeleton|ListItem|Button|Toast|DropdownMenu) \" atlas/index.md",
+    "grep -n -i -E \"24|xs|sm\" atlas/Avatar.md | head -8; grep -n -i -E \"18|sm\" atlas/Badge.md | head -6; grep -n -i -E \"500|md\" atlas/Dialog.md atlas/AlertDialog.md | head -8; grep -n -i -E \"32|iconOnly\" atlas/Button.md | head -6; ls packages/ui-web/src/*/ | grep -i -E \"Table|Select|Toast|Dropdown\"; grep -n \"export\" packages/ui-web/src/primitives/Table/Table.tsx packages/ui-web/src/primitives/Select/Select.tsx packages/ui-web/src/compositions/AlertDialog/AlertDialog.tsx packages/ui-web/src/compositions/Dialog/Dialog.tsx packages/ui-web/src/patterns/DropdownMenu/DropdownMenu.tsx packages/ui-web/src/compositions/Field/Field.tsx packages/ui-web/src/compositions/Toast/Toast.tsx | cut -c1-170",
+    "grep -n -E \"xs|24\" atlas/Avatar.md | head; grep -n -E \"sm|18\" atlas/metadata/Badge.json | head -5; grep -n -i -E \"iconOnly|32\" atlas/metadata/Button.json | head; sed -n 1,30p packages/ui-web/src/compositions/Dialog/Dialog.tsx | head -5; grep -n \"Avatar\\b\" -m3 packages/ui-web/src/primitives/Avatar/Avatar.tsx; grep -n \"export function Field\" -A22 packages/ui-web/src/compositions/Field/Field.tsx | head -40; sed -n 119,130p packages/ui-web/src/compositions/Dialog/Dialog.tsx; sed -n 96,115p packages/ui-web/src/primitives/Table/Table.tsx; ls packages/ui-web/src/primitives/Table; ls packages/governance/patterns/examples | tail -3; grep -rn \"patterns\" package.json | head",
+    "cd /private/var/folders/mj/4bm9y0256pbc4jdsdqsm5zs00000gn/T/atlas-bench/wave2-noskill-t18-T18-1/packages/governance/patterns/examples && cat payment-billing.example.tsx | head -150; grep -n \"Select\\|toast\\|Toast\\|Field\" settings.example.tsx | head -30; sed -n 35,66p ../../../ui-web/src/compositions/Field/Field.tsx",
+    "sed -n 40,75p packages/ui-web/src/primitives/Avatar/Avatar.tsx; sed -n 46,64p packages/ui-web/src/patterns/DropdownMenu/DropdownMenu.tsx",
+    "grep -n -E \"size|24px|--atlas-avatar\" packages/ui-web/src/primitives/Avatar/Avatar.module.css | head -12; grep -n -E \"sm|height|18|min-block\" packages/ui-web/src/primitives/Badge/Badge.module.css | head -8",
+    "sed -n 65,76p packages/ui-web/src/patterns/DropdownMenu/DropdownMenu.tsx; sed -n 13,40p packages/ui-web/src/primitives/Select/Select.tsx; grep -n \"iconOnly\\|loading\" packages/ui-web/src/primitives/Button/Button.tsx | head -5; sed -n 15,30p packages/governance/patterns/examples/settings.example.tsx",
+    "grep -n \"atlas:sync\\|atlas:verify\\|\\\"tsc\\|typecheck\" package.json",
+    "npm run atlas:sync 2>&1 | tail -20; git status --short; npx tsc --noEmit 2>&1 | head -20",
+    "npm run atlas:verify -- --scope \"packages/governance/patterns/**\" 2>&1 | tail -30"
+  ],
+  "quality": {
+    "outputExists": false,
+    "files": 0,
+    "loc": 1,
+    "registered": false,
+    "tokenLintViolations": 0,
+    "tscErrors": 0,
+    "atlasComponentsImported": [],
+    "expectedCoverage": "0/12",
+    "rawElements": 0,
+    "numericStyleLiterals": 0,
+    "primitiveTokenRefs": 0
+  },
+  "phase8": {
+    "readsAll": {
+      "total": 45,
+      "unique": 26,
+      "viaBash": 42,
+      "files": [
+        "Bash:atlas/index.md",
+        "Bash:packages/governance/patterns/notifications-center.md",
+        "Bash:scripts/atlas-sync.mjs",
+        "Bash:atlas/state/decisions.json",
+        "Bash:scripts/atlas-sync.mjs",
+        "Bash:packages/governance/patterns/examples/notifications-center.example.tsx",
+        "Bash:atlas/index.md",
+        "Bash:atlas/Badge.md",
+        "Bash:packages/governance/patterns/examples/notifications-center.example.tsx",
+        "Bash:atlas/index.md",
+        "Bash:packages/governance/patterns/examples/notifications-center.example.tsx",
+        "Bash:atlas/index.md",
+        "Bash:atlas/Avatar.md",
+        "Bash:atlas/Badge.md",
+        "Bash:atlas/Dialog.md",
+        "Bash:atlas/AlertDialog.md",
+        "Bash:atlas/Button.md",
+        "Bash:packages/ui-web/src/primitives/Table/Table.tsx",
+        "Bash:packages/ui-web/src/primitives/Select/Select.tsx",
+        "Bash:packages/ui-web/src/compositions/AlertDialog/AlertDialog.tsx",
+        "Bash:packages/ui-web/src/compositions/Dialog/Dialog.tsx",
+        "Bash:packages/ui-web/src/patterns/DropdownMenu/DropdownMenu.tsx",
+        "Bash:packages/ui-web/src/compositions/Field/Field.tsx",
+        "Bash:packages/ui-web/src/compositions/Toast/Toast.tsx",
+        "Bash:atlas/Avatar.md",
+        "Bash:atlas/metadata/Badge.json",
+        "Bash:atlas/metadata/Button.json",
+        "Bash:packages/ui-web/src/compositions/Dialog/Dialog.tsx",
+        "Bash:packages/ui-web/src/primitives/Avatar/Avatar.tsx",
+        "Bash:packages/ui-web/src/compositions/Field/Field.tsx",
+        "Bash:packages/ui-web/src/compositions/Dialog/Dialog.tsx",
+        "Bash:packages/ui-web/src/primitives/Table/Table.tsx",
+        "Bash:package.json",
+        "packages/governance/patterns/examples/payment-billing.example.tsx",
+        "packages/ui-web/src/compositions/Field/Field.tsx",
+        "Grep:packages/governance/patterns/examples/settings.example.tsx",
+        "Bash:packages/ui-web/src/primitives/Avatar/Avatar.tsx",
+        "Bash:packages/ui-web/src/patterns/DropdownMenu/DropdownMenu.tsx",
+        "Bash:packages/ui-web/src/primitives/Avatar/Avatar.module.css",
+        "Bash:packages/ui-web/src/primitives/Badge/Badge.module.css",
+        "Bash:packages/ui-web/src/patterns/DropdownMenu/DropdownMenu.tsx",
+        "Bash:packages/ui-web/src/primitives/Select/Select.tsx",
+        "Bash:packages/ui-web/src/primitives/Button/Button.tsx",
+        "Bash:packages/governance/patterns/examples/settings.example.tsx",
+        "Bash:package.json"
+      ]
+    },
+    "sourceOpened": {
+      "verifier-internals": [
+        "packages/governance/patterns/notifications-center.md",
+        "scripts/atlas-sync.mjs",
+        "packages/governance/patterns/examples/notifications-center.example.tsx",
+        "packages/governance/patterns/examples/payment-billing.example.tsx",
+        "packages/governance/patterns/examples/settings.example.tsx"
+      ],
+      "component-source": [
+        "packages/ui-web/src/primitives/Table/Table.tsx",
+        "packages/ui-web/src/primitives/Select/Select.tsx",
+        "packages/ui-web/src/compositions/AlertDialog/AlertDialog.tsx",
+        "packages/ui-web/src/compositions/Dialog/Dialog.tsx",
+        "packages/ui-web/src/patterns/DropdownMenu/DropdownMenu.tsx",
+        "packages/ui-web/src/compositions/Field/Field.tsx",
+        "packages/ui-web/src/compositions/Toast/Toast.tsx",
+        "packages/ui-web/src/primitives/Avatar/Avatar.tsx",
+        "packages/ui-web/src/primitives/Avatar/Avatar.module.css",
+        "packages/ui-web/src/primitives/Badge/Badge.module.css",
+        "packages/ui-web/src/primitives/Button/Button.tsx"
+      ]
+    },
+    "sourceOpenedCount": 16,
+    "verify": {
+      "runs": 2,
+      "failures": 1,
+      "firstPass": true,
+      "finalPass": false,
+      "calls": [
+        {
+          "cmd": "npm run atlas:sync 2>&1 | tail -20; git status --short; npx tsc --noEmit 2>&1 | head -20",
+          "failed": false
+        },
+        {
+          "cmd": "npm run atlas:verify -- --scope \"packages/governance/patterns/**\" 2>&1 | tail -30",
+          "failed": true
+        }
+      ]
+    },
+    "wasted": {
+      "duplicateReads": 19,
+      "unusedComponentReads": [
+        "atlas/Badge.md",
+        "atlas/Avatar.md",
+        "atlas/Dialog.md",
+        "atlas/AlertDialog.md",
+        "atlas/Button.md",
+        "packages/ui-web/src/primitives/Table/Table.tsx",
+        "packages/ui-web/src/primitives/Select/Select.tsx",
+        "packages/ui-web/src/compositions/AlertDialog/AlertDialog.tsx",
+        "packages/ui-web/src/compositions/Dialog/Dialog.tsx",
+        "packages/ui-web/src/patterns/DropdownMenu/DropdownMenu.tsx",
+        "packages/ui-web/src/compositions/Field/Field.tsx",
+        "packages/ui-web/src/compositions/Toast/Toast.tsx",
+        "atlas/metadata/Badge.json",
+        "atlas/metadata/Button.json",
+        "packages/ui-web/src/primitives/Avatar/Avatar.tsx",
+        "packages/ui-web/src/primitives/Avatar/Avatar.module.css",
+        "packages/ui-web/src/primitives/Badge/Badge.module.css",
+        "packages/ui-web/src/primitives/Button/Button.tsx"
+      ],
+      "offTask": [],
+      "verifierInternals": [
+        "packages/governance/patterns/notifications-center.md",
+        "scripts/atlas-sync.mjs",
+        "packages/governance/patterns/examples/notifications-center.example.tsx",
+        "packages/governance/patterns/examples/payment-billing.example.tsx",
+        "packages/governance/patterns/examples/settings.example.tsx"
+      ],
+      "failedToolCalls": 4,
+      "total": 46
+    },
+    "gaps": {
+      "available": true,
+      "candidatesChanged": [],
+      "expected": [],
+      "recognised": []
+    }
+  },
+  "pattern": {
+    "changed": [
+      "atlas/index.json",
+      "atlas/index.md",
+      "atlas/patterns/members-permissions.md",
+      "packages/governance/patterns/examples/members-permissions.example.tsx",
+      "packages/governance/patterns/members-permissions.md"
+    ],
+    "outOfScope": [],
+    "useFigmaAttempts": 0,
+    "figmaReads": [
+      "mcp__figma__create_session",
+      "mcp__figma__get_metadata",
+      "mcp__figma__get_screenshot",
+      "mcp__figma__get_design_context",
+      "mcp__figma__get_design_context",
+      "mcp__figma__get_design_context"
+    ],
+    "permissionDenials": 4,
+    "slugUsed": "members-permissions",
+    "slugAsExpected": true,
+    "sectionsMissing": [],
+    "namedComponents": [
+      "Card",
+      "Table",
+      "Avatar",
+      "Select",
+      "Badge",
+      "Button",
+      "DropdownMenu",
+      "Dialog",
+      "Field",
+      "Input",
+      "AlertDialog",
+      "Alert",
+      "Toast",
+      "Skeleton",
+      "ListItem"
+    ],
+    "componentRecall": 1,
+    "componentsMissing": [],
+    "strict": {
+      "passed": 7,
+      "total": 8,
+      "failed": [
+        "single-primary-invite"
+      ]
+    },
+    "notDrawnMarks": 0,
+    "example": {
+      "rawElements": 0,
+      "numericStyleLiterals": 3,
+      "primitiveTokenRefs": 0,
+      "loc": 209
+    },
+    "syncTail": [
+      "    DISC-097 Card [figma] Code has CardFooter justify = start | between | end; Figma Card set 110:24 draws the Footer slot with one fixed alignment and no justify property. Found 2026-10-21 in the Card refinement pass.",
+      "",
+      "  ⚠ no --pull: Figma-side facts were last read 2026-10-10T17:05:52.269Z — re-run the atlas-figma-sync skill to refresh them."
+    ],
+    "tscErrors": 0,
+    "verifyFails": [
+      "paths"
+    ],
+    "generatedHandEdits": [],
+    "gates": {
+      "docAndExample": true,
+      "sectionsComplete": true,
+      "syncValid": true,
+      "syncCurrent": true,
+      "tsc": true,
+      "verify": false,
+      "figmaFirst": true,
+      "figmaWrites": true,
+      "scope": true,
+      "noGeneratedHandEdits": true,
+      "readmeListed": false
+    },
+    "gatesPass": false,
+    "maxTurnsExit": false
+  },
+  "subtype": "success"
+}
