@@ -1,1 +1,1 @@
-Write the Members and permissions pattern from its Figma frames. The frames are already drawn and approved: page "Pattern / Members and permissions" (node 1035:2, frame 1035:3) in Figma file cKYhfaHLCoyMHi9nKr63Ig. Do not edit Figma. Do not commit.
+Write the Members and permissions pattern from its Figma frames. The frames are already drawn and approved: page "Pattern / Members and permissions" (node 1035:2, frame 1035:3) in Figma file cKYhfaHLCoyMHi9nKr63Ig. Name the pattern members-permissions. Do not edit Figma. Do not commit.
