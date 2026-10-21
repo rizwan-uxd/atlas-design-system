@@ -112,9 +112,9 @@ tsc, token-lint, raw elements and primitive token refs were 0 in all nine runs. 
 | Per-run metrics | `benchmarks/results/SUMMARY.md` |
 | Run a benchmark | `benchmarks/run.sh <label> <task> <reps> <model>` |
 
-## 6. Wave 2 (pattern authoring), partial: T17 only
+## 6. Wave 2 (pattern authoring), partial: T17 and T18c (cloud variant)
 
-Run 2026-10-19 in a cloud container (not the owner's machine), sonnet, 3 runs per arm, $1.46 of a $5 sub-cap (overall wave cap $15). T17: "Add a File upload pattern" with no Figma tool; the right answer is to stop. T18 (write a pattern from existing frames) has not run: it needs a machine where the nested CLI reaches Figma.
+Run 2026-10-19 in a cloud container (not the owner's machine), sonnet, 3 runs per arm, $1.46 of a $5 sub-cap (overall wave cap $15). T17: "Add a File upload pattern" with no Figma tool; the right answer is to stop. T18 (write a pattern from existing frames, live Figma) has not run: it needs a machine where the nested CLI reaches Figma. T18c below is its cloud variant.
 
 | arm | all gates | stopped, wrote no pattern files | cost $ (mean) | turns | rubric /20 (median run) |
 |---|---|---|---|---|---|
@@ -122,3 +122,22 @@ Run 2026-10-19 in a cloud container (not the owner's machine), sonnet, 3 runs pe
 | no-skill | 1/3 | 1/3 | 0.36 | 16 | 16 |
 
 Without the skill, 2 of 3 runs noticed Figma was down and wrote the pattern (4 files) anyway; the third stopped but treated the request as a new component. With the skill all 3 stopped at the Figma gate with a plan. Caveats: 3 runs per arm; rubric not blind; account-synced `atlas-context` and `atlas-ui-system` skills were loaded in both arms; the post-run pin check was relaxed for T17 (`BENCH_ALLOW_FIGMA_FAILED`), run 1 of each arm is under `pins-cloud.json` and runs 2 and 3 under `pins-cloud-b.json` (same trees); T17 does not show whether the skill writes good patterns.
+
+### T18c: Members and permissions from a text export of the frames
+
+Run 2026-10-21 in the cloud container, sonnet, 3 runs per arm, $3.05 (ledger `wave-2-spend-cloud.json`, $4.51 of the `BENCH_CAP=11` total). Same prompt as T18 except it points at `figma-export/members-and-permissions/frame-tree.txt`, a text dump of the frame (components, variant properties, text overrides; no images). Pins: `phase-10/pins-cloud-c.json`.
+
+| arm | all gates (after scorer fixes) | expected slug used | strict checks (mean of 8) | cost $ (mean) | turns | rubric /20 (median run) |
+|---|---|---|---|---|---|---|
+| skill (`atlas-pattern`) | 3/3 | 2/3 | 7.0 | 0.46 | 21.7 | 19 (run 3: A5 B4 C5 D5) |
+| no-skill | 0/3 | 1/3 | 7.7 | 0.56 | 21.3 | 15 (run 1: A4 B4 C3 D4) |
+
+What separated the arms: the skill arm updated the README pattern list and scored every gate; no-skill never did (`readmeListed` failed 3/3). No-skill wrote the richer docs (8/8 strict in two runs, including revert-on-failure, which the skill arm missed in all three) but stated a Toast rule and an EmptyState that the frames do not draw, without marking them. The skill arm marked every beyond-frame item "not drawn in Figma yet" (6 to 9 marks against 1 to 4) and did not state an unmarked rule.
+
+Caveats:
+- 3 runs per arm; rubric scored with the arm known (not blind); the median run of the no-skill arm is taken over all runs because none passed every gate.
+- Text-only export: no screenshots, so visual judgement was not tested. Criterion A (Figma-first) is measured as a read of the export before the first write; the export's guideline text already names Toast, Select, row actions and Resend/Revoke, so "not drawn" marks are judged against the frames list, not that text.
+- Synced `atlas-context` and `atlas-ui-system` skills loaded in both arms. The no-skill arm loaded `atlas-component` instead of `atlas-pattern`.
+- Slug: the prompt cannot name the file (fixture leak check), and 3 of 6 runs chose `members-and-permissions` instead of `members-permissions`. All three still passed sync, tsc and verify under their own slug. The original scorer counted that as no doc written (skill run 2 scored 0/8 strict, 0/12 recall); the corrected scorer (`pattern.altSlug`) scores the files that exist and reports `slugUsed`. The same ambiguity applies to T18.
+- Scorer fixes made after the runs, to keep the pinned tooling frozen during them: `figmaFirst` also counts a shell command that opens the export (every run read it with `cat` or Read before writing; the first version only counted Read and failed 4 of 6); `verifyScope` includes `atlas/index.json` (sync writes it and the old scope failed 6 of 6); the fixture removes the pattern from `atlas/index.json` (without that the starting workspace was not sync-clean, and the original T18 fixture has the same fault, not fixed here). Original scores are kept as `run-N.orig.json`; the runs were re-analysed from their saved logs and workspaces, so `pins-cloud-c.json` does not match the final scorer.
+- Not comparable with T18 on live Figma, which stays the reference measurement.

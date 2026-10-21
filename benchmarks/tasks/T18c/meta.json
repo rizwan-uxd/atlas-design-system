@@ -7,7 +7,8 @@
     "slug": "members-permissions",
     "docPath": "packages/governance/patterns/members-permissions.md",
     "examplePath": "packages/governance/patterns/examples/members-permissions.example.tsx",
-    "readmeNeedle": "members and permissions"
+    "readmeNeedle": "members and permissions",
+    "altSlug": "members-and-permissions"
   },
   "fixtureRemove": {
     "files": [
@@ -35,9 +36,12 @@
     "atlas/patterns/members-permissions.md",
     "atlas/index.md",
     "atlas/state/candidates.json",
-    "atlas/index.json"
+    "atlas/index.json",
+    "packages/governance/patterns/members-and-permissions.md",
+    "packages/governance/patterns/examples/members-and-permissions.example.tsx",
+    "atlas/patterns/members-and-permissions.md"
   ],
-  "verifyScope": "packages/governance/**,atlas/patterns/**,atlas/index.md",
+  "verifyScope": "packages/governance/**,atlas/patterns/**,atlas/index.md,atlas/index.json",
   "requiredSections": [
     "Use when",
     "Don't use when",

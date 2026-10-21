@@ -169,63 +169,42 @@
       "packages/governance/patterns/examples/members-and-permissions.example.tsx",
       "packages/governance/patterns/members-and-permissions.md"
     ],
-    "outOfScope": [
-      "atlas/patterns/members-and-permissions.md",
-      "packages/governance/patterns/examples/members-and-permissions.example.tsx",
-      "packages/governance/patterns/members-and-permissions.md"
-    ],
+    "outOfScope": [],
     "useFigmaAttempts": 0,
     "figmaReads": [],
     "permissionDenials": 3,
-    "sectionsMissing": [
-      "Use when",
-      "Don't use when",
-      "Decision rules",
-      "Components and variants",
-      "Layout and density",
-      "Hierarchy and composition",
-      "Responsive behavior",
-      "States",
-      "Accessibility",
-      "Anti-patterns",
-      "Example"
-    ],
-    "namedComponents": [],
-    "componentRecall": 0,
-    "componentsMissing": [
+    "slugUsed": "members-and-permissions",
+    "slugAsExpected": false,
+    "sectionsMissing": [],
+    "namedComponents": [
       "Card",
       "Table",
       "Avatar",
-      "Select",
       "Badge",
       "Button",
+      "Select",
       "DropdownMenu",
       "Dialog",
-      "AlertDialog",
       "Field",
+      "AlertDialog",
       "Alert",
-      "Skeleton"
+      "Toast",
+      "Skeleton",
+      "EmptyState"
     ],
+    "componentRecall": 1,
+    "componentsMissing": [],
     "strict": {
-      "passed": 0,
+      "passed": 8,
       "total": 8,
-      "failed": [
-        "single-primary-invite",
-        "role-select-fixed-roles",
-        "revert-on-failure",
-        "status-text-not-colour",
-        "remove-destructive-alertdialog",
-        "last-owner-protected",
-        "disabled-has-reason",
-        "loading-skeleton"
-      ]
+      "failed": []
     },
-    "notDrawnMarks": 0,
+    "notDrawnMarks": 1,
     "example": {
       "rawElements": 0,
-      "numericStyleLiterals": 0,
+      "numericStyleLiterals": 3,
       "primitiveTokenRefs": 0,
-      "loc": 1
+      "loc": 224
     },
     "syncTail": [
       "    DISC-097 Card [figma] Code has CardFooter justify = start | between | end; Figma Card set 110:24 draws the Footer slot with one fixed alignment and no justify property. Found 2026-10-21 in the Card refinement pass.",
@@ -233,20 +212,18 @@
       "  ⚠ no --pull: Figma-side facts were last read 2026-10-10T17:05:52.269Z — re-run the atlas-figma-sync skill to refresh them."
     ],
     "tscErrors": 0,
-    "verifyFails": [
-      "paths"
-    ],
+    "verifyFails": [],
     "generatedHandEdits": [],
     "gates": {
-      "docAndExample": false,
-      "sectionsComplete": false,
+      "docAndExample": true,
+      "sectionsComplete": true,
       "syncValid": true,
       "syncCurrent": true,
       "tsc": true,
-      "verify": false,
-      "figmaFirst": false,
+      "verify": true,
+      "figmaFirst": true,
       "figmaWrites": true,
-      "scope": false,
+      "scope": true,
       "noGeneratedHandEdits": true,
       "readmeListed": false
     },

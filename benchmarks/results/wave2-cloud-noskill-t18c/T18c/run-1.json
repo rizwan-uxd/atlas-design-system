@@ -186,6 +186,8 @@
     "useFigmaAttempts": 0,
     "figmaReads": [],
     "permissionDenials": 2,
+    "slugUsed": "members-permissions",
+    "slugAsExpected": true,
     "sectionsMissing": [],
     "namedComponents": [
       "Button",
@@ -224,9 +226,7 @@
       "  ⚠ no --pull: Figma-side facts were last read 2026-10-10T17:05:52.269Z — re-run the atlas-figma-sync skill to refresh them."
     ],
     "tscErrors": 0,
-    "verifyFails": [
-      "paths"
-    ],
+    "verifyFails": [],
     "generatedHandEdits": [],
     "gates": {
       "docAndExample": true,
@@ -234,8 +234,8 @@
       "syncValid": true,
       "syncCurrent": true,
       "tsc": true,
-      "verify": false,
-      "figmaFirst": false,
+      "verify": true,
+      "figmaFirst": true,
       "figmaWrites": true,
       "scope": true,
       "noGeneratedHandEdits": true,
