@@ -18,7 +18,7 @@
     "Switch": { "parity": "match", "figmaMetadata": "description-written", "code": "scaffolded", "verifiedAt": "2026-10-09T03:29:08.502Z" },
     "Badge": { "parity": "match", "figmaMetadata": "description-written", "code": "scaffolded", "verifiedAt": "2026-10-12T17:27:26.123Z" },
     "Alert": { "parity": "match", "figmaMetadata": "description-written", "code": "scaffolded", "verifiedAt": "2026-10-12T15:57:51.166Z" },
-    "Card": { "parity": "open", "figmaMetadata": "description-written", "code": "spec-complete", "verifiedAt": "2026-10-14T11:20:19.415Z" },
+    "Card": { "parity": "open", "figmaMetadata": "description-written", "code": "spec-complete", "verifiedAt": "2026-10-21T03:26:25.289Z" },
     "Dialog": { "parity": "match", "figmaMetadata": "description-written", "code": "scaffolded", "verifiedAt": "2026-10-12T15:57:51.166Z" },
     "AlertDialog": { "parity": "match", "figmaMetadata": "description-written", "code": "spec-complete", "verifiedAt": "2026-09-29T10:49:00.540Z" },
     "Tabs": { "parity": "match", "figmaMetadata": "description-written", "code": "scaffolded", "verifiedAt": "2026-10-09T03:29:08.502Z" },
