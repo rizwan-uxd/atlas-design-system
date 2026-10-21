@@ -164,3 +164,22 @@ Caveats:
 - Figma access was not identical: `create_session` was denied in every run (reads worked without it); no-skill run 2 read through the `figma-desktop` server (the Figma desktop app) and its `get_design_context` was denied, so it saw only metadata and a screenshot. 2 to 4 permission denials per run (also `curl` of screenshots).
 - Pre-run pin checks failed twice because of the synced folder (no spend); the first batch attempt stopped after skill run 1 for that reason, and the budget gate then blocked the remainder, so runs went one at a time with `BENCH_ONLY`.
 - Example not rendered in a browser; the compile check is `tsc` only.
+
+## 7. Wave 3: do the batch-2 patterns change what an agent prototypes? (T19)
+
+Run 2026-10-21 on the owner's machine, sonnet (`claude-sonnet-5-5`), CLI 2.1.286, 3 runs per arm, $2.88 of a $7 cap (ledger `wave-2-spend-local-t19.json`, pins `phase-10/pins-local-t19.json`). Task T19: "Build a prototype screen called notifications" (title, mark-all-read, six notifications, All / Unread views, per-item actions, loading, empty and error states); the prompt never names the pattern. Arms: **patterns** (the repo at the pinned commit) and **no-patterns** (`phase-10/no-patterns.patch`: `atlas/patterns/`, `packages/governance/patterns/` and the `atlas-pattern` skill deleted, the Patterns table regenerated away by `atlas:sync`, step 2b of `atlas-prototype` and the `AGENTS.md`/`claude.md` mentions removed). The skill `atlas-prototype` was loaded in both arms, so only the pattern layer differs. Runs alternated by arm.
+
+| arm | completed | strict pattern checks (mean of 18) | component coverage | numeric style literals | final verify | turns | cost $ |
+|---|---|---|---|---|---|---|---|
+| patterns | 3/3 | 0.96 (17, 18, 17 of 18) | 7/7 | 3 to 5 | 3/3 | 21 | 0.48 |
+| no-patterns | 3/3 | 0.41 (8, 5, 9 of 18) | 6/7 (no Avatar) | 1 to 4 | 3/3 | 22.3 | 0.48 |
+
+What separated the arms: cost, turns, tsc, token lint and the loose presence checks are the same. The pattern arm read exactly one pattern doc (`notifications-center.md`) and passed the rules that are easy to get wrong without it: `Tabs variant="line"` with the unread count in the label (0 of 3 without), ghost "Mark all as read" (0 of 3), a real link as the title (0 of 3), a live region for marking read (0 of 3), a `time` element (0 of 3), an `ul` with an accessible name (1 of 3), disabled-when-nothing-unread (1 of 3). The error-state check (`Alert variant="danger"` with a Retry action) passed 2 of 3 with patterns and 0 of 3 without. Neither arm logged a candidate or used a raw element.
+
+Caveats:
+- The 18 strict checks were written by hand from the pattern's Decision rules before the runs, so they measure adherence to that pattern by definition (the same disclosure as Wave 1). Run against the pattern's own example they score 16 of 18 (the example has no error state and no `dateTime`), so the ceiling is not 18 for every reading of the doc. They are regexes over source, not behaviour.
+- No manual `rubric.md` scores: nothing was rendered or viewed. Visual quality is unmeasured.
+- One task, one pattern, 3 runs per arm. The notifications pattern was written from Figma frames with the arm's agent not having seen them; the other batch-2 patterns are untested.
+- The no-patterns tree still contains the pattern names in `docs/HANDOFF-next-session.md` and `packages/governance/README.md` (the agents are told not to read `docs/`; no run opened either).
+- Wave 1 (T5 to T9) already measured the five older patterns the same way (strict adherence 0.81 to 0.94 on the original tree); T19 extends that to a batch-2 pattern with the patch method instead of two commits.
+- Account-synced Atlas skills were moved aside before each run (the CLI regrows them); neither arm invoked them.

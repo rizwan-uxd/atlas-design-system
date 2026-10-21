@@ -1,0 +1,161 @@
+{
+  "slug": "notifications",
+  "expectedComponents": [
+    "ListItem",
+    "Tabs",
+    "Button",
+    "Avatar",
+    "EmptyState",
+    "Skeleton",
+    "Alert"
+  ],
+  "w1": {
+    "pattern": "notifications-center",
+    "patternChecks": [
+      {
+        "id": "list-item",
+        "rule": "Rows are ListItem",
+        "type": "match",
+        "pattern": "<ListItem"
+      },
+      {
+        "id": "tabs",
+        "rule": "All / Unread views are Tabs",
+        "type": "match",
+        "pattern": "<Tabs"
+      },
+      {
+        "id": "empty-state",
+        "rule": "Empty state uses EmptyState",
+        "type": "match",
+        "pattern": "<EmptyState"
+      },
+      {
+        "id": "skeleton",
+        "rule": "Loading uses Skeleton",
+        "type": "match",
+        "pattern": "<Skeleton"
+      },
+      {
+        "id": "alert",
+        "rule": "Error uses Alert",
+        "type": "match",
+        "pattern": "<Alert"
+      }
+    ],
+    "strictChecks": [
+      {
+        "id": "tabs-line",
+        "rule": "Two views as Tabs variant=line",
+        "type": "match",
+        "pattern": "<Tabs(?:[^>]|=>)*variant=\"line\""
+      },
+      {
+        "id": "tabs-unread-count",
+        "rule": "Unread tab label carries the count",
+        "type": "match",
+        "pattern": "Unread\\s*(\\{|\\$\\{|\\(|\\d)"
+      },
+      {
+        "id": "tabs-aria-label",
+        "rule": "Tabs list has an aria-label",
+        "type": "match",
+        "pattern": "<Tabs(List)?(?:[^>]|=>)*aria-label"
+      },
+      {
+        "id": "list-ul-aria-label",
+        "rule": "Notifications are a ul with an accessible name",
+        "type": "match",
+        "pattern": "<ul(?:[^>]|=>)*aria-label"
+      },
+      {
+        "id": "row-muted-unread",
+        "rule": "Unread rows use ListItem variant muted",
+        "type": "match",
+        "pattern": "<ListItem(?:[^>]|=>)*muted"
+      },
+      {
+        "id": "unread-word",
+        "rule": "Unread is a visible word, not colour alone",
+        "type": "match",
+        "pattern": "Unread\\s*(\\\\u00b7|\\\\u2022|\\\\u2014|·|•|—|–|<)"
+      },
+      {
+        "id": "title-real-link",
+        "rule": "Title is a real link (a href or Link)",
+        "type": "match",
+        "pattern": "<(a|Link)\\s(?:[^>]|=>)*href="
+      },
+      {
+        "id": "no-row-onclick",
+        "rule": "No onClick on the ListItem row",
+        "type": "absent",
+        "pattern": "<ListItem(?:[^>]|=>)*onClick"
+      },
+      {
+        "id": "mark-all-ghost",
+        "rule": "Mark all as read is a ghost Button",
+        "type": "match",
+        "pattern": "<Button(?:[^>]|=>)*variant=\"ghost\"(?:[^>]|=>)*>\\s*Mark all( as)? read",
+        "flags": "i"
+      },
+      {
+        "id": "mark-all-disabled",
+        "rule": "Mark all as read is disabled when nothing is unread",
+        "type": "match",
+        "pattern": "<Button(?:[^>]|=>)*disabled(?:[^>]|=>)*>\\s*Mark all( as)? read",
+        "flags": "i"
+      },
+      {
+        "id": "action-aria-label",
+        "rule": "Row action buttons name their notification",
+        "type": "match",
+        "pattern": "aria-label=\\{?[`\"'][^`\"']*[Mm]ark[^`\"']*(read|unread)"
+      },
+      {
+        "id": "no-destructive-row",
+        "rule": "No destructive action on a notification row",
+        "type": "absent",
+        "pattern": "variant=\"destructive\""
+      },
+      {
+        "id": "no-confirm-dialog",
+        "rule": "No confirmation dialog (mark all is reversible)",
+        "type": "absent",
+        "pattern": "<(AlertDialog|Dialog)\\b"
+      },
+      {
+        "id": "empty-all-caught-up",
+        "rule": "Empty All says the user is all caught up",
+        "type": "match",
+        "pattern": "all caught up",
+        "flags": "i"
+      },
+      {
+        "id": "empty-unread-view-all",
+        "rule": "Empty Unread offers View all",
+        "type": "match",
+        "pattern": "No unread notifications[\\s\\S]{0,600}View all",
+        "flags": "i"
+      },
+      {
+        "id": "error-alert-retry",
+        "rule": "Error is Alert variant=danger with a Retry action",
+        "type": "match",
+        "pattern": "<Alert(?:[^>]|=>)*variant=\"danger\"[\\s\\S]{0,800}Retry"
+      },
+      {
+        "id": "live-region",
+        "rule": "Marking read is announced in a live region",
+        "type": "match",
+        "pattern": "aria-live|role=\"status\""
+      },
+      {
+        "id": "time-element",
+        "rule": "Time is a time element with dateTime",
+        "type": "match",
+        "pattern": "<time(?:[^>]|=>)*dateTime"
+      }
+    ]
+  }
+}
