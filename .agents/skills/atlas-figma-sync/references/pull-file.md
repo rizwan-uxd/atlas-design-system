@@ -26,6 +26,11 @@ gitignored, rewritten every run, and read by `scripts/atlas-sync.mjs` exactly on
       }
     }
   },
+  "boundVariables": {                       // optional — D1 option C, see "Bound variables" below
+    "pulledAt": "2026-10-22T14:00:24.681Z",
+    "figmaVersion": null,
+    "entries": [{ "name": "spacing/2", "collection": "Atlas/Primitives", "type": "FLOAT", "web": "var(--atlas-spacing-2)" }]
+  },
   "variables": { … }                         // optional, currently never populated — see tokens below
 }
 ```
@@ -80,3 +85,38 @@ table, so there is no honest way to regenerate `atlas/tokens.*` from Figma today
 therefore derives tokens from `packages/tokens/atlas.tokens.css` and stamps them
 `repo-derived (packages/tokens/atlas.tokens.css)` with `syncedAt: null` — deliberately, so nobody
 reads a Figma guarantee into them. Figma variable parity is phase 3 / `atlas-verify` work.
+
+## Bound variables (D1 option C)
+
+`boundVariables` is the honest part of a token sync that the MCP allows today: every variable bound
+anywhere inside the 47 component sets, with its `codeSyntax.WEB`. Harvest it with one **read-only**
+`mcp__figma__use_figma` call (load the `figma-use` skill first) over the `figmaNodeId`s in
+`atlas/metadata/*.json`:
+
+```js
+const ids = [/* every figmaNodeId */], seen = new Set()
+const collect = (a) => { if (!a) return; if (Array.isArray(a)) return a.forEach(collect)
+  if (a.type === 'VARIABLE_ALIAS' && a.id) return void seen.add(a.id)
+  if (typeof a === 'object') Object.values(a).forEach(collect) }
+function visit(n) {
+  try { collect(n.boundVariables) } catch {}
+  for (const k of ['fills', 'strokes', 'effects', 'layoutGrids']) try { (n[k] || []).forEach((p) => collect(p.boundVariables)) } catch {}
+  if (n.type === 'TEXT') try { n.getStyledTextSegments(['boundVariables', 'fills']).forEach((s) => { collect(s.boundVariables); (s.fills || []).forEach((p) => collect(p.boundVariables)) }) } catch {}
+  if ('children' in n) n.children.forEach(visit)
+}
+for (const id of ids) visit(await figma.getNodeByIdAsync(id))
+const out = []
+for (const id of seen) {
+  const v = await figma.variables.getVariableByIdAsync(id)
+  const c = await figma.variables.getVariableCollectionByIdAsync(v.variableCollectionId)
+  out.push({ name: v.name, collection: c.name, type: v.resolvedType, web: v.codeSyntax?.WEB ?? null })
+}
+return out
+```
+
+Copy the result into `entries` verbatim (the 2026-10-22 run returned 193; transcribe with a checksum
+computed on both sides if the list is long). `pulledAt` is now; `figmaVersion` stays `null` unless the
+same run read the library version. The generator compares each entry with `atlas.tokens.css` and
+writes `atlas/tokens.json` `figmaBound` (coverage, `drift.nameDrift`, `drift.missingInCode`,
+`conventionExceptions`, and the name→CSS map). Without `boundVariables` in the pull, the last
+`figmaBound` is carried forward unchanged.

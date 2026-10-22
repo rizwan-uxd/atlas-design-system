@@ -61,8 +61,10 @@ Figma and code disagree. It **reads** Figma and **writes** `atlas/` — never th
   between them is a discrepancy, never a silent merge.
 - A Figma description replaces the repo-written `atlas/<Name>.md` **only when it reads as guidance**.
   A spec summary ("3 variants × 3 sizes") is a Figma content gap: the doc is kept and the gap filed.
-- Tokens stay derived from `packages/tokens/atlas.tokens.css` — Figma MCP exposes variables per node,
-  not a variable table, so a token sync is not available and is not faked.
+- Token values stay derived from `packages/tokens/atlas.tokens.css` and stamped repo-derived. The pull
+  may add `boundVariables` (the `codeSyntax.WEB` of every variable bound in the component sets, see
+  `references/pull-file.md`); the generator writes it to `atlas/tokens.json` `figmaBound` and reports
+  token drift as a fraction (`0 drift over 193/432 covered`). Never present that fraction as coverage.
 - Don't hand-close discrepancies. A sync-detected entry closes itself once the drift is gone.
 - `.atlas-pull/` is scratch. Never commit it, never read it from another task.
 

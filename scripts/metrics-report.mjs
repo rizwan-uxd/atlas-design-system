@@ -52,6 +52,8 @@ const NOT_MEASURABLE = "not measurable"
  */
 function collectResults(manifest) {
   const results = new Map()
+  const coverage = new Map()
+  manifest._coverage = coverage
   const found = []
   manifest._sourcesFound = found
   const dir = arg("--results") ? path.resolve(ROOT, arg("--results")) : path.join(ROOT, ".metrics")
@@ -80,6 +82,23 @@ function collectResults(manifest) {
         const ok = (t.status ?? t.ok) === "passed" || t.ok === true
         results.set(`${source}:${name}`, ok)
       }
+    }
+  }
+
+  // atlas-sync: the committed atlas/tokens.json `figmaBound` block (roadmap D1, option C). It is generated
+  // state, not a CI artifact, so it is read from the repo, not from the results dir. It measures drift
+  // only over the code tokens some Figma component binds, so every result carries its coverage and the
+  // row renders the fraction — a partial measurement must never read as full coverage.
+  const tokens = path.join(ROOT, "atlas/tokens.json")
+  const bound = exists(tokens) ? readJson(tokens).figmaBound : null
+  if (bound?.coverage?.covered > 0) {
+    found.push("atlas-sync")
+    const { covered, codeTokens } = bound.coverage
+    const partial = covered < codeTokens ? { covered, total: codeTokens } : null
+    for (const [id, list] of [["tokens.bound-name-drift", bound.drift?.nameDrift], ["tokens.bound-missing-in-code", bound.drift?.missingInCode]]) {
+      if (!Array.isArray(list)) continue // a renamed field is not a pass
+      results.set(`atlas-sync:${id}`, list.length === 0)
+      if (partial) coverage.set(`atlas-sync:${id}`, { ...partial, drift: list.length })
     }
   }
 
@@ -150,6 +169,7 @@ const esc = (s) => String(s).replace(/\|/g, "\\|")
 function render(rows, manifest) {
   const counts = { passing: 0, failing: 0, [NOT_MEASURABLE]: 0 }
   for (const r of rows) counts[r.status]++
+  const partial = rows.filter((r) => r.coverage && r.status !== NOT_MEASURABLE).length
 
   const groups = []
   for (const r of rows) {
@@ -165,7 +185,8 @@ function render(rows, manifest) {
     "**failing** (ran and failed), **not measurable** (no result for the declared check — reported as `n/a`,",
     "never `0`). A metric with no check is *not measurable*, never passing: absence of a signal is not a pass.",
     "",
-    `**${counts.passing} passing · ${counts.failing} failing · ${counts[NOT_MEASURABLE]} not measurable** of ${rows.length}.`,
+    `**${counts.passing} passing · ${counts.failing} failing · ${counts[NOT_MEASURABLE]} not measurable** of ${rows.length}.`
+      + (partial ? ` ${partial} of the measured rows cover only part of their population; the row says how much.` : ""),
     "",
     manifest._sourcesFound?.length
       ? `Result sources read: ${manifest._sourcesFound.map((s) => `\`${s}\``).join(", ")}. Sources not present`
@@ -180,7 +201,9 @@ function render(rows, manifest) {
   for (const g of groups) {
     out.push(`### ${g.name}`, "", "| Metric | Target | Status | Check | Measurable at |", "|---|---:|---|---|---|")
     for (const r of g.rows) {
-      const status = r.status === NOT_MEASURABLE ? "not measurable" : `**${r.status}**`
+      const status = r.status === NOT_MEASURABLE ? "not measurable"
+        : r.coverage ? `**${r.status}** — ${r.coverage.drift} drift over ${r.coverage.covered}/${r.coverage.total} covered (bound subset only)`
+        : `**${r.status}**`
       out.push(`| ${esc(r.metric)} | ${esc(r.target)} | ${status} | \`${esc(r.check)}\` | ${esc(r.milestone)} |`)
     }
     out.push("")
@@ -210,6 +233,7 @@ const rows = manifest.metrics.map((m) => ({
   check: m.check,
   milestone: m.milestone,
   status: resolve(m, results),
+  coverage: manifest._coverage.get(`${m.source}:${m.check}`) ?? null,
 }))
 
 const report = {
