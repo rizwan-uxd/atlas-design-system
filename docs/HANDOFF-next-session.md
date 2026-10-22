@@ -6,14 +6,22 @@ only current state plus the gotchas that will bite again. **This is the only han
 ones were deleted and live in git history.
 
 ## State
-- **`main` has Phase 1 (#98) and M1 (#99).** M2 is on `claude/post-merge-handoff-0bf36c` (cut from
-  `4501e37`, the #99 merge); **check whether its PR merged before doing anything**, and branch from the
-  new `main` if it has.
-- **D1 runs in parallel** in its own session and branch (`atlas-d1-token-table`): option C (harvest
-  `codeSyntax.WEB` from the per-node pull, drift as a measured fraction) plus findings for the A/B
-  spike. The A/B/C/D call is the user's, at the end of Phase 2. When both branches are on `main`, check
-  whether D1 changed the shape of `atlas/tokens.json` or the pull file; if so, the schemas follow
-  (`tokens.schema.json`, `figma-pull.schema.json`, whose `variables` is deliberately open).
+- **`main` has Phase 1 (#98) and M1 (#99).** Two Phase-2 PRs were open when this was written, both
+  with auto-merge and auto-fix on and CI still running, with no failures:
+  - **M2 is PR #101** (`claude/post-merge-handoff-0bf36c`): schemas, `design/schemas`, inspection
+    counts, the AST JSX scanner, 15/15 checks tested.
+  - **D1 is PR #100** (`claude/atlas-d1-token-table-e72828`): option C plus the A/B spike findings.
+  **First, `gh pr view 100` and `gh pr view 101`.** If both merged, branch from the new `main`. If
+  either is still open, find out why (failed check or conflict) before starting M3, because M3 builds
+  on both.
+- **The two PRs are reconciled.** M2's schemas already accept D1's `figmaBound` in `atlas/tokens.json`
+  and the top-level `boundVariables` in the pull file (M2 commit `38e2710`). Whichever merges second will
+  probably conflict in `docs/ATLAS-DELIVERY-ROADMAP.md`: keep both the M2 and the D1 sections. After
+  both land, run `node scripts/atlas-verify.mjs --only design.schemas` on `main` to confirm.
+- **D1 results:** token-name drift is **0 over 193/432 tokens** (option C). **A** (REST
+  `/variables/local`) needs a Figma Enterprise plan. **B** works today through `use_figma`: it read
+  the full table (463 variables, 5 collections, all modes, aliases). D1 recommends B; the details are in
+  the roadmap's D1 section. **The A/B/C/D decision is still the user's**, at the end of Phase 2.
 - 47 web components (35 spec-complete, 12 scaffolded), 17 native (**ports paused by the user**),
   15 patterns. Latest ids **DEC-079, CAND-055, DISC-104**. Snapshot pulled from Figma 2026-10-21.
 - Benchmarks: waves 1–3 complete (T1–T19), written up in `docs/HARNESS.md` §6–§7. M1 and M2 changed
@@ -38,19 +46,38 @@ ones were deleted and live in git history.
 - All 15 checks have a PASS and a FAIL fixture test (`scripts/tests/atlas-verify.test.mjs`).
 
 ## M3 — do this next (the roadmap's §2c, 3–4 sessions)
-Read §2c in the roadmap; it owns the scope. M2 is done, so M3's precondition (a verifier that can fail)
-now holds. M3 fills compare-axes' `registry` slot, turning the two-way check three-way.
+Read §2c in the roadmap; it owns the scope. M2 met M3's precondition: a verifier that can fail. In short:
+- `packages/registry/` gains `aliases.json` and `src/<Name>.registry.json` (both authored), plus
+  generated `generated/<Name>.facts.json`, `componentMap.ts` and `schemas/<Name>.schema.json`, all
+  committed and gated by `git diff`.
+- New `scripts/registry-build.mjs` generates facts with the **TypeScript compiler API**
+  (`ts.createProgram` + `getPropertiesOfType`, so inherited DOM props and event handlers are included),
+  plus Code Connect slots and `atlas/metadata`. It reads `atlas/` and never writes it.
+- Invariant (`registry-build --check`): **authored ⊆ generated**.
+- M1's comparator becomes three-way by filling its `registry` slot, renamed `design/figma-registry-code`
+  in the same commit.
+- Contracts are regenerated into the same paths, with the deleted-variant and deleted-prop holes closed.
+- **M2 constraints for M3:** every new `packages/registry/**/*.json` needs a schema in
+  `packages/governance/schemas/` and an `INPUTS` rule in `scripts/lib/schemas.mjs` in the same commit,
+  or `design/schemas` fails. A new check must return `inspected`/`scope`. The generated per-component
+  schemas are an exception to decide up front: either exempt `packages/registry/generated/schemas/`
+  like `packages/governance/schemas/` is, or give them a meta-schema rule.
+- Plan it first: a `docs/superpowers/plans/` file, per the roadmap's execution conventions. It is 3–4
+  sessions, so scope the first session to `aliases.json`, the authored schema and `registry-build`'s
+  fact generation for 2–3 components before going wide.
 
 ## Open owner decisions (ask; do not decide these yourself)
 - **`Pagination/Position` — NEW, found by M1.** Figma draws `start|middle|end`; Pagination has no
-  `position` prop and no position concept in its source. Either Figma's axis is layout-only
-  presentation, or the component is missing an API. Left `unmapped` rather than inventing a prop
-  (`AGENTS.md` §4). Wants a DISC entry and a call.
+  `position` prop. The header comment of `Pagination.tsx` does model it, though: "derived from `page`
+  and `pageCount` here (not a prop)". The recommendation put to the user was to treat it as derived
+  state: reclassify the axis from `unmapped` to `state` in `figma-axis-map.json`, log a DISC, add no
+  prop. **Not decided yet.** It wants a DISC entry and the user's call.
 - **D1, the Figma token-table spike** — the roadmap's decision gate, and the highest-leverage unknown
   in the repo: it decides whether the brand axis is a quarter or a year away. The Figma MCP exposes
   variables per *node*, not as a table, so four metrics are unmeasurable. Options A–D are in the
-  roadmap. **The user chose (2026-10-22): implement C now, run the A/B spike in parallel with M2.**
-  That work is in its own session; the final A/B/C/D call is still the user's, at the end of Phase 2.
+  roadmap. **The user chose (2026-10-22): implement C now, run the A/B spike in parallel.** Both
+  are done (PR #100; results under State). The final A/B/C/D call is still the user's, at the end of
+  Phase 2; D1 recommends B.
 - **DISC-095** (Button `link` ignores size in code, Figma draws it), **DISC-096/097** (Card header
   slots and footer `justify` are code features Figma does not draw).
 - **7 of the 11 open DISCs are one class** — DISC-027, 098–104, "Figma description is a spec summary,
@@ -149,6 +176,8 @@ Search and filter frames (#57); disabled opacity bound (#58); StatCard icon, cli
 - **The stop hook** ("uncommitted changes" or "unpushed commits") fires at the end of a turn. Commit to the feature branch and push it, with no PR; do not merge or open a PR without the user's yes. (This session also committed and pushed on a user "commit" instruction because the session brief says to commit and push to the designated branch; PRs and merges waited for the user's "open the PR" and "merge N".)
 
 ### From M2 (2026-10-22)
+- **Auto-fix wakes the session on every Vercel bot deployment comment.** On this machine, comment wake-ups and Auto-fix are one switch, so they cannot be split. The notice needs no action; say so in one line and move on.
+- **`a11y`'s `role=` and `outline` rules are line regexes over the whole file**, so a doc comment counts. Three findings repo-wide fail today (NavBar.tsx:356, RadioGroup.tsx:14 and :102; at least RadioGroup:14 is a comment). They are invisible in CI because only changed files are checked, and they will surface the next time someone edits those files.
 - **Script-test fixtures need `node_modules` now.** `atlas-verify` imports `ajv` and `typescript`, and `atlas-sync` imports `ajv`; both fixture helpers symlink the repo's `node_modules` and `atlas-sync`'s also copies `packages/governance/schemas`. A new fixture helper must do the same, or every test fails with `ERR_MODULE_NOT_FOUND`.
 - **`process.exit()` after a large `console.log` truncates piped output** (it cut `--json` at 64 KB). Set `process.exitCode` instead.
 - **ajv strict mode rejects `pattern` without `"type": "string"` and `required` in a `then` without a matching `properties` entry.** Those are schema bugs and throw out of `validate()`, deliberately not reported against the input.
