@@ -200,10 +200,11 @@ grep -rn "#[0-9a-fA-F]\{3,6\}\b" components/
 grep -rn "style={{" components/ | grep -v "token"
 
 # 3. Confirm all CSS variables referenced in components exist in atlas.tokens.css
-node scripts/validate-tokens.js   # (to be authored)
+#    and that none is a primitive — this is atlas-verify's design/tokens check
+npm run atlas:verify -- --scope "packages/ui-web/src/**,app/**"
 
-# 4. Check NativeWind token map matches atlas.tokens.css
-node scripts/validate-nativewind-tokens.js
+# 4. Colour literals and component-token aliasing
+npm run token-lint
 ```
 
 ### Manual checks
