@@ -121,9 +121,9 @@ fails when this region is stale. Statuses are exactly three: **passing** (a decl
 **failing** (ran and failed), **not measurable** (no result for the declared check — reported as `n/a`,
 never `0`). A metric with no check is *not measurable*, never passing: absence of a signal is not a pass.
 
-**0 passing · 0 failing · 35 not measurable** of 35.
+**2 passing · 0 failing · 33 not measurable** of 35. 2 of the measured rows cover only part of their population; the row says how much.
 
-**No result sources were present**, so every metric reads not measurable. This is the committed baseline: it is reproducible anywhere, with no CI run required. Collect results into `.metrics/` (see the generator contract below) and regenerate to see real statuses; CI will commit result-derived regions once it collects those files as artifacts (roadmap Phase 4).
+Result sources read: `atlas-sync`. Sources not present leave their metrics not measurable.
 
 ### Catalog Over Code
 
@@ -184,9 +184,9 @@ never `0`). A metric with no check is *not measurable*, never passing: absence o
 
 | Metric | Target | Status | Check | Measurable at |
 |---|---:|---|---|---|
-| Token-name drift | 0 | not measurable | `design.token-drift` | D1-dependent |
-| Missing code tokens | 0 | not measurable | `design.token-drift` | D1-dependent |
-| Missing Figma tokens | 0 | not measurable | `design.token-drift` | D1-dependent |
+| Token-name drift | 0 | **passing** — 0 drift over 193/432 covered (bound subset only) | `tokens.bound-name-drift` | D1 option C now (bound subset); full table needs A or B |
+| Missing code tokens | 0 | **passing** — 0 drift over 193/432 covered (bound subset only) | `tokens.bound-missing-in-code` | D1 option C now (bound subset); full table needs A or B |
+| Missing Figma tokens | 0 | not measurable | `design.token-drift` | D1 option A or B |
 | All supported brand modes compile successfully | pass | not measurable | `design.brand-modes` | M5.6 |
 | Critical visual regression tests pass for every brand mode | pass | not measurable | `visual > sandbox` | now (light/dark only), M5.6 (brands) |
 
@@ -594,6 +594,46 @@ convention, and encode DEC-058 (Figma opacity percent vs CSS fraction) as **code
 
 **Do not** generate `atlas/tokens.json` from the CSS and stamp it `figma-synced`. That is effectively
 what the current fallback does, and it is why two generated siblings contradict each other today.
+
+### D1 findings (spike, 2026-10-22)
+
+**C is built.** A read-only `use_figma` harvest walks the 47 component sets, collects every bound
+variable and its `codeSyntax.WEB`, and the pull carries it as `boundVariables`. `atlas-sync` compares
+it with `atlas.tokens.css` (`scripts/lib/token-coverage.mjs`) and writes `atlas/tokens.json`
+`figmaBound`; the token values keep their repo-derived stamp. Result: **0 drift over 193/432
+covered**. All 193 bound variables have a WEB name that the CSS declares; the 2 that break the
+slash→dash convention (`font-family/sans|mono` → `--atlas-font-sans|mono`) are listed as
+`conventionExceptions`, not drift. The metric table now reads *passing on 193/432* for name drift
+and missing code tokens. **Missing Figma tokens stays not measurable**: a bound subset cannot prove
+a CSS token has no Figma variable.
+
+**A is blocked by plan, not by setup.** `GET /v1/files/:key/variables/local` needs the
+`file_variables:read` scope, which Figma issues only to full members of **Enterprise** orgs. The
+file owner's account is on Pro and Starter teams. No token is configured anywhere (environment,
+`.env*`, CI secrets), and an unauthenticated probe returns `403 Invalid token`. A personal access
+token on a Pro plan cannot get this scope, so A is not reachable without an Enterprise upgrade.
+
+**B needs no plugin: the Figma MCP already runs the Plugin API.** `use_figma` executes Plugin API
+JavaScript in the file, and `figma.variables.getLocalVariablesAsync()` returned the **whole table**
+in one read-only call: 463 variables in 5 collections (Primitives 197 · Semantic 47 Light|Dark ·
+Layout 3 and Responsive Type 7 Mobile|Tablet|Desktop · Component 209), every mode populated,
+aliases resolvable (`background` → `color/neutral/0` Light, `color/neutral/950` Dark), scopes and
+`codeSyntax` present (410 of 463 carry a WEB name; the 53 without are primitive colour ramps such as
+`color/charcoal/*`). It is operator- or agent-initiated, the same trigger as the component pull
+today, so it pairs with the existing `--max-figma-age` gate. A standalone plugin (manifest +
+`code.js` calling the same API, run as a development plugin and exporting JSON) is only needed if
+`use_figma` access goes away; it is about one session of work and needs no publishing.
+
+**Side finding for the "regardless of outcome" item (not done here):** `atlas.figma.tokens.json`
+models 172 variables in 4 collections; Figma has 463 in 5 (no `Atlas/Component` collection, 78 fewer
+primitives, 4 fewer semantic). Promoting it to declared truth must start by regenerating it from the
+table, not by schema-checking the stale copy.
+
+**Recommendation: B, through `use_figma`.** Extend the pull with the full `variables` table (all
+modes, aliases, codeSyntax) using the same read-only call, generate `atlas/tokens.json` values from
+it with a real `figma-synced` stamp, and keep C's bound subset as a cross-check. That makes all three
+token-drift metrics fully measurable and keeps the brand axis on the quarter track. A stays off the
+table unless the plan changes; D is not needed. The decision is the user's, at the end of Phase 2.
 
 ---
 
