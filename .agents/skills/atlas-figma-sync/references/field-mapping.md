@@ -17,6 +17,7 @@ What `scripts/atlas-sync.mjs` regenerates, from what, and how it decides somethi
 | `syncedAt`, `figmaVersion`, `source` | the pull | `null` + `repo-derived` means never read from Figma |
 | `index.md` | all of the above, one row per component | |
 | `tokens.json` / `tokens.md` | `packages/tokens/atlas.tokens.css` | Figma MCP has no variable table (see `pull-file.md`) |
+| `tokens.json` `figmaBound` | pull `boundVariables`, compared with `atlas.tokens.css` by `scripts/lib/token-coverage.mjs` | bound subset only (D1 option C); carried forward when a pull has none |
 | `<Name>.md` | the Figma description **if it reads as guidance**, else preserved | see below |
 | `<Name>.md` `## Variants` / `## Sizes` | `variants` / `sizes` above, plus a `Figma:` line when `figmaProperties` differs — between `generated-structure` markers, regenerated on every run, with or without a Figma description. A short hint after a value (`` `md` default ``) is carried forward. A `## Figma toggles` line lists the `BOOLEAN` component properties when the pull has any | a missing Figma description stays a phase 3 gap |
 | `<Name>.md` `## API` block | `<Name>Props` and each subcomponent's `<Sub>Props` (own members, extended native element) — between `generated-api` markers, regenerated on every run | |
