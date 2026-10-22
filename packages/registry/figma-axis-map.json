@@ -1,0 +1,163 @@
+{
+  "_note": "AUTHORED \u2014 never generated. How each Figma variant axis is verified against code. scripts/lib/compare-axes.mjs reads this; atlas-verify's design/figma-code check enforces TOTALITY: every axis present in any atlas/metadata/<Name>.json figmaProperties must appear here, or the check FAILS. That is the ratchet \u2014 a new Figma axis cannot slip in unclassified, and an axis cannot be quietly dropped once it drifts.",
+  "milestone": "M1 (docs/ATLAS-DELIVERY-ROADMAP.md). The `state` disposition is settled at M3, when the registry carries states/stateProps.",
+  "dispositions": {
+    "code-union": "Figma members are compared against a value list carried in atlas/metadata/<Name>.json (variants, sizes). Both directions: a member Figma has and code lacks, and a member code has and Figma lacks, both FAIL on the code side \u2014 Figma is the authority, so the fix is to add it in Figma first, re-sync, then code.",
+    "code-connect": "Figma members are compared against the keys of the corresponding figma.enum(...) in packages/figma-sync/code-connect/<Name>.figma.tsx. Both directions FAIL on the code side: Code Connect IS code. This is a real check on the code union too, not a weaker one \u2014 the figma.enum VALUES flow into the typechecked `example` closure, so `tsc` already proves they are assignable to the component's prop type. Figma -> Code Connect (here) plus Code Connect -> props (tsc) is a complete chain for axes whose value lists metadata does not carry.",
+    "boolean": "Mapped with figma.boolean(...) rather than an enum. Two-valued, so there is no member set to compare; presence of the mapping is verified, not its members.",
+    "state": "Member-level, and deferred to M3. A Figma State axis mixes members that map to props (disabled -> disabled, loading -> loading, error -> invalid), members that are pure CSS (hover, active, focus-visible), and a baseline (default). Code has no State union at all, and Code Connect deliberately maps only the subset that corresponds to props \u2014 so comparing member sets here would fail on every component for the wrong reason. The registry's states/stateProps settles it; until then these axes are reported, not compared.",
+    "unmapped": "Figma draws this axis and nothing in code models it. Requires a reason. Reported as a WARN with the component named, never silently passing. A NEW axis is not `unmapped` by default \u2014 it is unclassified, which FAILS.",
+    "_perComponent": "Any axis may carry a `components` object whose entries override the axis-level rule for one component. The same Figma axis can legitimately be treated differently per component, and an axis-level disposition alone would either flag the correctly mapped components or silently excuse the unmapped one."
+  },
+  "axes": {
+    "Variant": {
+      "disposition": "code-union",
+      "metadataField": "variants",
+      "alsoCodeConnect": true,
+      "reason": "The primary semantic axis. metadata.variants is scraped from the exported <Name>Variant union, and 24 of the 47 Code Connect files map it as an enum, so it is checked twice over."
+    },
+    "Size": {
+      "disposition": "code-union",
+      "metadataField": "sizes",
+      "alsoCodeConnect": true,
+      "reason": "Same as Variant, via metadata.sizes and the <Name>Size union. Note Figma and code may legitimately list the same members in a different ORDER (Button: Figma sm,md,lg,xs vs code xs,sm,md,lg) \u2014 the comparator compares sets, not sequences."
+    },
+    "State": {
+      "disposition": "state",
+      "reason": "23 components carry it. Deferred to M3 per the disposition above; this is the single largest piece of Figma-authored design information that code does not model as a union."
+    },
+    "Orientation": {
+      "disposition": "code-connect",
+      "reason": "ButtonGroup, Divider, ScrollProgress, Slider, Stepper \u2014 all five map it as an enum."
+    },
+    "Side": {
+      "disposition": "code-connect",
+      "reason": "Drawer, Sheet, Tooltip placement."
+    },
+    "Shape": {
+      "disposition": "code-connect",
+      "reason": "Avatar circle|squircle, Skeleton rect|circle."
+    },
+    "Align": {
+      "disposition": "code-connect",
+      "reason": "Bubble and Table cell alignment."
+    },
+    "Checked": {
+      "disposition": "code-connect",
+      "reason": "Checkbox unchecked|checked|indeterminate and Switch off|on. Checkbox's axis was renamed to Checked in Figma as the phase-2 pilot."
+    },
+    "Placeholder": {
+      "disposition": "code-connect",
+      "reason": "DatePicker and Select empty-value rendering. Figma models it as the two-valued axis true|false, which Select maps with figma.enum and DatePicker with figma.boolean \u2014 both correct, so the comparator accepts either for a boolean axis."
+    },
+    "Tone": {
+      "disposition": "code-connect",
+      "reason": "Divider default|strong|subtle|inverse, Sparkline neutral|positive|negative."
+    },
+    "Direction": {
+      "disposition": "code-connect",
+      "reason": "ListItem and RadioGroup stacking. Distinct from Orientation by component vocabulary, not by meaning \u2014 not worth unifying in Figma."
+    },
+    "Type": {
+      "disposition": "code-connect",
+      "reason": "Avatar Image|Text|Icon."
+    },
+    "Appearance": {
+      "disposition": "code-connect",
+      "reason": "Badge default|outline."
+    },
+    "Separator": {
+      "disposition": "code-connect",
+      "reason": "Breadcrumb chevron|dot."
+    },
+    "Groups": {
+      "disposition": "code-connect",
+      "reason": "DropdownMenu group count 1|2|3."
+    },
+    "Ratio": {
+      "disposition": "code-connect",
+      "reason": "Image aspect ratios including auto."
+    },
+    "Length": {
+      "disposition": "code-connect",
+      "reason": "OtpInput 4..8 slots."
+    },
+    "Position": {
+      "disposition": "code-connect",
+      "reason": "Pagination start|middle|end.",
+      "components": {
+        "Pagination": {
+          "disposition": "unmapped",
+          "reason": "OPEN OWNER DECISION, found by this check on 2026-10-22. Figma draws Pagination/Position = start|middle|end; Pagination has no position prop and no position concept anywhere in its source. Either Figma's Position is layout-only presentation (and should say so), or Pagination is missing an API. Left unmapped rather than inventing a prop, which the no-new-API-on-own-initiative rule forbids. Needs a DISC entry and an owner call."
+        }
+      }
+    },
+    "Visibility": {
+      "disposition": "code-connect",
+      "reason": "PasswordInput hidden|shown."
+    },
+    "Percent": {
+      "disposition": "code-connect",
+      "reason": "Progress fill. Numeric members mapped to a value prop."
+    },
+    "Scope": {
+      "disposition": "code-connect",
+      "reason": "ScrollProgress page|container."
+    },
+    "Collapsed": {
+      "disposition": "code-connect",
+      "reason": "Sidebar collapsed state as a boolean-valued enum in Figma."
+    },
+    "Range": {
+      "disposition": "code-connect",
+      "reason": "Slider single|range."
+    },
+    "Sentiment": {
+      "disposition": "code-connect",
+      "reason": "StatCard positive|negative|neutral."
+    },
+    "Leading icon": {
+      "disposition": "code-connect",
+      "reason": "StatCard icon slot, mapped as an enum rather than a boolean."
+    },
+    "Sparkline": {
+      "disposition": "code-connect",
+      "reason": "StatCard sparkline slot, mapped as an enum rather than a boolean."
+    },
+    "Interaction": {
+      "disposition": "code-connect",
+      "reason": "StatCard static|hover|focus-visible|active|disabled. A second state-like axis, but unlike State it is mapped as an enum in Code Connect, so it is comparable today."
+    },
+    "Steps": {
+      "disposition": "code-connect",
+      "reason": "Stepper step count 3|4|5."
+    },
+    "Current": {
+      "disposition": "code-connect",
+      "reason": "Stepper active step 1..5."
+    },
+    "Sort": {
+      "disposition": "code-connect",
+      "reason": "Table head none|unsorted|ascending|descending."
+    },
+    "Icon only": {
+      "disposition": "boolean",
+      "reason": "Button. Mapped with figma.boolean(\"Icon only\") to the iconOnly prop, so there is no member set to compare."
+    },
+    "Viewport": {
+      "disposition": "unmapped",
+      "component": "Stepper",
+      "reason": "Deliberate: Viewport (mobile|tablet|desktop) is a Figma-only presentation axis. Code derives the mobile ring from CSS and a media query rather than a prop, so there is intentionally no code prop and no Code Connect mapping. Recorded so the totality check does not flag it and so the decision is not re-litigated."
+    },
+    "Progress": {
+      "disposition": "unmapped",
+      "component": "ScrollProgress",
+      "reason": "Figma draws 0|50|100 as sample scroll positions. The real value is computed from scroll offset at runtime, so there is nothing to map. A presentation convenience in Figma, not a component API."
+    },
+    "Content": {
+      "disposition": "unmapped",
+      "component": "Table",
+      "reason": "Figma's TableCell draws Content = text|checkbox; code composes a Checkbox into the cell instead of branching on a prop. A genuine Figma-models-more-than-code gap, left unmapped rather than inventing a prop \u2014 adding one would violate the no-new-API-on-own-initiative rule. Worth an owner decision and a DISC entry if it should be modelled."
+    }
+  }
+}

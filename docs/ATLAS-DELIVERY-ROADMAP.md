@@ -332,7 +332,45 @@ how many rows it moves, and the generator must exist before there is anything to
 
 ## Phase 2 — Make the truth measurable
 
-### 2a → M1. Independent Figma→code comparison — two-way comparator, registry-ready (1–2 sessions)
+### 2a → M1. Independent Figma→code comparison — two-way comparator, registry-ready ✅ DONE 2026-10-22
+
+> **Landed.** `scripts/lib/compare-axes.mjs` + the `design/figma-code` check in `atlas-verify`, the
+> authored `packages/registry/figma-axis-map.json`, and 35 tests. Repo-wide result:
+> **47/47 components · 130 axes compared · 23 State axes deferred to M3 · 4 unmapped (WARN) · 0 findings.**
+>
+> **Five things went differently from this plan. They are recorded here, not quietly absorbed.**
+>
+> 1. **`syncedAt` already *is* `figmaPulledAt`, so no new field was added.** `atlas-sync` derives it
+>    from `pull.pulledAt`, and `carriedForward()` reuses the value already in the snapshot, so it never
+>    advances without a real `--pull` — the date was honest all along. What was missing was the *gate*,
+>    not another field. `--max-figma-age <days>` now FAILs on a stale Figma side and CI passes 90.
+>    Adding a redundant field would have rewritten all 47 metadata files for nothing.
+> 2. **Coverage went far beyond Variant and Size.** Metadata only carries value lists for those two,
+>    but Code Connect maps **30 of the 34 axes** as `figma.enum`, and its enum *values* flow into the
+>    typechecked `example` closure — so `tsc` already proves they are assignable to the real prop type.
+>    Figma → Code Connect keys (this check) plus Code Connect values → props (`tsc`) is a complete
+>    chain, which lifted the comparison from ~70 axes to **130**.
+> 3. **M1 did not land green, and it found 3 real drifts** that nothing in the repo could detect:
+>    **Dialog/Size** was missing `full` in Code Connect though both Figma and `DialogSize` have it
+>    (fixed here; `tsc` verifies the fix); **DatePicker/Placeholder** exposed a bug in the first axis
+>    map, since Figma models it as the two-valued axis `true|false` which Select maps as an enum and
+>    DatePicker as a `figma.boolean` — both correct, so the comparator now accepts either; and
+>    **Pagination/Position** is an **open owner decision** (below).
+> 4. **The axis map needed per-component overrides.** The same Figma axis is legitimately treated
+>    differently per component, so an axis-level disposition would either flag the correctly mapped
+>    components or silently excuse the unmapped one.
+> 5. **M1 moves zero rows in the metric table, by design.** No north-star metric is about component
+>    axis parity — the spec's Figma-parity metrics are all token-level. M1's value is that it makes
+>    M3's metrics trustworthy; claiming otherwise would be exactly the dishonesty the table forbids.
+>
+> **Open owner decision — Pagination/Position.** Figma draws `start|middle|end`; Pagination has no
+> `position` prop and no position concept anywhere in its source. Either Figma's axis is layout-only
+> presentation, or Pagination is missing an API. Left `unmapped` with that reason rather than inventing
+> a prop, which §4 forbids. It wants a DISC entry and a decision. The other three unmapped axes are
+> settled: Stepper/Viewport (deliberately CSS-driven), ScrollProgress/Progress (sample positions, the
+> real value is computed at runtime), Table/Content (code composes a Checkbox instead of branching).
+
+#### As planned (1–2 sessions)
 
 **This is the first blocking milestone and it needs no registry.** Both inputs already exist in every
 metadata file: `figmaProperties` (from the Figma pull) and `variants`/`sizes` (from the code unions).
@@ -388,8 +426,13 @@ fail-closed check lands green and gates future changes instead of opening with 4
 **Honest scope note for the doc:** this proves *axis* agreement, not *visual* agreement. A green
 `primary` in Figma where code is blue is caught only by the human four-gates review.
 
-**Exit (M1):** deleting a variant from a code union FAILs CI (today it passes), **and** emptying
-`figmaProperties` on one component FAILs rather than reporting zero drift.
+**Exit (M1) — verified 2026-10-22.** Both criteria demonstrated against the real repo, then reverted:
+deleting `"link"` from `ButtonVariant` and re-syncing makes `figma-code` FAIL with *"Figma
+Button/Variant has \"link\" and the code union does not"* while `variants-sizes` stays PASS (it
+compares code against metadata derived from that same code); and emptying `figmaProperties` on one
+component FAILs as unverifiable while the note drops to `46/47 components`, so the gap is visible
+rather than reported as zero drift. A malformed axis value (a string where an array belongs) also
+FAILs rather than being coerced or skipped.
 
 ### 2b → M2. The verifier cannot silently pass (2 sessions)
 

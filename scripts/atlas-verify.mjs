@@ -24,6 +24,7 @@ import fs from "fs"
 import path from "path"
 import { fileURLToPath } from "url"
 import { sh, ATLAS_IMPORT, RAW_ELEMENT, lengthLiterals, PRIMITIVE_TOKEN_REF, BRAND_FILE } from "./lib/quality-checks.mjs"
+import { compareAxes } from "./lib/compare-axes.mjs"
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..")
 const args = process.argv.slice(2)
@@ -40,6 +41,11 @@ const ALLOW_TOKEN = flag("--allow-new-token")
 // --stamp-components A,B stamps named components on a full pass even when no library file changed (a verification-only task); implies --stamp
 const STAMP_NAMED = new Set(list(opt("--stamp-components")))
 const STAMP = flag("--stamp") || STAMP_NAMED.size > 0
+// --max-figma-age <days> makes a stale Figma side a FAILURE rather than a warning. Off by default so
+// a local run is not blocked by it; CI passes a value. Needed because atlas-sync's carriedForward()
+// rewrites the snapshot from itself when no --pull is supplied, so "Figma wins" would otherwise mean
+// "the last pull wins, forever, undetectably".
+const MAX_FIGMA_AGE = opt("--max-figma-age") === undefined ? null : Number(opt("--max-figma-age"))
 
 const read = (rel) => fs.readFileSync(path.join(ROOT, rel), "utf8")
 const exists = (rel) => fs.existsSync(path.join(ROOT, rel))
@@ -162,6 +168,88 @@ check("design", "snapshot-current", () => {
     else if (!m.syncedAt || m.source !== "figma-synced") warns.push(`${name}: snapshot is ${m.source ?? "unsourced"}, syncedAt ${m.syncedAt} — stale, escalate to Figma for design facts`)
   }
   return verdict(fails, warns)
+})
+
+// M1 — the independent Figma→code comparison. Unlike variants-sizes (which validates JSX against
+// metadata generated FROM the code, and so is code-vs-code), this compares code against
+// metadata.figmaProperties, written straight from the Figma pull. It runs repo-wide, not over the
+// diff: Figma drift is a property of the whole snapshot, and a PR that happens to touch no component
+// must not be able to hide it.
+//
+// It FAILS CLOSED. Missing, empty or malformed Figma data is a failure, never "zero drift" — a
+// component whose Figma side is unreadable is unverifiable, and unverifiable must never read as
+// "agrees". Zero inspections is likewise a failure, not a clean run.
+check("design", "figma-code", () => {
+  const fails = [], warns = []
+  const MAP = "packages/registry/figma-axis-map.json"
+  if (!exists(MAP)) return { status: "fail", mismatches: [`${MAP} is missing — the axis map is authored, not generated`] }
+  if (!exists("atlas/metadata")) return { status: "fail", mismatches: ["atlas/metadata is missing — nothing to compare"] }
+
+  let axisMap
+  try { axisMap = JSON.parse(read(MAP)) }
+  catch (e) { return { status: "fail", mismatches: [`${MAP} is not valid JSON: ${e.message}`] } }
+
+  const codeConnect = new Map()
+  const CC_DIR = "packages/figma-sync/code-connect"
+  if (exists(CC_DIR)) for (const f of fs.readdirSync(path.join(ROOT, CC_DIR))) {
+    if (f.endsWith(".figma.tsx")) codeConnect.set(f.replace(".figma.tsx", ""), read(`${CC_DIR}/${f}`))
+  }
+
+  let result
+  try {
+    result = compareAxes({ components: Object.values(metadata), codeConnect, axisMap, registry: null })
+  } catch (e) {
+    // the comparator throws rather than optional-chaining past an absent field; a throw is a FAIL
+    // that names the cause, never a skip
+    return { status: "fail", mismatches: [`comparison could not run: ${e.message}`] }
+  }
+
+  // structural findings already name the component, so only prefix when an axis is involved
+  for (const f of result.findings) {
+    fails.push(f.axis === null ? `[${f.side}] ${f.detail}` : `[${f.side}] ${f.component}/${f.axis}: ${f.detail}`)
+  }
+
+  const { components: inspected, axes, total } = result.inspected
+  if (total === 0) fails.push("no components in atlas/metadata — 0 inspected is a failure, not a pass")
+  else if (inspected === 0) fails.push(`0 of ${total} components were comparable — every one had unreadable figmaProperties`)
+  else if (axes === 0) fails.push(`${inspected} component(s) inspected but 0 axes compared — the axis map classifies everything away`)
+
+  for (const a of result.unmappedAxes) {
+    const dot = a.indexOf(".")
+    warns.push(`${a.slice(0, dot)}/${a.slice(dot + 1)}: Figma draws this axis and code does not model it (see "${a.slice(dot + 1)}" in ${MAP} for the reason)`)
+  }
+
+  // Staleness. metadata.syncedAt already IS the Figma pull time: atlas-sync derives it from
+  // pull.pulledAt, and carriedForward() reuses the value already in the snapshot, so it never
+  // advances without a real --pull. What was missing is a gate, not another field.
+  let ageNote = ""
+  if (MAX_FIGMA_AGE !== null) {
+    if (!Number.isFinite(MAX_FIGMA_AGE) || MAX_FIGMA_AGE < 0) {
+      fails.push(`--max-figma-age expects a number of days, got ${JSON.stringify(opt("--max-figma-age"))}`)
+    } else {
+      const now = Date.now()
+      let oldestDays = null
+      for (const m of Object.values(metadata)) {
+        const synced = Object.prototype.hasOwnProperty.call(m, "syncedAt") ? m.syncedAt : undefined
+        if (synced === undefined || synced === null) {
+          fails.push(`${m.name}: syncedAt is ${synced === undefined ? "absent" : "null"} — the Figma side has never been pulled, so it cannot be compared`)
+          continue
+        }
+        const t = Date.parse(synced)
+        if (Number.isNaN(t)) { fails.push(`${m.name}: syncedAt ${JSON.stringify(synced)} is not a date`); continue }
+        const days = (now - t) / 86_400_000
+        if (oldestDays === null || days > oldestDays) oldestDays = days
+        if (days > MAX_FIGMA_AGE) {
+          fails.push(`${m.name}: Figma facts are ${days.toFixed(0)} days old (limit ${MAX_FIGMA_AGE}) — re-run the atlas-figma-sync skill with --pull`)
+        }
+      }
+      if (oldestDays !== null) ageNote = ` · oldest Figma pull ${oldestDays.toFixed(0)}d (limit ${MAX_FIGMA_AGE}d)`
+    }
+  }
+
+  const note = `${inspected}/${total} components · ${axes} axes compared · ${result.deferredAxes.length} State deferred to M3`
+    + (result.unmappedAxes.length ? ` · ${result.unmappedAxes.length} unmapped` : "") + ageNote
+  return { ...verdict(fails, warns), note }
 })
 
 check("design", "variants-sizes", () => {

@@ -56,7 +56,14 @@ All three: no new dependency, one `Animated.Value`, `useReducedMotion`, native d
 Search and filter frames (#57); disabled opacity bound (#58); StatCard icon, clickable and sparkline variants (#59, #60, #66); Sparkline primitive (#61); Card hover shadow, closes DISC-093 (#63); Sheet and Drawer Content and Footer slots (#64, #65); OtpInput and Stepper components, Auth and Onboarding patterns using them (#68); CommandMenu (#69); Button `asChild` and Link as a composition (#70); Stepper viewport variant and mobile ring, Navigation shell pattern, `verifiedAt` stamps (#71); native Stepper, tokens, types, CI native typecheck, letterSpacing, Spinner, Skeleton (#73 to #80); batch-2 patterns (#82, #83, #84).
 
 ## Do next (the user decides)
-0. **Atlas roadmap, Phase 1 landed 2026-10-22** — `docs/architecture/ATLAS-TARGET-ARCHITECTURE.md` (the stable
+0. **Atlas roadmap: Phase 1 and M1 both landed 2026-10-22.** Phase 1 is PR #98 (docs + the generated
+   metric table). **M1 is on branch `claude/atlas-m1-figma-code-compare`** (no PR yet): the independent
+   Figma→code comparison, `design/figma-code` in `atlas-verify`, 47/47 components and 130 axes compared,
+   0 findings, 4 reasoned WARNs. It found and fixed a real Code Connect gap (Dialog was missing
+   `size="full"`) and left **one open owner decision: Pagination/Position** — Figma draws
+   `start|middle|end` and Pagination has no such prop. Next milestone is **M2** (schemas, parser tests,
+   inspection counts). Details:
+0b. **Phase 1 context** — `docs/architecture/ATLAS-TARGET-ARCHITECTURE.md` (the stable
    north star) and `docs/ATLAS-DELIVERY-ROADMAP.md` (phases, milestones, metric status) now exist and are
    referenced from `AGENTS.md` §2. The next milestone is **M1: the independent Figma→code comparison**, a
    two-way comparator that fails closed on missing or malformed `figmaProperties`. It needs no registry and

@@ -176,7 +176,11 @@ jobs:
         env:
           BASE: ${{ github.event_name == 'pull_request' && format('origin/{0}', github.base_ref) || 'HEAD~1' }}
           ALLOW_NEW: ${{ ((github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'atlas-approved-new')) || steps.merged-label.outputs.approved == 'true') && '--allow-new-component --allow-new-token' || '' }}
-        run: npm run atlas:verify -- --base "$BASE" --skip tsc,tests,token-lint $ALLOW_NEW
+        # --max-figma-age makes a stale Figma side a FAILURE. 90 days is a policy choice, not a
+        # technical limit: atlas-sync's carriedForward() rewrites the snapshot from itself when no
+        # --pull is supplied, so without a gate "Figma wins" would mean "the last pull wins, forever,
+        # undetectably". Raise or lower it freely; the failure message names the fix.
+        run: npm run atlas:verify -- --base "$BASE" --skip tsc,tests,token-lint --max-figma-age 90 $ALLOW_NEW
 
   # ─── North-star metric manifest ───────────────────────────────────────────
   # Phase 1 scope (docs/ATLAS-DELIVERY-ROADMAP.md): this gates TOTALITY only — every metric the spec
