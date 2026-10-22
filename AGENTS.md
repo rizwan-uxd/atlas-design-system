@@ -30,6 +30,14 @@ Read in this order and stop as soon as you can act:
 
 `docs/` is background for humans. Do not read it to build something.
 
+**Two exceptions, both normative.** `docs/architecture/ATLAS-TARGET-ARCHITECTURE.md` is the stable
+north star: the target architecture, the declarations every component must eventually carry, and the
+enforcement metrics. `docs/ATLAS-DELIVERY-ROADMAP.md` is how it gets built — the phase order, what
+each phase may and may not touch, and which metrics are currently passing, failing or not measurable.
+Read the roadmap before starting work that belongs to a phase, and follow its ordering: it exists
+because several checks in this repo cannot currently fail, and building on them in the wrong order
+certifies broken work.
+
 ## 3. Tool selection
 **Understand → identify the context you're missing → pick the minimum tools → execute → verify.**
 Prefer one targeted read over a sweep, Grep over Read when you need a single fact, and batch independent calls into one turn.

@@ -62,3 +62,8 @@ next-env.d.ts
 /playwright-report/
 tests/visual/*-snapshots/*-darwin.png
 tests/visual/*-snapshots/*-win32.png
+
+# metrics-report: CI inputs and machine output. Only the generated region in
+# docs/ATLAS-DELIVERY-ROADMAP.md is committed.
+.metrics/
+atlas-report.json

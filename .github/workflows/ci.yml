@@ -178,6 +178,27 @@ jobs:
           ALLOW_NEW: ${{ ((github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'atlas-approved-new')) || steps.merged-label.outputs.approved == 'true') && '--allow-new-component --allow-new-token' || '' }}
         run: npm run atlas:verify -- --base "$BASE" --skip tsc,tests,token-lint $ALLOW_NEW
 
+  # ─── North-star metric manifest ───────────────────────────────────────────
+  # Phase 1 scope (docs/ATLAS-DELIVERY-ROADMAP.md): this gates TOTALITY only — every metric the spec
+  # names must appear in metrics.manifest.json, so a metric cannot be quietly dropped once it goes red.
+  # It does NOT yet gate staleness of the generated region in the roadmap: that needs the atlas-verify
+  # and vitest JSON collected as artifacts. Phase 4 adds that collection and switches this job to
+  # `npm run metrics:check`. Until then staleness is caught by `npm run metrics:check` locally and by
+  # scripts/tests/metrics-report.test.mjs, which the test:scripts job already runs.
+  metrics:
+    name: Metric manifest
+    runs-on: ubuntu-latest
+    needs: setup
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci --legacy-peer-deps
+      - name: Manifest covers every spec metric
+        run: node scripts/metrics-report.mjs --json > /dev/null
+
   # ─── Visual regression (sandbox sections, light + dark) ────────────────────
   # Baselines are linux screenshots made by the "Visual baseline" workflow and committed under
   # tests/visual/. Until they exist this job is skipped.

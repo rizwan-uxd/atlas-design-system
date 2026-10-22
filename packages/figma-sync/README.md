@@ -3,7 +3,7 @@
 **Figma ↔ codebase synchronisation layer.**
 
 ```
-code-connect/       — Code Connect mappings (.figma.tsx) for all 12 Atlas/Web components
+code-connect/       — Code Connect mappings (.figma.tsx) for all 47 Atlas/Web components
 mcp/
   configs/
     figma.config.json — Figma Code Connect CLI config (include paths, parser, aliases)

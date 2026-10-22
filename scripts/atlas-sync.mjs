@@ -24,7 +24,11 @@ const TOKENS_CSS = path.join(ROOT, "packages/tokens/atlas.tokens.css")
 const ATLAS = path.join(ROOT, "atlas")
 const FILE_KEY = "cKYhfaHLCoyMHi9nKr63Ig"
 
-/** Display order for index.md — tiers in AGENTS.md §4 order. */
+/**
+ * Display PRIORITY for index.md, not an enumeration: these lead each tier and every other
+ * component follows alphabetically (see the sort below). Adding a component does not require
+ * adding it here.
+ */
 const ORDER = [
   "Button", "Input", "Label", "Textarea", "Checkbox", "Switch", "Badge",
   "Alert", "Card", "Dialog", "Tabs", "NavBar",
@@ -829,10 +833,16 @@ const layoutSection = [
   LAYOUT_END,
 ].join("\n")
 
+// tokens.md must carry the TOKEN stamp, not the component one. The component pull and the token pull
+// are independent, and stamping tokens.md with HEADER claimed "figma-synced <date>" while its own
+// sibling atlas/tokens.json said syncedAt: null. The two now agree by construction.
+const TOKEN_HEADER = stamp(tokenSource, pull?.variables ? syncedAt : null)
+
 for (const rel of ["atlas/tokens.md", "atlas/README.md"]) {
   const abs = path.join(ROOT, rel)
   if (!fs.existsSync(abs)) continue
-  let body = read(abs).replace(/^<!-- GENERATED[^>]*-->/, `<!-- ${HEADER} -->`)
+  const header = rel === "atlas/tokens.md" ? TOKEN_HEADER : HEADER
+  let body = read(abs).replace(/^<!-- GENERATED[^>]*-->/, `<!-- ${header} -->`)
   if (rel === "atlas/tokens.md") {
     body = upsertSection(body, LAYOUT_BEGIN, LAYOUT_END, layoutSection)
     const componentSection = renderComponentSection(read(TOKENS_CSS))
