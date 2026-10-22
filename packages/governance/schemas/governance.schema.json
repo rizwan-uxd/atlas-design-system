@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://atlas.design-system/schemas/governance.schema.json",
+  "title": "Authored governance and registry files",
+  "description": "Hand-authored sources: packages/governance/{deprecations,ownership}.json and packages/registry/figma-axis-map.json.",
+  "$defs": {
+    "deprecations": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["entries"],
+      "properties": {
+        "_note": { "$ref": "common.schema.json#/$defs/text" },
+        "entries": { "type": "array", "items": { "$ref": "common.schema.json#/$defs/deprecationEntry" } }
+      }
+    },
+    "ownership": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["owners", "paths", "componentOwners"],
+      "properties": {
+        "_note": { "$ref": "common.schema.json#/$defs/text" },
+        "owners": { "$ref": "common.schema.json#/$defs/owners" },
+        "paths": { "$ref": "common.schema.json#/$defs/ownerPaths" },
+        "componentOwners": { "$ref": "common.schema.json#/$defs/componentOwners" }
+      }
+    },
+    "disposition": { "enum": ["code-union", "code-connect", "boolean", "state", "unmapped"] },
+    "axisRule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["disposition", "reason"],
+      "properties": {
+        "disposition": { "$ref": "#/$defs/disposition" },
+        "reason": { "$ref": "common.schema.json#/$defs/text" },
+        "metadataField": { "enum": ["variants", "sizes"] },
+        "alsoCodeConnect": { "type": "boolean" },
+        "component": { "$ref": "common.schema.json#/$defs/componentName" },
+        "components": {
+          "type": "object",
+          "minProperties": 1,
+          "propertyNames": { "$ref": "common.schema.json#/$defs/componentName" },
+          "additionalProperties": { "$ref": "#/$defs/axisOverride" }
+        }
+      },
+      "if": { "properties": { "disposition": { "const": "code-union" } } },
+      "then": { "required": ["metadataField"], "properties": { "metadataField": true } }
+    },
+    "axisOverride": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["disposition", "reason"],
+      "properties": {
+        "disposition": { "$ref": "#/$defs/disposition" },
+        "reason": { "$ref": "common.schema.json#/$defs/text" },
+        "metadataField": { "enum": ["variants", "sizes"] },
+        "alsoCodeConnect": { "type": "boolean" }
+      }
+    },
+    "figmaAxisMap": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["_note", "milestone", "dispositions", "axes"],
+      "properties": {
+        "_note": { "$ref": "common.schema.json#/$defs/text" },
+        "milestone": { "$ref": "common.schema.json#/$defs/text" },
+        "dispositions": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["code-union", "code-connect", "boolean", "state", "unmapped", "_perComponent"],
+          "properties": {
+            "code-union": { "$ref": "common.schema.json#/$defs/text" },
+            "code-connect": { "$ref": "common.schema.json#/$defs/text" },
+            "boolean": { "$ref": "common.schema.json#/$defs/text" },
+            "state": { "$ref": "common.schema.json#/$defs/text" },
+            "unmapped": { "$ref": "common.schema.json#/$defs/text" },
+            "_perComponent": { "$ref": "common.schema.json#/$defs/text" }
+          }
+        },
+        "axes": {
+          "type": "object",
+          "minProperties": 1,
+          "propertyNames": { "pattern": "\\S" },
+          "additionalProperties": { "$ref": "#/$defs/axisRule" }
+        }
+      }
+    }
+  }
+}

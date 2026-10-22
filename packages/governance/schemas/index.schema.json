@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://atlas.design-system/schemas/index.schema.json",
+  "title": "atlas/index.json",
+  "description": "The machine-readable twin of atlas/index.md, written by scripts/atlas-sync.mjs.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["_generated", "syncedAt", "figmaVersion", "note", "components", "patterns", "deprecations", "tokens", "state"],
+  "properties": {
+    "_generated": { "$ref": "common.schema.json#/$defs/generated" },
+    "syncedAt": { "$ref": "common.schema.json#/$defs/nullableIsoDate" },
+    "figmaVersion": { "$ref": "common.schema.json#/$defs/nullableText" },
+    "note": { "$ref": "common.schema.json#/$defs/text" },
+    "components": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "tier", "status", "import", "variants", "sizes", "use", "notUse", "doc", "metadata"],
+        "properties": {
+          "name": { "$ref": "common.schema.json#/$defs/componentName" },
+          "tier": { "$ref": "common.schema.json#/$defs/tier" },
+          "status": { "enum": ["stable", "deprecated"] },
+          "import": { "type": "string", "pattern": "^@atlas/ui-web/" },
+          "variants": { "$ref": "common.schema.json#/$defs/textList" },
+          "sizes": { "$ref": "common.schema.json#/$defs/textList" },
+          "use": { "$ref": "common.schema.json#/$defs/nullableText" },
+          "notUse": { "$ref": "common.schema.json#/$defs/nullableText" },
+          "doc": { "type": "string", "pattern": "^atlas/[A-Z][A-Za-z0-9]*\\.md$" },
+          "metadata": { "type": "string", "pattern": "^atlas/metadata/[A-Z][A-Za-z0-9]*\\.json$" }
+        }
+      }
+    },
+    "patterns": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["slug", "title", "summary", "doc"],
+        "properties": {
+          "slug": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+          "title": { "$ref": "common.schema.json#/$defs/text" },
+          "summary": { "$ref": "common.schema.json#/$defs/text" },
+          "doc": { "type": "string", "pattern": "^atlas/patterns/[a-z0-9-]+\\.md$" }
+        }
+      }
+    },
+    "deprecations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "kind", "replacement"],
+        "properties": {
+          "name": { "$ref": "common.schema.json#/$defs/text" },
+          "kind": { "enum": ["component", "variant", "token", null] },
+          "replacement": { "$ref": "common.schema.json#/$defs/nullableText" }
+        }
+      }
+    },
+    "tokens": { "const": "atlas/tokens.json" },
+    "state": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "decisions", "discrepancies", "candidates", "deprecations", "ownership"],
+      "properties": {
+        "status": { "const": "atlas/state/status.json" },
+        "decisions": { "const": "atlas/state/decisions.json" },
+        "discrepancies": { "const": "atlas/state/discrepancies.json" },
+        "candidates": { "const": "atlas/state/candidates.json" },
+        "deprecations": { "const": "atlas/state/deprecations.json" },
+        "ownership": { "const": "atlas/state/ownership.json" }
+      }
+    }
+  }
+}

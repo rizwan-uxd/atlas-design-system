@@ -4,9 +4,9 @@
  * Two properties matter more than any individual comparison, and most of these cases exist to pin
  * them down:
  *
- *   1. It FAILS CLOSED. Absent, null, empty or malformed Figma data produces a FINDING, never an
- *      empty finding list. "Nothing wrong" and "nothing inspected" must be distinguishable, which is
- *      exactly what the rest of this repo's checks currently cannot do.
+ *   1. It FAILS CLOSED. An unclassified axis, a missing mapping or an absent value list produces a
+ *      FINDING, never an empty finding list, and inspection counts keep "nothing wrong" apart from
+ *      "nothing inspected". Malformed Figma data is rejected earlier, by the metadata schema (M2).
  *   2. Member ORDER is not drift, but member SETS are.
  *
  * The Code Connect parser is tested against the real shapes in the repo — enums fanned out across
@@ -16,7 +16,7 @@
 
 import { test } from "node:test"
 import assert from "node:assert/strict"
-import { compareAxes, codeConnectEnums, guardFigmaProperties } from "../lib/compare-axes.mjs"
+import { compareAxes, codeConnectEnums } from "../lib/compare-axes.mjs"
 
 const MAP = {
   axes: {
@@ -42,51 +42,8 @@ const details = (r) => r.findings.map((f) => f.detail).join("\n")
 
 /* ── fail closed ────────────────────────────────────────── */
 
-test("absent figmaProperties is a finding, not zero drift", () => {
-  const r = run([component({ figmaProperties: undefined })])
-  assert.equal(r.findings.length, 1)
-  assert.match(details(r), /figmaProperties is absent/)
-  assert.equal(r.inspected.components, 0, "an unreadable component is not counted as inspected")
-})
-
-test("null figmaProperties is a finding", () => {
-  assert.match(details(run([component({ figmaProperties: null })])), /figmaProperties is null/)
-})
-
-test("empty figmaProperties is a finding — a component with no axes is unverifiable", () => {
-  assert.match(details(run([component({ figmaProperties: {} })])), /figmaProperties is empty/)
-})
-
-test("malformed axis values are findings, never coerced or skipped", () => {
-  for (const [value, pattern] of [
-    ["primary", /expected an array of members, got string/],
-    [42, /expected an array of members, got number/],
-    [null, /expected an array of members, got null/],
-    [[], /member list is empty/],
-    [["a", 7], /member 7 is number, expected a string/],
-    [["a", ""], /an empty string/],
-    [{ 0: "primary" }, /expected an array of members, got object/],
-  ]) {
-    const r = run([component({ figmaProperties: { Variant: value } })])
-    assert.match(details(r), pattern, `value ${JSON.stringify(value)}`)
-  }
-})
-
-test("an array in place of the figmaProperties object is a finding", () => {
-  assert.match(details(run([component({ figmaProperties: ["Variant"] })])), /is an array, expected an object/)
-})
-
-test("a malformed component does not suppress a healthy one", () => {
-  const r = run([component({ name: "Bad", figmaProperties: null }), component({ name: "Good" })])
-  assert.equal(r.inspected.components, 1)
-  assert.equal(r.inspected.total, 2)
-  assert.equal(r.findings.length, 1)
-})
-
-test("guardFigmaProperties reports every problem, not just the first", () => {
-  const problems = guardFigmaProperties("W", { A: [], B: "x", C: ["ok"] })
-  assert.equal(problems.length, 2)
-})
+// The figmaProperties shape cases (absent, null, empty, malformed) moved to schemas.test.mjs with the
+// guard they tested; a malformed component not suppressing a healthy one is in atlas-verify.test.mjs.
 
 test("a metadata entry with no name throws rather than being silently skipped", () => {
   assert.throws(() => run([component({ name: "" })]), /no name/)

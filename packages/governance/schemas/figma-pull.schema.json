@@ -1,0 +1,118 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://atlas.design-system/schemas/figma-pull.schema.json",
+  "title": "The Figma pull file (.atlas-pull/pull.json)",
+  "description": "Written by the atlas-figma-sync skill from Figma MCP calls and read once by scripts/atlas-sync.mjs --pull. Shape: .agents/skills/atlas-figma-sync/references/pull-file.md. `variables` is deliberately open while D1 decides how the token table is read.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "fileKey",
+    "pulledAt",
+    "components"
+  ],
+  "properties": {
+    "fileKey": {
+      "$ref": "common.schema.json#/$defs/figmaFileKey"
+    },
+    "figmaVersion": {
+      "$ref": "common.schema.json#/$defs/text"
+    },
+    "pulledAt": {
+      "$ref": "common.schema.json#/$defs/isoDate"
+    },
+    "components": {
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": {
+        "$ref": "common.schema.json#/$defs/componentName"
+      },
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "nodeId",
+          "properties"
+        ],
+        "properties": {
+          "nodeId": {
+            "$ref": "common.schema.json#/$defs/figmaNodeId"
+          },
+          "description": {
+            "$ref": "common.schema.json#/$defs/text"
+          },
+          "properties": {
+            "$ref": "common.schema.json#/$defs/figmaProperties"
+          },
+          "componentProperties": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object",
+              "required": [
+                "type"
+              ],
+              "properties": {
+                "type": {
+                  "description": "VARIANT entries are accepted and dropped by the generator: those axes are `properties`.",
+                  "enum": [
+                    "BOOLEAN",
+                    "INSTANCE_SWAP",
+                    "TEXT",
+                    "VARIANT"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "variables": {
+      "type": "object"
+    },
+    "boundVariables": {
+      "description": "D1 option C: variables bound to the pulled components, with their codeSyntax.WEB name. Deliberately NOT under `variables`: a truthy `variables` stamps atlas/tokens.json figma-synced, and a bound subset must never do that.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "pulledAt",
+        "figmaVersion",
+        "entries"
+      ],
+      "properties": {
+        "pulledAt": {
+          "$ref": "common.schema.json#/$defs/isoDate"
+        },
+        "figmaVersion": {
+          "$ref": "common.schema.json#/$defs/nullableText"
+        },
+        "entries": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "name",
+              "collection",
+              "type",
+              "web"
+            ],
+            "properties": {
+              "name": {
+                "$ref": "common.schema.json#/$defs/text"
+              },
+              "collection": {
+                "$ref": "common.schema.json#/$defs/text"
+              },
+              "type": {
+                "$ref": "common.schema.json#/$defs/text"
+              },
+              "web": {
+                "$ref": "common.schema.json#/$defs/nullableText"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

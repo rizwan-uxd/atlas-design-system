@@ -37,6 +37,10 @@ what it finds, and re-runs until it passes — then reports the actual output.
    - A `scope.paths` FAIL on a file you changed: revert it. On a file you did **not** change
      (pre-existing untracked files), leave it and say so in the report.
    - `design.snapshot-current` FAIL (atlas/ behind the code): run `npm run atlas:sync`, don't hand-edit.
+   - `design.schemas` FAIL on an `atlas/` file: regenerate with `npm run atlas:sync`, never hand-edit. On an
+     authored file (`packages/governance/*.json`, `packages/registry/figma-axis-map.json`): fix the field the
+     message points at. A `0 inspected, N in scope` FAIL means the check could not see what it should have:
+     read the note, never work around it with `--skip`.
 
 5. **Re-run** step 2 until it exits 0. Two fix cycles with the same FAIL → stop and report it.
 

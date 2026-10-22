@@ -15,6 +15,7 @@
  *   node scripts/atlas-verify.mjs --scope "app/prototypes/foo/**,app/prototypes/_shared/flowRegistry.ts"
  *   node scripts/atlas-verify.mjs --base main --allow-new-component --skip tests
  *   node scripts/atlas-verify.mjs --json
+ *   node scripts/atlas-verify.mjs --only design.schemas,tokens            # just these checks; the rest SKIP
  *   node scripts/atlas-verify.mjs --scope "…" --stamp                  # on a full pass, stamp verifiedAt
  *   node scripts/atlas-verify.mjs --stamp-components Button,Input     # same, for named components with no library change
  *
@@ -23,8 +24,9 @@
 import fs from "fs"
 import path from "path"
 import { fileURLToPath } from "url"
-import { sh, ATLAS_IMPORT, RAW_ELEMENT, lengthLiterals, PRIMITIVE_TOKEN_REF, BRAND_FILE } from "./lib/quality-checks.mjs"
+import { sh, ATLAS_IMPORT, RAW_ELEMENT, lengthLiterals, PRIMITIVE_TOKEN_REF, BRAND_FILE, lineOf, jsxTags, literalProp, UNKNOWN } from "./lib/quality-checks.mjs"
 import { compareAxes } from "./lib/compare-axes.mjs"
+import { loadInputs } from "./lib/schemas.mjs"
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..")
 const args = process.argv.slice(2)
@@ -35,6 +37,9 @@ const list = (v) => (v || "").split(",").map((s) => s.trim()).filter(Boolean)
 const BASE = opt("--base") || "HEAD"
 const SCOPE = list(opt("--scope"))
 const SKIP = new Set(list(opt("--skip")))
+// --only a,b runs just those checks (by id or group.id) and reports the rest as skipped — so --stamp,
+// which refuses any run with a skip, can never be satisfied by a partial run
+const ONLY = new Set(list(opt("--only")))
 const JSON_OUT = flag("--json")
 const ALLOW_COMPONENT = flag("--allow-new-component")
 const ALLOW_TOKEN = flag("--allow-new-token")
@@ -50,7 +55,6 @@ const MAX_FIGMA_AGE = opt("--max-figma-age") === undefined ? null : Number(opt("
 const read = (rel) => fs.readFileSync(path.join(ROOT, rel), "utf8")
 const exists = (rel) => fs.existsSync(path.join(ROOT, rel))
 const git = (cmd) => sh(`git ${cmd}`, ROOT).out.split("\n").filter(Boolean)
-const lineOf = (src, index) => src.slice(0, index).split("\n").length
 
 // ─── Changed files ───────────────────────────────────────────────────────────
 
@@ -64,20 +68,34 @@ const appSources = sources.filter((s) => s.file.startsWith("app/"))
 // ─── Result collection ───────────────────────────────────────────────────────
 
 const results = []
+// Every check returns `inspected` (how much it actually looked at) and `scope` (how much the run says it
+// should have looked at). Enforced here rather than trusted per check (M2): a check that reports no
+// count fails, and one that inspected nothing when its scope was non-empty fails — that is the shape
+// of a parser or a renamed field silently turning a check into a PASS.
 const check = (group, id, fn) => {
-  if (SKIP.has(id) || SKIP.has(`${group}.${id}`)) return results.push({ group, id, status: "skip", mismatches: [] })
-  const { status, mismatches = [], note } = fn()
-  results.push({ group, id, status, mismatches, note })
+  const named = (set) => set.has(id) || set.has(`${group}.${id}`)
+  if (named(SKIP) || (ONLY.size && !named(ONLY))) return results.push({ group, id, status: "skip", mismatches: [] })
+  let { status, mismatches = [], note, inspected, scope = 0 } = fn()
+  if (typeof inspected !== "number" || !Number.isFinite(inspected)) {
+    status = "fail"; mismatches = [`${group}/${id} reported no inspection count — every check must say what it inspected`, ...mismatches]
+  } else if (scope > 0 && inspected === 0) {
+    status = "fail"; mismatches = [`0 inspected, ${scope} in scope — the check looked at nothing it should have`, ...mismatches]
+  }
+  results.push({ group, id, status, mismatches, note, inspected, scope })
 }
 const verdict = (fails, warns = []) =>
   fails.length ? { status: "fail", mismatches: [...fails, ...warns] } : { status: warns.length ? "warn" : "pass", mismatches: warns }
 
 // ─── Snapshot facts ──────────────────────────────────────────────────────────
 
+// Every JSON input is read here, once, through its schema (packages/governance/schemas). A check only
+// ever sees data that validated: a renamed or retyped field is a design/schemas FAIL, never a check
+// that silently stops inspecting anything. Checks that depend on an invalid file fail closed on it.
+const inputs = loadInputs(ROOT)
+const invalidInputs = (prefix) => inputs.files.filter((f) => !f.ok && f.file.startsWith(prefix)).map((f) => f.file)
 const metadata = {}
-if (exists("atlas/metadata")) for (const f of fs.readdirSync(path.join(ROOT, "atlas/metadata"))) {
-  if (f.endsWith(".json")) { const m = JSON.parse(read(`atlas/metadata/${f}`)); metadata[m.name] = m }
-}
+for (const f of inputs.files) if (f.ok && f.file.startsWith("atlas/metadata/")) metadata[f.data.name] = f.data
+const invalidMetadata = invalidInputs("atlas/metadata/")
 const TOKEN_CSS = "packages/tokens/atlas.tokens.css"
 const definedTokens = (css) => new Set([...css.matchAll(/(--atlas-[\w-]+)\s*:/g)].map((m) => m[1]))
 const tokens = exists(TOKEN_CSS) ? definedTokens(read(TOKEN_CSS)) : new Set()
@@ -100,52 +118,6 @@ const atlasUsage = (src) => {
   return used
 }
 
-// Opening tags <Local ...> with their attribute text; braces and quotes are skipped so `=>` doesn't end a tag.
-function* jsxTags(src, local) {
-  const re = new RegExp(`<${local}(?=[\\s/>])`, "g")
-  for (const m of src.matchAll(re)) {
-    let depth = 0, quote = null, i = m.index + m[0].length
-    for (; i < src.length; i++) {
-      const c = src[i]
-      if (quote) { if (c === quote) quote = null; continue }
-      if (c === '"' || c === "'" || c === "`") quote = c
-      else if (c === "{") depth++
-      else if (c === "}") depth--
-      else if (c === ">" && depth === 0) break
-    }
-    yield { attrs: src.slice(m.index + m[0].length, i), line: lineOf(src, m.index) }
-  }
-}
-const literalProp = (attrs, prop) => {
-  const m = attrs.match(new RegExp(`(?:^|\\s)${prop}=(?:"([^"]*)"|'([^']*)'|\\{\\s*["'\`]([^"'\`]*)["'\`]\\s*\\})`))
-  return m ? m[1] ?? m[2] ?? m[3] : undefined
-}
-// jsxTags' depth scan must keep reading through a JSX-valued prop (e.g. actions={<div>...</div>})
-// to find the root tag's real end, but that leaves nested descendants' own literal props (e.g. the
-// inner <Button variant="outline">) inside `attrs` too. Blank out each top-level {...} expression
-// that contains a JSX tag before scanning for the root's own props, so a descendant's variant/size
-// is never misattributed to the root component.
-const blankNestedJsx = (attrs) => {
-  let out = "", i = 0
-  while (i < attrs.length) {
-    if (attrs[i] === "{") {
-      let depth = 1, j = i + 1, quote = null
-      for (; j < attrs.length && depth > 0; j++) {
-        const c = attrs[j]
-        if (quote) { if (c === quote) quote = null }
-        else if (c === '"' || c === "'" || c === "`") quote = c
-        else if (c === "{") depth++
-        else if (c === "}") depth--
-      }
-      out += /<[A-Za-z/]/.test(attrs.slice(i, j)) ? " " : attrs.slice(i, j)
-      i = j
-    } else {
-      out += attrs[i]; i++
-    }
-  }
-  return out
-}
-
 // ─── design ──────────────────────────────────────────────────────────────────
 
 const libChanged = new Set() // components whose library folder changed — the only ones --stamp marks verified
@@ -156,18 +128,29 @@ for (const { file, src } of sources) {
   if (lib) { touched.add(lib[1]); libChanged.add(lib[1]) }
 }
 
+// M2 — runs first. Reports every input that failed its schema and every JSON file no schema covers.
+check("design", "schemas", () => {
+  const fails = [...inputs.problems]
+  for (const f of inputs.files) for (const e of f.errors) fails.push(`${f.file}: ${e}`)
+  const schemas = new Set(inputs.files.map((f) => f.schema.split("#")[0])).size
+  const ok = inputs.files.filter((f) => f.ok).length
+  return { ...verdict(fails), inspected: inputs.files.length, scope: 1, note: `${ok}/${inputs.files.length} files valid · ${schemas} schemas` }
+})
+
 check("design", "snapshot-current", () => {
   const fails = [], warns = []
   const sync = sh("node scripts/atlas-sync.mjs --check", ROOT).out
   const pending = Number((sync.match(/would write\s+(\d+)/) || [])[1] || 0)
+  const synced = Number((sync.match(/^\s*components\s+(\d+)/m) || [])[1] || 0)
   if (!/would write/.test(sync)) fails.push("atlas-sync --check did not run: " + sync.trim().split("\n").pop())
   else if (pending) fails.push(`atlas/ is behind the code: atlas-sync would write ${pending} file(s) — run npm run atlas:sync`)
   for (const name of [...touched].sort()) {
     const m = metadata[name]
-    if (!m) fails.push(`${name}: no atlas/metadata/${name}.json`)
+    if (!m && invalidMetadata.includes(`atlas/metadata/${name}.json`)) fails.push(`${name}: atlas/metadata/${name}.json failed its schema (see design/schemas)`)
+    else if (!m) fails.push(`${name}: no atlas/metadata/${name}.json`)
     else if (!m.syncedAt || m.source !== "figma-synced") warns.push(`${name}: snapshot is ${m.source ?? "unsourced"}, syncedAt ${m.syncedAt} — stale, escalate to Figma for design facts`)
   }
-  return verdict(fails, warns)
+  return { ...verdict(fails, warns), inspected: synced, scope: 1, note: `${synced} components in the sync · ${touched.size} touched` }
 })
 
 // M1 — the independent Figma→code comparison. Unlike variants-sizes (which validates JSX against
@@ -182,12 +165,11 @@ check("design", "snapshot-current", () => {
 check("design", "figma-code", () => {
   const fails = [], warns = []
   const MAP = "packages/registry/figma-axis-map.json"
-  if (!exists(MAP)) return { status: "fail", mismatches: [`${MAP} is missing — the axis map is authored, not generated`] }
-  if (!exists("atlas/metadata")) return { status: "fail", mismatches: ["atlas/metadata is missing — nothing to compare"] }
-
-  let axisMap
-  try { axisMap = JSON.parse(read(MAP)) }
-  catch (e) { return { status: "fail", mismatches: [`${MAP} is not valid JSON: ${e.message}`] } }
+  if (!exists(MAP)) return { status: "fail", inspected: 0, mismatches: [`${MAP} is missing — the axis map is authored, not generated`] }
+  const axisMap = inputs.valid(MAP)
+  if (!axisMap) return { status: "fail", inspected: 0, mismatches: [`${MAP} failed its schema — see design/schemas; nothing compared`] }
+  // a component whose metadata failed its schema is unverifiable: a failure here too, never left out quietly
+  for (const f of invalidMetadata) fails.push(`${f} failed its schema — not compared (see design/schemas)`)
 
   const codeConnect = new Map()
   const CC_DIR = "packages/figma-sync/code-connect"
@@ -201,7 +183,7 @@ check("design", "figma-code", () => {
   } catch (e) {
     // the comparator throws rather than optional-chaining past an absent field; a throw is a FAIL
     // that names the cause, never a skip
-    return { status: "fail", mismatches: [`comparison could not run: ${e.message}`] }
+    return { status: "fail", inspected: 0, mismatches: [`comparison could not run: ${e.message}`] }
   }
 
   // structural findings already name the component, so only prefix when an axis is involved
@@ -209,7 +191,8 @@ check("design", "figma-code", () => {
     fails.push(f.axis === null ? `[${f.side}] ${f.detail}` : `[${f.side}] ${f.component}/${f.axis}: ${f.detail}`)
   }
 
-  const { components: inspected, axes, total } = result.inspected
+  const { components: inspected, axes } = result.inspected
+  const total = result.inspected.total + invalidMetadata.length
   if (total === 0) fails.push("no components in atlas/metadata — 0 inspected is a failure, not a pass")
   else if (inspected === 0) fails.push(`0 of ${total} components were comparable — every one had unreadable figmaProperties`)
   else if (axes === 0) fails.push(`${inspected} component(s) inspected but 0 axes compared — the axis map classifies everything away`)
@@ -249,28 +232,43 @@ check("design", "figma-code", () => {
 
   const note = `${inspected}/${total} components · ${axes} axes compared · ${result.deferredAxes.length} State deferred to M3`
     + (result.unmappedAxes.length ? ` · ${result.unmappedAxes.length} unmapped` : "") + ageNote
-  return { ...verdict(fails, warns), note }
+  return { ...verdict(fails, warns), inspected: axes, scope: total, note }
 })
 
+// A literal variant/size is checked against metadata; an expression or spread is UNKNOWN — counted and
+// reported in the note, never read as "no variant". Scope is every changed file that renders an Atlas
+// component; finding none of its tags means the scanner failed, not that the file is clean.
 check("design", "variants-sizes", () => {
   const fails = []
+  const inScope = new Set(), scanned = new Set()
+  let tags = 0, literal = 0, dynamic = 0
   for (const { file, src } of sources) for (const u of atlasUsage(src)) {
     const m = metadata[u.component]
     if (!m || !(u.exported === u.component || u.exported === `${u.component}Root`)) continue
-    for (const tag of jsxTags(src, u.local)) for (const [prop, allowed] of [["variant", m.variants], ["size", m.sizes]]) {
-      const value = literalProp(blankNestedJsx(tag.attrs), prop)
-      if (value !== undefined && allowed?.length && !allowed.includes(value))
-        fails.push(`${file}:${tag.line} <${u.local} ${prop}="${value}"> — ${u.component} ${prop}s are ${allowed.join(" | ")}`)
+    inScope.add(file)
+    for (const tag of jsxTags(src, u.local, file)) {
+      tags++; scanned.add(file)
+      for (const [prop, allowed] of [["variant", m.variants], ["size", m.sizes]]) {
+        const value = literalProp(tag, prop)
+        if (value === UNKNOWN) { dynamic++; continue }
+        if (value === undefined) continue
+        literal++
+        if (allowed.length && !allowed.includes(value))
+          fails.push(`${file}:${tag.line} <${u.local} ${prop}="${value}"> — ${u.component} ${prop}s are ${allowed.join(" | ")}`)
+      }
     }
   }
-  return verdict(fails)
+  return { ...verdict(fails), inspected: scanned.size, scope: inScope.size,
+    note: `${scanned.size} files · ${tags} tags · ${literal} literal props · ${dynamic} dynamic` }
 })
 
 // Deprecated assets (packages/governance/deprecations.json). A changed file fails only for a use it adds:
 // a use already present in the file at --base is historical and is migrated when its owner chooses.
 const DEPRECATIONS_FILE = "packages/governance/deprecations.json"
-const deprecations = exists(DEPRECATIONS_FILE) ? (JSON.parse(read(DEPRECATIONS_FILE)).entries ?? []) : []
-const deprecatedUses = (src) => {
+// undefined when the file is absent or failed its schema; deprecated-usage then fails rather than
+// treating "unreadable" as "nothing is deprecated"
+const deprecations = inputs.valid(DEPRECATIONS_FILE)?.entries
+const deprecatedUses = (src, file) => {
   const hits = []
   const add = (d, line, what) => hits.push({ key: `${d.name}|${what}`, line,
     msg: `${what} — ${d.kind} ${d.name} is deprecated since ${d.since}, removed in ${d.removeIn}; use ${d.replacement}. ${d.migration}` })
@@ -286,8 +284,8 @@ const deprecatedUses = (src) => {
         add(d, lineOf(src, src.indexOf(u.exported)), `imports ${u.exported}`)
       if (d.kind === "variant" && d.name.startsWith(`${u.component}.`) && (u.exported === u.component || u.exported === `${u.component}Root`)) {
         const variant = d.name.slice(u.component.length + 1)
-        for (const tag of jsxTags(src, u.local))
-          if (literalProp(blankNestedJsx(tag.attrs), "variant") === variant) add(d, tag.line, `<${u.local} variant="${variant}">`)
+        for (const tag of jsxTags(src, u.local, file))
+          if (literalProp(tag, "variant") === variant) add(d, tag.line, `<${u.local} variant="${variant}">`)
       }
     }
   }
@@ -295,29 +293,40 @@ const deprecatedUses = (src) => {
 }
 
 check("design", "deprecated-usage", () => {
+  if (!deprecations) return { status: "fail", inspected: 0, mismatches: [`${DEPRECATIONS_FILE} is missing or failed its schema — cannot tell what is deprecated`] }
   const fails = []
+  let scanned = 0
   for (const { file, src } of sources) {
     const old = sh(`git show ${BASE}:${file}`, ROOT)
-    const before = new Set(old.ok ? deprecatedUses(old.out).map((h) => h.key) : [])
-    for (const h of deprecatedUses(src)) if (!before.has(h.key)) fails.push(`${file}:${h.line} ${h.msg}`)
+    const before = new Set(old.ok ? deprecatedUses(old.out, file).map((h) => h.key) : [])
+    for (const h of deprecatedUses(src, file)) if (!before.has(h.key)) fails.push(`${file}:${h.line} ${h.msg}`)
+    scanned++
   }
-  return verdict(fails)
+  return { ...verdict(fails), inspected: scanned, scope: sources.length, note: `${scanned} files · ${deprecations.length} deprecations registered` }
 })
 
 check("design", "tokens", () => {
   const fails = []
+  // an empty token set would make every use "not defined"; say why instead of listing hundreds of lines
+  if (tokens.size === 0) return { status: "fail", inspected: 0, mismatches: [`${TOKEN_CSS} defines no --atlas-* tokens — nothing to check uses against`] }
+  let refs = 0
+  const scanned = new Set()
   for (const { file, src } of sources) {
     const brand = BRAND_FILE.test(file) // DEC-008: brand colours may reference the palette here
     for (const m of src.matchAll(/--atlas-[\w-]+/g)) {
       const name = m[0], line = lineOf(src, m.index)
       if (/^\s*:/.test(src.slice(m.index + name.length, m.index + name.length + 8))) continue // a definition, not a use
+      refs++; scanned.add(file)
       if (brand) { if (!tokens.has(name)) fails.push(`${file}:${line} ${name} is not defined in ${TOKEN_CSS}`) }
       else if (/^--atlas-color-/.test(name) || new RegExp(`^${PRIMITIVE_TOKEN_REF.source}$`).test(name))
         fails.push(`${file}:${line} ${name} is a primitive — use a semantic token`)
       else if (!tokens.has(name)) fails.push(`${file}:${line} ${name} is not defined in ${TOKEN_CSS}`)
     }
   }
-  return verdict(fails)
+  // scope stays 0: a changed file that only DEFINES tokens (atlas.tokens.css) has no uses to inspect.
+  // The silent-pass risk here is an empty token set, failed above.
+  return { ...verdict(fails), inspected: scanned.size, scope: 0,
+    note: `${refs} token refs in ${scanned.size} files · ${tokens.size} tokens defined` }
 })
 
 // ─── code ────────────────────────────────────────────────────────────────────
@@ -326,20 +335,29 @@ const changedOnTop = (out, pick) => {
   const lines = out.split("\n").filter(pick)
   return [...lines.filter((l) => changed.some((f) => l.includes(f))), ...lines.filter((l) => !changed.some((f) => l.includes(f)))].slice(0, 20)
 }
+// these three run repo-wide, so their scope is always 1: a run that reports no files is a broken run
+const countFrom = (out, re) => Number((out.replace(/\x1b\[[0-9;]*m/g, "").match(re) || [])[1] ?? 0)
 
 check("code", "token-lint", () => {
   const r = sh("node packages/governance/token-lint.mjs", ROOT)
-  return r.ok ? { status: "pass" } : { status: "fail", mismatches: changedOnTop(r.out, (l) => /^\s+\[/.test(l) || /^\s{2}\S/.test(l)) }
+  const files = countFrom(r.out, /scanned (\d+) files?/)
+  const base = { inspected: files, scope: 1, note: `${files} files` }
+  return r.ok ? { status: "pass", ...base } : { status: "fail", ...base, mismatches: changedOnTop(r.out, (l) => /^\s+\[/.test(l) || /^\s{2}\S/.test(l)) }
 })
 
 check("code", "tsc", () => {
-  const r = sh("npx tsc --noEmit -p tsconfig.json", ROOT, 300000)
-  return r.ok ? { status: "pass" } : { status: "fail", mismatches: changedOnTop(r.out, (l) => l.includes("error TS")) }
+  const r = sh("npx tsc --noEmit -p tsconfig.json --extendedDiagnostics", ROOT, 300000)
+  const files = countFrom(r.out, /^Files:\s+(\d+)/m)
+  const base = { inspected: files, scope: 1, note: `${files} files in the program` }
+  return r.ok ? { status: "pass", ...base } : { status: "fail", ...base, mismatches: changedOnTop(r.out, (l) => l.includes("error TS")) }
 })
 
 check("code", "tests", () => {
   const r = sh("npx vitest run", ROOT, 300000)
-  return r.ok ? { status: "pass" } : { status: "fail", mismatches: r.out.split("\n").filter((l) => /FAIL|✗|×|Error/.test(l)).slice(0, 20) }
+  const files = countFrom(r.out, /Test Files\s+[^\n]*\((\d+)\)/)
+  const tests = countFrom(r.out, /Tests\s+[^\n]*\((\d+)\)/)
+  const base = { inspected: files, scope: 1, note: `${files} test files · ${tests} tests` }
+  return r.ok ? { status: "pass", ...base } : { status: "fail", ...base, mismatches: r.out.split("\n").filter((l) => /FAIL|✗|×|Error/.test(l)).slice(0, 20) }
 })
 
 check("code", "atlas-components", () => {
@@ -349,15 +367,19 @@ check("code", "atlas-components", () => {
     for (const l of lengthLiterals(src))
       warns.push(`${file}:${lineOf(src, l.index)} ${l.prop}: ${l.value} — hardcoded length; use a spacing/size/radius/type token from atlas/tokens.md`)
   }
-  return verdict(fails, warns)
+  return { ...verdict(fails, warns), inspected: appSources.length, scope: appSources.length, note: `${appSources.length} app files` }
 })
 
 check("code", "a11y", () => {
   const fails = []
-  for (const { file, src } of sources.filter((s) => s.file.endsWith(".tsx"))) {
-    for (const tag of jsxTags(src, "img")) if (!/\balt=/.test(tag.attrs)) fails.push(`${file}:${tag.line} <img> without alt`)
-    for (const el of ["div", "span", "li", "p"]) for (const tag of jsxTags(src, el)) {
-      if (/\bonClick=/.test(tag.attrs) && !(/\brole=/.test(tag.attrs) && /\btabIndex=/.test(tag.attrs)))
+  const tsx = sources.filter((s) => s.file.endsWith(".tsx"))
+  let tags = 0
+  for (const { file, src } of tsx) {
+    // has() is UNKNOWN when a spread may supply the attribute: only a definite absence fails
+    for (const tag of jsxTags(src, "img", file)) { tags++; if (tag.has("alt") === false) fails.push(`${file}:${tag.line} <img> without alt`) }
+    for (const el of ["div", "span", "li", "p"]) for (const tag of jsxTags(src, el, file)) {
+      tags++
+      if (tag.has("onClick") === true && (tag.has("role") === false || tag.has("tabIndex") === false))
         fails.push(`${file}:${tag.line} <${el} onClick> without role + tabIndex — use Button, or make it keyboard-reachable`)
     }
     // composite widgets promise arrow-key navigation; a file that declares one and handles no keys breaks it
@@ -370,17 +392,18 @@ check("code", "a11y", () => {
         fails.push(`${file}:${i + 1} outline removed with no focus style on the same line`)
     })
   }
-  return verdict(fails)
+  return { ...verdict(fails), inspected: tsx.length, scope: tsx.length, note: `${tsx.length} .tsx files · ${tags} tags` }
 })
 
 check("code", "prototype-registered", () => {
   const fails = []
   const REGISTRY = "app/prototypes/_shared/flowRegistry.ts"
-  const registry = exists(REGISTRY) ? read(REGISTRY) : ""
   const slugs = new Set(changed.map((f) => (f.match(/^app\/prototypes\/([^_/][^/]*)\//) || [])[1]).filter(Boolean))
-  for (const slug of slugs) if (exists(`app/prototypes/${slug}/page.tsx`) && !registry.includes(`"${slug}"`))
-    fails.push(`app/prototypes/${slug} is not registered in ${REGISTRY}`)
-  return verdict(fails)
+  const flows = [...slugs].filter((slug) => exists(`app/prototypes/${slug}/page.tsx`))
+  if (flows.length && !exists(REGISTRY)) return { status: "fail", inspected: 0, scope: flows.length, mismatches: [`${REGISTRY} is missing — ${flows.length} changed flow(s) cannot be checked`] }
+  const registry = flows.length ? read(REGISTRY) : ""
+  for (const slug of flows) if (!registry.includes(`"${slug}"`)) fails.push(`app/prototypes/${slug} is not registered in ${REGISTRY}`)
+  return { ...verdict(fails), inspected: flows.length, scope: flows.length, note: `${flows.length} changed flows` }
 })
 
 // ─── scope ───────────────────────────────────────────────────────────────────
@@ -388,25 +411,32 @@ check("code", "prototype-registered", () => {
 const globToRe = (g) => new RegExp("^" + g.replace(/[.+^${}()|[\]\\]/g, "\\$&").replace(/\*\*\/?/g, "\0").replace(/\*/g, "[^/]*").replace(/\?/g, "[^/]").replace(/\0/g, ".*") + "$")
 
 check("scope", "paths", () => {
-  if (!SCOPE.length) return { status: changed.length ? "warn" : "pass", mismatches: changed.length ? [`no --scope given; ${changed.length} changed file(s) not checked: ${changed.slice(0, 10).join(", ")}${changed.length > 10 ? " …" : ""}`] : [] }
+  if (!SCOPE.length) return { status: changed.length ? "warn" : "pass", inspected: 0, mismatches: changed.length ? [`no --scope given; ${changed.length} changed file(s) not checked: ${changed.slice(0, 10).join(", ")}${changed.length > 10 ? " …" : ""}`] : [] }
   const res = SCOPE.map(globToRe)
-  return verdict(changed.filter((f) => !res.some((re) => re.test(f))).map((f) => `${f} is outside --scope`))
+  return { ...verdict(changed.filter((f) => !res.some((re) => re.test(f))).map((f) => `${f} is outside --scope`)),
+    inspected: changed.length, scope: changed.length, note: `${changed.length} changed files · ${SCOPE.length} globs` }
 })
 
 check("scope", "no-new-tokens", () => {
-  if (ALLOW_TOKEN) return { status: "pass", note: "--allow-new-token" }
+  if (ALLOW_TOKEN) return { status: "pass", inspected: 0, note: "--allow-new-token" }
   const before = sh(`git show ${BASE}:${TOKEN_CSS}`, ROOT)
-  const added = before.ok ? [...tokens].filter((t) => !definedTokens(before.out).has(t)) : []
-  return verdict(added.map((t) => `${t} added to ${TOKEN_CSS} — tokens are added in Figma first, never on a task's initiative`))
+  // unreadable at --base used to mean "nothing added" — a silent pass. It is a failure, unless the file
+  // is new in this diff (then every token in it is new, and is reported as such).
+  const isNew = !before.ok && changed.includes(TOKEN_CSS) && !sh(`git cat-file -e ${BASE}:${TOKEN_CSS}`, ROOT).ok
+  if (!before.ok && !isNew) return { status: "fail", inspected: 0, mismatches: [`could not read ${TOKEN_CSS} at ${BASE} — cannot tell which tokens are new`] }
+  const old = isNew ? new Set() : definedTokens(before.out)
+  const added = [...tokens].filter((t) => !old.has(t))
+  return { ...verdict(added.map((t) => `${t} added to ${TOKEN_CSS} — tokens are added in Figma first, never on a task's initiative`)),
+    inspected: tokens.size, scope: 1, note: `${tokens.size} tokens compared with ${BASE}` }
 })
 
 check("scope", "no-new-components", () => {
-  if (ALLOW_COMPONENT) return { status: "pass", note: "--allow-new-component" }
+  if (ALLOW_COMPONENT) return { status: "pass", inspected: 0, note: "--allow-new-component" }
   const COMPONENT_DIR = /^(packages\/ui-web\/src\/(primitives|compositions|patterns|layouts)|packages\/ui-native\/components)\/([^/]+)\//
   const dirs = new Set(changed.map((f) => (f.match(COMPONENT_DIR) || [])[0]).filter(Boolean))
   const fails = [...dirs].filter((d) => !sh(`git cat-file -e ${BASE}:${d.replace(/\/$/, "")}`, ROOT).ok)
     .map((d) => `${d} is a new component — compose it from primitives in the task and log it in atlas/state/candidates.json`)
-  return verdict(fails)
+  return { ...verdict(fails), inspected: dirs.size, scope: dirs.size, note: `${dirs.size} component dirs changed` }
 })
 
 // ─── Report ──────────────────────────────────────────────────────────────────
@@ -453,4 +483,5 @@ if (JSON_OUT) {
   if (stamped.length) console.log(`verifiedAt stamped: ${stamped.join(", ")} (atlas/state/status.json)`)
   for (const n of stampNote) console.log(n)
 }
-process.exit(failed.length ? 1 : 0)
+// exitCode, not process.exit(): exit() can cut off a large --json report written to a pipe (it did at 64 KB)
+process.exitCode = failed.length ? 1 : 0

@@ -15,6 +15,9 @@ const INPUTS = ["scripts", "packages/ui-web/src", "packages/figma-sync/code-conn
 function copyInputs(...extra) {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), "atlas-sync-test-"))
   for (const rel of [...INPUTS, ...extra]) fs.cpSync(path.join(REPO, rel), path.join(dir, rel), { recursive: true })
+  // since M2 atlas-sync validates a --pull file with ajv against packages/governance/schemas
+  fs.cpSync(path.join(REPO, "packages/governance/schemas"), path.join(dir, "packages/governance/schemas"), { recursive: true })
+  fs.symlinkSync(path.join(REPO, "node_modules"), path.join(dir, "node_modules"))
   return dir
 }
 const sync = (dir) => execFileSync("node", [path.join(dir, "scripts/atlas-sync.mjs")], { encoding: "utf8" })
@@ -450,4 +453,18 @@ test("a sync without --pull carries figmaComponentProperties forward", () => {
   } finally {
     fs.rmSync(dir, { recursive: true, force: true })
   }
+})
+
+test("a --pull file that fails its schema stops the sync, names the field, and writes nothing", () => {
+  const dir = copyInputs()
+  try {
+    const before = fs.readFileSync(path.join(dir, "atlas/metadata/Button.json"), "utf8")
+    const file = path.join(dir, "pull.json")
+    fs.writeFileSync(file, JSON.stringify({ fileKey: "cKYhfaHLCoyMHi9nKr63Ig", pulledAt: "2026-10-22", components: { Button: { nodeId: "19:2", properties: { Variant: [] } } } }))
+    let err
+    try { execFileSync("node", [path.join(dir, "scripts/atlas-sync.mjs"), "--pull", file], { encoding: "utf8", stdio: "pipe" }) } catch (e) { err = e }
+    assert.ok(err, "the sync must exit non-zero")
+    assert.match(err.stderr, /\/components\/Button\/properties\/Variant must NOT have fewer than 1 items/)
+    assert.equal(fs.readFileSync(path.join(dir, "atlas/metadata/Button.json"), "utf8"), before)
+  } finally { fs.rmSync(dir, { recursive: true, force: true }) }
 })

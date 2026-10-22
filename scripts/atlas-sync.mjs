@@ -16,6 +16,7 @@ import fs from "node:fs"
 import path from "node:path"
 import { fileURLToPath } from "node:url"
 import { renderComponentSection, SECTION_BEGIN, SECTION_END } from "./lib/component-tokens.mjs"
+import { validate } from "./lib/schemas.mjs"
 import { tokenCoverage } from "./lib/token-coverage.mjs"
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..")
@@ -332,6 +333,14 @@ function carriedForward() {
 }
 
 const pull = PULL_PATH ? JSON.parse(read(path.resolve(ROOT, PULL_PATH))) : carriedForward()
+// a hand-written pull file is the one input no generator vouches for: validate it before using any field
+if (PULL_PATH) {
+  const errors = validate("figma-pull.schema.json", pull)
+  if (errors.length) {
+    console.error(`✗ ${PULL_PATH} does not match packages/governance/schemas/figma-pull.schema.json:\n${errors.map((e) => `    ${e}`).join("\n")}`)
+    process.exit(1)
+  }
+}
 if (pull && pull.fileKey !== FILE_KEY) {
   console.error(`✗ pull file is for Figma file ${pull.fileKey}, expected ${FILE_KEY}`)
   process.exit(1)
