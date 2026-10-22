@@ -9,7 +9,7 @@ figma.connect(
     props: {
       variant:        figma.enum("Variant", { default: "default", destructive: "destructive" }),
       confirmVariant: figma.enum("Variant", { default: "primary", destructive: "destructive" }),
-      size:           figma.enum("Size",    { sm: "sm", md: "md", lg: "lg", xl: "xl" }),
+      size:           figma.enum("Size",    { sm: "sm", md: "md", lg: "lg", xl: "xl", full: "full" }),
     },
     example: ({ variant, confirmVariant, size }) => (
       <Dialog>
