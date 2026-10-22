@@ -192,3 +192,33 @@ test("a metadata file whose name does not match its filename fails", () => {
 test("every INPUTS rule points at a schema that compiles", () => {
   for (const i of INPUTS) assert.doesNotThrow(() => validate(i.schema, {}), i.schema)
 })
+
+// ─── D1 option C (built in parallel on its own branch; these keep the two branches mergeable) ───
+
+const figmaBound = () => ({
+  source: "figma-bound (codeSyntax.WEB of variables bound to pulled components)",
+  syncedAt: "2026-10-22T10:00:00.000Z", figmaVersion: null, note: "A subset, never the full table.",
+  coverage: { boundVariables: 193, codeTokens: 432, covered: 193, summary: "0 drift over 193/432 covered" },
+  drift: { nameDrift: [], missingInCode: [] },
+  conventionExceptions: [{ figma: "spacing/0.5", css: "--atlas-spacing-0_5" }],
+  variables: { "color/primary": { css: "--atlas-primary", collection: "Semantic", type: "COLOR", web: "var(--atlas-primary)" } },
+})
+
+test("tokens.json may carry a figmaBound block (or null) without claiming figma-synced", () => {
+  const t = clone(read("atlas/tokens.json"))
+  assert.deepEqual(validate("tokens.schema.json", { ...t, figmaBound: figmaBound() }), [])
+  assert.deepEqual(validate("tokens.schema.json", { ...t, figmaBound: null }), [])
+})
+
+test("a malformed figmaBound fails at its field", () => {
+  const b = figmaBound(); b.coverage.covered = "193"
+  assert.match(validate("tokens.schema.json", { ...clone(read("atlas/tokens.json")), figmaBound: b }).join("\n"), /\/figmaBound\/coverage\/covered must be integer/)
+})
+
+test("a pull may carry boundVariables, kept apart from `variables`", () => {
+  const p = pull()
+  p.boundVariables = { pulledAt: "2026-10-22", figmaVersion: null, entries: [{ name: "color/primary", collection: "Semantic", type: "COLOR", web: null }] }
+  assert.deepEqual(validate("figma-pull.schema.json", p), [])
+  delete p.boundVariables.entries[0].web
+  assert.notDeepEqual(validate("figma-pull.schema.json", p), [])
+})

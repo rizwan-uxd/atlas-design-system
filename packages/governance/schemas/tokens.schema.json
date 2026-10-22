@@ -5,28 +5,253 @@
   "description": "Semantic tokens and layout scales, written by scripts/atlas-sync.mjs. syncedAt stays null while the file is derived from packages/tokens/atlas.tokens.css (D1): a figma-synced source with a null syncedAt is a contradiction and fails.",
   "type": "object",
   "additionalProperties": false,
-  "required": ["_generated", "source", "syncedAt", "figmaVersion", "note", "semantic", "scales"],
+  "required": [
+    "_generated",
+    "source",
+    "syncedAt",
+    "figmaVersion",
+    "note",
+    "semantic",
+    "scales"
+  ],
   "properties": {
-    "_generated": { "$ref": "common.schema.json#/$defs/generated" },
-    "source": { "$ref": "common.schema.json#/$defs/text" },
-    "syncedAt": { "$ref": "common.schema.json#/$defs/nullableIsoDate" },
-    "figmaVersion": { "$ref": "common.schema.json#/$defs/nullableText" },
-    "note": { "$ref": "common.schema.json#/$defs/text" },
+    "_generated": {
+      "$ref": "common.schema.json#/$defs/generated"
+    },
+    "source": {
+      "$ref": "common.schema.json#/$defs/text"
+    },
+    "syncedAt": {
+      "$ref": "common.schema.json#/$defs/nullableIsoDate"
+    },
+    "figmaVersion": {
+      "$ref": "common.schema.json#/$defs/nullableText"
+    },
+    "note": {
+      "$ref": "common.schema.json#/$defs/text"
+    },
     "semantic": {
       "type": "object",
       "minProperties": 1,
-      "propertyNames": { "$ref": "common.schema.json#/$defs/token" },
-      "additionalProperties": { "$ref": "common.schema.json#/$defs/text" }
+      "propertyNames": {
+        "$ref": "common.schema.json#/$defs/token"
+      },
+      "additionalProperties": {
+        "$ref": "common.schema.json#/$defs/text"
+      }
     },
     "scales": {
       "type": "object",
       "minProperties": 1,
-      "propertyNames": { "$ref": "common.schema.json#/$defs/token" },
-      "additionalProperties": { "$ref": "common.schema.json#/$defs/text" }
+      "propertyNames": {
+        "$ref": "common.schema.json#/$defs/token"
+      },
+      "additionalProperties": {
+        "$ref": "common.schema.json#/$defs/text"
+      }
+    },
+    "figmaBound": {
+      "description": "D1 option C: the Figma-name to CSS-name map for the variables bound to components the pull already reads. Covers a SUBSET of tokens, so it never stamps the file figma-synced; coverage.summary states the fraction. Carried forward when a pull has no harvest.",
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "source",
+            "syncedAt",
+            "figmaVersion",
+            "note",
+            "coverage",
+            "drift",
+            "conventionExceptions",
+            "variables"
+          ],
+          "properties": {
+            "source": {
+              "$ref": "common.schema.json#/$defs/text"
+            },
+            "syncedAt": {
+              "$ref": "common.schema.json#/$defs/nullableIsoDate"
+            },
+            "figmaVersion": {
+              "$ref": "common.schema.json#/$defs/nullableText"
+            },
+            "note": {
+              "$ref": "common.schema.json#/$defs/text"
+            },
+            "coverage": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "boundVariables",
+                "codeTokens",
+                "covered",
+                "summary"
+              ],
+              "properties": {
+                "boundVariables": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "codeTokens": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "covered": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "summary": {
+                  "$ref": "common.schema.json#/$defs/text"
+                }
+              }
+            },
+            "drift": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "nameDrift",
+                "missingInCode"
+              ],
+              "properties": {
+                "nameDrift": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "figma",
+                      "web",
+                      "expected"
+                    ],
+                    "properties": {
+                      "figma": {
+                        "$ref": "common.schema.json#/$defs/text"
+                      },
+                      "web": {
+                        "$ref": "common.schema.json#/$defs/nullableText"
+                      },
+                      "expected": {
+                        "$ref": "common.schema.json#/$defs/nullableText"
+                      }
+                    }
+                  }
+                },
+                "missingInCode": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "figma",
+                      "css"
+                    ],
+                    "properties": {
+                      "figma": {
+                        "$ref": "common.schema.json#/$defs/text"
+                      },
+                      "css": {
+                        "$ref": "common.schema.json#/$defs/text"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "conventionExceptions": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "figma",
+                  "css"
+                ],
+                "properties": {
+                  "figma": {
+                    "$ref": "common.schema.json#/$defs/text"
+                  },
+                  "css": {
+                    "$ref": "common.schema.json#/$defs/token"
+                  }
+                }
+              }
+            },
+            "variables": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "css",
+                  "collection",
+                  "type"
+                ],
+                "properties": {
+                  "css": {
+                    "oneOf": [
+                      {
+                        "$ref": "common.schema.json#/$defs/token"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "collection": {
+                    "$ref": "common.schema.json#/$defs/nullableText"
+                  },
+                  "type": {
+                    "$ref": "common.schema.json#/$defs/nullableText"
+                  },
+                  "web": {
+                    "$ref": "common.schema.json#/$defs/nullableText"
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
     }
   },
   "allOf": [
-    { "if": { "properties": { "source": { "const": "figma-synced" } } }, "then": { "properties": { "syncedAt": { "type": "string" } } } },
-    { "if": { "properties": { "syncedAt": { "type": "null" } } }, "then": { "properties": { "source": { "not": { "const": "figma-synced" } } } } }
+    {
+      "if": {
+        "properties": {
+          "source": {
+            "const": "figma-synced"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "syncedAt": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "syncedAt": {
+            "type": "null"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "source": {
+            "not": {
+              "const": "figma-synced"
+            }
+          }
+        }
+      }
+    }
   ]
 }
