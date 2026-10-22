@@ -1,39 +1,91 @@
-# Handoff: next session (library state after PR #97; wave 2 and 3 benchmarks complete)
+# Handoff: start from M2 (Atlas roadmap)
 
-Written: 2026-10-16, State and the 10-21 section updated 2026-10-22. Read this, `AGENTS.md` and the `atlas-component` skill first. **This is the only handoff doc**: every earlier one was deleted (they stay in git history) and their useful gotchas and rules are folded in below. For anything that belongs to a roadmap phase, read `docs/ATLAS-DELIVERY-ROADMAP.md` as well — it sets the phase order and what each phase may touch.
+Written 2026-10-22. **Read in this order: `AGENTS.md` → `docs/ATLAS-DELIVERY-ROADMAP.md` → this file.**
+The roadmap is normative now (referenced from `AGENTS.md` §2) and owns the phase order; this file is
+only current state plus the gotchas that will bite again. **This is the only handoff doc** — earlier
+ones were deleted and live in git history.
 
 ## State
-- **`main` is at `512ec72` (PR #97)** (check `git log origin/main`). CI green; **no PR is open**. Native ports are **paused** by the user: build them later.
-- **All batch-2 patterns now exist (six, including Navigation shell)** (`packages/governance/patterns/`): Navigation shell, Detail view, Chat, Notifications center, Payment and billing, Members and permissions. Each has its doc, a compiled example, a generated `atlas/patterns/<slug>.md`, an `atlas/index.md` row and a README entry. Patterns add no DEC, CAND or DISC ids.
-- Latest ids: **DEC-079, CAND-055, DISC-095 (open: Button variant link ignores size in code, Figma draws it; owner deferred, option C), DISC-094 (closed).** 47 web components, **all with `verifiedAt`**; 17 native components, OtpInput added in #86 and Progress in #88 (Button, Input, Label, Textarea, Checkbox, Switch, Badge, Alert, Card, Dialog, Tabs, NavBar, Stepper, Spinner, Skeleton, OtpInput, Progress). About 20 entries in `candidates.json`; none is Figma debt.
-- Working branch for this cloud session: `ccr-3e75bb8c-9r4ah8` (earlier sessions used `claude/...` names). **After a merge, bring the branch up to date with `git fetch origin main && git merge --ff-only origin/main`** (works when the branch's commits are already in `main`). `git checkout -B <branch> origin/main` was blocked by the auto-mode classifier ("Merge Without Review"): do not work around it, ask the user for a Bash permission rule or to run it.
-- If a push is **rejected**, the remote has a commit you do not have: fetch and read it, never force.
-- `.atlas-pull/` (gitignored scratch) does not exist in a fresh cloud session: see the sync recipe in the gotchas.
+- **`main` has Phase 1** (PR #98, squash-merged, 13/13 checks green): the north star at
+  `docs/architecture/ATLAS-TARGET-ARCHITECTURE.md`, the roadmap at `docs/ATLAS-DELIVERY-ROADMAP.md`,
+  the generated metric table, and `scripts/metrics-report.mjs` + `metrics.manifest.json`.
+- **M1 is PR #99** on `claude/atlas-m1-figma-code-compare`, auto-merge armed. **Check whether it
+  merged before doing anything** (`gh pr view 99`); if it has, branch from the new `main`.
+- 47 web components (35 spec-complete, 12 scaffolded), 17 native (**ports paused by the user**),
+  15 patterns. Latest ids **DEC-079, CAND-055, DISC-104**. Snapshot pulled from Figma 2026-10-21;
+  `atlas/tokens.json` is still `syncedAt: null` — the token side has **never** synced (see D1).
+- Benchmarks: waves 1–3 complete (T1–T19), written up in `docs/HARNESS.md` §6–§7. Nothing outstanding.
 
-- **Agent-ready harness, post-phase-9 work (2026-10-16):** `atlas-pattern` skill added and routed from `AGENTS.md` §9 (patterns are Figma-first), `atlas-prototype` points at the Patterns table, `claude.md` counts refreshed (47 web components: 34 spec-complete, 13 scaffolded; 17 native; 15 patterns), `docs/HARNESS.md` notes the skill (not benchmarked). Later options the user has not chosen: a Wave 2 benchmark of the new patterns (costs spend; earlier cap $42), refinement passes on the 13 scaffolded components, a machine-readable `atlas/index.json` / `llms.txt` layer.
+## What M1 left you (the M2 starting point)
+- `scripts/lib/compare-axes.mjs` — exports `compareAxes`, `codeConnectEnums`, `guardFigmaProperties`.
+  A **two-way** comparator whose result carries a `registry: null` slot that **M3** fills; do not
+  rename it to "three-way" before then.
+- `design/figma-code` in `atlas-verify`: repo-wide, **fails closed**, reports
+  `47/47 components · 130 axes compared · 23 State deferred to M3 · 4 unmapped`.
+- `packages/registry/figma-axis-map.json` — **authored, never generated.** All 34 Figma axes
+  classified (`code-union` | `code-connect` | `boolean` | `state` | `unmapped`), each with a reason;
+  an unclassified axis **FAILS**, which is the ratchet.
+- `--max-figma-age <days>` on `atlas-verify`; CI passes **90**. A policy number, not a limit.
+- 35 comparator tests + 8 `ci-workflow` tests. Script tests total **116**.
 
-## Session 2026-10-16 to 10-19 (branch `claude/zealous-keller-vcfb6s`, no PR open yet)
-- **Batch-2 pattern examples rendered in Chromium** (Navigation shell, Detail view, Chat, Notifications, Billing, Members) through a throwaway page, since deleted: no console errors; Notifications Unread tab and Mark all as read worked. Not tested: dialogs, loading and error states, dark mode, role revert on failure. Both nits seen (Billing "Cancel plan" stretched full width; visible `TableCaption` on Billing and Members) were fixed after checking Figma: the button is content-width and the tables use `aria-label`. The Dashboard example keeps its visible `TableCaption`: Figma draws a visible footnote under that table too (checked 2026-10-19), so it matches.
-- **Wave 2 benchmark of the `atlas-pattern` skill built** (`benchmarks/README.md` "Wave 2", `benchmarks/phase-10/`, `benchmarks/rubric-pattern.md`, tasks T17 and T18, `no-pattern-skill.patch`). Cap $15, ledgers `results/wave-2-spend*.json`. `run.sh`, `budget.mjs`, `pins.mjs`, `analyze.mjs` and `summarize.mjs` gained a `pattern` task type; phase 9 defaults are unchanged (budget and pins read `BENCH_LEDGER`, `BENCH_CAP`, `BENCH_PINS`; `BENCH_ALLOW_FIGMA_FAILED` tolerates a failed figma server for T17 only).
-- **T17 (Figma unavailable, the right answer is to stop) ran in a cloud container**: skill 3/3 gates, no-skill 1/3, $1.46 spent. Result and caveats are in `docs/HARNESS.md` §6.
-- **T18 (write the Members pattern from its frames) has NOT run.** It needs a machine where the nested `claude` CLI reaches Figma; the cloud nested CLI cannot (its `figma` server is blocked). Runbook: `benchmarks/README.md` Wave 2, about $8 for 6 runs. Frame `1035:3` was confirmed to exist with six frames on 2026-10-19.
-- **Figma access:** the capital-F `Figma` server works from the cloud session (`whoami` passes). The runner uses the lowercase `mcp__figma__*` names, which only connect on the owner's machine.
-- **Auto-mode classifier** denied one edit to a pinned hash in `pins-cloud.json` (tampering with an integrity record). It was not worked around: a fresh `pins-cloud-b.json` was recorded instead, and run 1 of each arm stays under the old file.
-- **Cannot run remotely on the owner's machine** from a cloud session: no local session is reachable and both environments are Anthropic cloud. Remote Control or a self-hosted environment would have to be set up there first (`read_documentation` topic `remote_control.setup`).
-- **Next, in order:** (1) the owner runs T18 on their machine and the session scores it with `rubric-pattern.md`; (2) the options already listed under "Do next".
+## M2 — do this next (the roadmap's §2b, 2 sessions)
+The one non-negotiable ordering in the roadmap: **M2 before M3.** A verifier that cannot fail will
+certify a broken registry, and today only 1 of 13 `atlas-verify` checks has a test.
 
-## Session 2026-10-21: where it stopped (read this first)
-- **Merged to `main`, CI green:** #90 (wave 2 benchmark + T17), #91 (Billing/Members example fixes, `atlas/index.json`), #92 (Card `State=selected` in Figma and code, `aria-label`, `AGENTS.md` read-order line), and #93 (the owner's README revision). No open PRs. Card is `spec-complete` (parity `open`: DISC-096 header slots and DISC-097 footer `justify` are code features Figma does not draw, owner decision pending). 35 spec-complete, 12 scaffolded (the next refinement candidates; Card is done).
-- **Wave 2 and Wave 3 are finished and merged — nothing benchmark-side is outstanding.** #95 (T18 live-Figma results, skill vs no-skill, 2 runs per arm), #96 (snapshot pull, 47 components; the bench runner now allows Figma `create_session`) and #97 (T19: notifications prototype, patterns vs no-patterns) all merged with CI green. T18c (the cloud text-export variant) ran, was scored and is written up. Results and caveats are in `docs/HARNESS.md` §6 (T17, T18c, T18) and §7 (T19). The earlier "to do" list for T18c is gone: it was done.
-- **Environment facts:** the capital-F `Figma` server works from the cloud session (`whoami` passes); the lowercase `figma` server is blocked by the proxy (403) and so is the nested `claude`. `rsync` was missing and installed with apt for the runner. Synced skills `atlas-context` and `atlas-ui-system` load in nested runs.
-- **Other open items (owner decisions):** refine another scaffolded component (one per task, four gates; Card showed most "remaining focus" notes in `claude.md` were stale, so audit first); DISC-095 (Button `link` size); DISC-096 and DISC-097; 30 old remote branches show commits not in `main` by ancestry (probably squash-merged leftovers; offered a read-only audit, nothing deleted); native ports paused.
-- **Working rules that bit this session:** after a PR merges, `git fetch origin main && git merge --ff-only origin/main` on the session branch; commit and push to the feature branch when the stop hook asks (no PR); ask before opening a PR; "merge N" per PR; use the stamp command `npm run atlas:verify -- --scope "<globs>" --stamp-components <Name>` when everything is already committed.
+1. **`packages/governance/schemas/*.schema.json`** for `atlas/metadata/*`, `atlas/index.json`,
+   `atlas/tokens.json`, `atlas/state/*`, `packages/governance/{deprecations,ownership}.json` and the
+   Figma pull file. **Declare `ajv`** — chosen over zod because the schemas must ship to a browser as
+   data for the M4 runtime validator. Nothing is declared today (zod/ajv exist only transitively).
+2. **New check `design/schemas`**, validating every JSON input *before* any other check reads it.
+   Extend `scripts/atlas-verify.mjs`; add no new script.
+3. **Delete M1's inline structural guard in the same commit** that generalises it — `guardFigmaProperties`
+   in `compare-axes.mjs` is a deliberate temporary duplication, documented as such in its own comment.
+   Leaving both is the failure mode to avoid.
+4. **`scripts/tests/quality-checks.test.mjs`** — the missing parser tests for `jsxTags`,
+   `blankNestedJsx`, `literalProp` in `scripts/lib/quality-checks.mjs`: self-closing, nested,
+   fragments, comments, a string containing `<`, multi-line attributes, and `literalProp` on
+   `variant="x"` / `variant={"x"}` / `variant={v}` (must report **unknown**, not absent) and spreads.
+   Three checks depend on this parser and it has no tests, so a parser bug silently turns them into
+   no-ops that still print PASS.
+5. **Every check reports an inspection count and FAILs on zero** when the diff says it should have
+   inspected something: `PASS (14 files, 62 literal props)` vs
+   `FAIL (0 inspected, 14 changed .tsx in scope)`. `design/figma-code` already does this — copy it.
 
-## Start here (new session)
-1. `git status`, the open PR list and CI on `main`. The user wants every commit finished and merged to `main` before new work starts. Leave an open PR alone until "merge N". Run `npm ci` once before any local `tsc` or `atlas:verify`.
-2. Before the first push, fetch the branch and compare. Do not force-push over a commit you did not make.
-3. Ask the user which item in "Do next" to start. A candidate runs the four gates in "Rules"; a new component needs their explicit request.
-4. **Figma access:** use the tool server named `Figma` (capital F; load with `ToolSearch select:mcp__Figma__use_figma,...`; load the `figma-use` skill first). A lowercase `figma` server listed as failing (proxy 403) is a different entry: ignore it. If `whoami` fails, say so and stop; do not build code without the Figma side. File key `cKYhfaHLCoyMHi9nKr63Ig`. Screenshots: pass `enableBase64Response: true`.
+**M2 exit:** 13/13 checks have tests (from 1/13); no check can PASS with 0 inspections; corrupting one
+field in `atlas/metadata/Button.json` turns a PASS into a FAIL (today it stays PASS).
+
+## Open owner decisions (ask; do not decide these yourself)
+- **`Pagination/Position` — NEW, found by M1.** Figma draws `start|middle|end`; Pagination has no
+  `position` prop and no position concept in its source. Either Figma's axis is layout-only
+  presentation, or the component is missing an API. Left `unmapped` rather than inventing a prop
+  (`AGENTS.md` §4). Wants a DISC entry and a call.
+- **D1, the Figma token-table spike** — the roadmap's decision gate, and the highest-leverage unknown
+  in the repo: it decides whether the brand axis is a quarter or a year away. The Figma MCP exposes
+  variables per *node*, not as a table, so four metrics are unmeasurable. Options A–D are in the
+  roadmap; **C (harvest `codeSyntax.WEB` from the pull already running) is recommended now**, with the
+  A/B spike in parallel. Start it alongside M2, not after.
+- **DISC-095** (Button `link` ignores size in code, Figma draws it), **DISC-096/097** (Card header
+  slots and footer `justify` are code features Figma does not draw).
+- **7 of the 11 open DISCs are one class** — DISC-027, 098–104, "Figma description is a spec summary,
+  not usage guidance." One batched Figma pass clears them, and those descriptions generate
+  `atlas/<Name>.md` usage guidance, so it directly helps M3.
+- 12 scaffolded components each need a binary call at M5: finish, or mark `status: "scaffold"` and
+  **exclude from the registry** (excluded = the agent can never emit it, the correct safe default).
+  **`Checkbox` has no test file at all** and cannot enter the registry until it does.
+
+## Commands
+```bash
+npm ci
+npm run test:scripts        # 116 tests: comparator, ci-workflow, metrics-report, sync, verify
+npm test                    # 1410 vitest
+npm run token-lint
+npx tsc --noEmit
+npm run metrics:check       # the committed metric region matches a fresh run
+npm run atlas:verify -- --scope "<globs>" --max-figma-age 90
+```
+House verification order, every time:
+**token build → token-lint → typecheck → vitest → ESLint → `atlas:verify` → visual regression.**
+
 
 ## Batch-2 pattern Figma frames (drawn 2026-10-16, live in Figma, not in git)
 The Detail view, Chat, Notifications center and Payment and billing docs were first merged without Figma frames (#82), then drawn and the docs corrected to match (#83). Members and permissions was drawn first (#84). Pages in the Atlas file, each a clone of the Settings pattern layout built from existing instances only: `Pattern / Detail view` `1026:2` (frame `1026:3`), `Pattern / Chat` `1030:2` (`1030:3`), `Pattern / Notifications center` `1031:118`, `Pattern / Payment and billing` `1032:338`, `Pattern / Members and permissions` `1035:2` (`1035:3`).
@@ -42,7 +94,7 @@ The Detail view, Chat, Notifications center and Payment and billing docs were fi
 - **Gap seen, not logged as a candidate:** Dialog has no body slot, so the Update payment method (Billing) and Invite member (Members) frames are detached Dialogs with Field instances (same gap as Sheet, CAND-049).
 - **Not drawn or done:** the example `.tsx` files are unrendered in a browser; Notifications day grouping, Undo and focus-next, the Detail view error-with-Retry state, a Members empty state and the Billing Download column have no Figma frame. The docs mark these "not drawn" where they mention them.
 
-## Native components built this session (15 on `main`)
+## Native components (17 on `main`; ports PAUSED by the user)
 All three: no new dependency, one `Animated.Value`, `useReducedMotion`, native driver, no tests (`ui-native` has no test setup), **none run on a device**. Figma is live (not in git), page `Atlas/Mobile-Native` (`1:2`).
 - **Stepper (CAND-053, DEC-075, #73):** ring only; the arc is two clipped half-circle Views. Props `steps: { label }[]`, `current` (1-based, clamped), `accessibilityLabel`; one `progressbar` with an `accessibilityValue`. Figma set `1012:296`, frames `1013:191` (Light) and `1013:218` (Dark). The donut ring's inner radius is a fraction of the radius (0.833 for a 4 px band), not of the diameter.
 - **Spinner (CAND-013, DEC-076, #79):** variant `default | custom` x size `xs | sm | md | lg`, `label`. The arc reuses the Stepper technique (288 degree sweep, dots at both ends for round caps, clips overlap by `StyleSheet.hairlineWidth`); `custom` is eight rounded tick Views. Stroke drawn = `iconStroke x size / 24`. One turn per `duration.spin`, `Easing.linear`; still under Reduce Motion. Figma set `1020:237` (a copy of the web set `527:63`), frames `1020:15627` and `1020:15710`. No colour prop yet.
@@ -56,19 +108,8 @@ All three: no new dependency, one `Animated.Value`, `useReducedMotion`, native d
 Search and filter frames (#57); disabled opacity bound (#58); StatCard icon, clickable and sparkline variants (#59, #60, #66); Sparkline primitive (#61); Card hover shadow, closes DISC-093 (#63); Sheet and Drawer Content and Footer slots (#64, #65); OtpInput and Stepper components, Auth and Onboarding patterns using them (#68); CommandMenu (#69); Button `asChild` and Link as a composition (#70); Stepper viewport variant and mobile ring, Navigation shell pattern, `verifiedAt` stamps (#71); native Stepper, tokens, types, CI native typecheck, letterSpacing, Spinner, Skeleton (#73 to #80); batch-2 patterns (#82, #83, #84).
 
 ## Do next (the user decides)
-0. **Atlas roadmap: Phase 1 and M1 both landed 2026-10-22.** Phase 1 is PR #98 (docs + the generated
-   metric table). **M1 is on branch `claude/atlas-m1-figma-code-compare`** (no PR yet): the independent
-   Figma→code comparison, `design/figma-code` in `atlas-verify`, 47/47 components and 130 axes compared,
-   0 findings, 4 reasoned WARNs. It found and fixed a real Code Connect gap (Dialog was missing
-   `size="full"`) and left **one open owner decision: Pagination/Position** — Figma draws
-   `start|middle|end` and Pagination has no such prop. Next milestone is **M2** (schemas, parser tests,
-   inspection counts). Details:
-0b. **Phase 1 context** — `docs/architecture/ATLAS-TARGET-ARCHITECTURE.md` (the stable
-   north star) and `docs/ATLAS-DELIVERY-ROADMAP.md` (phases, milestones, metric status) now exist and are
-   referenced from `AGENTS.md` §2. The next milestone is **M1: the independent Figma→code comparison**, a
-   two-way comparator that fails closed on missing or malformed `figmaProperties`. It needs no registry and
-   lands green (verified: zero axis drift today, all 47 components carry `figmaProperties`). Read the roadmap
-   before starting it; the phase order is load-bearing.
+0. **M2 — the next milestone.** See "M2 — do this next" above; run **D1** in parallel.
+   Everything below is pre-roadmap work the user has not scheduled; none of it blocks M2.
 1. **The user's Gate 3 visual check** of the native Stepper, Spinner and Skeleton against their Figma frames (nothing has been run on a device or simulator), then check CI on `main`.
 2. **Next native port** (all logged, none built; each needs plan, Figma on `Atlas/Mobile-Native`, then code): suggested **Progress (CAND-017)**, whose indeterminate slide reuses `duration.pulse` and linear easing, or **Avatar (CAND-005)**. The rest: CAND-007, 009, 010, 016, 018, 019, 028, 029, 052, 054. **Button loading (CAND-014)** needs a colour prop on Spinner and a Figma design of the loading state.
 3. **Other candidates:** DataTable (CAND-024, needs its own Figma design), Button loading with a Spinner (CAND-014, needs a Figma design of the loading state), Load more and infinite scroll (CAND-048, deferred), AppShell (CAND-055, composed locally; not a component until designed and requested).
@@ -119,6 +160,21 @@ Search and filter frames (#57); disabled opacity bound (#58); StatCard icon, cli
 - **Browser mirror of React Native geometry:** Chromium is at `/opt/pw-browsers/chromium-1194/chrome-linux/chrome` (no playwright package). Render with `--headless=new --no-sandbox --force-device-scale-factor=3`: at 1x density fractional sizes (a 20 px Spinner ring is 16.46) show clip-snapping notches that a phone would not.
 - **Editing `atlas/state/*.json`:** remove or insert the entry as text. A `json.dump` round trip reformats the whole file (it did for `candidates.json`: a 98-line diff, redone). New decision entries use 6-space keys inside a 4-space `{`.
 - **The stop hook** ("uncommitted changes" or "unpushed commits") fires at the end of a turn. Commit to the feature branch and push it, with no PR; do not merge or open a PR without the user's yes. (This session also committed and pushed on a user "commit" instruction because the session brief says to commit and push to the designated branch; PRs and merges waited for the user's "open the PR" and "merge N".)
+
+### From the roadmap sessions (Phase 1 and M1, 2026-10-22)
+- **`atlas-verify`'s own test fixtures copy a hardcoded `INPUTS` list** (`scripts/tests/atlas-verify.test.mjs`). A new *authored* directory that a check needs must be added there, or the fixture repo lacks it and your fail-closed check fails every fixture test. This broke the two `--stamp` tests until `packages/registry` was added to the list.
+- **Two branches appending a job to the end of `ci.yml` merge cleanly into a DUPLICATE job key.** Git reports no conflict and nothing here validates YAML, so it ships silently. `scripts/tests/ci-workflow.test.mjs` now guards it — but read the post-merge `ci.yml` diff anyway.
+- **After a squash-merge, a branch cut from the pre-merge commit keeps that commit.** `git log origin/main..HEAD` then shows it and the PR lists it, though it contributes **no diff**. Verify with `git diff origin/main..HEAD --stat` and say so in the PR body; do not try to rebase it away.
+- **`sync_with_base_branch` conflicts in the docs both phases touch** (`ATLAS-DELIVERY-ROADMAP.md`, `HANDOFF-next-session.md`). The branch side is normally the superset, so resolve keeping **ours** — but diff the hunks first; strip only the conflict blocks so auto-merged regions survive.
+- **`syncedAt` already IS the Figma pull time.** `atlas-sync` derives it from `pull.pulledAt` and `carriedForward()` reuses the snapshot's own value, so it never advances without a real `--pull`. **Do not add a `figmaPulledAt` field** — it would rewrite all 47 metadata files for nothing. The gate (`--max-figma-age`) was what was missing.
+- **`ORDER` in `atlas-sync.mjs` is a display PRIORITY list, not an enumeration.** The v1 twelve lead `index.md` and everything else follows alphabetically (`indexOf` → `-1` → `99`). Adding a component does not require adding it there; "it only has 12 entries" is not a bug.
+- **Only `Variant` and `Size` have value lists in metadata.** Every other axis is verified through Code Connect: its `figma.enum` **values** flow into the typechecked `example` closure, so `tsc` proves they are assignable to the real prop type. Figma → CC keys → props is the chain; that is why 130 axes are comparable, not ~70.
+- **`figmaComponentProperties` is empty on all 47 components** — the last pull never captured boolean / instance-swap / text properties. So **Code Connect is the only artifact that names slots** (`figma.instance("Leading icon slot")`), which matters for M3's `slots`.
+- **The component-token alias layer already IS `tokenRoles`** for 8 components (`--atlas-button-primary-background: var(--atlas-primary)`), already enforced by `token-lint`. M3 should map roles onto it, not invent a tier. It is also the brand seam for M5.
+- **The same Figma axis can be mapped as an enum on one component and a boolean on another** (`Placeholder`: Select uses `figma.enum`, DatePicker uses `figma.boolean`). Both are correct. The axis map supports per-component overrides for exactly this.
+- **`metrics-report`'s committed region is the deterministic no-results state** so it reproduces anywhere. Collecting results into `.metrics/` locally changes it, so do not commit a result-derived region until CI collects those files as artifacts (Phase 4). `npm run metrics:check` tells you.
+- **Do not point a metric at a check that does not prove it.** Two mappings read `passing` off `token-lint` and the `a11y` heuristic before being corrected to *not measurable*; `code.token-lint` covers colour only, and spacing literals merely WARN. A green row on a weak check is worse than an honest `not measurable`.
+- **Prefix-matching a check name needs a delimiter boundary.** `code.token-lint` otherwise matches `code.token-lint-v2`, so renaming a check keeps its metric green — the exact failure the report exists to catch. Its own test found this.
 
 ## Rules that apply (from `AGENTS.md` and the user's standing preferences)
 - Figma is the authority. Figma first, then docs through `atlas:sync`, then code. One component per task; four gates (Figma plan, Figma built, code checked, final approval), no restating. Scope and taste questions go in one `AskUserQuestion` before Gate 1. A finding that changes an approved choice goes back to the user before building.
