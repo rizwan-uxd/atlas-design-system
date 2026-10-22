@@ -2,6 +2,7 @@
 // Change a pattern here and both the benchmark and the verifier move together — keep the
 // benchmark's counts comparable with the phase 0 baseline when you do.
 import { execSync } from "child_process"
+import ts from "typescript"
 
 // Run a command in cwd; never throws. Returns { ok, out } with stdout+stderr on failure.
 export const sh = (cmd, cwd, timeout = 180000) => {
@@ -48,3 +49,71 @@ export const tokenLintViolations = (out, fragment) => out.split("\n").filter((l)
 export const tscErrors = (out, fragment) => out.split("\n").filter((l) => l.includes(fragment) && l.includes("error TS")).length
 
 export const registered = (registrySrc, slug) => registrySrc.includes(`"${slug}"`)
+
+// ─── JSX scanning (atlas-verify's variants-sizes, deprecated-usage and a11y checks) ───
+//
+// Built on the TypeScript parser, not a regex. Until M2 this was a character scanner with no tests, and
+// its first tests showed what that cost: a tag inside a string or a comment was reported as a real use,
+// a generic like useState<Button>() in a .ts file was a tag, and `variant={v}` read as "no variant" —
+// so a check could neither be trusted to find a problem nor to know it had not looked.
+
+export const lineOf = (src, index) => src.slice(0, index).split("\n").length
+
+/** A prop whose value cannot be known statically: an expression, a boolean shorthand, or a later spread. */
+export const UNKNOWN = Symbol("unknown")
+
+const parsed = new Map()
+const sourceFile = (src, file) => {
+  const key = `${file}\0${src}`
+  if (!parsed.has(key)) {
+    if (parsed.size > 64) parsed.clear()
+    const kind = /\.ts$/.test(file) ? ts.ScriptKind.TS : /\.jsx$/.test(file) ? ts.ScriptKind.JSX : ts.ScriptKind.TSX
+    parsed.set(key, ts.createSourceFile(file, src, ts.ScriptTarget.Latest, true, kind))
+  }
+  return parsed.get(key)
+}
+
+const staticValue = (init) => {
+  if (!init) return UNKNOWN // <Button variant /> is `true`, not a member name
+  if (ts.isStringLiteral(init)) return init.text
+  if (ts.isJsxExpression(init) && init.expression && (ts.isStringLiteral(init.expression) || ts.isNoSubstitutionTemplateLiteral(init.expression)))
+    return init.expression.text
+  return UNKNOWN
+}
+
+/**
+ * Every opening or self-closing <local ...> element in src, in source order. Each tag carries its line,
+ * its attribute text, and its own attributes only — a descendant inside a JSX-valued prop is a separate
+ * element, never part of its parent. `file` picks the grammar: a .ts file has no JSX, so `<T>` there is
+ * a generic or a cast.
+ * @returns {Iterable<{ line: number, attrs: string, props: Map<string, string|symbol>, spreads: number[], has(name): boolean|symbol }>}
+ */
+export function* jsxTags(src, local, file = "file.tsx") {
+  const sf = sourceFile(src, file)
+  const found = []
+  const visit = (node) => {
+    if ((ts.isJsxOpeningElement(node) || ts.isJsxSelfClosingElement(node)) && ts.isIdentifier(node.tagName) && node.tagName.text === local) {
+      const props = new Map(), order = new Map(), spreads = []
+      node.attributes.properties.forEach((a, i) => {
+        if (ts.isJsxSpreadAttribute(a)) spreads.push(i)
+        else { const name = a.name.getText(sf); props.set(name, staticValue(a.initializer)); order.set(name, i) }
+      })
+      const lastSpread = spreads.length ? spreads[spreads.length - 1] : -1
+      // a spread after the attribute (or with no attribute at all) may supply or override it
+      const overridden = (name) => lastSpread > (order.has(name) ? order.get(name) : -1)
+      found.push({
+        line: sf.getLineAndCharacterOfPosition(node.getStart(sf)).line + 1,
+        attrs: node.attributes.getText(sf),
+        props, spreads,
+        value: (name) => (overridden(name) ? UNKNOWN : props.get(name)),
+        has: (name) => (props.has(name) ? true : overridden(name) ? UNKNOWN : false),
+      })
+    }
+    ts.forEachChild(node, visit)
+  }
+  visit(sf)
+  yield* found
+}
+
+/** The static value of `prop` on a tag from jsxTags: a string, UNKNOWN, or undefined when absent. */
+export const literalProp = (tag, prop) => tag.value(prop)

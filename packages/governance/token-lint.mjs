@@ -129,8 +129,10 @@ function* walkFiles(dir) {
 const violations = []
 const brandFiles = []
 
+let scanned = 0
 for (const dir of SCAN_DIRS) {
   for (const filePath of walkFiles(dir)) {
+    scanned++
     const rel = path.relative(ROOT, filePath)
     if (BRAND_FILE.test(rel.split(path.sep).join("/"))) {
       brandFiles.push(rel)
@@ -223,10 +225,10 @@ if (fs.existsSync(TOKEN_CSS_PATH)) {
 if (brandFiles.length) console.log(`Brand colour exceptions (DEC-008): ${brandFiles.join(", ")}`)
 
 if (violations.length === 0) {
-  console.log("✅ Token lint: 0 violations")
+  console.log(`✅ Token lint: 0 violations (scanned ${scanned} files)`)
   process.exit(0)
 } else {
-  console.error(`❌ Token lint: ${violations.length} violation${violations.length === 1 ? "" : "s"} found\n`)
+  console.error(`❌ Token lint: ${violations.length} violation${violations.length === 1 ? "" : "s"} found (scanned ${scanned} files)\n`)
   let lastFile = null
   for (const v of violations) {
     if (v.file !== lastFile) {

@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://atlas.design-system/schemas/tokens.schema.json",
+  "title": "atlas/tokens.json",
+  "description": "Semantic tokens and layout scales, written by scripts/atlas-sync.mjs. syncedAt stays null while the file is derived from packages/tokens/atlas.tokens.css (D1): a figma-synced source with a null syncedAt is a contradiction and fails.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["_generated", "source", "syncedAt", "figmaVersion", "note", "semantic", "scales"],
+  "properties": {
+    "_generated": { "$ref": "common.schema.json#/$defs/generated" },
+    "source": { "$ref": "common.schema.json#/$defs/text" },
+    "syncedAt": { "$ref": "common.schema.json#/$defs/nullableIsoDate" },
+    "figmaVersion": { "$ref": "common.schema.json#/$defs/nullableText" },
+    "note": { "$ref": "common.schema.json#/$defs/text" },
+    "semantic": {
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": { "$ref": "common.schema.json#/$defs/token" },
+      "additionalProperties": { "$ref": "common.schema.json#/$defs/text" }
+    },
+    "scales": {
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": { "$ref": "common.schema.json#/$defs/token" },
+      "additionalProperties": { "$ref": "common.schema.json#/$defs/text" }
+    }
+  },
+  "allOf": [
+    { "if": { "properties": { "source": { "const": "figma-synced" } } }, "then": { "properties": { "syncedAt": { "type": "string" } } } },
+    { "if": { "properties": { "syncedAt": { "type": "null" } } }, "then": { "properties": { "source": { "not": { "const": "figma-synced" } } } } }
+  ]
+}

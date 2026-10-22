@@ -434,7 +434,34 @@ component FAILs as unverifiable while the note drops to `46/47 components`, so t
 rather than reported as zero drift. A malformed axis value (a string where an array belongs) also
 FAILs rather than being coerced or skipped.
 
-### 2b → M2. The verifier cannot silently pass (2 sessions)
+### 2b → M2. The verifier cannot silently pass ✅ DONE 2026-10-22 (one session)
+
+> **Landed.** 7 schemas in `packages/governance/schemas/` (`common`, `metadata`, `index`, `tokens`,
+> `state`, `governance`, `figma-pull`), compiled by `scripts/lib/schemas.mjs` with `ajv@8` (declared).
+> `design/schemas` runs first and gates every other check's JSON. `guardFigmaProperties` is deleted in
+> the same change. `--only` was added. Results, on this repo:
+> **58/58 JSON inputs valid · 15/15 checks tested · every check reports `inspected`/`scope` · renaming
+> `variants` in `atlas/metadata/Button.json` → `design/schemas` FAIL, exit 1 (the M2 exit, now a test).**
+> Script tests: `npm run test:scripts` reports 184 passing; 175 top-level `test(` cases, up from 107.
+>
+> **What went differently from this plan:**
+>
+> 1. **The JSX scanner was replaced, not only tested.** Its first tests failed 8 of 26 cases on the
+>    regex scanner: a tag inside a JS string or a comment was a real use, `useState<Button>()` in a
+>    `.ts` file was a tag, `variant={v}` read as *absent*, and spreads were invisible. `jsxTags` now uses
+>    the TypeScript parser (already a devDependency) and returns a string, `UNKNOWN` or `undefined`.
+>    `blankNestedJsx` is gone: the AST gives each element its own attributes, the case it existed for.
+>    Run over the whole repo, old and new report identical findings; the new one also surfaces 32
+>    dynamic props the old one read as absent.
+> 2. **The zero-inspection rule is enforced centrally**, in `check()`, not per check: a check with no
+>    `inspected` count fails, and so does one with `scope > 0 && inspected === 0`. A future check cannot
+>    forget it.
+> 3. **Two silent passes found on the way and fixed:** `no-new-tokens` passed when `--base` could not be
+>    read, and `--json` output was truncated at 64 KB when piped (`process.exit` before stdout drained).
+> 4. **The pull file is validated in `atlas-sync`**, since `atlas-verify` never reads one; `variables`
+>    is left an open object for D1.
+> 5. **"13 checks" is 15 now** (M1 added `figma-code`, M2 `schemas`); all 15 have a PASS and a FAIL test.
+>    `tsc` and `tests` are tested on a one-file fixture program so they stay fast and real.
 
 - `packages/governance/schemas/*.schema.json` for `atlas/metadata/*`, `atlas/index.json`,
   `atlas/tokens.json`, `atlas/state/*`, `governance/{deprecations,ownership}.json`, and the Figma pull
@@ -838,7 +865,7 @@ complete and verified; ask before opening a PR.
 
 ```bash
 npm ci
-npm run test:scripts                       # 13/13 atlas-verify checks + parser (M2)
+npm run test:scripts                       # 15/15 atlas-verify checks + parser + schemas (M2)
 npm test                                   # vitest: components, registry, runtime
 npm run token-lint
 npx tsc --noEmit                           # generated contracts

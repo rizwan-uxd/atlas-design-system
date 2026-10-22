@@ -14,7 +14,8 @@
  *
  * 1. It FAILS CLOSED. Missing, null, empty or malformed Figma data is a FAILURE, never "zero drift".
  *    A component whose Figma side is unreadable is unverifiable, and unverifiable must never render as
- *    "agrees". This is the whole point of M1 preceding the registry.
+ *    "agrees". This is the whole point of M1 preceding the registry. Since M2 the shape is enforced by
+ *    the metadata schema before this module runs; what remains here are the comparison's own failures.
  *
  * 2. NO OPTIONAL CHAINING on the data under test. `m.figmaProperties?.Variant ?? []` is the exact
  *    idiom that turns a renamed field into a vacuous PASS — the failure mode endemic to this repo's
@@ -28,48 +29,12 @@
  * `primary` where code is blue passes here and is caught only by the human four-gates review.
  */
 
-/* ── structural guard ───────────────────────────────────── */
+/* ── input shape ────────────────────────────────────────── */
 
-/**
- * M1 runs BEFORE the ajv schema layer (M2), so it carries its own narrow guard rather than trusting
- * the shape. M2 generalises this to every JSON input and deletes this function in the same commit
- * that adds the schema — a deliberate temporary duplication, recorded here so it is not mistaken for
- * an oversight.
- *
- * An axis must be a non-empty array of non-empty strings. Anything else — an object, a number, an
- * empty array, an array holding a non-string — is MALFORMED and fails. Nothing is coerced and nothing
- * is skipped, because both of those turn bad data into a silent pass.
- */
-export function guardFigmaProperties(name, figmaProperties) {
-  const problems = []
-  if (figmaProperties === undefined) return [`${name}: figmaProperties is absent — re-pull from Figma`]
-  if (figmaProperties === null) return [`${name}: figmaProperties is null — re-pull from Figma`]
-  if (typeof figmaProperties !== "object" || Array.isArray(figmaProperties)) {
-    return [`${name}: figmaProperties is ${Array.isArray(figmaProperties) ? "an array" : typeof figmaProperties}, expected an object`]
-  }
-  const axes = Object.keys(figmaProperties)
-  if (axes.length === 0) return [`${name}: figmaProperties is empty — a component with no Figma axes is unverifiable, re-pull from Figma`]
-
-  for (const axis of axes) {
-    const members = figmaProperties[axis]
-    if (!Array.isArray(members)) {
-      problems.push(`${name}.${axis}: expected an array of members, got ${members === null ? "null" : typeof members}`)
-      continue
-    }
-    if (members.length === 0) {
-      problems.push(`${name}.${axis}: member list is empty`)
-      continue
-    }
-    for (const member of members) {
-      if (typeof member !== "string") {
-        problems.push(`${name}.${axis}: member ${JSON.stringify(member)} is ${typeof member}, expected a string`)
-      } else if (member.trim() === "") {
-        problems.push(`${name}.${axis}: a member is an empty string`)
-      }
-    }
-  }
-  return problems
-}
+// The structural guard that lived here in M1 (guardFigmaProperties) was deleted in M2, in the same
+// commit that added packages/governance/schemas/metadata.schema.json. Callers pass only metadata that
+// validated (scripts/lib/schemas.mjs); atlas-verify's design/schemas reports the rest, and
+// design/figma-code fails closed on them, so a malformed component is still a failure, never a skip.
 
 /* ── set comparison ─────────────────────────────────────── */
 
@@ -213,13 +178,6 @@ export function compareAxes({ components, codeConnect, axisMap, registry = null 
   for (const m of components) {
     const name = m.name
     if (typeof name !== "string" || name === "") throw new Error("compare-axes: a metadata entry has no name")
-
-    // fail closed: structural problems are findings, not reasons to skip
-    const problems = guardFigmaProperties(name, m.figmaProperties)
-    if (problems.length) {
-      for (const detail of problems) findings.push({ component: name, axis: null, side: "figma-data", detail })
-      continue
-    }
 
     componentsInspected++
     const figmaProperties = m.figmaProperties

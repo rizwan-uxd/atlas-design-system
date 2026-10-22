@@ -1,0 +1,166 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://atlas.design-system/schemas/state.schema.json",
+  "title": "atlas/state/*.json",
+  "description": "One definition per state file. Hand-written rows (discrepancies without detectedBy, decisions, candidates) survive sync, which is exactly why they need a schema: nothing else checks them.",
+  "$defs": {
+    "status": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["_generated", "source", "syncedAt", "figmaVersion", "legend", "components"],
+      "properties": {
+        "_generated": { "$ref": "common.schema.json#/$defs/generated" },
+        "source": { "$ref": "common.schema.json#/$defs/text" },
+        "syncedAt": { "$ref": "common.schema.json#/$defs/nullableIsoDate" },
+        "figmaVersion": { "$ref": "common.schema.json#/$defs/nullableText" },
+        "legend": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["parity", "figmaMetadata", "code", "verifiedAt"],
+          "properties": {
+            "parity": { "$ref": "common.schema.json#/$defs/text" },
+            "figmaMetadata": { "$ref": "common.schema.json#/$defs/text" },
+            "code": { "$ref": "common.schema.json#/$defs/text" },
+            "verifiedAt": { "$ref": "common.schema.json#/$defs/text" }
+          }
+        },
+        "components": {
+          "type": "object",
+          "minProperties": 1,
+          "propertyNames": { "$ref": "common.schema.json#/$defs/componentName" },
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["parity", "figmaMetadata", "code", "verifiedAt"],
+            "properties": {
+              "parity": { "enum": ["match", "code-applied", "open"] },
+              "figmaMetadata": { "enum": ["none", "description-written", "complete"] },
+              "code": { "enum": ["scaffolded", "spec-complete"] },
+              "verifiedAt": { "$ref": "common.schema.json#/$defs/nullableIsoDate" }
+            }
+          }
+        }
+      }
+    },
+    "discrepancies": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["_generated", "source", "syncedAt", "figmaVersion", "legend", "discrepancies"],
+      "properties": {
+        "_generated": { "$ref": "common.schema.json#/$defs/generated" },
+        "source": { "$ref": "common.schema.json#/$defs/text" },
+        "syncedAt": { "$ref": "common.schema.json#/$defs/nullableIsoDate" },
+        "figmaVersion": { "$ref": "common.schema.json#/$defs/nullableText" },
+        "legend": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["side", "status"],
+          "properties": {
+            "side": { "$ref": "common.schema.json#/$defs/text" },
+            "status": { "$ref": "common.schema.json#/$defs/text" }
+          }
+        },
+        "discrepancies": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "component", "side", "status", "issue", "resolution"],
+            "properties": {
+              "id": { "type": "string", "pattern": "^DISC-\\d{3,}$" },
+              "component": { "$ref": "common.schema.json#/$defs/text" },
+              "side": { "enum": ["figma", "code", "both", "closed"] },
+              "status": { "enum": ["open", "closed"] },
+              "issue": { "$ref": "common.schema.json#/$defs/text" },
+              "resolution": { "$ref": "common.schema.json#/$defs/text" },
+              "detectedBy": { "$ref": "common.schema.json#/$defs/text" },
+              "firstSeen": { "$ref": "common.schema.json#/$defs/isoDate" },
+              "lastSeen": { "$ref": "common.schema.json#/$defs/isoDate" },
+              "closedAt": { "$ref": "common.schema.json#/$defs/isoDate" },
+              "closedBy": { "$ref": "common.schema.json#/$defs/text" },
+              "date": { "$ref": "common.schema.json#/$defs/isoDate" }
+            }
+          }
+        }
+      }
+    },
+    "decisions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["_generated", "source", "syncedAt", "figmaVersion", "note", "decisions"],
+      "properties": {
+        "_generated": { "$ref": "common.schema.json#/$defs/generated" },
+        "source": { "$ref": "common.schema.json#/$defs/text" },
+        "syncedAt": { "$ref": "common.schema.json#/$defs/nullableIsoDate" },
+        "figmaVersion": { "$ref": "common.schema.json#/$defs/nullableText" },
+        "note": { "$ref": "common.schema.json#/$defs/text" },
+        "decisions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "topic", "decision", "date"],
+            "properties": {
+              "id": { "type": "string", "pattern": "^DEC-\\d{3,}$" },
+              "topic": { "$ref": "common.schema.json#/$defs/text" },
+              "decision": { "$ref": "common.schema.json#/$defs/text" },
+              "date": { "$ref": "common.schema.json#/$defs/isoDate" },
+              "status": { "$ref": "common.schema.json#/$defs/text" }
+            }
+          }
+        }
+      }
+    },
+    "candidates": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["_generated", "source", "syncedAt", "figmaVersion", "note", "candidates"],
+      "properties": {
+        "_generated": { "$ref": "common.schema.json#/$defs/generated" },
+        "source": { "$ref": "common.schema.json#/$defs/text" },
+        "syncedAt": { "$ref": "common.schema.json#/$defs/nullableIsoDate" },
+        "figmaVersion": { "$ref": "common.schema.json#/$defs/nullableText" },
+        "note": { "$ref": "common.schema.json#/$defs/text" },
+        "candidates": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "name", "seenIn", "composedFrom", "occurrences", "note"],
+            "properties": {
+              "id": { "type": "string", "pattern": "^CAND-\\d{3,}$" },
+              "name": { "$ref": "common.schema.json#/$defs/text" },
+              "seenIn": { "type": "array", "minItems": 1, "items": { "$ref": "common.schema.json#/$defs/text" } },
+              "composedFrom": { "$ref": "common.schema.json#/$defs/text" },
+              "occurrences": { "type": "integer", "minimum": 0 },
+              "note": { "$ref": "common.schema.json#/$defs/text" },
+              "promoted": { "type": "boolean" }
+            }
+          }
+        }
+      }
+    },
+    "deprecations": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["_generated", "source", "entries"],
+      "properties": {
+        "_generated": { "$ref": "common.schema.json#/$defs/generated" },
+        "source": { "const": "packages/governance/deprecations.json" },
+        "entries": { "type": "array", "items": { "$ref": "common.schema.json#/$defs/deprecationEntry" } }
+      }
+    },
+    "ownership": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["_generated", "source", "owners", "paths", "componentOwners"],
+      "properties": {
+        "_generated": { "$ref": "common.schema.json#/$defs/generated" },
+        "source": { "const": "packages/governance/ownership.json" },
+        "owners": { "$ref": "common.schema.json#/$defs/owners" },
+        "paths": { "$ref": "common.schema.json#/$defs/ownerPaths" },
+        "componentOwners": { "$ref": "common.schema.json#/$defs/componentOwners" }
+      }
+    }
+  }
+}

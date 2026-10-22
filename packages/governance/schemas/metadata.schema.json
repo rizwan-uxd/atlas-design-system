@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://atlas.design-system/schemas/metadata.schema.json",
+  "title": "atlas/metadata/<Name>.json",
+  "description": "One component's generated facts, written by scripts/atlas-sync.mjs. Every field is required and no other field is allowed, so a renamed field fails here instead of disabling a check. figmaProperties is required even though the generator writes null on a never-synced snapshot: such a component is unverifiable, and design/figma-code must not read it as agreeing.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "_generated", "name", "tier", "status", "deprecated", "import", "variants", "sizes", "props",
+    "subcomponents", "tokensUsed", "figmaNodeId", "figmaFileKey", "figmaProperties", "syncedAt",
+    "figmaVersion", "source"
+  ],
+  "properties": {
+    "_generated": { "$ref": "common.schema.json#/$defs/generated" },
+    "name": { "$ref": "common.schema.json#/$defs/componentName" },
+    "tier": { "$ref": "common.schema.json#/$defs/tier" },
+    "status": { "enum": ["stable", "deprecated"] },
+    "deprecated": { "oneOf": [{ "type": "null" }, { "$ref": "common.schema.json#/$defs/deprecationDetail" }] },
+    "deprecatedVariants": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["variant", "since", "removeIn", "replacement", "migration"],
+        "properties": {
+          "variant": { "$ref": "common.schema.json#/$defs/text" },
+          "since": { "$ref": "common.schema.json#/$defs/text" },
+          "removeIn": { "$ref": "common.schema.json#/$defs/text" },
+          "replacement": { "$ref": "common.schema.json#/$defs/text" },
+          "migration": { "$ref": "common.schema.json#/$defs/text" }
+        }
+      }
+    },
+    "owner": { "$ref": "common.schema.json#/$defs/owner" },
+    "import": { "type": "string", "pattern": "^@atlas/ui-web/(primitives|compositions|patterns|layouts)/[A-Z][A-Za-z0-9]*/[A-Z][A-Za-z0-9]*$" },
+    "variants": { "type": "array", "uniqueItems": true, "items": { "$ref": "common.schema.json#/$defs/text" } },
+    "sizes": { "type": "array", "uniqueItems": true, "items": { "$ref": "common.schema.json#/$defs/text" } },
+    "props": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "required", "type"],
+        "properties": {
+          "name": { "type": "string", "pattern": "^[A-Za-z_$][\\w$-]*$" },
+          "required": { "type": "boolean" },
+          "type": { "$ref": "common.schema.json#/$defs/text" }
+        }
+      }
+    },
+    "subcomponents": { "type": "array", "uniqueItems": true, "items": { "$ref": "common.schema.json#/$defs/componentName" } },
+    "tokensUsed": { "type": "array", "uniqueItems": true, "items": { "$ref": "common.schema.json#/$defs/token" } },
+    "figmaNodeId": { "$ref": "common.schema.json#/$defs/figmaNodeId" },
+    "figmaFileKey": { "$ref": "common.schema.json#/$defs/figmaFileKey" },
+    "figmaProperties": { "$ref": "common.schema.json#/$defs/figmaProperties" },
+    "figmaComponentProperties": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["type"],
+        "properties": {
+          "type": { "enum": ["BOOLEAN", "INSTANCE_SWAP", "TEXT"] },
+          "default": {}
+        }
+      }
+    },
+    "syncedAt": { "$ref": "common.schema.json#/$defs/nullableIsoDate" },
+    "figmaVersion": { "$ref": "common.schema.json#/$defs/nullableText" },
+    "source": { "enum": ["figma-synced", "repo-derived"] }
+  },
+  "allOf": [
+    { "if": { "properties": { "status": { "const": "deprecated" } } }, "then": { "properties": { "deprecated": { "type": "object" } } } },
+    { "if": { "properties": { "status": { "const": "stable" } } }, "then": { "properties": { "deprecated": { "type": "null" } } } },
+    { "if": { "properties": { "source": { "const": "figma-synced" } } }, "then": { "properties": { "syncedAt": { "type": "string" } } } }
+  ]
+}

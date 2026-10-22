@@ -1,4 +1,4 @@
-# Handoff: start from M2 (Atlas roadmap)
+# Handoff: start from M3 (Atlas roadmap)
 
 Written 2026-10-22. **Read in this order: `AGENTS.md` → `docs/ATLAS-DELIVERY-ROADMAP.md` → this file.**
 The roadmap is normative now (referenced from `AGENTS.md` §2) and owns the phase order; this file is
@@ -6,53 +6,40 @@ only current state plus the gotchas that will bite again. **This is the only han
 ones were deleted and live in git history.
 
 ## State
-- **`main` has Phase 1** (PR #98, squash-merged, 13/13 checks green): the north star at
-  `docs/architecture/ATLAS-TARGET-ARCHITECTURE.md`, the roadmap at `docs/ATLAS-DELIVERY-ROADMAP.md`,
-  the generated metric table, and `scripts/metrics-report.mjs` + `metrics.manifest.json`.
-- **M1 is PR #99** on `claude/atlas-m1-figma-code-compare`, auto-merge armed. **Check whether it
-  merged before doing anything** (`gh pr view 99`); if it has, branch from the new `main`.
+- **`main` has Phase 1 (#98) and M1 (#99).** M2 is on `claude/post-merge-handoff-0bf36c` (cut from
+  `4501e37`, the #99 merge); **check whether its PR merged before doing anything**, and branch from the
+  new `main` if it has.
+- **D1 runs in parallel** in its own session and branch (`atlas-d1-token-table`): option C (harvest
+  `codeSyntax.WEB` from the per-node pull, drift as a measured fraction) plus findings for the A/B
+  spike. The A/B/C/D call is the user's, at the end of Phase 2. When both branches are on `main`, check
+  whether D1 changed the shape of `atlas/tokens.json` or the pull file; if so, the schemas follow
+  (`tokens.schema.json`, `figma-pull.schema.json`, whose `variables` is deliberately open).
 - 47 web components (35 spec-complete, 12 scaffolded), 17 native (**ports paused by the user**),
-  15 patterns. Latest ids **DEC-079, CAND-055, DISC-104**. Snapshot pulled from Figma 2026-10-21;
-  `atlas/tokens.json` is still `syncedAt: null` — the token side has **never** synced (see D1).
-- Benchmarks: waves 1–3 complete (T1–T19), written up in `docs/HARNESS.md` §6–§7. Nothing outstanding.
+  15 patterns. Latest ids **DEC-079, CAND-055, DISC-104**. Snapshot pulled from Figma 2026-10-21.
+- Benchmarks: waves 1–3 complete (T1–T19), written up in `docs/HARNESS.md` §6–§7. M1 and M2 changed
+  `scripts/` and the atlas-verify skill, so `benchmarks/phase-9/pins.json` no longer matches; re-pin
+  before the next benchmark run.
 
-## What M1 left you (the M2 starting point)
-- `scripts/lib/compare-axes.mjs` — exports `compareAxes`, `codeConnectEnums`, `guardFigmaProperties`.
-  A **two-way** comparator whose result carries a `registry: null` slot that **M3** fills; do not
-  rename it to "three-way" before then.
-- `design/figma-code` in `atlas-verify`: repo-wide, **fails closed**, reports
-  `47/47 components · 130 axes compared · 23 State deferred to M3 · 4 unmapped`.
-- `packages/registry/figma-axis-map.json` — **authored, never generated.** All 34 Figma axes
-  classified (`code-union` | `code-connect` | `boolean` | `state` | `unmapped`), each with a reason;
-  an unclassified axis **FAILS**, which is the ratchet.
-- `--max-figma-age <days>` on `atlas-verify`; CI passes **90**. A policy number, not a limit.
-- 35 comparator tests + 8 `ci-workflow` tests. Script tests total **116**.
+## What M1 and M2 left you (the M3 starting point)
+- **Every JSON input is schema-validated before any check reads it.** `packages/governance/schemas/`
+  (draft 2020-12, plain data so M4 can ship them to a browser) · `scripts/lib/schemas.mjs` (`INPUTS`,
+  `validate`, `loadInputs`) · `design/schemas`, the first check. Coverage is a ratchet: a `*.json` under
+  `atlas/`, `packages/governance/` or `packages/registry/` with no `INPUTS` rule FAILS. **M3's registry
+  files need a schema and an `INPUTS` rule from their first commit.**
+- **Every check reports `inspected`/`scope`, enforced in `check()`**: no count → FAIL;
+  `scope > 0 && inspected === 0` → FAIL. A new check gets this for free and cannot opt out.
+- `scripts/lib/compare-axes.mjs` exports `compareAxes`, `codeConnectEnums`. Two-way, with a
+  `registry: null` slot that **M3** fills; do not call it three-way before then. It now trusts its
+  input shape: callers pass only schema-valid metadata.
+- `jsxTags(src, local, file)` / `literalProp(tag, prop)` / `UNKNOWN` in `scripts/lib/quality-checks.mjs`,
+  on the TypeScript parser. A tag has `props`, `spreads`, `value(name)`, `has(name)`.
+- `packages/registry/figma-axis-map.json` — **authored, never generated**, now schema-checked.
+- `--max-figma-age <days>` (CI passes **90**) and `--only <ids>` on `atlas-verify`.
+- All 15 checks have a PASS and a FAIL fixture test (`scripts/tests/atlas-verify.test.mjs`).
 
-## M2 — do this next (the roadmap's §2b, 2 sessions)
-The one non-negotiable ordering in the roadmap: **M2 before M3.** A verifier that cannot fail will
-certify a broken registry, and today only 1 of 13 `atlas-verify` checks has a test.
-
-1. **`packages/governance/schemas/*.schema.json`** for `atlas/metadata/*`, `atlas/index.json`,
-   `atlas/tokens.json`, `atlas/state/*`, `packages/governance/{deprecations,ownership}.json` and the
-   Figma pull file. **Declare `ajv`** — chosen over zod because the schemas must ship to a browser as
-   data for the M4 runtime validator. Nothing is declared today (zod/ajv exist only transitively).
-2. **New check `design/schemas`**, validating every JSON input *before* any other check reads it.
-   Extend `scripts/atlas-verify.mjs`; add no new script.
-3. **Delete M1's inline structural guard in the same commit** that generalises it — `guardFigmaProperties`
-   in `compare-axes.mjs` is a deliberate temporary duplication, documented as such in its own comment.
-   Leaving both is the failure mode to avoid.
-4. **`scripts/tests/quality-checks.test.mjs`** — the missing parser tests for `jsxTags`,
-   `blankNestedJsx`, `literalProp` in `scripts/lib/quality-checks.mjs`: self-closing, nested,
-   fragments, comments, a string containing `<`, multi-line attributes, and `literalProp` on
-   `variant="x"` / `variant={"x"}` / `variant={v}` (must report **unknown**, not absent) and spreads.
-   Three checks depend on this parser and it has no tests, so a parser bug silently turns them into
-   no-ops that still print PASS.
-5. **Every check reports an inspection count and FAILs on zero** when the diff says it should have
-   inspected something: `PASS (14 files, 62 literal props)` vs
-   `FAIL (0 inspected, 14 changed .tsx in scope)`. `design/figma-code` already does this — copy it.
-
-**M2 exit:** 13/13 checks have tests (from 1/13); no check can PASS with 0 inspections; corrupting one
-field in `atlas/metadata/Button.json` turns a PASS into a FAIL (today it stays PASS).
+## M3 — do this next (the roadmap's §2c, 3–4 sessions)
+Read §2c in the roadmap; it owns the scope. M2 is done, so M3's precondition (a verifier that can fail)
+now holds. M3 fills compare-axes' `registry` slot, turning the two-way check three-way.
 
 ## Open owner decisions (ask; do not decide these yourself)
 - **`Pagination/Position` — NEW, found by M1.** Figma draws `start|middle|end`; Pagination has no
@@ -62,8 +49,8 @@ field in `atlas/metadata/Button.json` turns a PASS into a FAIL (today it stays P
 - **D1, the Figma token-table spike** — the roadmap's decision gate, and the highest-leverage unknown
   in the repo: it decides whether the brand axis is a quarter or a year away. The Figma MCP exposes
   variables per *node*, not as a table, so four metrics are unmeasurable. Options A–D are in the
-  roadmap; **C (harvest `codeSyntax.WEB` from the pull already running) is recommended now**, with the
-  A/B spike in parallel. Start it alongside M2, not after.
+  roadmap. **The user chose (2026-10-22): implement C now, run the A/B spike in parallel with M2.**
+  That work is in its own session; the final A/B/C/D call is still the user's, at the end of Phase 2.
 - **DISC-095** (Button `link` ignores size in code, Figma draws it), **DISC-096/097** (Card header
   slots and footer `justify` are code features Figma does not draw).
 - **7 of the 11 open DISCs are one class** — DISC-027, 098–104, "Figma description is a spec summary,
@@ -108,8 +95,8 @@ All three: no new dependency, one `Animated.Value`, `useReducedMotion`, native d
 Search and filter frames (#57); disabled opacity bound (#58); StatCard icon, clickable and sparkline variants (#59, #60, #66); Sparkline primitive (#61); Card hover shadow, closes DISC-093 (#63); Sheet and Drawer Content and Footer slots (#64, #65); OtpInput and Stepper components, Auth and Onboarding patterns using them (#68); CommandMenu (#69); Button `asChild` and Link as a composition (#70); Stepper viewport variant and mobile ring, Navigation shell pattern, `verifiedAt` stamps (#71); native Stepper, tokens, types, CI native typecheck, letterSpacing, Spinner, Skeleton (#73 to #80); batch-2 patterns (#82, #83, #84).
 
 ## Do next (the user decides)
-0. **M2 — the next milestone.** See "M2 — do this next" above; run **D1** in parallel.
-   Everything below is pre-roadmap work the user has not scheduled; none of it blocks M2.
+0. **M3 — the next milestone.** See "M3 — do this next" above. D1 is running in parallel.
+   Everything below is pre-roadmap work the user has not scheduled; none of it blocks M3.
 1. **The user's Gate 3 visual check** of the native Stepper, Spinner and Skeleton against their Figma frames (nothing has been run on a device or simulator), then check CI on `main`.
 2. **Next native port** (all logged, none built; each needs plan, Figma on `Atlas/Mobile-Native`, then code): suggested **Progress (CAND-017)**, whose indeterminate slide reuses `duration.pulse` and linear easing, or **Avatar (CAND-005)**. The rest: CAND-007, 009, 010, 016, 018, 019, 028, 029, 052, 054. **Button loading (CAND-014)** needs a colour prop on Spinner and a Figma design of the loading state.
 3. **Other candidates:** DataTable (CAND-024, needs its own Figma design), Button loading with a Spinner (CAND-014, needs a Figma design of the loading state), Load more and infinite scroll (CAND-048, deferred), AppShell (CAND-055, composed locally; not a component until designed and requested).
@@ -160,6 +147,12 @@ Search and filter frames (#57); disabled opacity bound (#58); StatCard icon, cli
 - **Browser mirror of React Native geometry:** Chromium is at `/opt/pw-browsers/chromium-1194/chrome-linux/chrome` (no playwright package). Render with `--headless=new --no-sandbox --force-device-scale-factor=3`: at 1x density fractional sizes (a 20 px Spinner ring is 16.46) show clip-snapping notches that a phone would not.
 - **Editing `atlas/state/*.json`:** remove or insert the entry as text. A `json.dump` round trip reformats the whole file (it did for `candidates.json`: a 98-line diff, redone). New decision entries use 6-space keys inside a 4-space `{`.
 - **The stop hook** ("uncommitted changes" or "unpushed commits") fires at the end of a turn. Commit to the feature branch and push it, with no PR; do not merge or open a PR without the user's yes. (This session also committed and pushed on a user "commit" instruction because the session brief says to commit and push to the designated branch; PRs and merges waited for the user's "open the PR" and "merge N".)
+
+### From M2 (2026-10-22)
+- **Script-test fixtures need `node_modules` now.** `atlas-verify` imports `ajv` and `typescript`, and `atlas-sync` imports `ajv`; both fixture helpers symlink the repo's `node_modules` and `atlas-sync`'s also copies `packages/governance/schemas`. A new fixture helper must do the same, or every test fails with `ERR_MODULE_NOT_FOUND`.
+- **`process.exit()` after a large `console.log` truncates piped output** (it cut `--json` at 64 KB). Set `process.exitCode` instead.
+- **ajv strict mode rejects `pattern` without `"type": "string"` and `required` in a `then` without a matching `properties` entry.** Those are schema bugs and throw out of `validate()`, deliberately not reported against the input.
+- **Write schemas from the data, then tighten.** The first pass got `occurrences >= 1` wrong (two candidates have 0) and a required `_note` that the deprecation tests do not write. `loadInputs(REPO)` over the committed tree is the quick check.
 
 ### From the roadmap sessions (Phase 1 and M1, 2026-10-22)
 - **`atlas-verify`'s own test fixtures copy a hardcoded `INPUTS` list** (`scripts/tests/atlas-verify.test.mjs`). A new *authored* directory that a check needs must be added there, or the fixture repo lacks it and your fail-closed check fails every fixture test. This broke the two `--stamp` tests until `packages/registry` was added to the list.
