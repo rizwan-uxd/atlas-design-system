@@ -2,8 +2,30 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://atlas.design-system/schemas/governance.schema.json",
   "title": "Authored governance and registry files",
-  "description": "Hand-authored sources: packages/governance/{deprecations,ownership}.json and packages/registry/figma-axis-map.json.",
+  "description": "Hand-authored sources: packages/governance/{deprecations,ownership,private-vars.allow}.json and packages/registry/figma-axis-map.json.",
   "$defs": {
+    "privateVarsAllow": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["_note", "entries"],
+      "properties": {
+        "_note": { "$ref": "common.schema.json#/$defs/text" },
+        "entries": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["file", "var", "value", "reason"],
+            "properties": {
+              "file": { "type": "string", "pattern": "^packages/ui-web/src/.+\\.css$|^app/.+\\.css$" },
+              "var": { "type": "string", "pattern": "^--_[\\w-]+$" },
+              "value": { "$ref": "common.schema.json#/$defs/text" },
+              "reason": { "$ref": "common.schema.json#/$defs/text" }
+            }
+          }
+        }
+      }
+    },
     "deprecations": {
       "type": "object",
       "additionalProperties": false,

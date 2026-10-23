@@ -1,14 +1,15 @@
-# Handoff: M3 is done; Phase 2d is next (Atlas roadmap)
+# Handoff: Phase 2 is done; the D1 call, then M4 (Atlas roadmap)
 
-Written 2026-10-22, updated 2026-10-23 after M3 session 4. **Read in this order: `AGENTS.md` → `docs/ATLAS-DELIVERY-ROADMAP.md` → this file.**
+Written 2026-10-22, updated 2026-10-23 after Phase 2d. **Read in this order: `AGENTS.md` → `docs/ATLAS-DELIVERY-ROADMAP.md` → this file.**
 The roadmap is normative now (referenced from `AGENTS.md` §2) and owns the phase order; this file is
 only current state plus the gotchas that will bite again. **This is the only handoff doc** — earlier
 ones were deleted and live in git history.
 
 ## Progress (update at the end of every session, and report it at the start and end of each)
 Counted in sessions, using the roadmap's own estimates (midpoint where it gives a range). Change N
-and say so when an estimate changes. **Roadmap: 8.5 of ~27 sessions done (~31%). Next: session 10 of
-~27 = Phase 2d (token work, zero new tokens), session 1 of ~1.5.**
+and say so when an estimate changes. **Roadmap: 9.5 of ~27 sessions done (~35%). Phase 2 is complete. Next: the
+user's D1 A/B/C/D call (the roadmap's gate at the end of Phase 2), then session 11 of ~27 = M4 (runtime
+vertical slice), session 1 of ~3.5.**
 
 | Phase | Sessions (est.) | Done | Status | PR |
 |---|---|---|---|---|
@@ -16,16 +17,17 @@ and say so when an estimate changes. **Roadmap: 8.5 of ~27 sessions done (~31%).
 | M1 — Figma↔code comparison | 1.5 | 1.5 | ✅ | #99 |
 | D1 — token-table spike | 1 | 1 | ✅ C built; A/B/C/D call is the user's | #100 |
 | M2 — verifier can fail | 1 | 1 | ✅ | #101 |
-| M3 — registry | 4 | 4 | ✅ exit met except Text (5/6 types) | #102, #103, #104, this branch |
-| **2d — token work, zero new tokens** | 1.5 | 0 | ⏳ next | |
-| M4 — runtime vertical slice | 3.5 | 0 | ⏳ | |
+| M3 — registry | 4 | 4 | ✅ exit met except Text (5/6 types) | #102, #103, #104, #105 |
+| 2d — token work, zero new tokens | 1.5 | 1 | ✅ in 1 session (est. 1.5) | this branch |
+| **M4 — runtime vertical slice** | 3.5 | 0 | ⏳ next, after the D1 call | |
 | Phase 4 — enforcement hardened | 2.5 | 0 | ⏳ | |
 | M5 — semantic tokens + brands | 7 | 0 | ⏳ | |
 | Phase 6 — filtered agent catalog | 2.5 | 0 | ⏳ | |
 | Phase 7 — metrics as release gates | 1.5 | 0 | ⏳ | |
-| **Total** | **~27** | **8.5** | **~31%** | |
+| **Total** | **~27** | **9.5** | **~35%** | |
 
-Metric table (the roadmap's scoreboard): **5 passing · 0 failing · 30 not measurable** of 35.
+Metric table (the roadmap's scoreboard): **8 passing · 0 failing · 27 not measurable** of 35 (2d moved
+the two raw-design-values rows and reduced-motion to passing).
 M3 exit: **5/6 types `registryComplete`** (Text deferred: no Text component), **47/47 generated
 contracts** (the 44 hand-written ones deleted), **2/2 target metrics passing** (plus registry-states),
 each over the registered subset (4/47 components registered).
@@ -34,7 +36,8 @@ each over the registered subset (4/47 components registered).
 - **`main` has Phase 1 (#98), M1 (#99), D1 (#100) and M2 (#101).** The post-merge check passed on
   `dd039b1`: `node scripts/atlas-verify.mjs --only design.schemas` → `PASS schemas (58/58 files valid ·
   5 schemas)`, and the roadmap kept both the M2 and D1 sections.
-- **M3 session 4 is on branch `claude/atlas-m3-session4-56af2c`** (PR pending the user's go-ahead).
+- **Phase 2d is on this branch** (token rules, derived native tokens; details under "Phase 2d is done").
+- **M3 session 4 is merged (#105).**
   Three-way `design/figma-registry-code`; `design/registry-events|fallback|states` (shared with
   metrics-report's `registry` source); Button, TextField, Alert, Form and new Field entries
   `registryComplete: true` (DEC-080); contracts generated for every export straight into
@@ -88,7 +91,21 @@ each over the registered subset (4/47 components registered).
   `scripts/lib/registry-metrics.mjs`, also read by `metrics-report`'s committed-state `registry` source).
 - **Gotcha:** a registry slot needs a Figma counterpart in Code Connect (`figmaContent`); an undrawn
   ReactNode prop goes to `hiddenProps` with a reason, or gets drawn in Figma first.
-- **Next is Phase 2d** (roadmap §2d): token work that needs zero new tokens. Read the roadmap section first.
+
+## Phase 2d is done — what it left you (roadmap §2d; plan `docs/superpowers/plans/2026-10-23-phase-2d-tokens.md`)
+- **Four token-lint rules** in `scripts/lib/token-rules.mjs` (pure, `scripts/tests/token-rules.test.mjs`):
+  `no-private-var-escape`, `no-raw-length`, `breakpoint-literal-consistency`, `reduced-motion-required`.
+  `token-lint --json` prints violations plus per-rule `inspected` counts.
+- **A `--_` private var that is not one semantic alias** needs an entry with a reason in
+  `packages/governance/private-vars.allow.json` (schema `governance.schema.json#/$defs/privateVarsAllow`).
+  Entries match by value, so editing an allowed value fails until the entry is updated; a stale entry fails.
+- **Checks:** `code.raw-design-values` and `code.reduced-motion-required` (atlas-verify, one token-lint
+  run); metrics-report's committed-state `token-lint` source uses the same `METRIC_RULES`.
+- **Native tokens are fully derived** from `atlas.tokens.css`: change a token, run
+  `npm run tokens:build`, commit the native file, or CI's Tokens Build fails. A value in a new unit
+  throws instead of being written.
+- **Next is the D1 A/B/C/D decision (the user's), then M4** (roadmap "M4 — Vertical slice"). Read the
+  roadmap section first.
 
 ## Open owner decisions (ask; do not decide these yourself)
 - **Text (the 6th M3 exit type) — deferred by the user 2026-10-23 (DEC-080).** Atlas has no Text
@@ -118,9 +135,9 @@ each over the registered subset (4/47 components registered).
 ## Commands
 ```bash
 npm ci
-npm run test:scripts        # 288 tests: comparator, ci-workflow, metrics-report, registry, registry-metrics, schemas, sync, verify
+npm run test:scripts        # 305 tests: comparator, ci-workflow, convert-tokens, metrics-report, registry, registry-metrics, schemas, sync, token-rules, verify
 npm run registry:check      # facts, contracts, schemas current + authored registry ⊆ generated facts (M3)
-npm test                    # 1410 vitest
+npm test                    # 1411 vitest
 npm run token-lint
 npx tsc --noEmit
 npm run metrics:check       # the committed metric region matches a fresh run
@@ -151,9 +168,9 @@ All three: no new dependency, one `Animated.Value`, `useReducedMotion`, native d
 Search and filter frames (#57); disabled opacity bound (#58); StatCard icon, clickable and sparkline variants (#59, #60, #66); Sparkline primitive (#61); Card hover shadow, closes DISC-093 (#63); Sheet and Drawer Content and Footer slots (#64, #65); OtpInput and Stepper components, Auth and Onboarding patterns using them (#68); CommandMenu (#69); Button `asChild` and Link as a composition (#70); Stepper viewport variant and mobile ring, Navigation shell pattern, `verifiedAt` stamps (#71); native Stepper, tokens, types, CI native typecheck, letterSpacing, Spinner, Skeleton (#73 to #80); batch-2 patterns (#82, #83, #84).
 
 ## Do next (the user decides)
-0. **Phase 2d — the next roadmap session** (see "M3 is done" above). The D1 A/B/C/D call is the
-   user's at the end of Phase 2. Everything below is pre-roadmap work the user has not scheduled;
-   none of it blocks 2d.
+0. **The D1 A/B/C/D call, then M4** — Phase 2 is complete, and the D1 decision is the user's at its end
+   (D1 recommends B). Everything below is pre-roadmap work the user has not scheduled; none of it
+   blocks M4.
 1. **The user's Gate 3 visual check** of the native Stepper, Spinner and Skeleton against their Figma frames (nothing has been run on a device or simulator), then check CI on `main`.
 2. **Next native port** (all logged, none built; each needs plan, Figma on `Atlas/Mobile-Native`, then code): suggested **Progress (CAND-017)**, whose indeterminate slide reuses `duration.pulse` and linear easing, or **Avatar (CAND-005)**. The rest: CAND-007, 009, 010, 016, 018, 019, 028, 029, 052, 054. **Button loading (CAND-014)** needs a colour prop on Spinner and a Figma design of the loading state.
 3. **Other candidates:** DataTable (CAND-024, needs its own Figma design), Button loading with a Spinner (CAND-014, needs a Figma design of the loading state), Load more and infinite scroll (CAND-048, deferred), AppShell (CAND-055, composed locally; not a component until designed and requested).

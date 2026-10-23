@@ -226,7 +226,7 @@ test("a missing region marker fails rather than appending silently", () => {
 
 // ─── the registry source (M3): committed state, measured by the shared registry-metrics function ──
 
-const REG_COPY = ["scripts", "atlas", "packages/registry", "packages/governance", "docs", "metrics.manifest.json"]
+const REG_COPY = ["scripts", "atlas", "packages/registry", "packages/governance", "packages/tokens", "packages/ui-web/src", "app", "docs", "metrics.manifest.json"]
 function registryRepo() {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), "metrics-registry-"))
   for (const rel of REG_COPY) fs.cpSync(path.join(REAL_ROOT, rel), path.join(dir, rel), { recursive: true })
@@ -245,6 +245,32 @@ test("registry rows read passing from committed state, with their coverage of th
       assert.match(r.coverage.text, /^0 failing of \d+ .* \(\d+\/\d+ components registered\)$/)
     }
     assert.equal(run(dir, ["--check"]).code, 0, "the committed region is current")
+  } finally { fs.rmSync(dir, { recursive: true, force: true }) }
+})
+
+// token-lint rows (Phase 2d): measured from the committed tree with atlas-verify's rule grouping
+const lintRows = (dir) => Object.fromEntries(JSON.parse(run(dir, ["--json"]).out).metrics.filter((m) => m.source === "token-lint").map((m) => [`${m.check}|${m.metric}`, m.status]))
+
+test("token-lint rows read passing from the committed tree, and each fails only on its own rules", () => {
+  const dir = registryRepo()
+  try {
+    const clean = lintRows(dir)
+    assert.equal(Object.keys(clean).length, 3) // two metrics share code.raw-design-values
+    assert.ok(Object.values(clean).every((s) => s === "passing"), JSON.stringify(clean))
+    const css = path.join(dir, "packages/ui-web/src/primitives/Badge/Badge.module.css")
+    fs.appendFileSync(css, "\n.x { max-height: 200px; }\n")
+    const raw = lintRows(dir)
+    for (const [k, s] of Object.entries(raw)) assert.equal(s, k.startsWith("code.raw-design-values") ? "failing" : "passing", k)
+    fs.writeFileSync(path.join(dir, "packages/ui-web/src/primitives/Badge/Fade.module.css"), ".f { transition: opacity var(--atlas-duration-fast); }\n")
+    assert.ok(Object.values(lintRows(dir)).every((s) => s === "failing"))
+  } finally { fs.rmSync(dir, { recursive: true, force: true }) }
+})
+
+test("a token-lint run that cannot read its inputs fails its rows rather than leaving them unmeasured", () => {
+  const dir = registryRepo()
+  try {
+    fs.rmSync(path.join(dir, "packages/tokens/atlas.tokens.css"))
+    assert.ok(Object.values(lintRows(dir)).every((s) => s === "failing"))
   } finally { fs.rmSync(dir, { recursive: true, force: true }) }
 })
 

@@ -1,5 +1,5 @@
 {
-  "_note": "AUTHORED. fallback, nesting, a11y, responsive, capabilities and tokenRoles are owner decisions of 2026-10-23 (DEC-080); a11y and responsive state only what the source does. tokenRoles is empty: Alert themes through private --_ vars, not a component-token layer, until roadmap Phase 2d.",
+  "_note": "AUTHORED. fallback, nesting, a11y, responsive, capabilities and tokenRoles are owner decisions of 2026-10-23 (DEC-080); a11y and responsive state only what the source does. tokenRoles maps the private --_ vars Alert themes through (no component-token layer) to the tokens they resolve to in Alert.module.css: --_pad per size, --_accent per variant (roadmap Phase 2d).",
   "type": "Alert",
   "aliasOf": "Alert",
   "kind": "component",
@@ -32,5 +32,14 @@
   },
   "responsive": { "breakpoints": "None: no viewport-dependent layout." },
   "capabilities": ["dismiss"],
-  "tokenRoles": {}
+  "tokenRoles": {
+    "accent-danger": "--atlas-danger",
+    "accent-info": "--atlas-info",
+    "accent-neutral": "--atlas-foreground-muted",
+    "accent-success": "--atlas-success",
+    "accent-warning": "--atlas-warning",
+    "pad-lg": "--atlas-spacing-5",
+    "pad-md": "--atlas-spacing-4",
+    "pad-sm": "--atlas-spacing-3"
+  }
 }

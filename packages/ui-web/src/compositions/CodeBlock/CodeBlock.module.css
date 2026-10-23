@@ -120,7 +120,7 @@
   display: inline-block;
   inline-size: var(--atlas-border-width-2);
   block-size: 1.2em;
-  margin-inline-start: 1px;
+  margin-inline-start: var(--atlas-spacing-px);
   vertical-align: text-bottom;
   background-color: var(--atlas-foreground);
   animation: blink var(--atlas-duration-pulse) steps(1, end) infinite;

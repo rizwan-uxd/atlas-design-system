@@ -235,18 +235,20 @@
 /*
   Spec: "fade + height collapse over --atlas-duration-base --atlas-easing-exit"
   Two-step: first opacity fade, then max-height collapse via overflow hidden.
+  --_exit-h is the alert's own height, measured by Alert.tsx when dismiss starts, so the collapse
+  starts from the real height (a fixed 200px cap clipped taller alerts).
   onAnimationEnd in Alert.tsx fires onDismiss() after this completes.
 */
 
 @keyframes alertExit {
   0% {
     opacity: 1;
-    max-height: 200px; /* large enough for any alert */
+    max-height: var(--_exit-h);
     margin-block-end: 0;
   }
   50% {
     opacity: 0;
-    max-height: 200px;
+    max-height: var(--_exit-h);
     margin-block-end: 0;
   }
   100% {

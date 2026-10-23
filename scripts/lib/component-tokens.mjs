@@ -7,7 +7,7 @@ export const END = "/* END:component-tokens */"
 export const SECTION_BEGIN = "<!-- BEGIN:generated-component-tokens -->"
 export const SECTION_END = "<!-- END:generated-component-tokens -->"
 
-const PRIMITIVE = /^--atlas-(color-|(blue|gray|grey|red|green|amber|yellow|neutral|slate)-\d+)/
+export const PRIMITIVE = /^--atlas-(color-|(blue|gray|grey|red|green|amber|yellow|neutral|slate)-\d+)/
 const COMPONENT_NAME = new RegExp(`^--atlas-(${COMPONENTS.join("|")})-[a-z0-9]+(-[a-z0-9]+)*$`)
 const COMPONENT_PREFIX = new RegExp(`^--atlas-(${COMPONENTS.join("|")})-`)
 const ALIAS = /^var\((--atlas-[\w-]+)\)$/

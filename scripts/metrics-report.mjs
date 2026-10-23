@@ -23,6 +23,7 @@
 import fs from "node:fs"
 import path from "node:path"
 import { fileURLToPath } from "node:url"
+import { execFileSync } from "node:child_process"
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..")
 const MANIFEST = path.join(ROOT, "metrics.manifest.json")
@@ -42,6 +43,9 @@ const read = (p) => fs.readFileSync(p, "utf8")
 const readJson = (p) => JSON.parse(read(p))
 const exists = (p) => fs.existsSync(p)
 // the registry source needs ajv and the schemas; loaded only in a repo that has a registry
+// the token-lint source shares atlas-verify's rule grouping, whose module needs typescript; loaded only
+// in a repo that has token-lint
+const tokenRules = exists(path.join(ROOT, "packages/governance/token-lint.mjs")) ? await import("./lib/token-rules.mjs") : null
 const registryLib = exists(path.join(ROOT, "packages/registry/src"))
   ? { ...(await import("./lib/schemas.mjs")), ...(await import("./lib/registry-metrics.mjs")) }
   : null
@@ -126,6 +130,22 @@ function collectResults(manifest) {
       // an invalid registry or metadata file is unreadable state: the metric fails rather than measuring around it
       results.set(`registry:${id}`, !registryInvalid && r.fails.length === 0)
       coverage.set(`registry:${id}`, { text: registryLib.coverageText(r) })
+    }
+  }
+
+  // token-lint: the committed tree, measured by the same rules atlas-verify's code.raw-design-values and
+  // code.reduced-motion-required report (METRIC_RULES, roadmap Phase 2d). Like registry it is committed
+  // state, so the region is reproducible with no CI run. Output that is not token-lint's JSON is a
+  // broken run: both rows fail rather than read as measured.
+  const lintScript = path.join(ROOT, "packages/governance/token-lint.mjs")
+  if (tokenRules !== null) {
+    found.push("token-lint")
+    let lint = null
+    try { lint = JSON.parse(execFileSync("node", [lintScript, "--json"], { cwd: ROOT, encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] })) }
+    catch (e) { try { lint = JSON.parse(e.stdout) } catch { lint = null } } // token-lint exits 1 on violations
+    for (const [id, rules] of Object.entries(tokenRules.METRIC_RULES)) {
+      const ok = lint !== null && Array.isArray(lint.violations) && lint.scanned > 0
+      results.set(`token-lint:${id}`, ok && !lint.violations.some((v) => rules.includes(v.rule)))
     }
   }
 

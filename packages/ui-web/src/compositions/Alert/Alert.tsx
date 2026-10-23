@@ -26,7 +26,7 @@
  *   onDismiss   — fires after exit animation completes (FIX BUG-032)
  */
 
-import React, { useState } from "react"
+import React, { useRef, useState } from "react"
 import { CircleCheck, CircleX, Info, TriangleAlert, X, type LucideIcon } from "lucide-react"
 import styles from "./Alert.module.css"
 
@@ -99,6 +99,9 @@ export function Alert({
 }: AlertProps) {
   /* FIX BUG-032: track dismissing state to run exit animation */
   const [isDismissing, setIsDismissing] = useState(false)
+  /* the collapse starts from the alert's own height (--_exit-h in Alert.module.css) */
+  const rootRef = useRef<HTMLDivElement>(null)
+  const [exitHeight, setExitHeight] = useState<number>()
 
   /* role follows intent severity */
   const role = variant === "warning" || variant === "danger" ? "alert" : "status"
@@ -124,6 +127,7 @@ export function Alert({
       onDismiss?.()
       return
     }
+    setExitHeight(rootRef.current?.offsetHeight)
     setIsDismissing(true)
   }
 
@@ -137,8 +141,10 @@ export function Alert({
 
   return (
     <div
+      ref={rootRef}
       role={role}
       className={classes}
+      style={exitHeight === undefined ? undefined : ({ "--_exit-h": `${exitHeight}px` } as React.CSSProperties)}
       onAnimationEnd={isDismissing ? handleAnimationEnd : undefined}
     >
       {/* Leading icon */}

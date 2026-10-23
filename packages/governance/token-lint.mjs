@@ -14,6 +14,12 @@
  *   6. Pattern examples (packages/governance/patterns/examples) set token typography on every
  *      heading (<h1>-<h6>) and paragraph (<p>): the tag carries a style whose font size is an
  *      --atlas-text-* or --atlas-font-size-* token, inline or through a style object in the same file
+ *   Phase 2d (rules in scripts/lib/token-rules.mjs):
+ *   7. no-private-var-escape — a --_ private var is one var(--atlas-<semantic>), or is listed with a
+ *      reason in packages/governance/private-vars.allow.json
+ *   8. no-raw-length — no hardcoded length in packages/ui-web/src (not @media, em, or visually-hidden 1px)
+ *   9. breakpoint-literal-consistency — --atlas-breakpoint-*, @theme --breakpoint-* and @media widths agree
+ *  10. reduced-motion-required — component CSS using --atlas-duration-* has a prefers-reduced-motion block
  *
  * Allow-list:
  *   - Lines containing "token-lint-disable-next-line" suppress the NEXT line only.
@@ -26,7 +32,7 @@
  *
  * Usage:
  *   node packages/governance/token-lint.mjs
- *   node packages/governance/token-lint.mjs --fix   (future — not yet implemented)
+ *   node packages/governance/token-lint.mjs --json  (machine-readable: violations + per-rule inspected counts)
  *
  * Exit codes:
  *   0  — no violations
@@ -37,6 +43,7 @@ import fs from "fs"
 import path from "path"
 import { fileURLToPath } from "url"
 import { BEGIN, lintComponentTokens } from "../../scripts/lib/component-tokens.mjs"
+import { privateVarViolations, rawLengths, breakpointViolations, reducedMotionMissing } from "../../scripts/lib/token-rules.mjs"
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const ROOT = path.resolve(__dirname, "../..")
@@ -128,6 +135,8 @@ function* walkFiles(dir) {
 
 const violations = []
 const brandFiles = []
+const sources = [] // { file (posix, repo-relative), src } for the Phase 2d rules
+const JSON_OUT = process.argv.includes("--json")
 
 let scanned = 0
 for (const dir of SCAN_DIRS) {
@@ -138,7 +147,9 @@ for (const dir of SCAN_DIRS) {
       brandFiles.push(rel)
       continue
     }
-    const lines = fs.readFileSync(filePath, "utf8").split("\n")
+    const text = fs.readFileSync(filePath, "utf8")
+    sources.push({ file: rel.split(path.sep).join("/"), src: text })
+    const lines = text.split("\n")
 
     let suppressNext = false
     for (let i = 0; i < lines.length; i++) {
@@ -220,14 +231,58 @@ if (fs.existsSync(TOKEN_CSS_PATH)) {
   }
 }
 
+// ─── Phase 2d rules (scripts/lib/token-rules.mjs) ───────────────────────────
+
+const UI_SRC = "packages/ui-web/src/"
+const TOKEN_REL = "packages/tokens/atlas.tokens.css"
+const ALLOW_REL = "packages/governance/private-vars.allow.json"
+const css = sources.filter((s) => s.file.endsWith(".css"))
+const componentCss = css.filter((s) => s.file.startsWith(UI_SRC))
+const componentSrc = sources.filter((s) => s.file.startsWith(UI_SRC))
+const inspected = {}
+const add = (rule) => (v) => violations.push({ file: v.file, line: v.line, rule, text: v.text })
+
+const allow = JSON.parse(fs.readFileSync(path.join(ROOT, ALLOW_REL), "utf8")).entries
+const pv = privateVarViolations(css, allow)
+pv.violations.forEach(add("no-private-var-escape"))
+inspected["no-private-var-escape"] = pv.inspected
+
+for (const { file, src } of componentSrc) {
+  const lines = src.split("\n")
+  for (const l of rawLengths(src)) {
+    if (lines[l.line - 2]?.includes("token-lint-disable-next-line")) continue
+    violations.push({ file, line: l.line, rule: "no-raw-length", text: `${l.prop}: ${l.value} — hardcoded length; use a spacing/size/radius/type token` })
+  }
+}
+inspected["no-raw-length"] = componentSrc.length
+
+const tokenCss = fs.readFileSync(TOKEN_CSS_PATH, "utf8")
+const bp = breakpointViolations(tokenCss, [{ file: TOKEN_REL, src: tokenCss }, ...css])
+bp.violations.forEach(add("breakpoint-literal-consistency"))
+inspected["breakpoint-literal-consistency"] = bp.inspected
+
+const animated = componentCss.filter((s) => /--atlas-duration-/.test(s.src))
+for (const { file, src } of animated) {
+  if (reducedMotionMissing(src)) violations.push({ file, line: 0, rule: "reduced-motion-required", text: "uses --atlas-duration-* with no @media (prefers-reduced-motion) block" })
+}
+inspected["reduced-motion-required"] = animated.length
+
 // ─── Report ──────────────────────────────────────────────────────────────────
 
-if (brandFiles.length) console.log(`Brand colour exceptions (DEC-008): ${brandFiles.join(", ")}`)
+violations.sort((a, b) => (a.file === b.file ? a.line - b.line : a.file < b.file ? -1 : 1))
 
-if (violations.length === 0) {
-  console.log(`✅ Token lint: 0 violations (scanned ${scanned} files)`)
-  process.exit(0)
-} else {
+if (JSON_OUT) {
+  console.log(JSON.stringify({ scanned, inspected, brandFiles, violations }, null, 2))
+  process.exitCode = violations.length ? 1 : 0
+} else report()
+
+function report() {
+  if (brandFiles.length) console.log(`Brand colour exceptions (DEC-008): ${brandFiles.join(", ")}`)
+
+  if (violations.length === 0) {
+    console.log(`✅ Token lint: 0 violations (scanned ${scanned} files)`)
+    process.exit(0)
+  }
   console.error(`❌ Token lint: ${violations.length} violation${violations.length === 1 ? "" : "s"} found (scanned ${scanned} files)\n`)
   let lastFile = null
   for (const v of violations) {

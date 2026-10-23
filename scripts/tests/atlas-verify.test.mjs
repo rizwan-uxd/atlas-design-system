@@ -289,6 +289,28 @@ test("code/token-lint passes clean, fails a hardcoded colour, and reports files 
   assert.equal(verify(dir, "token-lint").status, "fail")
 }))
 
+// code/raw-design-values and code/reduced-motion-required (Phase 2d): the two metric rows read off token-lint
+test("code/raw-design-values passes clean and fails a raw length and an unlisted private var", () => withRepo(({ dir }) => {
+  const ok = verify(dir, "raw-design-values")
+  assert.equal(ok.status, "pass", ok.mismatches?.join("\n"))
+  assert.ok(ok.inspected > 0)
+  edit(dir, "packages/ui-web/src/primitives/Badge/Badge.module.css", (s) => s + "\n.x { max-height: 200px; --_pad: 16px; }\n")
+  const bad = verify(dir, "raw-design-values")
+  assert.equal(bad.status, "fail")
+  assert.match(bad.mismatches.join("\n"), /\[no-raw-length\] max-height: 200px/)
+  assert.match(bad.mismatches.join("\n"), /\[no-private-var-escape\] --_pad: 16px/)
+}))
+
+test("code/reduced-motion-required fails a --atlas-duration-* transition with no reduced-motion block", () => withRepo(({ dir }) => {
+  const ok = verify(dir, "reduced-motion-required")
+  assert.equal(ok.status, "pass", ok.mismatches?.join("\n"))
+  assert.ok(ok.inspected > 0)
+  write(dir, "packages/ui-web/src/primitives/Badge/Fade.module.css", ".fade { transition: opacity var(--atlas-duration-fast) var(--atlas-easing-standard); }\n")
+  const bad = verify(dir, "reduced-motion-required")
+  assert.equal(bad.status, "fail")
+  assert.match(bad.mismatches.join("\n"), /Fade\.module\.css:0 \[reduced-motion-required\]/)
+}))
+
 // code/tsc and code/tests: a one-file program and a one-file suite keep these fast and real
 test("code/tsc passes a clean program, fails a type error, and counts its files", () => withRepo(({ dir }) => {
   write(dir, "tsconfig.json", JSON.stringify({ compilerOptions: { strict: true, noEmit: true, skipLibCheck: true, types: [] }, files: ["x.ts"] }))
