@@ -46,7 +46,6 @@ export function filter(capabilities: string[], r: Registry = registry): string[]
 
 /** A copy of the registry with one type removed, as if its entry were deleted (the M4 exit test). */
 export function without(type: string, r: Registry = registry): Registry {
-  const { [type]: _entry, ...entries } = r.entries
-  const { [type]: _schema, ...schemas } = r.schemas
-  return { ...r, entries, schemas }
+  const drop = <T,>(o: Record<string, T>) => Object.fromEntries(Object.entries(o).filter(([k]) => k !== type))
+  return { ...r, entries: drop(r.entries), schemas: drop(r.schemas) }
 }
