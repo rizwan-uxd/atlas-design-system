@@ -1,0 +1,60 @@
+{
+  "_note": "AUTHORED. registryComplete stays false until the owner decides fallback, nesting, a11y and responsive (M3 plan, Global constraints).",
+  "type": "TextField",
+  "aliasOf": "Input",
+  "kind": "component",
+  "platforms": ["web"],
+  "registryComplete": false,
+  "protocolProps": {
+    "variant": {
+      "values": ["default", "filled", "unstyled"]
+    },
+    "size": {
+      "values": ["sm", "md", "lg"]
+    },
+    "invalid": {},
+    "loading": {},
+    "disabled": {},
+    "name": {},
+    "value": {},
+    "placeholder": {},
+    "required": {}
+  },
+  "hiddenProps": {},
+  "events": {
+    "blur": { "handler": "onBlur" },
+    "change": { "handler": "onChange" },
+    "focus": { "handler": "onFocus" }
+  },
+  "slots": ["leadingIcon", "prefix", "suffix", "trailingIcon"],
+  "states": { "default": "interaction", "hover": "interaction", "focus-visible": "interaction", "disabled": "prop", "error": "prop" },
+  "stateProps": { "disabled": "disabled", "error": "invalid" },
+  "tokenRoles": {
+    "adornment-padding": "--atlas-input-adornment-padding",
+    "affix-foreground": "--atlas-input-affix-foreground",
+    "background": "--atlas-input-background",
+    "background-disabled": "--atlas-input-background-disabled",
+    "border": "--atlas-input-border",
+    "border-focus": "--atlas-input-border-focus",
+    "border-hover": "--atlas-input-border-hover",
+    "border-invalid": "--atlas-input-border-invalid",
+    "filled-background": "--atlas-input-filled-background",
+    "filled-background-focus": "--atlas-input-filled-background-focus",
+    "filled-background-hover": "--atlas-input-filled-background-hover",
+    "foreground": "--atlas-input-foreground",
+    "foreground-disabled": "--atlas-input-foreground-disabled",
+    "icon-foreground": "--atlas-input-icon-foreground",
+    "icon-size": "--atlas-input-icon-size",
+    "placeholder": "--atlas-input-placeholder",
+    "radius": "--atlas-input-radius",
+    "size-lg-font-size": "--atlas-input-size-lg-font-size",
+    "size-lg-height": "--atlas-input-size-lg-height",
+    "size-lg-padding-inline": "--atlas-input-size-lg-padding-inline",
+    "size-md-font-size": "--atlas-input-size-md-font-size",
+    "size-md-height": "--atlas-input-size-md-height",
+    "size-md-padding-inline": "--atlas-input-size-md-padding-inline",
+    "size-sm-font-size": "--atlas-input-size-sm-font-size",
+    "size-sm-height": "--atlas-input-size-sm-height",
+    "size-sm-padding-inline": "--atlas-input-size-sm-padding-inline"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "_note": "AUTHORED. registryComplete stays false until the owner decides fallback, nesting, a11y and responsive (M3 plan, Global constraints). tokenRoles is left to roadmap Phase 2d: Alert themes through private --_ vars, not a component-token layer.",
+  "type": "Alert",
+  "aliasOf": "Alert",
+  "kind": "component",
+  "platforms": ["web"],
+  "registryComplete": false,
+  "protocolProps": {
+    "variant": {
+      "values": ["info", "success", "warning", "danger", "neutral"]
+    },
+    "size": {
+      "values": ["sm", "md", "lg"]
+    },
+    "dismissible": {},
+    "hideIcon": {}
+  },
+  "hiddenProps": { "className": "Styling escape hatch; the protocol carries no CSS." },
+  "events": {
+    "dismiss": { "handler": "onDismiss" }
+  },
+  "slots": ["actions", "children", "description", "icon", "title"]
+}

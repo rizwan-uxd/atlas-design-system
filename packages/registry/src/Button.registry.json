@@ -1,0 +1,73 @@
+{
+  "_note": "AUTHORED. registryComplete stays false until the owner decides fallback, nesting, a11y and responsive (M3 plan, Global constraints).",
+  "type": "Button",
+  "aliasOf": "Button",
+  "kind": "component",
+  "platforms": ["web"],
+  "registryComplete": false,
+  "protocolProps": {
+    "variant": {
+      "values": ["primary", "secondary", "outline", "ghost", "destructive", "link"]
+    },
+    "size": {
+      "values": ["xs", "sm", "md", "lg"]
+    },
+    "iconOnly": {},
+    "loading": {},
+    "disabled": {}
+  },
+  "hiddenProps": { "asChild": "Web-only Radix Slot composition: it styles a child element, which a protocol node cannot pass." },
+  "events": {
+    "click": { "handler": "onClick" }
+  },
+  "slots": ["children", "leadingIcon", "trailingIcon"],
+  "states": {
+    "default": "interaction",
+    "hover": "interaction",
+    "focus-visible": "interaction",
+    "active": "interaction",
+    "disabled": "prop",
+    "loading": "prop"
+  },
+  "stateProps": { "disabled": "disabled", "loading": "loading" },
+  "tokenRoles": {
+    "destructive-background": "--atlas-button-destructive-background",
+    "destructive-background-active": "--atlas-button-destructive-background-active",
+    "destructive-background-hover": "--atlas-button-destructive-background-hover",
+    "destructive-foreground": "--atlas-button-destructive-foreground",
+    "foreground-disabled": "--atlas-button-foreground-disabled",
+    "gap": "--atlas-button-gap",
+    "ghost-background-active": "--atlas-button-ghost-background-active",
+    "ghost-background-hover": "--atlas-button-ghost-background-hover",
+    "ghost-foreground": "--atlas-button-ghost-foreground",
+    "link-foreground": "--atlas-button-link-foreground",
+    "link-foreground-active": "--atlas-button-link-foreground-active",
+    "link-foreground-hover": "--atlas-button-link-foreground-hover",
+    "outline-background-active": "--atlas-button-outline-background-active",
+    "outline-background-hover": "--atlas-button-outline-background-hover",
+    "outline-border": "--atlas-button-outline-border",
+    "outline-foreground": "--atlas-button-outline-foreground",
+    "primary-background": "--atlas-button-primary-background",
+    "primary-background-active": "--atlas-button-primary-background-active",
+    "primary-background-hover": "--atlas-button-primary-background-hover",
+    "primary-foreground": "--atlas-button-primary-foreground",
+    "radius": "--atlas-button-radius",
+    "secondary-background": "--atlas-button-secondary-background",
+    "secondary-background-active": "--atlas-button-secondary-background-active",
+    "secondary-background-hover": "--atlas-button-secondary-background-hover",
+    "secondary-foreground": "--atlas-button-secondary-foreground",
+    "size-lg-font-size": "--atlas-button-size-lg-font-size",
+    "size-lg-height": "--atlas-button-size-lg-height",
+    "size-lg-padding-inline": "--atlas-button-size-lg-padding-inline",
+    "size-md-font-size": "--atlas-button-size-md-font-size",
+    "size-md-height": "--atlas-button-size-md-height",
+    "size-md-padding-inline": "--atlas-button-size-md-padding-inline",
+    "size-sm-font-size": "--atlas-button-size-sm-font-size",
+    "size-sm-height": "--atlas-button-size-sm-height",
+    "size-sm-padding-inline": "--atlas-button-size-sm-padding-inline",
+    "size-xs-font-size": "--atlas-button-size-xs-font-size",
+    "size-xs-gap": "--atlas-button-size-xs-gap",
+    "size-xs-height": "--atlas-button-size-xs-height",
+    "size-xs-padding-inline": "--atlas-button-size-xs-padding-inline"
+  }
+}

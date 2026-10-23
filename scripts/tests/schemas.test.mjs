@@ -222,3 +222,37 @@ test("a pull may carry boundVariables, kept apart from `variables`", () => {
   delete p.boundVariables.entries[0].web
   assert.notDeepEqual(validate("figma-pull.schema.json", p), [])
 })
+
+// ─── registry (M3) ──────────────────────────────────────────────────────────
+
+const formEntry = () => clone(read("packages/registry/src/Form.registry.json"))
+const buttonEntry = () => clone(read("packages/registry/src/Button.registry.json"))
+
+test("a structural registry entry may not render a component", () => {
+  const e = formEntry(); e.aliasOf = "Field"
+  assert.match(validate("registry.schema.json#/$defs/entry", e).join("\n"), /^\/aliasOf must be null/m)
+})
+
+test("a structural registry entry needs composedOf", () => {
+  const e = formEntry(); delete e.composedOf
+  assert.match(validate("registry.schema.json#/$defs/entry", e).join("\n"), /required property 'composedOf'/)
+})
+
+test("an unknown registry field fails, naming it", () => {
+  const e = buttonEntry(); e.variants = []
+  assert.match(validate("registry.schema.json#/$defs/entry", e).join("\n"), /additional properties \(variants\)/)
+})
+
+test("registryComplete: true requires every declarative field", () => {
+  const e = buttonEntry(); e.registryComplete = true
+  const errors = validate("registry.schema.json#/$defs/entry", e).join("\n")
+  for (const f of ["fallback", "nesting", "a11y", "responsive", "capabilities"]) assert.match(errors, new RegExp(`required property '${f}'`))
+})
+
+test("a registry entry whose type differs from its file name fails", () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "schemas-reg-"))
+  for (const rel of ["atlas", "packages/governance", "packages/registry"]) fs.cpSync(path.join(REPO, rel), path.join(dir, rel), { recursive: true })
+  fs.renameSync(path.join(dir, "packages/registry/src/Form.registry.json"), path.join(dir, "packages/registry/src/Forms.registry.json"))
+  const r = loadInputs(dir)
+  assert.match(r.files.find((f) => f.file.endsWith("Forms.registry.json")).errors.join("\n"), /\/type is "Form" but the file is Forms.registry.json/)
+})

@@ -30,6 +30,9 @@ export const INPUTS = [
   { glob: "packages/governance/deprecations.json", schema: "governance.schema.json#/$defs/deprecations", required: true },
   { glob: "packages/governance/ownership.json", schema: "governance.schema.json#/$defs/ownership", required: true },
   { glob: "packages/registry/figma-axis-map.json", schema: "governance.schema.json#/$defs/figmaAxisMap", required: true },
+  { glob: "packages/registry/aliases.json", schema: "registry.schema.json#/$defs/aliases", required: true },
+  { glob: "packages/registry/src/*.registry.json", schema: "registry.schema.json#/$defs/entry", min: 1, typeMatchesFile: true },
+  { glob: "packages/registry/generated/*.facts.json", schema: "registry.schema.json#/$defs/facts", nameMatchesFile: true },
 ]
 /** Directories whose every *.json must be covered by an INPUTS rule. The schemas themselves are exempt. */
 export const WATCHED = ["atlas", "packages/governance", "packages/registry"]
@@ -93,8 +96,11 @@ export function loadInputs(root) {
       // a schema that fails to compile throws out of validate(): that is a broken schema, not bad data,
       // and it must stop the run rather than be reported against the input
       if (!errors) errors = validate(input.schema, data)
-      if (!errors.length && input.nameMatchesFile && data.name !== path.basename(file, ".json"))
+      const stem = path.basename(file).split(".")[0]
+      if (!errors.length && input.nameMatchesFile && data.name !== stem)
         errors.push(`/name is ${JSON.stringify(data.name)} but the file is ${path.basename(file)}`)
+      if (!errors.length && input.typeMatchesFile && data.type !== stem)
+        errors.push(`/type is ${JSON.stringify(data.type)} but the file is ${path.basename(file)}`)
       files.push({ file, schema: input.schema, ok: errors.length === 0, errors, data: errors.length ? undefined : data })
     }
   }

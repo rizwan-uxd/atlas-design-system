@@ -1,0 +1,4 @@
+{
+  "_note": "AUTHORED. North-star type names the registry accepts in place of an Atlas component name (roadmap, Decisions taken: nothing is renamed in Figma or ui-web). A target is a ui-web component, or \"structural\" for a type composed from components. registry-build --check fails when an entry in src/ disagrees with this table.",
+  "aliases": { "Form": "structural", "Modal": "Dialog", "TextField": "Input" }
+}

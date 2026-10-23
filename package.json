@@ -14,6 +14,8 @@
     "atlas:sync": "node scripts/atlas-sync.mjs",
     "atlas:sync:check": "node scripts/atlas-sync.mjs --check",
     "atlas:verify": "node scripts/atlas-verify.mjs",
+    "registry:build": "node scripts/registry-build.mjs",
+    "registry:check": "node scripts/registry-build.mjs --check",
     "metrics:report": "node scripts/metrics-report.mjs",
     "metrics:check": "node scripts/metrics-report.mjs --check",
     "test": "vitest run",

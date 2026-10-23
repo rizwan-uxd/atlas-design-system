@@ -162,6 +162,9 @@ jobs:
       - run: npm ci --legacy-peer-deps
       - name: Script tests
         run: npm run test:scripts
+      # M3: stale facts, and any authored registry claim the code cannot back, fail here
+      - name: Registry invariant
+        run: npm run registry:check
       # A push to main has no PR labels in its event, so look up the merged PR of this commit.
       - name: Merged PR approved new components
         id: merged-label
