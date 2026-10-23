@@ -1,0 +1,201 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://atlas.design-system/schemas/registry.schema.json",
+  "title": "Atlas registry (M3)",
+  "description": "packages/registry: the authored alias table and entries, and the facts registry-build generates. The authored half must stay a subset of the generated half; registry-build --check enforces that, this schema only the shape.",
+  "$defs": {
+    "propName": { "type": "string", "pattern": "^[a-z][A-Za-z0-9-]*$" },
+    "propList": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/propName" } },
+    "componentList": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "common.schema.json#/$defs/componentName" } },
+    "textMap": {
+      "type": "object",
+      "propertyNames": { "pattern": "\\S" },
+      "additionalProperties": { "$ref": "common.schema.json#/$defs/text" }
+    },
+
+    "aliases": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["_note", "aliases"],
+      "properties": {
+        "_note": { "$ref": "common.schema.json#/$defs/text" },
+        "aliases": {
+          "type": "object",
+          "minProperties": 1,
+          "propertyNames": { "$ref": "common.schema.json#/$defs/componentName" },
+          "additionalProperties": {
+            "description": "The ui-web component the north-star name renders, or \"structural\" for a type composed from components.",
+            "oneOf": [{ "$ref": "common.schema.json#/$defs/componentName" }, { "const": "structural" }]
+          }
+        }
+      }
+    },
+
+    "protocolProp": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "values": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "common.schema.json#/$defs/text" } },
+        "narrowed": { "$ref": "common.schema.json#/$defs/text" },
+        "required": { "type": "boolean" }
+      }
+    },
+    "entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "aliasOf", "kind", "platforms", "registryComplete"],
+      "properties": {
+        "_note": { "$ref": "common.schema.json#/$defs/text" },
+        "type": { "$ref": "common.schema.json#/$defs/componentName" },
+        "aliasOf": { "oneOf": [{ "$ref": "common.schema.json#/$defs/componentName" }, { "type": "null" }] },
+        "kind": { "enum": ["component", "structural"] },
+        "platforms": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "enum": ["web"] } },
+        "registryComplete": { "type": "boolean" },
+        "composedOf": { "$ref": "#/$defs/componentList" },
+        "protocolProps": {
+          "description": "The agent-visible subset of the component's props.",
+          "type": "object",
+          "propertyNames": { "$ref": "#/$defs/propName" },
+          "additionalProperties": { "$ref": "#/$defs/protocolProp" }
+        },
+        "hiddenProps": {
+          "description": "Own props deliberately kept off the agent surface, each with a reason.",
+          "type": "object",
+          "propertyNames": { "$ref": "#/$defs/propName" },
+          "additionalProperties": { "$ref": "common.schema.json#/$defs/text" }
+        },
+        "events": {
+          "type": "object",
+          "propertyNames": { "pattern": "^[a-z][A-Za-z0-9]*$" },
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["handler"],
+            "properties": { "handler": { "type": "string", "pattern": "^on[A-Z][A-Za-z0-9]*$" } }
+          }
+        },
+        "slots": { "$ref": "#/$defs/propList" },
+        "states": {
+          "description": "Every Figma State member, classified: interaction (CSS-driven) or prop (named in stateProps).",
+          "type": "object",
+          "propertyNames": { "pattern": "\\S" },
+          "additionalProperties": { "enum": ["interaction", "prop"] }
+        },
+        "stateProps": {
+          "type": "object",
+          "propertyNames": { "pattern": "\\S" },
+          "additionalProperties": { "$ref": "#/$defs/propName" }
+        },
+        "tokenRoles": {
+          "type": "object",
+          "propertyNames": { "pattern": "^[a-z][a-z0-9.-]*$" },
+          "additionalProperties": { "$ref": "common.schema.json#/$defs/token" }
+        },
+        "fallback": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type"],
+          "properties": {
+            "type": { "$ref": "common.schema.json#/$defs/componentName" },
+            "props": { "type": "object" }
+          }
+        },
+        "nesting": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "children": { "type": "array", "uniqueItems": true, "items": { "$ref": "common.schema.json#/$defs/componentName" } },
+            "parents": { "type": "array", "uniqueItems": true, "items": { "$ref": "common.schema.json#/$defs/componentName" } }
+          }
+        },
+        "a11y": { "$ref": "#/$defs/textMap" },
+        "responsive": { "$ref": "#/$defs/textMap" },
+        "capabilities": { "$ref": "common.schema.json#/$defs/textList" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "kind": { "const": "structural" } }, "required": ["kind"] },
+          "then": { "required": ["composedOf"], "properties": { "aliasOf": { "type": "null" }, "composedOf": true } },
+          "else": { "properties": { "aliasOf": { "type": "string" } } }
+        },
+        {
+          "if": { "properties": { "registryComplete": { "const": true } }, "required": ["registryComplete"] },
+          "then": {
+            "required": ["protocolProps", "events", "slots", "fallback", "nesting", "a11y", "responsive", "capabilities", "tokenRoles"],
+            "properties": { "protocolProps": true, "events": true, "slots": true, "fallback": true, "nesting": true, "a11y": true, "responsive": true, "capabilities": true, "tokenRoles": true }
+          }
+        }
+      ]
+    },
+
+    "facts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["_generated", "name", "import", "source", "props", "inherited", "events", "unions", "codeConnect", "figma", "tokensUsed"],
+      "properties": {
+        "_generated": { "$ref": "common.schema.json#/$defs/generated" },
+        "name": { "$ref": "common.schema.json#/$defs/componentName" },
+        "import": { "$ref": "common.schema.json#/$defs/text" },
+        "source": { "$ref": "common.schema.json#/$defs/text" },
+        "props": {
+          "description": "Own props: declared in the component's source file.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["name", "type", "optional"],
+            "properties": {
+              "name": { "$ref": "#/$defs/propName" },
+              "type": { "$ref": "common.schema.json#/$defs/text" },
+              "optional": { "type": "boolean" }
+            }
+          }
+        },
+        "inherited": {
+          "description": "Props from a base type, grouped by the interface that declares them.",
+          "type": "object",
+          "additionalProperties": { "type": "array", "minItems": 1, "items": { "$ref": "common.schema.json#/$defs/text" } }
+        },
+        "events": {
+          "description": "Every on* handler prop, own or inherited, with its non-nullable type.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["name", "type"],
+            "properties": {
+              "name": { "type": "string", "pattern": "^on[A-Z][A-Za-z0-9]*$" },
+              "type": { "$ref": "common.schema.json#/$defs/text" }
+            }
+          }
+        },
+        "unions": {
+          "description": "Props whose non-nullable type is a union of string literals, with the members.",
+          "type": "object",
+          "additionalProperties": { "type": "array", "minItems": 1, "items": { "type": "string" } }
+        },
+        "codeConnect": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["file", "instances", "stateProps", "enums"],
+          "properties": {
+            "file": { "oneOf": [{ "$ref": "common.schema.json#/$defs/text" }, { "type": "null" }] },
+            "instances": { "$ref": "#/$defs/textMap" },
+            "stateProps": { "$ref": "#/$defs/textMap" },
+            "enums": { "$ref": "#/$defs/textMap" }
+          }
+        },
+        "figma": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["nodeId", "axes"],
+          "properties": {
+            "nodeId": { "$ref": "common.schema.json#/$defs/figmaNodeId" },
+            "axes": { "$ref": "common.schema.json#/$defs/figmaProperties" }
+          }
+        },
+        "tokensUsed": { "type": "array", "items": { "$ref": "common.schema.json#/$defs/token" } }
+      }
+    }
+  }
+}

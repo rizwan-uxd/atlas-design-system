@@ -478,7 +478,34 @@ inputs schema-validated — the honest proxy for "100% protocol messages passing
 years before a protocol exists.
 **Exit (M2):** corrupting one field in `atlas/metadata/Button.json` turns a PASS into a FAIL.
 
-### 2c → M3. The registry, and three-way agreement (3–4 sessions)
+### 2c → M3. The registry, and three-way agreement (3–4 sessions) — session 1 of 4 landed 2026-10-23
+
+> **Session 1 landed** (plan: `docs/superpowers/plans/2026-10-23-m3-registry.md`, which records the
+> design decisions below as numbered choices). `packages/registry/aliases.json`, four authored entries
+> (`Button`, `TextField`→`Input`, `Alert`, `Form` structural), `registry.schema.json` with three
+> `INPUTS` rules, and `scripts/registry-build.mjs` generating `generated/<Name>.facts.json` for the
+> three rendered components through the TypeScript compiler API. `npm run registry:check` runs in CI
+> after the script tests: **PASS — 4 entries, 3 facts, 115 rules checked**. Negative test 6 (an
+> authored enum member absent from the code union) FAILs, as a script test and once against the repo.
+>
+> **What went differently from this section:**
+>
+> 1. **Entries are keyed by the registered type**, not the component: `src/TextField.registry.json`
+>    with `aliasOf: "Input"`. `aliases.json` stays the alias table and `--check` FAILs when an entry
+>    disagrees with it, so the two cannot drift.
+> 2. **Own props must be accounted for** in `protocolProps`, `slots`, an `events` handler or
+>    `hiddenProps` (with a reason). That is the concrete form of "code gaining a prop with no authored
+>    entry is WARN, FAIL at `registryComplete: true`". Inherited DOM props are visible to the invariant
+>    (so `disabled` and `onClick` can be declared) but never required.
+> 3. **`states` is authored now**, as a classification of every Figma `State` member (`interaction` or
+>    `prop`), cross-checked with Code Connect's `figma.enum("State", …)` mappings. The comparator's
+>    "23 State deferred to M3" note goes away only when session 4 fills its `registry` slot.
+> 4. **No entry is `registryComplete: true` yet.** `fallback`, `nesting`, `a11y` and `responsive` need
+>    owner decisions (`AGENTS.md` §6), so they are absent rather than guessed. `tokenRoles` is authored
+>    for Button and TextField from the existing component-token layer; Alert's waits for Phase 2d.
+> 5. **Generated per-component schemas will be exempt from `INPUTS`** like `packages/governance/schemas/`,
+>    validated instead by ajv's strict compile against the 2020-12 meta-schema. Decided now, built in
+>    session 3.
 
 ```
 packages/registry/

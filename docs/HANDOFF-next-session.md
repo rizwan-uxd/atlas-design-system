@@ -1,23 +1,18 @@
-# Handoff: start from M3 (Atlas roadmap)
+# Handoff: M3 session 2 is next (Atlas roadmap)
 
-Written 2026-10-22. **Read in this order: `AGENTS.md` → `docs/ATLAS-DELIVERY-ROADMAP.md` → this file.**
+Written 2026-10-22, updated 2026-10-23 after M3 session 1. **Read in this order: `AGENTS.md` → `docs/ATLAS-DELIVERY-ROADMAP.md` → this file.**
 The roadmap is normative now (referenced from `AGENTS.md` §2) and owns the phase order; this file is
 only current state plus the gotchas that will bite again. **This is the only handoff doc** — earlier
 ones were deleted and live in git history.
 
 ## State
-- **`main` has Phase 1 (#98) and M1 (#99).** Two Phase-2 PRs were open when this was written, both
-  with auto-merge and auto-fix on and CI still running, with no failures:
-  - **M2 is PR #101** (`claude/post-merge-handoff-0bf36c`): schemas, `design/schemas`, inspection
-    counts, the AST JSX scanner, 15/15 checks tested.
-  - **D1 is PR #100** (`claude/atlas-d1-token-table-e72828`): option C plus the A/B spike findings.
-  **First, `gh pr view 100` and `gh pr view 101`.** If both merged, branch from the new `main`. If
-  either is still open, find out why (failed check or conflict) before starting M3, because M3 builds
-  on both.
-- **The two PRs are reconciled.** M2's schemas already accept D1's `figmaBound` in `atlas/tokens.json`
-  and the top-level `boundVariables` in the pull file (M2 commit `38e2710`). Whichever merges second will
-  probably conflict in `docs/ATLAS-DELIVERY-ROADMAP.md`: keep both the M2 and the D1 sections. After
-  both land, run `node scripts/atlas-verify.mjs --only design.schemas` on `main` to confirm.
+- **`main` has Phase 1 (#98), M1 (#99), D1 (#100) and M2 (#101).** The post-merge check passed on
+  `dd039b1`: `node scripts/atlas-verify.mjs --only design.schemas` → `PASS schemas (58/58 files valid ·
+  5 schemas)`, and the roadmap kept both the M2 and D1 sections.
+- **M3 session 1 is on branch `claude/atlas-m3-fa23b4`** (not merged; check for its PR before
+  starting). It adds `packages/registry/{aliases.json,src/,generated/}`, `registry.schema.json`,
+  `scripts/lib/registry.mjs`, `scripts/registry-build.mjs`, `npm run registry:build|registry:check`
+  and the CI step "Registry invariant". `registry:check` → PASS, 4 entries, 3 facts, 115 rules.
 - **D1 results:** token-name drift is **0 over 193/432 tokens** (option C). **A** (REST
   `/variables/local`) needs a Figma Enterprise plan. **B** works today through `use_figma`: it read
   the full table (463 variables, 5 collections, all modes, aliases). D1 recommends B; the details are in
@@ -45,8 +40,17 @@ ones were deleted and live in git history.
 - `--max-figma-age <days>` (CI passes **90**) and `--only <ids>` on `atlas-verify`.
 - All 15 checks have a PASS and a FAIL fixture test (`scripts/tests/atlas-verify.test.mjs`).
 
-## M3 — do this next (the roadmap's §2c, 3–4 sessions)
-Read §2c in the roadmap; it owns the scope. M2 met M3's precondition: a verifier that can fail. In short:
+## M3 — session 2 is next (the roadmap's §2c; plan `docs/superpowers/plans/2026-10-23-m3-registry.md`)
+**Session 2 (do next):** facts for all 47 components (an entry per component, or decide that facts
+are generated for every metadata component regardless of entries; the plan's decision 2 says entries
+drive it), then generate sound contracts (tuple-form mutual `extends`, per-prop existence) next to the
+44 hand-authored ones, diff them, route real drift to `atlas-component` work, and make `--check` FAIL
+on a missing contract. Sessions 3 and 4 are scoped in the plan. Session 1's design decisions are
+numbered there and summarised in roadmap §2c; do not re-open them without the user.
+**Owner decisions M3 needs before any type can be `registryComplete: true`:** a `fallback` target,
+`nesting`, `a11y` and `responsive` for Form, TextField, Button, Alert, Field, Text. Ask once, batched.
+
+The original scope summary, kept for reference:
 - `packages/registry/` gains `aliases.json` and `src/<Name>.registry.json` (both authored), plus
   generated `generated/<Name>.facts.json`, `componentMap.ts` and `schemas/<Name>.schema.json`, all
   committed and gated by `git diff`.
@@ -90,7 +94,8 @@ Read §2c in the roadmap; it owns the scope. M2 met M3's precondition: a verifie
 ## Commands
 ```bash
 npm ci
-npm run test:scripts        # 116 tests: comparator, ci-workflow, metrics-report, sync, verify
+npm run test:scripts        # 230 tests: comparator, ci-workflow, metrics-report, registry, schemas, sync, verify
+npm run registry:check      # facts current + authored registry ⊆ generated facts (M3)
 npm test                    # 1410 vitest
 npm run token-lint
 npx tsc --noEmit
@@ -174,6 +179,20 @@ Search and filter frames (#57); disabled opacity bound (#58); StatCard icon, cli
 - **Browser mirror of React Native geometry:** Chromium is at `/opt/pw-browsers/chromium-1194/chrome-linux/chrome` (no playwright package). Render with `--headless=new --no-sandbox --force-device-scale-factor=3`: at 1x density fractional sizes (a 20 px Spinner ring is 16.46) show clip-snapping notches that a phone would not.
 - **Editing `atlas/state/*.json`:** remove or insert the entry as text. A `json.dump` round trip reformats the whole file (it did for `candidates.json`: a 98-line diff, redone). New decision entries use 6-space keys inside a 4-space `{`.
 - **The stop hook** ("uncommitted changes" or "unpushed commits") fires at the end of a turn. Commit to the feature branch and push it, with no PR; do not merge or open a PR without the user's yes. (This session also committed and pushed on a user "commit" instruction because the session brief says to commit and push to the designated branch; PRs and merges waited for the user's "open the PR" and "merge N".)
+
+### From M3 session 1 (2026-10-23)
+- **A fresh worktree has no `node_modules`.** Run `npm ci` first; `atlas-verify` and `registry-build`
+  import `ajv` and `typescript` and die with `ERR_MODULE_NOT_FOUND` otherwise.
+- **`getNonNullableType` expands `React.ReactNode` into its nine members.** Own props keep their
+  declared annotation text (`React.ReactNode`, `ButtonVariant`); only inherited and event types use
+  `typeToString` (with `NoTruncation`, or long types end in `...`).
+- **`Omit<>` props have no `parent` symbol** (`symbolToString(p.parent)` crashes). The declaring
+  interface comes from the declaration node instead (`declaringName` in `scripts/lib/registry.mjs`).
+- **The generated metric region sits in the wrong place in the roadmap.** `metrics-report` upserted it
+  at the first `<!-- BEGIN:generated-metrics -->`, which is the marker quoted inside the prose blockquote
+  at "Metric status", so the generated tables live inside that blockquote's backticks and the hand-written
+  seed table further down is still there. `metrics:check` passes because it compares the region only.
+  Not fixed here (Phase 1 scope); needs a tolerant marker match or the quoted marker removed.
 
 ### From M2 (2026-10-22)
 - **Auto-fix wakes the session on every Vercel bot deployment comment.** On this machine, comment wake-ups and Auto-fix are one switch, so they cannot be split. The notice needs no action; say so in one line and move on.

@@ -1,0 +1,9 @@
+{
+  "_note": "AUTHORED. A structural type (roadmap, Decisions taken): it owns submit, validation and error association and is composed, not a Figma component. AUTHORED. registryComplete stays false until the owner decides fallback, nesting, a11y and responsive (M3 plan, Global constraints).",
+  "type": "Form",
+  "aliasOf": null,
+  "kind": "structural",
+  "platforms": ["web"],
+  "registryComplete": false,
+  "composedOf": ["Field", "Input", "Button", "Alert"]
+}

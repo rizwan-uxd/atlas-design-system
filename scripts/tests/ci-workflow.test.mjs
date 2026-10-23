@@ -90,6 +90,7 @@ test("ci.yml still runs the checks the roadmap depends on", () => {
     "--max-figma-age",           // M1's staleness gate
     "metrics-report.mjs",        // the metric manifest totality gate
     "token-lint",
+    "registry:check",            // M3's subset invariant: authored registry ⊆ generated facts
   ]) {
     assert.ok(src.includes(needle), `ci.yml no longer runs ${needle}`)
   }
