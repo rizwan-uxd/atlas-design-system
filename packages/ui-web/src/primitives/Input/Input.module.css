@@ -263,7 +263,7 @@
   height: var(--atlas-spacing-4);
   border: var(--atlas-border-width-2) solid var(--atlas-foreground-muted);
   border-block-start-color: transparent;
-  border-radius: var(--atlas-radius-full);
+  border-radius: var(--atlas-radius-pill);
   animation: atlas-input-spin calc(var(--atlas-duration-slow) * 2)
              var(--atlas-easing-linear) infinite;
 }

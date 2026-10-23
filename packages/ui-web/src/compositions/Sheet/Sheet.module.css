@@ -76,13 +76,13 @@
 
 .content[data-side="bottom"] {
   inset-block-end: 0;
-  border-radius: var(--atlas-radius-lg) var(--atlas-radius-lg) 0 0;
+  border-radius: var(--atlas-radius-surface) var(--atlas-radius-surface) 0 0;
   padding-block-end: var(--atlas-safe-bottom); /* FIX BUG-071 */
 }
 
 .content[data-side="top"] {
   inset-block-start: 0;
-  border-radius: 0 0 var(--atlas-radius-lg) var(--atlas-radius-lg);
+  border-radius: 0 0 var(--atlas-radius-surface) var(--atlas-radius-surface);
   padding-block-start: var(--atlas-safe-top);
 }
 
@@ -125,15 +125,15 @@
 
 .content[data-side="end"] {
   inset-inline-end: 0;
-  border-start-start-radius: var(--atlas-radius-lg);
-  border-end-start-radius: var(--atlas-radius-lg);
+  border-start-start-radius: var(--atlas-radius-surface);
+  border-end-start-radius: var(--atlas-radius-surface);
   padding-inline-end: var(--atlas-safe-inline-end);
 }
 
 .content[data-side="start"] {
   inset-inline-start: 0;
-  border-start-end-radius: var(--atlas-radius-lg);
-  border-end-end-radius: var(--atlas-radius-lg);
+  border-start-end-radius: var(--atlas-radius-surface);
+  border-end-end-radius: var(--atlas-radius-surface);
   padding-inline-start: var(--atlas-safe-inline-start);
 }
 
@@ -176,7 +176,7 @@
 .dragHandle {
   width: var(--atlas-spacing-9);   /* 36px */
   height: var(--atlas-spacing-1);  /* 4px */
-  border-radius: var(--atlas-radius-full);
+  border-radius: var(--atlas-radius-pill);
   background-color: var(--atlas-border-strong);
   margin: var(--atlas-spacing-2) auto 0;
   flex-shrink: 0;

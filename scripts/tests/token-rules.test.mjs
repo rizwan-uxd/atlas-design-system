@@ -2,7 +2,7 @@
 // reduced motion). One PASS case, then the FAIL cases each rule exists for.
 import { test } from "node:test"
 import assert from "node:assert/strict"
-import { privateVarViolations, rawLengths, breakpointViolations, reducedMotionMissing } from "../lib/token-rules.mjs"
+import { privateVarViolations, rawLengths, breakpointViolations, reducedMotionMissing, semanticRadiusViolations } from "../lib/token-rules.mjs"
 
 const F = "c/X.module.css"
 
@@ -71,4 +71,24 @@ test("reduced motion: a duration with a reduced-motion block passes; without one
   assert.equal(reducedMotionMissing(`${anim}\n@media (prefers-reduced-motion: reduce) { .x { transition: none; } }`), false)
   assert.equal(reducedMotionMissing(".x { color: var(--atlas-foreground); }"), false)
   assert.equal(reducedMotionMissing("/* var(--atlas-duration-fast) */ .x {}"), false)
+})
+
+test("semantic radius: a role passes; an unlisted primitive fails", () => {
+  assert.deepEqual(semanticRadiusViolations([{ file: F, src: ".x { border-radius: var(--atlas-radius-control); }" }], []), { violations: [], inspected: 1 })
+  const { violations } = semanticRadiusViolations([{ file: F, src: ".x {\n  border-radius: var(--atlas-radius-md);\n}" }], [])
+  assert.equal(violations[0].line, 2)
+  assert.match(violations[0].text, /--atlas-radius-md.*role/)
+})
+
+test("semantic radius: the allowlist matches an exact count per file and token; a changed count or stale entry fails", () => {
+  const allow = [{ family: "radius", file: F, token: "--atlas-radius-none", count: 2, reason: "joined edges" }]
+  const two = ".a { border-radius: var(--atlas-radius-none); } .b { border-radius: var(--atlas-radius-none); }"
+  assert.deepEqual(semanticRadiusViolations([{ file: F, src: two }], allow).violations, [])
+  const three = two + " .c { border-radius: var(--atlas-radius-none); }"
+  assert.match(semanticRadiusViolations([{ file: F, src: three }], allow).violations[0].text, /3 uses, allowlist says 2/)
+  assert.match(semanticRadiusViolations([{ file: F, src: ".a {}" }], allow).violations[0].text, /stale allowlist entry/)
+})
+
+test("semantic radius: a use inside a comment is not read", () => {
+  assert.equal(semanticRadiusViolations([{ file: F, src: "/* var(--atlas-radius-md) */ .x {}" }], []).inspected, 0)
 })

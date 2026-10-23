@@ -34,7 +34,7 @@
       "Side": ["bottom", "top", "start", "end"]
     }
   },
-  "tokensUsed": ["--atlas-border", "--atlas-border-strong", "--atlas-border-width-1", "--atlas-dialog-lg", "--atlas-dialog-md", "--atlas-dialog-sm", "--atlas-dialog-xl", "--atlas-duration-base", "--atlas-duration-fast", "--atlas-easing-emphasized", "--atlas-easing-exit", "--atlas-easing-standard", "--atlas-font-sans", "--atlas-overlay", "--atlas-radius-full", "--atlas-radius-lg", "--atlas-safe-bottom", "--atlas-safe-inline-end", "--atlas-safe-inline-start", "--atlas-safe-top", "--atlas-shadow-xl", "--atlas-spacing-1", "--atlas-spacing-2", "--atlas-spacing-4", "--atlas-spacing-6", "--atlas-spacing-8", "--atlas-spacing-9", "--atlas-surface-overlay", "--atlas-z-modal", "--atlas-z-overlay"],
+  "tokensUsed": ["--atlas-border", "--atlas-border-strong", "--atlas-border-width-1", "--atlas-dialog-lg", "--atlas-dialog-md", "--atlas-dialog-sm", "--atlas-dialog-xl", "--atlas-duration-base", "--atlas-duration-fast", "--atlas-easing-emphasized", "--atlas-easing-exit", "--atlas-easing-standard", "--atlas-font-sans", "--atlas-overlay", "--atlas-radius-pill", "--atlas-radius-surface", "--atlas-safe-bottom", "--atlas-safe-inline-end", "--atlas-safe-inline-start", "--atlas-safe-top", "--atlas-shadow-xl", "--atlas-spacing-1", "--atlas-spacing-2", "--atlas-spacing-4", "--atlas-spacing-6", "--atlas-spacing-8", "--atlas-spacing-9", "--atlas-surface-overlay", "--atlas-z-modal", "--atlas-z-overlay"],
   "module": {
     "imports": [
       { "from": "@atlas/ui-web/compositions/Sheet/Sheet", "name": "SheetSide", "kind": "named" },

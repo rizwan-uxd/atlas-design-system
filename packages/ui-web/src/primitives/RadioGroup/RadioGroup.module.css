@@ -62,7 +62,7 @@
   content: "";
   inline-size: var(--atlas-radio-dot);
   block-size: var(--atlas-radio-dot);
-  border-radius: var(--atlas-radius-full);
+  border-radius: var(--atlas-radius-pill);
   background-color: currentColor;
   transform: scale(0);
   transition: transform var(--atlas-duration-fast) var(--atlas-easing-standard);

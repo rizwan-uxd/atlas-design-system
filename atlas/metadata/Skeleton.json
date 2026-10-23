@@ -12,7 +12,7 @@
     { "name": "shape", "required": false, "type": "SkeletonShape" }
   ],
   "subcomponents": [],
-  "tokensUsed": ["--atlas-background-muted", "--atlas-duration-pulse", "--atlas-easing-standard", "--atlas-opacity-pulse", "--atlas-radius-full", "--atlas-radius-md", "--atlas-spacing-10", "--atlas-spacing-4"],
+  "tokensUsed": ["--atlas-background-muted", "--atlas-duration-pulse", "--atlas-easing-standard", "--atlas-opacity-pulse", "--atlas-radius-md", "--atlas-radius-pill", "--atlas-spacing-10", "--atlas-spacing-4"],
   "figmaNodeId": "531:5",
   "figmaFileKey": "cKYhfaHLCoyMHi9nKr63Ig",
   "figmaProperties": { "Shape": ["rect", "circle"] },

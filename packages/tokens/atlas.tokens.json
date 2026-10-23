@@ -170,7 +170,11 @@
       "lg":   { "$type": "dimension", "$value": "12px" },
       "xl":   { "$type": "dimension", "$value": "16px" },
       "2xl":  { "$type": "dimension", "$value": "24px" },
-      "full": { "$type": "dimension", "$value": "9999px" }
+      "full": { "$type": "dimension", "$value": "9999px" },
+      "item":    { "$type": "dimension", "$value": "{atlas.radius.sm}" },
+      "control": { "$type": "dimension", "$value": "{atlas.radius.md}" },
+      "surface": { "$type": "dimension", "$value": "{atlas.radius.lg}" },
+      "pill":    { "$type": "dimension", "$value": "{atlas.radius.full}" }
     },
     "icon": {
       "size": {

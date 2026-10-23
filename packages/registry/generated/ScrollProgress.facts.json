@@ -219,7 +219,7 @@
       "Progress": ["0", "50", "100"]
     }
   },
-  "tokensUsed": ["--atlas-background-muted", "--atlas-duration-fast", "--atlas-easing-standard", "--atlas-primary", "--atlas-radius-full", "--atlas-radius-none", "--atlas-spacing-1", "--atlas-z-sticky"],
+  "tokensUsed": ["--atlas-background-muted", "--atlas-duration-fast", "--atlas-easing-standard", "--atlas-primary", "--atlas-radius-none", "--atlas-radius-pill", "--atlas-spacing-1", "--atlas-z-sticky"],
   "module": {
     "imports": [
       { "from": "@atlas/ui-web/primitives/ScrollProgress/ScrollProgress", "name": "ScrollProgressAxis", "kind": "named" },

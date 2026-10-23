@@ -30,7 +30,7 @@
   gap: var(--_item-gap);
   padding-block: var(--_item-padding-block);
   padding-inline: var(--atlas-spacing-3);
-  border-radius: var(--atlas-radius-lg);
+  border-radius: var(--atlas-radius-surface);
   font-family: var(--atlas-font-sans);
 }
 

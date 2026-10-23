@@ -47,7 +47,7 @@
   width: min(var(--_max-w), calc(100vw - var(--atlas-spacing-8) * 2));
   background-color: var(--atlas-surface-overlay);
   border: var(--atlas-border-width-1) solid var(--atlas-border);
-  border-radius: var(--atlas-radius-lg);
+  border-radius: var(--atlas-radius-surface);
   box-shadow: var(--atlas-shadow-xl);
   font-family: var(--atlas-font-sans);
   display: flex;
@@ -93,7 +93,7 @@
     transform: none;
     width: 100%;
     max-width: 100%;
-    border-radius: var(--atlas-radius-lg) var(--atlas-radius-lg) 0 0;
+    border-radius: var(--atlas-radius-surface) var(--atlas-radius-surface) 0 0;
     max-height: 85vh;
   }
 }

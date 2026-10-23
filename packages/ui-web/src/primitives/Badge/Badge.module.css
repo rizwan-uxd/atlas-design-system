@@ -10,7 +10,7 @@
   display: inline-flex;
   align-items: center;
   gap: var(--atlas-spacing-1);
-  border-radius: var(--atlas-radius-full);
+  border-radius: var(--atlas-radius-pill);
   font-family: var(--atlas-font-sans);
   font-weight: var(--atlas-font-weight-semibold); /* Figma: SemiBold */
   letter-spacing: var(--atlas-letter-spacing-wide); /* Figma: 0.2px tracking (0.02em) */
@@ -149,7 +149,7 @@
 .dot {
   width: var(--atlas-spacing-1_5);   /* 6px */
   height: var(--atlas-spacing-1_5);
-  border-radius: var(--atlas-radius-full);
+  border-radius: var(--atlas-radius-pill);
   background-color: currentColor;
   flex-shrink: 0;
 }

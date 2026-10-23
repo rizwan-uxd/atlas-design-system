@@ -144,7 +144,7 @@ describe("Progress — motion and tokens", () => {
 
   it("uses the Atlas tokens for size, colour and motion", () => {
     for (const token of [
-      "--atlas-spacing-1", "--atlas-radius-full", "--atlas-background-muted", "--atlas-primary",
+      "--atlas-spacing-1", "--atlas-radius-pill", "--atlas-background-muted", "--atlas-primary",
       "--atlas-duration-base", "--atlas-easing-standard", "--atlas-duration-pulse", "--atlas-easing-linear",
     ]) expect(css).toContain(`var(${token})`)
   })

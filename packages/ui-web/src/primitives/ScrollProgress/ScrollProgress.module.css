@@ -8,7 +8,7 @@
   overflow: hidden;
   box-sizing: border-box;
   background-color: var(--atlas-background-muted);
-  border-radius: var(--atlas-radius-full);
+  border-radius: var(--atlas-radius-pill);
 }
 
 /* ── Orientation ──────────────────────────────────────────────── */

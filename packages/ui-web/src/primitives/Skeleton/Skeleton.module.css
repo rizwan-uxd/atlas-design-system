@@ -22,7 +22,7 @@
 .skeleton[data-shape="circle"] {
   inline-size: var(--atlas-spacing-10);
   block-size: var(--atlas-spacing-10);
-  border-radius: var(--atlas-radius-full);
+  border-radius: var(--atlas-radius-pill);
 }
 
 /* ── Motion ────────────────────────────────────────────────────── */

@@ -199,7 +199,7 @@
   border: var(--atlas-border-width-2) solid currentColor;
   /* Logical property: transparent gap on the block-start edge (top in LTR/RTL) */
   border-block-start-color: transparent;
-  border-radius: var(--atlas-radius-full);
+  border-radius: var(--atlas-radius-pill);
   flex-shrink: 0;
   /* Duration derived from token via calc(); easing from token */
   animation: atlas-spin calc(var(--atlas-duration-slow) * 2)

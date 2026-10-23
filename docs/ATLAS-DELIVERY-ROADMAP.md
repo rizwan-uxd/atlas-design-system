@@ -185,9 +185,9 @@ Result sources read: `atlas-verify`, `vitest`, `playwright`, `atlas-sync`, `regi
 
 | Metric | Target | Status | Check | Measurable at |
 |---|---:|---|---|---|
-| Token-name drift | 0 | **passing** — 0 drift — all 463 Figma variables and 432 code tokens | `tokens.name-drift` | D1 option B (full variable table) |
-| Missing code tokens | 0 | **failing** — 2 drift — all 463 Figma variables and 432 code tokens | `tokens.missing-in-code` | D1 option B (full variable table) |
-| Missing Figma tokens | 0 | **failing** — 15 drift — all 463 Figma variables and 432 code tokens | `tokens.missing-in-figma` | D1 option B (full variable table) |
+| Token-name drift | 0 | **passing** — 0 drift — all 467 Figma variables and 436 code tokens | `tokens.name-drift` | D1 option B (full variable table) |
+| Missing code tokens | 0 | **failing** — 2 drift — all 467 Figma variables and 436 code tokens | `tokens.missing-in-code` | D1 option B (full variable table) |
+| Missing Figma tokens | 0 | **failing** — 15 drift — all 467 Figma variables and 436 code tokens | `tokens.missing-in-figma` | D1 option B (full variable table) |
 | All supported brand modes compile successfully | pass | not measurable | `design.brand-modes` | M5.6 |
 | Critical visual regression tests pass for every brand mode | pass | not measurable | `visual > sandbox` | now (light/dark only), M5.6 (brands) |
 
@@ -942,6 +942,42 @@ registry** — excluded means the agent can never emit it, the correct safe defa
 
 **M5.6 caveat:** if D1 lands on option D, the brand axis ships without a Figma-side drift gate and the
 doc says so plainly.
+
+### M5.1 radius — ✅ DONE 2026-10-23 (1 session, Kind A)
+
+**As built** (plan `docs/superpowers/plans/2026-10-23-m5-1-radius.md`; DEC-086, CAND-057 to CAND-060):
+
+- **Roles (owner-chosen):** `radius-item` = sm (4), `radius-control` = md (8), `radius-surface` = lg (12),
+  `radius-pill` = full. Created first in Figma `Atlas/Semantic` (named flat, to match that collection; Light and Dark
+  alias the primitive). The variable table was then re-synced (467 variables; drift unchanged at 0 / 2 / 15), and the
+  roles were added to `atlas.tokens.css` as exact `var()` aliases. Eight component radius tokens moved onto roles in
+  Figma and code.
+- **Migration:** 62 uses in 28 component files now name a role (pill 26, surface 21, control 11, item 4).
+  **70 stay primitive** in 36 reasoned entries of `packages/governance/token-primitives.allow.json`:
+  - structural `none`
+  - `xl` and `2xl`
+  - the Image `radius` prop scale
+  - avatar squircle sizes
+  - 37 uses whose step matches a role but whose *meaning* does not (overlays at md, compact controls and focus rings
+    at sm, date-picker controls at lg)
+
+  A role is chosen by meaning, never by value alone. Those 37 are the four candidate roles. Adding any of them is
+  another value-identical stage, and is the owner's call.
+- **Ratchet:** token-lint `semantic-radius`. A primitive radius step in component CSS or a component token fails
+  unless the allowlist gives a reason and the exact count per file and token; a stale entry fails. It is not added to
+  the `raw-design-values` metric (a primitive reference is not a raw value), so the metric table is unchanged.
+- **Zero diff, proven twice:**
+  - The edit diff, with token names masked, is identical line for line.
+  - Computed `border-radius` (4 corners, plus `::before`/`::after`) for every element on `/` (3,402) and
+    `/runtime-demo` (32) shows 0 differences before and after.
+
+  CI's visual job must pass with no baseline change. The PR needs `atlas-approved-new` (four new tokens) and
+  `atlas-native-thaw` (the derived native file gains four keys).
+- **Method for M5.2 (spacing):**
+  - Audit by use, not by line.
+  - Map each use by meaning and write the residue down with reasons.
+  - Migrate with a line-exact script, then prove it with the masked diff plus the computed-style dump.
+  - `token-primitives.allow.json` already has a `family` field: add `"spacing"` to the schema enum.
 
 ---
 

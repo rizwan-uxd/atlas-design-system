@@ -14,7 +14,7 @@
   min-inline-size: 0;
   background-color: var(--atlas-surface);
   border: var(--atlas-border-width-1) solid var(--atlas-border);
-  border-radius: var(--atlas-radius-lg);
+  border-radius: var(--atlas-radius-surface);
   color: var(--atlas-foreground);
   overflow: hidden;
 }

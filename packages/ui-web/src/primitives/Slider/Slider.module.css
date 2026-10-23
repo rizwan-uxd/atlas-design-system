@@ -111,7 +111,7 @@
   inset-block-start: 50%;
   translate: 0 -50%;
   block-size: var(--atlas-spacing-1);
-  border-radius: var(--atlas-radius-full);
+  border-radius: var(--atlas-radius-pill);
   background-color: var(--atlas-background-muted);
 }
 
@@ -129,7 +129,7 @@
   inset-block: 0;
   inset-inline-start: calc(var(--_start) * 1%);
   inline-size: calc((var(--_end) - var(--_start)) * 1%);
-  border-radius: var(--atlas-radius-full);
+  border-radius: var(--atlas-radius-pill);
   background-color: var(--atlas-primary);
   transition:
     inset-inline-start var(--atlas-duration-fast) var(--atlas-easing-standard),
@@ -159,7 +159,7 @@
   inline-size: var(--atlas-spacing-4);
   block-size: var(--atlas-spacing-4);
   border: var(--atlas-border-width-2) solid var(--atlas-primary);
-  border-radius: var(--atlas-radius-full);
+  border-radius: var(--atlas-radius-pill);
   background-color: var(--atlas-surface);
   box-shadow: var(--atlas-shadow-sm);
   cursor: grab;

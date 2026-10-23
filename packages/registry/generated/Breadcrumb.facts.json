@@ -214,7 +214,7 @@
       "Separator": ["chevron", "dot"]
     }
   },
-  "tokensUsed": ["--atlas-background", "--atlas-border-width-2", "--atlas-duration-fast", "--atlas-easing-standard", "--atlas-focus-ring", "--atlas-font-sans", "--atlas-font-size-sm", "--atlas-font-weight-regular", "--atlas-foreground", "--atlas-foreground-muted", "--atlas-icon-size-xs", "--atlas-line-height-normal", "--atlas-primary", "--atlas-radius-md", "--atlas-radius-sm", "--atlas-spacing-0", "--atlas-spacing-1", "--atlas-spacing-1_5", "--atlas-spacing-6", "--atlas-touch-min"],
+  "tokensUsed": ["--atlas-background", "--atlas-border-width-2", "--atlas-duration-fast", "--atlas-easing-standard", "--atlas-focus-ring", "--atlas-font-sans", "--atlas-font-size-sm", "--atlas-font-weight-regular", "--atlas-foreground", "--atlas-foreground-muted", "--atlas-icon-size-xs", "--atlas-line-height-normal", "--atlas-primary", "--atlas-radius-control", "--atlas-radius-item", "--atlas-spacing-0", "--atlas-spacing-1", "--atlas-spacing-1_5", "--atlas-spacing-6", "--atlas-touch-min"],
   "module": {
     "imports": [
       { "from": "@atlas/ui-web/patterns/Breadcrumb/Breadcrumb", "name": "BreadcrumbSeparatorStyle", "kind": "named" }

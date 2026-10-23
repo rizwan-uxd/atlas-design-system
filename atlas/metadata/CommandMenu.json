@@ -16,7 +16,7 @@
     { "name": "children", "required": false, "type": "React.ReactNode" }
   ],
   "subcomponents": ["CommandMenuContent", "CommandMenuGroup", "CommandMenuItem"],
-  "tokensUsed": ["--atlas-background-accent", "--atlas-border-width-2", "--atlas-font-size-sm", "--atlas-font-size-xs", "--atlas-font-weight-medium", "--atlas-foreground", "--atlas-foreground-muted", "--atlas-icon-size-xs", "--atlas-letter-spacing-wide", "--atlas-opacity-disabled", "--atlas-radius-sm", "--atlas-spacing-1", "--atlas-spacing-10", "--atlas-spacing-1_5", "--atlas-spacing-2", "--atlas-spacing-6"],
+  "tokensUsed": ["--atlas-background-accent", "--atlas-border-width-2", "--atlas-font-size-sm", "--atlas-font-size-xs", "--atlas-font-weight-medium", "--atlas-foreground", "--atlas-foreground-muted", "--atlas-icon-size-xs", "--atlas-letter-spacing-wide", "--atlas-opacity-disabled", "--atlas-radius-item", "--atlas-spacing-1", "--atlas-spacing-10", "--atlas-spacing-1_5", "--atlas-spacing-2", "--atlas-spacing-6"],
   "figmaNodeId": "990:211",
   "figmaFileKey": "cKYhfaHLCoyMHi9nKr63Ig",
   "figmaProperties": { "Size": ["md", "lg"], "State": ["default", "empty", "loading"] },

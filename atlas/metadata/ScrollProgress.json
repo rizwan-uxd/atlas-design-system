@@ -15,7 +15,7 @@
     { "name": "axis", "required": false, "type": "ScrollProgressAxis" }
   ],
   "subcomponents": [],
-  "tokensUsed": ["--atlas-background-muted", "--atlas-duration-fast", "--atlas-easing-standard", "--atlas-primary", "--atlas-radius-full", "--atlas-radius-none", "--atlas-spacing-1", "--atlas-z-sticky"],
+  "tokensUsed": ["--atlas-background-muted", "--atlas-duration-fast", "--atlas-easing-standard", "--atlas-primary", "--atlas-radius-none", "--atlas-radius-pill", "--atlas-spacing-1", "--atlas-z-sticky"],
   "figmaNodeId": "734:27",
   "figmaFileKey": "cKYhfaHLCoyMHi9nKr63Ig",
   "figmaProperties": { "Orientation": ["horizontal", "vertical"], "Scope": ["page", "container"], "Progress": ["0", "50", "100"] },

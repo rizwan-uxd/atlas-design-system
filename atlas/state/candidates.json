@@ -158,6 +158,38 @@
       "composedFrom": "the runtime's structural Form: an intrinsic <form> (DEC-080) around Field, TextField, Button and Alert; the demo page spaces it with a local grid (runtime-demo.css)",
       "occurrences": 1,
       "note": "Raised by M4 (2026-10-23, roadmap M4: log the Form gap). Form is a registered structural type composed by the runtime as an intrinsic <form>; there is no Form component in Figma or ui-web, so field spacing and the submit row are page CSS. A Form component (layout, submit row, error summary) needs a Figma-first atlas-component session and the user's go-ahead."
+    },
+    {
+      "id": "CAND-057",
+      "name": "Radius role: overlay / inline surface at md (8px)",
+      "seenIn": ["packages/ui-web/src/compositions/Alert", "packages/ui-web/src/compositions/Chart", "packages/ui-web/src/patterns/DropdownMenu", "packages/ui-web/src/compositions/ListItem", "packages/ui-web/src/primitives/Skeleton", "packages/ui-web/src/primitives/Table", "packages/ui-web/src/primitives/Tooltip", "packages/tokens/atlas.tokens.css (select-content-radius)"],
+      "composedFrom": "--atlas-radius-md on non-interactive surfaces and overlay panels (alert banner, chart tooltip, menu panel, list tile media, skeleton rect, table frame and corner cells, tooltip panel, select content)",
+      "occurrences": 12,
+      "note": "Raised by M5.1 (2026-10-23, DEC-086): radius-control (md) means an interactive control, so it would mislabel them; radius-surface is lg (12px). These uses stay on the primitive step, allowlisted in packages/governance/token-primitives.allow.json; a new role is value-identical (Kind A) and needs Figma first plus the owner's go-ahead."
+    },
+    {
+      "id": "CAND-058",
+      "name": "Radius role: compact control or mark at sm (4px)",
+      "seenIn": ["packages/ui-web/src/compositions/Alert", "packages/ui-web/src/primitives/Badge", "packages/ui-web/src/compositions/Chart", "packages/ui-web/src/compositions/DatePicker", "packages/ui-web/src/compositions/ListItem", "packages/ui-web/src/layouts/NavBar", "packages/ui-web/src/primitives/Tooltip", "packages/tokens/atlas.tokens.css (checkbox-radius)"],
+      "composedFrom": "--atlas-radius-sm on small icon buttons (alert dismiss, badge remove, date-picker trailing and nav buttons), marks (chart bars and swatches, square badge, tooltip arrow, checkbox box), list image media and the NavBar bar variants",
+      "occurrences": 14,
+      "note": "Raised by M5.1 (2026-10-23, DEC-086): radius-item (sm) means a row inside a list or menu, so it would mislabel them. These uses stay on the primitive step, allowlisted in packages/governance/token-primitives.allow.json; a new role is value-identical (Kind A) and needs Figma first plus the owner's go-ahead."
+    },
+    {
+      "id": "CAND-059",
+      "name": "Radius role: focus ring corner (sm, 4px)",
+      "seenIn": ["packages/ui-web/src/compositions/CodeBlock", "packages/ui-web/src/layouts/NavBar", "packages/ui-web/src/patterns/Tabs"],
+      "composedFrom": "--atlas-radius-sm on :focus-visible outlines (code block scroll area, NavBar link and tab, tab trigger)",
+      "occurrences": 4,
+      "note": "Raised by M5.1 (2026-10-23, DEC-086): A focus outline corner is not a component role; a focus-ring radius would sit beside the focus-ring colour token. These uses stay on the primitive step, allowlisted in packages/governance/token-primitives.allow.json; a new role is value-identical (Kind A) and needs Figma first plus the owner's go-ahead."
+    },
+    {
+      "id": "CAND-060",
+      "name": "Radius role: large control at lg (12px)",
+      "seenIn": ["packages/ui-web/src/compositions/DatePicker"],
+      "composedFrom": "--atlas-radius-lg on the date-picker trigger, caption select and date cells, including range row ends",
+      "occurrences": 7,
+      "note": "Raised by M5.1 (2026-10-23, DEC-086): radius-surface (lg) means a raised container, so it would mislabel these controls; radius-control is md (8px). These uses stay on the primitive step, allowlisted in packages/governance/token-primitives.allow.json; a new role is value-identical (Kind A) and needs Figma first plus the owner's go-ahead."
     }
   ]
 }

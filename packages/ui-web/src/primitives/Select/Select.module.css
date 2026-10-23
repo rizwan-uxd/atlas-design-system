@@ -145,7 +145,7 @@
   padding-block: var(--atlas-spacing-1_5);
   padding-inline-start: var(--atlas-spacing-8);
   padding-inline-end: var(--atlas-spacing-2);
-  border-radius: var(--atlas-radius-sm);
+  border-radius: var(--atlas-radius-item);
   color: var(--atlas-select-item-foreground);
   cursor: default;
   user-select: none;

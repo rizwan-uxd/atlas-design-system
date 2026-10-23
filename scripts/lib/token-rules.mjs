@@ -124,6 +124,47 @@ export function reducedMotionMissing(css) {
   return /var\(\s*--atlas-duration-/.test(src) && !/@media[^{]*prefers-reduced-motion/.test(src)
 }
 
+// ─── semantic-radius (M5.1) ──────────────────────────────────────────────────
+// Component code names a radius ROLE (--atlas-radius-item|control|surface|pill). A primitive step is
+// legal only where packages/governance/token-primitives.allow.json gives a reason and the exact count
+// per file and token, so a new primitive use fails and a migrated one leaves a stale count that fails too.
+
+const RADIUS_PRIMITIVE = /var\(\s*(--atlas-radius-(?:none|base|sm|md|lg|xl|2xl|full))\s*\)/g
+const RADIUS_ANY = /var\(\s*--atlas-radius-[\w-]+\s*\)/g
+
+/**
+ * @param files [{ file, src }] component CSS, plus the component-token lines of atlas.tokens.css
+ * @param allow [{ family, file, token, count, reason }] — only family "radius" entries are read
+ * @returns {{ violations: {file, line, text}[], inspected: number }}
+ */
+export function semanticRadiusViolations(files, allow) {
+  const violations = []
+  const used = new Set()
+  let inspected = 0
+  for (const { file, src } of files) {
+    const s = stripComments(src)
+    inspected += (s.match(RADIUS_ANY) ?? []).length
+    const byToken = new Map()
+    for (const m of s.matchAll(RADIUS_PRIMITIVE)) {
+      if (!byToken.has(m[1])) byToken.set(m[1], [])
+      byToken.get(m[1]).push(lineOf(s, m.index))
+    }
+    for (const [token, lines] of byToken) {
+      const i = allow.findIndex((a) => a.family === "radius" && a.file === file && a.token === token)
+      if (i === -1) {
+        lines.forEach((line) => violations.push({ file, line, text: `${token} — use a radius role (item|control|surface|pill), or list it with a reason in packages/governance/token-primitives.allow.json` }))
+        continue
+      }
+      used.add(i)
+      if (allow[i].count !== lines.length) violations.push({ file, line: lines[0], text: `${token}: ${lines.length} uses, allowlist says ${allow[i].count} — update the count or use a role` })
+    }
+  }
+  allow.forEach((a, i) => {
+    if (a.family === "radius" && !used.has(i)) violations.push({ file: a.file, line: 0, text: `stale allowlist entry ${a.token} — no such use; remove it from packages/governance/token-primitives.allow.json` })
+  })
+  return { violations, inspected }
+}
+
 // ─── metric rows ─────────────────────────────────────────────────────────────
 // The token-lint rules behind each Phase 2d metric row. atlas-verify reports one check per row and
 // metrics-report measures the committed tree with the same grouping, so the two cannot disagree.
