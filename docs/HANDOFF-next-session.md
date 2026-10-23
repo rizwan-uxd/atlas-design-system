@@ -32,10 +32,10 @@ M3 exit: 0/6 types `registryComplete`, **47/47 generated contracts** (hand-writt
 - **`main` has Phase 1 (#98), M1 (#99), D1 (#100) and M2 (#101).** The post-merge check passed on
   `dd039b1`: `node scripts/atlas-verify.mjs --only design.schemas` → `PASS schemas (58/58 files valid ·
   5 schemas)`, and the roadmap kept both the M2 and D1 sections.
-- **M3 session 3 is on branch `claude/atlas-m3-session3`** (stacked on #103). Protocol schemas per
+- **M3 session 3 is on branch `claude/atlas-m3-session3`** (cut before #103 squash-merged; its diff against `main` is session 3 only). Protocol schemas per
   entry, `componentMap.ts`, `no-new-components` covers registry entries; `registry:check` → 4 entries,
   47 facts, 47 contracts, 4 schemas, 115 rules.
-- **M3 session 2 is PR #103** (`claude/atlas-roadmap-progress`, with the progress-table commit). Facts and generated contracts for all 47; `registry:check` → 4 entries, 47 facts, 47
+- **M3 session 2 is merged (#103)**, with the progress-table commit. Facts and generated contracts for all 47; `registry:check` → 4 entries, 47 facts, 47
   contracts, 115 rules. Audit result and the 10-component sub-part gap are in the M3 plan, "Session 2".
 - **M3 session 1 is merged (#102, `3993837`).** It adds `packages/registry/{aliases.json,src/,generated/}`, `registry.schema.json`,
   `scripts/lib/registry.mjs`, `scripts/registry-build.mjs`, `npm run registry:build|registry:check`
