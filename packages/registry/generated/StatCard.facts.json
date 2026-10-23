@@ -1,0 +1,56 @@
+{
+  "_generated": "GENERATED — do not hand-edit. registry-build from packages/ui-web/src/compositions/StatCard/StatCard.tsx, Code Connect and atlas/metadata; run npm run registry:build.",
+  "name": "StatCard",
+  "import": "@atlas/ui-web/compositions/StatCard/StatCard",
+  "source": "packages/ui-web/src/compositions/StatCard/StatCard.tsx",
+  "part": "StatCard",
+  "propsType": "StatCardProps",
+  "props": [
+    { "name": "className", "type": "string", "optional": true },
+    { "name": "delta", "type": "StatCardDelta", "optional": true },
+    { "name": "disabled", "type": "boolean", "optional": true },
+    { "name": "icon", "type": "React.ReactNode", "optional": true },
+    { "name": "id", "type": "string", "optional": true },
+    { "name": "label", "type": "React.ReactNode", "optional": false },
+    { "name": "loading", "type": "boolean", "optional": true },
+    { "name": "onClick", "type": "React.MouseEventHandler<HTMLElement>", "optional": true },
+    { "name": "period", "type": "React.ReactNode", "optional": false },
+    { "name": "size", "type": "StatCardSize", "optional": true },
+    { "name": "sparkline", "type": "StatCardSparkline", "optional": true },
+    { "name": "value", "type": "React.ReactNode", "optional": false }
+  ],
+  "inherited": {},
+  "events": [
+    { "name": "onClick", "type": "MouseEventHandler<HTMLElement>" }
+  ],
+  "unions": {
+    "size": ["lg", "md", "sm"]
+  },
+  "codeConnect": {
+    "file": "packages/figma-sync/code-connect/StatCard.figma.tsx",
+    "bound": "StatCard",
+    "instances": {},
+    "stateProps": { "loading": "loading" },
+    "enums": {
+      "disabled": "Interaction",
+      "icon": "Leading icon",
+      "loading": "State",
+      "onClick": "Interaction",
+      "sentiment": "Sentiment",
+      "size": "Size",
+      "sparkline": "Sparkline"
+    }
+  },
+  "figma": {
+    "nodeId": "867:351",
+    "axes": {
+      "Size": ["sm", "md", "lg"],
+      "State": ["default", "loading"],
+      "Sentiment": ["positive", "negative", "neutral"],
+      "Leading icon": ["off", "on"],
+      "Sparkline": ["off", "on"],
+      "Interaction": ["static", "hover", "focus-visible", "active", "disabled"]
+    }
+  },
+  "tokensUsed": ["--atlas-font-sans", "--atlas-font-size-2xl", "--atlas-font-size-3xl", "--atlas-font-size-4xl", "--atlas-font-size-xs", "--atlas-font-weight-semibold", "--atlas-foreground", "--atlas-foreground-muted", "--atlas-icon-size-xs", "--atlas-line-height-normal", "--atlas-line-height-tight", "--atlas-spacing-16", "--atlas-spacing-2"]
+}

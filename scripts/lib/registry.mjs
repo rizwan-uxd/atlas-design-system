@@ -59,19 +59,25 @@ function declaringName(decl) {
 }
 
 /**
- * Facts for one component from a program that contains `file`.
- * Throws when `<name>Props` is not exported: a component the registry cannot read is a failure,
- * never an empty fact sheet.
- * @returns {{ props: {name,type,optional}[], inherited: Record<string,string[]>, events: {name,type}[], unions: Record<string,string[]> }}
+ * Facts for one exported component part, read from the first parameter of its call signature: the
+ * props React itself type-checks against (`React.ComponentProps<typeof Part>`), so a function
+ * component, a `forwardRef` and a re-exported Radix part are read the same way.
+ * Throws when the part is not exported or not callable: a component the registry cannot read is a
+ * failure, never an empty fact sheet.
+ * @returns {{ propsType: string, props: {name,type,optional}[], inherited: Record<string,string[]>, events: {name,type}[], unions: Record<string,string[]> }}
  */
-export function extractFacts(program, file, name) {
+export function extractFacts(program, file, part) {
   const checker = program.getTypeChecker()
   const sf = program.getSourceFile(file)
   if (!sf) throw new Error(`registry: ${file} is not in the program`)
   const mod = checker.getSymbolAtLocation(sf)
-  const propsSym = mod && checker.getExportsOfModule(mod).find((s) => s.name === `${name}Props`)
-  if (!propsSym) throw new Error(`registry: ${path.basename(file)} does not export ${name}Props`)
-  const type = checker.getDeclaredTypeOfSymbol(propsSym)
+  let sym = mod && checker.getExportsOfModule(mod).find((s) => s.name === part)
+  if (!sym) throw new Error(`registry: ${path.basename(file)} does not export ${part}`)
+  if (sym.flags & ts.SymbolFlags.Alias) sym = checker.getAliasedSymbol(sym)
+  const [sig] = checker.getTypeOfSymbol(sym).getCallSignatures()
+  const param = sig?.getParameters()[0]
+  if (!param) throw new Error(`registry: ${part} in ${path.basename(file)} is not a component that takes props`)
+  const type = checker.getTypeOfSymbol(param)
 
   const props = [], inherited = {}, events = [], unions = {}
   for (const p of checker.getPropertiesOfType(type)) {
@@ -92,7 +98,8 @@ export function extractFacts(program, file, name) {
   const byName = (a, b) => a.name.localeCompare(b.name)
   props.sort(byName); events.sort(byName)
   for (const g of Object.keys(inherited)) inherited[g].sort()
-  return { props, inherited: sortKeys(inherited), events, unions: sortKeys(unions) }
+  const propsType = checker.typeToString(type, undefined, ts.TypeFormatFlags.NoTruncation)
+  return { propsType, props, inherited: sortKeys(inherited), events, unions: sortKeys(unions) }
 }
 
 const sortKeys = (o) => Object.fromEntries(Object.keys(o).sort().map((k) => [k, o[k]]))
@@ -111,47 +118,74 @@ const stringArg = (call, i) => {
 
 const keyText = (name) => (ts.isIdentifier(name) || ts.isStringLiteralLike(name) ? name.text : undefined)
 
+/** The JSX tag name of an element: `Button`, or `Dialog.Content` for a property access. */
+const tagName = (n) => n.tagName.getText()
+
 /**
- * What a Code Connect file says about slots and states, read from its `props` mapping:
- * `instances` prop → Figma instance-swap layer (`figma.instance("Leading icon slot")`),
- * `stateProps` Figma `State` member → prop (`loading: figma.enum("State", { loading: true })`),
+ * What a Code Connect file says about the Figma component at `nodeId`, read from the one
+ * `figma.connect(Bound, "…node-id=<nodeId>", { props, example })` call that binds it:
+ * `bound` the export it is connected to; `part` the element in `example` that the mapped props
+ * drive (`<DrawerContent side={side}>` while `Drawer` is bound), which is whose props the facts read;
+ * `instances` prop → Figma instance-swap layer (`figma.instance("Leading icon slot")`);
+ * `stateProps` Figma `State` member → prop (`loading: figma.enum("State", { loading: true })`);
  * `enums` prop → Figma axis.
+ * Throws when no connect call binds `nodeId`: the facts would otherwise describe another component.
  */
-export function codeConnectFacts(src, fileName = "x.figma.tsx") {
+export function codeConnectFacts(src, nodeId, fileName = "x.figma.tsx") {
   const sf = ts.createSourceFile(fileName, src, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX)
+  const connects = []
+  const find = (n) => { if (isFigmaCall(n, "connect")) connects.push(n); ts.forEachChild(n, find) }
+  find(sf)
+  const node = (call) => /node-id=(\d+)-(\d+)/.exec(stringArg(call, 1) ?? "")?.slice(1).join(":")
+  const call = connects.find((c) => node(c) === nodeId)
+  if (!call) throw new Error(`registry: ${fileName} has no figma.connect for node ${nodeId} (found ${connects.map(node).join(", ") || "none"})`)
+
+  const bound = call.arguments[0].getText(sf)
   const instances = {}, stateProps = {}, enums = {}
-  const visitMapping = (key, node) => {
-    const walk = (n) => {
-      if (isFigmaCall(n, "instance")) { const layer = stringArg(n, 0); if (layer) instances[key] = layer }
-      if (isFigmaCall(n, "enum")) {
-        const axis = stringArg(n, 0)
-        if (axis) enums[key] = axis
-        const map = n.arguments[1]
-        if (axis === "State" && map && ts.isObjectLiteralExpression(map))
-          for (const m of map.properties)
-            if (ts.isPropertyAssignment(m) && m.initializer.kind === ts.SyntaxKind.TrueKeyword) {
-              const member = keyText(m.name)
-              if (member) stateProps[member] = key
-            }
-      }
-      ts.forEachChild(n, walk)
-    }
-    walk(node)
-  }
-  const visit = (n) => {
-    if (isFigmaCall(n, "connect")) {
-      const opts = n.arguments.find((a) => ts.isObjectLiteralExpression(a))
-      const propsProp = opts?.properties.find((p) => ts.isPropertyAssignment(p) && keyText(p.name) === "props")
-      if (propsProp && ts.isObjectLiteralExpression(propsProp.initializer))
-        for (const m of propsProp.initializer.properties) {
-          const key = ts.isPropertyAssignment(m) ? keyText(m.name) : undefined
-          if (key) visitMapping(key, m.initializer)
+  const opts = call.arguments.find((a) => ts.isObjectLiteralExpression(a))
+  const member = (name) => opts?.properties.find((p) => (ts.isPropertyAssignment(p) || ts.isMethodDeclaration(p)) && keyText(p.name) === name)
+  const propsProp = member("props")
+  if (propsProp && ts.isObjectLiteralExpression(propsProp.initializer))
+    for (const m of propsProp.initializer.properties) {
+      const key = ts.isPropertyAssignment(m) ? keyText(m.name) : undefined
+      if (!key) continue
+      const walk = (n) => {
+        if (isFigmaCall(n, "instance")) { const layer = stringArg(n, 0); if (layer) instances[key] = layer }
+        if (isFigmaCall(n, "enum")) {
+          const axis = stringArg(n, 0)
+          if (axis) enums[key] = axis
+          const map = n.arguments[1]
+          if (axis === "State" && map && ts.isObjectLiteralExpression(map))
+            for (const e of map.properties)
+              if (ts.isPropertyAssignment(e) && e.initializer.kind === ts.SyntaxKind.TrueKeyword) {
+                const state = keyText(e.name)
+                if (state) stateProps[state] = key
+              }
         }
+        ts.forEachChild(n, walk)
+      }
+      walk(m.initializer)
     }
-    ts.forEachChild(n, visit)
+
+  // the element receiving the most `{mappedProp}` attributes; ties go to the bound export, then source order
+  const mapped = new Set([...Object.keys(enums), ...Object.keys(instances), ...(propsProp && ts.isObjectLiteralExpression(propsProp.initializer) ? propsProp.initializer.properties.map((m) => keyText(m.name)).filter(Boolean) : [])])
+  const counts = new Map()
+  const example = member("example")
+  const scan = (n) => {
+    if (ts.isJsxOpeningElement(n) || ts.isJsxSelfClosingElement(n)) {
+      const hits = n.attributes.properties.filter((a) => ts.isJsxAttribute(a) && a.initializer && ts.isJsxExpression(a.initializer) &&
+        a.initializer.expression && ts.isIdentifier(a.initializer.expression) && mapped.has(a.initializer.expression.text)).length
+      const tag = tagName(n)
+      if (!counts.has(tag)) counts.set(tag, 0)
+      counts.set(tag, counts.get(tag) + hits)
+    }
+    ts.forEachChild(n, scan)
   }
-  visit(sf)
-  return { instances: sortKeys(instances), stateProps: sortKeys(stateProps), enums: sortKeys(enums) }
+  if (example) scan(example)
+  let part = bound, best = counts.get(bound) ?? 0
+  for (const [tag, hits] of counts) if (hits > best) { part = tag; best = hits }
+
+  return { bound, part, instances: sortKeys(instances), stateProps: sortKeys(stateProps), enums: sortKeys(enums) }
 }
 
 /* ── the invariant ──────────────────────────────────────────────────────── */
@@ -272,4 +306,53 @@ export function checkRegistry({ entries, aliases, facts, components, cssTokens }
     }
   }
   return { fail, warn, inspected: Object.keys(entries).length, rules }
+}
+
+/* ── generated contracts ───────────────────────────────────────────────── */
+
+export const ASSERT_SOURCE = `// GENERATED — do not hand-edit. registry-build; run npm run registry:build.
+// Helpers for the generated contracts. Tuple form ([A] extends [B]) stops a union from distributing,
+// so Exact catches a member REMOVED as well as one added — the hole in the hand-written contracts.
+export type Exact<A, B> = [A] extends [B] ? ([B] extends [A] ? true : false) : false
+/** Per-prop existence: cannot collapse the way Pick<P, keyof A & keyof P> did when a prop was deleted. */
+export type Has<P, K extends PropertyKey> = K extends keyof P ? true : false
+export type IsOptional<P, K extends PropertyKey> = K extends keyof P ? ({} extends Pick<P, K> ? true : false) : false
+/** A false assertion is a type error on the line that names it (\`type Own_iconOnly = Assert<…>\`). */
+export type Assert<T extends true> = T
+`
+
+/**
+ * The contract for one component: a one-way tripwire derived from the facts (own props, their
+ * optionality, string unions) and from any registry entry rendering it (protocolProps, event handlers).
+ * Authoritative over neither; never hand-edited.
+ */
+export function contractSource(f, entries) {
+  const root = f.part.split(".")[0]
+  const q = JSON.stringify
+  const id = (n) => n.replace(/[^A-Za-z0-9]/g, "_")
+  const lines = []
+  lines.push(`// own props of ${f.part}: deleting one, or flipping its optionality, fails here`)
+  for (const p of f.props) {
+    lines.push(`type Own_${id(p.name)} = Assert<Has<P, ${q(p.name)}>>`)
+    lines.push(`type Optional_${id(p.name)} = Assert<Exact<IsOptional<P, ${q(p.name)}>, ${p.optional}>>`)
+  }
+  const unions = Object.entries(f.unions).filter(([k]) => f.props.some((p) => p.name === k))
+  if (unions.length) lines.push("", `// string unions: exactly these members, so removing one fails as well as adding one`)
+  for (const [k, members] of unions) lines.push(`type Union_${id(k)} = Assert<Exact<NonNullable<P[${q(k)}]>, ${members.map(q).join(" | ")}>>`)
+  for (const e of entries) {
+    const names = [...Object.keys(e.protocolProps ?? {}), ...Object.values(e.events ?? {}).map((x) => x.handler)]
+    if (!names.length) continue
+    lines.push("", `// registry ${e.type}: its protocolProps and event handlers exist`)
+    for (const n of names) lines.push(`type Registry_${e.type}_${id(n)} = Assert<Has<P, ${q(n)}>>`)
+  }
+  return `// GENERATED — do not hand-edit. registry-build from packages/registry/generated/${f.name}.facts.json; run npm run registry:build.
+// A one-way tripwire (roadmap §2c): it asserts what the facts recorded and is never consulted as a definition.
+import type React from "react"
+import type { ${root} } from "${f.import}"
+import type { Assert, Exact, Has, IsOptional } from "./_assert"
+
+type P = React.ComponentProps<typeof ${f.part}>
+
+${lines.join("\n")}
+`
 }

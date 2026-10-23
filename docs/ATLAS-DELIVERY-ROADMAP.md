@@ -478,7 +478,19 @@ inputs schema-validated — the honest proxy for "100% protocol messages passing
 years before a protocol exists.
 **Exit (M2):** corrupting one field in `atlas/metadata/Button.json` turns a PASS into a FAIL.
 
-### 2c → M3. The registry, and three-way agreement (3–4 sessions) — session 1 of 4 landed 2026-10-23
+### 2c → M3. The registry, and three-way agreement (3–4 sessions) — sessions 1–2 of 4 landed 2026-10-23
+
+> **Session 2 landed.** Facts and a generated contract for **all 47** components
+> (`packages/governance/contracts/generated/`, next to the 44 hand-written ones). `registry:check`:
+> **4 entries, 47 facts, 47 contracts, 115 rules**. Deleting a variant, deleting a prop or making an
+> optional prop required now fails `tsc` in the generated contract, while the hand-written one stays
+> silent (shown on the real Button, kept as script tests). **The audit found no drift** between the
+> hand contracts and the code; it found coverage gaps: 3 components with no contract, 26 own props
+> guarded by nothing, both now covered. Two things differ from this section: facts read the **part
+> Code Connect's example drives** (DrawerContent for Drawer, TableHead for Table), because 7
+> components bind a sub-part or export no `<Name>Props`; and **10 hand contracts also guard
+> sub-parts** (SelectProps, TableCellProps, …) that generation does not cover yet, so deleting the 44
+> waits until it does (session 4). Details: the M3 plan, "Session 2".
 
 > **Session 1 landed** (plan: `docs/superpowers/plans/2026-10-23-m3-registry.md`, which records the
 > design decisions below as numbered choices). `packages/registry/aliases.json`, four authored entries

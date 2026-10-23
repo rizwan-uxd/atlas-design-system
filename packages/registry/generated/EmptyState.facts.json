@@ -1,0 +1,36 @@
+{
+  "_generated": "GENERATED — do not hand-edit. registry-build from packages/ui-web/src/compositions/EmptyState/EmptyState.tsx, Code Connect and atlas/metadata; run npm run registry:build.",
+  "name": "EmptyState",
+  "import": "@atlas/ui-web/compositions/EmptyState/EmptyState",
+  "source": "packages/ui-web/src/compositions/EmptyState/EmptyState.tsx",
+  "part": "EmptyState",
+  "propsType": "EmptyStateProps",
+  "props": [
+    { "name": "action", "type": "React.ReactNode", "optional": true },
+    { "name": "className", "type": "string", "optional": true },
+    { "name": "description", "type": "React.ReactNode", "optional": true },
+    { "name": "icon", "type": "React.ReactNode", "optional": true },
+    { "name": "secondaryAction", "type": "React.ReactNode", "optional": true },
+    { "name": "size", "type": "EmptyStateSize", "optional": true },
+    { "name": "title", "type": "React.ReactNode", "optional": true }
+  ],
+  "inherited": {},
+  "events": [],
+  "unions": {
+    "size": ["lg", "md", "sm"]
+  },
+  "codeConnect": {
+    "file": "packages/figma-sync/code-connect/EmptyState.figma.tsx",
+    "bound": "EmptyState",
+    "instances": { "action": "Action", "icon": "Icon", "secondaryAction": "Secondary action" },
+    "stateProps": {},
+    "enums": { "size": "Size" }
+  },
+  "figma": {
+    "nodeId": "858:60",
+    "axes": {
+      "Size": ["sm", "md", "lg"]
+    }
+  },
+  "tokensUsed": ["--atlas-font-sans", "--atlas-font-weight-regular", "--atlas-font-weight-semibold", "--atlas-foreground", "--atlas-foreground-muted", "--atlas-foreground-subtle", "--atlas-icon-size-lg", "--atlas-icon-size-md", "--atlas-icon-stroke-lg", "--atlas-icon-stroke-md", "--atlas-line-height-normal", "--atlas-line-height-snug", "--atlas-spacing-12", "--atlas-spacing-3", "--atlas-spacing-6", "--atlas-text-body", "--atlas-text-body-sm", "--atlas-text-h2", "--atlas-text-h3", "--atlas-text-h4"]
+}

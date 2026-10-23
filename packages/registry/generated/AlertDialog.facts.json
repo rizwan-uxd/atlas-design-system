@@ -1,0 +1,39 @@
+{
+  "_generated": "GENERATED — do not hand-edit. registry-build from packages/ui-web/src/compositions/AlertDialog/AlertDialog.tsx, Code Connect and atlas/metadata; run npm run registry:build.",
+  "name": "AlertDialog",
+  "import": "@atlas/ui-web/compositions/AlertDialog/AlertDialog",
+  "source": "packages/ui-web/src/compositions/AlertDialog/AlertDialog.tsx",
+  "part": "AlertDialogContent",
+  "propsType": "AlertDialogContentProps",
+  "props": [
+    { "name": "children", "type": "React.ReactNode", "optional": true },
+    { "name": "className", "type": "string", "optional": true },
+    { "name": "id", "type": "string", "optional": true },
+    { "name": "size", "type": "AlertDialogSize", "optional": true },
+    { "name": "state", "type": "\"default\" | \"loading\"", "optional": true },
+    { "name": "variant", "type": "AlertDialogVariant", "optional": true }
+  ],
+  "inherited": {},
+  "events": [],
+  "unions": {
+    "size": ["lg", "md", "sm"],
+    "state": ["default", "loading"],
+    "variant": ["default", "destructive"]
+  },
+  "codeConnect": {
+    "file": "packages/figma-sync/code-connect/AlertDialog.figma.tsx",
+    "bound": "AlertDialogContent",
+    "instances": {},
+    "stateProps": {},
+    "enums": { "size": "Size", "state": "State", "variant": "Variant" }
+  },
+  "figma": {
+    "nodeId": "700:6560",
+    "axes": {
+      "Variant": ["default", "destructive"],
+      "Size": ["sm", "md", "lg"],
+      "State": ["default", "loading"]
+    }
+  },
+  "tokensUsed": ["--atlas-border", "--atlas-border-width-1", "--atlas-dialog-lg", "--atlas-dialog-md", "--atlas-dialog-sm", "--atlas-duration-base", "--atlas-duration-fast", "--atlas-easing-emphasized", "--atlas-easing-exit", "--atlas-easing-standard", "--atlas-font-sans", "--atlas-font-weight-semibold", "--atlas-foreground", "--atlas-foreground-muted", "--atlas-line-height-normal", "--atlas-line-height-tight", "--atlas-overlay", "--atlas-radius-lg", "--atlas-shadow-xl", "--atlas-spacing-1", "--atlas-spacing-3", "--atlas-spacing-4", "--atlas-spacing-6", "--atlas-spacing-8", "--atlas-surface-overlay", "--atlas-text-body-sm", "--atlas-text-h3", "--atlas-z-modal", "--atlas-z-overlay"]
+}

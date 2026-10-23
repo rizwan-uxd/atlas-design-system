@@ -1,0 +1,48 @@
+{
+  "_generated": "GENERATED — do not hand-edit. registry-build from packages/ui-web/src/primitives/Checkbox/Checkbox.tsx, Code Connect and atlas/metadata; run npm run registry:build.",
+  "name": "Checkbox",
+  "import": "@atlas/ui-web/primitives/Checkbox/Checkbox",
+  "source": "packages/ui-web/src/primitives/Checkbox/Checkbox.tsx",
+  "part": "Checkbox",
+  "propsType": "CheckboxProps",
+  "props": [
+    { "name": "aria-describedby", "type": "string", "optional": true },
+    { "name": "checked", "type": "boolean | \"indeterminate\"", "optional": true },
+    { "name": "className", "type": "string", "optional": true },
+    { "name": "defaultChecked", "type": "boolean | \"indeterminate\"", "optional": true },
+    { "name": "description", "type": "React.ReactNode", "optional": true },
+    { "name": "disabled", "type": "boolean", "optional": true },
+    { "name": "id", "type": "string", "optional": true },
+    { "name": "invalid", "type": "boolean", "optional": true },
+    { "name": "label", "type": "React.ReactNode", "optional": true },
+    { "name": "onCheckedChange", "type": "(checked: boolean | \"indeterminate\") => void", "optional": true },
+    { "name": "required", "type": "boolean", "optional": true },
+    { "name": "size", "type": "CheckboxSize", "optional": true },
+    { "name": "variant", "type": "CheckboxVariant", "optional": true }
+  ],
+  "inherited": {},
+  "events": [
+    { "name": "onCheckedChange", "type": "(checked: boolean | \"indeterminate\") => void" }
+  ],
+  "unions": {
+    "size": ["lg", "md", "sm"],
+    "variant": ["card", "default"]
+  },
+  "codeConnect": {
+    "file": "packages/figma-sync/code-connect/Checkbox.figma.tsx",
+    "bound": "Checkbox",
+    "instances": {},
+    "stateProps": { "disabled": "disabled" },
+    "enums": { "checked": "Checked", "disabled": "State", "size": "Size", "variant": "Variant" }
+  },
+  "figma": {
+    "nodeId": "82:24",
+    "axes": {
+      "Variant": ["default", "card"],
+      "Checked": ["unchecked", "checked", "indeterminate"],
+      "Size": ["sm", "md", "lg"],
+      "State": ["default", "hover", "focus-visible", "active", "disabled"]
+    }
+  },
+  "tokensUsed": ["--atlas-border-width-1", "--atlas-border-width-2", "--atlas-checkbox-background", "--atlas-checkbox-background-disabled", "--atlas-checkbox-background-hover", "--atlas-checkbox-border", "--atlas-checkbox-border-disabled", "--atlas-checkbox-border-hover", "--atlas-checkbox-card-background", "--atlas-checkbox-card-border", "--atlas-checkbox-card-checked-border", "--atlas-checkbox-card-invalid-border", "--atlas-checkbox-card-radius", "--atlas-checkbox-checked-background", "--atlas-checkbox-checked-background-hover", "--atlas-checkbox-description-foreground", "--atlas-checkbox-description-foreground-disabled", "--atlas-checkbox-foreground", "--atlas-checkbox-gap", "--atlas-checkbox-invalid-border", "--atlas-checkbox-invalid-checked-background", "--atlas-checkbox-invalid-checked-background-hover", "--atlas-checkbox-invalid-checked-foreground", "--atlas-checkbox-label-foreground", "--atlas-checkbox-label-foreground-disabled", "--atlas-checkbox-radius", "--atlas-checkbox-required-foreground", "--atlas-checkbox-required-foreground-disabled", "--atlas-checkbox-size-lg-box", "--atlas-checkbox-size-md-box", "--atlas-checkbox-size-sm-box", "--atlas-duration-fast", "--atlas-easing-emphasized", "--atlas-easing-standard", "--atlas-focus-ring", "--atlas-font-sans", "--atlas-font-size-lg", "--atlas-font-size-sm", "--atlas-font-size-xs", "--atlas-font-weight-semibold", "--atlas-line-height-normal", "--atlas-opacity-disabled", "--atlas-primary", "--atlas-primary-subtle", "--atlas-spacing-0_5", "--atlas-spacing-1", "--atlas-spacing-2", "--atlas-spacing-3", "--atlas-spacing-4", "--atlas-spacing-5", "--atlas-spacing-6", "--atlas-surface-raised", "--atlas-text-body", "--atlas-touch-min"]
+}

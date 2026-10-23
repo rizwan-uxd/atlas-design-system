@@ -1,0 +1,51 @@
+{
+  "_generated": "GENERATED — do not hand-edit. registry-build from packages/ui-web/src/primitives/Badge/Badge.tsx, Code Connect and atlas/metadata; run npm run registry:build.",
+  "name": "Badge",
+  "import": "@atlas/ui-web/primitives/Badge/Badge",
+  "source": "packages/ui-web/src/primitives/Badge/Badge.tsx",
+  "part": "Badge",
+  "propsType": "BadgeProps",
+  "props": [
+    { "name": "appearance", "type": "BadgeAppearance", "optional": true },
+    { "name": "children", "type": "React.ReactNode", "optional": false },
+    { "name": "className", "type": "string", "optional": true },
+    { "name": "disabled", "type": "boolean", "optional": true },
+    { "name": "dot", "type": "boolean", "optional": true },
+    { "name": "leadingIcon", "type": "React.ReactNode", "optional": true },
+    { "name": "onClick", "type": "() => void", "optional": true },
+    { "name": "onRemove", "type": "() => void", "optional": true },
+    { "name": "removable", "type": "boolean", "optional": true },
+    { "name": "removeLabel", "type": "string", "optional": true },
+    { "name": "size", "type": "BadgeSize", "optional": true },
+    { "name": "square", "type": "boolean", "optional": true },
+    { "name": "trailingIcon", "type": "React.ReactNode", "optional": true },
+    { "name": "variant", "type": "BadgeVariant", "optional": true }
+  ],
+  "inherited": {},
+  "events": [
+    { "name": "onClick", "type": "() => void" },
+    { "name": "onRemove", "type": "() => void" }
+  ],
+  "unions": {
+    "appearance": ["default", "outline"],
+    "size": ["lg", "md", "sm"],
+    "variant": ["danger", "info", "neutral", "primary", "success", "warning"]
+  },
+  "codeConnect": {
+    "file": "packages/figma-sync/code-connect/Badge.figma.tsx",
+    "bound": "Badge",
+    "instances": {},
+    "stateProps": { "disabled": "disabled" },
+    "enums": { "appearance": "Appearance", "disabled": "State", "size": "Size", "variant": "Variant" }
+  },
+  "figma": {
+    "nodeId": "123:24",
+    "axes": {
+      "Variant": ["neutral", "primary", "success", "warning", "danger", "info"],
+      "Size": ["sm", "md", "lg"],
+      "State": ["default", "disabled"],
+      "Appearance": ["default", "outline"]
+    }
+  },
+  "tokensUsed": ["--atlas-background-muted", "--atlas-background-subtle", "--atlas-border-strong", "--atlas-border-width-1", "--atlas-border-width-2", "--atlas-danger", "--atlas-danger-muted", "--atlas-danger-subtle", "--atlas-focus-ring", "--atlas-font-sans", "--atlas-font-weight-semibold", "--atlas-foreground", "--atlas-foreground-disabled", "--atlas-icon-stroke-xs", "--atlas-info", "--atlas-info-muted", "--atlas-info-subtle", "--atlas-letter-spacing-wide", "--atlas-line-height-tight", "--atlas-opacity-disabled", "--atlas-opacity-hover", "--atlas-primary", "--atlas-primary-foreground", "--atlas-primary-hover", "--atlas-radius-full", "--atlas-radius-sm", "--atlas-spacing-0_5", "--atlas-spacing-1", "--atlas-spacing-1_5", "--atlas-spacing-2", "--atlas-spacing-3", "--atlas-spacing-4", "--atlas-spacing-5", "--atlas-spacing-6", "--atlas-success", "--atlas-success-muted", "--atlas-success-subtle", "--atlas-text-body-sm", "--atlas-text-caption", "--atlas-touch-min", "--atlas-warning", "--atlas-warning-muted", "--atlas-warning-subtle"]
+}

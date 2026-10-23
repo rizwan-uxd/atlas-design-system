@@ -3,6 +3,8 @@
   "name": "Alert",
   "import": "@atlas/ui-web/compositions/Alert/Alert",
   "source": "packages/ui-web/src/compositions/Alert/Alert.tsx",
+  "part": "Alert",
+  "propsType": "AlertProps",
   "props": [
     { "name": "actions", "type": "React.ReactNode", "optional": true },
     { "name": "children", "type": "React.ReactNode", "optional": true },
@@ -26,6 +28,7 @@
   },
   "codeConnect": {
     "file": "packages/figma-sync/code-connect/Alert.figma.tsx",
+    "bound": "Alert",
     "instances": {},
     "stateProps": {},
     "enums": { "size": "Size", "variant": "Variant" }

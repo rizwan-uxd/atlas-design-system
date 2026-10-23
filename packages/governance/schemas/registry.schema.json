@@ -131,12 +131,17 @@
     "facts": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["_generated", "name", "import", "source", "props", "inherited", "events", "unions", "codeConnect", "figma", "tokensUsed"],
+      "required": ["_generated", "name", "import", "source", "part", "propsType", "props", "inherited", "events", "unions", "codeConnect", "figma", "tokensUsed"],
       "properties": {
         "_generated": { "$ref": "common.schema.json#/$defs/generated" },
         "name": { "$ref": "common.schema.json#/$defs/componentName" },
         "import": { "$ref": "common.schema.json#/$defs/text" },
         "source": { "$ref": "common.schema.json#/$defs/text" },
+        "part": {
+          "description": "The exported element whose props are read: the one Code Connect's example drives with the mapped Figma props (DrawerContent for Drawer).",
+          "type": "string", "pattern": "^[A-Z][A-Za-z0-9]*(\\.[A-Z][A-Za-z0-9]*)?$"
+        },
+        "propsType": { "$ref": "common.schema.json#/$defs/text" },
         "props": {
           "description": "Own props: declared in the component's source file.",
           "type": "array",
@@ -177,9 +182,10 @@
         "codeConnect": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["file", "instances", "stateProps", "enums"],
+          "required": ["file", "bound", "instances", "stateProps", "enums"],
           "properties": {
-            "file": { "oneOf": [{ "$ref": "common.schema.json#/$defs/text" }, { "type": "null" }] },
+            "file": { "$ref": "common.schema.json#/$defs/text" },
+            "bound": { "$ref": "common.schema.json#/$defs/text" },
             "instances": { "$ref": "#/$defs/textMap" },
             "stateProps": { "$ref": "#/$defs/textMap" },
             "enums": { "$ref": "#/$defs/textMap" }
