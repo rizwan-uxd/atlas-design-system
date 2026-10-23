@@ -1,0 +1,16 @@
+.atlas-runtime-demo {
+  max-inline-size: var(--atlas-content-width-md);
+  margin-inline: auto;
+  padding: var(--atlas-spacing-8);
+}
+
+/* The structural Form is an intrinsic <form> with no layout of its own (CAND-056); the demo page spaces it. */
+.atlas-runtime-demo form {
+  display: grid;
+  gap: var(--atlas-spacing-5);
+}
+
+/* The Button wrapper is display: contents, so the button itself is the grid item. */
+.atlas-runtime-demo form > [data-atlas-type="Button"] > button {
+  justify-self: start;
+}
