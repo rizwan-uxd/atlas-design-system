@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://atlas.design-system/schemas/registry/Form.schema.json",
+  "$comment": "GENERATED — do not hand-edit. registry-build from packages/registry/src/Form.registry.json; run npm run registry:build.",
+  "title": "Form protocol node",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["type"],
+  "properties": {
+    "type": { "const": "Form" },
+    "props": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {}
+    }
+  }
+}

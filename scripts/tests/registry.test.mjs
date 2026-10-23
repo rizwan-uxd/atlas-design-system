@@ -8,7 +8,8 @@ import os from "node:os"
 import path from "node:path"
 import { fileURLToPath } from "node:url"
 import ts from "typescript"
-import { ASSERT_SOURCE, checkRegistry, codeConnectFacts, compilerOptions, contractSource, extractFacts, formatJson } from "../lib/registry.mjs"
+import Ajv2020 from "ajv/dist/2020.js"
+import { ASSERT_SOURCE, checkRegistry, codeConnectFacts, compilerOptions, componentMapSource, contractSource, extractFacts, formatJson, jsonTypeOf, protocolSchema } from "../lib/registry.mjs"
 
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..")
 const BUTTON = path.join(REPO, "packages/ui-web/src/primitives/Button/Button.tsx")
@@ -140,6 +141,52 @@ test("a registry entry's protocolProps and handlers become existence assertions"
   assert.match(text, /type Union_variant = Assert<Exact<NonNullable<P\["variant"\]>, "destructive" \| "ghost" \| "link" \| "outline" \| "primary" \| "secondary">>/)
 })
 
+// ─── protocol schemas and the component map ────────────────────────────────
+
+const readJson = (rel) => JSON.parse(fs.readFileSync(path.join(REPO, rel), "utf8"))
+const node = (rel) => new Ajv2020({ strict: true, allErrors: true }).compile(readJson(rel))
+
+test("a generated protocol schema accepts a valid node and rejects unknown props, slots and enum values", () => {
+  const v = node("packages/registry/generated/schemas/Button.schema.json")
+  assert.ok(v({ type: "Button", props: { variant: "primary", disabled: true }, slots: { children: [] } }), JSON.stringify(v.errors))
+  assert.ok(!v({ type: "Button", props: { variant: "tertiary" } }), "an enum value outside protocolProps")
+  assert.ok(!v({ type: "Button", props: { asChild: true } }), "a hidden prop is not on the protocol surface")
+  assert.ok(!v({ type: "Button", props: { style: "color: red" } }), "no raw styling through the protocol")
+  assert.ok(!v({ type: "Button", slots: { footer: [] } }), "an undeclared slot")
+  assert.ok(!v({ type: "TextField" }), "the type is fixed")
+})
+
+test("inherited protocolProps are typed from the code", () => {
+  const props = readJson("packages/registry/generated/schemas/TextField.schema.json").properties.props.properties
+  assert.deepEqual(props.name, { type: "string" })
+  assert.deepEqual(props.value, { anyOf: [{ type: "string" }, { type: "number" }] }, "readonly string[] is dropped, not coerced")
+  assert.deepEqual(props.disabled, { type: "boolean" })
+})
+
+test("a protocolProp no JSON message can carry fails the build instead of being skipped", () => {
+  assert.throws(() => jsonTypeOf("ReactNode", "Button.icon"), /Button.icon is ReactNode, which a JSON protocol message cannot carry/)
+  assert.throws(() => protocolSchema({ type: "X", protocolProps: { onClick: {} } }, { onClick: "MouseEventHandler<HTMLButtonElement>" }), /cannot carry/)
+})
+
+test("required protocolProps are required in the schema", () => {
+  const schema = protocolSchema({ type: "X", protocolProps: { name: { required: true } } }, { name: "string" })
+  assert.deepEqual(schema.properties.props.required, ["name"])
+  const v = new Ajv2020({ strict: true }).compile(schema)
+  assert.ok(!v({ type: "X", props: {} }))
+})
+
+test("componentMap maps aliases to their component and lists structural types", () => {
+  const text = componentMapSource({
+    TextField: { type: "TextField", aliasOf: "Input", kind: "component" },
+    Button: { type: "Button", aliasOf: "Button", kind: "component" },
+    Form: { type: "Form", aliasOf: null, kind: "structural" },
+  }, { Input: { import: "@atlas/ui-web/primitives/Input/Input" }, Button: { import: "@atlas/ui-web/primitives/Button/Button" } })
+  assert.match(text, /import \{ Input \} from "@atlas\/ui-web\/primitives\/Input\/Input"/)
+  assert.match(text, /^  Button,$/m)
+  assert.match(text, /^  TextField: Input,$/m)
+  assert.match(text, /structuralTypes = \["Form"\]/)
+})
+
 // ─── the invariant ──────────────────────────────────────────────────────────
 
 const facts = () => ({
@@ -247,7 +294,7 @@ const editJson = (file, fn) => { const d = JSON.parse(fs.readFileSync(file, "utf
 test("--check passes on the committed repo", () => {
   const r = cli(REPO, "--check")
   assert.equal(r.code, 0, r.out)
-  assert.match(r.out, /PASS \(\d+ entries, 47 facts, 47 contracts, \d+ rules checked/)
+  assert.match(r.out, /PASS \(\d+ entries, 47 facts, 47 contracts, \d+ schemas, \d+ rules checked/)
 })
 
 test("--check fails on stale facts, and a build fixes them", () => {
@@ -264,7 +311,7 @@ test("--check fails on an orphaned facts file", () => {
   const dir = fixture()
   fs.copyFileSync(path.join(dir, "packages/registry/generated/Alert.facts.json"), path.join(dir, "packages/registry/generated/Ghost.facts.json"))
   editJson(path.join(dir, "packages/registry/generated/Ghost.facts.json"), (d) => { d.name = "Ghost" })
-  assert.match(cli(dir, "--check").out, /Ghost.facts.json belongs to no component in atlas\/metadata/)
+  assert.match(cli(dir, "--check").out, /Ghost.facts.json belongs to no component or registry entry/)
 })
 
 test("--check fails on a missing generated contract — all 47 must have one", () => {
@@ -273,6 +320,15 @@ test("--check fails on a missing generated contract — all 47 must have one", (
   const r = cli(dir, "--check")
   assert.equal(r.code, 1)
   assert.match(r.out, /ListItem.contract.ts is stale or missing/)
+})
+
+test("--check fails on an orphaned protocol schema, and on a stale componentMap", () => {
+  const dir = fixture()
+  fs.copyFileSync(path.join(dir, "packages/registry/generated/schemas/Alert.schema.json"), path.join(dir, "packages/registry/generated/schemas/Ghost.schema.json"))
+  fs.appendFileSync(path.join(dir, "packages/registry/generated/componentMap.ts"), "\n")
+  const out = cli(dir, "--check").out
+  assert.match(out, /schemas\/Ghost.schema.json belongs to no component or registry entry/)
+  assert.match(out, /componentMap.ts is stale or missing/)
 })
 
 test("a hand-edited generated contract is stale", () => {

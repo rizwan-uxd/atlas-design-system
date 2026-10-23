@@ -3,7 +3,8 @@
  * registry-build — generate packages/registry/generated/<Name>.facts.json and check the invariant
  * (M3, roadmap §2c; plan docs/superpowers/plans/2026-10-23-m3-registry.md).
  *
- *   node scripts/registry-build.mjs           write facts and contracts for every component in atlas/metadata
+ *   node scripts/registry-build.mjs           write facts and contracts for every component in atlas/metadata,
+ *                                             a protocol schema per registry entry, and componentMap.ts
  *   node scripts/registry-build.mjs --check   FAIL on stale, missing or orphaned facts and contracts, then on
  *                                             the invariant: the authored registry is a subset of the facts
  *   --root <dir>                              repo root (tests point it at a fixture copy)
@@ -16,7 +17,8 @@ import path from "node:path"
 import { fileURLToPath } from "node:url"
 import ts from "typescript"
 import { loadInputs } from "./lib/schemas.mjs"
-import { ASSERT_SOURCE, checkRegistry, codeConnectFacts, compilerOptions, contractSource, extractFacts, formatJson } from "./lib/registry.mjs"
+import Ajv2020 from "ajv/dist/2020.js"
+import { ASSERT_SOURCE, checkRegistry, codeConnectFacts, compilerOptions, componentMapSource, contractSource, extractFacts, formatJson, propTypes, protocolSchema } from "./lib/registry.mjs"
 
 const args = process.argv.slice(2)
 const CHECK = args.includes("--check")
@@ -24,6 +26,7 @@ const rootArg = args.indexOf("--root")
 const ROOT = rootArg >= 0 ? path.resolve(args[rootArg + 1]) : path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..")
 const GEN = "packages/registry/generated"
 const CONTRACTS = "packages/governance/contracts/generated"
+const SCHEMAS = `${GEN}/schemas`
 const rel = (...p) => path.join(ROOT, ...p)
 
 function fatal(lines) {
@@ -83,13 +86,27 @@ function main() {
     written[`${CONTRACTS}/${name}.contract.ts`] = contractSource(facts[name], entryFor(name))
   }
   written[`${CONTRACTS}/_assert.ts`] = ASSERT_SOURCE
+
+  // protocol schemas: exempt from INPUTS (they are schemas, not data); ajv's strict compile checks
+  // each against the 2020-12 meta-schema instead (plan decision 3)
+  const ajv = new Ajv2020({ strict: true, allErrors: true })
+  for (const e of Object.values(entries)) {
+    try {
+      const f = e.kind === "component" ? facts[e.aliasOf] : undefined
+      const types = f ? propTypes(program, rel(f.source), f.part, Object.keys(e.protocolProps ?? {})) : {}
+      const schema = protocolSchema(e, types)
+      ajv.compile(schema)
+      written[`${SCHEMAS}/${e.type}.schema.json`] = formatJson(schema)
+    } catch (err) { problems.push(`${e.type}: ${err.message}`) }
+  }
+  written[`${GEN}/componentMap.ts`] = componentMapSource(entries, metadata)
   if (problems.length) return fatal(problems)
 
   const list = (dir, suffix) => (fs.existsSync(rel(dir)) ? fs.readdirSync(rel(dir)).filter((f) => f.endsWith(suffix)).map((f) => `${dir}/${f}`) : [])
-  const orphans = [...list(GEN, ".json"), ...list(CONTRACTS, ".ts")].filter((f) => !(f in written))
+  const orphans = [...list(GEN, ".json"), ...list(GEN, ".ts"), ...list(SCHEMAS, ".json"), ...list(CONTRACTS, ".ts")].filter((f) => !(f in written))
 
   if (!CHECK) {
-    fs.mkdirSync(rel(GEN), { recursive: true }); fs.mkdirSync(rel(CONTRACTS), { recursive: true })
+    for (const d of [GEN, SCHEMAS, CONTRACTS]) fs.mkdirSync(rel(d), { recursive: true })
     let changed = 0
     for (const [f, text] of Object.entries(written)) {
       if (fs.existsSync(rel(f)) && fs.readFileSync(rel(f), "utf8") === text) continue
@@ -101,14 +118,14 @@ function main() {
   }
 
   const stale = Object.entries(written).filter(([f, text]) => !fs.existsSync(rel(f)) || fs.readFileSync(rel(f), "utf8") !== text).map(([f]) => `${f} is stale or missing — run npm run registry:build`)
-  stale.push(...orphans.map((f) => `${f} belongs to no component in atlas/metadata — run npm run registry:build`))
+  stale.push(...orphans.map((f) => `${f} belongs to no component or registry entry — run npm run registry:build`))
 
   const cssTokens = new Set(fs.readFileSync(rel("packages/tokens/atlas.tokens.css"), "utf8").match(/--atlas-[a-z0-9_-]+(?=\s*:)/g) ?? [])
   const r = checkRegistry({ entries, aliases, facts, components: new Set(Object.keys(metadata)), cssTokens })
   for (const w of r.warn) console.log(`  WARN  ${w}`)
   const failures = [...stale, ...r.fail]
   if (failures.length) return fatal(failures)
-  console.log(`registry-build --check — PASS (${r.inspected} entries, ${rendered.length} facts, ${rendered.length} contracts, ${r.rules} rules checked${r.warn.length ? `, ${r.warn.length} warn` : ""})`)
+  console.log(`registry-build --check — PASS (${r.inspected} entries, ${rendered.length} facts, ${rendered.length} contracts, ${r.inspected} schemas, ${r.rules} rules checked${r.warn.length ? `, ${r.warn.length} warn` : ""})`)
 }
 
 main()

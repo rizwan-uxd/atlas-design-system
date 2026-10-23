@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://atlas.design-system/schemas/registry/Button.schema.json",
+  "$comment": "GENERATED — do not hand-edit. registry-build from packages/registry/src/Button.registry.json and the Button facts; run npm run registry:build.",
+  "title": "Button protocol node",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["type"],
+  "properties": {
+    "type": { "const": "Button" },
+    "props": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "variant": {
+          "enum": ["primary", "secondary", "outline", "ghost", "destructive", "link"]
+        },
+        "size": {
+          "enum": ["xs", "sm", "md", "lg"]
+        },
+        "iconOnly": { "type": "boolean" },
+        "loading": { "type": "boolean" },
+        "disabled": { "type": "boolean" }
+      }
+    },
+    "slots": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "children": { "type": "array" },
+        "leadingIcon": { "type": "array" },
+        "trailingIcon": { "type": "array" }
+      }
+    }
+  }
+}

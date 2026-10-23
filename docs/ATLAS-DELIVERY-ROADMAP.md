@@ -478,7 +478,14 @@ inputs schema-validated — the honest proxy for "100% protocol messages passing
 years before a protocol exists.
 **Exit (M2):** corrupting one field in `atlas/metadata/Button.json` turns a PASS into a FAIL.
 
-### 2c → M3. The registry, and three-way agreement (3–4 sessions) — sessions 1–2 of 4 landed 2026-10-23
+### 2c → M3. The registry, and three-way agreement (3–4 sessions) — sessions 1–3 of 4 landed 2026-10-23
+
+> **Session 3 landed.** A protocol schema per registry entry (`generated/schemas/`, closed objects
+> whose props are the entry's protocolProps typed from the code; exempt from `INPUTS` and compiled by
+> ajv strict against the meta-schema), `generated/componentMap.ts` (deep imports, checked by `tsc`),
+> and `scope/no-new-components` extended to added registry entries. `registry:check`: **4 entries,
+> 47 facts, 47 contracts, 4 schemas, 115 rules**. Session 4 is the third leg, the metric checks, the
+> owner decisions, and deleting the 44 hand-written contracts.
 
 > **Session 2 landed.** Facts and a generated contract for **all 47** components
 > (`packages/governance/contracts/generated/`, next to the 44 hand-written ones). `registry:check`:
