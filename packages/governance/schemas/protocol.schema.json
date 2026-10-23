@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://atlas.design-system/schemas/protocol.schema.json",
+  "title": "Atlas runtime protocol (M4)",
+  "description": "The envelope only. A node's props and slots are checked per type by packages/registry/generated/schemas.",
+  "$defs": {
+    "seq": { "type": "integer", "minimum": 1 },
+    "node": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type"],
+      "properties": {
+        "type": { "type": "string", "pattern": "^[A-Z][A-Za-z0-9]*$" },
+        "props": { "type": "object" },
+        "slots": {
+          "type": "object",
+          "additionalProperties": { "type": "array", "items": { "anyOf": [{ "type": "string" }, { "$ref": "#/$defs/node" }] } }
+        }
+      }
+    },
+    "op": {
+      "oneOf": [
+        { "type": "object", "additionalProperties": false, "required": ["op", "seq", "root"],
+          "properties": { "op": { "const": "render" }, "seq": { "$ref": "#/$defs/seq" }, "root": { "$ref": "#/$defs/node" } } },
+        { "type": "object", "additionalProperties": false, "required": ["op", "seq", "at", "node"],
+          "properties": { "op": { "const": "patch" }, "seq": { "$ref": "#/$defs/seq" },
+            "at": { "type": "string", "pattern": "^(/slots/[a-zA-Z]+/[0-9]+)+$" },
+            "node": { "anyOf": [{ "$ref": "#/$defs/node" }, { "type": "null" }] } } },
+        { "type": "object", "additionalProperties": false, "required": ["op", "seq", "path", "value"],
+          "properties": { "op": { "const": "state" }, "seq": { "$ref": "#/$defs/seq" },
+            "path": { "type": "string", "pattern": "^form\\.[a-z][A-Za-z0-9]*$" },
+            "value": { "type": "object", "additionalProperties": false, "minProperties": 1,
+              "properties": { "error": { "type": ["string", "null"] }, "value": { "type": "string" } } } } },
+        { "type": "object", "additionalProperties": false, "required": ["op", "seq", "ack"],
+          "properties": { "op": { "const": "ack" }, "seq": { "$ref": "#/$defs/seq" }, "ack": { "$ref": "#/$defs/seq" } } }
+      ]
+    },
+    "fixture": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["_note", "render", "responses"],
+      "properties": {
+        "_note": { "$ref": "common.schema.json#/$defs/text" },
+        "render": { "allOf": [{ "$ref": "#/$defs/op" }, { "type": "object", "properties": { "op": { "const": "render" } } }] },
+        "responses": { "type": "object", "additionalProperties": { "type": "array", "items": { "$ref": "#/$defs/op" } } }
+      }
+    }
+  }
+}

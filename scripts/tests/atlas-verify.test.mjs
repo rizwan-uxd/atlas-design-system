@@ -11,8 +11,9 @@ import { fileURLToPath } from "node:url"
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..")
 // packages/registry carries the authored figma-axis-map.json that design/figma-registry-code needs. It is in
 // this list because that check fails closed: a throwaway repo without the map is one whose Figma side
-// cannot be verified, and it says so rather than passing.
-const INPUTS = ["scripts", "packages/ui-web/src", "packages/figma-sync/code-connect", "packages/tokens", "packages/governance", "packages/registry", "atlas"]
+// cannot be verified, and it says so rather than passing. packages/runtime carries the protocol fixtures that
+// design/schemas requires (min 1), for the same reason.
+const INPUTS = ["scripts", "packages/ui-web/src", "packages/figma-sync/code-connect", "packages/tokens", "packages/governance", "packages/registry", "packages/runtime", "atlas"]
 const FIXTURE = "app/prototypes/dep-fixture/page.tsx"
 const detail = { since: "1.1.0", removeIn: "2.0.0", replacement: "Badge", migration: "Swap Alert for Badge." }
 
