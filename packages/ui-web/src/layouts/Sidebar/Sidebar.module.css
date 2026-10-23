@@ -98,7 +98,7 @@
   inline-size: var(--atlas-spacing-8);
   block-size: var(--atlas-spacing-8);
   border: none;
-  border-radius: var(--atlas-radius-md);
+  border-radius: var(--atlas-radius-control);
   background: none;
   color: var(--atlas-foreground-muted);
   cursor: pointer;

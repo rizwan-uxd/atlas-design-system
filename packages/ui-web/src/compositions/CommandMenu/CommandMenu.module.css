@@ -52,7 +52,7 @@
   gap: var(--atlas-spacing-2);
   padding-block: var(--atlas-spacing-1_5);
   padding-inline: var(--atlas-spacing-2);
-  border-radius: var(--atlas-radius-sm);
+  border-radius: var(--atlas-radius-item);
   color: var(--atlas-foreground);
   cursor: default;
   user-select: none;

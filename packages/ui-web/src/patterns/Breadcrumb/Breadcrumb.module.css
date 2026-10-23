@@ -33,7 +33,7 @@
 .link,
 .page,
 .dropdown {
-  border-radius: var(--atlas-radius-sm);
+  border-radius: var(--atlas-radius-item);
   text-decoration: none;
 }
 
@@ -113,7 +113,7 @@
   justify-content: center;
   inline-size: var(--atlas-spacing-6);
   block-size: var(--atlas-spacing-6);
-  border-radius: var(--atlas-radius-md);
+  border-radius: var(--atlas-radius-control);
 }
 
 .ellipsis:focus-visible {

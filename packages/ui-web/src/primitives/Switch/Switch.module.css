@@ -23,7 +23,7 @@
   flex-shrink: 0;
   border: none;
   padding: 0;
-  border-radius: var(--atlas-radius-full);
+  border-radius: var(--atlas-radius-pill);
   background-color: var(--atlas-switch-track-background); /* off state per spec */
   position: relative;
   cursor: pointer;
@@ -135,7 +135,7 @@
 .thumb {
   display: block;
   position: absolute;
-  border-radius: var(--atlas-radius-full);
+  border-radius: var(--atlas-radius-pill);
   /*
    * BUG-019 — spec lists --atlas-background for thumb fill. However
    * --atlas-background resolves to neutral-950 in dark mode (near-black),

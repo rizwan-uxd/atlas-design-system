@@ -9,7 +9,7 @@
   cursor: pointer;
   font-family: inherit;
   font-size: var(--atlas-font-size-sm);
-  border-radius: var(--atlas-radius-md);
+  border-radius: var(--atlas-radius-control);
   text-decoration: none;
   text-align: start;
   min-block-size: var(--atlas-touch-min);

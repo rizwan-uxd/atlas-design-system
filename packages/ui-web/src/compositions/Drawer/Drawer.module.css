@@ -76,14 +76,14 @@
 
 .content[data-side="end"] {
   inset-inline-end: 0;
-  border-start-start-radius: var(--atlas-radius-lg);
-  border-end-start-radius: var(--atlas-radius-lg);
+  border-start-start-radius: var(--atlas-radius-surface);
+  border-end-start-radius: var(--atlas-radius-surface);
 }
 
 .content[data-side="start"] {
   inset-inline-start: 0;
-  border-start-end-radius: var(--atlas-radius-lg);
-  border-end-end-radius: var(--atlas-radius-lg);
+  border-start-end-radius: var(--atlas-radius-surface);
+  border-end-end-radius: var(--atlas-radius-surface);
 }
 
 .content[data-side="end"][data-state="open"] {

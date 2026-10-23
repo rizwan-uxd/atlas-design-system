@@ -20,6 +20,10 @@
  *   8. no-raw-length — no hardcoded length in packages/ui-web/src (not @media, em, or visually-hidden 1px)
  *   9. breakpoint-literal-consistency — --atlas-breakpoint-*, @theme --breakpoint-* and @media widths agree
  *  10. reduced-motion-required — component CSS using --atlas-duration-* has a prefers-reduced-motion block
+ *  M5.1:
+ *  11. semantic-radius — component CSS and component-token aliases use a radius role
+ *      (item|control|surface|pill); a primitive step is listed with a reason and its exact count in
+ *      packages/governance/token-primitives.allow.json
  *
  * Allow-list:
  *   - Lines containing "token-lint-disable-next-line" suppress the NEXT line only.
@@ -43,7 +47,7 @@ import fs from "fs"
 import path from "path"
 import { fileURLToPath } from "url"
 import { BEGIN, lintComponentTokens } from "../../scripts/lib/component-tokens.mjs"
-import { privateVarViolations, rawLengths, breakpointViolations, reducedMotionMissing } from "../../scripts/lib/token-rules.mjs"
+import { privateVarViolations, rawLengths, breakpointViolations, reducedMotionMissing, semanticRadiusViolations } from "../../scripts/lib/token-rules.mjs"
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const ROOT = path.resolve(__dirname, "../..")
@@ -266,6 +270,15 @@ for (const { file, src } of animated) {
   if (reducedMotionMissing(src)) violations.push({ file, line: 0, rule: "reduced-motion-required", text: "uses --atlas-duration-* with no @media (prefers-reduced-motion) block" })
 }
 inspected["reduced-motion-required"] = animated.length
+
+// semantic-radius (M5.1): the token file contributes only its component-token radius declarations
+// (--atlas-<component>-…radius…); the primitive steps and the roles themselves are declared there legally.
+// Other lines are blanked, not dropped, so reported line numbers stay right.
+const componentTokenRadius = tokenCss.split("\n").map((l) => (/^\s*--atlas-(?!radius-)[\w-]*radius[\w-]*\s*:/.test(l) ? l : "")).join("\n")
+const primitivesAllow = JSON.parse(fs.readFileSync(path.join(ROOT, "packages/governance/token-primitives.allow.json"), "utf8")).entries
+const sr = semanticRadiusViolations([...componentCss, { file: TOKEN_REL, src: componentTokenRadius }], primitivesAllow)
+sr.violations.forEach(add("semantic-radius"))
+inspected["semantic-radius"] = sr.inspected
 
 // ─── Report ──────────────────────────────────────────────────────────────────
 

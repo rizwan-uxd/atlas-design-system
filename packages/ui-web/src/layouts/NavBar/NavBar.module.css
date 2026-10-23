@@ -226,7 +226,7 @@
   border: none;
   cursor: pointer;
   color: var(--atlas-foreground);
-  border-radius: var(--atlas-radius-md);
+  border-radius: var(--atlas-radius-control);
   outline: none;
 }
 
@@ -245,7 +245,7 @@
   width: calc(var(--atlas-spacing-4) + var(--atlas-spacing-0_5)); /* 18px */
   height: var(--atlas-border-width-2);                            /* 2px */
   background-color: currentColor;
-  border-radius: var(--atlas-radius-full);
+  border-radius: var(--atlas-radius-pill);
   transition: opacity var(--atlas-duration-fast) var(--atlas-easing-standard);
 }
 
@@ -275,7 +275,7 @@
   font-weight: var(--atlas-font-weight-medium);
   color: var(--atlas-foreground-muted);
   text-decoration: none;
-  border-radius: var(--atlas-radius-md);
+  border-radius: var(--atlas-radius-control);
   border-inline-start: var(--atlas-border-width-2) solid transparent;
   outline: none;
   transition:

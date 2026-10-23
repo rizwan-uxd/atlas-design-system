@@ -62,7 +62,7 @@
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
-  border-radius: var(--atlas-radius-full);
+  border-radius: var(--atlas-radius-pill);
   font-weight: var(--atlas-font-weight-medium);
   font-variant-numeric: tabular-nums;
 }
@@ -206,7 +206,7 @@
 .arc {
   position: absolute;
   inset: 0;
-  border-radius: var(--atlas-radius-full);
+  border-radius: var(--atlas-radius-pill);
   background: conic-gradient(var(--atlas-primary) calc(var(--stepper-progress) * 1%), var(--atlas-border) 0);
   mask: radial-gradient(farthest-side, transparent calc(100% - var(--atlas-spacing-1)), var(--atlas-foreground) 0);
 }

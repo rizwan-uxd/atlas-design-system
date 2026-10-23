@@ -164,7 +164,7 @@
   background-color: var(--atlas-surface-overlay);
   color: var(--atlas-foreground);
   border: var(--atlas-border-width-1) solid var(--atlas-border);
-  border-radius: var(--atlas-radius-lg);
+  border-radius: var(--atlas-radius-surface);
   box-shadow: var(--atlas-shadow-md);
   font-family: var(--atlas-font-sans);
   outline: none;

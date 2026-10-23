@@ -75,7 +75,7 @@
   inset-inline-start: 50%;  /* FIX BUG-038: was left: 50% */
   transform: translate(-50%, -50%);
   width: min(var(--_max-w), calc(100vw - var(--atlas-spacing-8) * 2));
-  border-radius: var(--atlas-radius-lg);
+  border-radius: var(--atlas-radius-surface);
 }
 
 .modal[data-state="open"] {
@@ -113,7 +113,7 @@
     transform: none;
     width: 100%;
     max-width: 100%;
-    border-radius: var(--atlas-radius-lg) var(--atlas-radius-lg) 0 0;
+    border-radius: var(--atlas-radius-surface) var(--atlas-radius-surface) 0 0;
     max-height: 85vh;
   }
 
@@ -214,7 +214,7 @@
   color: var(--atlas-foreground-muted);
   font-size: var(--atlas-font-size-lg);
   line-height: var(--atlas-line-height-tight); /* FIX BUG-035: was line-height: 1 */
-  border-radius: var(--atlas-radius-md);
+  border-radius: var(--atlas-radius-control);
   outline: none;
   transition: background-color var(--atlas-duration-fast) var(--atlas-easing-standard),
               color            var(--atlas-duration-fast) var(--atlas-easing-standard);

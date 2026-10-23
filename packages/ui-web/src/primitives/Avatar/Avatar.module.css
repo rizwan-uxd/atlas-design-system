@@ -85,7 +85,7 @@
   inline-size: 100%;
   block-size: 100%;
   overflow: hidden;
-  border-radius: var(--atlas-radius-full);
+  border-radius: var(--atlas-radius-pill);
   background-color: var(--atlas-background-muted);
   color: var(--atlas-foreground-muted);
   font-size: var(--atlas-font-size-xs);
@@ -148,7 +148,7 @@
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
-  border-radius: var(--atlas-radius-full);
+  border-radius: var(--atlas-radius-pill);
 }
 
 .badgeIcon {
@@ -180,7 +180,7 @@
   padding: 0;
   border: 0;
   background: none;
-  border-radius: var(--atlas-radius-full);
+  border-radius: var(--atlas-radius-pill);
   color: inherit;
   cursor: pointer;
   transition: opacity var(--atlas-duration-fast) var(--atlas-easing-standard);
@@ -219,7 +219,7 @@
   position: relative;
   display: inline-flex;
   flex-shrink: 0;
-  border-radius: var(--atlas-radius-full);
+  border-radius: var(--atlas-radius-pill);
   transition: transform var(--atlas-duration-base) var(--atlas-easing-emphasized);
 }
 

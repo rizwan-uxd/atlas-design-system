@@ -45,7 +45,7 @@
   box-sizing: border-box;
   inline-size: 100%;
   block-size: var(--atlas-spacing-1);
-  border-radius: var(--atlas-radius-full);
+  border-radius: var(--atlas-radius-pill);
   background-color: var(--atlas-background-muted);
 }
 
@@ -53,7 +53,7 @@
   position: absolute;
   inset-block: 0;
   inset-inline-start: 0;
-  border-radius: var(--atlas-radius-full);
+  border-radius: var(--atlas-radius-pill);
   background-color: var(--atlas-primary);
 }
 

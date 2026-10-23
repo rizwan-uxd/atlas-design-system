@@ -58,7 +58,7 @@
   inset-inline-start: 0;
   height: var(--atlas-border-width-2);
   background-color: var(--atlas-primary);
-  border-radius: var(--atlas-radius-full);
+  border-radius: var(--atlas-radius-pill);
   width: var(--_ind-w, 0px);
   transform: translateX(var(--_ind-x, 0px));
   transition:
@@ -75,7 +75,7 @@
 /* Segmented list */
 .segmented .list {
   background-color: var(--atlas-background-muted);
-  border-radius: var(--atlas-radius-md);
+  border-radius: var(--atlas-radius-control);
   padding: var(--atlas-spacing-1);
   gap: var(--atlas-spacing-1);
 }
@@ -203,7 +203,7 @@
 
 .pill .trigger {
   color: var(--atlas-foreground-muted);
-  border-radius: var(--atlas-radius-md);
+  border-radius: var(--atlas-radius-control);
 }
 
 .pill .trigger:hover:not([data-disabled]) {
@@ -229,7 +229,7 @@
 
 .segmented .trigger {
   color: var(--atlas-foreground-muted);
-  border-radius: var(--atlas-radius-md);
+  border-radius: var(--atlas-radius-control);
   flex: 1;
 }
 
@@ -257,7 +257,7 @@
 
 .outline .trigger {
   color: var(--atlas-foreground-muted);
-  border-radius: var(--atlas-radius-md);
+  border-radius: var(--atlas-radius-control);
 }
 
 .outline .trigger:hover:not([data-disabled]) {
@@ -319,7 +319,7 @@
   inset-inline-start: 0;
   width: var(--_ind-w, 0px);
   transform: translateX(var(--_ind-x, 0px));
-  border-radius: var(--atlas-radius-md);
+  border-radius: var(--atlas-radius-control);
   opacity: 0;
   pointer-events: none;
   transition:

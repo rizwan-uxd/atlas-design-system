@@ -106,7 +106,7 @@
   padding-block: var(--atlas-spacing-0_5);
   padding-inline: var(--atlas-spacing-1_5);
   border: var(--atlas-border-width-2) solid var(--atlas-surface);
-  border-radius: var(--atlas-radius-full);
+  border-radius: var(--atlas-radius-pill);
   background: var(--atlas-background-muted);
   color: var(--atlas-foreground);
   font-family: var(--atlas-font-sans);
