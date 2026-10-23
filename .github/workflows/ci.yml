@@ -205,6 +205,12 @@ jobs:
       - run: npm ci --legacy-peer-deps
       - name: Manifest covers every spec metric
         run: node scripts/metrics-report.mjs --json > /dev/null
+      # Report-only metric tests (*.metric.tsx, vitest.metrics.config.ts), such as the protocol size ratio. A
+      # failure is an honest metric reading, not a broken build, so this step never fails the job (owner decision
+      # 2026-10-23). Its JSON lands in .metrics/vitest-metrics.json, which metrics-report reads as vitest results.
+      - name: Report-only metric tests (non-blocking)
+        continue-on-error: true
+        run: npm run test:metrics
 
   # ─── Visual regression (sandbox sections, light + dark) ────────────────────
   # Baselines are linux screenshots made by the "Visual baseline" workflow and committed under

@@ -1291,6 +1291,10 @@ class NodeBoundary extends React.Component<{ node: SafeNode; stable: Stable; chi
 
 ### Task 8: the size metric
 
+> **As built (2026-10-23, DEC-085):** the ratio is 0.308, over the gate. On the owner's decision the test is
+> `packages/runtime/tests/size.metric.tsx`, report-only: `vitest.metrics.config.ts` (`npm run test:metrics`) runs it
+> in CI's metrics job with `continue-on-error`, and `metrics-report` reads `.metrics/vitest-metrics.json`.
+
 **Files:** Create `packages/runtime/tests/size.test.tsx`.
 
 - [ ] **Step 1: Write the test:**

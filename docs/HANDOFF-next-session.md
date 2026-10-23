@@ -9,7 +9,7 @@ ones were deleted and live in git history.
 Counted in sessions, using the roadmap's own estimates (midpoint where it gives a range). Change N
 and say so when an estimate changes. **Roadmap: 13 of ~28 sessions done (~46%). M4 is 2.5 of 3.5: session 1 wrote the
 plan (`docs/superpowers/plans/2026-10-23-m4-runtime-slice.md`, owner decisions DEC-082 and DEC-083), session 2
-built plan Tasks 1–5, session 3 built Tasks 6, 7 and 9 (Task 8, the size metric, waits on an owner decision).
+built plan Tasks 1–5, session 3 built Tasks 6–9 (Task 8, the size metric, is report-only and reads failing at 0.308, DEC-085).
 Next: session 15 of ~28 = M4 session 4, plan Tasks 10–14 (stub agent, route, Playwright, CI, records, PR).**
 
 | Phase | Sessions (est.) | Done | Status | PR |
@@ -21,7 +21,7 @@ Next: session 15 of ~28 = M4 session 4, plan Tasks 10–14 (stub agent, route, P
 | M2 — verifier can fail | 1 | 1 | ✅ | #101 |
 | M3 — registry | 4 | 4 | ✅ exit met except Text (5/6 types) | #102, #103, #104, #105 |
 | 2d — token work, zero new tokens | 1.5 | 1 | ✅ in 1 session (est. 1.5) | #106 |
-| **M4 — runtime vertical slice** | 3.5 | 2.5 | 🔄 Tasks 1–7 and 9 done; Task 8 needs a decision; 10–14 next | `claude/m4-runtime-slice` (no PR yet) |
+| **M4 — runtime vertical slice** | 3.5 | 2.5 | 🔄 Tasks 1–9 done (size reads failing, DEC-085); 10–14 next | `claude/m4-runtime-slice` (no PR yet) |
 | Phase 4 — enforcement hardened | 2.5 | 0 | ⏳ | |
 | M5 — semantic tokens + brands | 7 | 0 | ⏳ | |
 | Phase 6 — filtered agent catalog | 2.5 | 0 | ⏳ | |
@@ -116,12 +116,13 @@ each over the registered subset (4/47 components registered).
   `protocol.schema.json` envelope, the request-access fixture (an `INPUTS` rule, `packages/runtime` watched),
   `findMarkup`, `validateTree` and `fallbackFor`. Session 3 added `store.ts` (sequenced reducer, structural-sharing
   patches), `Runtime.tsx` (`<AtlasRuntime>`, per-node boundaries, the Field handoff, DEC-084) and the seeded fuzz.
-  Five vitest M4 rows read passing (three `runtime/validator`, two `runtime/fuzz`); the six Playwright rows wait on
-  Task 11.
-- **Open decision — the size metric (plan Task 8).** The fixture's render op is 513 B against 1663 B of rendered
-  markup: ratio **0.308**, over the 0.30 gate. 521 B of that markup is the runtime's own `data-atlas-*` tagging,
-  so against the components' markup alone (about 1140 B) the ratio is about 0.45. The test is not committed; it
-  waits on the owner's choice of how to measure or whether to make the protocol more compact.
+  Five vitest M4 rows read passing (three `runtime/validator`, two `runtime/fuzz`) and `runtime/protocol` reads
+  failing (report-only); the six Playwright rows wait on Task 11.
+- **The size metric is report-only and reads failing (DEC-085).** The render op is 513 B against 1663 B of
+  rendered markup: ratio **0.308**, over the 0.30 gate (521 B of the markup is the runtime's own `data-atlas-*`
+  tagging; against component markup alone it is about 0.45). `packages/runtime/tests/size.metric.tsx` runs from
+  `vitest.metrics.config.ts` (`npm run test:metrics`) in CI's metrics job with `continue-on-error`, and
+  `metrics-report` reads its `.metrics/vitest-metrics.json`. A more compact protocol is a separate, later decision.
 
 ## Open owner decisions (ask; do not decide these yourself)
 - **Text (the 6th M3 exit type) — deferred by the user 2026-10-23 (DEC-080).** Atlas has no Text
