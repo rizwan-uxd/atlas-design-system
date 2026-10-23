@@ -1,5 +1,5 @@
 {
-  "_note": "Authored source. atlas-sync copies it to atlas/state/ownership.json. Owners come from repo evidence only: every commit is by one maintainer and the origin remote is github.com/rizwan-uxd/atlas-design-system. Add a separate owner only when a real second owner exists.",
+  "_note": "Authored source. atlas-sync copies it to atlas/state/ownership.json. Owners come from repo evidence only: every commit is by one maintainer and the origin remote is github.com/rizwan-uxd/atlas-design-system. componentOwners lists every component to the one real owner (roadmap Phase 4: an empty map hides the gap); add a second owner only when a real one exists.",
   "owners": {
     "design-system": "@rizwan-uxd",
     "tokens": "@rizwan-uxd",
@@ -8,11 +8,76 @@
     "ai-context": "@rizwan-uxd"
   },
   "paths": {
-    "design-system": ["AGENTS.md", "claude.md", "packages/governance/"],
-    "tokens": ["packages/tokens/"],
-    "components": ["packages/ui-web/", "packages/ui-native/", "packages/figma-sync/"],
-    "docs": ["docs/"],
-    "ai-context": ["atlas/", ".agents/", "scripts/", "benchmarks/"]
+    "design-system": [
+      "AGENTS.md",
+      "claude.md",
+      "packages/governance/"
+    ],
+    "tokens": [
+      "packages/tokens/"
+    ],
+    "components": [
+      "packages/ui-web/",
+      "packages/ui-native/",
+      "packages/figma-sync/"
+    ],
+    "docs": [
+      "docs/"
+    ],
+    "ai-context": [
+      "atlas/",
+      ".agents/",
+      "scripts/",
+      "benchmarks/"
+    ]
   },
-  "componentOwners": {}
+  "componentOwners": {
+    "Alert": "@rizwan-uxd",
+    "AlertDialog": "@rizwan-uxd",
+    "Avatar": "@rizwan-uxd",
+    "Badge": "@rizwan-uxd",
+    "Breadcrumb": "@rizwan-uxd",
+    "Bubble": "@rizwan-uxd",
+    "Button": "@rizwan-uxd",
+    "ButtonGroup": "@rizwan-uxd",
+    "Card": "@rizwan-uxd",
+    "Chart": "@rizwan-uxd",
+    "Checkbox": "@rizwan-uxd",
+    "CodeBlock": "@rizwan-uxd",
+    "CommandMenu": "@rizwan-uxd",
+    "DatePicker": "@rizwan-uxd",
+    "Dialog": "@rizwan-uxd",
+    "Divider": "@rizwan-uxd",
+    "Drawer": "@rizwan-uxd",
+    "DropdownMenu": "@rizwan-uxd",
+    "EmptyState": "@rizwan-uxd",
+    "Field": "@rizwan-uxd",
+    "Image": "@rizwan-uxd",
+    "Input": "@rizwan-uxd",
+    "Label": "@rizwan-uxd",
+    "ListItem": "@rizwan-uxd",
+    "NavBar": "@rizwan-uxd",
+    "OtpInput": "@rizwan-uxd",
+    "Pagination": "@rizwan-uxd",
+    "PasswordInput": "@rizwan-uxd",
+    "Progress": "@rizwan-uxd",
+    "RadioGroup": "@rizwan-uxd",
+    "ScrollProgress": "@rizwan-uxd",
+    "Select": "@rizwan-uxd",
+    "Sheet": "@rizwan-uxd",
+    "Sidebar": "@rizwan-uxd",
+    "SidebarMenuRow": "@rizwan-uxd",
+    "Skeleton": "@rizwan-uxd",
+    "Slider": "@rizwan-uxd",
+    "Sparkline": "@rizwan-uxd",
+    "Spinner": "@rizwan-uxd",
+    "StatCard": "@rizwan-uxd",
+    "Stepper": "@rizwan-uxd",
+    "Switch": "@rizwan-uxd",
+    "Table": "@rizwan-uxd",
+    "Tabs": "@rizwan-uxd",
+    "Textarea": "@rizwan-uxd",
+    "Toast": "@rizwan-uxd",
+    "Tooltip": "@rizwan-uxd"
+  }
 }

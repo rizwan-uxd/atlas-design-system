@@ -4,6 +4,7 @@
   "tier": "compositions",
   "status": "stable",
   "deprecated": null,
+  "owner": "@rizwan-uxd",
   "import": "@atlas/ui-web/compositions/Alert/Alert",
   "variants": ["info", "success", "warning", "danger", "neutral"],
   "sizes": ["sm", "md", "lg"],

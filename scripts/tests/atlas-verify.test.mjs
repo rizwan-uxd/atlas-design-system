@@ -20,6 +20,8 @@ const detail = { since: "1.1.0", removeIn: "2.0.0", replacement: "Badge", migrat
 function repo() {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), "atlas-verify-test-"))
   for (const rel of INPUTS) fs.cpSync(path.join(REPO, rel), path.join(dir, rel), { recursive: true })
+  // Phase 4 checks read it: deprecation-expiry's released versions, breaking-change's policy gate
+  fs.copyFileSync(path.join(REPO, "CHANGELOG.md"), path.join(dir, "CHANGELOG.md"))
   fs.mkdirSync(path.join(dir, "app/prototypes/dep-fixture"), { recursive: true })
   // since M2 atlas-verify imports ajv (schemas) and typescript (the JSX scanner), so every fixture needs them
   fs.symlinkSync(path.join(REPO, "node_modules"), path.join(dir, "node_modules"))
@@ -419,4 +421,68 @@ test("scope/no-new-components passes a new registry entry for a real component, 
   const r = verify(dir, "no-new-components")
   assert.equal(r.status, "pass", r.mismatches?.join("\n"))
   assert.match(r.note, /2 registry entries added/)
+}))
+
+// ─── Phase 4 checks (one PASS and one FAIL path each, like every check) ──────
+
+test("scope/registry-complete passes at the same count or higher, and fails a deleted entry", () => withRepo(({ dir }) => {
+  const same = verify(dir, "scope.registry-complete")
+  assert.equal(same.status, "pass", same.mismatches?.join("\n"))
+  assert.match(same.note, /5 authored entries/)
+  write(dir, "packages/registry/src/NewOne.registry.json", entry("NewOne", "Button"))
+  assert.match(verify(dir, "scope.registry-complete").note, /6 authored entries/)
+  fs.rmSync(path.join(dir, "packages/registry/src/Alert.registry.json"))
+  const r = verify(dir, "scope.registry-complete")
+  assert.equal(r.status, "fail")
+  assert.match(r.mismatches.join("\n"), /Alert\.registry\.json is gone/)
+}))
+
+test("design/deprecation-expiry fails a shipped removeIn, a malformed removeIn, and passes a future one", () => withRepo(({ dir }) => {
+  deprecate(dir, [{ kind: "token", name: "--atlas-old", since: "1.0.0", removeIn: "2.0.0", replacement: "--atlas-new", migration: "Swap." }])
+  assert.equal(verify(dir, "design.deprecation-expiry").status, "pass")
+  deprecate(dir, [{ kind: "token", name: "--atlas-old", since: "1.0.0", removeIn: "1.0.0", replacement: "--atlas-new", migration: "Swap." }])
+  const shipped = verify(dir, "design.deprecation-expiry")
+  assert.equal(shipped.status, "fail")
+  assert.match(shipped.mismatches.join("\n"), /removeIn 1\.0\.0 has shipped/)
+  deprecate(dir, [{ kind: "token", name: "--atlas-old", since: "1.0.0", removeIn: "next major", replacement: "--atlas-new", migration: "Swap." }])
+  assert.match(verify(dir, "design.deprecation-expiry").mismatches.join("\n"), /not a X\.Y\.Z version/)
+}))
+
+test("scope/breaking-change fails a removed token without a CHANGELOG entry and passes once ### Breaking lands", () => withRepo(({ dir }) => {
+  // shadow-xl is declared in BOTH theme blocks; a real removal takes both declarations
+  edit(dir, "packages/tokens/atlas.tokens.css", (s) => s.replace(/\s*--atlas-shadow-xl:[^;]+;/g, ""))
+  const removed = verify(dir, "scope.breaking-change")
+  assert.equal(removed.status, "fail")
+  assert.match(removed.mismatches.join("\n"), /--atlas-shadow-xl removed/)
+  assert.match(removed.mismatches.join("\n"), /### Breaking/)
+  edit(dir, "CHANGELOG.md", (s) => s.replace("## Unreleased", "## Unreleased\n\n### Breaking\n- Removed the xl shadow token."))
+  const r = verify(dir, "scope.breaking-change")
+  assert.equal(r.status, "pass", r.mismatches?.join("\n"))
+  assert.match(r.note, /1 removal\(s\) · CHANGELOG carries a ### Breaking entry/)
+}))
+
+test("scope/breaking-change fails a removed variant and a deleted component the same way", () => withRepo(({ dir }) => {
+  edit(dir, "atlas/metadata/Button.json", (s) => s.replace('"destructive", "link"', '"destructive"'))
+  assert.match(verify(dir, "scope.breaking-change").mismatches.join("\n"), /Button variant "link" removed/)
+  fs.rmSync(path.join(dir, "atlas/metadata/Tooltip.json"))
+  assert.match(verify(dir, "scope.breaking-change").mismatches.join("\n"), /component Tooltip removed/)
+  const untouched = verify(dir, "scope.breaking-change")
+  assert.equal(untouched.status, "fail")
+}))
+
+test("code/contrast fails a new low-contrast value, a worse-than-allowed one, and a stale allowance", () => withRepo(({ dir }) => {
+  assert.equal(verify(dir, "code.contrast").status, "pass", "the committed tree passes with its seeded allowances")
+  // a NEW finding: light primary-foreground darkened to a mid grey, not covered by any allowance
+  edit(dir, "packages/tokens/atlas.tokens.css", (s) => s.replace("--atlas-primary-foreground: var(--atlas-color-neutral-0);", "--atlas-primary-foreground: oklch(0.75 0.01 247);"))
+  const fresh = verify(dir, "code.contrast")
+  assert.equal(fresh.status, "fail")
+  assert.match(fresh.mismatches.join("\n"), /light: --atlas-primary-foreground on --atlas-primary/)
+  // the DARK block is everything after its selector; light and dark declare the same tokens separately
+  const dark = (s, from, to) => { const at = s.indexOf('[data-theme="dark"]'); return s.slice(0, at) + s.slice(at).replace(from, to) }
+  // WORSE than allowed: the dark info pair (allowed at 2.98) drops to a mid grey on mid blue
+  edit(dir, "packages/tokens/atlas.tokens.css", (s) => dark(s, "--atlas-info-foreground: var(--atlas-color-neutral-0);", "--atlas-info-foreground: oklch(0.65 0.06 264);"))
+  assert.match(verify(dir, "code.contrast").mismatches.join("\n"), /worse than the allowed/)
+  // STALE: black on info in the dark block clears 4.5:1, so the dark allowance has nothing to cover
+  edit(dir, "packages/tokens/atlas.tokens.css", (s) => dark(s, "--atlas-info-foreground: oklch(0.65 0.06 264);", "--atlas-info-foreground: var(--atlas-color-neutral-1000);"))
+  assert.match(verify(dir, "code.contrast").mismatches.join("\n"), /stale/)
 }))

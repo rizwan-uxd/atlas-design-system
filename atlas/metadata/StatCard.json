@@ -4,6 +4,7 @@
   "tier": "compositions",
   "status": "stable",
   "deprecated": null,
+  "owner": "@rizwan-uxd",
   "import": "@atlas/ui-web/compositions/StatCard/StatCard",
   "variants": [],
   "sizes": ["sm", "md", "lg"],

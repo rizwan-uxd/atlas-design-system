@@ -1,15 +1,18 @@
-# Handoff: Phase 2 and the D1 decision are done; M4 is next (Atlas roadmap)
+# Handoff: Phase 4 is complete (3 sessions); M5 is next (Atlas roadmap)
 
-Written 2026-10-22, updated 2026-10-23 after D1 option B. **Read in this order: `AGENTS.md` → `docs/ATLAS-DELIVERY-ROADMAP.md` → this file.**
+Written 2026-10-22, updated 2026-10-23 after D1 option B, M4 (#108) and Phase 4 (all three sessions). **Read in this order: `AGENTS.md` → `docs/ATLAS-DELIVERY-ROADMAP.md` → this file.**
 The roadmap is normative now (referenced from `AGENTS.md` §2) and owns the phase order; this file is
 only current state plus the gotchas that will bite again. **This is the only handoff doc** — earlier
 ones were deleted and live in git history.
 
 ## Progress (update at the end of every session, and report it at the start and end of each)
 Counted in sessions, using the roadmap's own estimates (midpoint where it gives a range). Change N
-and say so when an estimate changes. **Roadmap: 14 of ~28 sessions done (~50%). M4 is complete in 3.5 sessions (estimate 3.5):
-plan, Tasks 1–5, Tasks 6–9, Tasks 10–14, on `claude/m4-runtime-slice`. Next: session 16 of ~28 = Phase 4
-(enforcement hardened), session 1 of ~2.5.**
+and say so when an estimate changes. **Roadmap: 17 of ~28 sessions done (~61%). Phase 4 is complete in
+3 sessions (estimate 2–3): the four atlas-verify extensions, the CI metrics collection with a blocking
+staleness gate, the ui-native freeze, the overflow check, runtime-demo visual sections, the @theme inline
+reduction and componentOwners (plan `docs/superpowers/plans/2026-10-23-phase-4-enforcement.md`).
+Next: session 18 of ~28 = M5.1 radius (the semantic token tier; the @theme reduction was its hard
+prerequisite and is done).**
 
 | Phase | Sessions (est.) | Done | Status | PR |
 |---|---|---|---|---|
@@ -20,12 +23,12 @@ plan, Tasks 1–5, Tasks 6–9, Tasks 10–14, on `claude/m4-runtime-slice`. Nex
 | M2 — verifier can fail | 1 | 1 | ✅ | #101 |
 | M3 — registry | 4 | 4 | ✅ exit met except Text (5/6 types) | #102, #103, #104, #105 |
 | 2d — token work, zero new tokens | 1.5 | 1 | ✅ in 1 session (est. 1.5) | #106 |
-| **M4 — runtime vertical slice** | 3.5 | 3.5 | ✅ all 12 M4 rows measured: 11 pass, size fails (report-only, DEC-085) | `claude/m4-runtime-slice` |
-| **Phase 4 — enforcement hardened** | 2.5 | 0 | ⏳ next | |
-| M5 — semantic tokens + brands | 7 | 0 | ⏳ | |
+| **M4 — runtime vertical slice** | 3.5 | 3.5 | ✅ all 12 M4 rows measured: 11 pass, size fails (report-only, DEC-085) | #108 |
+| **Phase 4 — enforcement hardened** | 2.5 | 3 | ✅ in 3 sessions (est. range 2–3) | this branch |
+| M5 — semantic tokens + brands | 7 | 0 | ⏳ next: M5.1 radius | |
 | Phase 6 — filtered agent catalog | 2.5 | 0 | ⏳ | |
 | Phase 7 — metrics as release gates | 1.5 | 0 | ⏳ | |
-| **Total** | **~28** | **14** | **~50%** | |
+| **Total** | **~28** | **17** | **~61%** | |
 
 Metric table (the roadmap's scoreboard): **7 passing · 2 failing · 26 not measurable** of 35. 2d moved
 the two raw-design-values rows and reduced-motion to passing; D1-B measured the three token-drift rows
@@ -128,6 +131,42 @@ each over the registered subset (4/47 components registered).
   `vitest.metrics.config.ts` (`npm run test:metrics`) in CI's metrics job with `continue-on-error`, and
   `metrics-report` reads its `.metrics/vitest-metrics.json`. A more compact protocol is a separate, later decision.
 
+## Phase 4 session 1 is done — what it left you (roadmap §Phase 4; plan `docs/superpowers/plans/2026-10-23-phase-4-enforcement.md`)
+- **Four new atlas-verify checks, each with PASS and FAIL fixture tests**: `design/deprecation-expiry`
+  (removeIn shipped or malformed fails), `code/contrast` (the manifest row's check id), `scope/registry-complete`
+  (authored-entry count may only increase), `scope/breaking-change` (token/variant/size/component removals need a
+  `### Breaking` CHANGELOG addition in the same diff). All static, all local; CI runs them through the existing
+  atlas-verify job with no workflow change.
+- **`code.contrast` measures 25 token pairs in both themes** (5 scale, 11 component, 9 surface; Checkbox/Radio
+  glyphs pair with their CHECKED fills) and found 14 sub-4.5:1 pairs → five root values, all logged as **DISC-108**
+  and seeded in `packages/governance/contrast-allow.json` (schema `contrastAllow`, an `INPUTS` rule, WATCHED).
+  The check PASSES today: the allow entries carry each finding's measured `ratio`, and fail when a pair recovers
+  (stale) or drops >0.15 below its allowance (new violation). Fixing a value Figma-first deletes the entry.
+- **A glyph pairing rule was discovered, not invented**: `checkbox-foreground`/`radio-foreground` render only on the
+  checked fill; pairing them with the unchecked box measures 1.00:1 nonsense. `derivePairs` prefers
+  `-checked-background`; the unit test pins it.
+- The metric row stays `not measurable` until session 2's CI collection (the committed region is still the
+  deterministic no-results state; `metrics:check` unchanged).
+- **Sessions 2–3 also done, on the same branch:**
+  - **CI metrics collection is live and blocking.** The metrics job collects atlas-verify/vitest/test:metrics/Playwright
+    JSON into `.metrics/` in-job (collection steps continue-on-error: a red check is a reading), writes `atlas-report.json`,
+    uploads the `metrics` artifact, comments the totals on the PR, and `metrics:check` BLOCKS on a stale region. Refresh
+    protocol: download the `metrics` artifact, drop the files into `.metrics/`, `npm run metrics:report`, commit. Locally
+    (no result sources) `--check` tolerates a result-derived region and says so — CI verifies it strictly.
+  - **`Native freeze` job:** any diff under `packages/ui-native/**` fails without the `atlas-native-thaw` label
+    (merged-PR lookup on pushes, the atlas-approved-new mechanism).
+  - **Manifest +32nd→36 rows:** the registryComplete ratchet ("Registered types removed between releases" →
+    `scope.registry-complete`) and the D1 coverage fraction rendered on all three token-drift rows.
+  - **Overflow check** (`visual > no horizontal scroll at each breakpoint`, tests/runtime/overflow.spec.ts): sandbox +
+    runtime-demo at sm–2xl, all clean. **Known gap (not a library regression): the sandbox overflows 86px at 375px**
+    (Tooltip demo 437px wide; Tabs row, NavBar search, Bar Chart stats also overshoot) — below-sm is not a supported
+    breakpoint; fix the sandbox demo layout if phone-width demos matter.
+  - **runtime-demo visual sections** (tests/visual/runtime-demo.spec.ts, light+dark; linux baselines via the
+    Visual baseline workflow) and **@theme inline reduced to the five breakpoint mirrors** (R4 closed for M5: ~90
+    build-time-flattened mirrors deleted; nothing consumed them).
+  - **componentOwners populated** for all 47 (one handle); `atlas-sync` now carries `owner` into every metadata file
+    (the atlas-sync test asserts it).
+
 ## Open owner decisions (ask; do not decide these yourself)
 - **Text (the 6th M3 exit type) — deferred by the user 2026-10-23 (DEC-080).** Atlas has no Text
   component; register it only after a Figma-first atlas-component session builds one. Until then the
@@ -143,6 +182,13 @@ each over the registered subset (4/47 components registered).
   (effect styles in Figma, not variables) and safe-area insets (`env()`) may be declared code-only, but
   that allowance is a new design-system rule and is the owner's; the 4 dialog widths and `neutral-50`
   look like Figma gaps. Until decided, "missing code tokens" and "missing Figma tokens" read failing.
+- **Contrast findings (DISC-108, found by Phase 4's `code.contrast`).** Five root values measure under
+  WCAG AA 4.5:1: `success-foreground` light (4.42), `info-foreground` (3.98 light / 2.98 dark),
+  `primary-foreground` dark (3.71, inherited by Button primary and Checkbox/Radio checked fills),
+  `danger-foreground` dark (3.90, inherited by Button destructive and the invalid-checked fills) and
+  `foreground-subtle` dark (4.16/3.74/3.07 on background/surface/surface-raised). Fix each Figma-first
+  (then delete its `contrast-allow.json` entry — a recovered pair fails as stale), or record a
+  pairing/AA-large decision in the entry's reason.
 - **DISC-095** (Button `link` ignores size in code, Figma draws it), **DISC-096/097** (Card header
   slots and footer `justify` are code features Figma does not draw).
 - **7 of the 11 open DISCs are one class** — DISC-027, 098–104, "Figma description is a spec summary,

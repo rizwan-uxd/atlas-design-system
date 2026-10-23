@@ -4,6 +4,7 @@
   "tier": "patterns",
   "status": "stable",
   "deprecated": null,
+  "owner": "@rizwan-uxd",
   "import": "@atlas/ui-web/patterns/DropdownMenu/DropdownMenu",
   "variants": [],
   "sizes": [],

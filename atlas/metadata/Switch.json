@@ -4,6 +4,7 @@
   "tier": "primitives",
   "status": "stable",
   "deprecated": null,
+  "owner": "@rizwan-uxd",
   "import": "@atlas/ui-web/primitives/Switch/Switch",
   "variants": [],
   "sizes": ["sm", "md", "lg"],

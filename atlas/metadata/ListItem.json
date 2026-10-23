@@ -4,6 +4,7 @@
   "tier": "compositions",
   "status": "stable",
   "deprecated": null,
+  "owner": "@rizwan-uxd",
   "import": "@atlas/ui-web/compositions/ListItem/ListItem",
   "variants": ["default", "outline", "muted"],
   "sizes": ["sm", "md"],

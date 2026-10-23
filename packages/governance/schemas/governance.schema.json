@@ -2,8 +2,31 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://atlas.design-system/schemas/governance.schema.json",
   "title": "Authored governance and registry files",
-  "description": "Hand-authored sources: packages/governance/{deprecations,ownership,private-vars.allow}.json and packages/registry/figma-axis-map.json.",
+  "description": "Hand-authored sources: packages/governance/{deprecations,ownership,private-vars.allow,contrast-allow}.json and packages/registry/figma-axis-map.json.",
   "$defs": {
+    "contrastAllow": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["_note", "entries"],
+      "properties": {
+        "_note": { "$ref": "common.schema.json#/$defs/text" },
+        "entries": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["fg", "bg", "theme", "ratio", "reason"],
+            "properties": {
+              "fg": { "type": "string", "pattern": "^--atlas-[\\w-]+$" },
+              "bg": { "type": "string", "pattern": "^--atlas-[\\w-]+$" },
+              "theme": { "enum": ["light", "dark"] },
+              "ratio": { "type": "number", "minimum": 1, "maximum": 21 },
+              "reason": { "$ref": "common.schema.json#/$defs/text" }
+            }
+          }
+        }
+      }
+    },
     "privateVarsAllow": {
       "type": "object",
       "additionalProperties": false,

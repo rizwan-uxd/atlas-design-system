@@ -40,7 +40,11 @@ const JSON_ONLY = args.includes("--json")
 const arg = (name) => { const i = args.indexOf(name); return i === -1 ? null : args[i + 1] }
 
 const read = (p) => fs.readFileSync(p, "utf8")
-const readJson = (p) => JSON.parse(read(p))
+// a present-but-invalid results file must be named, not crash the report: it contributes no results
+// (its metrics read not measurable) and the warning says why
+const readJson = (p) => {
+  try { return JSON.parse(read(p)) } catch (e) { console.error(`  ⚠ ${path.relative(ROOT, p)} is not JSON (${e.message}) — its results are not read`); return null }
+}
 const exists = (p) => fs.existsSync(p)
 // the registry source needs ajv and the schemas; loaded only in a repo that has a registry
 // the token-lint source shares atlas-verify's rule grouping, whose module needs typescript; loaded only
@@ -69,8 +73,10 @@ function collectResults(manifest) {
   // atlas-verify --json: { results: [{ group, id, status }] }
   const verify = path.join(dir, "atlas-verify.json")
   if (exists(verify)) {
+    const parsed = readJson(verify)
+    if (!parsed) return results
     found.push("atlas-verify")
-    for (const r of readJson(verify).results ?? []) {
+    for (const r of parsed.results ?? []) {
       if (r.status === "skip") continue // skipped is not a result; leave the metric not measurable
       results.set(`atlas-verify:${r.group}.${r.id}`, r.status === "pass")
       results.set(`atlas-verify:${r.id}`, r.status === "pass")
@@ -83,8 +89,9 @@ function collectResults(manifest) {
   for (const [source, file] of [["vitest", "vitest.json"], ["vitest", "vitest-metrics.json"], ["playwright", "playwright.json"]]) {
     const p = path.join(dir, file)
     if (!exists(p)) continue
-    if (!found.includes(source)) found.push(source)
     const data = readJson(p)
+    if (!data) continue
+    if (!found.includes(source)) found.push(source)
     for (const suite of data.testResults ?? data.suites ?? []) {
       for (const t of suite.assertionResults ?? suite.specs ?? []) {
         const name = t.fullName ?? t.title ?? ""
@@ -102,14 +109,15 @@ function collectResults(manifest) {
   const tokens = path.join(ROOT, "atlas/tokens.json")
   const tokensJson = exists(tokens) ? readJson(tokens) : null
   const bound = tokensJson?.figmaBound ?? null
-  // D1 option B: the whole variable table. Full coverage, so its rows carry no fraction.
+  // D1 option B: the whole variable table. Full coverage; Phase 4 renders the D1 coverage fraction on
+  // every row (passing or failing), so a green row also says what it was measured over.
   const table = tokensJson?.figmaTable ?? null
   if (table?.coverage?.figmaVariables > 0) {
     if (!found.includes("atlas-sync")) found.push("atlas-sync")
     for (const [id, list] of [["tokens.name-drift", table.drift?.nameDrift], ["tokens.missing-in-code", table.drift?.missingInCode], ["tokens.missing-in-figma", table.drift?.missingInFigma]]) {
       if (!Array.isArray(list)) continue // a renamed field is not a pass
       results.set(`atlas-sync:${id}`, list.length === 0)
-      if (list.length) coverage.set(`atlas-sync:${id}`, { text: `${list.length} over all ${table.coverage.figmaVariables} Figma variables and ${table.coverage.codeTokens} code tokens`, full: true })
+      coverage.set(`atlas-sync:${id}`, { text: `${list.length ? list.length + " drift — " : "0 drift — "}all ${table.coverage.figmaVariables} Figma variables and ${table.coverage.codeTokens} code tokens`, full: true })
     }
   }
   if (bound?.coverage?.covered > 0) {
@@ -328,7 +336,24 @@ const next = `${body.slice(0, at)}${section}${body.slice(body.indexOf(END) + END
 if (CHECK) {
   const stale = next !== body
   for (const p of problems) console.error(`  ✗ ${p}`)
-  if (stale) console.error("  ✗ docs/ATLAS-DELIVERY-ROADMAP.md metric region is stale — run: node scripts/metrics-report.mjs")
+  if (stale) {
+    // Phase 4: the committed region may be derived from CI's collected results (.metrics artifacts),
+    // which no local run without those files can reproduce. Such a region is only verifiable where
+    // the results exist — CI, which runs this same check with .metrics/ present and BLOCKS on it.
+    // Anywhere else, say so instead of demanding an impossible regeneration. (Problems — totality
+    // failures — still fail everywhere; only the region comparison is tolerated.)
+    const RESULT_SOURCES = ["atlas-verify", "vitest", "playwright", "bench"]
+    const committedRegion = body.slice(body.indexOf(BEGIN), body.indexOf(END))
+    const committedSources = [...new Set([...committedRegion.matchAll(/`([a-z-]+)`/g)].map((m) => m[1]).filter((s) => RESULT_SOURCES.includes(s)))]
+    const runSources = manifest._sourcesFound ?? []
+    const committedIsResultDerived = committedSources.length > 0
+    const runIsResultDerived = runSources.some((s) => RESULT_SOURCES.includes(s))
+    if (committedIsResultDerived && !runIsResultDerived && !problems.length) {
+      console.log(`◯ metrics-report: committed region is CI result-derived (${committedSources.join(", ")}) and no result sources are present here — verified strictly in CI's metrics job`)
+      process.exit(0)
+    }
+    console.error("  ✗ docs/ATLAS-DELIVERY-ROADMAP.md metric region is stale — run: node scripts/metrics-report.mjs (from CI's `metrics` artifact when the region is result-derived)")
+  }
   if (!stale && !problems.length) {
     console.log(`✅ metrics-report: region current — ${report.totals.passing} passing · ${report.totals.failing} failing · ${report.totals.notMeasurable} not measurable`)
     process.exit(0)

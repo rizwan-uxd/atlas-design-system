@@ -121,25 +121,26 @@ fails when this region is stale. Statuses are exactly three: **passing** (a decl
 **failing** (ran and failed), **not measurable** (no result for the declared check — reported as `n/a`,
 never `0`). A metric with no check is *not measurable*, never passing: absence of a signal is not a pass.
 
-**7 passing · 2 failing · 26 not measurable** of 35. 3 of the measured rows cover only part of their population; the row says how much.
+**23 passing · 3 failing · 10 not measurable** of 36. 3 of the measured rows cover only part of their population; the row says how much.
 
-Result sources read: `atlas-sync`, `registry`, `token-lint`. Sources not present leave their metrics not measurable.
+Result sources read: `atlas-verify`, `vitest`, `playwright`, `atlas-sync`, `registry`, `token-lint`. Sources not present leave their metrics not measurable.
 
 ### Catalog Over Code
 
 | Metric | Target | Status | Check | Measurable at |
 |---|---:|---|---|---|
-| Agent outputs containing CSS, HTML, JSX, or arbitrary markup | 0 | not measurable | `runtime/validator > rejects markup in prop values` | M4 |
-| Rendered nodes mapped to registered components | 100% | not measurable | `runtime-demo > every node carries a registered data-atlas-type` | M4 |
+| Agent outputs containing CSS, HTML, JSX, or arbitrary markup | 0 | **passing** | `runtime/validator > rejects markup in prop values` | M4 |
+| Rendered nodes mapped to registered components | 100% | **passing** | `runtime-demo > every node carries a registered data-atlas-type` | M4 |
 | Direct raw color or spacing values accepted by components | 0 | **passing** | `code.raw-design-values` | Phase 2d |
+| Registered types removed between releases | 0 | **passing** | `scope.registry-complete` | Phase 4 |
 
 ### Grammar Parsimony
 
 | Metric | Target | Status | Check | Measurable at |
 |---|---:|---|---|---|
-| Protocol messages passing schema validation | 100% | not measurable | `design.schemas` | M2 (JSON inputs), M4 (protocol) |
-| Full conversation replay required for UI interaction | 0% | not measurable | `runtime-demo > interaction sends a state delta, not a re-render` | M4 |
-| Median protocol size versus equivalent markup | At least 70% smaller | not measurable | `runtime/protocol > payload is at most 30% of rendered markup bytes` | M4 |
+| Protocol messages passing schema validation | 100% | **passing** | `design.schemas` | M2 (JSON inputs), M4 (protocol) |
+| Full conversation replay required for UI interaction | 0% | **passing** | `runtime-demo > interaction sends a state delta, not a re-render` | M4 |
+| Median protocol size versus equivalent markup | At least 70% smaller | **failing** | `runtime/protocol > payload is at most 30% of rendered markup bytes` | M4 |
 | First valid streamed operation | Under 250 ms p95 | not measurable | `protocol.firstOpP95` | Phase 6 |
 
 ### State Synchronization
@@ -147,18 +148,18 @@ Result sources read: `atlas-sync`, `registry`, `token-lint`. Sources not present
 | Metric | Target | Status | Check | Measurable at |
 |---|---:|---|---|---|
 | Interactive components with typed event contracts | 100% | **passing** — 0 failing of 4 interactive registered types (4/47 components registered) | `design.registry-events` | M3 |
-| User events lost or reordered | 0 | not measurable | `runtime-demo > 50 rapid submits keep strictly increasing sequence` | M4 |
-| Interactions requiring full-screen regeneration | 0% | not measurable | `runtime-demo > patch updates only the addressed subtree` | M4 |
-| State acknowledgment latency | Under 300 ms p95 client-side | not measurable | `runtime-demo > state ack p95` | M4 |
+| User events lost or reordered | 0 | **passing** | `runtime-demo > 50 rapid submits keep strictly increasing sequence` | M4 |
+| Interactions requiring full-screen regeneration | 0% | **passing** | `runtime-demo > patch updates only the addressed subtree` | M4 |
+| State acknowledgment latency | Under 300 ms p95 client-side | **passing** | `runtime-demo > state ack p95` | M4 |
 
 ### Fallback
 
 | Metric | Target | Status | Check | Measurable at |
 |---|---:|---|---|---|
-| Invalid payloads producing a safe render | 100% | not measurable | `runtime/fuzz > 1000 malformed payloads all render` | M4 |
-| Unhandled render exceptions | 0 | not measurable | `runtime/fuzz > no payload throws` | M4 |
+| Invalid payloads producing a safe render | 100% | **passing** | `runtime/fuzz > 1000 malformed payloads all render` | M4 |
+| Unhandled render exceptions | 0 | **passing** | `runtime/fuzz > no payload throws` | M4 |
 | Components with declared fallback behavior | 100% | **passing** — 0 failing of 5 registered types (4/47 components registered) | `design.registry-fallback` | M3 |
-| Fallback render latency | Under 100 ms p95 | not measurable | `runtime-demo > fallback render p95` | M4 |
+| Fallback render latency | Under 100 ms p95 | **passing** | `runtime-demo > fallback render p95` | M4 |
 
 ### Context Containment
 
@@ -174,19 +175,19 @@ Result sources read: `atlas-sync`, `registry`, `token-lint`. Sources not present
 | Metric | Target | Status | Check | Measurable at |
 |---|---:|---|---|---|
 | Core components pass automated accessibility checks | 100% | not measurable | `axe-coverage > every registered component has a passing axe assertion` | M3 |
-| Contrast meets WCAG AA | pass | not measurable | `code.contrast` | Phase 4 |
+| Contrast meets WCAG AA | pass | **passing** | `code.contrast` | Phase 4 |
 | Keyboard navigation works for every interactive component | pass | not measurable | `keyboard > every interactive component suite` | Phase 4 |
 | Focus states are visible | pass | not measurable | `code.focus-visible` | Phase 4 |
-| Form errors are associated with their fields | pass | not measurable | `Field — help and error` | now |
+| Form errors are associated with their fields | pass | **passing** | `Field — help and error` | now |
 | Reduced-motion behavior is supported | pass | **passing** | `code.reduced-motion-required` | Phase 2d |
 
 ### Figma parity
 
 | Metric | Target | Status | Check | Measurable at |
 |---|---:|---|---|---|
-| Token-name drift | 0 | **passing** | `tokens.name-drift` | D1 option B (full variable table) |
-| Missing code tokens | 0 | **failing** — 2 over all 463 Figma variables and 432 code tokens | `tokens.missing-in-code` | D1 option B (full variable table) |
-| Missing Figma tokens | 0 | **failing** — 15 over all 463 Figma variables and 432 code tokens | `tokens.missing-in-figma` | D1 option B (full variable table) |
+| Token-name drift | 0 | **passing** — 0 drift — all 463 Figma variables and 432 code tokens | `tokens.name-drift` | D1 option B (full variable table) |
+| Missing code tokens | 0 | **failing** — 2 drift — all 463 Figma variables and 432 code tokens | `tokens.missing-in-code` | D1 option B (full variable table) |
+| Missing Figma tokens | 0 | **failing** — 15 drift — all 463 Figma variables and 432 code tokens | `tokens.missing-in-figma` | D1 option B (full variable table) |
 | All supported brand modes compile successfully | pass | not measurable | `design.brand-modes` | M5.6 |
 | Critical visual regression tests pass for every brand mode | pass | not measurable | `visual > sandbox` | now (light/dark only), M5.6 (brands) |
 
@@ -195,10 +196,10 @@ Result sources read: `atlas-sync`, `registry`, `token-lint`. Sources not present
 | Metric | Target | Status | Check | Measurable at |
 |---|---:|---|---|---|
 | No raw design values in component implementations | pass | **passing** | `code.raw-design-values` | Phase 2d |
-| No component renders without a valid schema | pass | not measurable | `runtime/validator > unregistered type never renders` | M4 |
-| No unsupported component can reach the renderer | pass | not measurable | `runtime/validator > unknown type replaced by fallback` | M4 |
+| No component renders without a valid schema | pass | **passing** | `runtime/validator > unregistered type never renders` | M4 |
+| No unsupported component can reach the renderer | pass | **passing** | `runtime/validator > unknown type replaced by fallback` | M4 |
 | Loading, empty, error, active and disabled states exist for all interactive components | pass | **passing** — 0 failing of 3 interactive registered components (4/47 components registered) | `design.registry-states` | M3 |
-| No horizontal overflow at supported breakpoints | pass | not measurable | `visual > no horizontal scroll at each breakpoint` | Phase 4 |
+| No horizontal overflow at supported breakpoints | pass | **passing** | `visual > no horizontal scroll at each breakpoint` | Phase 4 |
 
 **How to read this.** A row is only as good as its check. `not measurable` is the honest state for
 most of this table today and it is what the roadmap's early phases exist to reduce — each phase is
@@ -859,6 +860,25 @@ All extensions, no new scripts:
   committed table fails CI the same way `tokens-build` fails on undiffed native output. Nobody
   hand-edits a status, and a metric with no check reports *not measurable* rather than passing. Plus
   the `registryComplete` ratchet and the D1 coverage fraction. This substitutes for a second reviewer.
+
+**As built (sessions 1–3, 2026-10-23; plan `docs/superpowers/plans/2026-10-23-phase-4-enforcement.md`).**
+The four `atlas-verify` extensions are in, each with PASS and FAIL fixture tests:
+`design/deprecation-expiry`, `code/contrast`, `scope/registry-complete`, `scope/breaking-change`.
+`code.contrast` derives 25 pairs from the tokens' own naming (scale, component — control glyphs pair
+with their **checked** fills — and the canonical surface set) and measures both themes statically:
+14 pairs sit under 4.5:1, tracing to five root values, logged as **DISC-108** and seeded (with their
+measured ratios) in `packages/governance/contrast-allow.json`; an allowance fails as stale the moment
+its pair recovers, and a pair more than 0.15 below its allowance is a new violation the allowance
+cannot mask. Sessions 2–3 closed the rest of the bullet list: the metrics job collects every result
+source in-job, comments the totals on the PR and blocks on a stale region (`metrics:check`; refresh
+from the `metrics` artifact — locally `--check` tolerates a result-derived region, CI verifies it
+strictly); the `Native freeze` job fails any `packages/ui-native` diff without the
+`atlas-native-thaw` label; the manifest gained the registryComplete ratchet row (36 rows) and the D1
+coverage fraction on the token-drift rows; `visual > no horizontal scroll at each breakpoint` runs
+the sandbox and `app/runtime-demo` at sm–2xl (all clean; the sandbox's 86px overflow at 375px is
+below the smallest supported breakpoint and noted in the handoff); `app/runtime-demo` joined the
+visual-regression surface; `@theme inline` is reduced to the five breakpoint mirrors (R4 closed for
+M5); and `componentOwners` lists all 47 components, carried into every metadata file by the sync.
 
 ---
 
