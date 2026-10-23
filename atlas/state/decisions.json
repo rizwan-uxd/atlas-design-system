@@ -491,6 +491,18 @@
       "topic": "D1 decision gate: the Figma token table is read with option B (Plugin API through use_figma)",
       "decision": "Owner-chosen 2026-10-23 at the end of Phase 2. The whole local variable table is read with figma.variables.getLocalVariablesAsync() in one read-only use_figma call (names, collections, modes, codeSyntax.WEB; no values) and synced with atlas-sync --variables into atlas/tokens.json figmaTable, stamped with its own syncedAt. Token values stay derived from atlas.tokens.css. Token-name drift, missing code tokens and missing Figma tokens are measured over the full table; option C's bound subset (figmaBound) stays as a cross-check. A Figma variable with no codeSyntax.WEB and no CSS token is unpublished (Figma-only), not drift; a CSS token that spells out a mode of a multi-mode collection (columns-mobile) is covered by that variable. Option A (REST) stays off the table without an Enterprise plan; D is not needed.",
       "date": "2026-10-23"
+    },
+    {
+      "id": "DEC-082",
+      "topic": "M4 runtime: a fallback whose target type is not registered renders nothing",
+      "decision": "Owner-chosen 2026-10-23 (M4 session 1). When the runtime needs a node's fallback and the fallback target is not a registered type (for example, Alert's own entry was deleted, and Alert is the one terminal of DEC-080), the node is dropped. Its siblings and the rest of the page render, and the runtime reports a render issue. No unregistered or runtime-invented markup reaches the DOM, so every rendered node still carries a registered data-atlas-type. Rejected: a runtime-owned placeholder element (it would need an exemption from 'every node registered'), and changing the exit test to delete a non-terminal entry.",
+      "date": "2026-10-23"
+    },
+    {
+      "id": "DEC-083",
+      "topic": "M4 runtime: TextField.name is the one required protocol prop",
+      "decision": "Owner-chosen 2026-10-23 (M4 session 1). protocolProps.name.required is true on TextField, the only required prop for now: a form cannot submit a field with no name. registry-build already emits protocolProps.<p>.required into the generated schema's props.required. The validator sends a node missing a required prop to its fallback instead of throwing. More required props are later owner decisions, one per entry.",
+      "date": "2026-10-23"
     }
   ]
 }

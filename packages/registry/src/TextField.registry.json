@@ -15,7 +15,7 @@
     "invalid": {},
     "loading": {},
     "disabled": {},
-    "name": {},
+    "name": { "required": true },
     "value": {},
     "placeholder": {},
     "required": {}
