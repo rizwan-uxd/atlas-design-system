@@ -83,6 +83,11 @@
   --atlas-radius-xl: 16px;
   --atlas-radius-2xl: 24px;
   --atlas-radius-full: 9999px;
+  /* M5.1 semantic radius roles — value-identical aliases (Kind A); Figma Atlas/Semantic radius-* */
+  --atlas-radius-item: var(--atlas-radius-sm);
+  --atlas-radius-control: var(--atlas-radius-md);
+  --atlas-radius-surface: var(--atlas-radius-lg);
+  --atlas-radius-pill: var(--atlas-radius-full);
 
   /* ─────────────── Icon size ─────────────── */
   --atlas-icon-size-xs: 16px;
@@ -371,7 +376,7 @@
   --atlas-button-link-foreground-active: var(--atlas-primary-active);
   --atlas-button-foreground-disabled: var(--atlas-foreground-disabled);
   /* Button · size and shape */
-  --atlas-button-radius: var(--atlas-radius-md);
+  --atlas-button-radius: var(--atlas-radius-control);
   --atlas-button-gap: var(--atlas-spacing-2);
   --atlas-button-size-xs-gap: var(--atlas-spacing-1);
   --atlas-button-size-xs-height: var(--atlas-spacing-6);
@@ -403,7 +408,7 @@
   --atlas-input-icon-foreground: var(--atlas-foreground-muted);
   --atlas-input-affix-foreground: var(--atlas-foreground-muted);
   /* Input · size and shape */
-  --atlas-input-radius: var(--atlas-radius-md);
+  --atlas-input-radius: var(--atlas-radius-control);
   --atlas-input-icon-size: var(--atlas-spacing-5);
   --atlas-input-adornment-padding: var(--atlas-spacing-10);
   --atlas-input-size-sm-height: var(--atlas-spacing-8);
@@ -431,7 +436,7 @@
   --atlas-card-title-foreground: var(--atlas-foreground);
   --atlas-card-description-foreground: var(--atlas-foreground-muted);
   /* Card · size and shape */
-  --atlas-card-radius: var(--atlas-radius-lg);
+  --atlas-card-radius: var(--atlas-radius-surface);
   --atlas-card-size-sm-padding: var(--atlas-spacing-3);
   --atlas-card-size-sm-gap: var(--atlas-spacing-2);
   --atlas-card-size-md-padding: var(--atlas-spacing-4);
@@ -455,7 +460,7 @@
   --atlas-textarea-counter-foreground: var(--atlas-foreground-muted);
   --atlas-textarea-counter-foreground-over: var(--atlas-danger);
   /* Textarea · size and shape */
-  --atlas-textarea-radius: var(--atlas-radius-md);
+  --atlas-textarea-radius: var(--atlas-radius-control);
   --atlas-textarea-size-sm-padding-block: var(--atlas-spacing-2);
   --atlas-textarea-size-sm-padding-inline: var(--atlas-spacing-3);
   --atlas-textarea-size-sm-font-size: var(--atlas-font-size-sm);
@@ -490,7 +495,7 @@
   --atlas-checkbox-card-invalid-border: var(--atlas-danger);
   /* Checkbox · size and shape */
   --atlas-checkbox-radius: var(--atlas-radius-sm);
-  --atlas-checkbox-card-radius: var(--atlas-radius-md);
+  --atlas-checkbox-card-radius: var(--atlas-radius-control);
   --atlas-checkbox-gap: var(--atlas-spacing-3);
   --atlas-checkbox-size-sm-box: var(--atlas-spacing-4);
   --atlas-checkbox-size-md-box: var(--atlas-spacing-5);
@@ -540,8 +545,8 @@
   --atlas-radio-card-checked-border: var(--atlas-primary);
   --atlas-radio-card-invalid-border: var(--atlas-danger);
   /* Radio · size and shape */
-  --atlas-radio-radius: var(--atlas-radius-full);
-  --atlas-radio-card-radius: var(--atlas-radius-md);
+  --atlas-radio-radius: var(--atlas-radius-pill);
+  --atlas-radio-card-radius: var(--atlas-radius-control);
   --atlas-radio-gap: var(--atlas-spacing-3);
   --atlas-radio-dot: var(--atlas-spacing-2);
   --atlas-radio-size-sm-control: var(--atlas-spacing-4);
@@ -566,7 +571,7 @@
   --atlas-select-item-indicator-foreground: var(--atlas-primary);
   --atlas-select-label-foreground: var(--atlas-foreground-muted);
   /* Select · size and shape */
-  --atlas-select-radius: var(--atlas-radius-md);
+  --atlas-select-radius: var(--atlas-radius-control);
   --atlas-select-content-radius: var(--atlas-radius-md);
   --atlas-select-size-sm-height: var(--atlas-spacing-8);
   --atlas-select-size-sm-padding-inline-start: var(--atlas-spacing-3);

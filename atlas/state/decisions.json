@@ -515,6 +515,12 @@
       "topic": "M4: the protocol size metric is report-only and reads failing (0.308)",
       "decision": "Owner-chosen 2026-10-23 (M4 session 3). runtime/protocol > payload is at most 30% of rendered markup bytes is committed as the honest reading: the request-access render op is 513 B against 1663 B of rendered markup, ratio 0.308, over the 0.30 gate (521 B of the markup is the runtime's own data-atlas-* tagging; against component markup alone the ratio is about 0.45). The test is packages/runtime/tests/size.metric.tsx, outside the blocking vitest include; vitest.metrics.config.ts runs it (npm run test:metrics) in CI's metrics job with continue-on-error, writing .metrics/vitest-metrics.json, which metrics-report reads as vitest results. The fixture copy is not trimmed to pass. A more compact protocol encoding is a later, separate decision.",
       "date": "2026-10-23"
+    },
+    {
+      "id": "DEC-086",
+      "topic": "M5.1: semantic radius roles (Kind A, value-identical)",
+      "decision": "Owner-chosen 2026-10-23. Four radius roles, each an exact alias of one existing step: radius-item = radius/sm (4, rows inside a list or menu), radius-control = radius/md (8, interactive controls), radius-surface = radius/lg (12, raised surfaces and containers), radius-pill = radius/full (fully rounded shapes). Figma Atlas/Semantic, named flat to match that collection (radius-item, not radius/item), ids VariableID:1088:2-5, CORNER_RADIUS scope, Light and Dark both alias the primitive; CSS --atlas-radius-item|control|surface|pill in atlas.tokens.css :root. Component tokens re-aliased in Figma and code: button, input, textarea, select, checkbox-card and radio-card radius to control; card radius to surface; radio radius to pill (every value resolves unchanged). radius/none, radius/xl and radius/2xl stay primitive, and so do uses whose step matches a role but whose meaning does not (md overlays, sm compact controls and focus rings, lg date-picker controls, the Image radius prop scale, avatar-squircle sizes, checkbox box, select content); they are allowlisted with reasons and logged as candidate roles in PR-1. A role is chosen by meaning, never by value alone. Plan docs/superpowers/plans/2026-10-23-m5-1-radius.md.",
+      "date": "2026-10-23"
     }
   ]
 }

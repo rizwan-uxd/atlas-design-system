@@ -179,6 +179,10 @@ export const radius = {
   xl: 16,
   "2xl": 24,
   full: 9999,
+  item: 4,
+  control: 8,
+  surface: 12,
+  pill: 9999,
 } as const
 
 // ─── Typography · sizes (--atlas-font-size-*) ─────────────────────────────────
