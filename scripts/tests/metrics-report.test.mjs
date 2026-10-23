@@ -274,6 +274,28 @@ test("a token-lint run that cannot read its inputs fails its rows rather than le
   } finally { fs.rmSync(dir, { recursive: true, force: true }) }
 })
 
+// D1 option B: the three token-drift rows read the full variable table (atlas/tokens.json figmaTable)
+const tokenRows = (dir) => Object.fromEntries(JSON.parse(run(dir, ["--json"]).out).metrics.filter((m) => m.check.startsWith("tokens.")).map((m) => [m.check, m]))
+
+test("token-drift rows read the full table: failing with a count over the whole table, passing when the list is empty", () => {
+  const dir = registryRepo()
+  try {
+    const file = path.join(dir, "atlas/tokens.json")
+    const tokens = JSON.parse(fs.readFileSync(file, "utf8"))
+    tokens.figmaTable.drift = { nameDrift: [], missingInCode: [{ figma: "card/radius", css: "--atlas-card-radius" }], missingInFigma: [] }
+    fs.writeFileSync(file, JSON.stringify(tokens))
+    const rows = tokenRows(dir)
+    assert.deepEqual(Object.keys(rows).sort(), ["tokens.missing-in-code", "tokens.missing-in-figma", "tokens.name-drift"])
+    assert.equal(rows["tokens.name-drift"].status, "passing")
+    assert.equal(rows["tokens.missing-in-figma"].status, "passing")
+    assert.equal(rows["tokens.missing-in-code"].status, "failing")
+    assert.match(rows["tokens.missing-in-code"].coverage.text, /^1 over all \d+ Figma variables and \d+ code tokens$/)
+    delete tokens.figmaTable.drift.missingInFigma // a renamed or missing field is no result, never a pass
+    fs.writeFileSync(file, JSON.stringify(tokens))
+    assert.equal(tokenRows(dir)["tokens.missing-in-figma"].status, "not measurable")
+  } finally { fs.rmSync(dir, { recursive: true, force: true }) }
+})
+
 test("a broken registry turns its row failing, and an invalid entry fails rather than being measured around", () => {
   const dir = registryRepo()
   try {

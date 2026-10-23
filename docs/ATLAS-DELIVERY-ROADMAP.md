@@ -121,7 +121,7 @@ fails when this region is stale. Statuses are exactly three: **passing** (a decl
 **failing** (ran and failed), **not measurable** (no result for the declared check — reported as `n/a`,
 never `0`). A metric with no check is *not measurable*, never passing: absence of a signal is not a pass.
 
-**8 passing · 0 failing · 27 not measurable** of 35. 5 of the measured rows cover only part of their population; the row says how much.
+**7 passing · 2 failing · 26 not measurable** of 35. 3 of the measured rows cover only part of their population; the row says how much.
 
 Result sources read: `atlas-sync`, `registry`, `token-lint`. Sources not present leave their metrics not measurable.
 
@@ -184,9 +184,9 @@ Result sources read: `atlas-sync`, `registry`, `token-lint`. Sources not present
 
 | Metric | Target | Status | Check | Measurable at |
 |---|---:|---|---|---|
-| Token-name drift | 0 | **passing** — 0 drift over 193/432 covered (bound subset only) | `tokens.bound-name-drift` | D1 option C now (bound subset); full table needs A or B |
-| Missing code tokens | 0 | **passing** — 0 drift over 193/432 covered (bound subset only) | `tokens.bound-missing-in-code` | D1 option C now (bound subset); full table needs A or B |
-| Missing Figma tokens | 0 | not measurable | `design.token-drift` | D1 option A or B |
+| Token-name drift | 0 | **passing** | `tokens.name-drift` | D1 option B (full variable table) |
+| Missing code tokens | 0 | **failing** — 2 over all 463 Figma variables and 432 code tokens | `tokens.missing-in-code` | D1 option B (full variable table) |
+| Missing Figma tokens | 0 | **failing** — 15 over all 463 Figma variables and 432 code tokens | `tokens.missing-in-figma` | D1 option B (full variable table) |
 | All supported brand modes compile successfully | pass | not measurable | `design.brand-modes` | M5.6 |
 | Critical visual regression tests pass for every brand mode | pass | not measurable | `visual > sandbox` | now (light/dark only), M5.6 (brands) |
 
@@ -680,7 +680,27 @@ has **no Figma dependency, no `atlas-approved-new` label, no visual blast radius
 
 ---
 
-## D1 — Decision gate: Figma token-table access
+## D1 — Decision gate: Figma token-table access — ✅ DECIDED 2026-10-23: option B, built (DEC-081)
+
+> **The owner chose B at the end of Phase 2, and it landed in one session.** One read-only `use_figma`
+> call reads the whole table (`getLocalVariablesAsync`: 463 variables, 5 collections, every mode) as a
+> compact list with an FNV-1a checksum, so the copy into `.atlas-pull/variables.json` is proven exact
+> (`e11ec099` on both sides). `atlas-sync --variables` validates it against
+> `figma-pull.schema.json#/$defs/variableTable` before writing anything, and `atlas/tokens.json`
+> `figmaTable` carries it with its own `syncedAt`. The token values keep their repo-derived stamp, since
+> the table carries names, not values; a sync without `--variables` carries the table forward.
+> `tableCoverage` (`scripts/lib/token-coverage.mjs`) classifies every variable and every CSS token. A
+> variable with no `codeSyntax.WEB` and no CSS token is **unpublished**: 53 colour ramps, Figma-only,
+> not drift. A CSS token that spells out a mode of a multi-mode collection is covered by that variable
+> (9: `columns|gutter|margin-mobile|tablet|desktop`). **Result over the full table:** 0 name drift;
+> **2 missing in code** (`card/default-background-hover`, `card/outlined-background-hover`, DISC-106);
+> **15 missing in Figma** (`color-neutral-50`, 4 dialog widths, 4 safe-area insets, 4 shadows, 2 card
+> shadows, DISC-107); 417/432 code tokens covered. All three rows are now measured, with no fraction:
+> name drift **passing**, missing code tokens **failing**, missing Figma tokens **failing**. "Missing
+> code tokens" read passing over the bound subset and fails over the whole table, which is exactly why
+> the subset was never coverage. `figmaBound` stays as a cross-check. **Not done:** token *values*
+> (per-mode value drift) and the "regardless of outcome" `atlas.figma.tokens.json` promotion below;
+> both now start from this table.
 
 **This is a dependency decision, not an assumed capability.** Four metrics (token-name drift, missing
 code tokens, missing Figma tokens, all-brand-modes-compile) are **blocked on it**, and the semantic

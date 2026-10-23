@@ -1252,6 +1252,26 @@
       "status": "closed",
       "issue": "Figma draws Pagination/Position = start|middle|end and Pagination has no position prop (found by design/figma-code, M1, 2026-10-22).",
       "resolution": "Owner decision 2026-10-23 (DEC-080): Position is derived state, computed from page and pageCount in Pagination.tsx. The axis is classified state in packages/registry/figma-axis-map.json; no prop is added."
+    },
+    {
+      "id": "DISC-106",
+      "component": "tokens",
+      "side": "both",
+      "status": "open",
+      "issue": "Two Figma variables in Atlas/Component name code tokens that atlas.tokens.css does not declare: card/default-background-hover (--atlas-card-default-background-hover) and card/outlined-background-hover (--atlas-card-outlined-background-hover). Code has only --atlas-card-filled-background-hover. Found 2026-10-23 by the full variable table (DEC-081, atlas/tokens.json figmaTable.drift.missingInCode).",
+      "resolution": "Open. Either add the two component tokens to code (Card default and outlined hover backgrounds, aliasing semantic tokens) or remove the variables from Figma. Needs an owner decision; adding a token is never done on initiative (AGENTS.md section 4).",
+      "firstSeen": "2026-10-23",
+      "lastSeen": "2026-10-23"
+    },
+    {
+      "id": "DISC-107",
+      "component": "tokens",
+      "side": "both",
+      "status": "open",
+      "issue": "15 tokens declared in atlas.tokens.css have no Figma variable: --atlas-color-neutral-50; --atlas-dialog-sm|md|lg|xl; --atlas-safe-top|bottom|inline-start|inline-end; --atlas-shadow-sm|md|lg|xl; --atlas-card-elevated-shadow and --atlas-card-elevated-shadow-hover. Found 2026-10-23 by the full variable table (DEC-081, figmaTable.drift.missingInFigma).",
+      "resolution": "Open, needs an owner decision per group. Shadows are effect styles in Figma, not variables, and safe-area values are env() insets with no Figma equivalent, so those may be declared code-only; the dialog widths and neutral-50 look like Figma gaps. A code-only allowance would be a new design-system rule, so it is not invented here.",
+      "firstSeen": "2026-10-23",
+      "lastSeen": "2026-10-23"
     }
   ]
 }
