@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://atlas.design-system/schemas/tokens.schema.json",
   "title": "atlas/tokens.json",
-  "description": "Semantic tokens and layout scales, written by scripts/atlas-sync.mjs. syncedAt stays null while the file is derived from packages/tokens/atlas.tokens.css (D1): a figma-synced source with a null syncedAt is a contradiction and fails.",
+  "description": "Semantic tokens and layout scales, written by scripts/atlas-sync.mjs. syncedAt stays null: the token values are always derived from packages/tokens/atlas.tokens.css; the Figma side is in figmaTable (D1 option B) and figmaBound (option C), each with its own syncedAt: a figma-synced source with a null syncedAt is a contradiction and fails.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -209,6 +209,254 @@
                   },
                   "web": {
                     "$ref": "common.schema.json#/$defs/nullableText"
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "figmaTable": {
+      "description": "D1 option B: the whole Figma variable table compared with every --atlas-* token. figma-synced with its own syncedAt; it never restamps the token values above, which stay derived from atlas.tokens.css. Carried forward when a run reads no table.",
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "source",
+            "syncedAt",
+            "figmaVersion",
+            "note",
+            "collections",
+            "coverage",
+            "drift",
+            "modeExpansions",
+            "conventionExceptions",
+            "unpublished",
+            "variables"
+          ],
+          "properties": {
+            "source": {
+              "$ref": "common.schema.json#/$defs/text"
+            },
+            "syncedAt": {
+              "$ref": "common.schema.json#/$defs/isoDate"
+            },
+            "figmaVersion": {
+              "$ref": "common.schema.json#/$defs/nullableText"
+            },
+            "note": {
+              "$ref": "common.schema.json#/$defs/text"
+            },
+            "collections": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "name",
+                  "modes",
+                  "count"
+                ],
+                "properties": {
+                  "name": {
+                    "$ref": "common.schema.json#/$defs/text"
+                  },
+                  "modes": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                      "$ref": "common.schema.json#/$defs/text"
+                    }
+                  },
+                  "count": {
+                    "type": "integer",
+                    "minimum": 0
+                  }
+                }
+              }
+            },
+            "coverage": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "figmaVariables",
+                "published",
+                "codeTokens",
+                "covered",
+                "summary"
+              ],
+              "properties": {
+                "figmaVariables": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "published": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "codeTokens": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "covered": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "summary": {
+                  "$ref": "common.schema.json#/$defs/text"
+                }
+              }
+            },
+            "drift": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "nameDrift",
+                "missingInCode",
+                "missingInFigma"
+              ],
+              "properties": {
+                "nameDrift": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "figma",
+                      "web",
+                      "expected"
+                    ],
+                    "properties": {
+                      "figma": {
+                        "$ref": "common.schema.json#/$defs/text"
+                      },
+                      "web": {
+                        "$ref": "common.schema.json#/$defs/nullableText"
+                      },
+                      "expected": {
+                        "oneOf": [
+                          {
+                            "type": "null"
+                          },
+                          {
+                            "$ref": "common.schema.json#/$defs/token"
+                          }
+                        ]
+                      }
+                    }
+                  }
+                },
+                "missingInCode": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "figma",
+                      "css"
+                    ],
+                    "properties": {
+                      "figma": {
+                        "$ref": "common.schema.json#/$defs/text"
+                      },
+                      "css": {
+                        "$ref": "common.schema.json#/$defs/token"
+                      }
+                    }
+                  }
+                },
+                "missingInFigma": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "common.schema.json#/$defs/token"
+                  }
+                }
+              }
+            },
+            "modeExpansions": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "figma",
+                  "mode",
+                  "css"
+                ],
+                "properties": {
+                  "figma": {
+                    "$ref": "common.schema.json#/$defs/text"
+                  },
+                  "mode": {
+                    "$ref": "common.schema.json#/$defs/text"
+                  },
+                  "css": {
+                    "$ref": "common.schema.json#/$defs/token"
+                  }
+                }
+              }
+            },
+            "conventionExceptions": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "figma",
+                  "css"
+                ],
+                "properties": {
+                  "figma": {
+                    "$ref": "common.schema.json#/$defs/text"
+                  },
+                  "css": {
+                    "$ref": "common.schema.json#/$defs/token"
+                  }
+                }
+              }
+            },
+            "unpublished": {
+              "type": "array",
+              "items": {
+                "$ref": "common.schema.json#/$defs/text"
+              }
+            },
+            "variables": {
+              "type": "object",
+              "minProperties": 1,
+              "additionalProperties": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "css",
+                  "collection",
+                  "type"
+                ],
+                "properties": {
+                  "css": {
+                    "oneOf": [
+                      {
+                        "type": "null"
+                      },
+                      {
+                        "$ref": "common.schema.json#/$defs/token"
+                      }
+                    ]
+                  },
+                  "collection": {
+                    "$ref": "common.schema.json#/$defs/text"
+                  },
+                  "type": {
+                    "$ref": "common.schema.json#/$defs/text"
+                  },
+                  "web": {
+                    "$ref": "common.schema.json#/$defs/text"
                   }
                 }
               }

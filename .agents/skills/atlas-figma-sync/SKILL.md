@@ -38,7 +38,8 @@ Figma and code disagree. It **reads** Figma and **writes** `atlas/` — never th
    Record `figmaVersion` from the newest `updatedAt` seen in step 3 (or carry the previous value
    forward when no search ran) and `pulledAt` as the current ISO timestamp.
 
-5. **Regenerate** — `node scripts/atlas-sync.mjs --pull .atlas-pull/pull.json`
+5. **Regenerate** — `node scripts/atlas-sync.mjs --pull .atlas-pull/pull.json` (add
+   `--variables .atlas-pull/variables.json` when this run also read the variable table)
    (add `--check` first if you want a no-write preview). The generator owns all of `atlas/`:
    field mapping, drift rules and the doc-preservation rule are in `references/field-mapping.md`.
 
@@ -61,10 +62,13 @@ Figma and code disagree. It **reads** Figma and **writes** `atlas/` — never th
   between them is a discrepancy, never a silent merge.
 - A Figma description replaces the repo-written `atlas/<Name>.md` **only when it reads as guidance**.
   A spec summary ("3 variants × 3 sizes") is a Figma content gap: the doc is kept and the gap filed.
-- Token values stay derived from `packages/tokens/atlas.tokens.css` and stamped repo-derived. The pull
-  may add `boundVariables` (the `codeSyntax.WEB` of every variable bound in the component sets, see
-  `references/pull-file.md`); the generator writes it to `atlas/tokens.json` `figmaBound` and reports
-  token drift as a fraction (`0 drift over 193/432 covered`). Never present that fraction as coverage.
+- Token values stay derived from `packages/tokens/atlas.tokens.css` and stamped repo-derived. The
+  Figma **variable table** (names, collections, modes, `codeSyntax.WEB`; no values) is read with one
+  read-only `use_figma` call and synced with `--variables` into `atlas/tokens.json` `figmaTable`
+  (DEC-081, roadmap D1 option B; "Variable table" in `references/pull-file.md`). It is the source of
+  the three token-drift metrics, over the whole table. `boundVariables` (`figmaBound`, option C) stays
+  as a cross-check and is a fraction — never present it as coverage. A run without a table carries the
+  last one forward; `--variables` alone carries the components forward.
 - Don't hand-close discrepancies. A sync-detected entry closes itself once the drift is gone.
 - `.atlas-pull/` is scratch. Never commit it, never read it from another task.
 

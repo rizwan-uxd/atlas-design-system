@@ -485,6 +485,12 @@
       "topic": "Registry owner decisions for the M3 exit types: fallback, nesting, a11y, responsive, capabilities, tokenRoles; Text deferred; Pagination/Position derived",
       "decision": "Owner-approved 2026-10-23 (M3 session 4). Fallback: Button, TextField, Field and Form fall back to Alert with variant neutral and the message \"This content is unavailable\"; Alert is the one terminal type and falls back to itself the same way. Nesting: Form children Alert, Button, Field; Field parents Form, children TextField; TextField parents Field, Form; Button parents Alert, Form; Alert parents Form, children Button. a11y and responsive state only what the source does (no breakpoints anywhere; pointer: coarse grows Button xs/sm and Input sm to --atlas-touch-min). Capabilities: Button press, TextField input, Form submit, Alert dismiss, Field none. tokenRoles: Button and TextField keep their component-token roles; Field, Alert and Form have none (no component-token layer until Phase 2d). Form renders as the intrinsic <form>, whose onSubmit backs its submit event. Text is deferred: Atlas has no Text component, and it gets a Figma-first atlas-component session before it is registered, so M3 exits with 5 of the 6 named types complete. Pagination/Position (start|middle|end) is derived state from page and pageCount, classified state in figma-axis-map.json, with no new prop (DISC-105).",
       "date": "2026-10-23"
+    },
+    {
+      "id": "DEC-081",
+      "topic": "D1 decision gate: the Figma token table is read with option B (Plugin API through use_figma)",
+      "decision": "Owner-chosen 2026-10-23 at the end of Phase 2. The whole local variable table is read with figma.variables.getLocalVariablesAsync() in one read-only use_figma call (names, collections, modes, codeSyntax.WEB; no values) and synced with atlas-sync --variables into atlas/tokens.json figmaTable, stamped with its own syncedAt. Token values stay derived from atlas.tokens.css. Token-name drift, missing code tokens and missing Figma tokens are measured over the full table; option C's bound subset (figmaBound) stays as a cross-check. A Figma variable with no codeSyntax.WEB and no CSS token is unpublished (Figma-only), not drift; a CSS token that spells out a mode of a multi-mode collection (columns-mobile) is covered by that variable. Option A (REST) stays off the table without an Enterprise plan; D is not needed.",
+      "date": "2026-10-23"
     }
   ]
 }

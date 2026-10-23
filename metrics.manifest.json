@@ -224,27 +224,27 @@
       "metric": "Token-name drift",
       "target": "0",
       "source": "atlas-sync",
-      "check": "tokens.bound-name-drift",
-      "milestone": "D1 option C now (bound subset); full table needs A or B",
-      "why": "Measured over the code tokens some Figma component binds (codeSyntax.WEB of bound variables), so the row carries its coverage fraction and must never be read as full coverage."
+      "check": "tokens.name-drift",
+      "milestone": "D1 option B (full variable table)",
+      "why": "Over the whole Figma variable table (atlas/tokens.json figmaTable): a variable whose codeSyntax.WEB is not a var(--atlas-*) reference, or names an undeclared token while its slash-to-dash name is declared. The bound subset (figmaBound) is a cross-check, not the metric."
     },
     {
       "principle": "Figma parity",
       "metric": "Missing code tokens",
       "target": "0",
       "source": "atlas-sync",
-      "check": "tokens.bound-missing-in-code",
-      "milestone": "D1 option C now (bound subset); full table needs A or B",
-      "why": "A bound Figma variable whose codeSyntax.WEB names no token in atlas.tokens.css. Unbound Figma variables are invisible to option C."
+      "check": "tokens.missing-in-code",
+      "milestone": "D1 option B (full variable table)",
+      "why": "A Figma variable whose codeSyntax.WEB names a token atlas.tokens.css does not declare. Variables with no codeSyntax.WEB and no CSS token are Figma-only (figmaTable.unpublished) and not counted."
     },
     {
       "principle": "Figma parity",
       "metric": "Missing Figma tokens",
       "target": "0",
-      "source": "atlas-verify",
-      "check": "design.token-drift",
-      "milestone": "D1 option A or B",
-      "why": "Proving a CSS token has NO Figma variable needs the whole variable table; the bound subset (option C) cannot show absence, so this stays not measurable until A or B lands."
+      "source": "atlas-sync",
+      "check": "tokens.missing-in-figma",
+      "milestone": "D1 option B (full variable table)",
+      "why": "A token declared in atlas.tokens.css that no Figma variable's codeSyntax.WEB names and that is not a mode spelled out from one (columns-mobile from the Layout collection's Mobile mode)."
     },
     {
       "principle": "Figma parity",

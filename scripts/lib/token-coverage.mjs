@@ -7,7 +7,7 @@
  * (`0 drift over 193/432 covered`), never a coverage claim. A variable that no component binds is
  * invisible here, so "missing Figma tokens" (a CSS token with no Figma variable) cannot be measured.
  *
- * Shared by scripts/atlas-sync.mjs (writes atlas/tokens.json `figmaBound`) and
+ * Shared by scripts/atlas-sync.mjs (writes atlas/tokens.json `figmaBound` and `figmaTable`) and
  * scripts/metrics-report.mjs (reads it).
  */
 
@@ -63,6 +63,73 @@ export function tokenCoverage(entries, cssText) {
     },
     drift: { nameDrift, missingInCode },
     conventionExceptions,
+    variables,
+  }
+}
+
+/**
+ * tableCoverage — Figma↔code token drift over the FULL variable table (roadmap D1, option B: the
+ * Plugin API's getLocalVariablesAsync through use_figma). Every metric here is over the whole table and
+ * the whole CSS, so no result is a fraction.
+ *
+ * table: { collections: [{ name, modes: [..] }], entries: [{ name, collection, type, web }] }
+ *
+ * Classification, per Figma variable:
+ *   unpublished    no codeSyntax.WEB and the slash→dash name is not declared: a Figma-only variable
+ *                  (the primitive colour ramps no code uses). WEB is the declared code mapping, so its
+ *                  absence is intent, not drift — listed, never counted.
+ *   nameDrift      WEB absent while the slash→dash name IS declared, or WEB not a `var(--atlas-*)`
+ *                  reference, or WEB names an undeclared token while the slash→dash name is declared.
+ *   missingInCode  WEB is well formed, and neither it nor the slash→dash name is declared.
+ *   covered        WEB names a declared CSS token.
+ * Per CSS token:
+ *   modeExpansion  `<covered>-<mode>` for a mode of the variable's collection (Figma `columns` with
+ *                  Mobile|Tablet|Desktop modes ↔ CSS `--atlas-columns-mobile|tablet|desktop`): the CSS
+ *                  spells out the modes the Figma variable holds. Covered.
+ *   missingInFigma declared in the CSS, and neither covered nor a mode expansion.
+ */
+export function tableCoverage(table, cssText) {
+  const declared = declaredTokens(cssText)
+  const modesOf = new Map(table.collections.map((c) => [c.name, c.modes]))
+  const nameDrift = [], missingInCode = [], unpublished = [], conventionExceptions = [], modeExpansions = []
+  const covered = new Set()
+  const variables = {}
+  for (const e of [...table.entries].sort((a, b) => a.name.localeCompare(b.name) || a.collection.localeCompare(b.collection))) {
+    const css = cssNameOf(e.web)
+    const conv = conventionName(e.name)
+    variables[e.name] = { css, collection: e.collection, type: e.type, ...(css || e.web === null ? {} : { web: e.web }) }
+    if (css && declared.has(css)) {
+      covered.add(css)
+      if (css !== conv) conventionExceptions.push({ figma: e.name, css })
+      const modes = modesOf.get(e.collection) ?? []
+      if (modes.length > 1) {
+        for (const m of modes) {
+          const expanded = `${css}-${m.toLowerCase()}`
+          if (declared.has(expanded)) { covered.add(expanded); modeExpansions.push({ figma: e.name, mode: m, css: expanded }) }
+        }
+      }
+    } else if (e.web === null && !declared.has(conv)) {
+      unpublished.push(e.name)
+    } else if (!css || declared.has(conv)) {
+      nameDrift.push({ figma: e.name, web: e.web, expected: declared.has(conv) ? conv : null })
+    } else {
+      missingInCode.push({ figma: e.name, css })
+    }
+  }
+  const missingInFigma = [...declared].filter((t) => !covered.has(t)).sort()
+  const published = table.entries.length - unpublished.length
+  return {
+    coverage: {
+      figmaVariables: table.entries.length,
+      published,
+      codeTokens: declared.size,
+      covered: covered.size,
+      summary: `${nameDrift.length} name drift · ${missingInCode.length} missing in code · ${missingInFigma.length} missing in Figma · ${covered.size}/${declared.size} code tokens covered`,
+    },
+    drift: { nameDrift, missingInCode, missingInFigma },
+    modeExpansions,
+    conventionExceptions,
+    unpublished,
     variables,
   }
 }

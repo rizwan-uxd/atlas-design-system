@@ -31,7 +31,7 @@ gitignored, rewritten every run, and read by `scripts/atlas-sync.mjs` exactly on
     "figmaVersion": null,
     "entries": [{ "name": "spacing/2", "collection": "Atlas/Primitives", "type": "FLOAT", "web": "var(--atlas-spacing-2)" }]
   },
-  "variables": { … }                         // optional, currently never populated — see tokens below
+  "variables": { … }                         // optional — D1 option B, see "Variable table"; or pass it alone with --variables
 }
 ```
 
@@ -80,11 +80,43 @@ costs nothing, a wrong one rewrites a doc.
 
 ## Tokens
 
-`variables` stays absent. Figma MCP returns variables *used by a node*, not the file's variable
-table, so there is no honest way to regenerate `atlas/tokens.*` from Figma today. The generator
-therefore derives tokens from `packages/tokens/atlas.tokens.css` and stamps them
-`repo-derived (packages/tokens/atlas.tokens.css)` with `syncedAt: null` — deliberately, so nobody
-reads a Figma guarantee into them. Figma variable parity is phase 3 / `atlas-verify` work.
+Token **values** are always derived from `packages/tokens/atlas.tokens.css` and stamped
+`repo-derived (packages/tokens/atlas.tokens.css)` with `syncedAt: null`: the variable table below
+carries names, not values, so nobody should read a Figma guarantee into a value. Figma variable
+**parity** (names, missing on either side) comes from the variable table, in `figmaTable`.
+
+## Variable table (D1 option B, DEC-081)
+
+The whole local variable table, read with one **read-only** `mcp__figma__use_figma` call (load the
+`figma-use` skill first). It is the metric source for token-name drift, missing code tokens and missing
+Figma tokens; `boundVariables` below stays as a cross-check. Return it compact with a checksum, because
+it is ~460 entries and has to be copied into a file exactly:
+
+```js
+const cols = await figma.variables.getLocalVariableCollectionsAsync()
+const vars = await figma.variables.getLocalVariablesAsync()
+const colIdx = new Map(cols.map((c, i) => [c.id, i]))
+const conv = (n) => `var(--atlas-${n.replaceAll('/', '-')})`
+const entries = vars.map((v) => {
+  const web = v.codeSyntax && v.codeSyntax.WEB ? v.codeSyntax.WEB : null
+  return [v.name, colIdx.get(v.variableCollectionId), v.resolvedType[0], web === null ? 0 : web === conv(v.name) ? 1 : web]
+}).sort((a, b) => (a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : a[1] - b[1]))
+const fnv = (s) => { let h = 0x811c9dc5; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0 } return h.toString(16) }
+const full = entries.map(([n, c, t, w]) => ({ name: n, collection: cols[c].name, type: t, web: w === 0 ? null : w === 1 ? conv(n) : w }))
+return { collections: cols.map((c) => ({ name: c.name, modes: c.modes.map((m) => m.name), count: c.variableIds.length })), total: vars.length, checksum: fnv(JSON.stringify(full)), entries }
+```
+
+`web` is `0` for no `codeSyntax.WEB`, `1` for the slash→dash name, else the literal WEB string; the
+type is its first letter (`C`OLOR, `F`LOAT, `S`TRING, `B`OOLEAN). Save the result as
+`.atlas-pull/variables.compact.json`, recompute the same FNV-1a over the expanded entries (with the
+one-letter type) in node and compare it with `checksum` — the 2026-10-23 run read 463 variables in 5
+collections, `e11ec099`. Then expand it to `.atlas-pull/variables.json` in the shape of
+`figma-pull.schema.json#/$defs/variableTable` —
+`{ pulledAt: <now>, figmaVersion: null, collections, entries: [{ name, collection, type: "COLOR"|…, web }] }` —
+and run `node scripts/atlas-sync.mjs --variables .atlas-pull/variables.json`. The generator writes
+`atlas/tokens.json` `figmaTable`: coverage, `drift.nameDrift|missingInCode|missingInFigma`,
+`modeExpansions` (CSS tokens that spell out a multi-mode variable's modes), `conventionExceptions`,
+`unpublished` (no WEB and no CSS token: Figma-only, never drift) and the name→CSS map.
 
 ## Bound variables (D1 option C)
 

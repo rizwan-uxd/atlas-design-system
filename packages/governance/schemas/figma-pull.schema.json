@@ -67,10 +67,10 @@
       }
     },
     "variables": {
-      "type": "object"
+      "$ref": "#/$defs/variableTable"
     },
     "boundVariables": {
-      "description": "D1 option C: variables bound to the pulled components, with their codeSyntax.WEB name. Deliberately NOT under `variables`: a truthy `variables` stamps atlas/tokens.json figma-synced, and a bound subset must never do that.",
+      "description": "D1 option C: variables bound to the pulled components, with their codeSyntax.WEB name. A subset, kept as a cross-check of the full table in `variables`.",
       "type": "object",
       "additionalProperties": false,
       "required": [
@@ -111,6 +111,84 @@
               }
             }
           }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "variableTable": {
+      "description": "D1 option B: the whole local variable table, read with figma.variables.getLocalVariablesAsync() through use_figma (read-only). Names, collections, modes and codeSyntax.WEB only; values are not pulled. Written to atlas/tokens.json figmaTable; the token values above it stay derived from atlas.tokens.css.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "pulledAt",
+        "figmaVersion",
+        "collections",
+        "entries"
+      ],
+      "properties": {
+        "pulledAt": {
+          "$ref": "common.schema.json#/$defs/isoDate"
+        },
+        "figmaVersion": {
+          "$ref": "common.schema.json#/$defs/nullableText"
+        },
+        "collections": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "name",
+              "modes",
+              "count"
+            ],
+            "properties": {
+              "name": {
+                "$ref": "common.schema.json#/$defs/text"
+              },
+              "modes": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "$ref": "common.schema.json#/$defs/text"
+                }
+              },
+              "count": {
+                "type": "integer",
+                "minimum": 0
+              }
+            }
+          }
+        },
+        "entries": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "name",
+              "collection",
+              "type",
+              "web"
+            ],
+            "properties": {
+              "name": {
+                "$ref": "common.schema.json#/$defs/text"
+              },
+              "collection": {
+                "$ref": "common.schema.json#/$defs/text"
+              },
+              "type": {
+                "$ref": "common.schema.json#/$defs/text"
+              },
+              "web": {
+                "$ref": "common.schema.json#/$defs/nullableText"
+              }
+            }
+          },
+          "minItems": 1
         }
       }
     }

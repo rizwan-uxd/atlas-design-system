@@ -468,3 +468,46 @@ test("a --pull file that fails its schema stops the sync, names the field, and w
     assert.equal(fs.readFileSync(path.join(dir, "atlas/metadata/Button.json"), "utf8"), before)
   } finally { fs.rmSync(dir, { recursive: true, force: true }) }
 })
+
+// D1 option B: --variables writes atlas/tokens.json figmaTable from the whole variable table
+const TABLE = {
+  pulledAt: "2026-10-23T08:00:00.000Z",
+  figmaVersion: null,
+  collections: [{ name: "Atlas/Primitives", modes: ["Default"], count: 2 }],
+  entries: [
+    { name: "spacing/2", collection: "Atlas/Primitives", type: "FLOAT", web: "var(--atlas-spacing-2)" },
+    { name: "color/coral/500", collection: "Atlas/Primitives", type: "COLOR", web: null },
+  ],
+}
+const syncWith = (dir, ...args) => execFileSync("node", [path.join(dir, "scripts/atlas-sync.mjs"), ...args], { encoding: "utf8", stdio: "pipe" })
+
+test("--variables writes figmaTable with its own stamp, leaves the token values repo-derived, and a plain sync carries it forward", () => {
+  const dir = copyInputs()
+  try {
+    const file = path.join(dir, "variables.json")
+    fs.writeFileSync(file, JSON.stringify(TABLE))
+    syncWith(dir, "--variables", file)
+    const tokens = JSON.parse(fs.readFileSync(path.join(dir, "atlas/tokens.json"), "utf8"))
+    assert.equal(tokens.syncedAt, null)
+    assert.match(tokens.source, /^repo-derived/)
+    assert.equal(tokens.figmaTable.syncedAt, TABLE.pulledAt)
+    assert.deepEqual(tokens.figmaTable.unpublished, ["color/coral/500"])
+    assert.equal(tokens.figmaTable.coverage.figmaVariables, 2)
+    assert.ok(tokens.figmaTable.drift.missingInFigma.length > 0) // a two-variable table cannot name the whole CSS
+    assert.equal(writtenCount(sync(dir)), 0, "a sync with no table carries the last one forward unchanged")
+  } finally { fs.rmSync(dir, { recursive: true, force: true }) }
+})
+
+test("a --variables file that fails its schema stops the sync and writes nothing", () => {
+  const dir = copyInputs()
+  try {
+    const before = fs.readFileSync(path.join(dir, "atlas/tokens.json"), "utf8")
+    const file = path.join(dir, "variables.json")
+    fs.writeFileSync(file, JSON.stringify({ ...TABLE, collections: [] }))
+    let err
+    try { syncWith(dir, "--variables", file) } catch (e) { err = e }
+    assert.ok(err, "the sync must exit non-zero")
+    assert.match(err.stderr, /\/collections must NOT have fewer than 1 items/)
+    assert.equal(fs.readFileSync(path.join(dir, "atlas/tokens.json"), "utf8"), before)
+  } finally { fs.rmSync(dir, { recursive: true, force: true }) }
+})

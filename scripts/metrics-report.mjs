@@ -98,9 +98,20 @@ function collectResults(manifest) {
   // only over the code tokens some Figma component binds, so every result carries its coverage and the
   // row renders the fraction — a partial measurement must never read as full coverage.
   const tokens = path.join(ROOT, "atlas/tokens.json")
-  const bound = exists(tokens) ? readJson(tokens).figmaBound : null
+  const tokensJson = exists(tokens) ? readJson(tokens) : null
+  const bound = tokensJson?.figmaBound ?? null
+  // D1 option B: the whole variable table. Full coverage, so its rows carry no fraction.
+  const table = tokensJson?.figmaTable ?? null
+  if (table?.coverage?.figmaVariables > 0) {
+    if (!found.includes("atlas-sync")) found.push("atlas-sync")
+    for (const [id, list] of [["tokens.name-drift", table.drift?.nameDrift], ["tokens.missing-in-code", table.drift?.missingInCode], ["tokens.missing-in-figma", table.drift?.missingInFigma]]) {
+      if (!Array.isArray(list)) continue // a renamed field is not a pass
+      results.set(`atlas-sync:${id}`, list.length === 0)
+      if (list.length) coverage.set(`atlas-sync:${id}`, { text: `${list.length} over all ${table.coverage.figmaVariables} Figma variables and ${table.coverage.codeTokens} code tokens`, full: true })
+    }
+  }
   if (bound?.coverage?.covered > 0) {
-    found.push("atlas-sync")
+    if (!found.includes("atlas-sync")) found.push("atlas-sync")
     const { covered, codeTokens } = bound.coverage
     const partial = covered < codeTokens ? { covered, total: codeTokens } : null
     for (const [id, list] of [["tokens.bound-name-drift", bound.drift?.nameDrift], ["tokens.bound-missing-in-code", bound.drift?.missingInCode]]) {
@@ -216,7 +227,7 @@ const esc = (s) => String(s).replace(/\|/g, "\\|")
 function render(rows, manifest) {
   const counts = { passing: 0, failing: 0, [NOT_MEASURABLE]: 0 }
   for (const r of rows) counts[r.status]++
-  const partial = rows.filter((r) => r.coverage && r.status !== NOT_MEASURABLE).length
+  const partial = rows.filter((r) => r.coverage && !r.coverage.full && r.status !== NOT_MEASURABLE).length
 
   const groups = []
   for (const r of rows) {

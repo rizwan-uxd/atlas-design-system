@@ -4,6 +4,7 @@
  *
  *   node scripts/atlas-sync.mjs                      # repo-derived refresh (no Figma)
  *   node scripts/atlas-sync.mjs --pull <file.json>   # merge a Figma MCP pull, stamp syncedAt
+ *   node scripts/atlas-sync.mjs --variables <f.json> # refresh only the Figma variable table (D1 option B)
  *   node scripts/atlas-sync.mjs --check              # report only, write nothing (exit 1 on drift)
  *
  * The agent-facing half of this lives in .agents/skills/atlas-figma-sync/.
@@ -17,7 +18,7 @@ import path from "node:path"
 import { fileURLToPath } from "node:url"
 import { renderComponentSection, SECTION_BEGIN, SECTION_END } from "./lib/component-tokens.mjs"
 import { validate } from "./lib/schemas.mjs"
-import { tokenCoverage } from "./lib/token-coverage.mjs"
+import { tokenCoverage, tableCoverage } from "./lib/token-coverage.mjs"
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..")
 const SRC = path.join(ROOT, "packages/ui-web/src")
@@ -59,6 +60,8 @@ const flag = (n) => args.includes(n)
 const opt = (n) => { const i = args.indexOf(n); return i === -1 ? null : args[i + 1] }
 const CHECK = flag("--check")
 const PULL_PATH = opt("--pull")
+// the variable table alone, as figma-pull.schema.json#/$defs/variableTable — the components carry forward
+const VARIABLES_PATH = opt("--variables")
 
 /* ── small helpers ──────────────────────────────────────── */
 
@@ -338,6 +341,15 @@ if (PULL_PATH) {
   const errors = validate("figma-pull.schema.json", pull)
   if (errors.length) {
     console.error(`✗ ${PULL_PATH} does not match packages/governance/schemas/figma-pull.schema.json:\n${errors.map((e) => `    ${e}`).join("\n")}`)
+    process.exit(1)
+  }
+}
+// --variables is validated here too, before anything is written
+const variablesFile = VARIABLES_PATH ? JSON.parse(read(path.resolve(ROOT, VARIABLES_PATH))) : null
+if (variablesFile) {
+  const errors = validate("figma-pull.schema.json#/$defs/variableTable", variablesFile)
+  if (errors.length) {
+    console.error(`✗ ${VARIABLES_PATH} does not match figma-pull.schema.json#/$defs/variableTable:\n${errors.map((e) => `    ${e}`).join("\n")}`)
     process.exit(1)
   }
 }
@@ -816,9 +828,10 @@ write("atlas/index.json", compactJson({
 /* ── tokens ─────────────────────────────────────────────── */
 
 const tok = tokens()
-// Figma MCP exposes variables per node, not a full variable table, so tokens stay
-// repo-derived from packages/tokens/atlas.tokens.css until a pull carries variables.
-const tokenSource = pull?.variables ? source : "repo-derived (packages/tokens/atlas.tokens.css)"
+// The token VALUES are the code's: always derived from packages/tokens/atlas.tokens.css. The Figma
+// variable table (D1 option B) carries names, collections and modes, not values, so it is reported in
+// its own figma-synced `figmaTable` block and never restamps the values.
+const tokenSource = "repo-derived (packages/tokens/atlas.tokens.css)"
 
 // D1 option C: the variables bound inside the component sets, with their codeSyntax.WEB, give a
 // Figma-name→CSS-name map for that subset. It is compared with the CSS and reported as a fraction
@@ -839,11 +852,29 @@ function boundVariables() {
 const bound = boundVariables()
 const boundCoverage = bound ? tokenCoverage(bound.entries, read(TOKENS_CSS)) : null
 
+// D1 option B: the whole variable table, from --variables, a full pull, or the last tokens.json.
+function variableTable() {
+  if (variablesFile) return variablesFile
+  if (pull?.variables?.entries) return pull.variables
+  const prev = fs.existsSync(path.join(ATLAS, "tokens.json")) ? JSON.parse(read(path.join(ATLAS, "tokens.json"))).figmaTable : null
+  if (!prev?.variables) return null
+  return {
+    pulledAt: prev.syncedAt,
+    figmaVersion: prev.figmaVersion,
+    collections: prev.collections,
+    entries: Object.entries(prev.variables).map(([name, v]) => ({
+      name, collection: v.collection, type: v.type, web: v.css ? `var(${v.css})` : (v.web ?? null),
+    })),
+  }
+}
+const table = variableTable()
+const tableResult = table ? tableCoverage(table, read(TOKENS_CSS)) : null
+
 write("atlas/tokens.json", compactJson({
-  _generated: stamp(tokenSource, pull?.variables ? syncedAt : null),
+  _generated: stamp(tokenSource, null),
   source: tokenSource,
-  syncedAt: pull?.variables ? syncedAt : null,
-  figmaVersion: pull?.variables ? figmaVersion : null,
+  syncedAt: null,
+  figmaVersion: null,
   note: "Semantic tokens and layout scales only. Primitive colour ramps (--atlas-color-*) are never used in app code.",
   semantic: tok.semantic,
   scales: tok.scales,
@@ -851,8 +882,16 @@ write("atlas/tokens.json", compactJson({
     source: "figma-synced — codeSyntax.WEB of the variables bound inside the component sets; NOT the Figma variable table (roadmap D1, option C)",
     syncedAt: bound.pulledAt ?? null,
     figmaVersion: bound.figmaVersion ?? null,
-    note: "Partial by construction: drift is measured only over code tokens some component binds in Figma. A Figma variable no component binds, and a CSS token with no Figma variable, are invisible here.",
+    note: "Partial by construction: drift is measured only over code tokens some component binds in Figma. A Figma variable no component binds, and a CSS token with no Figma variable, are invisible here. Kept as a cross-check of figmaTable.",
     ...boundCoverage,
+  } : null,
+  figmaTable: table ? {
+    source: "figma-synced — the whole local variable table (getLocalVariablesAsync through use_figma; roadmap D1, option B). Names, collections, modes and codeSyntax.WEB; values are not pulled.",
+    syncedAt: table.pulledAt,
+    figmaVersion: table.figmaVersion ?? null,
+    note: "Full coverage: every Figma variable against every --atlas-* token in atlas.tokens.css. unpublished = Figma variables with no codeSyntax.WEB and no CSS token (Figma-only, never counted as drift); modeExpansions = CSS tokens that spell out a Figma variable's modes.",
+    collections: table.collections,
+    ...tableResult,
   } : null,
 }))
 
@@ -873,7 +912,7 @@ const layoutSection = [
 // tokens.md must carry the TOKEN stamp, not the component one. The component pull and the token pull
 // are independent, and stamping tokens.md with HEADER claimed "figma-synced <date>" while its own
 // sibling atlas/tokens.json said syncedAt: null. The two now agree by construction.
-const TOKEN_HEADER = stamp(tokenSource, pull?.variables ? syncedAt : null)
+const TOKEN_HEADER = stamp(tokenSource, null)
 
 for (const rel of ["atlas/tokens.md", "atlas/README.md"]) {
   const abs = path.join(ROOT, rel)
