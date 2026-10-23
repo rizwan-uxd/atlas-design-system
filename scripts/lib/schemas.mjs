@@ -29,6 +29,7 @@ export const INPUTS = [
     ({ glob: `atlas/state/${n}.json`, schema: `state.schema.json#/$defs/${n}`, required: true })),
   { glob: "packages/governance/deprecations.json", schema: "governance.schema.json#/$defs/deprecations", required: true },
   { glob: "packages/governance/ownership.json", schema: "governance.schema.json#/$defs/ownership", required: true },
+  { glob: "packages/governance/private-vars.allow.json", schema: "governance.schema.json#/$defs/privateVarsAllow", required: true },
   { glob: "packages/registry/figma-axis-map.json", schema: "governance.schema.json#/$defs/figmaAxisMap", required: true },
   { glob: "packages/registry/aliases.json", schema: "registry.schema.json#/$defs/aliases", required: true },
   { glob: "packages/registry/contract-props.json", schema: "registry.schema.json#/$defs/contractProps", required: true },

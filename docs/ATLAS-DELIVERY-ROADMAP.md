@@ -121,9 +121,9 @@ fails when this region is stale. Statuses are exactly three: **passing** (a decl
 **failing** (ran and failed), **not measurable** (no result for the declared check — reported as `n/a`,
 never `0`). A metric with no check is *not measurable*, never passing: absence of a signal is not a pass.
 
-**5 passing · 0 failing · 30 not measurable** of 35. 5 of the measured rows cover only part of their population; the row says how much.
+**8 passing · 0 failing · 27 not measurable** of 35. 5 of the measured rows cover only part of their population; the row says how much.
 
-Result sources read: `atlas-sync`, `registry`. Sources not present leave their metrics not measurable.
+Result sources read: `atlas-sync`, `registry`, `token-lint`. Sources not present leave their metrics not measurable.
 
 ### Catalog Over Code
 
@@ -131,7 +131,7 @@ Result sources read: `atlas-sync`, `registry`. Sources not present leave their m
 |---|---:|---|---|---|
 | Agent outputs containing CSS, HTML, JSX, or arbitrary markup | 0 | not measurable | `runtime/validator > rejects markup in prop values` | M4 |
 | Rendered nodes mapped to registered components | 100% | not measurable | `runtime-demo > every node carries a registered data-atlas-type` | M4 |
-| Direct raw color or spacing values accepted by components | 0 | not measurable | `code.raw-design-values` | Phase 2d |
+| Direct raw color or spacing values accepted by components | 0 | **passing** | `code.raw-design-values` | Phase 2d |
 
 ### Grammar Parsimony
 
@@ -178,7 +178,7 @@ Result sources read: `atlas-sync`, `registry`. Sources not present leave their m
 | Keyboard navigation works for every interactive component | pass | not measurable | `keyboard > every interactive component suite` | Phase 4 |
 | Focus states are visible | pass | not measurable | `code.focus-visible` | Phase 4 |
 | Form errors are associated with their fields | pass | not measurable | `Field — help and error` | now |
-| Reduced-motion behavior is supported | pass | not measurable | `code.reduced-motion-required` | Phase 2d |
+| Reduced-motion behavior is supported | pass | **passing** | `code.reduced-motion-required` | Phase 2d |
 
 ### Figma parity
 
@@ -194,7 +194,7 @@ Result sources read: `atlas-sync`, `registry`. Sources not present leave their m
 
 | Metric | Target | Status | Check | Measurable at |
 |---|---:|---|---|---|
-| No raw design values in component implementations | pass | not measurable | `code.raw-design-values` | Phase 2d |
+| No raw design values in component implementations | pass | **passing** | `code.raw-design-values` | Phase 2d |
 | No component renders without a valid schema | pass | not measurable | `runtime/validator > unregistered type never renders` | M4 |
 | No unsupported component can reach the renderer | pass | not measurable | `runtime/validator > unknown type replaced by fallback` | M4 |
 | Loading, empty, error, active and disabled states exist for all interactive components | pass | **passing** — 0 failing of 3 interactive registered components (4/47 components registered) | `design.registry-states` | M3 |
@@ -635,7 +635,29 @@ contract.
 all 47 have a generated contract; "typed event contracts" and "components with declared fallback" move
 from *failing* to *passing* in the metric table.
 
-### 2d. Token work that needs zero new tokens (1–2 sessions)
+### 2d. Token work that needs zero new tokens (1–2 sessions) — ✅ DONE 2026-10-23 (1 session)
+
+> **Landed in one session, no new token, no Figma call** (plan
+> `docs/superpowers/plans/2026-10-23-phase-2d-tokens.md`). The rules are pure functions in
+> `scripts/lib/token-rules.mjs`; `token-lint` applies them and gains `--json`. **Private vars are a
+> legal tier:** 88 of 98 `--_` declarations are one semantic alias; the other 10 (`calc()` of tokens,
+> `100vw`, `0`, the Slider `±1` direction) are listed with a reason in
+> `packages/governance/private-vars.allow.json`, matched by value, and a stale entry fails.
+> **`no-raw-length`** is strict over `packages/ui-web/src`; `@media` widths (owned by the breakpoint
+> rule), `em` units and the visually-hidden `1px` are not lengths. It found exactly the 3 named
+> violations: Alert's exit collapse now starts from the alert's measured height (`--_exit-h`; the
+> `200px` cap clipped tall alerts) and CodeBlock's cursor gap is `--atlas-spacing-px`.
+> **`breakpoint-literal-consistency`** reads 10 `@media` widths, all on the scale;
+> **`reduced-motion-required`** covers 30 animated component CSS files, none missing a block.
+> `atlas-verify` reports `code.raw-design-values` and `code.reduced-motion-required` from one
+> token-lint run, and metrics-report measures the committed tree through a new `token-lint` source with
+> the same rule grouping (`METRIC_RULES`), so the region stays reproducible: **three rows moved from
+> not measurable to passing (8 passing of 35).** **`convert-tokens` derives all 17 exports** from the
+> CSS; the only literals left are pure white and black. The drift it surfaced was additive only
+> (`spacing.9`, `radius.base`, `easing.linear|emphasized|exit`, `textRole.h1|h2`), no existing value
+> changed, and a script test proves editing `--atlas-spacing-4` changes the native output, so the
+> `tokens-build` gate is real. Alert's `tokenRoles` maps its private-var roles (`pad-*`, `accent-*`).
+> Verification items 7 and 8 below are now tests.
 
 **The slice needs no new token** — Button and Input have complete component-token layers, Alert uses
 the private-var pattern, `Field` is layout. The most important scheduling fact in the plan: the slice

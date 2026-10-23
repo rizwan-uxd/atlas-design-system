@@ -4,7 +4,7 @@
  *
  * Three groups, each a pass/fail line plus its mismatches:
  *   design  snapshot current · variants/sizes used vs atlas/metadata · no new use of a deprecated asset · tokens exist and are semantic
- *   code    token-lint · tsc · tests · Atlas components over raw controls · basic a11y · prototype registered
+ *   code    token-lint (+ raw-design-values, reduced-motion-required) · tsc · tests · Atlas components over raw controls · basic a11y · prototype registered
  *   scope   diff stays inside --scope · no new tokens · no new components
  *
  * Design and code checks look only at files changed against --base (tracked diff + untracked), so a
@@ -28,6 +28,7 @@ import { sh, ATLAS_IMPORT, RAW_ELEMENT, lengthLiterals, PRIMITIVE_TOKEN_REF, BRA
 import { compareAxes } from "./lib/compare-axes.mjs"
 import { registryMetrics, coverageText } from "./lib/registry-metrics.mjs"
 import { loadInputs } from "./lib/schemas.mjs"
+import { METRIC_RULES } from "./lib/token-rules.mjs"
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..")
 const args = process.argv.slice(2)
@@ -370,12 +371,31 @@ const changedOnTop = (out, pick) => {
 // these three run repo-wide, so their scope is always 1: a run that reports no files is a broken run
 const countFrom = (out, re) => Number((out.replace(/\x1b\[[0-9;]*m/g, "").match(re) || [])[1] ?? 0)
 
-check("code", "token-lint", () => {
-  const r = sh("node packages/governance/token-lint.mjs", ROOT)
-  const files = countFrom(r.out, /scanned (\d+) files?/)
-  const base = { inspected: files, scope: 1, note: `${files} files` }
-  return r.ok ? { status: "pass", ...base } : { status: "fail", ...base, mismatches: changedOnTop(r.out, (l) => /^\s+\[/.test(l) || /^\s{2}\S/.test(l)) }
+// One token-lint run feeds three checks: the whole lint, and the two Phase 2d metric rows. A run whose
+// JSON cannot be read fails all three rather than passing them on silence.
+let lintRun // run on first use, so a run that skips all three never spawns token-lint
+const runTokenLint = () => {
+  if (lintRun) return lintRun
+  const r = sh("node packages/governance/token-lint.mjs --json", ROOT)
+  try { lintRun = JSON.parse(r.out) } catch { lintRun = { error: r.out.split("\n").slice(0, 5) } }
+  return lintRun
+}
+const lintCheck = (id, rules, inspectedOf, what) => check("code", id, () => {
+  const tokenLint = runTokenLint()
+  if (tokenLint.error) return { status: "fail", inspected: 0, scope: 1, mismatches: ["token-lint --json did not return JSON:", ...tokenLint.error] }
+  const hits = tokenLint.violations.filter((v) => !rules || rules.includes(v.rule))
+  const inspected = inspectedOf(tokenLint)
+  const mismatches = hits.map((v) => `${v.file}:${v.line} [${v.rule}] ${v.text.slice(0, 160)}`)
+  const ordered = [...mismatches.filter((m) => changed.some((f) => m.startsWith(f))), ...mismatches.filter((m) => !changed.some((f) => m.startsWith(f)))]
+  return { status: hits.length ? "fail" : "pass", inspected, scope: 1, note: what(inspected), mismatches: ordered.slice(0, 20) }
 })
+
+lintCheck("token-lint", null, (t) => t.scanned, (n) => `${n} files`)
+// The two Phase 2d metric rows; their rule lists live in scripts/lib/token-rules.mjs (METRIC_RULES).
+lintCheck("raw-design-values", METRIC_RULES["code.raw-design-values"],
+  (t) => t.inspected["no-raw-length"], (n) => `${n} component files · colour, length and private-var rules`)
+lintCheck("reduced-motion-required", METRIC_RULES["code.reduced-motion-required"],
+  (t) => t.inspected["reduced-motion-required"], (n) => `${n} component CSS files use --atlas-duration-*`)
 
 check("code", "tsc", () => {
   const r = sh("npx tsc --noEmit -p tsconfig.json --extendedDiagnostics", ROOT, 300000)

@@ -96,6 +96,21 @@ describe("Alert — dismissible", () => {
     expect(onDismiss).toHaveBeenCalledTimes(1)
     window.matchMedia = original
   })
+
+  it("starts the exit collapse from the alert's measured height, not a fixed cap", () => {
+    const original = window.matchMedia
+    window.matchMedia = vi.fn().mockReturnValue({ matches: false }) as unknown as typeof window.matchMedia
+    const height = vi.spyOn(HTMLElement.prototype, "offsetHeight", "get").mockReturnValue(312)
+    const onDismiss = vi.fn()
+    render(<Alert dismissible onDismiss={onDismiss} title="Info" />)
+    const root = screen.getByRole("status")
+    expect(root.style.getPropertyValue("--_exit-h")).toBe("")
+    fireEvent.click(screen.getByRole("button", { name: /dismiss/i }))
+    expect(root.style.getPropertyValue("--_exit-h")).toBe("312px")
+    expect(onDismiss).not.toHaveBeenCalled() // waits for the exit animation
+    height.mockRestore()
+    window.matchMedia = original
+  })
 })
 
 // ─── 5. Icon and description fallback ───────────────────────────────────────

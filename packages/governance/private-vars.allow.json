@@ -1,0 +1,15 @@
+{
+  "_note": "AUTHORED. Private vars (--_x) whose value is not one var(--atlas-<semantic>), each with its reason (token-lint no-private-var-escape, roadmap Phase 2d). The value is matched exactly, so changing it fails again; an entry with no matching declaration fails as stale. Add an entry only with a reason a reviewer can check; prefer an existing token.",
+  "entries": [
+    { "file": "packages/ui-web/src/compositions/Dialog/Dialog.module.css", "var": "--_max-w", "value": "calc(100% - var(--atlas-spacing-6) * 2)", "reason": "Full size: the viewport less a spacing-6 gutter each side, composed from a token." },
+    { "file": "packages/ui-web/src/compositions/Drawer/Drawer.module.css", "var": "--_max-w", "value": "100vw", "reason": "Full size: the whole viewport width, a relative unit, not a design length." },
+    { "file": "packages/ui-web/src/compositions/Sheet/Sheet.module.css", "var": "--_max-w", "value": "100vw", "reason": "Full size: the whole viewport width, a relative unit, not a design length." },
+    { "file": "packages/ui-web/src/compositions/ListItem/ListItem.module.css", "var": "--_content-gap", "value": "0", "reason": "Compact density sets no gap between title and description." },
+    { "file": "packages/ui-web/src/layouts/NavBar/NavBar.module.css", "var": "--_h", "value": "calc(var(--atlas-spacing-8) * 2)", "reason": "Bar height composed from a spacing token (64px)." },
+    { "file": "packages/ui-web/src/layouts/NavBar/NavBar.module.css", "var": "--_h", "value": "calc(var(--atlas-spacing-10) * 2)", "reason": "Large bar height composed from a spacing token (80px)." },
+    { "file": "packages/ui-web/src/primitives/Checkbox/Checkbox.module.css", "var": "--_icon-size", "value": "calc(var(--atlas-spacing-2) + var(--atlas-spacing-0_5))", "reason": "Small check glyph (10px) composed from spacing tokens." },
+    { "file": "packages/ui-web/src/primitives/Checkbox/Checkbox.module.css", "var": "--_icon-size", "value": "calc(var(--atlas-spacing-3) + var(--atlas-spacing-0_5))", "reason": "Large check glyph (14px) composed from spacing tokens." },
+    { "file": "packages/ui-web/src/primitives/Slider/Slider.module.css", "var": "--_dir", "value": "1", "reason": "Unitless direction multiplier for the fill (LTR), not a design value." },
+    { "file": "packages/ui-web/src/primitives/Slider/Slider.module.css", "var": "--_dir", "value": "-1", "reason": "Unitless direction multiplier for the fill (RTL), not a design value." }
+  ]
+}
