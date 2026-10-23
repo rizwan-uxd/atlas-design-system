@@ -1272,6 +1272,16 @@
       "resolution": "Open, needs an owner decision per group. Shadows are effect styles in Figma, not variables, and safe-area values are env() insets with no Figma equivalent, so those may be declared code-only; the dialog widths and neutral-50 look like Figma gaps. A code-only allowance would be a new design-system rule, so it is not invented here.",
       "firstSeen": "2026-10-23",
       "lastSeen": "2026-10-23"
+    },
+    {
+      "id": "DISC-108",
+      "component": "tokens",
+      "side": "both",
+      "status": "open",
+      "issue": "14 token pairs measure under WCAG AA 4.5:1 for text (found 2026-10-23 by atlas-verify code.contrast, roadmap Phase 4; scripts/lib/contrast.mjs over atlas.tokens.css, both themes). Root causes are five values: --atlas-success-foreground light (4.42 on success), --atlas-info-foreground light 3.98 and dark 2.98, --atlas-primary-foreground dark (3.71; inherited by button-primary, checkbox and radio checked fills), --atlas-danger-foreground dark (3.90; inherited by button-destructive and the invalid-checked fills), and --atlas-foreground-subtle dark (4.16 on background, 3.74 surface, 3.07 surface-raised).",
+      "resolution": "Open, needs an owner decision per value. Fixing a value is Figma-first (the variables live in Figma) and removes the pair from packages/governance/contrast-allow.json, whose entries go stale the moment they recover. Alternatively declare a pairing out of the text set or AA-large-only, recorded in the allow file's reason. The check itself is agnostic: it fails only on new, worse-than-allowed or stale pairs.",
+      "firstSeen": "2026-10-23",
+      "lastSeen": "2026-10-23"
     }
   ]
 }

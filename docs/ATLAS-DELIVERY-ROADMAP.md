@@ -860,6 +860,18 @@ All extensions, no new scripts:
   hand-edits a status, and a metric with no check reports *not measurable* rather than passing. Plus
   the `registryComplete` ratchet and the D1 coverage fraction. This substitutes for a second reviewer.
 
+**As built (session 1, 2026-10-23; plan `docs/superpowers/plans/2026-10-23-phase-4-enforcement.md`).**
+The four `atlas-verify` extensions are in, each with PASS and FAIL fixture tests:
+`design/deprecation-expiry`, `code/contrast`, `scope/registry-complete`, `scope/breaking-change`.
+`code.contrast` derives 25 pairs from the tokens' own naming (scale, component — control glyphs pair
+with their **checked** fills — and the canonical surface set) and measures both themes statically:
+14 pairs sit under 4.5:1, tracing to five root values, logged as **DISC-108** and seeded (with their
+measured ratios) in `packages/governance/contrast-allow.json`; an allowance fails as stale the moment
+its pair recovers, and a pair more than 0.15 below its allowance is a new violation the allowance
+cannot mask. The metric row reads `not measurable` until session 2's CI collection lands. Remaining:
+CI reporting + `ui-native` freeze (session 2), overflow check + runtime-demo visual sections +
+`@theme inline` reduction + `componentOwners` (session 3).
+
 ---
 
 ## M5 — Semantic token tier, one family per reviewable stage (ongoing)

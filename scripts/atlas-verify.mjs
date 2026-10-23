@@ -29,6 +29,7 @@ import { compareAxes } from "./lib/compare-axes.mjs"
 import { registryMetrics, coverageText } from "./lib/registry-metrics.mjs"
 import { loadInputs } from "./lib/schemas.mjs"
 import { METRIC_RULES } from "./lib/token-rules.mjs"
+import { contrastCheck } from "./lib/contrast.mjs"
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..")
 const args = process.argv.slice(2)
@@ -338,6 +339,28 @@ check("design", "deprecated-usage", () => {
   return { ...verdict(fails), inspected: scanned, scope: sources.length, note: `${scanned} files · ${deprecations.length} deprecations registered` }
 })
 
+// Phase 4 — the deprecation policy's expiry half, until now prose only ("remove no sooner than the next
+// MAJOR"): a registered deprecation whose removeIn version has already shipped must be gone (or its
+// removeIn moved). Unreleased CHANGELOG headings carry no version and never count as shipped.
+check("design", "deprecation-expiry", () => {
+  const CHANGELOG = "CHANGELOG.md"
+  if (!exists(CHANGELOG)) return { status: "fail", inspected: 0, mismatches: [`${CHANGELOG} is missing — released versions cannot be determined`] }
+  if (!deprecations) return { status: "fail", inspected: 0, mismatches: [`${DEPRECATIONS_FILE} is missing or failed its schema — cannot tell what is deprecated`] }
+  // "## 1.0.0 (2026-05-11)" is the real heading shape; "Unreleased"/"Policy" never match
+  const released = [...read(CHANGELOG).matchAll(/^##\s+v?(\d+)\.(\d+)\.(\d+)(?:\s|$)/gm)].map((m) => m.slice(1).map(Number))
+  const latest = released.sort((a, b) => a[0] - b[0] || a[1] - b[1] || a[2] - b[2]).at(-1)
+  const ver = (s) => (String(s).match(/^(\d+)\.(\d+)\.(\d+)$/) || []).slice(1).map(Number)
+  const fails = []
+  for (const d of deprecations) {
+    const r = ver(d.removeIn)
+    if (r.length !== 3) { fails.push(`${d.name}: removeIn ${JSON.stringify(d.removeIn)} is not a X.Y.Z version`); continue }
+    if (latest && (r[0] < latest[0] || (r[0] === latest[0] && (r[1] < latest[1] || (r[1] === latest[1] && r[2] <= latest[2])))))
+      fails.push(`${d.name}: removeIn ${d.removeIn} has shipped (latest release ${latest.join(".")}) but the asset is still registered — remove it, or move removeIn`)
+  }
+  const note = latest ? `latest release ${latest.join(".")} · ${deprecations.length} deprecations registered` : `no released versions in ${CHANGELOG} · ${deprecations.length} deprecations registered`
+  return { ...verdict(fails), inspected: deprecations.length, scope: deprecations.length, note }
+})
+
 check("design", "tokens", () => {
   const fails = []
   // an empty token set would make every use "not defined"; say why instead of listing hundreds of lines
@@ -396,6 +419,32 @@ lintCheck("raw-design-values", METRIC_RULES["code.raw-design-values"],
   (t) => t.inspected["no-raw-length"], (n) => `${n} component files · colour, length and private-var rules`)
 lintCheck("reduced-motion-required", METRIC_RULES["code.reduced-motion-required"],
   (t) => t.inspected["reduced-motion-required"], (n) => `${n} component CSS files use --atlas-duration-*`)
+
+// Phase 4 — metric `code.contrast` (manifest row "Contrast meets WCAG AA"): every text/background
+// token pairing measured statically in both themes (scripts/lib/contrast.mjs). Repo-wide, not over
+// the diff: the token file declares the pairings for every page that will ever render them. Fail-closed
+// on unresolvable values; known findings live in contrast-allow.json and go stale the moment they are
+// fixed, exactly like private-vars.allow.
+const CONTRAST_ALLOW = "packages/governance/contrast-allow.json"
+check("code", "contrast", () => {
+  const allow = inputs.valid(CONTRAST_ALLOW)
+  if (!tokens.size) return { status: "fail", inspected: 0, mismatches: [`${TOKEN_CSS} defines no --atlas-* tokens`] }
+  if (!allow) return { status: "fail", inspected: 0, mismatches: [`${CONTRAST_ALLOW} is missing or failed its schema — allowances cannot be checked`] }
+  const r = contrastCheck(read(TOKEN_CSS), allow.entries)
+  const fails = []
+  if (r.tokenCount < 50) fails.push(`parser saw only ${r.tokenCount} tokens in ${TOKEN_CSS} — a parsing regression, not a clean run`)
+  for (const v of r.violations)
+    fails.push(v.worseThanAllowed === undefined
+      ? `${v.theme}: ${v.fg} on ${v.bg} = ${v.ratio.toFixed(2)}:1 (AA needs 4.5) — fix the value Figma-first, or record the decision in ${CONTRAST_ALLOW}`
+      : `${v.theme}: ${v.fg} on ${v.bg} = ${v.ratio.toFixed(2)}:1, worse than the allowed ${v.worseThanAllowed.toFixed(2)}:1 — a NEW finding; record it or fix the value`)
+  for (const u of r.unresolved)
+    fails.push(`${u.theme}: ${u.fg} on ${u.bg} — ${u.unresolvable}; an unmeasurable pair is a failure, not a pass`)
+  for (const s of r.stale)
+    fails.push(`${s.entry.theme}: ${s.entry.fg} on ${s.entry.bg} — ${s.why}`)
+  const pairs = r.pairs.length / 2
+  return { ...verdict(fails), inspected: r.pairs.length, scope: 1,
+    note: `${pairs} pairs · ${r.pairs.length} measurements (light+dark) · ${r.allowed.length} allowed · ${r.violations.length} failing` }
+})
 
 check("code", "tsc", () => {
   const r = sh("npx tsc --noEmit -p tsconfig.json --extendedDiagnostics", ROOT, 300000)
@@ -503,6 +552,64 @@ check("scope", "no-new-components", () => {
   }
   return { ...verdict(fails), inspected: dirs.size + entries.length, scope: dirs.size + entries.length,
     note: `${dirs.size} component dirs changed · ${entries.length} registry entries added` }
+})
+
+// Phase 4 — the registryComplete ratchet: the authored-entry count under packages/registry/src may only
+// increase. An entry is an agent-visible type; removing one is a breaking change to what the agent may
+// emit and goes through an owner decision (atlas/state/decisions.json) first, which is why v1 has no
+// allowance flag: no legitimate removal path exists yet.
+check("scope", "registry-complete", () => {
+  const ENTRY_RE = /^packages\/registry\/src\/[^/]+\.registry\.json$/
+  const now = exists("packages/registry/src")
+    ? fs.readdirSync(path.join(ROOT, "packages/registry/src"))
+      .filter((f) => ENTRY_RE.test(`packages/registry/src/${f}`))
+      .map((f) => `packages/registry/src/${f}`) : []
+  const before = sh(`git ls-tree -r --name-only ${BASE} -- packages/registry/src/`, ROOT)
+  if (!before.ok) return { status: "fail", inspected: 0, mismatches: [`could not list packages/registry/src at ${BASE} — cannot tell whether the registry shrank`] }
+  const old = before.out.split("\n").filter(Boolean).filter((f) => ENTRY_RE.test(f))
+  const removed = old.filter((f) => !now.includes(f))
+  const fails = removed.map((f) =>
+    `registry shrank (${old.length} → ${now.length}): ${f} is gone — an entry leaves only through an owner decision; record it first`)
+  return { ...verdict(fails), inspected: now.length, scope: 1, note: `${now.length} authored entries (was ${old.length} at ${BASE})` }
+})
+
+// Phase 4 — the breaking-change policy, until now prose only ("MAJOR for a breaking change to a
+// component API, variant or size value, or a token name or meaning; listed under ### Breaking"):
+// removed tokens (atlas.tokens.css), removed variants/sizes (atlas/metadata) or a deleted component
+// fail unless the same diff also adds a `### Breaking` CHANGELOG heading. Registry enum removals are
+// already caught by design/figma-registry-code against the code union.
+check("scope", "breaking-change", () => {
+  const fails = []
+  const removals = []
+  const before = sh(`git show ${BASE}:${TOKEN_CSS}`, ROOT)
+  if (!before.ok && !changed.includes(TOKEN_CSS)) return { status: "fail", inspected: 0, mismatches: [`could not read ${TOKEN_CSS} at ${BASE} — cannot tell which tokens were removed`] }
+  const oldTokens = before.ok ? definedTokens(before.out) : new Set()
+  const removedTokens = [...oldTokens].filter((t) => !tokens.has(t))
+  for (const t of removedTokens) removals.push(`token ${t} removed from ${TOKEN_CSS}`)
+
+  let compared = 0
+  const metaBefore = sh(`git ls-tree -r --name-only ${BASE} -- atlas/metadata/`, ROOT)
+  if (!metaBefore.ok) return { status: "fail", inspected: 0, mismatches: [`could not list atlas/metadata at ${BASE} — cannot tell which variants or sizes were removed`] }
+  for (const f of metaBefore.out.split("\n").filter(Boolean)) {
+    compared++
+    const now = inputs.files.find((x) => x.file === f)
+    if (!now) { removals.push(`component ${f.replace(/^atlas\/metadata\/|\.json$/g, "")} removed (atlas/metadata deleted)`); continue }
+    if (!now.ok) return { status: "fail", inspected: 0, mismatches: [`${f} failed its schema — cannot compare variants or sizes (see design/schemas)`] }
+    const oldRaw = sh(`git show ${BASE}:${f}`, ROOT)
+    let old
+    try { old = JSON.parse(oldRaw.out) } catch { return { status: "fail", inspected: 0, mismatches: [`${f} at ${BASE} is not JSON — cannot compare variants or sizes`] } }
+    for (const [key, what] of [["variants", "variant"], ["sizes", "size"]])
+      for (const v of old[key] ?? []) if (!(now.data[key] ?? []).includes(v)) removals.push(`${now.data.name} ${what} "${v}" removed`)
+  }
+
+  if (!removals.length) return { status: "pass", inspected: oldTokens.size + compared, scope: 1, note: `${oldTokens.size} tokens · ${compared} metadata files compared with ${BASE}` }
+  const changelog = changed.includes("CHANGELOG.md")
+    ? sh(`git diff ${BASE} -- CHANGELOG.md`, ROOT) : { ok: true, out: "" }
+  const hasBreaking = /^\+.*###\s+Breaking\b/m.test(changelog.out)
+  if (!(changelog.ok && hasBreaking))
+    fails.push(...removals.map((r) => `${r} — a breaking change needs a MAJOR entry under "### Breaking" in CHANGELOG.md in the same diff`))
+  return { ...verdict(fails), inspected: oldTokens.size + compared, scope: 1,
+    note: `${removals.length} removal(s) · CHANGELOG ${hasBreaking ? "carries a ### Breaking entry" : "untouched"}` }
 })
 
 // ─── Report ──────────────────────────────────────────────────────────────────

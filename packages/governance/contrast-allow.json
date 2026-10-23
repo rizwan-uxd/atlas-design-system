@@ -1,0 +1,19 @@
+{
+  "_note": "AUTHORED. Text/background token pairs that currently measure under WCAG AA 4.5:1 (atlas-verify code.contrast, roadmap Phase 4), each with its reason. An entry whose pair later measures ≥ 4.5:1 fails as stale, exactly like private-vars.allow — fix the value in Figma first, then delete the entry. `ratio` is the measurement at the time of seeding, informational only. Every entry here is an open finding (DISC-108), not an approval.",
+  "entries": [
+    { "fg": "--atlas-success-foreground", "bg": "--atlas-success", "theme": "light", "ratio": 4.42, "reason": "Pending owner decision (DISC-108): success-foreground on success reads 4.42:1 in light. Fix the value Figma-first, or declare the pairing out of scope." },
+    { "fg": "--atlas-info-foreground", "bg": "--atlas-info", "theme": "light", "ratio": 3.98, "reason": "Pending owner decision (DISC-108): info-foreground on info reads 3.98:1 in light." },
+    { "fg": "--atlas-info-foreground", "bg": "--atlas-info", "theme": "dark", "ratio": 2.98, "reason": "Pending owner decision (DISC-108): info-foreground on info reads 2.98:1 in dark — the worst measured pair." },
+    { "fg": "--atlas-primary-foreground", "bg": "--atlas-primary", "theme": "dark", "ratio": 3.71, "reason": "Pending owner decision (DISC-108): primary-foreground on primary reads 3.71:1 in dark. The four component pairs below inherit this value through var() chains." },
+    { "fg": "--atlas-danger-foreground", "bg": "--atlas-danger", "theme": "dark", "ratio": 3.9, "reason": "Pending owner decision (DISC-108): danger-foreground on danger reads 3.90:1 in dark. The three invalid-state component pairs below inherit this value." },
+    { "fg": "--atlas-button-primary-foreground", "bg": "--atlas-button-primary-background", "theme": "dark", "ratio": 3.71, "reason": "Pending owner decision (DISC-108): inherits the primary pair's dark value (3.71:1)." },
+    { "fg": "--atlas-button-destructive-foreground", "bg": "--atlas-button-destructive-background", "theme": "dark", "ratio": 3.9, "reason": "Pending owner decision (DISC-108): inherits the danger pair's dark value (3.90:1)." },
+    { "fg": "--atlas-checkbox-foreground", "bg": "--atlas-checkbox-checked-background", "theme": "dark", "ratio": 3.71, "reason": "Pending owner decision (DISC-108): check glyph on the checked fill inherits the primary pair's dark value (3.71:1)." },
+    { "fg": "--atlas-checkbox-invalid-checked-foreground", "bg": "--atlas-checkbox-invalid-checked-background", "theme": "dark", "ratio": 3.9, "reason": "Pending owner decision (DISC-108): inherits the danger pair's dark value (3.90:1)." },
+    { "fg": "--atlas-radio-foreground", "bg": "--atlas-radio-checked-background", "theme": "dark", "ratio": 3.71, "reason": "Pending owner decision (DISC-108): dot on the checked fill inherits the primary pair's dark value (3.71:1)." },
+    { "fg": "--atlas-radio-invalid-checked-foreground", "bg": "--atlas-radio-invalid-checked-background", "theme": "dark", "ratio": 3.9, "reason": "Pending owner decision (DISC-108): inherits the danger pair's dark value (3.90:1)." },
+    { "fg": "--atlas-foreground-subtle", "bg": "--atlas-background", "theme": "dark", "ratio": 4.16, "reason": "Pending owner decision (DISC-108): foreground-subtle is the darkest-failing text tone in dark (4.16:1 here, 3.07:1 on surface-raised). Decide the dark value, or declare subtle text AA-large-only and record it." },
+    { "fg": "--atlas-foreground-subtle", "bg": "--atlas-surface", "theme": "dark", "ratio": 3.74, "reason": "Pending owner decision (DISC-108): see foreground-subtle on background (dark)." },
+    { "fg": "--atlas-foreground-subtle", "bg": "--atlas-surface-raised", "theme": "dark", "ratio": 3.07, "reason": "Pending owner decision (DISC-108): see foreground-subtle on background (dark)." }
+  ]
+}

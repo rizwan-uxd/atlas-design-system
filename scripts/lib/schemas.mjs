@@ -30,6 +30,7 @@ export const INPUTS = [
   { glob: "packages/governance/deprecations.json", schema: "governance.schema.json#/$defs/deprecations", required: true },
   { glob: "packages/governance/ownership.json", schema: "governance.schema.json#/$defs/ownership", required: true },
   { glob: "packages/governance/private-vars.allow.json", schema: "governance.schema.json#/$defs/privateVarsAllow", required: true },
+  { glob: "packages/governance/contrast-allow.json", schema: "governance.schema.json#/$defs/contrastAllow", required: true },
   { glob: "packages/registry/figma-axis-map.json", schema: "governance.schema.json#/$defs/figmaAxisMap", required: true },
   { glob: "packages/registry/aliases.json", schema: "registry.schema.json#/$defs/aliases", required: true },
   { glob: "packages/registry/contract-props.json", schema: "registry.schema.json#/$defs/contractProps", required: true },
