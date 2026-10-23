@@ -5,12 +5,34 @@ The roadmap is normative now (referenced from `AGENTS.md` §2) and owns the phas
 only current state plus the gotchas that will bite again. **This is the only handoff doc** — earlier
 ones were deleted and live in git history.
 
+## Progress (update at the end of every session, and report it at the start and end of each)
+Counted in sessions, using the roadmap's own estimates (midpoint where it gives a range). Change N
+and say so when an estimate changes. **Roadmap: 5.5 of ~27 sessions done (~20%). Next: session 7 of
+~27 = M3 session 2 of 4.**
+
+| Phase | Sessions (est.) | Done | Status | PR |
+|---|---|---|---|---|
+| Phase 1 — docs + metrics generator | 1 | 1 | ✅ | #98 |
+| M1 — Figma↔code comparison | 1.5 | 1.5 | ✅ | #99 |
+| D1 — token-table spike | 1 | 1 | ✅ C built; A/B/C/D call is the user's | #100 |
+| M2 — verifier can fail | 1 | 1 | ✅ | #101 |
+| **M3 — registry** | 4 | 1 | 🟡 session 1 of 4 done (25%) | #102 |
+| 2d — token work, zero new tokens | 1.5 | 0 | ⏳ | |
+| M4 — runtime vertical slice | 3.5 | 0 | ⏳ | |
+| Phase 4 — enforcement hardened | 2.5 | 0 | ⏳ | |
+| M5 — semantic tokens + brands | 7 | 0 | ⏳ | |
+| Phase 6 — filtered agent catalog | 2.5 | 0 | ⏳ | |
+| Phase 7 — metrics as release gates | 1.5 | 0 | ⏳ | |
+| **Total** | **~27** | **5.5** | **~20%** | |
+
+Metric table (the roadmap's scoreboard): **2 passing · 0 failing · 33 not measurable** of 35.
+M3 exit: 0/6 types `registryComplete`, 0/47 generated contracts, 0/2 target metrics moved.
+
 ## State
 - **`main` has Phase 1 (#98), M1 (#99), D1 (#100) and M2 (#101).** The post-merge check passed on
   `dd039b1`: `node scripts/atlas-verify.mjs --only design.schemas` → `PASS schemas (58/58 files valid ·
   5 schemas)`, and the roadmap kept both the M2 and D1 sections.
-- **M3 session 1 is on branch `claude/atlas-m3-fa23b4`** (not merged; check for its PR before
-  starting). It adds `packages/registry/{aliases.json,src/,generated/}`, `registry.schema.json`,
+- **M3 session 1 is merged (#102, `3993837`).** It adds `packages/registry/{aliases.json,src/,generated/}`, `registry.schema.json`,
   `scripts/lib/registry.mjs`, `scripts/registry-build.mjs`, `npm run registry:build|registry:check`
   and the CI step "Registry invariant". `registry:check` → PASS, 4 entries, 3 facts, 115 rules.
 - **D1 results:** token-name drift is **0 over 193/432 tokens** (option C). **A** (REST
