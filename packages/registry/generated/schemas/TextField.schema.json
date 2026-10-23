@@ -30,7 +30,8 @@
         },
         "placeholder": { "type": "string" },
         "required": { "type": "boolean" }
-      }
+      },
+      "required": ["name"]
     },
     "slots": {
       "type": "object",

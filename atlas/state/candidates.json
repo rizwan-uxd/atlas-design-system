@@ -150,6 +150,14 @@
       "composedFrom": "a Button with loading and a 'Showing 20 of 240' line (Load more); infinite scroll has no composition, it needs a scroll sentinel",
       "occurrences": 0,
       "note": "Raised by the user while scoping Pagination (2026-10-13). Decision: Pagination shipped first; Load more is now documented guidance in data-table.md and the Figma Pattern / Data table page (frame 8), composed from Button (2026-10-13); infinite scroll is a behaviour, not a visual, and is not built."
+    },
+    {
+      "id": "CAND-056",
+      "name": "Form (submit row layout, field spacing, error summary)",
+      "seenIn": ["app/runtime-demo/RuntimeDemo.tsx", "packages/registry/src/Form.registry.json"],
+      "composedFrom": "the runtime's structural Form: an intrinsic <form> (DEC-080) around Field, TextField, Button and Alert; the demo page spaces it with a local grid (runtime-demo.css)",
+      "occurrences": 1,
+      "note": "Raised by M4 (2026-10-23, roadmap M4: log the Form gap). Form is a registered structural type composed by the runtime as an intrinsic <form>; there is no Form component in Figma or ui-web, so field spacing and the submit row are page CSS. A Form component (layout, submit row, error summary) needs a Figma-first atlas-component session and the user's go-ahead."
     }
   ]
 }

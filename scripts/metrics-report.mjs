@@ -78,10 +78,12 @@ function collectResults(manifest) {
   }
 
   // vitest / playwright --reporter=json: { testResults: [{ assertionResults: [{ fullName, status }] }] }
-  for (const [source, file] of [["vitest", "vitest.json"], ["playwright", "playwright.json"]]) {
+  // vitest-metrics.json is the report-only suite (vitest.metrics.config.ts): metric readings that CI does not
+  // block on, such as the protocol size ratio. Its results are vitest results like any other.
+  for (const [source, file] of [["vitest", "vitest.json"], ["vitest", "vitest-metrics.json"], ["playwright", "playwright.json"]]) {
     const p = path.join(dir, file)
     if (!exists(p)) continue
-    found.push(source)
+    if (!found.includes(source)) found.push(source)
     const data = readJson(p)
     for (const suite of data.testResults ?? data.suites ?? []) {
       for (const t of suite.assertionResults ?? suite.specs ?? []) {

@@ -104,6 +104,13 @@ test("a declared check that ran and failed → failing", () => {
   assert.match(region(dir), /0 passing · 1 failing · 0 not measurable/)
 })
 
+test("report-only vitest results (vitest-metrics.json) count as vitest results", () => {
+  const dir = scaffold({ metrics: ONE, results: { "vitest-metrics.json": vitestRow("runtime/fuzz > no payload throws", "failed") } })
+  run(dir)
+  assert.match(rows(dir), /\*\*failing\*\*/)
+  assert.match(region(dir), /0 passing · 1 failing · 0 not measurable/)
+})
+
 test("one failing match among passing ones makes the metric failing", () => {
   const dir = scaffold({
     metrics: ONE,

@@ -87,6 +87,7 @@ Skills are **authored** in `.agents/skills/<name>/` (`SKILL.md` + `references/`)
 | Build a prototype flow or screen | `atlas-prototype` skill |
 | Create or change a library component | `atlas-component` skill |
 | Write or change a screen pattern (doc + example, Figma frames first) | `atlas-pattern` skill |
+| Change the runtime, protocol or runtime demo (`packages/runtime`, `app/runtime-demo`) | `atlas-runtime` skill |
 | Refresh the snapshot from Figma | `atlas-figma-sync` skill + `scripts/atlas-sync.mjs` |
 | Check work before reporting done | `atlas-verify` skill + `scripts/atlas-verify.mjs` (`npm run atlas:verify -- --scope "<globs>"`) |
 | QA audit of a component | `docs/audits/QA-REPORT.md` only — never a new per-session file. Append the bug log (BUG-NNN: guard, location, description, fix) and the checklist, then update the Summary, Component Results and Session Progress tables. |

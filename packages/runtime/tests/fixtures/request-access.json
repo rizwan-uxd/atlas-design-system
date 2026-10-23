@@ -1,0 +1,34 @@
+{
+  "_note": "AUTHORED. The M4 Request access form (roadmap M4): render is the first op; responses are the op lists the stub agent sends after a submit, chosen by its validation. seq values here are placeholders the stub re-stamps.",
+  "render": {
+    "op": "render",
+    "seq": 1,
+    "root": {
+      "type": "Form",
+      "slots": {
+        "children": [
+          { "type": "Field", "props": { "required": true }, "slots": {
+            "label": ["Work email"],
+            "helpText": ["We send the access link here."],
+            "children": [{ "type": "TextField", "props": { "name": "email", "placeholder": "you@company.com" } }]
+          } },
+          { "type": "Field", "props": { "required": true }, "slots": {
+            "label": ["Organisation"],
+            "children": [{ "type": "TextField", "props": { "name": "organisation" } }]
+          } },
+          { "type": "Button", "props": { "variant": "primary" }, "slots": { "children": ["Request access"] } }
+        ]
+      }
+    }
+  },
+  "responses": {
+    "invalid-email": [{ "op": "state", "seq": 1, "path": "form.email", "value": { "error": "Enter a valid work email" } }],
+    "clear-email": [{ "op": "state", "seq": 1, "path": "form.email", "value": { "error": null } }],
+    "missing-organisation": [{ "op": "state", "seq": 1, "path": "form.organisation", "value": { "error": "Enter your organisation" } }],
+    "clear-organisation": [{ "op": "state", "seq": 1, "path": "form.organisation", "value": { "error": null } }],
+    "success": [{ "op": "patch", "seq": 1, "at": "/slots/children/3", "node": {
+      "type": "Alert", "props": { "variant": "success" },
+      "slots": { "title": ["Request sent"], "description": ["We will email you when access is approved."] }
+    } }]
+  }
+}

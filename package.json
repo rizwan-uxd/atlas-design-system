@@ -21,9 +21,11 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
+    "test:metrics": "vitest run --config vitest.metrics.config.ts",
     "test:scripts": "node --test scripts/tests/*.test.mjs",
-    "test:visual": "playwright test",
-    "test:visual:update": "playwright test --update-snapshots"
+    "test:visual": "playwright test --project=chromium",
+    "test:visual:update": "playwright test --project=chromium --update-snapshots",
+    "test:runtime": "playwright test --project=runtime-demo"
   },
   "workspaces": [
     "packages/*"

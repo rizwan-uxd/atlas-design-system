@@ -7,25 +7,25 @@ ones were deleted and live in git history.
 
 ## Progress (update at the end of every session, and report it at the start and end of each)
 Counted in sessions, using the roadmap's own estimates (midpoint where it gives a range). Change N
-and say so when an estimate changes. **Roadmap: 10.5 of ~28 sessions done (~38%). N went from ~27 to ~28 for the
-D1 option-B build the user chose (one session). Phase 2 and D1 are complete. Next: session 12 of ~28 =
-M4 (runtime vertical slice), session 1 of ~3.5.**
+and say so when an estimate changes. **Roadmap: 14 of ~28 sessions done (~50%). M4 is complete in 3.5 sessions (estimate 3.5):
+plan, Tasks 1–5, Tasks 6–9, Tasks 10–14, on `claude/m4-runtime-slice`. Next: session 16 of ~28 = Phase 4
+(enforcement hardened), session 1 of ~2.5.**
 
 | Phase | Sessions (est.) | Done | Status | PR |
 |---|---|---|---|---|
 | Phase 1 — docs + metrics generator | 1 | 1 | ✅ | #98 |
 | M1 — Figma↔code comparison | 1.5 | 1.5 | ✅ | #99 |
 | D1 — token-table spike | 1 | 1 | ✅ C built, A/B spiked | #100 |
-| D1 — option B, the full variable table | 1 | 1 | ✅ user chose B (DEC-081) | this branch |
+| D1 — option B, the full variable table | 1 | 1 | ✅ user chose B (DEC-081) | #107 |
 | M2 — verifier can fail | 1 | 1 | ✅ | #101 |
 | M3 — registry | 4 | 4 | ✅ exit met except Text (5/6 types) | #102, #103, #104, #105 |
 | 2d — token work, zero new tokens | 1.5 | 1 | ✅ in 1 session (est. 1.5) | #106 |
-| **M4 — runtime vertical slice** | 3.5 | 0 | ⏳ next | |
-| Phase 4 — enforcement hardened | 2.5 | 0 | ⏳ | |
+| **M4 — runtime vertical slice** | 3.5 | 3.5 | ✅ all 12 M4 rows measured: 11 pass, size fails (report-only, DEC-085) | `claude/m4-runtime-slice` |
+| **Phase 4 — enforcement hardened** | 2.5 | 0 | ⏳ next | |
 | M5 — semantic tokens + brands | 7 | 0 | ⏳ | |
 | Phase 6 — filtered agent catalog | 2.5 | 0 | ⏳ | |
 | Phase 7 — metrics as release gates | 1.5 | 0 | ⏳ | |
-| **Total** | **~28** | **10.5** | **~38%** | |
+| **Total** | **~28** | **14** | **~50%** | |
 
 Metric table (the roadmap's scoreboard): **7 passing · 2 failing · 26 not measurable** of 35. 2d moved
 the two raw-design-values rows and reduced-motion to passing; D1-B measured the three token-drift rows
@@ -108,7 +108,25 @@ each over the registered subset (4/47 components registered).
 - **Native tokens are fully derived** from `atlas.tokens.css`: change a token, run
   `npm run tokens:build`, commit the native file, or CI's Tokens Build fails. A value in a new unit
   throws instead of being written.
-- **Next is M4** (roadmap "M4 — Vertical slice"). Read the roadmap section first.
+- **M4 is done on `claude/m4-runtime-slice`** (plan `docs/superpowers/plans/2026-10-23-m4-runtime-slice.md`;
+  roadmap §M4 "As built"). Session 4 added the stub agent, `app/runtime-demo`, `tests/runtime/runtime-demo.spec.ts`
+  (six metrics plus page-level axe, on one Playwright server with two projects), the `runtime` CI job, both
+  Playwright projects in the visual job, the nightly random-seed fuzz workflow, the `atlas-runtime` skill, CAND-056
+  (the Form gap) and dropped `ui-web`'s false `main`. All 12 M4 rows are measured: 11 pass, size fails (0.308,
+  report-only). Measured p95 (production build): ack 0.4 ms, fallback 0.5 ms. The committed metrics region stays the
+  no-results state (see the gotcha below); the M4 readings are in the roadmap prose. **Next is Phase 4.** Earlier: Done: `TextField.name` required
+  (DEC-083); `registry-build` writes `generated/runtimeRegistry.ts`, which `packages/registry/lib` wraps as
+  `registry`, `resolve`, `filter` and `without`; `packages/runtime` has the protocol types, the
+  `protocol.schema.json` envelope, the request-access fixture (an `INPUTS` rule, `packages/runtime` watched),
+  `findMarkup`, `validateTree` and `fallbackFor`. Session 3 added `store.ts` (sequenced reducer, structural-sharing
+  patches), `Runtime.tsx` (`<AtlasRuntime>`, per-node boundaries, the Field handoff, DEC-084) and the seeded fuzz.
+  Five vitest M4 rows read passing (three `runtime/validator`, two `runtime/fuzz`) and `runtime/protocol` reads
+  failing (report-only); the six Playwright rows wait on Task 11.
+- **The size metric is report-only and reads failing (DEC-085).** The render op is 513 B against 1663 B of
+  rendered markup: ratio **0.308**, over the 0.30 gate (521 B of the markup is the runtime's own `data-atlas-*`
+  tagging; against component markup alone it is about 0.45). `packages/runtime/tests/size.metric.tsx` runs from
+  `vitest.metrics.config.ts` (`npm run test:metrics`) in CI's metrics job with `continue-on-error`, and
+  `metrics-report` reads its `.metrics/vitest-metrics.json`. A more compact protocol is a separate, later decision.
 
 ## Open owner decisions (ask; do not decide these yourself)
 - **Text (the 6th M3 exit type) — deferred by the user 2026-10-23 (DEC-080).** Atlas has no Text
@@ -137,9 +155,11 @@ each over the registered subset (4/47 components registered).
 ## Commands
 ```bash
 npm ci
-npm run test:scripts        # 314 tests: comparator, ci-workflow, convert-tokens, metrics-report, registry, registry-metrics, schemas, sync, token-coverage, token-rules, verify
+npm run test:scripts        # 319 tests: comparator, ci-workflow, convert-tokens, metrics-report, registry, registry-metrics, schemas, sync, token-coverage, token-rules, verify
 npm run registry:check      # facts, contracts, schemas current + authored registry ⊆ generated facts (M3)
-npm test                    # 1411 vitest
+npm test                    # 1475 vitest (blocking; *.metric.tsx excluded)
+npm run test:metrics        # report-only metrics (exit 1 while the size metric reads failing, DEC-085)
+npm run test:runtime        # Playwright runtime-demo project (PW_CHROMIUM may point at an installed Chromium)
 npm run token-lint
 npx tsc --noEmit
 npm run metrics:check       # the committed metric region matches a fresh run
@@ -222,6 +242,15 @@ Search and filter frames (#57); disabled opacity bound (#58); StatCard icon, cli
 - **Browser mirror of React Native geometry:** Chromium is at `/opt/pw-browsers/chromium-1194/chrome-linux/chrome` (no playwright package). Render with `--headless=new --no-sandbox --force-device-scale-factor=3`: at 1x density fractional sizes (a 20 px Spinner ring is 16.46) show clip-snapping notches that a phone would not.
 - **Editing `atlas/state/*.json`:** remove or insert the entry as text. A `json.dump` round trip reformats the whole file (it did for `candidates.json`: a 98-line diff, redone). New decision entries use 6-space keys inside a 4-space `{`.
 - **The stop hook** ("uncommitted changes" or "unpushed commits") fires at the end of a turn. Commit to the feature branch and push it, with no PR; do not merge or open a PR without the user's yes. (This session also committed and pushed on a user "commit" instruction because the session brief says to commit and push to the designated branch; PRs and merges waited for the user's "open the PR" and "merge N".)
+
+### From M4 session 2 (2026-10-23)
+- **A worktree has no `node_modules` of its own**, so Node resolves the main checkout's, which can be on another
+  branch with other versions (it had ajv 6, and `registry-build` needs ajv 8's `dist/2020`). Run
+  `npm ci --legacy-peer-deps` in the worktree first.
+- **A new watched input directory must also be copied by the verify tests' throwaway repo**
+  (`INPUTS` in `scripts/tests/atlas-verify.test.mjs`), or the `min: 1` rule fails three `--stamp-components` and
+  `design/schemas` tests.
+- **The repo's ajv runs in strict mode**: a subschema with `properties` needs `"type": "object"`, even inside `allOf`.
 
 ### From M3 session 1 (2026-10-23)
 - **A fresh worktree has no `node_modules`.** Run `npm ci` first; `atlas-verify` and `registry-build`

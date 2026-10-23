@@ -773,3 +773,23 @@ export const structuralTypes = [${structural.join(", ")}] as const
 export type RegisteredType = keyof typeof componentMap | (typeof structuralTypes)[number]
 `
 }
+
+/** `runtimeRegistry.ts`: every authored entry and its protocol schema as JSON imports, for the M4 runtime (no fs at runtime). */
+export function runtimeRegistrySource(entries) {
+  const types = Object.keys(entries).sort()
+  return `// GENERATED — do not hand-edit. registry-build from packages/registry/src, generated/schemas and aliases.json; run npm run registry:build.
+// Every registered entry and its protocol schema, bundled so the runtime reads the registry without fs (roadmap M4).
+import aliases from "../aliases.json"
+${types.map((t) => `import ${t}Entry from "../src/${t}.registry.json"\nimport ${t}Schema from "./schemas/${t}.schema.json"`).join("\n")}
+
+export const entries = {
+${types.map((t) => `  ${t}: ${t}Entry,`).join("\n")}
+}
+
+export const schemas = {
+${types.map((t) => `  ${t}: ${t}Schema,`).join("\n")}
+}
+
+export const aliasTable: Record<string, string> = aliases.aliases
+`
+}

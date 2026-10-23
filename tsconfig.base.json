@@ -15,7 +15,9 @@
     "paths": {
       "@/*": ["./*"],
       "@atlas/ui-web/*": ["./packages/ui-web/src/*"],
-      "@atlas/tokens/*": ["./packages/tokens/*"]
+      "@atlas/tokens/*": ["./packages/tokens/*"],
+      "@atlas/registry/*": ["./packages/registry/*"],
+      "@atlas/runtime/*": ["./packages/runtime/src/*"]
     }
   }
 }

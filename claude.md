@@ -6,7 +6,7 @@
 
 ## Status
 Monorepo restructured; 47 web components are tracked in `atlas/state/status.json` (35 spec-complete, 12 scaffolded) and live in `packages/ui-web/src/` by tier, with 17 native components in `packages/ui-native/components/` and 15 screen patterns in `packages/governance/patterns/` (generated copies in `atlas/patterns/`). A visual sandbox is at `app/page.tsx` and the prototype scaffold is under `app/prototypes/_shared/` (no flows currently).
-**Current work:** component batches per `docs/componentlist plan _next6_2026-09-25.md` (batch 2 and its screen patterns complete; current next steps in `docs/HANDOFF-next-session.md`). The harness (phases 0 to 9) is finished and documented in `docs/HARNESS.md`; H3 is integrated on `main`.
+**Current work:** the delivery roadmap (`docs/ATLAS-DELIVERY-ROADMAP.md`): M4, the runtime vertical slice, is done (`app/runtime-demo` on `packages/registry` + `packages/runtime`); Phase 4 is next. Progress and next steps are in `docs/HANDOFF-next-session.md`. The harness (phases 0 to 9) is finished and documented in `docs/HARNESS.md`; H3 is integrated on `main`.
 
 ## What this is
 A monorepo holding: the visual sandbox (Next.js 16, `app/page.tsx`), the web component library (`packages/ui-web/src/`), a React Native library (`packages/ui-native/`), design tokens (`packages/tokens/`), Figma sync (`packages/figma-sync/`), governance checks (`packages/governance/`), and the agent benchmark (`benchmarks/`).
@@ -50,12 +50,15 @@ packages/
 ├── ui-native/         React Native components (Expo)
 ├── figma-sync/        code-connect/*.figma.tsx · mcp/configs/
 ├── governance/        token-lint.mjs · contracts/
+├── registry/          authored entries (src/) · generated facts, schemas, componentMap, runtimeRegistry · lib/ (resolve, filter, without)
+├── runtime/           M4 runtime: protocol · validator · fallback · reducer · <AtlasRuntime> · stub agent
 └── ai-workflows/      retired in phase 8 (README only)
 app/
 ├── page.tsx           visual sandbox
 ├── prototypes/        _shared scaffold (FlowShell + PhoneFrame + registry); no flows yet
+├── runtime-demo/      M4: the Request access form rendered from a JSON protocol tree
 └── globals.css        imports tokens + tailwind
-.agents/skills/        authored skills (symlinked as .claude/skills) — atlas-figma-sync · atlas-verify · atlas-prototype · atlas-component · atlas-pattern
+.agents/skills/        authored skills (symlinked as .claude/skills) — atlas-figma-sync · atlas-verify · atlas-prototype · atlas-component · atlas-pattern · atlas-runtime
 scripts/               convert-tokens.mjs · atlas-sync.mjs (regenerates atlas/)
 benchmarks/            agent cost/quality benchmark · tasks/ · results/ · rubric.md
 docs/

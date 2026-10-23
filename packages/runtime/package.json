@@ -1,0 +1,7 @@
+{
+  "name": "@atlas/runtime",
+  "version": "0.1.0",
+  "private": true,
+  "exports": { "./*": "./src/*" },
+  "peerDependencies": { "react": ">=19" }
+}
