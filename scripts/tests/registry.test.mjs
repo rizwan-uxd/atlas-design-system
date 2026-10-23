@@ -9,7 +9,7 @@ import path from "node:path"
 import { fileURLToPath } from "node:url"
 import ts from "typescript"
 import Ajv2020 from "ajv/dist/2020.js"
-import { ASSERT_SOURCE, checkRegistry, codeConnectFacts, compilerOptions, componentMapSource, contractSource, elementsSource, extractElementEvents, extractFacts, formatJson, jsonTypeOf, protocolSchema } from "../lib/registry.mjs"
+import { ASSERT_SOURCE, checkRegistry, codeConnectFacts, compilerOptions, componentMapSource, contractSource, elementsSource, extractElementEvents, extractFacts, formatJson, jsonTypeOf, protocolSchema, runtimeRegistrySource } from "../lib/registry.mjs"
 
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..")
 const BUTTON = path.join(REPO, "packages/ui-web/src/primitives/Button/Button.tsx")
@@ -455,4 +455,13 @@ test("zero entries is a failure, not a clean run", () => {
   const r = cli(dir, "--check")
   assert.equal(r.code, 1)
   assert.match(r.out, /src\/\*\.registry\.json matched 0 file/)
+})
+
+test("runtimeRegistry bundles every entry with its schema, sorted, and the alias table", () => {
+  const text = runtimeRegistrySource({ TextField: {}, Alert: {}, Form: {} })
+  assert.match(text, /^\/\/ GENERATED — do not hand-edit\./)
+  assert.ok(text.indexOf('import AlertEntry from "../src/Alert.registry.json"') < text.indexOf("import FormEntry"))
+  assert.match(text, /import TextFieldSchema from "\.\/schemas\/TextField\.schema\.json"/)
+  assert.match(text, /export const entries = \{\n  Alert: AlertEntry,\n  Form: FormEntry,\n  TextField: TextFieldEntry,\n\}/)
+  assert.match(text, /export const aliasTable: Record<string, string> = aliases\.aliases/)
 })

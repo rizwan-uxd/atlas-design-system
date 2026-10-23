@@ -22,6 +22,8 @@
     "packages/governance/**/*.ts",
     "packages/governance/**/*.tsx",
     "packages/registry/**/*.ts",
+    "packages/runtime/**/*.ts",
+    "packages/runtime/**/*.tsx",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts"
   ],

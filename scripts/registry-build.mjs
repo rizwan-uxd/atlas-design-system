@@ -18,7 +18,7 @@ import { fileURLToPath } from "node:url"
 import ts from "typescript"
 import { loadInputs } from "./lib/schemas.mjs"
 import Ajv2020 from "ajv/dist/2020.js"
-import { ASSERT_SOURCE, checkRegistry, codeConnectFacts, compilerOptions, componentMapSource, contractSource, elementsSource, extractElementEvents, extractFacts, extractModule, formatJson, moduleContext, propTypes, protocolSchema } from "./lib/registry.mjs"
+import { ASSERT_SOURCE, checkRegistry, codeConnectFacts, compilerOptions, componentMapSource, contractSource, elementsSource, extractElementEvents, extractFacts, extractModule, formatJson, moduleContext, propTypes, protocolSchema, runtimeRegistrySource } from "./lib/registry.mjs"
 
 const args = process.argv.slice(2)
 const CHECK = args.includes("--check")
@@ -123,6 +123,7 @@ function main() {
     } catch (err) { problems.push(`${e.type}: ${err.message}`) }
   }
   written[`${GEN}/componentMap.ts`] = componentMapSource(entries, metadata)
+  written[`${GEN}/runtimeRegistry.ts`] = runtimeRegistrySource(entries)
   if (problems.length) return fatal(problems)
 
   const list = (dir, suffix) => (fs.existsSync(rel(dir)) ? fs.readdirSync(rel(dir)).filter((f) => f.endsWith(suffix)).map((f) => `${dir}/${f}`) : [])
