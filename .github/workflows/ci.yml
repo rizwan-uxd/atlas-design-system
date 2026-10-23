@@ -207,7 +207,10 @@ jobs:
           cache: npm
       - run: npm ci --legacy-peer-deps
       # Collection steps are continue-on-error on purpose: a red check is an honest metric READING
-      # (the region must show it failing), not a reason to skip the report.
+      # (the region must show it failing), not a reason to skip the report. mkdir first: a shell
+      # redirect into .metrics/ fails before anything creates the directory.
+      - name: Prepare .metrics
+        run: mkdir -p .metrics
       - name: Collect atlas-verify results
         continue-on-error: true
         env:
