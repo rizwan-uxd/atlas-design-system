@@ -1,0 +1,3 @@
+/* The node wrapper carries data-atlas-type for components that take no extra attributes (DEC-084). It is not a
+   layout box: display: contents removes it from layout and leaves the accessibility tree to its child. */
+.atlas-node { display: contents; }

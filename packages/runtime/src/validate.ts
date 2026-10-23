@@ -14,7 +14,7 @@ export function validateTree(raw: unknown, r: Registry, at = "", parent: string 
   return { node, issues }
 }
 
-/** M4 plan, decision 4 (nesting is closed): one side must declare the pair and neither may contradict it. */
+/** DEC-084 (1), nesting is closed: one side must declare the pair and neither may contradict it. */
 function nests(r: Registry, parent: string, child: string): boolean {
   const p = r.entries[parent].nesting?.children, c = r.entries[child].nesting?.parents
   const byParent = p ? p.includes(child) : undefined
