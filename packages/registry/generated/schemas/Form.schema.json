@@ -12,6 +12,13 @@
       "type": "object",
       "additionalProperties": false,
       "properties": {}
+    },
+    "slots": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "children": { "type": "array" }
+      }
     }
   }
 }

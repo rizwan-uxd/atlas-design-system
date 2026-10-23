@@ -6,14 +6,14 @@
   "part": "Image",
   "propsType": "ImageProps",
   "props": [
-    { "name": "alt", "type": "string", "optional": false },
-    { "name": "className", "type": "string", "optional": true },
-    { "name": "fallback", "type": "React.ReactNode", "optional": true },
-    { "name": "fit", "type": "ImageFit", "optional": true },
-    { "name": "radius", "type": "ImageRadius", "optional": true },
-    { "name": "ratio", "type": "ImageRatio", "optional": true },
-    { "name": "src", "type": "string", "optional": false },
-    { "name": "style", "type": "React.CSSProperties", "optional": true }
+    { "name": "alt", "type": "string", "optional": false, "exact": true },
+    { "name": "className", "type": "string", "optional": true, "exact": true },
+    { "name": "fallback", "type": "React.ReactNode", "optional": true, "exact": true },
+    { "name": "fit", "type": "ImageFit", "optional": true, "exact": true },
+    { "name": "radius", "type": "ImageRadius", "optional": true, "exact": true },
+    { "name": "ratio", "type": "ImageRatio", "optional": true, "exact": true },
+    { "name": "src", "type": "string", "optional": false, "exact": true },
+    { "name": "style", "type": "React.CSSProperties", "optional": true, "exact": true }
   ],
   "inherited": {
     "AriaAttributes": ["aria-activedescendant", "aria-atomic", "aria-autocomplete", "aria-braillelabel", "aria-brailleroledescription", "aria-busy", "aria-checked", "aria-colcount", "aria-colindex", "aria-colindextext", "aria-colspan", "aria-controls", "aria-current", "aria-describedby", "aria-description", "aria-details", "aria-disabled", "aria-dropeffect", "aria-errormessage", "aria-expanded", "aria-flowto", "aria-grabbed", "aria-haspopup", "aria-hidden", "aria-invalid", "aria-keyshortcuts", "aria-label", "aria-labelledby", "aria-level", "aria-live", "aria-modal", "aria-multiline", "aria-multiselectable", "aria-orientation", "aria-owns", "aria-placeholder", "aria-posinset", "aria-pressed", "aria-readonly", "aria-relevant", "aria-required", "aria-roledescription", "aria-rowcount", "aria-rowindex", "aria-rowindextext", "aria-rowspan", "aria-selected", "aria-setsize", "aria-sort", "aria-valuemax", "aria-valuemin", "aria-valuenow", "aria-valuetext"],
@@ -218,7 +218,8 @@
     "bound": "Image",
     "instances": {},
     "stateProps": {},
-    "enums": { "ratio": "Ratio" }
+    "enums": { "ratio": "Ratio" },
+    "figmaContent": ["alt", "src"]
   },
   "figma": {
     "nodeId": "534:35",
@@ -227,5 +228,31 @@
       "State": ["loaded", "loading", "error"]
     }
   },
-  "tokensUsed": ["--atlas-background-muted", "--atlas-foreground-subtle", "--atlas-icon-size-lg", "--atlas-icon-stroke-lg", "--atlas-radius-full", "--atlas-radius-lg", "--atlas-radius-md", "--atlas-radius-none", "--atlas-radius-sm", "--atlas-radius-xl"]
+  "tokensUsed": ["--atlas-background-muted", "--atlas-foreground-subtle", "--atlas-icon-size-lg", "--atlas-icon-stroke-lg", "--atlas-radius-full", "--atlas-radius-lg", "--atlas-radius-md", "--atlas-radius-none", "--atlas-radius-sm", "--atlas-radius-xl"],
+  "module": {
+    "imports": [
+      { "from": "@atlas/ui-web/primitives/Image/Image", "name": "ImageFit", "kind": "named" },
+      { "from": "@atlas/ui-web/primitives/Image/Image", "name": "ImageRadius", "kind": "named" },
+      { "from": "@atlas/ui-web/primitives/Image/Image", "name": "ImageRatio", "kind": "named" }
+    ],
+    "parts": {},
+    "types": {
+      "ImageFit": {
+        "kind": "union",
+        "members": ["contain", "cover"]
+      },
+      "ImageRadius": {
+        "kind": "union",
+        "members": ["full", "lg", "md", "none", "sm", "xl"]
+      },
+      "ImageRatio": {
+        "kind": "union",
+        "members": ["16:10", "16:9", "1:1", "2:3", "3:2", "3:4", "4:3", "4:5", "9:16", "auto"]
+      },
+      "ImageState": {
+        "kind": "union",
+        "members": ["error", "loaded", "loading"]
+      }
+    }
+  }
 }

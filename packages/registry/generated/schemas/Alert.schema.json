@@ -27,9 +27,7 @@
       "additionalProperties": false,
       "properties": {
         "actions": { "type": "array" },
-        "children": { "type": "array" },
         "description": { "type": "array" },
-        "icon": { "type": "array" },
         "title": { "type": "array" }
       }
     }

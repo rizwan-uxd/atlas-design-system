@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://atlas.design-system/schemas/registry/Field.schema.json",
+  "$comment": "GENERATED — do not hand-edit. registry-build from packages/registry/src/Field.registry.json and the Field facts; run npm run registry:build.",
+  "title": "Field protocol node",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["type"],
+  "properties": {
+    "type": { "const": "Field" },
+    "props": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "size": {
+          "enum": ["sm", "md", "lg"]
+        },
+        "required": { "type": "boolean" },
+        "optional": { "type": "boolean" },
+        "disabled": { "type": "boolean" }
+      }
+    },
+    "slots": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "children": { "type": "array" },
+        "error": { "type": "array" },
+        "helpText": { "type": "array" },
+        "label": { "type": "array" },
+        "labelAction": { "type": "array" }
+      }
+    }
+  }
+}

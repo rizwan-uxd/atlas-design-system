@@ -6,15 +6,15 @@
   "part": "SidebarMenuRow",
   "propsType": "SidebarMenuRowProps",
   "props": [
-    { "name": "active", "type": "boolean", "optional": true },
-    { "name": "as", "type": "\"button\" | \"a\"", "optional": true },
-    { "name": "badge", "type": "React.ReactNode", "optional": true },
-    { "name": "children", "type": "React.ReactNode", "optional": false },
-    { "name": "disabled", "type": "boolean", "optional": true },
-    { "name": "expanded", "type": "boolean", "optional": true },
-    { "name": "hasChildren", "type": "boolean", "optional": true },
-    { "name": "href", "type": "string", "optional": true },
-    { "name": "icon", "type": "React.ReactNode", "optional": true }
+    { "name": "active", "type": "boolean", "optional": true, "exact": true },
+    { "name": "as", "type": "\"button\" | \"a\"", "optional": true, "exact": true },
+    { "name": "badge", "type": "React.ReactNode", "optional": true, "exact": true },
+    { "name": "children", "type": "React.ReactNode", "optional": false, "exact": true },
+    { "name": "disabled", "type": "boolean", "optional": true, "exact": true },
+    { "name": "expanded", "type": "boolean", "optional": true, "exact": true },
+    { "name": "hasChildren", "type": "boolean", "optional": true, "exact": true },
+    { "name": "href", "type": "string", "optional": true, "exact": true },
+    { "name": "icon", "type": "React.ReactNode", "optional": true, "exact": true }
   ],
   "inherited": {
     "AriaAttributes": ["aria-activedescendant", "aria-atomic", "aria-autocomplete", "aria-braillelabel", "aria-brailleroledescription", "aria-busy", "aria-checked", "aria-colcount", "aria-colindex", "aria-colindextext", "aria-colspan", "aria-controls", "aria-current", "aria-describedby", "aria-description", "aria-details", "aria-disabled", "aria-dropeffect", "aria-errormessage", "aria-expanded", "aria-flowto", "aria-grabbed", "aria-haspopup", "aria-hidden", "aria-invalid", "aria-keyshortcuts", "aria-label", "aria-labelledby", "aria-level", "aria-live", "aria-modal", "aria-multiline", "aria-multiselectable", "aria-orientation", "aria-owns", "aria-placeholder", "aria-posinset", "aria-pressed", "aria-readonly", "aria-relevant", "aria-required", "aria-roledescription", "aria-rowcount", "aria-rowindex", "aria-rowindextext", "aria-rowspan", "aria-selected", "aria-setsize", "aria-sort", "aria-valuemax", "aria-valuemin", "aria-valuenow", "aria-valuetext"],
@@ -211,7 +211,8 @@
     "bound": "SidebarMenuRow",
     "instances": {},
     "stateProps": { "active": "active", "disabled": "disabled", "expanded": "expanded" },
-    "enums": { "active": "State", "disabled": "State", "expanded": "State" }
+    "enums": { "active": "State", "disabled": "State", "expanded": "State" },
+    "figmaContent": ["badge", "children", "icon"]
   },
   "figma": {
     "nodeId": "606:2897",
@@ -219,5 +220,37 @@
       "State": ["default", "hover", "active", "expanded", "disabled"]
     }
   },
-  "tokensUsed": ["--atlas-background-hovered", "--atlas-border-width-2", "--atlas-duration-fast", "--atlas-easing-standard", "--atlas-focus-ring", "--atlas-font-size-sm", "--atlas-font-weight-medium", "--atlas-font-weight-regular", "--atlas-foreground", "--atlas-foreground-muted", "--atlas-icon-size-xs", "--atlas-opacity-disabled", "--atlas-primary", "--atlas-radius-md", "--atlas-spacing-0_5", "--atlas-spacing-1_5", "--atlas-spacing-2", "--atlas-spacing-3", "--atlas-spacing-9", "--atlas-touch-min"]
+  "tokensUsed": ["--atlas-background-hovered", "--atlas-border-width-2", "--atlas-duration-fast", "--atlas-easing-standard", "--atlas-focus-ring", "--atlas-font-size-sm", "--atlas-font-weight-medium", "--atlas-font-weight-regular", "--atlas-foreground", "--atlas-foreground-muted", "--atlas-icon-size-xs", "--atlas-opacity-disabled", "--atlas-primary", "--atlas-radius-md", "--atlas-spacing-0_5", "--atlas-spacing-1_5", "--atlas-spacing-2", "--atlas-spacing-3", "--atlas-spacing-9", "--atlas-touch-min"],
+  "module": {
+    "imports": [],
+    "parts": {
+      "SidebarMenuRowChild": {
+        "propsType": "SidebarMenuRowChildProps",
+        "props": [
+          { "name": "active", "type": "boolean", "optional": true, "exact": true },
+          { "name": "as", "type": "\"button\" | \"a\"", "optional": true, "exact": true },
+          { "name": "badge", "type": "React.ReactNode", "optional": true, "exact": true },
+          { "name": "children", "type": "React.ReactNode", "optional": false, "exact": true },
+          { "name": "disabled", "type": "boolean", "optional": true, "exact": true },
+          { "name": "href", "type": "string", "optional": true, "exact": true }
+        ],
+        "unions": {
+          "aria-autocomplete": ["both", "inline", "list", "none"],
+          "aria-dropeffect": ["copy", "execute", "link", "move", "none", "popup"],
+          "aria-live": ["assertive", "off", "polite"],
+          "aria-orientation": ["horizontal", "vertical"],
+          "aria-relevant": ["additions", "additions removals", "additions text", "all", "removals", "removals additions", "removals text", "text", "text additions", "text removals"],
+          "aria-sort": ["ascending", "descending", "none", "other"],
+          "as": ["a", "button"],
+          "enterKeyHint": ["done", "enter", "go", "next", "previous", "search", "send"],
+          "inputMode": ["decimal", "email", "none", "numeric", "search", "tel", "text", "url"],
+          "popover": ["", "auto", "hint", "manual"],
+          "popoverTargetAction": ["hide", "show", "toggle"],
+          "translate": ["no", "yes"],
+          "unselectable": ["off", "on"]
+        }
+      }
+    },
+    "types": {}
+  }
 }

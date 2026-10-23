@@ -18,14 +18,16 @@ import { fileURLToPath } from "node:url"
 import ts from "typescript"
 import { loadInputs } from "./lib/schemas.mjs"
 import Ajv2020 from "ajv/dist/2020.js"
-import { ASSERT_SOURCE, checkRegistry, codeConnectFacts, compilerOptions, componentMapSource, contractSource, extractFacts, formatJson, propTypes, protocolSchema } from "./lib/registry.mjs"
+import { ASSERT_SOURCE, checkRegistry, codeConnectFacts, compilerOptions, componentMapSource, contractSource, elementsSource, extractElementEvents, extractFacts, extractModule, formatJson, moduleContext, propTypes, protocolSchema } from "./lib/registry.mjs"
 
 const args = process.argv.slice(2)
 const CHECK = args.includes("--check")
 const rootArg = args.indexOf("--root")
 const ROOT = rootArg >= 0 ? path.resolve(args[rootArg + 1]) : path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..")
 const GEN = "packages/registry/generated"
-const CONTRACTS = "packages/governance/contracts/generated"
+// contracts live at their historical paths so the CHANGELOG policy ("the contract changes in the
+// same commit as a breaking change") keeps working; every file there is generated (M3 session 4)
+const CONTRACTS = "packages/governance/contracts"
 const SCHEMAS = `${GEN}/schemas`
 const rel = (...p) => path.join(ROOT, ...p)
 
@@ -46,6 +48,7 @@ function main() {
   const pick = (re) => inputs.files.filter((f) => re.test(f.file))
   const entries = Object.fromEntries(pick(/^packages\/registry\/src\/[^/]+\.registry\.json$/).map((f) => [f.data.type, f.data]))
   const aliases = inputs.valid("packages/registry/aliases.json").aliases
+  const contractProps = inputs.valid("packages/registry/contract-props.json").components
   const metadata = Object.fromEntries(pick(/^atlas\/metadata\/[^/]+\.json$/).map((f) => [f.data.name, f.data]))
   if (Object.keys(entries).length === 0) return fatal(["0 registry entries in packages/registry/src — nothing was inspected"])
 
@@ -57,7 +60,17 @@ function main() {
     if (!m) throw new Error(`atlas/metadata/${name}.json import "${imp}" is not under @atlas/ui-web`)
     return `packages/ui-web/src/${m[1]}.tsx`
   }
-  const program = ts.createProgram(rendered.map((n) => rel(sourceOf(n))), compilerOptions(ROOT))
+  // structural entries name the intrinsic element they render as; a virtual module resolves its props
+  const elementNames = [...new Set(Object.values(entries).filter((e) => e.kind === "structural" && e.element !== undefined).map((e) => e.element))].sort()
+  const ELEMENTS_TSX = rel("packages/registry/__elements__.tsx")
+  const options = compilerOptions(ROOT)
+  const host = ts.createCompilerHost(options)
+  const virtual = elementsSource(elementNames)
+  const { getSourceFile, fileExists, readFile } = host
+  host.getSourceFile = (f, ...a) => (path.resolve(f) === ELEMENTS_TSX ? ts.createSourceFile(f, virtual, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX) : getSourceFile.call(host, f, ...a))
+  host.fileExists = (f) => path.resolve(f) === ELEMENTS_TSX || fileExists.call(host, f)
+  host.readFile = (f) => (path.resolve(f) === ELEMENTS_TSX ? virtual : readFile.call(host, f))
+  const program = ts.createProgram([...rendered.map((n) => rel(sourceOf(n))), ELEMENTS_TSX], options, host)
 
   const facts = {}, written = {}, problems = []
   const entryFor = (name) => Object.values(entries).filter((e) => e.aliasOf === name)
@@ -68,7 +81,10 @@ function main() {
     try {
       if (!fs.existsSync(rel(ccRel))) throw new Error(`registry: ${ccRel} is missing; facts need Code Connect to know which part Figma binds`)
       const { bound, part, ...cc } = codeConnectFacts(fs.readFileSync(rel(ccRel), "utf8"), m.figmaNodeId, ccRel)
-      const { propsType, ...code } = extractFacts(program, rel(source), part)
+      const ctx = moduleContext(program, rel(source), m.import, ROOT)
+      const { propsType, ...code } = extractFacts(program, rel(source), part, ctx)
+      const { parts, types } = extractModule(program, rel(source), part, ctx)
+      const imports = [...ctx.imports.values()].sort((a, b) => `${a.from}:${a.name}`.localeCompare(`${b.from}:${b.name}`))
       facts[name] = {
         _generated: `GENERATED — do not hand-edit. registry-build from ${source}, Code Connect and atlas/metadata; run npm run registry:build.`,
         name,
@@ -80,12 +96,19 @@ function main() {
         codeConnect: { file: ccRel, bound, ...cc },
         figma: { nodeId: m.figmaNodeId, axes: m.figmaProperties },
         tokensUsed: m.tokensUsed,
+        module: { imports, parts, types },
       }
     } catch (e) { problems.push(`${name}: ${e.message}`); continue }
     written[`${GEN}/${name}.facts.json`] = formatJson(facts[name])
-    written[`${CONTRACTS}/${name}.contract.ts`] = contractSource(facts[name], entryFor(name))
+    written[`${CONTRACTS}/${name}.contract.ts`] = contractSource(facts[name], entryFor(name), contractProps[name] ?? {})
   }
   written[`${CONTRACTS}/_assert.ts`] = ASSERT_SOURCE
+  let elements = {}
+  try { elements = elementNames.length ? extractElementEvents(program, ELEMENTS_TSX) : {} } catch (e) { problems.push(e.message) }
+  written[`${GEN}/elements.json`] = formatJson({
+    _generated: "GENERATED — do not hand-edit. registry-build from React's JSX types, for each structural entry's element; run npm run registry:build.",
+    elements,
+  })
 
   // protocol schemas: exempt from INPUTS (they are schemas, not data); ajv's strict compile checks
   // each against the 2020-12 meta-schema instead (plan decision 3)
@@ -121,7 +144,7 @@ function main() {
   stale.push(...orphans.map((f) => `${f} belongs to no component or registry entry — run npm run registry:build`))
 
   const cssTokens = new Set(fs.readFileSync(rel("packages/tokens/atlas.tokens.css"), "utf8").match(/--atlas-[a-z0-9_-]+(?=\s*:)/g) ?? [])
-  const r = checkRegistry({ entries, aliases, facts, components: new Set(Object.keys(metadata)), cssTokens })
+  const r = checkRegistry({ entries, aliases, facts, components: new Set(Object.keys(metadata)), cssTokens, elements })
   for (const w of r.warn) console.log(`  WARN  ${w}`)
   const failures = [...stale, ...r.fail]
   if (failures.length) return fatal(failures)

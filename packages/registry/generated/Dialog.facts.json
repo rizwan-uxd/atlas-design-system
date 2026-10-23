@@ -6,13 +6,13 @@
   "part": "DialogContent",
   "propsType": "DialogContentProps",
   "props": [
-    { "name": "children", "type": "React.ReactNode", "optional": true },
-    { "name": "className", "type": "string", "optional": true },
-    { "name": "closeOnEscape", "type": "boolean", "optional": true },
-    { "name": "closeOnOverlayClick", "type": "boolean", "optional": true },
-    { "name": "id", "type": "string", "optional": true },
-    { "name": "size", "type": "DialogSize", "optional": true },
-    { "name": "variant", "type": "DialogVariant", "optional": true }
+    { "name": "children", "type": "React.ReactNode", "optional": true, "exact": true },
+    { "name": "className", "type": "string", "optional": true, "exact": true },
+    { "name": "closeOnEscape", "type": "boolean", "optional": true, "exact": true },
+    { "name": "closeOnOverlayClick", "type": "boolean", "optional": true, "exact": true },
+    { "name": "id", "type": "string", "optional": true, "exact": true },
+    { "name": "size", "type": "DialogSize", "optional": true, "exact": true },
+    { "name": "variant", "type": "DialogVariant", "optional": true, "exact": true }
   ],
   "inherited": {},
   "events": [],
@@ -25,7 +25,8 @@
     "bound": "Dialog",
     "instances": {},
     "stateProps": {},
-    "enums": { "confirmVariant": "Variant", "size": "Size", "variant": "Variant" }
+    "enums": { "confirmVariant": "Variant", "size": "Size", "variant": "Variant" },
+    "figmaContent": ["children"]
   },
   "figma": {
     "nodeId": "136:174",
@@ -35,5 +36,95 @@
       "State": ["default", "loading"]
     }
   },
-  "tokensUsed": ["--atlas-background", "--atlas-background-subtle", "--atlas-border", "--atlas-border-width-1", "--atlas-border-width-2", "--atlas-dialog-lg", "--atlas-dialog-md", "--atlas-dialog-sm", "--atlas-dialog-xl", "--atlas-duration-base", "--atlas-duration-fast", "--atlas-easing-emphasized", "--atlas-easing-exit", "--atlas-easing-standard", "--atlas-focus-ring", "--atlas-font-sans", "--atlas-font-size-lg", "--atlas-font-weight-semibold", "--atlas-foreground", "--atlas-foreground-muted", "--atlas-icon-size-xs", "--atlas-icon-stroke-xs", "--atlas-line-height-normal", "--atlas-line-height-tight", "--atlas-overlay", "--atlas-radius-lg", "--atlas-radius-md", "--atlas-shadow-xl", "--atlas-spacing-0_5", "--atlas-spacing-1", "--atlas-spacing-10", "--atlas-spacing-3", "--atlas-spacing-4", "--atlas-spacing-6", "--atlas-spacing-8", "--atlas-surface-overlay", "--atlas-text-body-sm", "--atlas-text-h3", "--atlas-z-modal", "--atlas-z-overlay"]
+  "tokensUsed": ["--atlas-background", "--atlas-background-subtle", "--atlas-border", "--atlas-border-width-1", "--atlas-border-width-2", "--atlas-dialog-lg", "--atlas-dialog-md", "--atlas-dialog-sm", "--atlas-dialog-xl", "--atlas-duration-base", "--atlas-duration-fast", "--atlas-easing-emphasized", "--atlas-easing-exit", "--atlas-easing-standard", "--atlas-focus-ring", "--atlas-font-sans", "--atlas-font-size-lg", "--atlas-font-weight-semibold", "--atlas-foreground", "--atlas-foreground-muted", "--atlas-icon-size-xs", "--atlas-icon-stroke-xs", "--atlas-line-height-normal", "--atlas-line-height-tight", "--atlas-overlay", "--atlas-radius-lg", "--atlas-radius-md", "--atlas-shadow-xl", "--atlas-spacing-0_5", "--atlas-spacing-1", "--atlas-spacing-10", "--atlas-spacing-3", "--atlas-spacing-4", "--atlas-spacing-6", "--atlas-spacing-8", "--atlas-surface-overlay", "--atlas-text-body-sm", "--atlas-text-h3", "--atlas-z-modal", "--atlas-z-overlay"],
+  "module": {
+    "imports": [
+      { "from": "@atlas/ui-web/compositions/Dialog/Dialog", "name": "DialogSize", "kind": "named" },
+      { "from": "@atlas/ui-web/compositions/Dialog/Dialog", "name": "DialogVariant", "kind": "named" }
+    ],
+    "parts": {
+      "Dialog": {
+        "propsType": "DialogProps",
+        "props": [
+          { "name": "children", "type": "React.ReactNode", "optional": true, "exact": true },
+          { "name": "defaultOpen", "type": "boolean", "optional": true, "exact": true },
+          { "name": "onClose", "type": "() => void", "optional": true, "exact": true },
+          { "name": "onOpenChange", "type": "(open: boolean) => void", "optional": true, "exact": true },
+          { "name": "open", "type": "boolean", "optional": true, "exact": true }
+        ],
+        "unions": {}
+      },
+      "DialogBody": {
+        "propsType": "DialogBodyProps",
+        "props": [
+          { "name": "children", "type": "React.ReactNode", "optional": true, "exact": true },
+          { "name": "className", "type": "string", "optional": true, "exact": true }
+        ],
+        "unions": {}
+      },
+      "DialogClose": {
+        "propsType": "DialogCloseProps",
+        "props": [
+          { "name": "asChild", "type": "boolean", "optional": true, "exact": true },
+          { "name": "children", "type": "React.ReactNode", "optional": true, "exact": true }
+        ],
+        "unions": {}
+      },
+      "DialogDescription": {
+        "propsType": "DialogDescriptionProps",
+        "props": [
+          { "name": "children", "type": "React.ReactNode", "optional": true, "exact": true },
+          { "name": "className", "type": "string", "optional": true, "exact": true }
+        ],
+        "unions": {}
+      },
+      "DialogFooter": {
+        "propsType": "DialogFooterProps",
+        "props": [
+          { "name": "children", "type": "React.ReactNode", "optional": true, "exact": true },
+          { "name": "className", "type": "string", "optional": true, "exact": true },
+          { "name": "justify", "type": "\"start\" | \"between\" | \"end\"", "optional": true, "exact": true }
+        ],
+        "unions": {
+          "justify": ["between", "end", "start"]
+        }
+      },
+      "DialogHeader": {
+        "propsType": "DialogHeaderProps",
+        "props": [
+          { "name": "children", "type": "React.ReactNode", "optional": true, "exact": true },
+          { "name": "className", "type": "string", "optional": true, "exact": true },
+          { "name": "onClose", "type": "() => void", "optional": true, "exact": true },
+          { "name": "showClose", "type": "boolean", "optional": true, "exact": true }
+        ],
+        "unions": {}
+      },
+      "DialogTitle": {
+        "propsType": "DialogTitleProps",
+        "props": [
+          { "name": "children", "type": "React.ReactNode", "optional": true, "exact": true },
+          { "name": "className", "type": "string", "optional": true, "exact": true }
+        ],
+        "unions": {}
+      },
+      "DialogTrigger": {
+        "propsType": "DialogTriggerProps",
+        "props": [
+          { "name": "asChild", "type": "boolean", "optional": true, "exact": true },
+          { "name": "children", "type": "React.ReactNode", "optional": true, "exact": true }
+        ],
+        "unions": {}
+      }
+    },
+    "types": {
+      "DialogSize": {
+        "kind": "union",
+        "members": ["full", "lg", "md", "sm", "xl"]
+      },
+      "DialogVariant": {
+        "kind": "union",
+        "members": ["default", "destructive"]
+      }
+    }
+  }
 }

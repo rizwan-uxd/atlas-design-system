@@ -6,16 +6,16 @@
   "part": "Switch",
   "propsType": "SwitchProps",
   "props": [
-    { "name": "checked", "type": "boolean", "optional": true },
-    { "name": "defaultChecked", "type": "boolean", "optional": true },
-    { "name": "description", "type": "React.ReactNode", "optional": true },
-    { "name": "disabled", "type": "boolean", "optional": true },
-    { "name": "id", "type": "string", "optional": true },
-    { "name": "invalid", "type": "boolean", "optional": true },
-    { "name": "label", "type": "React.ReactNode", "optional": true },
-    { "name": "onCheckedChange", "type": "(checked: boolean) => void", "optional": true },
-    { "name": "required", "type": "boolean", "optional": true },
-    { "name": "size", "type": "SwitchSize", "optional": true }
+    { "name": "checked", "type": "boolean", "optional": true, "exact": true },
+    { "name": "defaultChecked", "type": "boolean", "optional": true, "exact": true },
+    { "name": "description", "type": "React.ReactNode", "optional": true, "exact": true },
+    { "name": "disabled", "type": "boolean", "optional": true, "exact": true },
+    { "name": "id", "type": "string", "optional": true, "exact": true },
+    { "name": "invalid", "type": "boolean", "optional": true, "exact": true },
+    { "name": "label", "type": "React.ReactNode", "optional": true, "exact": true },
+    { "name": "onCheckedChange", "type": "(checked: boolean) => void", "optional": true, "exact": true },
+    { "name": "required", "type": "boolean", "optional": true, "exact": true },
+    { "name": "size", "type": "SwitchSize", "optional": true, "exact": true }
   ],
   "inherited": {
     "AriaAttributes": ["aria-activedescendant", "aria-atomic", "aria-autocomplete", "aria-braillelabel", "aria-brailleroledescription", "aria-busy", "aria-checked", "aria-colcount", "aria-colindex", "aria-colindextext", "aria-colspan", "aria-controls", "aria-current", "aria-describedby", "aria-description", "aria-details", "aria-disabled", "aria-dropeffect", "aria-errormessage", "aria-expanded", "aria-flowto", "aria-grabbed", "aria-haspopup", "aria-hidden", "aria-invalid", "aria-keyshortcuts", "aria-label", "aria-labelledby", "aria-level", "aria-live", "aria-modal", "aria-multiline", "aria-multiselectable", "aria-orientation", "aria-owns", "aria-placeholder", "aria-posinset", "aria-pressed", "aria-readonly", "aria-relevant", "aria-required", "aria-roledescription", "aria-rowcount", "aria-rowindex", "aria-rowindextext", "aria-rowspan", "aria-selected", "aria-setsize", "aria-sort", "aria-valuemax", "aria-valuemin", "aria-valuenow", "aria-valuetext"],
@@ -214,7 +214,8 @@
     "bound": "Switch",
     "instances": {},
     "stateProps": { "disabled": "disabled" },
-    "enums": { "defaultChecked": "Checked", "disabled": "State", "size": "Size" }
+    "enums": { "defaultChecked": "Checked", "disabled": "State", "size": "Size" },
+    "figmaContent": ["label"]
   },
   "figma": {
     "nodeId": "95:114",
@@ -224,5 +225,17 @@
       "State": ["default", "hover", "focus-visible", "active", "disabled"]
     }
   },
-  "tokensUsed": ["--atlas-background", "--atlas-border-width-2", "--atlas-danger", "--atlas-duration-base", "--atlas-duration-fast", "--atlas-easing-emphasized", "--atlas-easing-standard", "--atlas-focus-ring", "--atlas-font-sans", "--atlas-font-size-sm", "--atlas-font-size-xs", "--atlas-font-weight-medium", "--atlas-foreground-on-brand", "--atlas-line-height-snug", "--atlas-opacity-disabled", "--atlas-radius-full", "--atlas-shadow-sm", "--atlas-spacing-0_5", "--atlas-spacing-1", "--atlas-spacing-10", "--atlas-spacing-3", "--atlas-spacing-4", "--atlas-spacing-5", "--atlas-spacing-6", "--atlas-spacing-9", "--atlas-switch-checked-track-background", "--atlas-switch-checked-track-background-active", "--atlas-switch-checked-track-background-hover", "--atlas-switch-description-foreground", "--atlas-switch-gap", "--atlas-switch-label-foreground", "--atlas-switch-size-lg-height", "--atlas-switch-size-lg-thumb", "--atlas-switch-size-md-height", "--atlas-switch-size-md-thumb", "--atlas-switch-size-sm-height", "--atlas-switch-size-sm-thumb", "--atlas-switch-thumb-background", "--atlas-switch-track-background", "--atlas-switch-track-background-active", "--atlas-switch-track-background-hover", "--atlas-touch-min"]
+  "tokensUsed": ["--atlas-background", "--atlas-border-width-2", "--atlas-danger", "--atlas-duration-base", "--atlas-duration-fast", "--atlas-easing-emphasized", "--atlas-easing-standard", "--atlas-focus-ring", "--atlas-font-sans", "--atlas-font-size-sm", "--atlas-font-size-xs", "--atlas-font-weight-medium", "--atlas-foreground-on-brand", "--atlas-line-height-snug", "--atlas-opacity-disabled", "--atlas-radius-full", "--atlas-shadow-sm", "--atlas-spacing-0_5", "--atlas-spacing-1", "--atlas-spacing-10", "--atlas-spacing-3", "--atlas-spacing-4", "--atlas-spacing-5", "--atlas-spacing-6", "--atlas-spacing-9", "--atlas-switch-checked-track-background", "--atlas-switch-checked-track-background-active", "--atlas-switch-checked-track-background-hover", "--atlas-switch-description-foreground", "--atlas-switch-gap", "--atlas-switch-label-foreground", "--atlas-switch-size-lg-height", "--atlas-switch-size-lg-thumb", "--atlas-switch-size-md-height", "--atlas-switch-size-md-thumb", "--atlas-switch-size-sm-height", "--atlas-switch-size-sm-thumb", "--atlas-switch-thumb-background", "--atlas-switch-track-background", "--atlas-switch-track-background-active", "--atlas-switch-track-background-hover", "--atlas-touch-min"],
+  "module": {
+    "imports": [
+      { "from": "@atlas/ui-web/primitives/Switch/Switch", "name": "SwitchSize", "kind": "named" }
+    ],
+    "parts": {},
+    "types": {
+      "SwitchSize": {
+        "kind": "union",
+        "members": ["lg", "md", "sm"]
+      }
+    }
+  }
 }

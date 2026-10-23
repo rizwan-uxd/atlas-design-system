@@ -6,13 +6,13 @@
   "part": "DrawerContent",
   "propsType": "DrawerContentProps",
   "props": [
-    { "name": "children", "type": "React.ReactNode", "optional": true },
-    { "name": "className", "type": "string", "optional": true },
-    { "name": "closeOnEscape", "type": "boolean", "optional": true },
-    { "name": "closeOnOverlayClick", "type": "boolean", "optional": true },
-    { "name": "id", "type": "string", "optional": true },
-    { "name": "side", "type": "DrawerSide", "optional": true },
-    { "name": "size", "type": "DrawerSize", "optional": true }
+    { "name": "children", "type": "React.ReactNode", "optional": true, "exact": true },
+    { "name": "className", "type": "string", "optional": true, "exact": true },
+    { "name": "closeOnEscape", "type": "boolean", "optional": true, "exact": true },
+    { "name": "closeOnOverlayClick", "type": "boolean", "optional": true, "exact": true },
+    { "name": "id", "type": "string", "optional": true, "exact": true },
+    { "name": "side", "type": "DrawerSide", "optional": true, "exact": true },
+    { "name": "size", "type": "DrawerSize", "optional": true, "exact": true }
   ],
   "inherited": {},
   "events": [],
@@ -25,7 +25,8 @@
     "bound": "Drawer",
     "instances": {},
     "stateProps": {},
-    "enums": { "side": "Side" }
+    "enums": { "side": "Side" },
+    "figmaContent": ["children"]
   },
   "figma": {
     "nodeId": "577:24",
@@ -33,5 +34,65 @@
       "Side": ["start", "end"]
     }
   },
-  "tokensUsed": ["--atlas-border", "--atlas-border-width-1", "--atlas-dialog-lg", "--atlas-dialog-md", "--atlas-dialog-sm", "--atlas-dialog-xl", "--atlas-duration-base", "--atlas-duration-fast", "--atlas-easing-emphasized", "--atlas-easing-exit", "--atlas-easing-standard", "--atlas-font-sans", "--atlas-overlay", "--atlas-radius-lg", "--atlas-safe-top", "--atlas-shadow-xl", "--atlas-spacing-4", "--atlas-spacing-6", "--atlas-spacing-8", "--atlas-surface-overlay", "--atlas-z-modal", "--atlas-z-overlay"]
+  "tokensUsed": ["--atlas-border", "--atlas-border-width-1", "--atlas-dialog-lg", "--atlas-dialog-md", "--atlas-dialog-sm", "--atlas-dialog-xl", "--atlas-duration-base", "--atlas-duration-fast", "--atlas-easing-emphasized", "--atlas-easing-exit", "--atlas-easing-standard", "--atlas-font-sans", "--atlas-overlay", "--atlas-radius-lg", "--atlas-safe-top", "--atlas-shadow-xl", "--atlas-spacing-4", "--atlas-spacing-6", "--atlas-spacing-8", "--atlas-surface-overlay", "--atlas-z-modal", "--atlas-z-overlay"],
+  "module": {
+    "imports": [
+      { "from": "@atlas/ui-web/compositions/Drawer/Drawer", "name": "DrawerSide", "kind": "named" },
+      { "from": "@atlas/ui-web/compositions/Drawer/Drawer", "name": "DrawerSize", "kind": "named" }
+    ],
+    "parts": {
+      "Drawer": {
+        "propsType": "DialogProps",
+        "props": [],
+        "unions": {}
+      },
+      "DrawerBody": {
+        "propsType": "DialogBodyProps",
+        "props": [],
+        "unions": {}
+      },
+      "DrawerClose": {
+        "propsType": "DialogCloseProps",
+        "props": [],
+        "unions": {}
+      },
+      "DrawerDescription": {
+        "propsType": "DialogDescriptionProps",
+        "props": [],
+        "unions": {}
+      },
+      "DrawerFooter": {
+        "propsType": "DialogFooterProps",
+        "props": [],
+        "unions": {
+          "justify": ["between", "end", "start"]
+        }
+      },
+      "DrawerHeader": {
+        "propsType": "DialogHeaderProps",
+        "props": [],
+        "unions": {}
+      },
+      "DrawerTitle": {
+        "propsType": "DialogTitleProps",
+        "props": [],
+        "unions": {}
+      },
+      "DrawerTrigger": {
+        "propsType": "DialogTriggerProps",
+        "props": [],
+        "unions": {}
+      }
+    },
+    "types": {
+      "DrawerSide": {
+        "kind": "union",
+        "members": ["end", "start"]
+      },
+      "DrawerSize": {
+        "kind": "union",
+        "members": ["full", "lg", "md", "sm", "xl"]
+      }
+    }
+  }
 }

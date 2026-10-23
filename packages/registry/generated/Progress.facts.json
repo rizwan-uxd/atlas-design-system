@@ -6,16 +6,16 @@
   "part": "Progress",
   "propsType": "ProgressProps",
   "props": [
-    { "name": "aria-describedby", "type": "string", "optional": true },
-    { "name": "aria-label", "type": "string", "optional": true },
-    { "name": "aria-labelledby", "type": "string", "optional": true },
-    { "name": "aria-valuetext", "type": "string", "optional": true },
-    { "name": "helperText", "type": "React.ReactNode", "optional": true },
-    { "name": "indeterminate", "type": "boolean", "optional": true },
-    { "name": "label", "type": "React.ReactNode", "optional": true },
-    { "name": "max", "type": "number", "optional": true },
-    { "name": "value", "type": "number", "optional": true },
-    { "name": "valueLabel", "type": "React.ReactNode", "optional": true }
+    { "name": "aria-describedby", "type": "string", "optional": true, "exact": true },
+    { "name": "aria-label", "type": "string", "optional": true, "exact": true },
+    { "name": "aria-labelledby", "type": "string", "optional": true, "exact": true },
+    { "name": "aria-valuetext", "type": "string", "optional": true, "exact": true },
+    { "name": "helperText", "type": "React.ReactNode", "optional": true, "exact": true },
+    { "name": "indeterminate", "type": "boolean", "optional": true, "exact": true },
+    { "name": "label", "type": "React.ReactNode", "optional": true, "exact": true },
+    { "name": "max", "type": "number", "optional": true, "exact": true },
+    { "name": "value", "type": "number", "optional": true, "exact": true },
+    { "name": "valueLabel", "type": "React.ReactNode", "optional": true, "exact": true }
   ],
   "inherited": {
     "AriaAttributes": ["aria-activedescendant", "aria-atomic", "aria-autocomplete", "aria-braillelabel", "aria-brailleroledescription", "aria-busy", "aria-checked", "aria-colcount", "aria-colindex", "aria-colindextext", "aria-colspan", "aria-controls", "aria-current", "aria-description", "aria-details", "aria-disabled", "aria-dropeffect", "aria-errormessage", "aria-expanded", "aria-flowto", "aria-grabbed", "aria-haspopup", "aria-hidden", "aria-invalid", "aria-keyshortcuts", "aria-level", "aria-live", "aria-modal", "aria-multiline", "aria-multiselectable", "aria-orientation", "aria-owns", "aria-placeholder", "aria-posinset", "aria-pressed", "aria-readonly", "aria-relevant", "aria-required", "aria-roledescription", "aria-rowcount", "aria-rowindex", "aria-rowindextext", "aria-rowspan", "aria-selected", "aria-setsize", "aria-sort", "aria-valuemax", "aria-valuemin", "aria-valuenow"],
@@ -211,7 +211,8 @@
     "bound": "Progress",
     "instances": {},
     "stateProps": { "indeterminate": "indeterminate" },
-    "enums": { "indeterminate": "State", "value": "Percent" }
+    "enums": { "indeterminate": "State", "value": "Percent" },
+    "figmaContent": ["helperText", "label", "valueLabel"]
   },
   "figma": {
     "nodeId": "541:28",
@@ -220,5 +221,10 @@
       "Percent": ["50", "0", "10", "20", "30", "40", "60", "70", "80", "90", "100"]
     }
   },
-  "tokensUsed": ["--atlas-background-muted", "--atlas-duration-base", "--atlas-duration-pulse", "--atlas-easing-linear", "--atlas-easing-standard", "--atlas-font-sans", "--atlas-font-weight-medium", "--atlas-font-weight-regular", "--atlas-foreground", "--atlas-foreground-muted", "--atlas-line-height-normal", "--atlas-primary", "--atlas-radius-full", "--atlas-spacing-1", "--atlas-spacing-2", "--atlas-text-body-sm", "--atlas-text-caption"]
+  "tokensUsed": ["--atlas-background-muted", "--atlas-duration-base", "--atlas-duration-pulse", "--atlas-easing-linear", "--atlas-easing-standard", "--atlas-font-sans", "--atlas-font-weight-medium", "--atlas-font-weight-regular", "--atlas-foreground", "--atlas-foreground-muted", "--atlas-line-height-normal", "--atlas-primary", "--atlas-radius-full", "--atlas-spacing-1", "--atlas-spacing-2", "--atlas-text-body-sm", "--atlas-text-caption"],
+  "module": {
+    "imports": [],
+    "parts": {},
+    "types": {}
+  }
 }

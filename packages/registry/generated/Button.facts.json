@@ -6,14 +6,14 @@
   "part": "Button",
   "propsType": "ButtonProps",
   "props": [
-    { "name": "asChild", "type": "boolean", "optional": true },
-    { "name": "children", "type": "React.ReactNode", "optional": true },
-    { "name": "iconOnly", "type": "boolean", "optional": true },
-    { "name": "leadingIcon", "type": "React.ReactNode", "optional": true },
-    { "name": "loading", "type": "boolean", "optional": true },
-    { "name": "size", "type": "ButtonSize", "optional": true },
-    { "name": "trailingIcon", "type": "React.ReactNode", "optional": true },
-    { "name": "variant", "type": "ButtonVariant", "optional": true }
+    { "name": "asChild", "type": "boolean", "optional": true, "exact": true },
+    { "name": "children", "type": "React.ReactNode", "optional": true, "exact": true },
+    { "name": "iconOnly", "type": "boolean", "optional": true, "exact": true },
+    { "name": "leadingIcon", "type": "React.ReactNode", "optional": true, "exact": true },
+    { "name": "loading", "type": "boolean", "optional": true, "exact": true },
+    { "name": "size", "type": "ButtonSize", "optional": true, "exact": true },
+    { "name": "trailingIcon", "type": "React.ReactNode", "optional": true, "exact": true },
+    { "name": "variant", "type": "ButtonVariant", "optional": true, "exact": true }
   ],
   "inherited": {
     "AriaAttributes": ["aria-activedescendant", "aria-atomic", "aria-autocomplete", "aria-braillelabel", "aria-brailleroledescription", "aria-busy", "aria-checked", "aria-colcount", "aria-colindex", "aria-colindextext", "aria-colspan", "aria-controls", "aria-current", "aria-describedby", "aria-description", "aria-details", "aria-disabled", "aria-dropeffect", "aria-errormessage", "aria-expanded", "aria-flowto", "aria-grabbed", "aria-haspopup", "aria-hidden", "aria-invalid", "aria-keyshortcuts", "aria-label", "aria-labelledby", "aria-level", "aria-live", "aria-modal", "aria-multiline", "aria-multiselectable", "aria-orientation", "aria-owns", "aria-placeholder", "aria-posinset", "aria-pressed", "aria-readonly", "aria-relevant", "aria-required", "aria-roledescription", "aria-rowcount", "aria-rowindex", "aria-rowindextext", "aria-rowspan", "aria-selected", "aria-setsize", "aria-sort", "aria-valuemax", "aria-valuemin", "aria-valuenow", "aria-valuetext"],
@@ -215,7 +215,8 @@
     "bound": "Button",
     "instances": { "leadingIcon": "Leading icon slot", "trailingIcon": "Trailing icon slot" },
     "stateProps": { "disabled": "disabled", "loading": "loading" },
-    "enums": { "disabled": "State", "loading": "State", "size": "Size", "variant": "Variant" }
+    "enums": { "disabled": "State", "loading": "State", "size": "Size", "variant": "Variant" },
+    "figmaContent": ["children", "leadingIcon", "trailingIcon"]
   },
   "figma": {
     "nodeId": "19:2",
@@ -226,5 +227,22 @@
       "State": ["default", "hover", "focus-visible", "active", "disabled", "loading"]
     }
   },
-  "tokensUsed": ["--atlas-border-width-1", "--atlas-border-width-2", "--atlas-button-destructive-background", "--atlas-button-destructive-background-active", "--atlas-button-destructive-background-hover", "--atlas-button-destructive-foreground", "--atlas-button-foreground-disabled", "--atlas-button-gap", "--atlas-button-ghost-background-active", "--atlas-button-ghost-background-hover", "--atlas-button-ghost-foreground", "--atlas-button-link-foreground", "--atlas-button-link-foreground-active", "--atlas-button-link-foreground-hover", "--atlas-button-outline-background-active", "--atlas-button-outline-background-hover", "--atlas-button-outline-border", "--atlas-button-outline-foreground", "--atlas-button-primary-background", "--atlas-button-primary-background-active", "--atlas-button-primary-background-hover", "--atlas-button-primary-foreground", "--atlas-button-radius", "--atlas-button-secondary-background", "--atlas-button-secondary-background-active", "--atlas-button-secondary-background-hover", "--atlas-button-secondary-foreground", "--atlas-button-size-lg-font-size", "--atlas-button-size-lg-height", "--atlas-button-size-lg-padding-inline", "--atlas-button-size-md-font-size", "--atlas-button-size-md-height", "--atlas-button-size-md-padding-inline", "--atlas-button-size-sm-font-size", "--atlas-button-size-sm-height", "--atlas-button-size-sm-padding-inline", "--atlas-button-size-xs-font-size", "--atlas-button-size-xs-gap", "--atlas-button-size-xs-height", "--atlas-button-size-xs-padding-inline", "--atlas-duration-fast", "--atlas-duration-slow", "--atlas-easing-linear", "--atlas-easing-standard", "--atlas-focus-ring", "--atlas-font-sans", "--atlas-font-weight-medium", "--atlas-opacity-disabled", "--atlas-radius-full", "--atlas-spacing-0_5", "--atlas-touch-min"]
+  "tokensUsed": ["--atlas-border-width-1", "--atlas-border-width-2", "--atlas-button-destructive-background", "--atlas-button-destructive-background-active", "--atlas-button-destructive-background-hover", "--atlas-button-destructive-foreground", "--atlas-button-foreground-disabled", "--atlas-button-gap", "--atlas-button-ghost-background-active", "--atlas-button-ghost-background-hover", "--atlas-button-ghost-foreground", "--atlas-button-link-foreground", "--atlas-button-link-foreground-active", "--atlas-button-link-foreground-hover", "--atlas-button-outline-background-active", "--atlas-button-outline-background-hover", "--atlas-button-outline-border", "--atlas-button-outline-foreground", "--atlas-button-primary-background", "--atlas-button-primary-background-active", "--atlas-button-primary-background-hover", "--atlas-button-primary-foreground", "--atlas-button-radius", "--atlas-button-secondary-background", "--atlas-button-secondary-background-active", "--atlas-button-secondary-background-hover", "--atlas-button-secondary-foreground", "--atlas-button-size-lg-font-size", "--atlas-button-size-lg-height", "--atlas-button-size-lg-padding-inline", "--atlas-button-size-md-font-size", "--atlas-button-size-md-height", "--atlas-button-size-md-padding-inline", "--atlas-button-size-sm-font-size", "--atlas-button-size-sm-height", "--atlas-button-size-sm-padding-inline", "--atlas-button-size-xs-font-size", "--atlas-button-size-xs-gap", "--atlas-button-size-xs-height", "--atlas-button-size-xs-padding-inline", "--atlas-duration-fast", "--atlas-duration-slow", "--atlas-easing-linear", "--atlas-easing-standard", "--atlas-focus-ring", "--atlas-font-sans", "--atlas-font-weight-medium", "--atlas-opacity-disabled", "--atlas-radius-full", "--atlas-spacing-0_5", "--atlas-touch-min"],
+  "module": {
+    "imports": [
+      { "from": "@atlas/ui-web/primitives/Button/Button", "name": "ButtonSize", "kind": "named" },
+      { "from": "@atlas/ui-web/primitives/Button/Button", "name": "ButtonVariant", "kind": "named" }
+    ],
+    "parts": {},
+    "types": {
+      "ButtonSize": {
+        "kind": "union",
+        "members": ["lg", "md", "sm", "xs"]
+      },
+      "ButtonVariant": {
+        "kind": "union",
+        "members": ["destructive", "ghost", "link", "outline", "primary", "secondary"]
+      }
+    }
+  }
 }

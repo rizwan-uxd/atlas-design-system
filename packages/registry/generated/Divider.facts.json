@@ -6,9 +6,9 @@
   "part": "Divider",
   "propsType": "DividerProps",
   "props": [
-    { "name": "decorative", "type": "boolean", "optional": true },
-    { "name": "orientation", "type": "DividerOrientation", "optional": true },
-    { "name": "tone", "type": "DividerTone", "optional": true }
+    { "name": "decorative", "type": "boolean", "optional": true, "exact": true },
+    { "name": "orientation", "type": "DividerOrientation", "optional": true, "exact": true },
+    { "name": "tone", "type": "DividerTone", "optional": true, "exact": true }
   ],
   "inherited": {
     "AriaAttributes": ["aria-activedescendant", "aria-atomic", "aria-autocomplete", "aria-braillelabel", "aria-brailleroledescription", "aria-busy", "aria-checked", "aria-colcount", "aria-colindex", "aria-colindextext", "aria-colspan", "aria-controls", "aria-current", "aria-describedby", "aria-description", "aria-details", "aria-disabled", "aria-dropeffect", "aria-errormessage", "aria-expanded", "aria-flowto", "aria-grabbed", "aria-haspopup", "aria-hidden", "aria-invalid", "aria-keyshortcuts", "aria-label", "aria-labelledby", "aria-level", "aria-live", "aria-modal", "aria-multiline", "aria-multiselectable", "aria-orientation", "aria-owns", "aria-placeholder", "aria-posinset", "aria-pressed", "aria-readonly", "aria-relevant", "aria-required", "aria-roledescription", "aria-rowcount", "aria-rowindex", "aria-rowindextext", "aria-rowspan", "aria-selected", "aria-setsize", "aria-sort", "aria-valuemax", "aria-valuemin", "aria-valuenow", "aria-valuetext"],
@@ -206,7 +206,8 @@
     "bound": "Divider",
     "instances": {},
     "stateProps": {},
-    "enums": { "orientation": "Orientation", "tone": "Tone" }
+    "enums": { "orientation": "Orientation", "tone": "Tone" },
+    "figmaContent": []
   },
   "figma": {
     "nodeId": "498:11",
@@ -215,5 +216,22 @@
       "Tone": ["default", "strong", "subtle", "inverse"]
     }
   },
-  "tokensUsed": ["--atlas-border", "--atlas-border-inverse", "--atlas-border-strong", "--atlas-border-subtle", "--atlas-border-width-1"]
+  "tokensUsed": ["--atlas-border", "--atlas-border-inverse", "--atlas-border-strong", "--atlas-border-subtle", "--atlas-border-width-1"],
+  "module": {
+    "imports": [
+      { "from": "@atlas/ui-web/primitives/Divider/Divider", "name": "DividerOrientation", "kind": "named" },
+      { "from": "@atlas/ui-web/primitives/Divider/Divider", "name": "DividerTone", "kind": "named" }
+    ],
+    "parts": {},
+    "types": {
+      "DividerOrientation": {
+        "kind": "union",
+        "members": ["horizontal", "vertical"]
+      },
+      "DividerTone": {
+        "kind": "union",
+        "members": ["default", "inverse", "strong", "subtle"]
+      }
+    }
+  }
 }

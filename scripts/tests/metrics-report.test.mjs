@@ -223,3 +223,38 @@ test("a missing region marker fails rather than appending silently", () => {
   assert.equal(code, 1)
   assert.match(out, /marker/)
 })
+
+// ─── the registry source (M3): committed state, measured by the shared registry-metrics function ──
+
+const REG_COPY = ["scripts", "atlas", "packages/registry", "packages/governance", "docs", "metrics.manifest.json"]
+function registryRepo() {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "metrics-registry-"))
+  for (const rel of REG_COPY) fs.cpSync(path.join(REAL_ROOT, rel), path.join(dir, rel), { recursive: true })
+  fs.symlinkSync(path.join(REAL_ROOT, "node_modules"), path.join(dir, "node_modules"))
+  return dir
+}
+const registryRows = (dir) => JSON.parse(run(dir, ["--json"]).out).metrics.filter((m) => m.source === "registry")
+
+test("registry rows read passing from committed state, with their coverage of the components", () => {
+  const dir = registryRepo()
+  try {
+    const rows = registryRows(dir)
+    assert.deepEqual(rows.map((r) => r.check).sort(), ["design.registry-events", "design.registry-fallback", "design.registry-states"])
+    for (const r of rows) {
+      assert.equal(r.status, "passing", r.check)
+      assert.match(r.coverage.text, /^0 failing of \d+ .* \(\d+\/\d+ components registered\)$/)
+    }
+    assert.equal(run(dir, ["--check"]).code, 0, "the committed region is current")
+  } finally { fs.rmSync(dir, { recursive: true, force: true }) }
+})
+
+test("a broken registry turns its row failing, and an invalid entry fails rather than being measured around", () => {
+  const dir = registryRepo()
+  try {
+    const f = path.join(dir, "packages/registry/src/Button.registry.json")
+    fs.writeFileSync(f, fs.readFileSync(f, "utf8").replace('"handler": "onClick"', '"handler": "onPress"'))
+    assert.equal(registryRows(dir).find((r) => r.check === "design.registry-events").status, "failing")
+    fs.writeFileSync(f, fs.readFileSync(f, "utf8").replace('"kind": "component"', '"kind": "widget"'))
+    assert.equal(registryRows(dir).find((r) => r.check === "design.registry-fallback").status, "failing")
+  } finally { fs.rmSync(dir, { recursive: true, force: true }) }
+})

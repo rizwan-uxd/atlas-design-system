@@ -6,8 +6,8 @@
   "part": "SelectTrigger",
   "propsType": "SelectTriggerProps",
   "props": [
-    { "name": "invalid", "type": "boolean", "optional": true },
-    { "name": "size", "type": "SelectSize", "optional": true }
+    { "name": "invalid", "type": "boolean", "optional": true, "exact": true },
+    { "name": "size", "type": "SelectSize", "optional": true, "exact": true }
   ],
   "inherited": {
     "AriaAttributes": ["aria-activedescendant", "aria-atomic", "aria-autocomplete", "aria-braillelabel", "aria-brailleroledescription", "aria-busy", "aria-checked", "aria-colcount", "aria-colindex", "aria-colindextext", "aria-colspan", "aria-controls", "aria-current", "aria-describedby", "aria-description", "aria-details", "aria-disabled", "aria-dropeffect", "aria-errormessage", "aria-expanded", "aria-flowto", "aria-grabbed", "aria-haspopup", "aria-hidden", "aria-invalid", "aria-keyshortcuts", "aria-label", "aria-labelledby", "aria-level", "aria-live", "aria-modal", "aria-multiline", "aria-multiselectable", "aria-orientation", "aria-owns", "aria-placeholder", "aria-posinset", "aria-pressed", "aria-readonly", "aria-relevant", "aria-required", "aria-roledescription", "aria-rowcount", "aria-rowindex", "aria-rowindextext", "aria-rowspan", "aria-selected", "aria-setsize", "aria-sort", "aria-valuemax", "aria-valuemin", "aria-valuenow", "aria-valuetext"],
@@ -208,7 +208,8 @@
     "bound": "Select",
     "instances": {},
     "stateProps": { "disabled": "disabled", "invalid": "invalid" },
-    "enums": { "disabled": "State", "invalid": "State", "placeholder": "Placeholder", "size": "Size" }
+    "enums": { "disabled": "State", "invalid": "State", "placeholder": "Placeholder", "size": "Size" },
+    "figmaContent": ["children"]
   },
   "figma": {
     "nodeId": "630:75",
@@ -218,5 +219,134 @@
       "Placeholder": ["true", "false"]
     }
   },
-  "tokensUsed": ["--atlas-border-width-1", "--atlas-border-width-2", "--atlas-duration-fast", "--atlas-easing-standard", "--atlas-focus-ring", "--atlas-font-sans", "--atlas-font-size-sm", "--atlas-font-size-xs", "--atlas-font-weight-medium", "--atlas-font-weight-regular", "--atlas-icon-size-xs", "--atlas-line-height-normal", "--atlas-opacity-disabled", "--atlas-radius-sm", "--atlas-select-background", "--atlas-select-background-disabled", "--atlas-select-border", "--atlas-select-border-focus", "--atlas-select-border-hover", "--atlas-select-border-invalid", "--atlas-select-chevron-foreground", "--atlas-select-content-background", "--atlas-select-content-border", "--atlas-select-content-foreground", "--atlas-select-content-radius", "--atlas-select-foreground", "--atlas-select-foreground-disabled", "--atlas-select-item-background-focus", "--atlas-select-item-foreground", "--atlas-select-item-indicator-foreground", "--atlas-select-label-foreground", "--atlas-select-placeholder-foreground", "--atlas-select-radius", "--atlas-select-size-md-font-size", "--atlas-select-size-md-gap", "--atlas-select-size-md-height", "--atlas-select-size-md-padding-inline-end", "--atlas-select-size-md-padding-inline-start", "--atlas-select-size-sm-font-size", "--atlas-select-size-sm-gap", "--atlas-select-size-sm-height", "--atlas-select-size-sm-padding-inline-end", "--atlas-select-size-sm-padding-inline-start", "--atlas-shadow-md", "--atlas-spacing-0_5", "--atlas-spacing-1", "--atlas-spacing-1_5", "--atlas-spacing-2", "--atlas-spacing-4", "--atlas-spacing-8", "--atlas-touch-min", "--atlas-z-dropdown"]
+  "tokensUsed": ["--atlas-border-width-1", "--atlas-border-width-2", "--atlas-duration-fast", "--atlas-easing-standard", "--atlas-focus-ring", "--atlas-font-sans", "--atlas-font-size-sm", "--atlas-font-size-xs", "--atlas-font-weight-medium", "--atlas-font-weight-regular", "--atlas-icon-size-xs", "--atlas-line-height-normal", "--atlas-opacity-disabled", "--atlas-radius-sm", "--atlas-select-background", "--atlas-select-background-disabled", "--atlas-select-border", "--atlas-select-border-focus", "--atlas-select-border-hover", "--atlas-select-border-invalid", "--atlas-select-chevron-foreground", "--atlas-select-content-background", "--atlas-select-content-border", "--atlas-select-content-foreground", "--atlas-select-content-radius", "--atlas-select-foreground", "--atlas-select-foreground-disabled", "--atlas-select-item-background-focus", "--atlas-select-item-foreground", "--atlas-select-item-indicator-foreground", "--atlas-select-label-foreground", "--atlas-select-placeholder-foreground", "--atlas-select-radius", "--atlas-select-size-md-font-size", "--atlas-select-size-md-gap", "--atlas-select-size-md-height", "--atlas-select-size-md-padding-inline-end", "--atlas-select-size-md-padding-inline-start", "--atlas-select-size-sm-font-size", "--atlas-select-size-sm-gap", "--atlas-select-size-sm-height", "--atlas-select-size-sm-padding-inline-end", "--atlas-select-size-sm-padding-inline-start", "--atlas-shadow-md", "--atlas-spacing-0_5", "--atlas-spacing-1", "--atlas-spacing-1_5", "--atlas-spacing-2", "--atlas-spacing-4", "--atlas-spacing-8", "--atlas-touch-min", "--atlas-z-dropdown"],
+  "module": {
+    "imports": [
+      { "from": "@atlas/ui-web/primitives/Select/Select", "name": "SelectSize", "kind": "named" }
+    ],
+    "parts": {
+      "Select": {
+        "propsType": "SelectProps",
+        "props": [
+          { "name": "children", "type": "React.ReactNode", "optional": true, "exact": true },
+          { "name": "defaultValue", "type": "string", "optional": true, "exact": true },
+          { "name": "disabled", "type": "boolean", "optional": true, "exact": true },
+          { "name": "name", "type": "string", "optional": true, "exact": true },
+          { "name": "onValueChange", "type": "(value: string) => void", "optional": true, "exact": true },
+          { "name": "required", "type": "boolean", "optional": true, "exact": true },
+          { "name": "value", "type": "string", "optional": true, "exact": true }
+        ],
+        "unions": {}
+      },
+      "SelectContent": {
+        "propsType": "SelectContentProps",
+        "props": [
+          { "name": "side", "type": "\"bottom\" | \"top\"", "optional": true, "exact": true }
+        ],
+        "unions": {
+          "aria-autocomplete": ["both", "inline", "list", "none"],
+          "aria-dropeffect": ["copy", "execute", "link", "move", "none", "popup"],
+          "aria-live": ["assertive", "off", "polite"],
+          "aria-orientation": ["horizontal", "vertical"],
+          "aria-relevant": ["additions", "additions removals", "additions text", "all", "removals", "removals additions", "removals text", "text", "text additions", "text removals"],
+          "aria-sort": ["ascending", "descending", "none", "other"],
+          "enterKeyHint": ["done", "enter", "go", "next", "previous", "search", "send"],
+          "inputMode": ["decimal", "email", "none", "numeric", "search", "tel", "text", "url"],
+          "popover": ["", "auto", "hint", "manual"],
+          "popoverTargetAction": ["hide", "show", "toggle"],
+          "side": ["bottom", "top"],
+          "translate": ["no", "yes"],
+          "unselectable": ["off", "on"]
+        }
+      },
+      "SelectGroup": {
+        "propsType": "SelectGroupProps",
+        "props": [],
+        "unions": {
+          "aria-autocomplete": ["both", "inline", "list", "none"],
+          "aria-dropeffect": ["copy", "execute", "link", "move", "none", "popup"],
+          "aria-live": ["assertive", "off", "polite"],
+          "aria-orientation": ["horizontal", "vertical"],
+          "aria-relevant": ["additions", "additions removals", "additions text", "all", "removals", "removals additions", "removals text", "text", "text additions", "text removals"],
+          "aria-sort": ["ascending", "descending", "none", "other"],
+          "enterKeyHint": ["done", "enter", "go", "next", "previous", "search", "send"],
+          "inputMode": ["decimal", "email", "none", "numeric", "search", "tel", "text", "url"],
+          "popover": ["", "auto", "hint", "manual"],
+          "popoverTargetAction": ["hide", "show", "toggle"],
+          "translate": ["no", "yes"],
+          "unselectable": ["off", "on"]
+        }
+      },
+      "SelectItem": {
+        "propsType": "SelectItemProps",
+        "props": [
+          { "name": "disabled", "type": "boolean", "optional": true, "exact": true },
+          { "name": "value", "type": "string", "optional": false, "exact": true }
+        ],
+        "unions": {
+          "aria-autocomplete": ["both", "inline", "list", "none"],
+          "aria-dropeffect": ["copy", "execute", "link", "move", "none", "popup"],
+          "aria-live": ["assertive", "off", "polite"],
+          "aria-orientation": ["horizontal", "vertical"],
+          "aria-relevant": ["additions", "additions removals", "additions text", "all", "removals", "removals additions", "removals text", "text", "text additions", "text removals"],
+          "aria-sort": ["ascending", "descending", "none", "other"],
+          "enterKeyHint": ["done", "enter", "go", "next", "previous", "search", "send"],
+          "inputMode": ["decimal", "email", "none", "numeric", "search", "tel", "text", "url"],
+          "popover": ["", "auto", "hint", "manual"],
+          "popoverTargetAction": ["hide", "show", "toggle"],
+          "translate": ["no", "yes"],
+          "unselectable": ["off", "on"]
+        }
+      },
+      "SelectLabel": {
+        "propsType": "SelectLabelProps",
+        "props": [],
+        "unions": {
+          "aria-autocomplete": ["both", "inline", "list", "none"],
+          "aria-dropeffect": ["copy", "execute", "link", "move", "none", "popup"],
+          "aria-live": ["assertive", "off", "polite"],
+          "aria-orientation": ["horizontal", "vertical"],
+          "aria-relevant": ["additions", "additions removals", "additions text", "all", "removals", "removals additions", "removals text", "text", "text additions", "text removals"],
+          "aria-sort": ["ascending", "descending", "none", "other"],
+          "enterKeyHint": ["done", "enter", "go", "next", "previous", "search", "send"],
+          "inputMode": ["decimal", "email", "none", "numeric", "search", "tel", "text", "url"],
+          "popover": ["", "auto", "hint", "manual"],
+          "popoverTargetAction": ["hide", "show", "toggle"],
+          "translate": ["no", "yes"],
+          "unselectable": ["off", "on"]
+        }
+      },
+      "SelectSeparator": {
+        "propsType": "SelectSeparatorProps",
+        "props": [],
+        "unions": {
+          "aria-autocomplete": ["both", "inline", "list", "none"],
+          "aria-dropeffect": ["copy", "execute", "link", "move", "none", "popup"],
+          "aria-live": ["assertive", "off", "polite"],
+          "aria-orientation": ["horizontal", "vertical"],
+          "aria-relevant": ["additions", "additions removals", "additions text", "all", "removals", "removals additions", "removals text", "text", "text additions", "text removals"],
+          "aria-sort": ["ascending", "descending", "none", "other"],
+          "enterKeyHint": ["done", "enter", "go", "next", "previous", "search", "send"],
+          "inputMode": ["decimal", "email", "none", "numeric", "search", "tel", "text", "url"],
+          "popover": ["", "auto", "hint", "manual"],
+          "popoverTargetAction": ["hide", "show", "toggle"],
+          "translate": ["no", "yes"],
+          "unselectable": ["off", "on"]
+        }
+      },
+      "SelectValue": {
+        "propsType": "SelectValueProps",
+        "props": [
+          { "name": "placeholder", "type": "string", "optional": true, "exact": true }
+        ],
+        "unions": {}
+      }
+    },
+    "types": {
+      "SelectSize": {
+        "kind": "union",
+        "members": ["md", "sm"]
+      }
+    }
+  }
 }

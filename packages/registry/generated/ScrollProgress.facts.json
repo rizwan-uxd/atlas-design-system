@@ -6,10 +6,10 @@
   "part": "ScrollProgress",
   "propsType": "ScrollProgressProps",
   "props": [
-    { "name": "axis", "type": "ScrollProgressAxis", "optional": true },
-    { "name": "orientation", "type": "ScrollProgressOrientation", "optional": true },
-    { "name": "scope", "type": "ScrollProgressScope", "optional": true },
-    { "name": "target", "type": "React.RefObject<HTMLElement | null>", "optional": true }
+    { "name": "axis", "type": "ScrollProgressAxis", "optional": true, "exact": true },
+    { "name": "orientation", "type": "ScrollProgressOrientation", "optional": true, "exact": true },
+    { "name": "scope", "type": "ScrollProgressScope", "optional": true, "exact": true },
+    { "name": "target", "type": "React.RefObject<HTMLElement | null>", "optional": true, "exact": true }
   ],
   "inherited": {
     "AriaAttributes": ["aria-activedescendant", "aria-atomic", "aria-autocomplete", "aria-braillelabel", "aria-brailleroledescription", "aria-busy", "aria-checked", "aria-colcount", "aria-colindex", "aria-colindextext", "aria-colspan", "aria-controls", "aria-current", "aria-describedby", "aria-description", "aria-details", "aria-disabled", "aria-dropeffect", "aria-errormessage", "aria-expanded", "aria-flowto", "aria-grabbed", "aria-haspopup", "aria-hidden", "aria-invalid", "aria-keyshortcuts", "aria-label", "aria-labelledby", "aria-level", "aria-live", "aria-modal", "aria-multiline", "aria-multiselectable", "aria-orientation", "aria-owns", "aria-placeholder", "aria-posinset", "aria-pressed", "aria-readonly", "aria-relevant", "aria-required", "aria-roledescription", "aria-rowcount", "aria-rowindex", "aria-rowindextext", "aria-rowspan", "aria-selected", "aria-setsize", "aria-sort", "aria-valuemax", "aria-valuemin", "aria-valuenow", "aria-valuetext"],
@@ -208,7 +208,8 @@
     "bound": "ScrollProgress",
     "instances": {},
     "stateProps": {},
-    "enums": { "orientation": "Orientation", "scope": "Scope" }
+    "enums": { "orientation": "Orientation", "scope": "Scope" },
+    "figmaContent": ["aria-label"]
   },
   "figma": {
     "nodeId": "734:27",
@@ -218,5 +219,27 @@
       "Progress": ["0", "50", "100"]
     }
   },
-  "tokensUsed": ["--atlas-background-muted", "--atlas-duration-fast", "--atlas-easing-standard", "--atlas-primary", "--atlas-radius-full", "--atlas-radius-none", "--atlas-spacing-1", "--atlas-z-sticky"]
+  "tokensUsed": ["--atlas-background-muted", "--atlas-duration-fast", "--atlas-easing-standard", "--atlas-primary", "--atlas-radius-full", "--atlas-radius-none", "--atlas-spacing-1", "--atlas-z-sticky"],
+  "module": {
+    "imports": [
+      { "from": "@atlas/ui-web/primitives/ScrollProgress/ScrollProgress", "name": "ScrollProgressAxis", "kind": "named" },
+      { "from": "@atlas/ui-web/primitives/ScrollProgress/ScrollProgress", "name": "ScrollProgressOrientation", "kind": "named" },
+      { "from": "@atlas/ui-web/primitives/ScrollProgress/ScrollProgress", "name": "ScrollProgressScope", "kind": "named" }
+    ],
+    "parts": {},
+    "types": {
+      "ScrollProgressAxis": {
+        "kind": "union",
+        "members": ["horizontal", "vertical"]
+      },
+      "ScrollProgressOrientation": {
+        "kind": "union",
+        "members": ["horizontal", "vertical"]
+      },
+      "ScrollProgressScope": {
+        "kind": "union",
+        "members": ["container", "page"]
+      }
+    }
+  }
 }

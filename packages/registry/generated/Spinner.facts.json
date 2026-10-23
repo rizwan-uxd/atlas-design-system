@@ -6,9 +6,9 @@
   "part": "Spinner",
   "propsType": "SpinnerProps",
   "props": [
-    { "name": "label", "type": "string", "optional": true },
-    { "name": "size", "type": "SpinnerSize", "optional": true },
-    { "name": "variant", "type": "SpinnerVariant", "optional": true }
+    { "name": "label", "type": "string", "optional": true, "exact": true },
+    { "name": "size", "type": "SpinnerSize", "optional": true, "exact": true },
+    { "name": "variant", "type": "SpinnerVariant", "optional": true, "exact": true }
   ],
   "inherited": {
     "AriaAttributes": ["aria-activedescendant", "aria-atomic", "aria-autocomplete", "aria-braillelabel", "aria-brailleroledescription", "aria-busy", "aria-checked", "aria-colcount", "aria-colindex", "aria-colindextext", "aria-colspan", "aria-controls", "aria-current", "aria-describedby", "aria-description", "aria-details", "aria-disabled", "aria-dropeffect", "aria-errormessage", "aria-expanded", "aria-flowto", "aria-grabbed", "aria-haspopup", "aria-hidden", "aria-invalid", "aria-keyshortcuts", "aria-label", "aria-labelledby", "aria-level", "aria-live", "aria-modal", "aria-multiline", "aria-multiselectable", "aria-orientation", "aria-owns", "aria-placeholder", "aria-posinset", "aria-pressed", "aria-readonly", "aria-relevant", "aria-required", "aria-roledescription", "aria-rowcount", "aria-rowindex", "aria-rowindextext", "aria-rowspan", "aria-selected", "aria-setsize", "aria-sort", "aria-valuemax", "aria-valuemin", "aria-valuenow", "aria-valuetext"],
@@ -206,7 +206,8 @@
     "bound": "Spinner",
     "instances": {},
     "stateProps": {},
-    "enums": { "size": "Size", "variant": "Variant" }
+    "enums": { "size": "Size", "variant": "Variant" },
+    "figmaContent": []
   },
   "figma": {
     "nodeId": "527:63",
@@ -215,5 +216,22 @@
       "Size": ["xs", "sm", "md", "lg"]
     }
   },
-  "tokensUsed": ["--atlas-duration-spin", "--atlas-easing-linear", "--atlas-icon-size-lg", "--atlas-icon-size-md", "--atlas-icon-size-sm", "--atlas-icon-size-xs", "--atlas-icon-stroke-lg", "--atlas-icon-stroke-md", "--atlas-icon-stroke-sm", "--atlas-icon-stroke-xs"]
+  "tokensUsed": ["--atlas-duration-spin", "--atlas-easing-linear", "--atlas-icon-size-lg", "--atlas-icon-size-md", "--atlas-icon-size-sm", "--atlas-icon-size-xs", "--atlas-icon-stroke-lg", "--atlas-icon-stroke-md", "--atlas-icon-stroke-sm", "--atlas-icon-stroke-xs"],
+  "module": {
+    "imports": [
+      { "from": "@atlas/ui-web/primitives/Spinner/Spinner", "name": "SpinnerSize", "kind": "named" },
+      { "from": "@atlas/ui-web/primitives/Spinner/Spinner", "name": "SpinnerVariant", "kind": "named" }
+    ],
+    "parts": {},
+    "types": {
+      "SpinnerSize": {
+        "kind": "union",
+        "members": ["lg", "md", "sm", "xs"]
+      },
+      "SpinnerVariant": {
+        "kind": "union",
+        "members": ["custom", "default"]
+      }
+    }
+  }
 }

@@ -6,20 +6,20 @@
   "part": "Badge",
   "propsType": "BadgeProps",
   "props": [
-    { "name": "appearance", "type": "BadgeAppearance", "optional": true },
-    { "name": "children", "type": "React.ReactNode", "optional": false },
-    { "name": "className", "type": "string", "optional": true },
-    { "name": "disabled", "type": "boolean", "optional": true },
-    { "name": "dot", "type": "boolean", "optional": true },
-    { "name": "leadingIcon", "type": "React.ReactNode", "optional": true },
-    { "name": "onClick", "type": "() => void", "optional": true },
-    { "name": "onRemove", "type": "() => void", "optional": true },
-    { "name": "removable", "type": "boolean", "optional": true },
-    { "name": "removeLabel", "type": "string", "optional": true },
-    { "name": "size", "type": "BadgeSize", "optional": true },
-    { "name": "square", "type": "boolean", "optional": true },
-    { "name": "trailingIcon", "type": "React.ReactNode", "optional": true },
-    { "name": "variant", "type": "BadgeVariant", "optional": true }
+    { "name": "appearance", "type": "BadgeAppearance", "optional": true, "exact": true },
+    { "name": "children", "type": "React.ReactNode", "optional": false, "exact": true },
+    { "name": "className", "type": "string", "optional": true, "exact": true },
+    { "name": "disabled", "type": "boolean", "optional": true, "exact": true },
+    { "name": "dot", "type": "boolean", "optional": true, "exact": true },
+    { "name": "leadingIcon", "type": "React.ReactNode", "optional": true, "exact": true },
+    { "name": "onClick", "type": "() => void", "optional": true, "exact": true },
+    { "name": "onRemove", "type": "() => void", "optional": true, "exact": true },
+    { "name": "removable", "type": "boolean", "optional": true, "exact": true },
+    { "name": "removeLabel", "type": "string", "optional": true, "exact": true },
+    { "name": "size", "type": "BadgeSize", "optional": true, "exact": true },
+    { "name": "square", "type": "boolean", "optional": true, "exact": true },
+    { "name": "trailingIcon", "type": "React.ReactNode", "optional": true, "exact": true },
+    { "name": "variant", "type": "BadgeVariant", "optional": true, "exact": true }
   ],
   "inherited": {},
   "events": [
@@ -36,7 +36,8 @@
     "bound": "Badge",
     "instances": {},
     "stateProps": { "disabled": "disabled" },
-    "enums": { "appearance": "Appearance", "disabled": "State", "size": "Size", "variant": "Variant" }
+    "enums": { "appearance": "Appearance", "disabled": "State", "size": "Size", "variant": "Variant" },
+    "figmaContent": ["children", "removeLabel"]
   },
   "figma": {
     "nodeId": "123:24",
@@ -47,5 +48,27 @@
       "Appearance": ["default", "outline"]
     }
   },
-  "tokensUsed": ["--atlas-background-muted", "--atlas-background-subtle", "--atlas-border-strong", "--atlas-border-width-1", "--atlas-border-width-2", "--atlas-danger", "--atlas-danger-muted", "--atlas-danger-subtle", "--atlas-focus-ring", "--atlas-font-sans", "--atlas-font-weight-semibold", "--atlas-foreground", "--atlas-foreground-disabled", "--atlas-icon-stroke-xs", "--atlas-info", "--atlas-info-muted", "--atlas-info-subtle", "--atlas-letter-spacing-wide", "--atlas-line-height-tight", "--atlas-opacity-disabled", "--atlas-opacity-hover", "--atlas-primary", "--atlas-primary-foreground", "--atlas-primary-hover", "--atlas-radius-full", "--atlas-radius-sm", "--atlas-spacing-0_5", "--atlas-spacing-1", "--atlas-spacing-1_5", "--atlas-spacing-2", "--atlas-spacing-3", "--atlas-spacing-4", "--atlas-spacing-5", "--atlas-spacing-6", "--atlas-success", "--atlas-success-muted", "--atlas-success-subtle", "--atlas-text-body-sm", "--atlas-text-caption", "--atlas-touch-min", "--atlas-warning", "--atlas-warning-muted", "--atlas-warning-subtle"]
+  "tokensUsed": ["--atlas-background-muted", "--atlas-background-subtle", "--atlas-border-strong", "--atlas-border-width-1", "--atlas-border-width-2", "--atlas-danger", "--atlas-danger-muted", "--atlas-danger-subtle", "--atlas-focus-ring", "--atlas-font-sans", "--atlas-font-weight-semibold", "--atlas-foreground", "--atlas-foreground-disabled", "--atlas-icon-stroke-xs", "--atlas-info", "--atlas-info-muted", "--atlas-info-subtle", "--atlas-letter-spacing-wide", "--atlas-line-height-tight", "--atlas-opacity-disabled", "--atlas-opacity-hover", "--atlas-primary", "--atlas-primary-foreground", "--atlas-primary-hover", "--atlas-radius-full", "--atlas-radius-sm", "--atlas-spacing-0_5", "--atlas-spacing-1", "--atlas-spacing-1_5", "--atlas-spacing-2", "--atlas-spacing-3", "--atlas-spacing-4", "--atlas-spacing-5", "--atlas-spacing-6", "--atlas-success", "--atlas-success-muted", "--atlas-success-subtle", "--atlas-text-body-sm", "--atlas-text-caption", "--atlas-touch-min", "--atlas-warning", "--atlas-warning-muted", "--atlas-warning-subtle"],
+  "module": {
+    "imports": [
+      { "from": "@atlas/ui-web/primitives/Badge/Badge", "name": "BadgeAppearance", "kind": "named" },
+      { "from": "@atlas/ui-web/primitives/Badge/Badge", "name": "BadgeSize", "kind": "named" },
+      { "from": "@atlas/ui-web/primitives/Badge/Badge", "name": "BadgeVariant", "kind": "named" }
+    ],
+    "parts": {},
+    "types": {
+      "BadgeAppearance": {
+        "kind": "union",
+        "members": ["default", "outline"]
+      },
+      "BadgeSize": {
+        "kind": "union",
+        "members": ["lg", "md", "sm"]
+      },
+      "BadgeVariant": {
+        "kind": "union",
+        "members": ["danger", "info", "neutral", "primary", "success", "warning"]
+      }
+    }
+  }
 }

@@ -1,25 +1,24 @@
-/**
- * Atlas Divider — API contract v1
- */
+// GENERATED — do not hand-edit. registry-build from packages/registry/generated/Divider.facts.json; run npm run registry:build.
+// A one-way tripwire (roadmap §2c): it asserts what the facts recorded and is never consulted as a definition.
+import type React from "react"
+import type { Divider, DividerOrientation, DividerTone } from "@atlas/ui-web/primitives/Divider/Divider"
+import type { Assert, Exact, Has, IsOptional } from "./_assert"
 
-import type {
-  DividerProps,
-  DividerOrientation,
-  DividerTone,
-} from "@atlas/ui-web/primitives/Divider/Divider"
+type P = React.ComponentProps<typeof Divider>
 
-type AssertDividerOrientation = DividerOrientation extends "horizontal" | "vertical" ? true : false
-const _o: AssertDividerOrientation = true; void _o
+// own props of Divider: deleting one, flipping its optionality or changing its type fails here
+type Own_decorative = Assert<Has<P, "decorative">>
+type Optional_decorative = Assert<Exact<IsOptional<P, "decorative">, true>>
+type Type_decorative = Assert<Exact<NonNullable<P["decorative"]>, NonNullable<boolean>>>
+type Own_orientation = Assert<Has<P, "orientation">>
+type Optional_orientation = Assert<Exact<IsOptional<P, "orientation">, true>>
+type Type_orientation = Assert<Exact<NonNullable<P["orientation"]>, NonNullable<DividerOrientation>>>
+type Own_tone = Assert<Has<P, "tone">>
+type Optional_tone = Assert<Exact<IsOptional<P, "tone">, true>>
+type Type_tone = Assert<Exact<NonNullable<P["tone"]>, NonNullable<DividerTone>>>
+type Union_orientation = Assert<Exact<NonNullable<P["orientation"]>, "horizontal" | "vertical">>
+type Union_tone = Assert<Exact<NonNullable<P["tone"]>, "default" | "inverse" | "strong" | "subtle">>
 
-type AssertDividerTone = DividerTone extends "default" | "strong" | "subtle" | "inverse" ? true : false
-const _t: AssertDividerTone = true; void _t
-
-type AssertDividerPropsShape = {
-  orientation?: DividerOrientation
-  tone?:        DividerTone
-  decorative?:  boolean
-}
-
-type _CheckDividerProps = AssertDividerPropsShape extends Pick<DividerProps, keyof AssertDividerPropsShape & keyof DividerProps>
-  ? true : never
-const _p: _CheckDividerProps = true; void _p
+// exported types of the module
+type Type_DividerOrientation = Assert<Exact<DividerOrientation, "horizontal" | "vertical">>
+type Type_DividerTone = Assert<Exact<DividerTone, "default" | "inverse" | "strong" | "subtle">>

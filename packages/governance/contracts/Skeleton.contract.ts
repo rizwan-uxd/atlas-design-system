@@ -1,19 +1,16 @@
-/**
- * Atlas Skeleton — API contract v1
- */
+// GENERATED — do not hand-edit. registry-build from packages/registry/generated/Skeleton.facts.json; run npm run registry:build.
+// A one-way tripwire (roadmap §2c): it asserts what the facts recorded and is never consulted as a definition.
+import type React from "react"
+import type { Skeleton, SkeletonShape } from "@atlas/ui-web/primitives/Skeleton/Skeleton"
+import type { Assert, Exact, Has, IsOptional } from "./_assert"
 
-import type {
-  SkeletonProps,
-  SkeletonShape,
-} from "@atlas/ui-web/primitives/Skeleton/Skeleton"
+type P = React.ComponentProps<typeof Skeleton>
 
-type AssertSkeletonShape = SkeletonShape extends "rect" | "circle" ? true : false
-const _s: AssertSkeletonShape = true; void _s
+// own props of Skeleton: deleting one, flipping its optionality or changing its type fails here
+type Own_shape = Assert<Has<P, "shape">>
+type Optional_shape = Assert<Exact<IsOptional<P, "shape">, true>>
+type Type_shape = Assert<Exact<NonNullable<P["shape"]>, NonNullable<SkeletonShape>>>
+type Union_shape = Assert<Exact<NonNullable<P["shape"]>, "circle" | "rect">>
 
-type AssertSkeletonPropsShape = {
-  shape?: SkeletonShape
-}
-
-type _CheckSkeletonProps = AssertSkeletonPropsShape extends Pick<SkeletonProps, keyof AssertSkeletonPropsShape & keyof SkeletonProps>
-  ? true : never
-const _p: _CheckSkeletonProps = true; void _p
+// exported types of the module
+type Type_SkeletonShape = Assert<Exact<SkeletonShape, "circle" | "rect">>

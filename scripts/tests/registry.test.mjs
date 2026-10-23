@@ -9,7 +9,7 @@ import path from "node:path"
 import { fileURLToPath } from "node:url"
 import ts from "typescript"
 import Ajv2020 from "ajv/dist/2020.js"
-import { ASSERT_SOURCE, checkRegistry, codeConnectFacts, compilerOptions, componentMapSource, contractSource, extractFacts, formatJson, jsonTypeOf, protocolSchema } from "../lib/registry.mjs"
+import { ASSERT_SOURCE, checkRegistry, codeConnectFacts, compilerOptions, componentMapSource, contractSource, elementsSource, extractElementEvents, extractFacts, formatJson, jsonTypeOf, protocolSchema } from "../lib/registry.mjs"
 
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..")
 const BUTTON = path.join(REPO, "packages/ui-web/src/primitives/Button/Button.tsx")
@@ -79,6 +79,17 @@ test("only the connect call bound to the component's node is read", () => {
   assert.ok(!("selected" in head.enums), "TableRow's mappings are not merged into TableHead's")
 })
 
+test("figmaContent lists the part props Figma supplies content for, and nothing else", () => {
+  // Button: two figma.instance slots, plus literal text children ("Button label")
+  assert.deepEqual(codeConnectFacts(cc("Button"), "19:2").figmaContent, ["children", "leadingIcon", "trailingIcon"])
+  // Input: figma.string inside figma.boolean branches, and a literal placeholder attribute
+  assert.deepEqual(codeConnectFacts(cc("Input"), "43:111").figmaContent, ["leadingIcon", "placeholder", "prefix", "suffix", "trailingIcon"])
+  // Alert: a JSX branch (actions) and literal strings; dismissible is a bare boolean and icon is not drawn
+  assert.deepEqual(codeConnectFacts(cc("Alert"), "127:24").figmaContent, ["actions", "description", "title"])
+  // Field: a render-prop child that returns an element counts as children
+  assert.ok(codeConnectFacts(cc("Field"), "863:254").figmaContent.includes("children"))
+})
+
 test("a Code Connect file with no connect for the node throws", () => {
   assert.throws(() => codeConnectFacts(cc("Button"), "1:1", "Button.figma.tsx"), /no figma.connect for node 1:1 \(found 19:2\)/)
 })
@@ -97,32 +108,43 @@ function typecheck(files, check) {
   return check.flatMap((f) => program.getSemanticDiagnostics(program.getSourceFile(f))).map((d) => ts.flattenDiagnosticMessageText(d.messageText, "\n"))
 }
 
-const GEN_DIR = path.join(REPO, "packages/governance/contracts/generated")
+const CONTRACT_PROPS = JSON.parse(fs.readFileSync(path.join(REPO, "packages/registry/contract-props.json"), "utf8")).components
+const GEN_DIR = path.join(REPO, "packages/governance/contracts")
 const buttonFacts = () => JSON.parse(fs.readFileSync(path.join(REPO, "packages/registry/generated/Button.facts.json"), "utf8"))
+// The shape of the 44 hand-written contracts deleted in M3 session 4, kept as a fixture so the two
+// holes the generated contracts close stay demonstrated: a subset check that only catches widening,
+// and a Pick that collapses when the prop is gone.
+const HAND_PATTERN = `import type { ButtonProps, ButtonVariant } from "@atlas/ui-web/primitives/Button/Button"
+type AssertButtonVariant = ButtonVariant extends "primary" | "secondary" | "outline" | "ghost" | "destructive" | "link" ? true : false
+const _v: AssertButtonVariant = true; void _v
+type AssertButtonShape = { variant?: ButtonVariant; iconOnly?: boolean; loading?: boolean }
+type _CheckButtonProps = AssertButtonShape extends Pick<ButtonProps, keyof AssertButtonShape & keyof ButtonProps> ? true : never
+const _p: _CheckButtonProps = true; void _p
+`
+const hand = path.join(REPO, "packages/governance/contracts/__hand_pattern__.ts")
+const generated = path.join(GEN_DIR, "Button.contract.ts")
 const buttonContracts = (buttonSource) => {
   const files = {
     [path.join(GEN_DIR, "_assert.ts")]: ASSERT_SOURCE,
-    [path.join(GEN_DIR, "Button.contract.ts")]: contractSource(buttonFacts(), []),
-    [path.join(REPO, "packages/governance/contracts/Button.contract.ts")]: fs.readFileSync(path.join(REPO, "packages/governance/contracts/Button.contract.ts"), "utf8"),
+    [generated]: contractSource(buttonFacts(), [], CONTRACT_PROPS.Button),
+    [hand]: HAND_PATTERN,
   }
   if (buttonSource) files[BUTTON] = buttonSource
   return files
 }
-const hand = path.join(REPO, "packages/governance/contracts/Button.contract.ts")
-const generated = path.join(GEN_DIR, "Button.contract.ts")
 
 test("the generated contract compiles cleanly against the real Button", () => {
   assert.deepEqual(typecheck(buttonContracts(), [generated, hand]), [])
 })
 
-test("deleting a variant fails the generated contract; the hand-written one lets it through", () => {
+test("deleting a variant fails the generated contract; the old hand-written pattern lets it through", () => {
   const src = fs.readFileSync(BUTTON, "utf8").replace('  | "destructive"\n  | "link"', '  | "destructive"')
   const files = buttonContracts(src)
   assert.match(typecheck(files, [generated]).join("\n"), /'false' does not satisfy the constraint 'true'/)
-  assert.deepEqual(typecheck(files, [hand]), [], "the hand-written Button contract only catches widening")
+  assert.deepEqual(typecheck(files, [hand]), [], "the hand-written pattern only catches widening")
 })
 
-test("deleting a prop fails the generated contract; the hand-written one lets it through", () => {
+test("deleting a prop fails the generated contract; the old hand-written pattern lets it through", () => {
   const src = fs.readFileSync(BUTTON, "utf8").replace("  iconOnly?: boolean\n", "")
   const files = buttonContracts(src)
   assert.notDeepEqual(typecheck(files, [generated]), [])
@@ -132,6 +154,52 @@ test("deleting a prop fails the generated contract; the hand-written one lets it
 test("making an optional prop required fails the generated contract", () => {
   const src = fs.readFileSync(BUTTON, "utf8").replace("  iconOnly?: boolean\n", "  iconOnly: boolean\n")
   assert.notDeepEqual(typecheck(buttonContracts(src), [generated]), [])
+})
+
+// sub-parts, branches, exported types and contract-props.json (M3 session 4): each kind of assertion
+// fails on a real regression, typechecked against an edited copy of the component source
+const contractCheck = (name, edit) => {
+  const f = JSON.parse(fs.readFileSync(path.join(REPO, `packages/registry/generated/${name}.facts.json`), "utf8"))
+  const src = path.join(REPO, f.source)
+  const files = {
+    [path.join(GEN_DIR, "_assert.ts")]: ASSERT_SOURCE,
+    [path.join(GEN_DIR, `${name}.contract.ts`)]: contractSource(f, [], CONTRACT_PROPS[name] ?? {}),
+  }
+  if (edit) {
+    const before = fs.readFileSync(src, "utf8"), after = edit(before)
+    assert.notEqual(after, before, `the edit did not apply to ${f.source}`)
+    files[src] = after
+  }
+  return typecheck(files, [path.join(GEN_DIR, `${name}.contract.ts`)]).join("\n")
+}
+
+test("generated contracts for sub-parts, branches and exported types compile against the real code", () => {
+  for (const name of ["Select", "DatePicker", "Stepper", "Input"]) assert.equal(contractCheck(name), "", name)
+})
+
+test("changing a sub-part prop's type fails (SelectItem value: string → number)", () => {
+  assert.match(contractCheck("Select", (s) => s.replace("  value: string\n  disabled?: boolean\n}", "  value: number\n  disabled?: boolean\n}")), /does not satisfy the constraint 'true'/)
+})
+
+test("changing a discriminated branch fails (DatePicker range onValueChange)", () => {
+  assert.match(contractCheck("DatePicker", (s) => s.replace("onValueChange?: (range: DatePickerRange) => void", "onValueChange?: (range: Date) => void")), /does not satisfy the constraint 'true'/)
+})
+
+test("adding a member to a closed exported object type fails (StepperStep)", () => {
+  assert.match(contractCheck("Stepper", (s) => s.replace("  description?: React.ReactNode\n}", "  description?: React.ReactNode\n  hint?: string\n}")), /does not satisfy the constraint 'true'/)
+})
+
+test("adding a prop that contract-props.json marks absent fails (Stepper viewport)", () => {
+  assert.match(contractCheck("Stepper", (s) => s.replace("  steps: StepperStep[]", "  steps: StepperStep[]\n  viewport?: string")), /does not satisfy the constraint 'true'/)
+})
+
+test("dropping an inherited prop that contract-props.json keeps fails (Input placeholder)", () => {
+  assert.match(contractCheck("Input", (s) => s.replace('"size" | "prefix">', '"size" | "prefix" | "placeholder">')), /does not satisfy the constraint 'true'/)
+})
+
+test("contract-props.json naming a part the module does not export throws", () => {
+  const f = JSON.parse(fs.readFileSync(path.join(REPO, "packages/registry/generated/Input.facts.json"), "utf8"))
+  assert.throws(() => contractSource(f, [], { InputGhost: { absent: { x: "y" } } }), /names Input.InputGhost, which is not an exported part/)
 })
 
 test("a registry entry's protocolProps and handlers become existence assertions", () => {
@@ -260,6 +328,11 @@ const cases = [
   ["composedOf naming a non-component", (s) => { s.entries.Form.composedOf.push("Ghost") }, /composedOf "Ghost" is not a component/],
   ["aliasOf naming a non-component", (s, e) => { e.aliasOf = "Ghost" }, /aliasOf "Ghost" is not a component/],
   ["facts missing for the rendered component", (s) => { delete s.facts.Widget }, /no generated facts for Widget/],
+  ["nesting naming an unregistered type", (s, e) => { e.nesting = { parents: ["Card"] } }, /nesting.parents "Card" is not a registered type/],
+  ["a structural event with no element", (s) => { s.entries.Form.events = { submit: { handler: "onSubmit" } } }, /needs "element"/],
+  ["a structural event the element does not have", (s) => { Object.assign(s.entries.Form, { element: "form", events: { tap: { handler: "onTap" } } }); s.elements = { form: { events: ["onSubmit"] } } }, /handler onTap, which <form> does not have/],
+  ["a structural element with no generated element facts", (s) => { s.entries.Form.element = "form" }, /element <form> has no generated element facts/],
+  ["element on a component entry", (s, e) => { e.element = "div" }, /"element" is for structural types/],
 ]
 for (const [name, mutate, re] of cases)
   test(`FAIL: ${name}`, () => assert.match(run(mutate).fail.join("\n"), re))
@@ -270,6 +343,27 @@ test("an unaccounted own prop WARNs, and FAILs once registryComplete is true", (
   assert.match(warned.warn.join("\n"), /own props not in protocolProps, slots, events or hiddenProps: asChild/)
   const failed = run((s, e) => { delete e.hiddenProps.asChild; e.registryComplete = true })
   assert.match(failed.fail.join("\n"), /asChild/)
+})
+
+test("a structural event backed by its element's handlers passes", () => {
+  assert.deepEqual(run((s) => { Object.assign(s.entries.Form, { element: "form", events: { submit: { handler: "onSubmit" } } }); s.elements = { form: { events: ["onSubmit"] } } }).fail, [])
+})
+
+test("element facts resolve through React's JSX types and reject a non-element", () => {
+  const opts = compilerOptions(REPO)
+  const file = path.join(REPO, "packages/registry/__elements_test__.tsx")
+  const build = (els) => {
+    const host = ts.createCompilerHost(opts)
+    const src = elementsSource(els)
+    const { getSourceFile, fileExists } = host
+    host.getSourceFile = (f, ...a) => (path.resolve(f) === file ? ts.createSourceFile(f, src, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX) : getSourceFile.call(host, f, ...a))
+    host.fileExists = (f) => path.resolve(f) === file || fileExists.call(host, f)
+    return ts.createProgram([file], opts, host)
+  }
+  const ok = extractElementEvents(build(["form"]), file)
+  assert.ok(ok.form.events.includes("onSubmit"))
+  assert.ok(ok.form.events.includes("onReset"))
+  assert.throws(() => extractElementEvents(build(["notanelement"]), file), /resolved to no handler props/)
 })
 
 test("an authored enum narrower than the code union passes with a reason", () => {
@@ -316,7 +410,7 @@ test("--check fails on an orphaned facts file", () => {
 
 test("--check fails on a missing generated contract — all 47 must have one", () => {
   const dir = fixture()
-  fs.rmSync(path.join(dir, "packages/governance/contracts/generated/ListItem.contract.ts"))
+  fs.rmSync(path.join(dir, "packages/governance/contracts/ListItem.contract.ts"))
   const r = cli(dir, "--check")
   assert.equal(r.code, 1)
   assert.match(r.out, /ListItem.contract.ts is stale or missing/)
@@ -333,7 +427,7 @@ test("--check fails on an orphaned protocol schema, and on a stale componentMap"
 
 test("a hand-edited generated contract is stale", () => {
   const dir = fixture()
-  const f = path.join(dir, "packages/governance/contracts/generated/Button.contract.ts")
+  const f = path.join(dir, "packages/governance/contracts/Button.contract.ts")
   fs.writeFileSync(f, fs.readFileSync(f, "utf8").replace(/^type Union_variant.*$/m, ""))
   assert.match(cli(dir, "--check").out, /Button.contract.ts is stale or missing/)
 })

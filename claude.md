@@ -65,7 +65,7 @@ docs/
 ├── architecture/ATLAS-SPEC/   per-component specs
 └── decisions/                 ATLAS-COMPONENTS-V1.md (locked v1 decisions)
 ```
-The snapshot was first synced from Figma on 2026-09-12 and last on 2026-10-21 (`figmaVersion` `lib:Atlas Design System v1@2026-07-06T03:44:45Z`); `atlas/state/discrepancies.json` holds 104 entries, 11 open (DISC-027, 095-104).
+The snapshot was first synced from Figma on 2026-09-12 and last on 2026-10-21 (`figmaVersion` `lib:Atlas Design System v1@2026-07-06T03:44:45Z`); `atlas/state/discrepancies.json` holds 105 entries, 11 open (DISC-027, 095-104).
 
 `atlas/` holds the generated snapshot the agent reads: `index.md`, per-component docs and metadata, semantic tokens, and `state/` (status, discrepancies, decisions, candidates). Generated — never hand-edited.
 

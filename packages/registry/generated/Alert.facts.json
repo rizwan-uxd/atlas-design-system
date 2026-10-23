@@ -6,17 +6,17 @@
   "part": "Alert",
   "propsType": "AlertProps",
   "props": [
-    { "name": "actions", "type": "React.ReactNode", "optional": true },
-    { "name": "children", "type": "React.ReactNode", "optional": true },
-    { "name": "className", "type": "string", "optional": true },
-    { "name": "description", "type": "React.ReactNode", "optional": true },
-    { "name": "dismissible", "type": "boolean", "optional": true },
-    { "name": "hideIcon", "type": "boolean", "optional": true },
-    { "name": "icon", "type": "React.ReactNode", "optional": true },
-    { "name": "onDismiss", "type": "() => void", "optional": true },
-    { "name": "size", "type": "AlertSize", "optional": true },
-    { "name": "title", "type": "React.ReactNode", "optional": true },
-    { "name": "variant", "type": "AlertVariant", "optional": true }
+    { "name": "actions", "type": "React.ReactNode", "optional": true, "exact": true },
+    { "name": "children", "type": "React.ReactNode", "optional": true, "exact": true },
+    { "name": "className", "type": "string", "optional": true, "exact": true },
+    { "name": "description", "type": "React.ReactNode", "optional": true, "exact": true },
+    { "name": "dismissible", "type": "boolean", "optional": true, "exact": true },
+    { "name": "hideIcon", "type": "boolean", "optional": true, "exact": true },
+    { "name": "icon", "type": "React.ReactNode", "optional": true, "exact": true },
+    { "name": "onDismiss", "type": "() => void", "optional": true, "exact": true },
+    { "name": "size", "type": "AlertSize", "optional": true, "exact": true },
+    { "name": "title", "type": "React.ReactNode", "optional": true, "exact": true },
+    { "name": "variant", "type": "AlertVariant", "optional": true, "exact": true }
   ],
   "inherited": {},
   "events": [
@@ -31,7 +31,8 @@
     "bound": "Alert",
     "instances": {},
     "stateProps": {},
-    "enums": { "size": "Size", "variant": "Variant" }
+    "enums": { "size": "Size", "variant": "Variant" },
+    "figmaContent": ["actions", "description", "title"]
   },
   "figma": {
     "nodeId": "127:24",
@@ -40,5 +41,22 @@
       "Size": ["sm", "md", "lg"]
     }
   },
-  "tokensUsed": ["--atlas-background-muted", "--atlas-border-subtle", "--atlas-border-width-1", "--atlas-border-width-2", "--atlas-danger", "--atlas-danger-muted", "--atlas-danger-subtle", "--atlas-duration-base", "--atlas-easing-emphasized", "--atlas-easing-exit", "--atlas-easing-standard", "--atlas-focus-ring", "--atlas-font-sans", "--atlas-font-size-base", "--atlas-font-size-lg", "--atlas-font-weight-semibold", "--atlas-foreground", "--atlas-foreground-muted", "--atlas-icon-size-sm", "--atlas-icon-size-xs", "--atlas-icon-stroke-sm", "--atlas-icon-stroke-xs", "--atlas-info", "--atlas-info-muted", "--atlas-info-subtle", "--atlas-line-height-normal", "--atlas-line-height-tight", "--atlas-opacity-hover", "--atlas-radius-md", "--atlas-radius-sm", "--atlas-spacing-0_5", "--atlas-spacing-1", "--atlas-spacing-2", "--atlas-spacing-3", "--atlas-spacing-4", "--atlas-spacing-5", "--atlas-success", "--atlas-success-muted", "--atlas-success-subtle", "--atlas-text-body", "--atlas-text-body-sm", "--atlas-text-caption", "--atlas-touch-min", "--atlas-warning", "--atlas-warning-muted", "--atlas-warning-subtle"]
+  "tokensUsed": ["--atlas-background-muted", "--atlas-border-subtle", "--atlas-border-width-1", "--atlas-border-width-2", "--atlas-danger", "--atlas-danger-muted", "--atlas-danger-subtle", "--atlas-duration-base", "--atlas-easing-emphasized", "--atlas-easing-exit", "--atlas-easing-standard", "--atlas-focus-ring", "--atlas-font-sans", "--atlas-font-size-base", "--atlas-font-size-lg", "--atlas-font-weight-semibold", "--atlas-foreground", "--atlas-foreground-muted", "--atlas-icon-size-sm", "--atlas-icon-size-xs", "--atlas-icon-stroke-sm", "--atlas-icon-stroke-xs", "--atlas-info", "--atlas-info-muted", "--atlas-info-subtle", "--atlas-line-height-normal", "--atlas-line-height-tight", "--atlas-opacity-hover", "--atlas-radius-md", "--atlas-radius-sm", "--atlas-spacing-0_5", "--atlas-spacing-1", "--atlas-spacing-2", "--atlas-spacing-3", "--atlas-spacing-4", "--atlas-spacing-5", "--atlas-success", "--atlas-success-muted", "--atlas-success-subtle", "--atlas-text-body", "--atlas-text-body-sm", "--atlas-text-caption", "--atlas-touch-min", "--atlas-warning", "--atlas-warning-muted", "--atlas-warning-subtle"],
+  "module": {
+    "imports": [
+      { "from": "@atlas/ui-web/compositions/Alert/Alert", "name": "AlertSize", "kind": "named" },
+      { "from": "@atlas/ui-web/compositions/Alert/Alert", "name": "AlertVariant", "kind": "named" }
+    ],
+    "parts": {},
+    "types": {
+      "AlertSize": {
+        "kind": "union",
+        "members": ["lg", "md", "sm"]
+      },
+      "AlertVariant": {
+        "kind": "union",
+        "members": ["danger", "info", "neutral", "success", "warning"]
+      }
+    }
+  }
 }

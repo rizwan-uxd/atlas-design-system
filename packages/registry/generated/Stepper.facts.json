@@ -6,9 +6,9 @@
   "part": "Stepper",
   "propsType": "StepperProps",
   "props": [
-    { "name": "current", "type": "number", "optional": false },
-    { "name": "orientation", "type": "StepperOrientation", "optional": true },
-    { "name": "steps", "type": "StepperStep[]", "optional": false }
+    { "name": "current", "type": "number", "optional": false, "exact": true },
+    { "name": "orientation", "type": "StepperOrientation", "optional": true, "exact": true },
+    { "name": "steps", "type": "StepperStep[]", "optional": false, "exact": true }
   ],
   "inherited": {
     "AriaAttributes": ["aria-activedescendant", "aria-atomic", "aria-autocomplete", "aria-braillelabel", "aria-brailleroledescription", "aria-busy", "aria-checked", "aria-colcount", "aria-colindex", "aria-colindextext", "aria-colspan", "aria-controls", "aria-current", "aria-describedby", "aria-description", "aria-details", "aria-disabled", "aria-dropeffect", "aria-errormessage", "aria-expanded", "aria-flowto", "aria-grabbed", "aria-haspopup", "aria-hidden", "aria-invalid", "aria-keyshortcuts", "aria-label", "aria-labelledby", "aria-level", "aria-live", "aria-modal", "aria-multiline", "aria-multiselectable", "aria-orientation", "aria-owns", "aria-placeholder", "aria-posinset", "aria-pressed", "aria-readonly", "aria-relevant", "aria-required", "aria-roledescription", "aria-rowcount", "aria-rowindex", "aria-rowindextext", "aria-rowspan", "aria-selected", "aria-setsize", "aria-sort", "aria-valuemax", "aria-valuemin", "aria-valuenow", "aria-valuetext"],
@@ -209,7 +209,8 @@
     "bound": "Stepper",
     "instances": {},
     "stateProps": {},
-    "enums": { "current": "Current", "orientation": "Orientation", "steps": "Steps" }
+    "enums": { "current": "Current", "orientation": "Orientation", "steps": "Steps" },
+    "figmaContent": ["aria-label"]
   },
   "figma": {
     "nodeId": "984:3356",
@@ -220,5 +221,30 @@
       "Current": ["1", "2", "3", "4", "5"]
     }
   },
-  "tokensUsed": ["--atlas-background", "--atlas-background-muted", "--atlas-border", "--atlas-border-width-1", "--atlas-border-width-2", "--atlas-font-sans", "--atlas-font-size-base", "--atlas-font-size-sm", "--atlas-font-size-xs", "--atlas-font-weight-medium", "--atlas-font-weight-regular", "--atlas-font-weight-semibold", "--atlas-foreground", "--atlas-foreground-muted", "--atlas-line-height-normal", "--atlas-primary", "--atlas-primary-foreground", "--atlas-radius-full", "--atlas-spacing-1", "--atlas-spacing-10", "--atlas-spacing-12", "--atlas-spacing-2", "--atlas-spacing-3", "--atlas-spacing-4", "--atlas-spacing-5", "--atlas-spacing-6", "--atlas-spacing-8", "--atlas-text-body-sm", "--atlas-text-caption"]
+  "tokensUsed": ["--atlas-background", "--atlas-background-muted", "--atlas-border", "--atlas-border-width-1", "--atlas-border-width-2", "--atlas-font-sans", "--atlas-font-size-base", "--atlas-font-size-sm", "--atlas-font-size-xs", "--atlas-font-weight-medium", "--atlas-font-weight-regular", "--atlas-font-weight-semibold", "--atlas-foreground", "--atlas-foreground-muted", "--atlas-line-height-normal", "--atlas-primary", "--atlas-primary-foreground", "--atlas-radius-full", "--atlas-spacing-1", "--atlas-spacing-10", "--atlas-spacing-12", "--atlas-spacing-2", "--atlas-spacing-3", "--atlas-spacing-4", "--atlas-spacing-5", "--atlas-spacing-6", "--atlas-spacing-8", "--atlas-text-body-sm", "--atlas-text-caption"],
+  "module": {
+    "imports": [
+      { "from": "@atlas/ui-web/patterns/Stepper/Stepper", "name": "StepperOrientation", "kind": "named" },
+      { "from": "@atlas/ui-web/patterns/Stepper/Stepper", "name": "StepperStep", "kind": "named" }
+    ],
+    "parts": {},
+    "types": {
+      "StepperOrientation": {
+        "kind": "union",
+        "members": ["horizontal", "vertical"]
+      },
+      "StepperStatus": {
+        "kind": "union",
+        "members": ["complete", "current", "upcoming"]
+      },
+      "StepperStep": {
+        "kind": "object",
+        "props": [
+          { "name": "description", "type": "React.ReactNode", "optional": true, "exact": true },
+          { "name": "label", "type": "React.ReactNode", "optional": false, "exact": true }
+        ],
+        "closed": true
+      }
+    }
+  }
 }

@@ -6,18 +6,18 @@
   "part": "StatCard",
   "propsType": "StatCardProps",
   "props": [
-    { "name": "className", "type": "string", "optional": true },
-    { "name": "delta", "type": "StatCardDelta", "optional": true },
-    { "name": "disabled", "type": "boolean", "optional": true },
-    { "name": "icon", "type": "React.ReactNode", "optional": true },
-    { "name": "id", "type": "string", "optional": true },
-    { "name": "label", "type": "React.ReactNode", "optional": false },
-    { "name": "loading", "type": "boolean", "optional": true },
-    { "name": "onClick", "type": "React.MouseEventHandler<HTMLElement>", "optional": true },
-    { "name": "period", "type": "React.ReactNode", "optional": false },
-    { "name": "size", "type": "StatCardSize", "optional": true },
-    { "name": "sparkline", "type": "StatCardSparkline", "optional": true },
-    { "name": "value", "type": "React.ReactNode", "optional": false }
+    { "name": "className", "type": "string", "optional": true, "exact": true },
+    { "name": "delta", "type": "StatCardDelta", "optional": true, "exact": true },
+    { "name": "disabled", "type": "boolean", "optional": true, "exact": true },
+    { "name": "icon", "type": "React.ReactNode", "optional": true, "exact": true },
+    { "name": "id", "type": "string", "optional": true, "exact": true },
+    { "name": "label", "type": "React.ReactNode", "optional": false, "exact": true },
+    { "name": "loading", "type": "boolean", "optional": true, "exact": true },
+    { "name": "onClick", "type": "React.MouseEventHandler<HTMLElement>", "optional": true, "exact": true },
+    { "name": "period", "type": "React.ReactNode", "optional": false, "exact": true },
+    { "name": "size", "type": "StatCardSize", "optional": true, "exact": true },
+    { "name": "sparkline", "type": "StatCardSparkline", "optional": true, "exact": true },
+    { "name": "value", "type": "React.ReactNode", "optional": false, "exact": true }
   ],
   "inherited": {},
   "events": [
@@ -39,7 +39,8 @@
       "sentiment": "Sentiment",
       "size": "Size",
       "sparkline": "Sparkline"
-    }
+    },
+    "figmaContent": ["icon", "label", "period", "value"]
   },
   "figma": {
     "nodeId": "867:351",
@@ -52,5 +53,47 @@
       "Interaction": ["static", "hover", "focus-visible", "active", "disabled"]
     }
   },
-  "tokensUsed": ["--atlas-font-sans", "--atlas-font-size-2xl", "--atlas-font-size-3xl", "--atlas-font-size-4xl", "--atlas-font-size-xs", "--atlas-font-weight-semibold", "--atlas-foreground", "--atlas-foreground-muted", "--atlas-icon-size-xs", "--atlas-line-height-normal", "--atlas-line-height-tight", "--atlas-spacing-16", "--atlas-spacing-2"]
+  "tokensUsed": ["--atlas-font-sans", "--atlas-font-size-2xl", "--atlas-font-size-3xl", "--atlas-font-size-4xl", "--atlas-font-size-xs", "--atlas-font-weight-semibold", "--atlas-foreground", "--atlas-foreground-muted", "--atlas-icon-size-xs", "--atlas-line-height-normal", "--atlas-line-height-tight", "--atlas-spacing-16", "--atlas-spacing-2"],
+  "module": {
+    "imports": [
+      { "from": "@atlas/ui-web/compositions/StatCard/StatCard", "name": "StatCardDelta", "kind": "named" },
+      { "from": "@atlas/ui-web/compositions/StatCard/StatCard", "name": "StatCardSentiment", "kind": "named" },
+      { "from": "@atlas/ui-web/compositions/StatCard/StatCard", "name": "StatCardSize", "kind": "named" },
+      { "from": "@atlas/ui-web/compositions/StatCard/StatCard", "name": "StatCardSparkline", "kind": "named" },
+      { "from": "@atlas/ui-web/compositions/StatCard/StatCard", "name": "StatCardTrend", "kind": "named" }
+    ],
+    "parts": {},
+    "types": {
+      "StatCardDelta": {
+        "kind": "object",
+        "props": [
+          { "name": "sentiment", "type": "StatCardSentiment", "optional": true, "exact": true },
+          { "name": "text", "type": "string", "optional": false, "exact": true },
+          { "name": "trend", "type": "StatCardTrend", "optional": false, "exact": true },
+          { "name": "trendLabel", "type": "string", "optional": true, "exact": true }
+        ],
+        "closed": true
+      },
+      "StatCardSentiment": {
+        "kind": "union",
+        "members": ["negative", "neutral", "positive"]
+      },
+      "StatCardSize": {
+        "kind": "union",
+        "members": ["lg", "md", "sm"]
+      },
+      "StatCardSparkline": {
+        "kind": "object",
+        "props": [
+          { "name": "label", "type": "string", "optional": false, "exact": true },
+          { "name": "values", "type": "number[]", "optional": false, "exact": true }
+        ],
+        "closed": true
+      },
+      "StatCardTrend": {
+        "kind": "union",
+        "members": ["down", "flat", "up"]
+      }
+    }
+  }
 }

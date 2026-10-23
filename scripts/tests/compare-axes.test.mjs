@@ -1,5 +1,5 @@
 /**
- * compare-axes tests (M1).
+ * compare-axes tests (M1; the registry leg, M3 session 4).
  *
  * Two properties matter more than any individual comparison, and most of these cases exist to pin
  * them down:
@@ -219,6 +219,70 @@ test("an empty component list reports zero inspected", () => {
   assert.equal(r.findings.length, 0, "the caller turns 0 inspected into a FAIL; the comparator just reports")
 })
 
-test("the registry slot stays null until M3 fills it", () => {
+test("with no registry passed the comparison is two-way and reports registry: null", () => {
   assert.equal(run([component()]).registry, null)
+})
+
+/* ── the registry leg (M3): every disagreement fails on the registry side ── */
+
+const widget = component({ variants: ["primary", "ghost"], figmaProperties: { Variant: ["primary", "ghost"], State: ["default", "hover", "disabled"] } })
+const facts = (over = {}) => ({
+  Widget: { unions: { variant: ["ghost", "primary"] }, codeConnect: { file: "Widget.figma.tsx", enums: { variant: "Variant" }, figmaContent: ["children", "icon"] }, ...over },
+})
+const entry = (over = {}) => ({
+  type: "Widget", aliasOf: "Widget", kind: "component",
+  protocolProps: { variant: { values: ["primary", "ghost"] } },
+  states: { default: "interaction", hover: "interaction", disabled: "prop" },
+  slots: ["children", "icon"], ...over,
+})
+const withRegistry = (e, f = facts(), components = [widget]) =>
+  compareAxes({ components, codeConnect: cc('figma.enum("Variant", { primary: "primary", ghost: "ghost" })'), axisMap: MAP, registry: { entries: { [e.type]: e }, facts: f } })
+const registryFindings = (r) => r.findings.filter((x) => x.side === "registry")
+
+test("PASS: a registry entry that agrees with Figma and code", () => {
+  const r = withRegistry(entry())
+  assert.deepEqual(registryFindings(r), [])
+  assert.deepEqual(r.registry, { entries: 1, axes: 2, states: 1, enums: 1, slots: 2 })
+  assert.deepEqual(r.deferredAxes, [], "a registered component's State is compared, not deferred")
+})
+
+test("a registry enum member Figma does not have fails on the registry side", () => {
+  const r = withRegistry(entry({ protocolProps: { variant: { values: ["primary", "ghost", "sparkly"] } } }), facts({ unions: { variant: ["ghost", "primary", "sparkly"] } }))
+  assert.match(registryFindings(r).map((x) => x.detail).join("\n"), /registry variant="sparkly" and Figma Widget\/Variant has no such member/)
+})
+
+test("a registry enum narrower than Figma fails unless it declares narrowed", () => {
+  const narrow = entry({ protocolProps: { variant: { values: ["primary"] } } })
+  assert.match(registryFindings(withRegistry(narrow)).map((x) => x.detail).join("\n"), /has "ghost" and registry variant does not/)
+  assert.deepEqual(registryFindings(withRegistry(entry({ protocolProps: { variant: { values: ["primary"], narrowed: "agent surface" } } }))), [])
+})
+
+test("a registry enum member absent from the code union fails on the registry side", () => {
+  const r = withRegistry(entry(), facts({ unions: { variant: ["primary"] } }))
+  assert.match(registryFindings(r).map((x) => x.detail).join("\n"), /registry variant="ghost" is not in the code union/)
+})
+
+test("an unclassified Figma State member fails on the registry side", () => {
+  const r = withRegistry(entry({ states: { default: "interaction", hover: "interaction" } }))
+  const f = registryFindings(r)
+  assert.equal(f.length, 1)
+  assert.equal(f[0].axis, "State")
+  assert.match(f[0].detail, /Figma State "disabled" is not classified/)
+})
+
+test("a registry slot with no Figma counterpart fails on the registry side and names the type", () => {
+  const r = withRegistry(entry({ slots: ["children", "icon", "footer"] }))
+  assert.match(registryFindings(r).map((x) => x.detail).join("\n"), /^Widget: slot "footer" has no Figma counterpart/m)
+})
+
+test("the registry leg fails closed on an entry whose facts or metadata are missing", () => {
+  assert.match(registryFindings(withRegistry(entry(), {})).map((x) => x.detail).join("\n"), /no generated facts for Widget/)
+  assert.match(registryFindings(withRegistry(entry(), facts(), [])).map((x) => x.detail).join("\n"), /no valid atlas\/metadata entry/)
+  assert.throws(() => compareAxes({ components: [], codeConnect: new Map(), axisMap: MAP, registry: {} }), /registry needs entries and facts/)
+})
+
+test("structural entries have no Figma side and are not compared", () => {
+  const r = withRegistry({ type: "Form", aliasOf: null, kind: "structural", composedOf: ["Widget"] })
+  assert.deepEqual(registryFindings(r), [])
+  assert.equal(r.registry.entries, 0)
 })

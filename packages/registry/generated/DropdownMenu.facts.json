@@ -6,10 +6,10 @@
   "part": "DropdownMenu",
   "propsType": "DropdownMenuProps",
   "props": [
-    { "name": "children", "type": "React.ReactNode", "optional": true },
-    { "name": "defaultOpen", "type": "boolean", "optional": true },
-    { "name": "onOpenChange", "type": "(open: boolean) => void", "optional": true },
-    { "name": "open", "type": "boolean", "optional": true }
+    { "name": "children", "type": "React.ReactNode", "optional": true, "exact": true },
+    { "name": "defaultOpen", "type": "boolean", "optional": true, "exact": true },
+    { "name": "onOpenChange", "type": "(open: boolean) => void", "optional": true, "exact": true },
+    { "name": "open", "type": "boolean", "optional": true, "exact": true }
   ],
   "inherited": {},
   "events": [
@@ -21,7 +21,8 @@
     "bound": "DropdownMenu",
     "instances": {},
     "stateProps": {},
-    "enums": { "groups": "Groups" }
+    "enums": { "groups": "Groups" },
+    "figmaContent": ["children"]
   },
   "figma": {
     "nodeId": "516:118",
@@ -29,5 +30,252 @@
       "Groups": ["1", "2", "3"]
     }
   },
-  "tokensUsed": ["--atlas-background-accent", "--atlas-border", "--atlas-border-width-1", "--atlas-border-width-2", "--atlas-danger", "--atlas-danger-subtle", "--atlas-font-sans", "--atlas-font-size-sm", "--atlas-font-size-xs", "--atlas-font-weight-medium", "--atlas-font-weight-regular", "--atlas-foreground", "--atlas-foreground-muted", "--atlas-icon-size-xs", "--atlas-letter-spacing-wide", "--atlas-line-height-normal", "--atlas-opacity-disabled", "--atlas-radius-full", "--atlas-radius-md", "--atlas-radius-sm", "--atlas-shadow-md", "--atlas-spacing-1", "--atlas-spacing-16", "--atlas-spacing-1_5", "--atlas-spacing-2", "--atlas-spacing-8", "--atlas-surface-overlay", "--atlas-z-dropdown"]
+  "tokensUsed": ["--atlas-background-accent", "--atlas-border", "--atlas-border-width-1", "--atlas-border-width-2", "--atlas-danger", "--atlas-danger-subtle", "--atlas-font-sans", "--atlas-font-size-sm", "--atlas-font-size-xs", "--atlas-font-weight-medium", "--atlas-font-weight-regular", "--atlas-foreground", "--atlas-foreground-muted", "--atlas-icon-size-xs", "--atlas-letter-spacing-wide", "--atlas-line-height-normal", "--atlas-opacity-disabled", "--atlas-radius-full", "--atlas-radius-md", "--atlas-radius-sm", "--atlas-shadow-md", "--atlas-spacing-1", "--atlas-spacing-16", "--atlas-spacing-1_5", "--atlas-spacing-2", "--atlas-spacing-8", "--atlas-surface-overlay", "--atlas-z-dropdown"],
+  "module": {
+    "imports": [
+      { "from": "@atlas/ui-web/patterns/DropdownMenu/DropdownMenu", "name": "DropdownMenuSide", "kind": "named" }
+    ],
+    "parts": {
+      "DropdownMenuCheckboxItem": {
+        "propsType": "DropdownMenuCheckboxItemProps",
+        "props": [
+          { "name": "checked", "type": "boolean", "optional": true, "exact": true },
+          { "name": "disabled", "type": "boolean", "optional": true, "exact": true },
+          { "name": "onCheckedChange", "type": "(checked: boolean) => void", "optional": true, "exact": true },
+          { "name": "onSelect", "type": "(event: Event) => void", "optional": true, "exact": true },
+          { "name": "shortcut", "type": "React.ReactNode", "optional": true, "exact": true }
+        ],
+        "unions": {
+          "aria-autocomplete": ["both", "inline", "list", "none"],
+          "aria-dropeffect": ["copy", "execute", "link", "move", "none", "popup"],
+          "aria-live": ["assertive", "off", "polite"],
+          "aria-orientation": ["horizontal", "vertical"],
+          "aria-relevant": ["additions", "additions removals", "additions text", "all", "removals", "removals additions", "removals text", "text", "text additions", "text removals"],
+          "aria-sort": ["ascending", "descending", "none", "other"],
+          "enterKeyHint": ["done", "enter", "go", "next", "previous", "search", "send"],
+          "inputMode": ["decimal", "email", "none", "numeric", "search", "tel", "text", "url"],
+          "popover": ["", "auto", "hint", "manual"],
+          "popoverTargetAction": ["hide", "show", "toggle"],
+          "translate": ["no", "yes"],
+          "unselectable": ["off", "on"]
+        }
+      },
+      "DropdownMenuContent": {
+        "propsType": "DropdownMenuContentProps",
+        "props": [
+          { "name": "side", "type": "DropdownMenuSide", "optional": true, "exact": true }
+        ],
+        "unions": {
+          "aria-autocomplete": ["both", "inline", "list", "none"],
+          "aria-dropeffect": ["copy", "execute", "link", "move", "none", "popup"],
+          "aria-live": ["assertive", "off", "polite"],
+          "aria-orientation": ["horizontal", "vertical"],
+          "aria-relevant": ["additions", "additions removals", "additions text", "all", "removals", "removals additions", "removals text", "text", "text additions", "text removals"],
+          "aria-sort": ["ascending", "descending", "none", "other"],
+          "enterKeyHint": ["done", "enter", "go", "next", "previous", "search", "send"],
+          "inputMode": ["decimal", "email", "none", "numeric", "search", "tel", "text", "url"],
+          "popover": ["", "auto", "hint", "manual"],
+          "popoverTargetAction": ["hide", "show", "toggle"],
+          "side": ["bottom", "top"],
+          "translate": ["no", "yes"],
+          "unselectable": ["off", "on"]
+        }
+      },
+      "DropdownMenuGroup": {
+        "propsType": "DropdownMenuGroupProps",
+        "props": [],
+        "unions": {
+          "aria-autocomplete": ["both", "inline", "list", "none"],
+          "aria-dropeffect": ["copy", "execute", "link", "move", "none", "popup"],
+          "aria-live": ["assertive", "off", "polite"],
+          "aria-orientation": ["horizontal", "vertical"],
+          "aria-relevant": ["additions", "additions removals", "additions text", "all", "removals", "removals additions", "removals text", "text", "text additions", "text removals"],
+          "aria-sort": ["ascending", "descending", "none", "other"],
+          "enterKeyHint": ["done", "enter", "go", "next", "previous", "search", "send"],
+          "inputMode": ["decimal", "email", "none", "numeric", "search", "tel", "text", "url"],
+          "popover": ["", "auto", "hint", "manual"],
+          "popoverTargetAction": ["hide", "show", "toggle"],
+          "translate": ["no", "yes"],
+          "unselectable": ["off", "on"]
+        }
+      },
+      "DropdownMenuItem": {
+        "propsType": "DropdownMenuItemProps",
+        "props": [
+          { "name": "destructive", "type": "boolean", "optional": true, "exact": true },
+          { "name": "disabled", "type": "boolean", "optional": true, "exact": true },
+          { "name": "icon", "type": "React.ReactNode", "optional": true, "exact": true },
+          { "name": "onSelect", "type": "(event: Event) => void", "optional": true, "exact": true },
+          { "name": "shortcut", "type": "React.ReactNode", "optional": true, "exact": true }
+        ],
+        "unions": {
+          "aria-autocomplete": ["both", "inline", "list", "none"],
+          "aria-dropeffect": ["copy", "execute", "link", "move", "none", "popup"],
+          "aria-live": ["assertive", "off", "polite"],
+          "aria-orientation": ["horizontal", "vertical"],
+          "aria-relevant": ["additions", "additions removals", "additions text", "all", "removals", "removals additions", "removals text", "text", "text additions", "text removals"],
+          "aria-sort": ["ascending", "descending", "none", "other"],
+          "enterKeyHint": ["done", "enter", "go", "next", "previous", "search", "send"],
+          "inputMode": ["decimal", "email", "none", "numeric", "search", "tel", "text", "url"],
+          "popover": ["", "auto", "hint", "manual"],
+          "popoverTargetAction": ["hide", "show", "toggle"],
+          "translate": ["no", "yes"],
+          "unselectable": ["off", "on"]
+        }
+      },
+      "DropdownMenuLabel": {
+        "propsType": "DropdownMenuLabelProps",
+        "props": [],
+        "unions": {
+          "aria-autocomplete": ["both", "inline", "list", "none"],
+          "aria-dropeffect": ["copy", "execute", "link", "move", "none", "popup"],
+          "aria-live": ["assertive", "off", "polite"],
+          "aria-orientation": ["horizontal", "vertical"],
+          "aria-relevant": ["additions", "additions removals", "additions text", "all", "removals", "removals additions", "removals text", "text", "text additions", "text removals"],
+          "aria-sort": ["ascending", "descending", "none", "other"],
+          "enterKeyHint": ["done", "enter", "go", "next", "previous", "search", "send"],
+          "inputMode": ["decimal", "email", "none", "numeric", "search", "tel", "text", "url"],
+          "popover": ["", "auto", "hint", "manual"],
+          "popoverTargetAction": ["hide", "show", "toggle"],
+          "translate": ["no", "yes"],
+          "unselectable": ["off", "on"]
+        }
+      },
+      "DropdownMenuRadioGroup": {
+        "propsType": "DropdownMenuRadioGroupProps",
+        "props": [
+          { "name": "onValueChange", "type": "(value: string) => void", "optional": true, "exact": true },
+          { "name": "value", "type": "string", "optional": true, "exact": true }
+        ],
+        "unions": {
+          "aria-autocomplete": ["both", "inline", "list", "none"],
+          "aria-dropeffect": ["copy", "execute", "link", "move", "none", "popup"],
+          "aria-live": ["assertive", "off", "polite"],
+          "aria-orientation": ["horizontal", "vertical"],
+          "aria-relevant": ["additions", "additions removals", "additions text", "all", "removals", "removals additions", "removals text", "text", "text additions", "text removals"],
+          "aria-sort": ["ascending", "descending", "none", "other"],
+          "enterKeyHint": ["done", "enter", "go", "next", "previous", "search", "send"],
+          "inputMode": ["decimal", "email", "none", "numeric", "search", "tel", "text", "url"],
+          "popover": ["", "auto", "hint", "manual"],
+          "popoverTargetAction": ["hide", "show", "toggle"],
+          "translate": ["no", "yes"],
+          "unselectable": ["off", "on"]
+        }
+      },
+      "DropdownMenuRadioItem": {
+        "propsType": "DropdownMenuRadioItemProps",
+        "props": [
+          { "name": "disabled", "type": "boolean", "optional": true, "exact": true },
+          { "name": "onSelect", "type": "(event: Event) => void", "optional": true, "exact": true },
+          { "name": "shortcut", "type": "React.ReactNode", "optional": true, "exact": true },
+          { "name": "value", "type": "string", "optional": false, "exact": true }
+        ],
+        "unions": {
+          "aria-autocomplete": ["both", "inline", "list", "none"],
+          "aria-dropeffect": ["copy", "execute", "link", "move", "none", "popup"],
+          "aria-live": ["assertive", "off", "polite"],
+          "aria-orientation": ["horizontal", "vertical"],
+          "aria-relevant": ["additions", "additions removals", "additions text", "all", "removals", "removals additions", "removals text", "text", "text additions", "text removals"],
+          "aria-sort": ["ascending", "descending", "none", "other"],
+          "enterKeyHint": ["done", "enter", "go", "next", "previous", "search", "send"],
+          "inputMode": ["decimal", "email", "none", "numeric", "search", "tel", "text", "url"],
+          "popover": ["", "auto", "hint", "manual"],
+          "popoverTargetAction": ["hide", "show", "toggle"],
+          "translate": ["no", "yes"],
+          "unselectable": ["off", "on"]
+        }
+      },
+      "DropdownMenuSeparator": {
+        "propsType": "DropdownMenuSeparatorProps",
+        "props": [],
+        "unions": {
+          "aria-autocomplete": ["both", "inline", "list", "none"],
+          "aria-dropeffect": ["copy", "execute", "link", "move", "none", "popup"],
+          "aria-live": ["assertive", "off", "polite"],
+          "aria-orientation": ["horizontal", "vertical"],
+          "aria-relevant": ["additions", "additions removals", "additions text", "all", "removals", "removals additions", "removals text", "text", "text additions", "text removals"],
+          "aria-sort": ["ascending", "descending", "none", "other"],
+          "enterKeyHint": ["done", "enter", "go", "next", "previous", "search", "send"],
+          "inputMode": ["decimal", "email", "none", "numeric", "search", "tel", "text", "url"],
+          "popover": ["", "auto", "hint", "manual"],
+          "popoverTargetAction": ["hide", "show", "toggle"],
+          "translate": ["no", "yes"],
+          "unselectable": ["off", "on"]
+        }
+      },
+      "DropdownMenuSub": {
+        "propsType": "DropdownMenuSubProps",
+        "props": [
+          { "name": "children", "type": "React.ReactNode", "optional": true, "exact": true }
+        ],
+        "unions": {}
+      },
+      "DropdownMenuSubContent": {
+        "propsType": "DropdownMenuSubContentProps",
+        "props": [],
+        "unions": {
+          "aria-autocomplete": ["both", "inline", "list", "none"],
+          "aria-dropeffect": ["copy", "execute", "link", "move", "none", "popup"],
+          "aria-live": ["assertive", "off", "polite"],
+          "aria-orientation": ["horizontal", "vertical"],
+          "aria-relevant": ["additions", "additions removals", "additions text", "all", "removals", "removals additions", "removals text", "text", "text additions", "text removals"],
+          "aria-sort": ["ascending", "descending", "none", "other"],
+          "enterKeyHint": ["done", "enter", "go", "next", "previous", "search", "send"],
+          "inputMode": ["decimal", "email", "none", "numeric", "search", "tel", "text", "url"],
+          "popover": ["", "auto", "hint", "manual"],
+          "popoverTargetAction": ["hide", "show", "toggle"],
+          "translate": ["no", "yes"],
+          "unselectable": ["off", "on"]
+        }
+      },
+      "DropdownMenuSubTrigger": {
+        "propsType": "DropdownMenuSubTriggerProps",
+        "props": [
+          { "name": "disabled", "type": "boolean", "optional": true, "exact": true },
+          { "name": "icon", "type": "React.ReactNode", "optional": true, "exact": true }
+        ],
+        "unions": {
+          "aria-autocomplete": ["both", "inline", "list", "none"],
+          "aria-dropeffect": ["copy", "execute", "link", "move", "none", "popup"],
+          "aria-live": ["assertive", "off", "polite"],
+          "aria-orientation": ["horizontal", "vertical"],
+          "aria-relevant": ["additions", "additions removals", "additions text", "all", "removals", "removals additions", "removals text", "text", "text additions", "text removals"],
+          "aria-sort": ["ascending", "descending", "none", "other"],
+          "enterKeyHint": ["done", "enter", "go", "next", "previous", "search", "send"],
+          "inputMode": ["decimal", "email", "none", "numeric", "search", "tel", "text", "url"],
+          "popover": ["", "auto", "hint", "manual"],
+          "popoverTargetAction": ["hide", "show", "toggle"],
+          "translate": ["no", "yes"],
+          "unselectable": ["off", "on"]
+        }
+      },
+      "DropdownMenuTrigger": {
+        "propsType": "DropdownMenuTriggerProps",
+        "props": [
+          { "name": "asChild", "type": "boolean", "optional": true, "exact": true }
+        ],
+        "unions": {
+          "aria-autocomplete": ["both", "inline", "list", "none"],
+          "aria-dropeffect": ["copy", "execute", "link", "move", "none", "popup"],
+          "aria-live": ["assertive", "off", "polite"],
+          "aria-orientation": ["horizontal", "vertical"],
+          "aria-relevant": ["additions", "additions removals", "additions text", "all", "removals", "removals additions", "removals text", "text", "text additions", "text removals"],
+          "aria-sort": ["ascending", "descending", "none", "other"],
+          "enterKeyHint": ["done", "enter", "go", "next", "previous", "search", "send"],
+          "inputMode": ["decimal", "email", "none", "numeric", "search", "tel", "text", "url"],
+          "popover": ["", "auto", "hint", "manual"],
+          "popoverTargetAction": ["hide", "show", "toggle"],
+          "translate": ["no", "yes"],
+          "type": ["button", "reset", "submit"],
+          "unselectable": ["off", "on"]
+        }
+      }
+    },
+    "types": {
+      "DropdownMenuSide": {
+        "kind": "union",
+        "members": ["bottom", "top"]
+      }
+    }
+  }
 }

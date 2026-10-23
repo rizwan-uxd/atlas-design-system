@@ -86,7 +86,7 @@ test("ci.yml still runs the checks the roadmap depends on", () => {
   // a phase's exit criteria unenforced while CI still looked green
   for (const needle of [
     "npm run test:scripts",      // the parser and comparator tests
-    "atlas:verify",              // design/figma-code lives here
+    "atlas:verify",              // design/figma-registry-code lives here
     "--max-figma-age",           // M1's staleness gate
     "metrics-report.mjs",        // the metric manifest totality gate
     "token-lint",

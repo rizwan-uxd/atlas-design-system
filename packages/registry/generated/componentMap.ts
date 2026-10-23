@@ -3,11 +3,13 @@
 // and this map is provably complete because it is generated from the registry (roadmap M4).
 import { Alert } from "@atlas/ui-web/compositions/Alert/Alert"
 import { Button } from "@atlas/ui-web/primitives/Button/Button"
+import { Field } from "@atlas/ui-web/compositions/Field/Field"
 import { Input } from "@atlas/ui-web/primitives/Input/Input"
 
 export const componentMap = {
   Alert,
   Button,
+  Field,
   TextField: Input,
 } as const
 

@@ -6,12 +6,12 @@
   "part": "Pagination",
   "propsType": "PaginationProps",
   "props": [
-    { "name": "disabled", "type": "boolean", "optional": true },
-    { "name": "onPageChange", "type": "(page: number) => void", "optional": false },
-    { "name": "page", "type": "number", "optional": false },
-    { "name": "pageCount", "type": "number", "optional": false },
-    { "name": "siblingCount", "type": "number", "optional": true },
-    { "name": "size", "type": "PaginationSize", "optional": true }
+    { "name": "disabled", "type": "boolean", "optional": true, "exact": true },
+    { "name": "onPageChange", "type": "(page: number) => void", "optional": false, "exact": true },
+    { "name": "page", "type": "number", "optional": false, "exact": true },
+    { "name": "pageCount", "type": "number", "optional": false, "exact": true },
+    { "name": "siblingCount", "type": "number", "optional": true, "exact": true },
+    { "name": "size", "type": "PaginationSize", "optional": true, "exact": true }
   ],
   "inherited": {
     "AriaAttributes": ["aria-activedescendant", "aria-atomic", "aria-autocomplete", "aria-braillelabel", "aria-brailleroledescription", "aria-busy", "aria-checked", "aria-colcount", "aria-colindex", "aria-colindextext", "aria-colspan", "aria-controls", "aria-current", "aria-describedby", "aria-description", "aria-details", "aria-disabled", "aria-dropeffect", "aria-errormessage", "aria-expanded", "aria-flowto", "aria-grabbed", "aria-haspopup", "aria-hidden", "aria-invalid", "aria-keyshortcuts", "aria-label", "aria-labelledby", "aria-level", "aria-live", "aria-modal", "aria-multiline", "aria-multiselectable", "aria-orientation", "aria-owns", "aria-placeholder", "aria-posinset", "aria-pressed", "aria-readonly", "aria-relevant", "aria-required", "aria-roledescription", "aria-rowcount", "aria-rowindex", "aria-rowindextext", "aria-rowspan", "aria-selected", "aria-setsize", "aria-sort", "aria-valuemax", "aria-valuemin", "aria-valuenow", "aria-valuetext"],
@@ -210,7 +210,8 @@
     "bound": "Pagination",
     "instances": {},
     "stateProps": {},
-    "enums": { "size": "Size" }
+    "enums": { "size": "Size" },
+    "figmaContent": []
   },
   "figma": {
     "nodeId": "903:537",
@@ -219,5 +220,17 @@
       "Position": ["start", "middle", "end"]
     }
   },
-  "tokensUsed": ["--atlas-button-size-md-height", "--atlas-button-size-sm-height", "--atlas-foreground-muted", "--atlas-icon-size-xs", "--atlas-spacing-1"]
+  "tokensUsed": ["--atlas-button-size-md-height", "--atlas-button-size-sm-height", "--atlas-foreground-muted", "--atlas-icon-size-xs", "--atlas-spacing-1"],
+  "module": {
+    "imports": [
+      { "from": "@atlas/ui-web/patterns/Pagination/Pagination", "name": "PaginationSize", "kind": "named" }
+    ],
+    "parts": {},
+    "types": {
+      "PaginationSize": {
+        "kind": "union",
+        "members": ["md", "sm"]
+      }
+    }
+  }
 }

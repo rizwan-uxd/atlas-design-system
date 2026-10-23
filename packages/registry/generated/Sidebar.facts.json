@@ -6,9 +6,9 @@
   "part": "Sidebar",
   "propsType": "SidebarProps",
   "props": [
-    { "name": "children", "type": "React.ReactNode", "optional": true },
-    { "name": "collapsed", "type": "boolean", "optional": true },
-    { "name": "onCollapsedChange", "type": "(collapsed: boolean) => void", "optional": true }
+    { "name": "children", "type": "React.ReactNode", "optional": true, "exact": true },
+    { "name": "collapsed", "type": "boolean", "optional": true, "exact": true },
+    { "name": "onCollapsedChange", "type": "(collapsed: boolean) => void", "optional": true, "exact": true }
   ],
   "inherited": {
     "AriaAttributes": ["aria-activedescendant", "aria-atomic", "aria-autocomplete", "aria-braillelabel", "aria-brailleroledescription", "aria-busy", "aria-checked", "aria-colcount", "aria-colindex", "aria-colindextext", "aria-colspan", "aria-controls", "aria-current", "aria-describedby", "aria-description", "aria-details", "aria-disabled", "aria-dropeffect", "aria-errormessage", "aria-expanded", "aria-flowto", "aria-grabbed", "aria-haspopup", "aria-hidden", "aria-invalid", "aria-keyshortcuts", "aria-label", "aria-labelledby", "aria-level", "aria-live", "aria-modal", "aria-multiline", "aria-multiselectable", "aria-orientation", "aria-owns", "aria-placeholder", "aria-posinset", "aria-pressed", "aria-readonly", "aria-relevant", "aria-required", "aria-roledescription", "aria-rowcount", "aria-rowindex", "aria-rowindextext", "aria-rowspan", "aria-selected", "aria-setsize", "aria-sort", "aria-valuemax", "aria-valuemin", "aria-valuenow", "aria-valuetext"],
@@ -205,7 +205,8 @@
     "bound": "Sidebar",
     "instances": {},
     "stateProps": {},
-    "enums": { "collapsed": "Collapsed" }
+    "enums": { "collapsed": "Collapsed" },
+    "figmaContent": ["children"]
   },
   "figma": {
     "nodeId": "620:52",
@@ -213,5 +214,111 @@
       "Collapsed": ["false", "true"]
     }
   },
-  "tokensUsed": ["--atlas-background-hovered", "--atlas-border", "--atlas-border-width-1", "--atlas-border-width-2", "--atlas-content-width-xs", "--atlas-duration-base", "--atlas-easing-standard", "--atlas-focus-ring", "--atlas-font-size-xs", "--atlas-font-weight-medium", "--atlas-font-weight-semibold", "--atlas-foreground-muted", "--atlas-foreground-subtle", "--atlas-icon-size-xs", "--atlas-letter-spacing-wide", "--atlas-radius-md", "--atlas-spacing-0_5", "--atlas-spacing-1", "--atlas-spacing-2", "--atlas-spacing-3", "--atlas-spacing-4", "--atlas-spacing-8", "--atlas-surface", "--atlas-text-body-sm"]
+  "tokensUsed": ["--atlas-background-hovered", "--atlas-border", "--atlas-border-width-1", "--atlas-border-width-2", "--atlas-content-width-xs", "--atlas-duration-base", "--atlas-easing-standard", "--atlas-focus-ring", "--atlas-font-size-xs", "--atlas-font-weight-medium", "--atlas-font-weight-semibold", "--atlas-foreground-muted", "--atlas-foreground-subtle", "--atlas-icon-size-xs", "--atlas-letter-spacing-wide", "--atlas-radius-md", "--atlas-spacing-0_5", "--atlas-spacing-1", "--atlas-spacing-2", "--atlas-spacing-3", "--atlas-spacing-4", "--atlas-spacing-8", "--atlas-surface", "--atlas-text-body-sm"],
+  "module": {
+    "imports": [],
+    "parts": {
+      "SidebarBody": {
+        "propsType": "SidebarBodyProps",
+        "props": [
+          { "name": "children", "type": "React.ReactNode", "optional": true, "exact": true }
+        ],
+        "unions": {
+          "aria-autocomplete": ["both", "inline", "list", "none"],
+          "aria-dropeffect": ["copy", "execute", "link", "move", "none", "popup"],
+          "aria-live": ["assertive", "off", "polite"],
+          "aria-orientation": ["horizontal", "vertical"],
+          "aria-relevant": ["additions", "additions removals", "additions text", "all", "removals", "removals additions", "removals text", "text", "text additions", "text removals"],
+          "aria-sort": ["ascending", "descending", "none", "other"],
+          "enterKeyHint": ["done", "enter", "go", "next", "previous", "search", "send"],
+          "inputMode": ["decimal", "email", "none", "numeric", "search", "tel", "text", "url"],
+          "popover": ["", "auto", "hint", "manual"],
+          "popoverTargetAction": ["hide", "show", "toggle"],
+          "translate": ["no", "yes"],
+          "unselectable": ["off", "on"]
+        }
+      },
+      "SidebarCollapseToggle": {
+        "propsType": "SidebarCollapseToggleProps",
+        "props": [],
+        "unions": {
+          "aria-autocomplete": ["both", "inline", "list", "none"],
+          "aria-dropeffect": ["copy", "execute", "link", "move", "none", "popup"],
+          "aria-live": ["assertive", "off", "polite"],
+          "aria-orientation": ["horizontal", "vertical"],
+          "aria-relevant": ["additions", "additions removals", "additions text", "all", "removals", "removals additions", "removals text", "text", "text additions", "text removals"],
+          "aria-sort": ["ascending", "descending", "none", "other"],
+          "enterKeyHint": ["done", "enter", "go", "next", "previous", "search", "send"],
+          "inputMode": ["decimal", "email", "none", "numeric", "search", "tel", "text", "url"],
+          "popover": ["", "auto", "hint", "manual"],
+          "popoverTargetAction": ["hide", "show", "toggle"],
+          "translate": ["no", "yes"],
+          "type": ["button", "reset", "submit"],
+          "unselectable": ["off", "on"]
+        }
+      },
+      "SidebarFooter": {
+        "propsType": "SidebarFooterProps",
+        "props": [
+          { "name": "children", "type": "React.ReactNode", "optional": true, "exact": true }
+        ],
+        "unions": {
+          "aria-autocomplete": ["both", "inline", "list", "none"],
+          "aria-dropeffect": ["copy", "execute", "link", "move", "none", "popup"],
+          "aria-live": ["assertive", "off", "polite"],
+          "aria-orientation": ["horizontal", "vertical"],
+          "aria-relevant": ["additions", "additions removals", "additions text", "all", "removals", "removals additions", "removals text", "text", "text additions", "text removals"],
+          "aria-sort": ["ascending", "descending", "none", "other"],
+          "enterKeyHint": ["done", "enter", "go", "next", "previous", "search", "send"],
+          "inputMode": ["decimal", "email", "none", "numeric", "search", "tel", "text", "url"],
+          "popover": ["", "auto", "hint", "manual"],
+          "popoverTargetAction": ["hide", "show", "toggle"],
+          "translate": ["no", "yes"],
+          "unselectable": ["off", "on"]
+        }
+      },
+      "SidebarHeader": {
+        "propsType": "SidebarHeaderProps",
+        "props": [
+          { "name": "children", "type": "React.ReactNode", "optional": true, "exact": true }
+        ],
+        "unions": {
+          "aria-autocomplete": ["both", "inline", "list", "none"],
+          "aria-dropeffect": ["copy", "execute", "link", "move", "none", "popup"],
+          "aria-live": ["assertive", "off", "polite"],
+          "aria-orientation": ["horizontal", "vertical"],
+          "aria-relevant": ["additions", "additions removals", "additions text", "all", "removals", "removals additions", "removals text", "text", "text additions", "text removals"],
+          "aria-sort": ["ascending", "descending", "none", "other"],
+          "enterKeyHint": ["done", "enter", "go", "next", "previous", "search", "send"],
+          "inputMode": ["decimal", "email", "none", "numeric", "search", "tel", "text", "url"],
+          "popover": ["", "auto", "hint", "manual"],
+          "popoverTargetAction": ["hide", "show", "toggle"],
+          "translate": ["no", "yes"],
+          "unselectable": ["off", "on"]
+        }
+      },
+      "SidebarSection": {
+        "propsType": "SidebarSectionProps",
+        "props": [
+          { "name": "children", "type": "React.ReactNode", "optional": true, "exact": true },
+          { "name": "label", "type": "string", "optional": true, "exact": true }
+        ],
+        "unions": {
+          "aria-autocomplete": ["both", "inline", "list", "none"],
+          "aria-dropeffect": ["copy", "execute", "link", "move", "none", "popup"],
+          "aria-live": ["assertive", "off", "polite"],
+          "aria-orientation": ["horizontal", "vertical"],
+          "aria-relevant": ["additions", "additions removals", "additions text", "all", "removals", "removals additions", "removals text", "text", "text additions", "text removals"],
+          "aria-sort": ["ascending", "descending", "none", "other"],
+          "enterKeyHint": ["done", "enter", "go", "next", "previous", "search", "send"],
+          "inputMode": ["decimal", "email", "none", "numeric", "search", "tel", "text", "url"],
+          "popover": ["", "auto", "hint", "manual"],
+          "popoverTargetAction": ["hide", "show", "toggle"],
+          "translate": ["no", "yes"],
+          "unselectable": ["off", "on"]
+        }
+      }
+    },
+    "types": {}
+  }
 }

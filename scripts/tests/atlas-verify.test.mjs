@@ -9,7 +9,7 @@ import path from "node:path"
 import { fileURLToPath } from "node:url"
 
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..")
-// packages/registry carries the authored figma-axis-map.json that design/figma-code needs. It is in
+// packages/registry carries the authored figma-axis-map.json that design/figma-registry-code needs. It is in
 // this list because that check fails closed: a throwaway repo without the map is one whose Figma side
 // cannot be verified, and it says so rather than passing.
 const INPUTS = ["scripts", "packages/ui-web/src", "packages/figma-sync/code-connect", "packages/tokens", "packages/governance", "packages/registry", "atlas"]
@@ -189,21 +189,47 @@ test("design/snapshot-current passes when atlas/ matches the generator, fails wh
   assert.match(behind.mismatches.join("\n"), /atlas-sync would write/)
 }))
 
-// design/figma-code
-test("design/figma-code fails a member Figma has and code lacks", () => withRepo(({ dir }) => {
+// design/figma-registry-code
+test("design/figma-registry-code fails a member Figma has and code lacks", () => withRepo(({ dir }) => {
   edit(dir, "atlas/metadata/Badge.json", (s) => s.replace(/"Variant": \[/, '"Variant": ["sparkly", '))
-  const r = verify(dir, "figma-code")
+  const r = verify(dir, "figma-registry-code")
   assert.equal(r.status, "fail")
   assert.match(r.mismatches.join("\n"), /Badge\/Variant: Figma Badge\/Variant has "sparkly"/)
 }))
 
-test("design/figma-code fails closed on a schema-invalid component and still compares the rest", () => withRepo(({ dir }) => {
+test("design/figma-registry-code fails a registry slot Figma does not draw, on the registry side", () => withRepo(({ dir }) => {
+  const ok = verify(dir, "figma-registry-code")
+  assert.notEqual(ok.status, "fail", ok.mismatches.join("\n"))
+  assert.match(ok.note, /registry \d+ entries/)
+  edit(dir, "packages/registry/src/Alert.registry.json", (s) => s.replace('"slots": ["actions", "description", "title"]', '"slots": ["actions", "description", "icon", "title"]'))
+  const r = verify(dir, "figma-registry-code")
+  assert.equal(r.status, "fail")
+  assert.match(r.mismatches.join("\n"), /\[registry\] Alert: slot "icon" has no Figma counterpart/)
+}))
+
+test("design/figma-registry-code fails closed on a schema-invalid component and still compares the rest", () => withRepo(({ dir }) => {
   edit(dir, "atlas/metadata/Button.json", (s) => s.replace(/"figmaProperties": \{[^}]*\}/, '"figmaProperties": null'))
-  const r = verify(dir, "figma-code")
+  const r = verify(dir, "figma-registry-code")
   assert.equal(r.status, "fail")
   assert.match(r.mismatches.join("\n"), /atlas\/metadata\/Button\.json failed its schema — not compared/)
   assert.match(r.note, /^46\/47 components/)
 }))
+
+// design/registry-events, design/registry-fallback, design/registry-states (M3): PASS on the repo,
+// FAIL on one edit each. The rules themselves are unit-tested in registry-metrics.test.mjs.
+const registryEdit = (id, file, from, to, re) => test(`design/${id} passes the repo and fails ${re}`, () => withRepo(({ dir }) => {
+  const ok = verify(dir, id)
+  assert.equal(ok.status, "pass", ok.mismatches.join("\n"))
+  assert.ok(ok.inspected > 0)
+  assert.match(ok.note, /\/47 components registered/)
+  edit(dir, file, (s) => { assert.ok(s.includes(from), `${file} no longer contains ${from}`); return s.replace(from, to) })
+  const bad = verify(dir, id)
+  assert.equal(bad.status, "fail")
+  assert.match(bad.mismatches.join("\n"), re)
+}))
+registryEdit("registry-events", "packages/registry/src/Button.registry.json", '"handler": "onClick"', '"handler": "onPress"', /Button: event "click" → onPress, which Button does not have/)
+registryEdit("registry-fallback", "packages/registry/src/Field.registry.json", '"fallback": { "type": "Alert"', '"fallback": { "type": "Field"', /more than one terminal fallback/)
+registryEdit("registry-states", "packages/registry/src/TextField.registry.json", '"stateProps": { "disabled": "disabled", "error": "invalid" }', '"stateProps": { "disabled": "disabled", "error": "broken" }', /TextField: State "error" is prop-driven but stateProps names no prop/)
 
 // design/variants-sizes
 test("design/variants-sizes fails an unknown literal variant and passes a real one", () => withRepo(({ dir }) => {

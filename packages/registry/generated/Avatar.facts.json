@@ -6,17 +6,17 @@
   "part": "Avatar",
   "propsType": "AvatarProps",
   "props": [
-    { "name": "alt", "type": "string", "optional": true },
-    { "name": "badgeIcon", "type": "React.ReactNode", "optional": true },
-    { "name": "icon", "type": "React.ReactNode", "optional": true },
-    { "name": "initials", "type": "string", "optional": true },
-    { "name": "shape", "type": "AvatarShape", "optional": true },
-    { "name": "showBadgeIcon", "type": "boolean", "optional": true },
-    { "name": "showStatus", "type": "boolean", "optional": true },
-    { "name": "size", "type": "AvatarSize", "optional": true },
-    { "name": "src", "type": "string", "optional": true },
-    { "name": "statusIndicator", "type": "React.ReactNode", "optional": true },
-    { "name": "statusLabel", "type": "string", "optional": true }
+    { "name": "alt", "type": "string", "optional": true, "exact": true },
+    { "name": "badgeIcon", "type": "React.ReactNode", "optional": true, "exact": true },
+    { "name": "icon", "type": "React.ReactNode", "optional": true, "exact": true },
+    { "name": "initials", "type": "string", "optional": true, "exact": true },
+    { "name": "shape", "type": "AvatarShape", "optional": true, "exact": true },
+    { "name": "showBadgeIcon", "type": "boolean", "optional": true, "exact": true },
+    { "name": "showStatus", "type": "boolean", "optional": true, "exact": true },
+    { "name": "size", "type": "AvatarSize", "optional": true, "exact": true },
+    { "name": "src", "type": "string", "optional": true, "exact": true },
+    { "name": "statusIndicator", "type": "React.ReactNode", "optional": true, "exact": true },
+    { "name": "statusLabel", "type": "string", "optional": true, "exact": true }
   ],
   "inherited": {
     "AriaAttributes": ["aria-activedescendant", "aria-atomic", "aria-autocomplete", "aria-braillelabel", "aria-brailleroledescription", "aria-busy", "aria-checked", "aria-colcount", "aria-colindex", "aria-colindextext", "aria-colspan", "aria-controls", "aria-current", "aria-describedby", "aria-description", "aria-details", "aria-disabled", "aria-dropeffect", "aria-errormessage", "aria-expanded", "aria-flowto", "aria-grabbed", "aria-haspopup", "aria-hidden", "aria-invalid", "aria-keyshortcuts", "aria-label", "aria-labelledby", "aria-level", "aria-live", "aria-modal", "aria-multiline", "aria-multiselectable", "aria-orientation", "aria-owns", "aria-placeholder", "aria-posinset", "aria-pressed", "aria-readonly", "aria-relevant", "aria-required", "aria-roledescription", "aria-rowcount", "aria-rowindex", "aria-rowindextext", "aria-rowspan", "aria-selected", "aria-setsize", "aria-sort", "aria-valuemax", "aria-valuemin", "aria-valuenow", "aria-valuetext"],
@@ -214,7 +214,8 @@
     "bound": "Avatar",
     "instances": {},
     "stateProps": {},
-    "enums": { "shape": "Shape", "size": "Size", "type": "Type" }
+    "enums": { "shape": "Shape", "size": "Size", "type": "Type" },
+    "figmaContent": ["alt", "statusLabel"]
   },
   "figma": {
     "nodeId": "487:720",
@@ -224,5 +225,57 @@
       "Shape": ["circle", "squircle"]
     }
   },
-  "tokensUsed": ["--atlas-avatar-group-overlap", "--atlas-avatar-squircle-radius-lg", "--atlas-avatar-squircle-radius-md", "--atlas-avatar-squircle-radius-sm", "--atlas-avatar-squircle-radius-xl", "--atlas-avatar-squircle-radius-xs", "--atlas-background", "--atlas-background-muted", "--atlas-border-width-1", "--atlas-border-width-2", "--atlas-duration-base", "--atlas-duration-fast", "--atlas-easing-emphasized", "--atlas-easing-standard", "--atlas-focus-ring", "--atlas-font-sans", "--atlas-font-size-xs", "--atlas-font-weight-medium", "--atlas-foreground-muted", "--atlas-icon-size-md", "--atlas-icon-size-sm", "--atlas-icon-size-xs", "--atlas-line-height-tight", "--atlas-opacity-hover", "--atlas-primary", "--atlas-primary-foreground", "--atlas-radius-full", "--atlas-spacing-0", "--atlas-spacing-1", "--atlas-spacing-10", "--atlas-spacing-12", "--atlas-spacing-1_5", "--atlas-spacing-2", "--atlas-spacing-3", "--atlas-spacing-5", "--atlas-spacing-6", "--atlas-spacing-8", "--atlas-success", "--atlas-touch-min"]
+  "tokensUsed": ["--atlas-avatar-group-overlap", "--atlas-avatar-squircle-radius-lg", "--atlas-avatar-squircle-radius-md", "--atlas-avatar-squircle-radius-sm", "--atlas-avatar-squircle-radius-xl", "--atlas-avatar-squircle-radius-xs", "--atlas-background", "--atlas-background-muted", "--atlas-border-width-1", "--atlas-border-width-2", "--atlas-duration-base", "--atlas-duration-fast", "--atlas-easing-emphasized", "--atlas-easing-standard", "--atlas-focus-ring", "--atlas-font-sans", "--atlas-font-size-xs", "--atlas-font-weight-medium", "--atlas-foreground-muted", "--atlas-icon-size-md", "--atlas-icon-size-sm", "--atlas-icon-size-xs", "--atlas-line-height-tight", "--atlas-opacity-hover", "--atlas-primary", "--atlas-primary-foreground", "--atlas-radius-full", "--atlas-spacing-0", "--atlas-spacing-1", "--atlas-spacing-10", "--atlas-spacing-12", "--atlas-spacing-1_5", "--atlas-spacing-2", "--atlas-spacing-3", "--atlas-spacing-5", "--atlas-spacing-6", "--atlas-spacing-8", "--atlas-success", "--atlas-touch-min"],
+  "module": {
+    "imports": [
+      { "from": "@atlas/ui-web/primitives/Avatar/Avatar", "name": "AvatarGroupVariant", "kind": "named" },
+      { "from": "@atlas/ui-web/primitives/Avatar/Avatar", "name": "AvatarShape", "kind": "named" },
+      { "from": "@atlas/ui-web/primitives/Avatar/Avatar", "name": "AvatarSize", "kind": "named" }
+    ],
+    "parts": {
+      "AvatarGroup": {
+        "propsType": "AvatarGroupProps",
+        "props": [
+          { "name": "addLabel", "type": "string", "optional": true, "exact": true },
+          { "name": "children", "type": "React.ReactNode", "optional": false, "exact": true },
+          { "name": "onAdd", "type": "() => void", "optional": true, "exact": true },
+          { "name": "shape", "type": "AvatarShape", "optional": true, "exact": true },
+          { "name": "showAdd", "type": "boolean", "optional": true, "exact": true },
+          { "name": "size", "type": "AvatarSize", "optional": true, "exact": true },
+          { "name": "variant", "type": "AvatarGroupVariant", "optional": true, "exact": true }
+        ],
+        "unions": {
+          "aria-autocomplete": ["both", "inline", "list", "none"],
+          "aria-dropeffect": ["copy", "execute", "link", "move", "none", "popup"],
+          "aria-live": ["assertive", "off", "polite"],
+          "aria-orientation": ["horizontal", "vertical"],
+          "aria-relevant": ["additions", "additions removals", "additions text", "all", "removals", "removals additions", "removals text", "text", "text additions", "text removals"],
+          "aria-sort": ["ascending", "descending", "none", "other"],
+          "enterKeyHint": ["done", "enter", "go", "next", "previous", "search", "send"],
+          "inputMode": ["decimal", "email", "none", "numeric", "search", "tel", "text", "url"],
+          "popover": ["", "auto", "hint", "manual"],
+          "popoverTargetAction": ["hide", "show", "toggle"],
+          "shape": ["circle", "squircle"],
+          "size": ["lg", "md", "sm", "xl", "xs"],
+          "translate": ["no", "yes"],
+          "unselectable": ["off", "on"],
+          "variant": ["animated", "default"]
+        }
+      }
+    },
+    "types": {
+      "AvatarGroupVariant": {
+        "kind": "union",
+        "members": ["animated", "default"]
+      },
+      "AvatarShape": {
+        "kind": "union",
+        "members": ["circle", "squircle"]
+      },
+      "AvatarSize": {
+        "kind": "union",
+        "members": ["lg", "md", "sm", "xl", "xs"]
+      }
+    }
+  }
 }

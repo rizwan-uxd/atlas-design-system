@@ -6,11 +6,11 @@
   "part": "Sparkline",
   "propsType": "SparklineProps",
   "props": [
-    { "name": "label", "type": "string", "optional": false },
-    { "name": "size", "type": "SparklineSize", "optional": true },
-    { "name": "tone", "type": "SparklineTone", "optional": true },
-    { "name": "values", "type": "number[]", "optional": false },
-    { "name": "variant", "type": "SparklineVariant", "optional": true }
+    { "name": "label", "type": "string", "optional": false, "exact": true },
+    { "name": "size", "type": "SparklineSize", "optional": true, "exact": true },
+    { "name": "tone", "type": "SparklineTone", "optional": true, "exact": true },
+    { "name": "values", "type": "number[]", "optional": false, "exact": true },
+    { "name": "variant", "type": "SparklineVariant", "optional": true, "exact": true }
   ],
   "inherited": {
     "AriaAttributes": ["aria-activedescendant", "aria-atomic", "aria-autocomplete", "aria-braillelabel", "aria-brailleroledescription", "aria-busy", "aria-checked", "aria-colcount", "aria-colindex", "aria-colindextext", "aria-colspan", "aria-controls", "aria-current", "aria-describedby", "aria-description", "aria-details", "aria-disabled", "aria-dropeffect", "aria-errormessage", "aria-expanded", "aria-flowto", "aria-grabbed", "aria-haspopup", "aria-hidden", "aria-invalid", "aria-keyshortcuts", "aria-label", "aria-labelledby", "aria-level", "aria-live", "aria-modal", "aria-multiline", "aria-multiselectable", "aria-orientation", "aria-owns", "aria-placeholder", "aria-posinset", "aria-pressed", "aria-readonly", "aria-relevant", "aria-required", "aria-roledescription", "aria-rowcount", "aria-rowindex", "aria-rowindextext", "aria-rowspan", "aria-selected", "aria-setsize", "aria-sort", "aria-valuemax", "aria-valuemin", "aria-valuenow", "aria-valuetext"],
@@ -215,7 +215,8 @@
     "bound": "Sparkline",
     "instances": {},
     "stateProps": {},
-    "enums": { "size": "Size", "tone": "Tone", "variant": "Variant" }
+    "enums": { "size": "Size", "tone": "Tone", "variant": "Variant" },
+    "figmaContent": ["label"]
   },
   "figma": {
     "nodeId": "953:48",
@@ -225,5 +226,27 @@
       "Size": ["sm", "md", "lg"]
     }
   },
-  "tokensUsed": ["--atlas-background-muted", "--atlas-border-width-2", "--atlas-danger", "--atlas-danger-subtle", "--atlas-foreground-muted", "--atlas-spacing-10", "--atlas-spacing-6", "--atlas-spacing-8", "--atlas-success", "--atlas-success-subtle"]
+  "tokensUsed": ["--atlas-background-muted", "--atlas-border-width-2", "--atlas-danger", "--atlas-danger-subtle", "--atlas-foreground-muted", "--atlas-spacing-10", "--atlas-spacing-6", "--atlas-spacing-8", "--atlas-success", "--atlas-success-subtle"],
+  "module": {
+    "imports": [
+      { "from": "@atlas/ui-web/primitives/Sparkline/Sparkline", "name": "SparklineSize", "kind": "named" },
+      { "from": "@atlas/ui-web/primitives/Sparkline/Sparkline", "name": "SparklineTone", "kind": "named" },
+      { "from": "@atlas/ui-web/primitives/Sparkline/Sparkline", "name": "SparklineVariant", "kind": "named" }
+    ],
+    "parts": {},
+    "types": {
+      "SparklineSize": {
+        "kind": "union",
+        "members": ["lg", "md", "sm"]
+      },
+      "SparklineTone": {
+        "kind": "union",
+        "members": ["negative", "neutral", "positive"]
+      },
+      "SparklineVariant": {
+        "kind": "union",
+        "members": ["area", "line"]
+      }
+    }
+  }
 }

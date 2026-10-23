@@ -6,9 +6,9 @@
   "part": "ButtonGroup",
   "propsType": "ButtonGroupProps",
   "props": [
-    { "name": "children", "type": "React.ReactNode", "optional": true },
-    { "name": "orientation", "type": "ButtonGroupOrientation", "optional": true },
-    { "name": "size", "type": "ButtonGroupSize", "optional": true }
+    { "name": "children", "type": "React.ReactNode", "optional": true, "exact": true },
+    { "name": "orientation", "type": "ButtonGroupOrientation", "optional": true, "exact": true },
+    { "name": "size", "type": "ButtonGroupSize", "optional": true, "exact": true }
   ],
   "inherited": {
     "AriaAttributes": ["aria-activedescendant", "aria-atomic", "aria-autocomplete", "aria-braillelabel", "aria-brailleroledescription", "aria-busy", "aria-checked", "aria-colcount", "aria-colindex", "aria-colindextext", "aria-colspan", "aria-controls", "aria-current", "aria-describedby", "aria-description", "aria-details", "aria-disabled", "aria-dropeffect", "aria-errormessage", "aria-expanded", "aria-flowto", "aria-grabbed", "aria-haspopup", "aria-hidden", "aria-invalid", "aria-keyshortcuts", "aria-label", "aria-labelledby", "aria-level", "aria-live", "aria-modal", "aria-multiline", "aria-multiselectable", "aria-orientation", "aria-owns", "aria-placeholder", "aria-posinset", "aria-pressed", "aria-readonly", "aria-relevant", "aria-required", "aria-roledescription", "aria-rowcount", "aria-rowindex", "aria-rowindextext", "aria-rowspan", "aria-selected", "aria-setsize", "aria-sort", "aria-valuemax", "aria-valuemin", "aria-valuenow", "aria-valuetext"],
@@ -206,7 +206,8 @@
     "bound": "ButtonGroup",
     "instances": {},
     "stateProps": {},
-    "enums": { "orientation": "Orientation", "size": "Size" }
+    "enums": { "orientation": "Orientation", "size": "Size" },
+    "figmaContent": ["aria-label", "children"]
   },
   "figma": {
     "nodeId": "666:5817",
@@ -215,5 +216,86 @@
       "Size": ["sm", "md", "lg"]
     }
   },
-  "tokensUsed": ["--atlas-border-width-0", "--atlas-border-width-1", "--atlas-radius-none", "--atlas-spacing-0", "--atlas-spacing-1"]
+  "tokensUsed": ["--atlas-border-width-0", "--atlas-border-width-1", "--atlas-radius-none", "--atlas-spacing-0", "--atlas-spacing-1"],
+  "module": {
+    "imports": [
+      { "from": "@atlas/ui-web/compositions/ButtonGroup/ButtonGroup", "name": "ButtonGroupItemVariant", "kind": "named" },
+      { "from": "@atlas/ui-web/compositions/ButtonGroup/ButtonGroup", "name": "ButtonGroupOrientation", "kind": "named" },
+      { "from": "@atlas/ui-web/compositions/ButtonGroup/ButtonGroup", "name": "ButtonGroupPosition", "kind": "named" },
+      { "from": "@atlas/ui-web/compositions/ButtonGroup/ButtonGroup", "name": "ButtonGroupSize", "kind": "named" }
+    ],
+    "parts": {
+      "ButtonGroupButton": {
+        "propsType": "ButtonGroupButtonProps",
+        "props": [
+          { "name": "position", "type": "ButtonGroupPosition", "optional": true, "exact": true },
+          { "name": "size", "type": "ButtonGroupSize", "optional": true, "exact": true },
+          { "name": "variant", "type": "ButtonGroupItemVariant", "optional": true, "exact": true }
+        ],
+        "unions": {
+          "aria-autocomplete": ["both", "inline", "list", "none"],
+          "aria-dropeffect": ["copy", "execute", "link", "move", "none", "popup"],
+          "aria-live": ["assertive", "off", "polite"],
+          "aria-orientation": ["horizontal", "vertical"],
+          "aria-relevant": ["additions", "additions removals", "additions text", "all", "removals", "removals additions", "removals text", "text", "text additions", "text removals"],
+          "aria-sort": ["ascending", "descending", "none", "other"],
+          "enterKeyHint": ["done", "enter", "go", "next", "previous", "search", "send"],
+          "inputMode": ["decimal", "email", "none", "numeric", "search", "tel", "text", "url"],
+          "popover": ["", "auto", "hint", "manual"],
+          "popoverTargetAction": ["hide", "show", "toggle"],
+          "position": ["bottom", "left", "middle", "right", "single", "top"],
+          "size": ["lg", "md", "sm"],
+          "translate": ["no", "yes"],
+          "type": ["button", "reset", "submit"],
+          "unselectable": ["off", "on"],
+          "variant": ["ghost", "outline", "secondary"]
+        }
+      },
+      "ButtonGroupIconButton": {
+        "propsType": "ButtonGroupIconButtonProps",
+        "props": [
+          { "name": "aria-label", "type": "string", "optional": true, "exact": true },
+          { "name": "position", "type": "ButtonGroupPosition", "optional": true, "exact": true },
+          { "name": "size", "type": "ButtonGroupSize", "optional": true, "exact": true },
+          { "name": "variant", "type": "ButtonGroupItemVariant", "optional": true, "exact": true }
+        ],
+        "unions": {
+          "aria-autocomplete": ["both", "inline", "list", "none"],
+          "aria-dropeffect": ["copy", "execute", "link", "move", "none", "popup"],
+          "aria-live": ["assertive", "off", "polite"],
+          "aria-orientation": ["horizontal", "vertical"],
+          "aria-relevant": ["additions", "additions removals", "additions text", "all", "removals", "removals additions", "removals text", "text", "text additions", "text removals"],
+          "aria-sort": ["ascending", "descending", "none", "other"],
+          "enterKeyHint": ["done", "enter", "go", "next", "previous", "search", "send"],
+          "inputMode": ["decimal", "email", "none", "numeric", "search", "tel", "text", "url"],
+          "popover": ["", "auto", "hint", "manual"],
+          "popoverTargetAction": ["hide", "show", "toggle"],
+          "position": ["bottom", "left", "middle", "right", "single", "top"],
+          "size": ["lg", "md", "sm"],
+          "translate": ["no", "yes"],
+          "type": ["button", "reset", "submit"],
+          "unselectable": ["off", "on"],
+          "variant": ["ghost", "outline", "secondary"]
+        }
+      }
+    },
+    "types": {
+      "ButtonGroupItemVariant": {
+        "kind": "union",
+        "members": ["ghost", "outline", "secondary"]
+      },
+      "ButtonGroupOrientation": {
+        "kind": "union",
+        "members": ["horizontal", "vertical"]
+      },
+      "ButtonGroupPosition": {
+        "kind": "union",
+        "members": ["bottom", "left", "middle", "right", "single", "top"]
+      },
+      "ButtonGroupSize": {
+        "kind": "union",
+        "members": ["lg", "md", "sm"]
+      }
+    }
+  }
 }

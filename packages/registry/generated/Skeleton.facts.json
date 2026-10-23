@@ -6,7 +6,7 @@
   "part": "Skeleton",
   "propsType": "SkeletonProps",
   "props": [
-    { "name": "shape", "type": "SkeletonShape", "optional": true }
+    { "name": "shape", "type": "SkeletonShape", "optional": true, "exact": true }
   ],
   "inherited": {
     "AriaAttributes": ["aria-activedescendant", "aria-atomic", "aria-autocomplete", "aria-braillelabel", "aria-brailleroledescription", "aria-busy", "aria-checked", "aria-colcount", "aria-colindex", "aria-colindextext", "aria-colspan", "aria-controls", "aria-current", "aria-describedby", "aria-description", "aria-details", "aria-disabled", "aria-dropeffect", "aria-errormessage", "aria-expanded", "aria-flowto", "aria-grabbed", "aria-haspopup", "aria-hidden", "aria-invalid", "aria-keyshortcuts", "aria-label", "aria-labelledby", "aria-level", "aria-live", "aria-modal", "aria-multiline", "aria-multiselectable", "aria-orientation", "aria-owns", "aria-placeholder", "aria-posinset", "aria-pressed", "aria-readonly", "aria-relevant", "aria-required", "aria-roledescription", "aria-rowcount", "aria-rowindex", "aria-rowindextext", "aria-rowspan", "aria-selected", "aria-setsize", "aria-sort", "aria-valuemax", "aria-valuemin", "aria-valuenow", "aria-valuetext"],
@@ -203,7 +203,8 @@
     "bound": "Skeleton",
     "instances": {},
     "stateProps": {},
-    "enums": { "shape": "Shape" }
+    "enums": { "shape": "Shape" },
+    "figmaContent": []
   },
   "figma": {
     "nodeId": "531:5",
@@ -211,5 +212,17 @@
       "Shape": ["rect", "circle"]
     }
   },
-  "tokensUsed": ["--atlas-background-muted", "--atlas-duration-pulse", "--atlas-easing-standard", "--atlas-opacity-pulse", "--atlas-radius-full", "--atlas-radius-md", "--atlas-spacing-10", "--atlas-spacing-4"]
+  "tokensUsed": ["--atlas-background-muted", "--atlas-duration-pulse", "--atlas-easing-standard", "--atlas-opacity-pulse", "--atlas-radius-full", "--atlas-radius-md", "--atlas-spacing-10", "--atlas-spacing-4"],
+  "module": {
+    "imports": [
+      { "from": "@atlas/ui-web/primitives/Skeleton/Skeleton", "name": "SkeletonShape", "kind": "named" }
+    ],
+    "parts": {},
+    "types": {
+      "SkeletonShape": {
+        "kind": "union",
+        "members": ["circle", "rect"]
+      }
+    }
+  }
 }

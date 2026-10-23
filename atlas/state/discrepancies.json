@@ -1244,6 +1244,14 @@
       "detectedBy": "sync:description",
       "firstSeen": "2026-10-21T12:25:27.000Z",
       "lastSeen": "2026-10-21T12:25:27.000Z"
+    },
+    {
+      "id": "DISC-105",
+      "component": "Pagination",
+      "side": "closed",
+      "status": "closed",
+      "issue": "Figma draws Pagination/Position = start|middle|end and Pagination has no position prop (found by design/figma-code, M1, 2026-10-22).",
+      "resolution": "Owner decision 2026-10-23 (DEC-080): Position is derived state, computed from page and pageCount in Pagination.tsx. The axis is classified state in packages/registry/figma-axis-map.json; no prop is added."
     }
   ]
 }

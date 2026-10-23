@@ -6,13 +6,13 @@
   "part": "OtpInput",
   "propsType": "OtpInputProps",
   "props": [
-    { "name": "defaultValue", "type": "string", "optional": true },
-    { "name": "invalid", "type": "boolean", "optional": true },
-    { "name": "length", "type": "number", "optional": true },
-    { "name": "onComplete", "type": "(value: string) => void", "optional": true },
-    { "name": "onValueChange", "type": "(value: string) => void", "optional": true },
-    { "name": "size", "type": "OtpInputSize", "optional": true },
-    { "name": "value", "type": "string", "optional": true }
+    { "name": "defaultValue", "type": "string", "optional": true, "exact": true },
+    { "name": "invalid", "type": "boolean", "optional": true, "exact": true },
+    { "name": "length", "type": "number", "optional": true, "exact": true },
+    { "name": "onComplete", "type": "(value: string) => void", "optional": true, "exact": true },
+    { "name": "onValueChange", "type": "(value: string) => void", "optional": true, "exact": true },
+    { "name": "size", "type": "OtpInputSize", "optional": true, "exact": true },
+    { "name": "value", "type": "string", "optional": true, "exact": true }
   ],
   "inherited": {
     "AriaAttributes": ["aria-activedescendant", "aria-atomic", "aria-autocomplete", "aria-braillelabel", "aria-brailleroledescription", "aria-busy", "aria-checked", "aria-colcount", "aria-colindex", "aria-colindextext", "aria-colspan", "aria-controls", "aria-current", "aria-describedby", "aria-description", "aria-details", "aria-disabled", "aria-dropeffect", "aria-errormessage", "aria-expanded", "aria-flowto", "aria-grabbed", "aria-haspopup", "aria-hidden", "aria-invalid", "aria-keyshortcuts", "aria-label", "aria-labelledby", "aria-level", "aria-live", "aria-modal", "aria-multiline", "aria-multiselectable", "aria-orientation", "aria-owns", "aria-placeholder", "aria-posinset", "aria-pressed", "aria-readonly", "aria-relevant", "aria-required", "aria-roledescription", "aria-rowcount", "aria-rowindex", "aria-rowindextext", "aria-rowspan", "aria-selected", "aria-setsize", "aria-sort", "aria-valuemax", "aria-valuemin", "aria-valuenow", "aria-valuetext"],
@@ -210,7 +210,8 @@
     "bound": "OtpInput",
     "instances": {},
     "stateProps": { "disabled": "disabled", "error": "invalid" },
-    "enums": { "disabled": "State", "invalid": "State", "length": "Length", "size": "Size" }
+    "enums": { "disabled": "State", "invalid": "State", "length": "Length", "size": "Size" },
+    "figmaContent": ["aria-label"]
   },
   "figma": {
     "nodeId": "979:1039",
@@ -220,5 +221,17 @@
       "Length": ["4", "5", "6", "7", "8"]
     }
   },
-  "tokensUsed": ["--atlas-border-width-1", "--atlas-border-width-2", "--atlas-duration-fast", "--atlas-easing-standard", "--atlas-focus-ring", "--atlas-font-sans", "--atlas-input-background", "--atlas-input-background-disabled", "--atlas-input-border", "--atlas-input-border-focus", "--atlas-input-border-hover", "--atlas-input-border-invalid", "--atlas-input-foreground", "--atlas-input-foreground-disabled", "--atlas-input-radius", "--atlas-input-size-lg-font-size", "--atlas-input-size-lg-height", "--atlas-input-size-md-font-size", "--atlas-input-size-md-height", "--atlas-input-size-sm-font-size", "--atlas-input-size-sm-height", "--atlas-spacing-0_5", "--atlas-spacing-2"]
+  "tokensUsed": ["--atlas-border-width-1", "--atlas-border-width-2", "--atlas-duration-fast", "--atlas-easing-standard", "--atlas-focus-ring", "--atlas-font-sans", "--atlas-input-background", "--atlas-input-background-disabled", "--atlas-input-border", "--atlas-input-border-focus", "--atlas-input-border-hover", "--atlas-input-border-invalid", "--atlas-input-foreground", "--atlas-input-foreground-disabled", "--atlas-input-radius", "--atlas-input-size-lg-font-size", "--atlas-input-size-lg-height", "--atlas-input-size-md-font-size", "--atlas-input-size-md-height", "--atlas-input-size-sm-font-size", "--atlas-input-size-sm-height", "--atlas-spacing-0_5", "--atlas-spacing-2"],
+  "module": {
+    "imports": [
+      { "from": "@atlas/ui-web/compositions/OtpInput/OtpInput", "name": "OtpInputSize", "kind": "named" }
+    ],
+    "parts": {},
+    "types": {
+      "OtpInputSize": {
+        "kind": "union",
+        "members": ["lg", "md", "sm"]
+      }
+    }
+  }
 }

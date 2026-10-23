@@ -6,20 +6,20 @@
   "part": "Tabs",
   "propsType": "TabsProps",
   "props": [
-    { "name": "activationMode", "type": "\"automatic\" | \"manual\"", "optional": true },
-    { "name": "activeTab", "type": "string", "optional": true },
-    { "name": "animated", "type": "boolean", "optional": true },
-    { "name": "children", "type": "React.ReactNode", "optional": true },
-    { "name": "className", "type": "string", "optional": true },
-    { "name": "defaultTab", "type": "string", "optional": true },
-    { "name": "defaultValue", "type": "string", "optional": true },
-    { "name": "items", "type": "TabItem[]", "optional": false },
-    { "name": "onTabChange", "type": "(value: string) => void", "optional": true },
-    { "name": "onValueChange", "type": "(value: string) => void", "optional": true },
-    { "name": "orientation", "type": "TabsOrientation", "optional": true },
-    { "name": "size", "type": "TabsSize", "optional": true },
-    { "name": "value", "type": "string", "optional": true },
-    { "name": "variant", "type": "TabsVariant", "optional": true }
+    { "name": "activationMode", "type": "\"automatic\" | \"manual\"", "optional": true, "exact": true },
+    { "name": "activeTab", "type": "string", "optional": true, "exact": true },
+    { "name": "animated", "type": "boolean", "optional": true, "exact": true },
+    { "name": "children", "type": "React.ReactNode", "optional": true, "exact": true },
+    { "name": "className", "type": "string", "optional": true, "exact": true },
+    { "name": "defaultTab", "type": "string", "optional": true, "exact": true },
+    { "name": "defaultValue", "type": "string", "optional": true, "exact": true },
+    { "name": "items", "type": "TabItem[]", "optional": false, "exact": true },
+    { "name": "onTabChange", "type": "(value: string) => void", "optional": true, "exact": true },
+    { "name": "onValueChange", "type": "(value: string) => void", "optional": true, "exact": true },
+    { "name": "orientation", "type": "TabsOrientation", "optional": true, "exact": true },
+    { "name": "size", "type": "TabsSize", "optional": true, "exact": true },
+    { "name": "value", "type": "string", "optional": true, "exact": true },
+    { "name": "variant", "type": "TabsVariant", "optional": true, "exact": true }
   ],
   "inherited": {},
   "events": [
@@ -37,7 +37,8 @@
     "bound": "Tabs",
     "instances": { "badge": "Badge", "icon": "Icon slot" },
     "stateProps": {},
-    "enums": { "size": "Size", "variant": "Variant" }
+    "enums": { "size": "Size", "variant": "Variant" },
+    "figmaContent": []
   },
   "figma": {
     "nodeId": "146:54",
@@ -47,5 +48,93 @@
       "State": ["default", "hover", "focus-visible", "selected", "disabled"]
     }
   },
-  "tokensUsed": ["--atlas-background-muted", "--atlas-background-subtle", "--atlas-border", "--atlas-border-width-1", "--atlas-border-width-2", "--atlas-duration-base", "--atlas-duration-fast", "--atlas-easing-emphasized", "--atlas-easing-standard", "--atlas-focus-ring", "--atlas-font-sans", "--atlas-font-weight-medium", "--atlas-font-weight-semibold", "--atlas-foreground", "--atlas-foreground-disabled", "--atlas-foreground-muted", "--atlas-primary", "--atlas-primary-foreground", "--atlas-radius-full", "--atlas-radius-md", "--atlas-radius-sm", "--atlas-shadow-sm", "--atlas-spacing-0_5", "--atlas-spacing-1", "--atlas-spacing-10", "--atlas-spacing-12", "--atlas-spacing-2", "--atlas-spacing-3", "--atlas-spacing-4", "--atlas-spacing-5", "--atlas-spacing-8", "--atlas-surface", "--atlas-text-body", "--atlas-text-body-sm", "--atlas-touch-min"]
+  "tokensUsed": ["--atlas-background-muted", "--atlas-background-subtle", "--atlas-border", "--atlas-border-width-1", "--atlas-border-width-2", "--atlas-duration-base", "--atlas-duration-fast", "--atlas-easing-emphasized", "--atlas-easing-standard", "--atlas-focus-ring", "--atlas-font-sans", "--atlas-font-weight-medium", "--atlas-font-weight-semibold", "--atlas-foreground", "--atlas-foreground-disabled", "--atlas-foreground-muted", "--atlas-primary", "--atlas-primary-foreground", "--atlas-radius-full", "--atlas-radius-md", "--atlas-radius-sm", "--atlas-shadow-sm", "--atlas-spacing-0_5", "--atlas-spacing-1", "--atlas-spacing-10", "--atlas-spacing-12", "--atlas-spacing-2", "--atlas-spacing-3", "--atlas-spacing-4", "--atlas-spacing-5", "--atlas-spacing-8", "--atlas-surface", "--atlas-text-body", "--atlas-text-body-sm", "--atlas-touch-min"],
+  "module": {
+    "imports": [
+      { "from": "@atlas/ui-web/patterns/Tabs/Tabs", "name": "TabItem", "kind": "named" },
+      { "from": "@atlas/ui-web/patterns/Tabs/Tabs", "name": "TabsOrientation", "kind": "named" },
+      { "from": "@atlas/ui-web/patterns/Tabs/Tabs", "name": "TabsSize", "kind": "named" },
+      { "from": "@atlas/ui-web/patterns/Tabs/Tabs", "name": "TabsVariant", "kind": "named" }
+    ],
+    "parts": {
+      "TabsList": {
+        "propsType": "TabsListProps",
+        "props": [
+          { "name": "aria-label", "type": "string", "optional": true, "exact": true },
+          { "name": "children", "type": "React.ReactNode", "optional": true, "exact": true },
+          { "name": "className", "type": "string", "optional": true, "exact": true }
+        ],
+        "unions": {}
+      },
+      "TabsPanel": {
+        "propsType": "TabsPanelProps",
+        "props": [
+          { "name": "children", "type": "React.ReactNode", "optional": true, "exact": true },
+          { "name": "className", "type": "string", "optional": true, "exact": true },
+          { "name": "forceMount", "type": "true", "optional": true, "exact": true },
+          { "name": "value", "type": "string", "optional": false, "exact": true }
+        ],
+        "unions": {}
+      },
+      "TabsRoot": {
+        "propsType": "TabsRootProps",
+        "props": [
+          { "name": "activationMode", "type": "\"automatic\" | \"manual\"", "optional": true, "exact": true },
+          { "name": "animated", "type": "boolean", "optional": true, "exact": true },
+          { "name": "children", "type": "React.ReactNode", "optional": true, "exact": true },
+          { "name": "className", "type": "string", "optional": true, "exact": true },
+          { "name": "defaultValue", "type": "string", "optional": true, "exact": true },
+          { "name": "onValueChange", "type": "(value: string) => void", "optional": true, "exact": true },
+          { "name": "orientation", "type": "TabsOrientation", "optional": true, "exact": true },
+          { "name": "size", "type": "TabsSize", "optional": true, "exact": true },
+          { "name": "value", "type": "string", "optional": true, "exact": true },
+          { "name": "variant", "type": "TabsVariant", "optional": true, "exact": true }
+        ],
+        "unions": {
+          "activationMode": ["automatic", "manual"],
+          "orientation": ["horizontal", "vertical"],
+          "size": ["lg", "md", "sm"],
+          "variant": ["line", "outline", "pill", "segmented"]
+        }
+      },
+      "TabsTrigger": {
+        "propsType": "TabsTriggerProps",
+        "props": [
+          { "name": "badge", "type": "React.ReactNode", "optional": true, "exact": true },
+          { "name": "children", "type": "React.ReactNode", "optional": true, "exact": true },
+          { "name": "className", "type": "string", "optional": true, "exact": true },
+          { "name": "disabled", "type": "boolean", "optional": true, "exact": true },
+          { "name": "leadingIcon", "type": "React.ReactNode", "optional": true, "exact": true },
+          { "name": "value", "type": "string", "optional": false, "exact": true }
+        ],
+        "unions": {}
+      }
+    },
+    "types": {
+      "TabItem": {
+        "kind": "object",
+        "props": [
+          { "name": "badge", "type": "React.ReactNode", "optional": true, "exact": true },
+          { "name": "content", "type": "React.ReactNode", "optional": false, "exact": true },
+          { "name": "disabled", "type": "boolean", "optional": true, "exact": true },
+          { "name": "icon", "type": "React.ReactNode", "optional": true, "exact": true },
+          { "name": "id", "type": "string", "optional": false, "exact": true },
+          { "name": "label", "type": "React.ReactNode", "optional": false, "exact": true }
+        ],
+        "closed": true
+      },
+      "TabsOrientation": {
+        "kind": "union",
+        "members": ["horizontal", "vertical"]
+      },
+      "TabsSize": {
+        "kind": "union",
+        "members": ["lg", "md", "sm"]
+      },
+      "TabsVariant": {
+        "kind": "union",
+        "members": ["line", "outline", "pill", "segmented"]
+      }
+    }
+  }
 }

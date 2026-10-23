@@ -6,17 +6,17 @@
   "part": "NavBar",
   "propsType": "NavBarProps",
   "props": [
-    { "name": "actions", "type": "React.ReactNode", "optional": true },
-    { "name": "brand", "type": "React.ReactNode", "optional": true },
-    { "name": "brandHref", "type": "string", "optional": true },
-    { "name": "breadcrumb", "type": "React.ReactNode", "optional": true },
-    { "name": "className", "type": "string", "optional": true },
-    { "name": "hideOnScroll", "type": "boolean", "optional": true },
-    { "name": "links", "type": "NavLink[]", "optional": true },
-    { "name": "search", "type": "React.ReactNode", "optional": true },
-    { "name": "size", "type": "NavBarSize", "optional": true },
-    { "name": "style", "type": "React.CSSProperties", "optional": true },
-    { "name": "variant", "type": "NavBarVariant", "optional": true }
+    { "name": "actions", "type": "React.ReactNode", "optional": true, "exact": true },
+    { "name": "brand", "type": "React.ReactNode", "optional": true, "exact": true },
+    { "name": "brandHref", "type": "string", "optional": true, "exact": true },
+    { "name": "breadcrumb", "type": "React.ReactNode", "optional": true, "exact": true },
+    { "name": "className", "type": "string", "optional": true, "exact": true },
+    { "name": "hideOnScroll", "type": "boolean", "optional": true, "exact": true },
+    { "name": "links", "type": "NavLink[]", "optional": true, "exact": true },
+    { "name": "search", "type": "React.ReactNode", "optional": true, "exact": true },
+    { "name": "size", "type": "NavBarSize", "optional": true, "exact": true },
+    { "name": "style", "type": "React.CSSProperties", "optional": true, "exact": true },
+    { "name": "variant", "type": "NavBarVariant", "optional": true, "exact": true }
   ],
   "inherited": {},
   "events": [],
@@ -29,7 +29,8 @@
     "bound": "NavBar",
     "instances": {},
     "stateProps": {},
-    "enums": { "size": "Size", "variant": "Variant" }
+    "enums": { "size": "Size", "variant": "Variant" },
+    "figmaContent": ["actions", "brand", "breadcrumb", "search"]
   },
   "figma": {
     "nodeId": "148:306",
@@ -39,5 +40,98 @@
       "State": ["default", "disabled"]
     }
   },
-  "tokensUsed": ["--atlas-background", "--atlas-background-subtle", "--atlas-border", "--atlas-border-subtle", "--atlas-border-width-1", "--atlas-border-width-2", "--atlas-duration-base", "--atlas-duration-fast", "--atlas-easing-standard", "--atlas-focus-ring", "--atlas-font-sans", "--atlas-font-size-lg", "--atlas-font-size-xs", "--atlas-font-weight-medium", "--atlas-font-weight-semibold", "--atlas-foreground", "--atlas-foreground-disabled", "--atlas-foreground-muted", "--atlas-line-height-tight", "--atlas-primary", "--atlas-radius-full", "--atlas-radius-md", "--atlas-radius-sm", "--atlas-radius-xl", "--atlas-safe-bottom", "--atlas-safe-top", "--atlas-shadow-lg", "--atlas-shadow-md", "--atlas-shadow-sm", "--atlas-spacing-0_5", "--atlas-spacing-1", "--atlas-spacing-10", "--atlas-spacing-12", "--atlas-spacing-16", "--atlas-spacing-2", "--atlas-spacing-3", "--atlas-spacing-4", "--atlas-spacing-6", "--atlas-spacing-8", "--atlas-surface", "--atlas-surface-raised", "--atlas-text-body", "--atlas-text-body-sm", "--atlas-text-h4", "--atlas-touch-min", "--atlas-z-sticky"]
+  "tokensUsed": ["--atlas-background", "--atlas-background-subtle", "--atlas-border", "--atlas-border-subtle", "--atlas-border-width-1", "--atlas-border-width-2", "--atlas-duration-base", "--atlas-duration-fast", "--atlas-easing-standard", "--atlas-focus-ring", "--atlas-font-sans", "--atlas-font-size-lg", "--atlas-font-size-xs", "--atlas-font-weight-medium", "--atlas-font-weight-semibold", "--atlas-foreground", "--atlas-foreground-disabled", "--atlas-foreground-muted", "--atlas-line-height-tight", "--atlas-primary", "--atlas-radius-full", "--atlas-radius-md", "--atlas-radius-sm", "--atlas-radius-xl", "--atlas-safe-bottom", "--atlas-safe-top", "--atlas-shadow-lg", "--atlas-shadow-md", "--atlas-shadow-sm", "--atlas-spacing-0_5", "--atlas-spacing-1", "--atlas-spacing-10", "--atlas-spacing-12", "--atlas-spacing-16", "--atlas-spacing-2", "--atlas-spacing-3", "--atlas-spacing-4", "--atlas-spacing-6", "--atlas-spacing-8", "--atlas-surface", "--atlas-surface-raised", "--atlas-text-body", "--atlas-text-body-sm", "--atlas-text-h4", "--atlas-touch-min", "--atlas-z-sticky"],
+  "module": {
+    "imports": [
+      { "from": "@atlas/ui-web/layouts/NavBar/NavBar", "name": "NavBarSize", "kind": "named" },
+      { "from": "@atlas/ui-web/layouts/NavBar/NavBar", "name": "NavBarVariant", "kind": "named" },
+      { "from": "@atlas/ui-web/layouts/NavBar/NavBar", "name": "NavLink", "kind": "named" }
+    ],
+    "parts": {
+      "NavBarHeader": {
+        "propsType": "NavBarHeaderProps",
+        "props": [
+          { "name": "children", "type": "React.ReactNode", "optional": true, "exact": true },
+          { "name": "className", "type": "string", "optional": true, "exact": true },
+          { "name": "size", "type": "NavBarSize", "optional": true, "exact": true },
+          { "name": "variant", "type": "NavBarVariant", "optional": true, "exact": true }
+        ],
+        "unions": {
+          "size": ["lg", "md", "sm"],
+          "variant": ["bordered", "default", "floating", "transparent"]
+        }
+      },
+      "NavBarHeaderActions": {
+        "propsType": "NavBarHeaderActionsProps",
+        "props": [
+          { "name": "children", "type": "React.ReactNode", "optional": true, "exact": true },
+          { "name": "className", "type": "string", "optional": true, "exact": true }
+        ],
+        "unions": {}
+      },
+      "NavBarHeaderLeading": {
+        "propsType": "NavBarHeaderLeadingProps",
+        "props": [
+          { "name": "children", "type": "React.ReactNode", "optional": true, "exact": true },
+          { "name": "className", "type": "string", "optional": true, "exact": true }
+        ],
+        "unions": {}
+      },
+      "NavBarHeaderTitle": {
+        "propsType": "NavBarHeaderTitleProps",
+        "props": [
+          { "name": "children", "type": "React.ReactNode", "optional": true, "exact": true },
+          { "name": "className", "type": "string", "optional": true, "exact": true }
+        ],
+        "unions": {}
+      },
+      "NavBarTab": {
+        "propsType": "NavBarTabProps",
+        "props": [
+          { "name": "active", "type": "boolean", "optional": true, "exact": true },
+          { "name": "badge", "type": "React.ReactNode", "optional": true, "exact": true },
+          { "name": "className", "type": "string", "optional": true, "exact": true },
+          { "name": "disabled", "type": "boolean", "optional": true, "exact": true },
+          { "name": "icon", "type": "React.ReactNode", "optional": true, "exact": true },
+          { "name": "label", "type": "string", "optional": false, "exact": true },
+          { "name": "onClick", "type": "(value: string) => void", "optional": true, "exact": true },
+          { "name": "value", "type": "string", "optional": false, "exact": true }
+        ],
+        "unions": {}
+      },
+      "NavBarTabBar": {
+        "propsType": "NavBarTabBarProps",
+        "props": [
+          { "name": "children", "type": "React.ReactNode", "optional": true, "exact": true },
+          { "name": "className", "type": "string", "optional": true, "exact": true },
+          { "name": "size", "type": "NavBarSize", "optional": true, "exact": true }
+        ],
+        "unions": {
+          "size": ["lg", "md", "sm"]
+        }
+      }
+    },
+    "types": {
+      "NavBarSize": {
+        "kind": "union",
+        "members": ["lg", "md", "sm"]
+      },
+      "NavBarVariant": {
+        "kind": "union",
+        "members": ["bordered", "default", "floating", "transparent"]
+      },
+      "NavLink": {
+        "kind": "object",
+        "props": [
+          { "name": "active", "type": "boolean", "optional": true, "exact": true },
+          { "name": "badge", "type": "React.ReactNode", "optional": true, "exact": true },
+          { "name": "disabled", "type": "boolean", "optional": true, "exact": true },
+          { "name": "href", "type": "string", "optional": true, "exact": true },
+          { "name": "label", "type": "string", "optional": false, "exact": true },
+          { "name": "leadingIcon", "type": "React.ReactNode", "optional": true, "exact": true }
+        ],
+        "closed": true
+      }
+    }
+  }
 }

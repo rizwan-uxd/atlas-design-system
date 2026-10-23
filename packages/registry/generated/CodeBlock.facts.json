@@ -6,19 +6,19 @@
   "part": "CodeBlock",
   "propsType": "CodeBlockProps",
   "props": [
-    { "name": "code", "type": "string", "optional": false },
-    { "name": "copyLabel", "type": "string", "optional": true },
-    { "name": "delay", "type": "number", "optional": true },
-    { "name": "duration", "type": "number", "optional": true },
-    { "name": "filename", "type": "string", "optional": true },
-    { "name": "language", "type": "string", "optional": true },
-    { "name": "onCopy", "type": "(code: string) => void", "optional": true },
-    { "name": "onDone", "type": "() => void", "optional": true },
-    { "name": "showHeader", "type": "boolean", "optional": true },
-    { "name": "showLineNumbers", "type": "boolean", "optional": true },
-    { "name": "size", "type": "CodeBlockSize", "optional": true },
-    { "name": "variant", "type": "CodeBlockVariant", "optional": true },
-    { "name": "writing", "type": "boolean", "optional": true }
+    { "name": "code", "type": "string", "optional": false, "exact": true },
+    { "name": "copyLabel", "type": "string", "optional": true, "exact": true },
+    { "name": "delay", "type": "number", "optional": true, "exact": true },
+    { "name": "duration", "type": "number", "optional": true, "exact": true },
+    { "name": "filename", "type": "string", "optional": true, "exact": true },
+    { "name": "language", "type": "string", "optional": true, "exact": true },
+    { "name": "onCopy", "type": "(code: string) => void", "optional": true, "exact": true },
+    { "name": "onDone", "type": "() => void", "optional": true, "exact": true },
+    { "name": "showHeader", "type": "boolean", "optional": true, "exact": true },
+    { "name": "showLineNumbers", "type": "boolean", "optional": true, "exact": true },
+    { "name": "size", "type": "CodeBlockSize", "optional": true, "exact": true },
+    { "name": "variant", "type": "CodeBlockVariant", "optional": true, "exact": true },
+    { "name": "writing", "type": "boolean", "optional": true, "exact": true }
   ],
   "inherited": {
     "AriaAttributes": ["aria-activedescendant", "aria-atomic", "aria-autocomplete", "aria-braillelabel", "aria-brailleroledescription", "aria-busy", "aria-checked", "aria-colcount", "aria-colindex", "aria-colindextext", "aria-colspan", "aria-controls", "aria-current", "aria-describedby", "aria-description", "aria-details", "aria-disabled", "aria-dropeffect", "aria-errormessage", "aria-expanded", "aria-flowto", "aria-grabbed", "aria-haspopup", "aria-hidden", "aria-invalid", "aria-keyshortcuts", "aria-label", "aria-labelledby", "aria-level", "aria-live", "aria-modal", "aria-multiline", "aria-multiselectable", "aria-orientation", "aria-owns", "aria-placeholder", "aria-posinset", "aria-pressed", "aria-readonly", "aria-relevant", "aria-required", "aria-roledescription", "aria-rowcount", "aria-rowindex", "aria-rowindextext", "aria-rowspan", "aria-selected", "aria-setsize", "aria-sort", "aria-valuemax", "aria-valuemin", "aria-valuenow", "aria-valuetext"],
@@ -217,7 +217,8 @@
     "bound": "CodeBlock",
     "instances": {},
     "stateProps": {},
-    "enums": { "size": "Size", "variant": "Variant" }
+    "enums": { "size": "Size", "variant": "Variant" },
+    "figmaContent": ["code", "filename"]
   },
   "figma": {
     "nodeId": "731:108",
@@ -226,5 +227,22 @@
       "Size": ["sm", "md", "lg"]
     }
   },
-  "tokensUsed": ["--atlas-border", "--atlas-border-subtle", "--atlas-border-width-1", "--atlas-border-width-2", "--atlas-duration-pulse", "--atlas-focus-ring", "--atlas-font-mono", "--atlas-font-sans", "--atlas-font-size-base", "--atlas-font-size-sm", "--atlas-font-size-xs", "--atlas-font-weight-medium", "--atlas-foreground", "--atlas-foreground-muted", "--atlas-foreground-subtle", "--atlas-icon-size-xs", "--atlas-line-height-relaxed", "--atlas-opacity-pulse", "--atlas-radius-lg", "--atlas-radius-sm", "--atlas-spacing-2", "--atlas-spacing-3", "--atlas-spacing-4", "--atlas-spacing-5", "--atlas-surface"]
+  "tokensUsed": ["--atlas-border", "--atlas-border-subtle", "--atlas-border-width-1", "--atlas-border-width-2", "--atlas-duration-pulse", "--atlas-focus-ring", "--atlas-font-mono", "--atlas-font-sans", "--atlas-font-size-base", "--atlas-font-size-sm", "--atlas-font-size-xs", "--atlas-font-weight-medium", "--atlas-foreground", "--atlas-foreground-muted", "--atlas-foreground-subtle", "--atlas-icon-size-xs", "--atlas-line-height-relaxed", "--atlas-opacity-pulse", "--atlas-radius-lg", "--atlas-radius-sm", "--atlas-spacing-2", "--atlas-spacing-3", "--atlas-spacing-4", "--atlas-spacing-5", "--atlas-surface"],
+  "module": {
+    "imports": [
+      { "from": "@atlas/ui-web/compositions/CodeBlock/CodeBlock", "name": "CodeBlockSize", "kind": "named" },
+      { "from": "@atlas/ui-web/compositions/CodeBlock/CodeBlock", "name": "CodeBlockVariant", "kind": "named" }
+    ],
+    "parts": {},
+    "types": {
+      "CodeBlockSize": {
+        "kind": "union",
+        "members": ["lg", "md", "sm"]
+      },
+      "CodeBlockVariant": {
+        "kind": "union",
+        "members": ["default", "typing"]
+      }
+    }
+  }
 }

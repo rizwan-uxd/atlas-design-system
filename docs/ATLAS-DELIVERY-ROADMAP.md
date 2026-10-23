@@ -121,9 +121,9 @@ fails when this region is stale. Statuses are exactly three: **passing** (a decl
 **failing** (ran and failed), **not measurable** (no result for the declared check — reported as `n/a`,
 never `0`). A metric with no check is *not measurable*, never passing: absence of a signal is not a pass.
 
-**2 passing · 0 failing · 33 not measurable** of 35. 2 of the measured rows cover only part of their population; the row says how much.
+**5 passing · 0 failing · 30 not measurable** of 35. 5 of the measured rows cover only part of their population; the row says how much.
 
-Result sources read: `atlas-sync`. Sources not present leave their metrics not measurable.
+Result sources read: `atlas-sync`, `registry`. Sources not present leave their metrics not measurable.
 
 ### Catalog Over Code
 
@@ -146,7 +146,7 @@ Result sources read: `atlas-sync`. Sources not present leave their metrics not m
 
 | Metric | Target | Status | Check | Measurable at |
 |---|---:|---|---|---|
-| Interactive components with typed event contracts | 100% | not measurable | `design.registry-events` | M3 |
+| Interactive components with typed event contracts | 100% | **passing** — 0 failing of 4 interactive registered types (4/47 components registered) | `design.registry-events` | M3 |
 | User events lost or reordered | 0 | not measurable | `runtime-demo > 50 rapid submits keep strictly increasing sequence` | M4 |
 | Interactions requiring full-screen regeneration | 0% | not measurable | `runtime-demo > patch updates only the addressed subtree` | M4 |
 | State acknowledgment latency | Under 300 ms p95 client-side | not measurable | `runtime-demo > state ack p95` | M4 |
@@ -157,7 +157,7 @@ Result sources read: `atlas-sync`. Sources not present leave their metrics not m
 |---|---:|---|---|---|
 | Invalid payloads producing a safe render | 100% | not measurable | `runtime/fuzz > 1000 malformed payloads all render` | M4 |
 | Unhandled render exceptions | 0 | not measurable | `runtime/fuzz > no payload throws` | M4 |
-| Components with declared fallback behavior | 100% | not measurable | `design.registry-fallback` | M3 |
+| Components with declared fallback behavior | 100% | **passing** — 0 failing of 5 registered types (4/47 components registered) | `design.registry-fallback` | M3 |
 | Fallback render latency | Under 100 ms p95 | not measurable | `runtime-demo > fallback render p95` | M4 |
 
 ### Context Containment
@@ -197,7 +197,7 @@ Result sources read: `atlas-sync`. Sources not present leave their metrics not m
 | No raw design values in component implementations | pass | not measurable | `code.raw-design-values` | Phase 2d |
 | No component renders without a valid schema | pass | not measurable | `runtime/validator > unregistered type never renders` | M4 |
 | No unsupported component can reach the renderer | pass | not measurable | `runtime/validator > unknown type replaced by fallback` | M4 |
-| Loading, empty, error, active and disabled states exist for all interactive components | pass | not measurable | `design.registry-states` | M3 |
+| Loading, empty, error, active and disabled states exist for all interactive components | pass | **passing** — 0 failing of 3 interactive registered components (4/47 components registered) | `design.registry-states` | M3 |
 | No horizontal overflow at supported breakpoints | pass | not measurable | `visual > no horizontal scroll at each breakpoint` | Phase 4 |
 
 **How to read this.** A row is only as good as its check. `not measurable` is the honest state for
@@ -478,7 +478,27 @@ inputs schema-validated — the honest proxy for "100% protocol messages passing
 years before a protocol exists.
 **Exit (M2):** corrupting one field in `atlas/metadata/Button.json` turns a PASS into a FAIL.
 
-### 2c → M3. The registry, and three-way agreement (3–4 sessions) — sessions 1–3 of 4 landed 2026-10-23
+### 2c → M3. The registry, and three-way agreement (3–4 sessions) — ✅ DONE 2026-10-23 (4 sessions); exit met except Text
+
+> **Session 4 landed; M3 is complete.** The comparator is three-way: `design/figma-registry-code`
+> (renamed in the commit that filled the `registry` slot) fails on the registry side for an enum
+> that differs from its Figma axis or the code union, an unclassified Figma `State` member, and a
+> slot with no Figma counterpart — a Code Connect content mapping or drawn literal content, recorded
+> as `figmaContent` in the facts (it found Alert's `children` and `icon` undrawn; both are now
+> hidden). `design/registry-events`, `-fallback` and `-states` share one function with
+> metrics-report's committed-state `registry` source, so the metric region stays deterministic.
+> Owner decisions (DEC-080) set fallback (everything → Alert neutral; Alert terminal), nesting, a11y,
+> responsive, capabilities and tokenRoles. **Exit, honestly:** 5 of the 6 named types are
+> `registryComplete: true` — **Text is deferred** because Atlas has no Text component (it needs a
+> Figma-first component session); all 47 have a generated contract; "typed event contracts" and
+> "components with declared fallback" read **passing**, over the registered subset (4/47 components
+> registered, printed in each row). Contracts now cover every export of each module, with exact prop
+> types, discriminated branches, exported types and one authored input
+> (`packages/registry/contract-props.json`). A script audit found 524/524 hand-contract assertions
+> covered before the 44 were deleted in one commit; contracts generate straight into
+> `packages/governance/contracts/`. `registry:check`: **5 entries, 47 facts, 47 contracts, 5
+> schemas, 144 rules**. Metric table **5 passing · 0 failing · 30 not measurable**. Details: the M3
+> plan, "Session 4".
 
 > **Session 3 landed.** A protocol schema per registry entry (`generated/schemas/`, closed objects
 > whose props are the entry's protocolProps typed from the code; exempt from `INPUTS` and compiled by
