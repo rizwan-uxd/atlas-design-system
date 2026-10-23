@@ -215,7 +215,8 @@
     "bound": "Sparkline",
     "instances": {},
     "stateProps": {},
-    "enums": { "size": "Size", "tone": "Tone", "variant": "Variant" }
+    "enums": { "size": "Size", "tone": "Tone", "variant": "Variant" },
+    "figmaContent": ["label"]
   },
   "figma": {
     "nodeId": "953:48",

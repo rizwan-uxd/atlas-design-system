@@ -25,7 +25,8 @@
     "bound": "AlertDialogContent",
     "instances": {},
     "stateProps": {},
-    "enums": { "size": "Size", "state": "State", "variant": "Variant" }
+    "enums": { "size": "Size", "state": "State", "variant": "Variant" },
+    "figmaContent": ["children"]
   },
   "figma": {
     "nodeId": "700:6560",

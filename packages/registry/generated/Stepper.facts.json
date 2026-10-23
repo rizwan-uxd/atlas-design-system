@@ -209,7 +209,8 @@
     "bound": "Stepper",
     "instances": {},
     "stateProps": {},
-    "enums": { "current": "Current", "orientation": "Orientation", "steps": "Steps" }
+    "enums": { "current": "Current", "orientation": "Orientation", "steps": "Steps" },
+    "figmaContent": ["aria-label"]
   },
   "figma": {
     "nodeId": "984:3356",

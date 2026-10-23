@@ -206,7 +206,8 @@
     "bound": "Divider",
     "instances": {},
     "stateProps": {},
-    "enums": { "orientation": "Orientation", "tone": "Tone" }
+    "enums": { "orientation": "Orientation", "tone": "Tone" },
+    "figmaContent": []
   },
   "figma": {
     "nodeId": "498:11",

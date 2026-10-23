@@ -210,7 +210,8 @@
     "bound": "OtpInput",
     "instances": {},
     "stateProps": { "disabled": "disabled", "error": "invalid" },
-    "enums": { "disabled": "State", "invalid": "State", "length": "Length", "size": "Size" }
+    "enums": { "disabled": "State", "invalid": "State", "length": "Length", "size": "Size" },
+    "figmaContent": ["aria-label"]
   },
   "figma": {
     "nodeId": "979:1039",

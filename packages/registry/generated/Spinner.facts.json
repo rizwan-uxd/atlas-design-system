@@ -206,7 +206,8 @@
     "bound": "Spinner",
     "instances": {},
     "stateProps": {},
-    "enums": { "size": "Size", "variant": "Variant" }
+    "enums": { "size": "Size", "variant": "Variant" },
+    "figmaContent": []
   },
   "figma": {
     "nodeId": "527:63",

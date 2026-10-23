@@ -205,7 +205,8 @@
     "bound": "Chart",
     "instances": {},
     "stateProps": {},
-    "enums": { "state": "State" }
+    "enums": { "state": "State" },
+    "figmaContent": ["children"]
   },
   "figma": {
     "nodeId": "660:247",

@@ -205,7 +205,8 @@
     "bound": "Sidebar",
     "instances": {},
     "stateProps": {},
-    "enums": { "collapsed": "Collapsed" }
+    "enums": { "collapsed": "Collapsed" },
+    "figmaContent": ["children"]
   },
   "figma": {
     "nodeId": "620:52",

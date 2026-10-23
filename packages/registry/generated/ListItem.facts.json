@@ -210,7 +210,8 @@
     "bound": "ListItem",
     "instances": {},
     "stateProps": {},
-    "enums": { "direction": "Direction", "size": "Size", "variant": "Variant" }
+    "enums": { "direction": "Direction", "size": "Size", "variant": "Variant" },
+    "figmaContent": ["children"]
   },
   "figma": {
     "nodeId": "505:124",

@@ -24,7 +24,8 @@
     "bound": "EmptyState",
     "instances": { "action": "Action", "icon": "Icon", "secondaryAction": "Secondary action" },
     "stateProps": {},
-    "enums": { "size": "Size" }
+    "enums": { "size": "Size" },
+    "figmaContent": ["action", "description", "icon", "secondaryAction", "title"]
   },
   "figma": {
     "nodeId": "858:60",

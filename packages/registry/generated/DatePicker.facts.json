@@ -210,7 +210,8 @@
     "bound": "DatePickerTrigger",
     "instances": {},
     "stateProps": { "disabled": "disabled", "invalid": "invalid" },
-    "enums": { "disabled": "State", "invalid": "State" }
+    "enums": { "disabled": "State", "invalid": "State" },
+    "figmaContent": []
   },
   "figma": {
     "nodeId": "680:56",

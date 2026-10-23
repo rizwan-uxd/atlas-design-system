@@ -79,6 +79,17 @@ test("only the connect call bound to the component's node is read", () => {
   assert.ok(!("selected" in head.enums), "TableRow's mappings are not merged into TableHead's")
 })
 
+test("figmaContent lists the part props Figma supplies content for, and nothing else", () => {
+  // Button: two figma.instance slots, plus literal text children ("Button label")
+  assert.deepEqual(codeConnectFacts(cc("Button"), "19:2").figmaContent, ["children", "leadingIcon", "trailingIcon"])
+  // Input: figma.string inside figma.boolean branches, and a literal placeholder attribute
+  assert.deepEqual(codeConnectFacts(cc("Input"), "43:111").figmaContent, ["leadingIcon", "placeholder", "prefix", "suffix", "trailingIcon"])
+  // Alert: a JSX branch (actions) and literal strings; dismissible is a bare boolean and icon is not drawn
+  assert.deepEqual(codeConnectFacts(cc("Alert"), "127:24").figmaContent, ["actions", "description", "title"])
+  // Field: a render-prop child that returns an element counts as children
+  assert.ok(codeConnectFacts(cc("Field"), "863:254").figmaContent.includes("children"))
+})
+
 test("a Code Connect file with no connect for the node throws", () => {
   assert.throws(() => codeConnectFacts(cc("Button"), "1:1", "Button.figma.tsx"), /no figma.connect for node 1:1 \(found 19:2\)/)
 })

@@ -1,9 +1,9 @@
 /**
- * compare-axes — the independent Figma→code comparison (M1).
+ * compare-axes — the independent Figma→registry→code comparison (M1, made three-way in M3).
  *
- * A TWO-WAY comparator, registry-ready: it compares Figma's variant axes against code, and its result
- * shape already carries a `registry` slot that stays null until M3 fills it. It is named for what it
- * is, so nothing in this repo claims a three-way check before one exists.
+ * Figma's variant axes are compared against code (M1), and, when `registry` is passed, against the
+ * authored registry entries too (M3 session 4; the check is design/figma-registry-code). The registry
+ * is derived, never a third opinion: every registry disagreement fails on the REGISTRY side.
  *
  * WHY THIS EXISTS. atlas-verify's `variants-sizes` check validates JSX against atlas/metadata/*.json,
  * whose `variants` and `sizes` are scraped from the code's own type unions — so it is code-vs-code and
@@ -34,7 +34,7 @@
 // The structural guard that lived here in M1 (guardFigmaProperties) was deleted in M2, in the same
 // commit that added packages/governance/schemas/metadata.schema.json. Callers pass only metadata that
 // validated (scripts/lib/schemas.mjs); atlas-verify's design/schemas reports the rest, and
-// design/figma-code fails closed on them, so a malformed component is still a failure, never a skip.
+// design/figma-registry-code fails closed on them, so a malformed component is still a failure, never a skip.
 
 /* ── set comparison ─────────────────────────────────────── */
 
@@ -157,11 +157,13 @@ function isBooleanAxis(members) {
  * @param {Array<{name, figmaProperties, variants, sizes}>} input.components  from atlas/metadata
  * @param {Map<string,string>} input.codeConnect   component name -> Code Connect source
  * @param {object} input.axisMap                   packages/registry/figma-axis-map.json
- * @param {null|object} input.registry             M3 fills this; null keeps the check two-way
+ * @param {null|{entries: Record<string, object>, facts: Record<string, object>}} input.registry
+ *   the authored entries (packages/registry/src) and the generated facts; null compares Figma↔code only
  *
  * @returns {{ findings, inspected, unclassifiedAxes, unmappedAxes, deferredAxes, registry }}
- * `findings` entries carry { component, axis, side, detail }. `side` is who must change, and for a
- * member-set disagreement it is always "code", because Figma is the authority.
+ * `findings` entries carry { component, axis, side, detail }. `side` is who must change: "code" for a
+ * Figma↔code member-set disagreement (Figma is the authority), "registry" for any registry
+ * disagreement (the registry is derived from both).
  */
 export function compareAxes({ components, codeConnect, axisMap, registry = null }) {
   if (!axisMap || typeof axisMap !== "object") throw new Error("compare-axes: axisMap is required")
@@ -174,6 +176,9 @@ export function compareAxes({ components, codeConnect, axisMap, registry = null 
   const deferredAxes = []
   let componentsInspected = 0
   let axesCompared = 0
+  // with a registry, a component it renders has its state-like axes compared there instead of deferred
+  if (registry !== null && (!own(registry, "entries") || !own(registry, "facts"))) throw new Error("compare-axes: registry needs entries and facts")
+  const rendered = new Set(registry === null ? [] : Object.values(registry.entries).filter((e) => e.kind === "component").map((e) => e.aliasOf))
 
   for (const m of components) {
     const name = m.name
@@ -199,7 +204,7 @@ export function compareAxes({ components, codeConnect, axisMap, registry = null 
 
       const disposition = rule.disposition
 
-      if (disposition === "state") { deferredAxes.push(`${name}.${axis}`); continue }
+      if (disposition === "state") { if (!rendered.has(name)) deferredAxes.push(`${name}.${axis}`); continue }
       if (disposition === "unmapped") { unmappedAxes.push(`${name}.${axis}`); continue }
       if (disposition === "boolean") {
         axesCompared++
@@ -282,12 +287,84 @@ export function compareAxes({ components, codeConnect, axisMap, registry = null 
     }
   }
 
+  const reg = registry === null ? null : compareRegistry({ components, registry, findings })
+  if (reg !== null) axesCompared += reg.axes
+
   return {
     findings,
     inspected: { components: componentsInspected, axes: axesCompared, total: components.length },
     unclassifiedAxes: uniq(unclassifiedAxes).sort(),
     unmappedAxes: uniq(unmappedAxes).sort(),
     deferredAxes: uniq(deferredAxes).sort(),
-    registry, // M3 fills this; null keeps the comparison two-way
+    registry: reg, // null when no registry was passed: the comparison is then two-way
   }
+}
+
+/* ── the third leg: registry ↔ Figma and registry ↔ code (M3) ───────────── */
+
+const own = (o, k) => o !== null && typeof o === "object" && Object.prototype.hasOwnProperty.call(o, k)
+/** `variant` → `Variant`, the axis name a protocol prop maps to when Code Connect does not say. */
+const axisName = (prop) => prop.charAt(0).toUpperCase() + prop.slice(1)
+
+/**
+ * Every registry entry that renders a component, against that component's Figma axes and facts.
+ * Fails on the REGISTRY side: an enum that differs from its Figma axis (narrower only with
+ * `narrowed`), an enum member absent from the code union, a Figma `State` member the entry does not
+ * classify (or a classified member Figma does not have), and a slot Figma supplies no content for.
+ * Structural entries render nothing and have no Figma side. Absent facts or metadata FAIL closed.
+ */
+function compareRegistry({ components, registry, findings }) {
+  const byName = new Map(components.map((m) => [m.name, m]))
+  const out = { entries: 0, axes: 0, states: 0, enums: 0, slots: 0 }
+  // a finding with no axis is printed bare, so its detail names the type
+  const fail = (type, axis, detail) => findings.push({ component: type, axis, side: "registry", detail: axis === null ? `${type}: ${detail}` : detail })
+
+  for (const e of Object.values(registry.entries)) {
+    if (e.kind !== "component") continue
+    const type = e.type
+    out.entries++
+    const m = byName.get(e.aliasOf)
+    const f = registry.facts[e.aliasOf]
+    if (m === undefined) { fail(type, null, `renders ${e.aliasOf}, which has no valid atlas/metadata entry — not compared`); continue }
+    if (f === undefined) { fail(type, null, `no generated facts for ${e.aliasOf} — run npm run registry:build`); continue }
+    const axes = m.figmaProperties
+    const ccEnums = f.codeConnect.enums
+
+    const protocolProps = own(e, "protocolProps") ? e.protocolProps : {}
+    for (const [prop, spec] of Object.entries(protocolProps)) {
+      if (!own(spec, "values")) continue
+      const axis = own(ccEnums, prop) ? ccEnums[prop] : axisName(prop)
+      if (own(f.unions, prop)) {
+        for (const v of spec.values) if (!f.unions[prop].includes(v))
+          fail(type, axis, `registry ${prop}="${v}" is not in the code union of ${e.aliasOf} (${f.unions[prop].join("|")}) — the registry is a subset of code`)
+      }
+      if (axis === "State" || !own(axes, axis)) continue
+      out.axes++; out.enums++
+      for (const v of missingFrom(spec.values, axes[axis]))
+        fail(type, axis, `registry ${prop}="${v}" and Figma ${e.aliasOf}/${axis} has no such member — the registry derives from Figma; remove it`)
+      const missing = missingFrom(axes[axis], spec.values)
+      if (missing.length && !own(spec, "narrowed"))
+        fail(type, axis, `Figma ${e.aliasOf}/${axis} has ${missing.map((x) => `"${x}"`).join(", ")} and registry ${prop} does not — add it, or declare "narrowed" with a reason`)
+    }
+
+    const states = own(e, "states") ? e.states : undefined
+    if (own(axes, "State")) {
+      out.axes++; out.states++
+      if (states === undefined) fail(type, "State", `Figma ${e.aliasOf} has a State axis (${axes.State.join(", ")}) and the entry classifies none of it`)
+      else {
+        for (const s of axes.State) if (!own(states, s)) fail(type, "State", `Figma State "${s}" is not classified in the registry (interaction | prop)`)
+        for (const s of Object.keys(states)) if (!axes.State.includes(s)) fail(type, "State", `registry classifies State "${s}" and Figma ${e.aliasOf} has no such member`)
+      }
+    } else if (states !== undefined) {
+      fail(type, "State", `registry declares states and Figma ${e.aliasOf} has no State axis`)
+    }
+
+    const content = f.codeConnect.figmaContent
+    for (const slot of own(e, "slots") ? e.slots : []) {
+      out.slots++
+      if (!content.includes(slot))
+        fail(type, null, `slot "${slot}" has no Figma counterpart: no instance swap, figma.instance, figma.string or drawn content for it in ${f.codeConnect.file} — move it to hiddenProps with a reason, or draw it in Figma first`)
+    }
+  }
+  return out
 }

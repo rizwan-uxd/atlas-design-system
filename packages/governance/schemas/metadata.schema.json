@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://atlas.design-system/schemas/metadata.schema.json",
   "title": "atlas/metadata/<Name>.json",
-  "description": "One component's generated facts, written by scripts/atlas-sync.mjs. Every field is required and no other field is allowed, so a renamed field fails here instead of disabling a check. figmaProperties is required even though the generator writes null on a never-synced snapshot: such a component is unverifiable, and design/figma-code must not read it as agreeing.",
+  "description": "One component's generated facts, written by scripts/atlas-sync.mjs. Every field is required and no other field is allowed, so a renamed field fails here instead of disabling a check. figmaProperties is required even though the generator writes null on a never-synced snapshot: such a component is unverifiable, and design/figma-registry-code must not read it as agreeing.",
   "type": "object",
   "additionalProperties": false,
   "required": [

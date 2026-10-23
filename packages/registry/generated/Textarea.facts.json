@@ -213,7 +213,8 @@
     "bound": "Textarea",
     "instances": {},
     "stateProps": { "disabled": "disabled", "error": "invalid" },
-    "enums": { "disabled": "State", "invalid": "State", "size": "Size", "variant": "Variant" }
+    "enums": { "disabled": "State", "invalid": "State", "size": "Size", "variant": "Variant" },
+    "figmaContent": ["placeholder"]
   },
   "figma": {
     "nodeId": "66:24",

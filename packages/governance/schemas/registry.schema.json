@@ -182,13 +182,17 @@
         "codeConnect": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["file", "bound", "instances", "stateProps", "enums"],
+          "required": ["file", "bound", "instances", "stateProps", "enums", "figmaContent"],
           "properties": {
             "file": { "$ref": "common.schema.json#/$defs/text" },
             "bound": { "$ref": "common.schema.json#/$defs/text" },
             "instances": { "$ref": "#/$defs/textMap" },
             "stateProps": { "$ref": "#/$defs/textMap" },
-            "enums": { "$ref": "#/$defs/textMap" }
+            "enums": { "$ref": "#/$defs/textMap" },
+            "figmaContent": {
+              "description": "Props of the part that Figma supplies content for: mapped in Code Connect by figma.instance, figma.string, figma.children or a figma.boolean/enum branch holding JSX, or passed literal content (text, a string attribute, an element) in the example, which Figma draws as a layer. design/figma-registry-code fails a registry slot that is not in this list.",
+              "type": "array", "uniqueItems": true, "items": { "type": "string" }
+            }
           }
         },
         "figma": {

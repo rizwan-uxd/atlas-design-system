@@ -208,7 +208,8 @@
     "bound": "Bubble",
     "instances": {},
     "stateProps": {},
-    "enums": { "align": "Align", "variant": "Variant" }
+    "enums": { "align": "Align", "variant": "Variant" },
+    "figmaContent": ["children"]
   },
   "figma": {
     "nodeId": "656:27",

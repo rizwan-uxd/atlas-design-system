@@ -214,7 +214,8 @@
     "bound": "TooltipContent",
     "instances": {},
     "stateProps": {},
-    "enums": { "side": "Side" }
+    "enums": { "side": "Side" },
+    "figmaContent": ["children"]
   },
   "figma": {
     "nodeId": "645:397",

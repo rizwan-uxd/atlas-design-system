@@ -185,7 +185,56 @@ export function codeConnectFacts(src, nodeId, fileName = "x.figma.tsx") {
   let part = bound, best = counts.get(bound) ?? 0
   for (const [tag, hits] of counts) if (hits > best) { part = tag; best = hits }
 
-  return { bound, part, instances: sortKeys(instances), stateProps: sortKeys(stateProps), enums: sortKeys(enums) }
+  return { bound, part, instances: sortKeys(instances), stateProps: sortKeys(stateProps), enums: sortKeys(enums),
+    figmaContent: figmaContentOf(propsProp, example, part) }
+}
+
+const CONTENT_CALLS = new Set(["instance", "string", "children", "textContent", "nestedProps"])
+
+/**
+ * Props of `part` that Figma supplies content for — the Figma side of a registry slot. A Code Connect
+ * prop counts when it maps to content (`figma.instance`, `figma.string`, `figma.children`, or a
+ * `figma.boolean`/`figma.enum` branch holding JSX); an attribute of the part in `example` counts when
+ * it receives such a prop or literal content (a string, an element), and `children` counts when the
+ * part element has content between its tags. Literal content is what Figma draws as a text or
+ * instance layer that Code Connect does not parameterise ("Button label").
+ */
+function figmaContentOf(propsProp, example, part) {
+  const content = new Set()
+  if (propsProp && ts.isObjectLiteralExpression(propsProp.initializer))
+    for (const m of propsProp.initializer.properties) {
+      const key = ts.isPropertyAssignment(m) ? keyText(m.name) : undefined
+      if (!key) continue
+      let drawn = false
+      const walk = (n) => {
+        if (CONTENT_CALLS.has(n.expression?.name?.text) && isFigmaCall(n, n.expression.name.text)) drawn = true
+        if (ts.isJsxElement(n) || ts.isJsxSelfClosingElement(n) || ts.isJsxFragment(n)) drawn = true
+        ts.forEachChild(n, walk)
+      }
+      walk(m.initializer)
+      if (drawn) content.add(key)
+    }
+  const drawnKeys = new Set(content)
+  content.clear()
+  const isContent = (e) => e && (ts.isStringLiteralLike(e) || ts.isJsxElement(e) || ts.isJsxSelfClosingElement(e) || ts.isJsxFragment(e) ||
+    (ts.isIdentifier(e) && drawnKeys.has(e.text)) || ((ts.isArrowFunction(e) || ts.isFunctionExpression(e)) && hasJsx(e.body)))
+  const hasJsx = (n) => ts.isJsxElement(n) || ts.isJsxSelfClosingElement(n) || ts.isJsxFragment(n) || (ts.forEachChild(n, (c) => hasJsx(c) || undefined) ?? false)
+  let el
+  const find = (n) => { if (!el && (ts.isJsxOpeningElement(n) || ts.isJsxSelfClosingElement(n)) && tagName(n) === part) el = n; else ts.forEachChild(n, find) }
+  if (example) find(example)
+  if (!el) return []
+  for (const a of el.attributes.properties) {
+    if (!ts.isJsxAttribute(a) || !a.initializer) continue
+    const name = a.name.getText()
+    const init = a.initializer
+    if (ts.isStringLiteralLike(init) || (ts.isJsxExpression(init) && isContent(init.expression))) content.add(name)
+  }
+  if (ts.isJsxOpeningElement(el)) {
+    const kids = el.parent.children.filter((c) => !(ts.isJsxText(c) && c.containsOnlyTriviaWhiteSpaces))
+    if (kids.some((c) => ts.isJsxText(c) || ts.isJsxElement(c) || ts.isJsxSelfClosingElement(c) || ts.isJsxFragment(c) ||
+      (ts.isJsxExpression(c) && isContent(c.expression)))) content.add("children")
+  }
+  return [...content].sort()
 }
 
 /* ── the invariant ──────────────────────────────────────────────────────── */

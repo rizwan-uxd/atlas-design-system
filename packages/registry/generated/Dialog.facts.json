@@ -25,7 +25,8 @@
     "bound": "Dialog",
     "instances": {},
     "stateProps": {},
-    "enums": { "confirmVariant": "Variant", "size": "Size", "variant": "Variant" }
+    "enums": { "confirmVariant": "Variant", "size": "Size", "variant": "Variant" },
+    "figmaContent": ["children"]
   },
   "figma": {
     "nodeId": "136:174",

@@ -30,7 +30,8 @@
     "bound": "Card",
     "instances": {},
     "stateProps": { "selected": "selected" },
-    "enums": { "selected": "State", "size": "Size", "variant": "Variant" }
+    "enums": { "selected": "State", "size": "Size", "variant": "Variant" },
+    "figmaContent": ["children"]
   },
   "figma": {
     "nodeId": "110:24",

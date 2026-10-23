@@ -217,7 +217,8 @@
     "bound": "CodeBlock",
     "instances": {},
     "stateProps": {},
-    "enums": { "size": "Size", "variant": "Variant" }
+    "enums": { "size": "Size", "variant": "Variant" },
+    "figmaContent": ["code", "filename"]
   },
   "figma": {
     "nodeId": "731:108",

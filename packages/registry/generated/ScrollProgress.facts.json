@@ -208,7 +208,8 @@
     "bound": "ScrollProgress",
     "instances": {},
     "stateProps": {},
-    "enums": { "orientation": "Orientation", "scope": "Scope" }
+    "enums": { "orientation": "Orientation", "scope": "Scope" },
+    "figmaContent": ["aria-label"]
   },
   "figma": {
     "nodeId": "734:27",

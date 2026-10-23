@@ -153,16 +153,17 @@ check("design", "snapshot-current", () => {
   return { ...verdict(fails, warns), inspected: synced, scope: 1, note: `${synced} components in the sync · ${touched.size} touched` }
 })
 
-// M1 — the independent Figma→code comparison. Unlike variants-sizes (which validates JSX against
-// metadata generated FROM the code, and so is code-vs-code), this compares code against
-// metadata.figmaProperties, written straight from the Figma pull. It runs repo-wide, not over the
-// diff: Figma drift is a property of the whole snapshot, and a PR that happens to touch no component
-// must not be able to hide it.
+// M1, made three-way in M3 — the independent Figma→registry→code comparison. Unlike variants-sizes
+// (which validates JSX against metadata generated FROM the code, and so is code-vs-code), this compares
+// code against metadata.figmaProperties, written straight from the Figma pull, and the authored
+// registry entries against both (enums, State classification, slots), failing on the registry side.
+// It runs repo-wide, not over the diff: Figma drift is a property of the whole snapshot, and a PR that
+// happens to touch no component must not be able to hide it.
 //
 // It FAILS CLOSED. Missing, empty or malformed Figma data is a failure, never "zero drift" — a
 // component whose Figma side is unreadable is unverifiable, and unverifiable must never read as
 // "agrees". Zero inspections is likewise a failure, not a clean run.
-check("design", "figma-code", () => {
+check("design", "figma-registry-code", () => {
   const fails = [], warns = []
   const MAP = "packages/registry/figma-axis-map.json"
   if (!exists(MAP)) return { status: "fail", inspected: 0, mismatches: [`${MAP} is missing — the axis map is authored, not generated`] }
@@ -177,9 +178,20 @@ check("design", "figma-code", () => {
     if (f.endsWith(".figma.tsx")) codeConnect.set(f.replace(".figma.tsx", ""), read(`${CC_DIR}/${f}`))
   }
 
+  // the registry leg: entries and facts that failed their schema are failures here too, never skipped
+  for (const f of [...invalidInputs("packages/registry/src/"), ...invalidInputs("packages/registry/generated/")])
+    fails.push(`${f} failed its schema — the registry leg cannot trust it (see design/schemas)`)
+  const registry = { entries: {}, facts: {} }
+  for (const f of inputs.files) {
+    if (!f.ok) continue
+    if (/^packages\/registry\/src\/[^/]+\.registry\.json$/.test(f.file)) registry.entries[f.data.type] = f.data
+    if (/^packages\/registry\/generated\/[^/]+\.facts\.json$/.test(f.file)) registry.facts[f.data.name] = f.data
+  }
+  if (Object.keys(registry.entries).length === 0) fails.push("0 registry entries in packages/registry/src — the registry leg compared nothing")
+
   let result
   try {
-    result = compareAxes({ components: Object.values(metadata), codeConnect, axisMap, registry: null })
+    result = compareAxes({ components: Object.values(metadata), codeConnect, axisMap, registry })
   } catch (e) {
     // the comparator throws rather than optional-chaining past an absent field; a throw is a FAIL
     // that names the cause, never a skip
@@ -230,7 +242,9 @@ check("design", "figma-code", () => {
     }
   }
 
-  const note = `${inspected}/${total} components · ${axes} axes compared · ${result.deferredAxes.length} State deferred to M3`
+  const r = result.registry
+  const note = `${inspected}/${total} components · ${axes} axes compared · registry ${r.entries} entries (${r.enums} enums, ${r.states} State, ${r.slots} slots)`
+    + ` · ${result.deferredAxes.length} state axes on unregistered components`
     + (result.unmappedAxes.length ? ` · ${result.unmappedAxes.length} unmapped` : "") + ageNote
   return { ...verdict(fails, warns), inspected: axes, scope: total, note }
 })

@@ -205,7 +205,8 @@
     "bound": "Breadcrumb",
     "instances": {},
     "stateProps": {},
-    "enums": { "separator": "Separator" }
+    "enums": { "separator": "Separator" },
+    "figmaContent": ["children"]
   },
   "figma": {
     "nodeId": "493:75",

@@ -21,7 +21,8 @@
     "bound": "DropdownMenu",
     "instances": {},
     "stateProps": {},
-    "enums": { "groups": "Groups" }
+    "enums": { "groups": "Groups" },
+    "figmaContent": ["children"]
   },
   "figma": {
     "nodeId": "516:118",

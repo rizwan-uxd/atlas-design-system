@@ -25,7 +25,8 @@
     "bound": "Sheet",
     "instances": {},
     "stateProps": {},
-    "enums": { "side": "Side" }
+    "enums": { "side": "Side" },
+    "figmaContent": ["children"]
   },
   "figma": {
     "nodeId": "583:2861",

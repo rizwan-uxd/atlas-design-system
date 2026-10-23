@@ -36,7 +36,8 @@
     "bound": "Badge",
     "instances": {},
     "stateProps": { "disabled": "disabled" },
-    "enums": { "appearance": "Appearance", "disabled": "State", "size": "Size", "variant": "Variant" }
+    "enums": { "appearance": "Appearance", "disabled": "State", "size": "Size", "variant": "Variant" },
+    "figmaContent": ["children", "removeLabel"]
   },
   "figma": {
     "nodeId": "123:24",

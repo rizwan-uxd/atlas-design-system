@@ -206,7 +206,8 @@
     "bound": "ButtonGroup",
     "instances": {},
     "stateProps": {},
-    "enums": { "orientation": "Orientation", "size": "Size" }
+    "enums": { "orientation": "Orientation", "size": "Size" },
+    "figmaContent": ["aria-label", "children"]
   },
   "figma": {
     "nodeId": "666:5817",

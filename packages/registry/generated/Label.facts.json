@@ -213,7 +213,8 @@
     "bound": "Label",
     "instances": {},
     "stateProps": { "disabled": "disabled", "error": "invalid" },
-    "enums": { "disabled": "State", "invalid": "State", "size": "Size", "variant": "Variant" }
+    "enums": { "disabled": "State", "invalid": "State", "size": "Size", "variant": "Variant" },
+    "figmaContent": ["children"]
   },
   "figma": {
     "nodeId": "50:48",

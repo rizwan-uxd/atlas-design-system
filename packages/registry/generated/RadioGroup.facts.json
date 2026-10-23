@@ -214,7 +214,8 @@
     "bound": "RadioGroup",
     "instances": {},
     "stateProps": {},
-    "enums": { "direction": "Direction", "variant": "Variant" }
+    "enums": { "direction": "Direction", "variant": "Variant" },
+    "figmaContent": ["aria-label", "children", "defaultValue"]
   },
   "figma": {
     "nodeId": "545:98",

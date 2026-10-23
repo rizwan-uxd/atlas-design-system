@@ -210,7 +210,8 @@
     "bound": "Pagination",
     "instances": {},
     "stateProps": {},
-    "enums": { "size": "Size" }
+    "enums": { "size": "Size" },
+    "figmaContent": []
   },
   "figma": {
     "nodeId": "903:537",

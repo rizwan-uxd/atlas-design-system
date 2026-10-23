@@ -31,7 +31,8 @@
     "bound": "Alert",
     "instances": {},
     "stateProps": {},
-    "enums": { "size": "Size", "variant": "Variant" }
+    "enums": { "size": "Size", "variant": "Variant" },
+    "figmaContent": ["actions", "description", "title"]
   },
   "figma": {
     "nodeId": "127:24",

@@ -31,7 +31,8 @@
     "bound": "CommandMenuContent",
     "instances": {},
     "stateProps": { "loading": "loading" },
-    "enums": { "loading": "State", "size": "Size" }
+    "enums": { "loading": "State", "size": "Size" },
+    "figmaContent": ["children", "label"]
   },
   "figma": {
     "nodeId": "990:211",

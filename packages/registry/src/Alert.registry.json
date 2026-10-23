@@ -15,9 +15,13 @@
     "dismissible": {},
     "hideIcon": {}
   },
-  "hiddenProps": { "className": "Styling escape hatch; the protocol carries no CSS." },
+  "hiddenProps": {
+    "className": "Styling escape hatch; the protocol carries no CSS.",
+    "children": "An alias of description in Alert.tsx; Figma draws only the description, so the protocol uses description.",
+    "icon": "Figma draws the intent icon per variant with no instance swap; the protocol picks it through variant (or hideIcon)."
+  },
   "events": {
     "dismiss": { "handler": "onDismiss" }
   },
-  "slots": ["actions", "children", "description", "icon", "title"]
+  "slots": ["actions", "description", "title"]
 }

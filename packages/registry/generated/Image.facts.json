@@ -218,7 +218,8 @@
     "bound": "Image",
     "instances": {},
     "stateProps": {},
-    "enums": { "ratio": "Ratio" }
+    "enums": { "ratio": "Ratio" },
+    "figmaContent": ["alt", "src"]
   },
   "figma": {
     "nodeId": "534:35",

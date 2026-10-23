@@ -214,7 +214,8 @@
     "bound": "Avatar",
     "instances": {},
     "stateProps": {},
-    "enums": { "shape": "Shape", "size": "Size", "type": "Type" }
+    "enums": { "shape": "Shape", "size": "Size", "type": "Type" },
+    "figmaContent": ["alt", "statusLabel"]
   },
   "figma": {
     "nodeId": "487:720",

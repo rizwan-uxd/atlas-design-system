@@ -9,7 +9,7 @@ import path from "node:path"
 import { fileURLToPath } from "node:url"
 
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..")
-// packages/registry carries the authored figma-axis-map.json that design/figma-code needs. It is in
+// packages/registry carries the authored figma-axis-map.json that design/figma-registry-code needs. It is in
 // this list because that check fails closed: a throwaway repo without the map is one whose Figma side
 // cannot be verified, and it says so rather than passing.
 const INPUTS = ["scripts", "packages/ui-web/src", "packages/figma-sync/code-connect", "packages/tokens", "packages/governance", "packages/registry", "atlas"]
@@ -189,17 +189,27 @@ test("design/snapshot-current passes when atlas/ matches the generator, fails wh
   assert.match(behind.mismatches.join("\n"), /atlas-sync would write/)
 }))
 
-// design/figma-code
-test("design/figma-code fails a member Figma has and code lacks", () => withRepo(({ dir }) => {
+// design/figma-registry-code
+test("design/figma-registry-code fails a member Figma has and code lacks", () => withRepo(({ dir }) => {
   edit(dir, "atlas/metadata/Badge.json", (s) => s.replace(/"Variant": \[/, '"Variant": ["sparkly", '))
-  const r = verify(dir, "figma-code")
+  const r = verify(dir, "figma-registry-code")
   assert.equal(r.status, "fail")
   assert.match(r.mismatches.join("\n"), /Badge\/Variant: Figma Badge\/Variant has "sparkly"/)
 }))
 
-test("design/figma-code fails closed on a schema-invalid component and still compares the rest", () => withRepo(({ dir }) => {
+test("design/figma-registry-code fails a registry slot Figma does not draw, on the registry side", () => withRepo(({ dir }) => {
+  const ok = verify(dir, "figma-registry-code")
+  assert.notEqual(ok.status, "fail", ok.mismatches.join("\n"))
+  assert.match(ok.note, /registry \d+ entries/)
+  edit(dir, "packages/registry/src/Alert.registry.json", (s) => s.replace('"slots": ["actions", "description", "title"]', '"slots": ["actions", "description", "icon", "title"]'))
+  const r = verify(dir, "figma-registry-code")
+  assert.equal(r.status, "fail")
+  assert.match(r.mismatches.join("\n"), /\[registry\] Alert: slot "icon" has no Figma counterpart/)
+}))
+
+test("design/figma-registry-code fails closed on a schema-invalid component and still compares the rest", () => withRepo(({ dir }) => {
   edit(dir, "atlas/metadata/Button.json", (s) => s.replace(/"figmaProperties": \{[^}]*\}/, '"figmaProperties": null'))
-  const r = verify(dir, "figma-code")
+  const r = verify(dir, "figma-registry-code")
   assert.equal(r.status, "fail")
   assert.match(r.mismatches.join("\n"), /atlas\/metadata\/Button\.json failed its schema — not compared/)
   assert.match(r.note, /^46\/47 components/)

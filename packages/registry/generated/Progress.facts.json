@@ -211,7 +211,8 @@
     "bound": "Progress",
     "instances": {},
     "stateProps": { "indeterminate": "indeterminate" },
-    "enums": { "indeterminate": "State", "value": "Percent" }
+    "enums": { "indeterminate": "State", "value": "Percent" },
+    "figmaContent": ["helperText", "label", "valueLabel"]
   },
   "figma": {
     "nodeId": "541:28",

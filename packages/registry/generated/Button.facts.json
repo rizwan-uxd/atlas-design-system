@@ -215,7 +215,8 @@
     "bound": "Button",
     "instances": { "leadingIcon": "Leading icon slot", "trailingIcon": "Trailing icon slot" },
     "stateProps": { "disabled": "disabled", "loading": "loading" },
-    "enums": { "disabled": "State", "loading": "State", "size": "Size", "variant": "Variant" }
+    "enums": { "disabled": "State", "loading": "State", "size": "Size", "variant": "Variant" },
+    "figmaContent": ["children", "leadingIcon", "trailingIcon"]
   },
   "figma": {
     "nodeId": "19:2",

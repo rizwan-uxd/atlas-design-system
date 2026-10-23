@@ -33,7 +33,8 @@
     "bound": "Checkbox",
     "instances": {},
     "stateProps": { "disabled": "disabled" },
-    "enums": { "checked": "Checked", "disabled": "State", "size": "Size", "variant": "Variant" }
+    "enums": { "checked": "Checked", "disabled": "State", "size": "Size", "variant": "Variant" },
+    "figmaContent": ["label"]
   },
   "figma": {
     "nodeId": "82:24",

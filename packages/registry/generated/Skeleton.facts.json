@@ -203,7 +203,8 @@
     "bound": "Skeleton",
     "instances": {},
     "stateProps": {},
-    "enums": { "shape": "Shape" }
+    "enums": { "shape": "Shape" },
+    "figmaContent": []
   },
   "figma": {
     "nodeId": "531:5",

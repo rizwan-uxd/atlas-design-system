@@ -211,7 +211,8 @@
     "bound": "SidebarMenuRow",
     "instances": {},
     "stateProps": { "active": "active", "disabled": "disabled", "expanded": "expanded" },
-    "enums": { "active": "State", "disabled": "State", "expanded": "State" }
+    "enums": { "active": "State", "disabled": "State", "expanded": "State" },
+    "figmaContent": ["badge", "children", "icon"]
   },
   "figma": {
     "nodeId": "606:2897",

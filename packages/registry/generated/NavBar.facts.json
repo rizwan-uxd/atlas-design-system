@@ -29,7 +29,8 @@
     "bound": "NavBar",
     "instances": {},
     "stateProps": {},
-    "enums": { "size": "Size", "variant": "Variant" }
+    "enums": { "size": "Size", "variant": "Variant" },
+    "figmaContent": ["actions", "brand", "breadcrumb", "search"]
   },
   "figma": {
     "nodeId": "148:306",

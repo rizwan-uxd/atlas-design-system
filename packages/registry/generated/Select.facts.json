@@ -208,7 +208,8 @@
     "bound": "Select",
     "instances": {},
     "stateProps": { "disabled": "disabled", "invalid": "invalid" },
-    "enums": { "disabled": "State", "invalid": "State", "placeholder": "Placeholder", "size": "Size" }
+    "enums": { "disabled": "State", "invalid": "State", "placeholder": "Placeholder", "size": "Size" },
+    "figmaContent": ["children"]
   },
   "figma": {
     "nodeId": "630:75",

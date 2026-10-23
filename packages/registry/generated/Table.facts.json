@@ -208,7 +208,8 @@
     "bound": "TableHead",
     "instances": {},
     "stateProps": {},
-    "enums": { "align": "Align", "sort": "Sort" }
+    "enums": { "align": "Align", "sort": "Sort" },
+    "figmaContent": ["children"]
   },
   "figma": {
     "nodeId": "674:68",

@@ -25,7 +25,8 @@
     "bound": "Drawer",
     "instances": {},
     "stateProps": {},
-    "enums": { "side": "Side" }
+    "enums": { "side": "Side" },
+    "figmaContent": ["children"]
   },
   "figma": {
     "nodeId": "577:24",

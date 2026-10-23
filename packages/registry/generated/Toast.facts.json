@@ -217,7 +217,8 @@
     "bound": "Toast",
     "instances": {},
     "stateProps": {},
-    "enums": { "variant": "Variant" }
+    "enums": { "variant": "Variant" },
+    "figmaContent": []
   },
   "figma": {
     "nodeId": "670:68",

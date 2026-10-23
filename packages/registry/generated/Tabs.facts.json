@@ -37,7 +37,8 @@
     "bound": "Tabs",
     "instances": { "badge": "Badge", "icon": "Icon slot" },
     "stateProps": {},
-    "enums": { "size": "Size", "variant": "Variant" }
+    "enums": { "size": "Size", "variant": "Variant" },
+    "figmaContent": []
   },
   "figma": {
     "nodeId": "146:54",

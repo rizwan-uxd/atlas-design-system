@@ -214,7 +214,8 @@
     "bound": "Field",
     "instances": {},
     "stateProps": {},
-    "enums": { "size": "Size" }
+    "enums": { "size": "Size" },
+    "figmaContent": ["children", "error", "helpText", "label", "labelAction"]
   },
   "figma": {
     "nodeId": "863:254",

@@ -214,7 +214,8 @@
     "bound": "Switch",
     "instances": {},
     "stateProps": { "disabled": "disabled" },
-    "enums": { "defaultChecked": "Checked", "disabled": "State", "size": "Size" }
+    "enums": { "defaultChecked": "Checked", "disabled": "State", "size": "Size" },
+    "figmaContent": ["label"]
   },
   "figma": {
     "nodeId": "95:114",

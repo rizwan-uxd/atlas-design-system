@@ -212,7 +212,8 @@
     "bound": "Input",
     "instances": { "leadingIcon": "Leading icon slot", "trailingIcon": "Trailing icon slot" },
     "stateProps": { "disabled": "disabled", "error": "invalid" },
-    "enums": { "disabled": "State", "invalid": "State", "size": "Size", "variant": "Variant" }
+    "enums": { "disabled": "State", "invalid": "State", "size": "Size", "variant": "Variant" },
+    "figmaContent": ["leadingIcon", "placeholder", "prefix", "suffix", "trailingIcon"]
   },
   "figma": {
     "nodeId": "43:111",
