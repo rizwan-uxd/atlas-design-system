@@ -3,6 +3,8 @@
   "name": "Button",
   "import": "@atlas/ui-web/primitives/Button/Button",
   "source": "packages/ui-web/src/primitives/Button/Button.tsx",
+  "part": "Button",
+  "propsType": "ButtonProps",
   "props": [
     { "name": "asChild", "type": "boolean", "optional": true },
     { "name": "children", "type": "React.ReactNode", "optional": true },
@@ -210,6 +212,7 @@
   },
   "codeConnect": {
     "file": "packages/figma-sync/code-connect/Button.figma.tsx",
+    "bound": "Button",
     "instances": { "leadingIcon": "Leading icon slot", "trailingIcon": "Trailing icon slot" },
     "stateProps": { "disabled": "disabled", "loading": "loading" },
     "enums": { "disabled": "State", "loading": "State", "size": "Size", "variant": "Variant" }

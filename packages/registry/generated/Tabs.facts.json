@@ -1,0 +1,51 @@
+{
+  "_generated": "GENERATED — do not hand-edit. registry-build from packages/ui-web/src/patterns/Tabs/Tabs.tsx, Code Connect and atlas/metadata; run npm run registry:build.",
+  "name": "Tabs",
+  "import": "@atlas/ui-web/patterns/Tabs/Tabs",
+  "source": "packages/ui-web/src/patterns/Tabs/Tabs.tsx",
+  "part": "Tabs",
+  "propsType": "TabsProps",
+  "props": [
+    { "name": "activationMode", "type": "\"automatic\" | \"manual\"", "optional": true },
+    { "name": "activeTab", "type": "string", "optional": true },
+    { "name": "animated", "type": "boolean", "optional": true },
+    { "name": "children", "type": "React.ReactNode", "optional": true },
+    { "name": "className", "type": "string", "optional": true },
+    { "name": "defaultTab", "type": "string", "optional": true },
+    { "name": "defaultValue", "type": "string", "optional": true },
+    { "name": "items", "type": "TabItem[]", "optional": false },
+    { "name": "onTabChange", "type": "(value: string) => void", "optional": true },
+    { "name": "onValueChange", "type": "(value: string) => void", "optional": true },
+    { "name": "orientation", "type": "TabsOrientation", "optional": true },
+    { "name": "size", "type": "TabsSize", "optional": true },
+    { "name": "value", "type": "string", "optional": true },
+    { "name": "variant", "type": "TabsVariant", "optional": true }
+  ],
+  "inherited": {},
+  "events": [
+    { "name": "onTabChange", "type": "(value: string) => void" },
+    { "name": "onValueChange", "type": "(value: string) => void" }
+  ],
+  "unions": {
+    "activationMode": ["automatic", "manual"],
+    "orientation": ["horizontal", "vertical"],
+    "size": ["lg", "md", "sm"],
+    "variant": ["line", "outline", "pill", "segmented"]
+  },
+  "codeConnect": {
+    "file": "packages/figma-sync/code-connect/Tabs.figma.tsx",
+    "bound": "Tabs",
+    "instances": { "badge": "Badge", "icon": "Icon slot" },
+    "stateProps": {},
+    "enums": { "size": "Size", "variant": "Variant" }
+  },
+  "figma": {
+    "nodeId": "146:54",
+    "axes": {
+      "Variant": ["line", "pill", "segmented", "outline"],
+      "Size": ["sm", "md", "lg"],
+      "State": ["default", "hover", "focus-visible", "selected", "disabled"]
+    }
+  },
+  "tokensUsed": ["--atlas-background-muted", "--atlas-background-subtle", "--atlas-border", "--atlas-border-width-1", "--atlas-border-width-2", "--atlas-duration-base", "--atlas-duration-fast", "--atlas-easing-emphasized", "--atlas-easing-standard", "--atlas-focus-ring", "--atlas-font-sans", "--atlas-font-weight-medium", "--atlas-font-weight-semibold", "--atlas-foreground", "--atlas-foreground-disabled", "--atlas-foreground-muted", "--atlas-primary", "--atlas-primary-foreground", "--atlas-radius-full", "--atlas-radius-md", "--atlas-radius-sm", "--atlas-shadow-sm", "--atlas-spacing-0_5", "--atlas-spacing-1", "--atlas-spacing-10", "--atlas-spacing-12", "--atlas-spacing-2", "--atlas-spacing-3", "--atlas-spacing-4", "--atlas-spacing-5", "--atlas-spacing-8", "--atlas-surface", "--atlas-text-body", "--atlas-text-body-sm", "--atlas-touch-min"]
+}

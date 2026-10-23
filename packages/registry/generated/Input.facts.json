@@ -3,6 +3,8 @@
   "name": "Input",
   "import": "@atlas/ui-web/primitives/Input/Input",
   "source": "packages/ui-web/src/primitives/Input/Input.tsx",
+  "part": "Input",
+  "propsType": "InputProps",
   "props": [
     { "name": "invalid", "type": "boolean", "optional": true },
     { "name": "leadingIcon", "type": "React.ReactNode", "optional": true },
@@ -207,6 +209,7 @@
   },
   "codeConnect": {
     "file": "packages/figma-sync/code-connect/Input.figma.tsx",
+    "bound": "Input",
     "instances": { "leadingIcon": "Leading icon slot", "trailingIcon": "Trailing icon slot" },
     "stateProps": { "disabled": "disabled", "error": "invalid" },
     "enums": { "disabled": "State", "invalid": "State", "size": "Size", "variant": "Variant" }

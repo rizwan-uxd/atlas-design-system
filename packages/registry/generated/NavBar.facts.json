@@ -1,0 +1,43 @@
+{
+  "_generated": "GENERATED — do not hand-edit. registry-build from packages/ui-web/src/layouts/NavBar/NavBar.tsx, Code Connect and atlas/metadata; run npm run registry:build.",
+  "name": "NavBar",
+  "import": "@atlas/ui-web/layouts/NavBar/NavBar",
+  "source": "packages/ui-web/src/layouts/NavBar/NavBar.tsx",
+  "part": "NavBar",
+  "propsType": "NavBarProps",
+  "props": [
+    { "name": "actions", "type": "React.ReactNode", "optional": true },
+    { "name": "brand", "type": "React.ReactNode", "optional": true },
+    { "name": "brandHref", "type": "string", "optional": true },
+    { "name": "breadcrumb", "type": "React.ReactNode", "optional": true },
+    { "name": "className", "type": "string", "optional": true },
+    { "name": "hideOnScroll", "type": "boolean", "optional": true },
+    { "name": "links", "type": "NavLink[]", "optional": true },
+    { "name": "search", "type": "React.ReactNode", "optional": true },
+    { "name": "size", "type": "NavBarSize", "optional": true },
+    { "name": "style", "type": "React.CSSProperties", "optional": true },
+    { "name": "variant", "type": "NavBarVariant", "optional": true }
+  ],
+  "inherited": {},
+  "events": [],
+  "unions": {
+    "size": ["lg", "md", "sm"],
+    "variant": ["bordered", "default", "floating", "transparent"]
+  },
+  "codeConnect": {
+    "file": "packages/figma-sync/code-connect/NavBar.figma.tsx",
+    "bound": "NavBar",
+    "instances": {},
+    "stateProps": {},
+    "enums": { "size": "Size", "variant": "Variant" }
+  },
+  "figma": {
+    "nodeId": "148:306",
+    "axes": {
+      "Variant": ["default", "bordered", "floating", "transparent"],
+      "Size": ["sm", "md", "lg"],
+      "State": ["default", "disabled"]
+    }
+  },
+  "tokensUsed": ["--atlas-background", "--atlas-background-subtle", "--atlas-border", "--atlas-border-subtle", "--atlas-border-width-1", "--atlas-border-width-2", "--atlas-duration-base", "--atlas-duration-fast", "--atlas-easing-standard", "--atlas-focus-ring", "--atlas-font-sans", "--atlas-font-size-lg", "--atlas-font-size-xs", "--atlas-font-weight-medium", "--atlas-font-weight-semibold", "--atlas-foreground", "--atlas-foreground-disabled", "--atlas-foreground-muted", "--atlas-line-height-tight", "--atlas-primary", "--atlas-radius-full", "--atlas-radius-md", "--atlas-radius-sm", "--atlas-radius-xl", "--atlas-safe-bottom", "--atlas-safe-top", "--atlas-shadow-lg", "--atlas-shadow-md", "--atlas-shadow-sm", "--atlas-spacing-0_5", "--atlas-spacing-1", "--atlas-spacing-10", "--atlas-spacing-12", "--atlas-spacing-16", "--atlas-spacing-2", "--atlas-spacing-3", "--atlas-spacing-4", "--atlas-spacing-6", "--atlas-spacing-8", "--atlas-surface", "--atlas-surface-raised", "--atlas-text-body", "--atlas-text-body-sm", "--atlas-text-h4", "--atlas-touch-min", "--atlas-z-sticky"]
+}

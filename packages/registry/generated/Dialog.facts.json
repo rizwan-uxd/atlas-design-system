@@ -1,0 +1,39 @@
+{
+  "_generated": "GENERATED — do not hand-edit. registry-build from packages/ui-web/src/compositions/Dialog/Dialog.tsx, Code Connect and atlas/metadata; run npm run registry:build.",
+  "name": "Dialog",
+  "import": "@atlas/ui-web/compositions/Dialog/Dialog",
+  "source": "packages/ui-web/src/compositions/Dialog/Dialog.tsx",
+  "part": "DialogContent",
+  "propsType": "DialogContentProps",
+  "props": [
+    { "name": "children", "type": "React.ReactNode", "optional": true },
+    { "name": "className", "type": "string", "optional": true },
+    { "name": "closeOnEscape", "type": "boolean", "optional": true },
+    { "name": "closeOnOverlayClick", "type": "boolean", "optional": true },
+    { "name": "id", "type": "string", "optional": true },
+    { "name": "size", "type": "DialogSize", "optional": true },
+    { "name": "variant", "type": "DialogVariant", "optional": true }
+  ],
+  "inherited": {},
+  "events": [],
+  "unions": {
+    "size": ["full", "lg", "md", "sm", "xl"],
+    "variant": ["default", "destructive"]
+  },
+  "codeConnect": {
+    "file": "packages/figma-sync/code-connect/Dialog.figma.tsx",
+    "bound": "Dialog",
+    "instances": {},
+    "stateProps": {},
+    "enums": { "confirmVariant": "Variant", "size": "Size", "variant": "Variant" }
+  },
+  "figma": {
+    "nodeId": "136:174",
+    "axes": {
+      "Variant": ["default", "destructive"],
+      "Size": ["sm", "md", "lg", "full", "xl"],
+      "State": ["default", "loading"]
+    }
+  },
+  "tokensUsed": ["--atlas-background", "--atlas-background-subtle", "--atlas-border", "--atlas-border-width-1", "--atlas-border-width-2", "--atlas-dialog-lg", "--atlas-dialog-md", "--atlas-dialog-sm", "--atlas-dialog-xl", "--atlas-duration-base", "--atlas-duration-fast", "--atlas-easing-emphasized", "--atlas-easing-exit", "--atlas-easing-standard", "--atlas-focus-ring", "--atlas-font-sans", "--atlas-font-size-lg", "--atlas-font-weight-semibold", "--atlas-foreground", "--atlas-foreground-muted", "--atlas-icon-size-xs", "--atlas-icon-stroke-xs", "--atlas-line-height-normal", "--atlas-line-height-tight", "--atlas-overlay", "--atlas-radius-lg", "--atlas-radius-md", "--atlas-shadow-xl", "--atlas-spacing-0_5", "--atlas-spacing-1", "--atlas-spacing-10", "--atlas-spacing-3", "--atlas-spacing-4", "--atlas-spacing-6", "--atlas-spacing-8", "--atlas-surface-overlay", "--atlas-text-body-sm", "--atlas-text-h3", "--atlas-z-modal", "--atlas-z-overlay"]
+}

@@ -1,0 +1,33 @@
+{
+  "_generated": "GENERATED — do not hand-edit. registry-build from packages/ui-web/src/patterns/DropdownMenu/DropdownMenu.tsx, Code Connect and atlas/metadata; run npm run registry:build.",
+  "name": "DropdownMenu",
+  "import": "@atlas/ui-web/patterns/DropdownMenu/DropdownMenu",
+  "source": "packages/ui-web/src/patterns/DropdownMenu/DropdownMenu.tsx",
+  "part": "DropdownMenu",
+  "propsType": "DropdownMenuProps",
+  "props": [
+    { "name": "children", "type": "React.ReactNode", "optional": true },
+    { "name": "defaultOpen", "type": "boolean", "optional": true },
+    { "name": "onOpenChange", "type": "(open: boolean) => void", "optional": true },
+    { "name": "open", "type": "boolean", "optional": true }
+  ],
+  "inherited": {},
+  "events": [
+    { "name": "onOpenChange", "type": "(open: boolean) => void" }
+  ],
+  "unions": {},
+  "codeConnect": {
+    "file": "packages/figma-sync/code-connect/DropdownMenu.figma.tsx",
+    "bound": "DropdownMenu",
+    "instances": {},
+    "stateProps": {},
+    "enums": { "groups": "Groups" }
+  },
+  "figma": {
+    "nodeId": "516:118",
+    "axes": {
+      "Groups": ["1", "2", "3"]
+    }
+  },
+  "tokensUsed": ["--atlas-background-accent", "--atlas-border", "--atlas-border-width-1", "--atlas-border-width-2", "--atlas-danger", "--atlas-danger-subtle", "--atlas-font-sans", "--atlas-font-size-sm", "--atlas-font-size-xs", "--atlas-font-weight-medium", "--atlas-font-weight-regular", "--atlas-foreground", "--atlas-foreground-muted", "--atlas-icon-size-xs", "--atlas-letter-spacing-wide", "--atlas-line-height-normal", "--atlas-opacity-disabled", "--atlas-radius-full", "--atlas-radius-md", "--atlas-radius-sm", "--atlas-shadow-md", "--atlas-spacing-1", "--atlas-spacing-16", "--atlas-spacing-1_5", "--atlas-spacing-2", "--atlas-spacing-8", "--atlas-surface-overlay", "--atlas-z-dropdown"]
+}

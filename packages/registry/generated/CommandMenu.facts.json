@@ -1,0 +1,44 @@
+{
+  "_generated": "GENERATED — do not hand-edit. registry-build from packages/ui-web/src/compositions/CommandMenu/CommandMenu.tsx, Code Connect and atlas/metadata; run npm run registry:build.",
+  "name": "CommandMenu",
+  "import": "@atlas/ui-web/compositions/CommandMenu/CommandMenu",
+  "source": "packages/ui-web/src/compositions/CommandMenu/CommandMenu.tsx",
+  "part": "CommandMenuContent",
+  "propsType": "CommandMenuContentProps",
+  "props": [
+    { "name": "children", "type": "React.ReactNode", "optional": true },
+    { "name": "className", "type": "string", "optional": true },
+    { "name": "closeOnSelect", "type": "boolean", "optional": true },
+    { "name": "defaultValue", "type": "string", "optional": true },
+    { "name": "emptyText", "type": "string", "optional": true },
+    { "name": "filter", "type": "CommandMenuFilter | false", "optional": true },
+    { "name": "label", "type": "string", "optional": true },
+    { "name": "loading", "type": "boolean", "optional": true },
+    { "name": "onValueChange", "type": "(value: string) => void", "optional": true },
+    { "name": "placeholder", "type": "string", "optional": true },
+    { "name": "size", "type": "CommandMenuSize", "optional": true },
+    { "name": "value", "type": "string", "optional": true }
+  ],
+  "inherited": {},
+  "events": [
+    { "name": "onValueChange", "type": "(value: string) => void" }
+  ],
+  "unions": {
+    "size": ["lg", "md"]
+  },
+  "codeConnect": {
+    "file": "packages/figma-sync/code-connect/CommandMenu.figma.tsx",
+    "bound": "CommandMenuContent",
+    "instances": {},
+    "stateProps": { "loading": "loading" },
+    "enums": { "loading": "State", "size": "Size" }
+  },
+  "figma": {
+    "nodeId": "990:211",
+    "axes": {
+      "Size": ["md", "lg"],
+      "State": ["default", "empty", "loading"]
+    }
+  },
+  "tokensUsed": ["--atlas-background-accent", "--atlas-border-width-2", "--atlas-font-size-sm", "--atlas-font-size-xs", "--atlas-font-weight-medium", "--atlas-foreground", "--atlas-foreground-muted", "--atlas-icon-size-xs", "--atlas-letter-spacing-wide", "--atlas-opacity-disabled", "--atlas-radius-sm", "--atlas-spacing-1", "--atlas-spacing-10", "--atlas-spacing-1_5", "--atlas-spacing-2", "--atlas-spacing-6"]
+}
