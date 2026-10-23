@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://atlas.design-system/schemas/registry/TextField.schema.json",
+  "$comment": "GENERATED — do not hand-edit. registry-build from packages/registry/src/TextField.registry.json and the Input facts; run npm run registry:build.",
+  "title": "TextField protocol node",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["type"],
+  "properties": {
+    "type": { "const": "TextField" },
+    "props": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "variant": {
+          "enum": ["default", "filled", "unstyled"]
+        },
+        "size": {
+          "enum": ["sm", "md", "lg"]
+        },
+        "invalid": { "type": "boolean" },
+        "loading": { "type": "boolean" },
+        "disabled": { "type": "boolean" },
+        "name": { "type": "string" },
+        "value": {
+          "anyOf": [
+            { "type": "string" },
+            { "type": "number" }
+          ]
+        },
+        "placeholder": { "type": "string" },
+        "required": { "type": "boolean" }
+      }
+    },
+    "slots": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "leadingIcon": { "type": "array" },
+        "prefix": { "type": "array" },
+        "suffix": { "type": "array" },
+        "trailingIcon": { "type": "array" }
+      }
+    }
+  }
+}

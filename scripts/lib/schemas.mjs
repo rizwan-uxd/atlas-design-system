@@ -34,9 +34,13 @@ export const INPUTS = [
   { glob: "packages/registry/src/*.registry.json", schema: "registry.schema.json#/$defs/entry", min: 1, typeMatchesFile: true },
   { glob: "packages/registry/generated/*.facts.json", schema: "registry.schema.json#/$defs/facts", nameMatchesFile: true },
 ]
-/** Directories whose every *.json must be covered by an INPUTS rule. The schemas themselves are exempt. */
+/**
+ * Directories whose every *.json must be covered by an INPUTS rule. Schemas themselves are exempt:
+ * the authored ones here, and the protocol schemas registry-build generates, which it compiles with
+ * ajv in strict mode (that validates them against the 2020-12 meta-schema) and diff-gates.
+ */
 export const WATCHED = ["atlas", "packages/governance", "packages/registry"]
-const EXEMPT = /^packages\/governance\/schemas\//
+const EXEMPT = /^packages\/(governance\/schemas|registry\/generated\/schemas)\//
 
 let ajv
 /** One compiled validator per schema id, sharing $refs through common.schema.json. */

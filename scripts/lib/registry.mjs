@@ -356,3 +356,88 @@ type P = React.ComponentProps<typeof ${f.part}>
 ${lines.join("\n")}
 `
 }
+
+/* ── generated protocol schemas and the component map (M3 session 3) ───── */
+
+/**
+ * The non-nullable type text of named props of an exported part, read from the program — used for
+ * protocolProps that are inherited (`name`, `value`), which the facts list by name only.
+ */
+export function propTypes(program, file, part, names) {
+  const checker = program.getTypeChecker()
+  const sf = program.getSourceFile(file)
+  let sym = checker.getExportsOfModule(checker.getSymbolAtLocation(sf)).find((s) => s.name === part)
+  if (sym.flags & ts.SymbolFlags.Alias) sym = checker.getAliasedSymbol(sym)
+  const type = checker.getTypeOfSymbol(checker.getTypeOfSymbol(sym).getCallSignatures()[0].getParameters()[0])
+  const out = {}
+  for (const n of names) {
+    const p = checker.getPropertyOfType(type, n)
+    if (p) out[n] = checker.typeToString(checker.getNonNullableType(checker.getTypeOfSymbol(p)), undefined, ts.TypeFormatFlags.NoTruncation)
+  }
+  return out
+}
+
+/** JSON Schema for a TypeScript type's JSON-representable members; throws when it has none. */
+export function jsonTypeOf(typeText, where) {
+  const members = typeText.split(" | ").map((m) => m.trim())
+  const out = []
+  for (const m of members) {
+    if (m === "string" || m === "number") out.push({ type: m })
+    else if (m === "boolean" || m === "true" || m === "false") out.push({ type: "boolean" })
+    else if (/^"[^"]*"$/.test(m)) out.push({ const: JSON.parse(m) })
+  }
+  const seen = new Set(), unique = out.filter((s) => { const k = JSON.stringify(s); return !seen.has(k) && seen.add(k) })
+  if (!unique.length) throw new Error(`registry: ${where} is ${typeText}, which a JSON protocol message cannot carry`)
+  return unique.length === 1 ? unique[0] : { anyOf: unique }
+}
+
+/**
+ * The protocol-node schema for one registered type: `{ type, props, slots }`, closed at every level,
+ * so an unknown prop or slot is invalid. Consumed by the M4 runtime validator; the props it allows are
+ * exactly the entry's protocolProps, typed from the code.
+ */
+export function protocolSchema(entry, types) {
+  const props = {}, required = []
+  for (const [name, spec] of Object.entries(entry.protocolProps ?? {})) {
+    props[name] = spec.values ? { enum: spec.values } : jsonTypeOf(types[name] ?? "", `${entry.type}.${name}`)
+    if (spec.required) required.push(name)
+  }
+  const properties = {
+    type: { const: entry.type },
+    props: { type: "object", additionalProperties: false, properties: props, ...(required.length ? { required } : {}) },
+  }
+  const slots = entry.slots ?? []
+  if (slots.length) properties.slots = { type: "object", additionalProperties: false, properties: Object.fromEntries(slots.map((s) => [s, { type: "array" }])) }
+  return {
+    $schema: "https://json-schema.org/draft/2020-12/schema",
+    $id: `https://atlas.design-system/schemas/registry/${entry.type}.schema.json`,
+    $comment: `GENERATED — do not hand-edit. registry-build from packages/registry/src/${entry.type}.registry.json${entry.aliasOf ? ` and the ${entry.aliasOf} facts` : ""}; run npm run registry:build.`,
+    title: `${entry.type} protocol node`,
+    type: "object",
+    additionalProperties: false,
+    required: ["type"],
+    properties,
+  }
+}
+
+/** `componentMap.ts`: registered type → the component that renders it, through deep imports (no barrel). */
+export function componentMapSource(entries, metadata) {
+  const rendered = Object.values(entries).filter((e) => e.kind === "component").sort((a, b) => a.type.localeCompare(b.type))
+  const imports = [...new Set(rendered.map((e) => e.aliasOf))].sort()
+    .map((c) => `import { ${c} } from "${metadata[c].import}"`)
+  const structural = Object.values(entries).filter((e) => e.kind === "structural").map((e) => JSON.stringify(e.type)).sort()
+  return `// GENERATED — do not hand-edit. registry-build from packages/registry/src and aliases.json; run npm run registry:build.
+// Registered type → the Atlas component that renders it, through deep imports: there is no barrel,
+// and this map is provably complete because it is generated from the registry (roadmap M4).
+${imports.join("\n")}
+
+export const componentMap = {
+${rendered.map((e) => `  ${e.type === e.aliasOf ? e.type : `${e.type}: ${e.aliasOf}`},`).join("\n")}
+} as const
+
+/** Structural types are composed by the runtime from registered components, not rendered by one. */
+export const structuralTypes = [${structural.join(", ")}] as const
+
+export type RegisteredType = keyof typeof componentMap | (typeof structuralTypes)[number]
+`
+}

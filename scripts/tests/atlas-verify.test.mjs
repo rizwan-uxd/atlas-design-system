@@ -353,3 +353,21 @@ test("scope/no-new-components fails a new component directory unless --allow-new
   assert.match(bad.mismatches.join("\n"), /primitives\/Zork\/ is a new component/)
   assert.equal(verify(dir, "no-new-components", ["--allow-new-component"]).status, "pass")
 }))
+
+const entry = (type, aliasOf, kind = "component") => JSON.stringify({ type, aliasOf, kind, platforms: ["web"], registryComplete: false, ...(kind === "structural" ? { composedOf: ["Button"] } : {}) })
+
+test("scope/no-new-components fails a new registry type that resolves to no component", () => withRepo(({ dir }) => {
+  write(dir, "packages/registry/src/Gizmo.registry.json", entry("Gizmo", "Button"))
+  const bad = verify(dir, "no-new-components")
+  assert.equal(bad.status, "fail")
+  assert.match(bad.mismatches.join("\n"), /registers "Gizmo", which does not resolve to an Atlas component/)
+  assert.equal(verify(dir, "no-new-components", ["--allow-new-component"]).status, "pass")
+}))
+
+test("scope/no-new-components passes a new registry entry for a real component, or a structural one", () => withRepo(({ dir }) => {
+  write(dir, "packages/registry/src/Badge.registry.json", entry("Badge", "Badge"))
+  write(dir, "packages/registry/src/Wizard.registry.json", entry("Wizard", null, "structural"))
+  const r = verify(dir, "no-new-components")
+  assert.equal(r.status, "pass", r.mismatches?.join("\n"))
+  assert.match(r.note, /2 registry entries added/)
+}))

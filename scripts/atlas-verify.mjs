@@ -436,7 +436,21 @@ check("scope", "no-new-components", () => {
   const dirs = new Set(changed.map((f) => (f.match(COMPONENT_DIR) || [])[0]).filter(Boolean))
   const fails = [...dirs].filter((d) => !sh(`git cat-file -e ${BASE}:${d.replace(/\/$/, "")}`, ROOT).ok)
     .map((d) => `${d} is a new component — compose it from primitives in the task and log it in atlas/state/candidates.json`)
-  return { ...verdict(fails), inspected: dirs.size, scope: dirs.size, note: `${dirs.size} component dirs changed` }
+  // M3: a new registry entry is a new agent-visible type. It passes only when it renders a real
+  // component (directly, or through an aliases.json name) or is structural; anything else needs the
+  // atlas-approved-new label, which CI turns into --allow-new-component (handled above)
+  const ENTRY = /^packages\/registry\/src\/[^/]+\.registry\.json$/
+  const entries = changed.filter((f) => ENTRY.test(f) && fs.existsSync(path.join(ROOT, f)) && !sh(`git cat-file -e ${BASE}:${f}`, ROOT).ok)
+  const aliases = inputs.valid("packages/registry/aliases.json")?.aliases
+  for (const f of entries) {
+    const e = inputs.valid(f)
+    if (!e || !aliases) { fails.push(`${f} is a new registry entry that is not schema-valid (or aliases.json is not) — it cannot be checked`); continue }
+    if (e.kind === "structural") continue
+    const resolves = metadata[e.aliasOf] && (e.type === e.aliasOf || aliases[e.type] === e.aliasOf)
+    if (!resolves) fails.push(`${f} registers "${e.type}", which does not resolve to an Atlas component through aliases.json — a new type needs the atlas-approved-new label`)
+  }
+  return { ...verdict(fails), inspected: dirs.size + entries.length, scope: dirs.size + entries.length,
+    note: `${dirs.size} component dirs changed · ${entries.length} registry entries added` }
 })
 
 // ─── Report ──────────────────────────────────────────────────────────────────
