@@ -7,9 +7,10 @@ ones were deleted and live in git history.
 
 ## Progress (update at the end of every session, and report it at the start and end of each)
 Counted in sessions, using the roadmap's own estimates (midpoint where it gives a range). Change N
-and say so when an estimate changes. **Roadmap: 12 of ~28 sessions done (~43%). M4 is 1.5 of 3.5: session 1 wrote the
+and say so when an estimate changes. **Roadmap: 13 of ~28 sessions done (~46%). M4 is 2.5 of 3.5: session 1 wrote the
 plan (`docs/superpowers/plans/2026-10-23-m4-runtime-slice.md`, owner decisions DEC-082 and DEC-083), session 2
-built plan Tasks 1–5. Next: session 14 of ~28 = M4 session 3, plan Tasks 6–9 (reducer, renderer, size, fuzz).**
+built plan Tasks 1–5, session 3 built Tasks 6, 7 and 9 (Task 8, the size metric, waits on an owner decision).
+Next: session 15 of ~28 = M4 session 4, plan Tasks 10–14 (stub agent, route, Playwright, CI, records, PR).**
 
 | Phase | Sessions (est.) | Done | Status | PR |
 |---|---|---|---|---|
@@ -20,12 +21,12 @@ built plan Tasks 1–5. Next: session 14 of ~28 = M4 session 3, plan Tasks 6–9
 | M2 — verifier can fail | 1 | 1 | ✅ | #101 |
 | M3 — registry | 4 | 4 | ✅ exit met except Text (5/6 types) | #102, #103, #104, #105 |
 | 2d — token work, zero new tokens | 1.5 | 1 | ✅ in 1 session (est. 1.5) | #106 |
-| **M4 — runtime vertical slice** | 3.5 | 1.5 | 🔄 plan + Tasks 1–5 done; Tasks 6–14 next | `claude/m4-runtime-slice` (no PR yet) |
+| **M4 — runtime vertical slice** | 3.5 | 2.5 | 🔄 Tasks 1–7 and 9 done; Task 8 needs a decision; 10–14 next | `claude/m4-runtime-slice` (no PR yet) |
 | Phase 4 — enforcement hardened | 2.5 | 0 | ⏳ | |
 | M5 — semantic tokens + brands | 7 | 0 | ⏳ | |
 | Phase 6 — filtered agent catalog | 2.5 | 0 | ⏳ | |
 | Phase 7 — metrics as release gates | 1.5 | 0 | ⏳ | |
-| **Total** | **~28** | **12** | **~43%** | |
+| **Total** | **~28** | **13** | **~46%** | |
 
 Metric table (the roadmap's scoreboard): **7 passing · 2 failing · 26 not measurable** of 35. 2d moved
 the two raw-design-values rows and reduced-motion to passing; D1-B measured the three token-drift rows
@@ -113,8 +114,14 @@ each over the registered subset (4/47 components registered).
   (DEC-083); `registry-build` writes `generated/runtimeRegistry.ts`, which `packages/registry/lib` wraps as
   `registry`, `resolve`, `filter` and `without`; `packages/runtime` has the protocol types, the
   `protocol.schema.json` envelope, the request-access fixture (an `INPUTS` rule, `packages/runtime` watched),
-  `findMarkup`, `validateTree` and `fallbackFor`. The three `runtime/validator` metric rows read passing; the other
-  nine M4 rows are still not measurable.
+  `findMarkup`, `validateTree` and `fallbackFor`. Session 3 added `store.ts` (sequenced reducer, structural-sharing
+  patches), `Runtime.tsx` (`<AtlasRuntime>`, per-node boundaries, the Field handoff, DEC-084) and the seeded fuzz.
+  Five vitest M4 rows read passing (three `runtime/validator`, two `runtime/fuzz`); the six Playwright rows wait on
+  Task 11.
+- **Open decision — the size metric (plan Task 8).** The fixture's render op is 513 B against 1663 B of rendered
+  markup: ratio **0.308**, over the 0.30 gate. 521 B of that markup is the runtime's own `data-atlas-*` tagging,
+  so against the components' markup alone (about 1140 B) the ratio is about 0.45. The test is not committed; it
+  waits on the owner's choice of how to measure or whether to make the protocol more compact.
 
 ## Open owner decisions (ask; do not decide these yourself)
 - **Text (the 6th M3 exit type) — deferred by the user 2026-10-23 (DEC-080).** Atlas has no Text
