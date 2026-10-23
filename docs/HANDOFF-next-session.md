@@ -1,18 +1,13 @@
-# Handoff: Phase 4 is complete (3 sessions); M5 is next (Atlas roadmap)
+# Handoff: M5.1 radius is complete; M5.2 spacing is next (Atlas roadmap)
 
-Written 2026-10-22, updated 2026-10-23 after D1 option B, M4 (#108) and Phase 4 (all three sessions). **Read in this order: `AGENTS.md` → `docs/ATLAS-DELIVERY-ROADMAP.md` → this file.**
+Written 2026-10-22, updated 2026-10-23 after D1 option B, M4 (#108), Phase 4 (#109) and M5.1 radius. **Read in this order: `AGENTS.md` → `docs/ATLAS-DELIVERY-ROADMAP.md` → this file.**
 The roadmap is normative now (referenced from `AGENTS.md` §2) and owns the phase order; this file is
 only current state plus the gotchas that will bite again. **This is the only handoff doc** — earlier
 ones were deleted and live in git history.
 
 ## Progress (update at the end of every session, and report it at the start and end of each)
 Counted in sessions, using the roadmap's own estimates (midpoint where it gives a range). Change N
-and say so when an estimate changes. **Roadmap: 17 of ~28 sessions done (~61%). Phase 4 is complete in
-3 sessions (estimate 2–3): the four atlas-verify extensions, the CI metrics collection with a blocking
-staleness gate, the ui-native freeze, the overflow check, runtime-demo visual sections, the @theme inline
-reduction and componentOwners (plan `docs/superpowers/plans/2026-10-23-phase-4-enforcement.md`).
-Next: session 18 of ~28 = M5.1 radius (the semantic token tier; the @theme reduction was its hard
-prerequisite and is done).**
+and say so when an estimate changes. **Roadmap: 18 of ~28 sessions done (~64%). M5.1 radius is complete in 1 session (Kind A, zero pixel diff): four radius roles in Figma and CSS, 62 component uses migrated, 70 kept primitive with reasons, and the token-lint `semantic-radius` ratchet (plan `docs/superpowers/plans/2026-10-23-m5-1-radius.md`, roadmap §M5 "M5.1 radius"). Next: session 19 of ~28 = M5.2 spacing (value-identical, the largest surface), or first the owner's call on the four candidate radius roles (CAND-057 to CAND-060).**
 
 | Phase | Sessions (est.) | Done | Status | PR |
 |---|---|---|---|---|
@@ -24,11 +19,11 @@ prerequisite and is done).**
 | M3 — registry | 4 | 4 | ✅ exit met except Text (5/6 types) | #102, #103, #104, #105 |
 | 2d — token work, zero new tokens | 1.5 | 1 | ✅ in 1 session (est. 1.5) | #106 |
 | **M4 — runtime vertical slice** | 3.5 | 3.5 | ✅ all 12 M4 rows measured: 11 pass, size fails (report-only, DEC-085) | #108 |
-| **Phase 4 — enforcement hardened** | 2.5 | 3 | ✅ in 3 sessions (est. range 2–3) | this branch |
-| M5 — semantic tokens + brands | 7 | 0 | ⏳ next: M5.1 radius | |
+| Phase 4 — enforcement hardened | 2.5 | 3 | ✅ in 3 sessions (est. range 2–3) | #109 |
+| **M5 — semantic tokens + brands** | 7 | 1 | 🔄 M5.1 radius ✅ (DEC-086); next M5.2 spacing | this branch |
 | Phase 6 — filtered agent catalog | 2.5 | 0 | ⏳ | |
 | Phase 7 — metrics as release gates | 1.5 | 0 | ⏳ | |
-| **Total** | **~28** | **17** | **~61%** | |
+| **Total** | **~28** | **18** | **~64%** | |
 
 Metric table (the roadmap's scoreboard): **7 passing · 2 failing · 26 not measurable** of 35. 2d moved
 the two raw-design-values rows and reduced-motion to passing; D1-B measured the three token-drift rows
@@ -39,6 +34,7 @@ contracts** (the 44 hand-written ones deleted), **2/2 target metrics passing** (
 each over the registered subset (4/47 components registered).
 
 ## State
+- **M5.1 radius is on this branch** (PR-0 `08d033a` roles in Figma and CSS, PR-1 `579640d` ratchet and migration). Figma `Atlas/Semantic` `radius-item|control|surface|pill` (`VariableID:1088:2-5`). The PR needs the owner's `atlas-approved-new` and `atlas-native-thaw` labels. Latest ids **DEC-086, CAND-060, DISC-108**.
 - **`main` has Phase 1 (#98), M1 (#99), D1 (#100) and M2 (#101).** The post-merge check passed on
   `dd039b1`: `node scripts/atlas-verify.mjs --only design.schemas` → `PASS schemas (58/58 files valid ·
   5 schemas)`, and the roadmap kept both the M2 and D1 sections.
@@ -64,7 +60,7 @@ each over the registered subset (4/47 components registered).
   unpublished colour ramps, 9 mode expansions. `figmaBound` (option C) stays as a cross-check. Refresh
   recipe: "Variable table" in `.agents/skills/atlas-figma-sync/references/pull-file.md`.
 - 47 web components (35 spec-complete, 12 scaffolded), 17 native (**ports paused by the user**),
-  15 patterns. Latest ids **DEC-081, CAND-055, DISC-107**. Snapshot pulled from Figma 2026-10-21.
+  15 patterns. Latest ids: see the M5.1 bullet above. Snapshot pulled from Figma 2026-10-21.
 - Benchmarks: waves 1–3 complete (T1–T19), written up in `docs/HARNESS.md` §6–§7. M1 and M2 changed
   `scripts/` and the atlas-verify skill, so `benchmarks/phase-9/pins.json` no longer matches; re-pin
   before the next benchmark run.
@@ -251,6 +247,9 @@ Search and filter frames (#57); disabled opacity bound (#58); StatCard icon, cli
    - The 18 components stamped on 2026-10-15 were compared with live Figma variant properties on 2026-10-19: 0 differences from the snapshot (Stepper's `Viewport` is intentionally not a code prop or Code Connect mapping). Not compared: booleans, text and instance-swap properties, visuals, tokens.
 
 ## Gotchas learned (they will bite again)
+- **A small variable-table refresh does not need the 460-entry copy.** Rebuild `.atlas-pull/variables.json` from the committed `atlas/tokens.json` `figmaTable.variables` plus the variables you just created, then recompute the FNV-1a checksum. If it equals the checksum the Figma read-only pull returned (M5.1: 467 variables, `8d191245`), the file is exact; if not, copy the pull.
+- **Count token uses, not lines.** M5.1 planned 59 migrations and made 62, because some lines hold two uses (`border-radius: var(a) var(a) 0 0`). Allowlist counts are per use.
+- **Plain `npm run atlas:sync` (no `--variables`) keeps `figmaTable`.** Run it after a component CSS change: `atlas/metadata` records each component's `tokensUsed`, so `design.snapshot-current` fails until it is regenerated. `npm run registry:build` is needed for the same reason (`generated/*.facts.json`).
 - **Donut ring in Figma, inner radius is a fraction of the RADIUS, not the diameter.** For a 48 px ring with a 4 px band, `innerRadius = (24 - 4) / 24 = 0.833` (what the web ring uses). Using `44 / 48 = 0.917` gives a 2 px band: that happened on the native Stepper and was fixed on all 24 arcs.
 - **Auto-layout glitch after `setExplicitVariableModeForCollection` on a frame:** one instance stayed at (0, 0) in a vertical auto-layout frame. `frame.appendChild(child)` on that child, then reading the geometry in a **later** call, fixed it; geometry read in the same call as an edit is stale.
 - **Native components are checked differently:** native components are not in the sync snapshot and have no Code Connect, contract or test (`atlas-verify` only recognises `packages/ui-native/components/<Name>` for scope and new-component checks), so a native task's checks are tsc, `atlas:verify` and a manual or harness check.
