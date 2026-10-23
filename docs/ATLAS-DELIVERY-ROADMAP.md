@@ -121,9 +121,9 @@ fails when this region is stale. Statuses are exactly three: **passing** (a decl
 **failing** (ran and failed), **not measurable** (no result for the declared check — reported as `n/a`,
 never `0`). A metric with no check is *not measurable*, never passing: absence of a signal is not a pass.
 
-**20 passing · 3 failing · 13 not measurable** of 36. 3 of the measured rows cover only part of their population; the row says how much.
+**23 passing · 3 failing · 10 not measurable** of 36. 3 of the measured rows cover only part of their population; the row says how much.
 
-Result sources read: `vitest`, `playwright`, `atlas-sync`, `registry`, `token-lint`. Sources not present leave their metrics not measurable.
+Result sources read: `atlas-verify`, `vitest`, `playwright`, `atlas-sync`, `registry`, `token-lint`. Sources not present leave their metrics not measurable.
 
 ### Catalog Over Code
 
@@ -132,13 +132,13 @@ Result sources read: `vitest`, `playwright`, `atlas-sync`, `registry`, `token-li
 | Agent outputs containing CSS, HTML, JSX, or arbitrary markup | 0 | **passing** | `runtime/validator > rejects markup in prop values` | M4 |
 | Rendered nodes mapped to registered components | 100% | **passing** | `runtime-demo > every node carries a registered data-atlas-type` | M4 |
 | Direct raw color or spacing values accepted by components | 0 | **passing** | `code.raw-design-values` | Phase 2d |
-| Registered types removed between releases | 0 | not measurable | `scope.registry-complete` | Phase 4 |
+| Registered types removed between releases | 0 | **passing** | `scope.registry-complete` | Phase 4 |
 
 ### Grammar Parsimony
 
 | Metric | Target | Status | Check | Measurable at |
 |---|---:|---|---|---|
-| Protocol messages passing schema validation | 100% | not measurable | `design.schemas` | M2 (JSON inputs), M4 (protocol) |
+| Protocol messages passing schema validation | 100% | **passing** | `design.schemas` | M2 (JSON inputs), M4 (protocol) |
 | Full conversation replay required for UI interaction | 0% | **passing** | `runtime-demo > interaction sends a state delta, not a re-render` | M4 |
 | Median protocol size versus equivalent markup | At least 70% smaller | **failing** | `runtime/protocol > payload is at most 30% of rendered markup bytes` | M4 |
 | First valid streamed operation | Under 250 ms p95 | not measurable | `protocol.firstOpP95` | Phase 6 |
@@ -175,7 +175,7 @@ Result sources read: `vitest`, `playwright`, `atlas-sync`, `registry`, `token-li
 | Metric | Target | Status | Check | Measurable at |
 |---|---:|---|---|---|
 | Core components pass automated accessibility checks | 100% | not measurable | `axe-coverage > every registered component has a passing axe assertion` | M3 |
-| Contrast meets WCAG AA | pass | not measurable | `code.contrast` | Phase 4 |
+| Contrast meets WCAG AA | pass | **passing** | `code.contrast` | Phase 4 |
 | Keyboard navigation works for every interactive component | pass | not measurable | `keyboard > every interactive component suite` | Phase 4 |
 | Focus states are visible | pass | not measurable | `code.focus-visible` | Phase 4 |
 | Form errors are associated with their fields | pass | **passing** | `Field — help and error` | now |
