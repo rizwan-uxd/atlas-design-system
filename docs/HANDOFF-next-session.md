@@ -1,14 +1,14 @@
-# Handoff: M3 session 4 is next (Atlas roadmap)
+# Handoff: M3 is done; Phase 2d is next (Atlas roadmap)
 
-Written 2026-10-22, updated 2026-10-23 after M3 session 3. **Read in this order: `AGENTS.md` → `docs/ATLAS-DELIVERY-ROADMAP.md` → this file.**
+Written 2026-10-22, updated 2026-10-23 after M3 session 4. **Read in this order: `AGENTS.md` → `docs/ATLAS-DELIVERY-ROADMAP.md` → this file.**
 The roadmap is normative now (referenced from `AGENTS.md` §2) and owns the phase order; this file is
 only current state plus the gotchas that will bite again. **This is the only handoff doc** — earlier
 ones were deleted and live in git history.
 
 ## Progress (update at the end of every session, and report it at the start and end of each)
 Counted in sessions, using the roadmap's own estimates (midpoint where it gives a range). Change N
-and say so when an estimate changes. **Roadmap: 7.5 of ~27 sessions done (~28%). Next: session 9 of
-~27 = M3 session 4 of 4.**
+and say so when an estimate changes. **Roadmap: 8.5 of ~27 sessions done (~31%). Next: session 10 of
+~27 = Phase 2d (token work, zero new tokens), session 1 of ~1.5.**
 
 | Phase | Sessions (est.) | Done | Status | PR |
 |---|---|---|---|---|
@@ -16,23 +16,32 @@ and say so when an estimate changes. **Roadmap: 7.5 of ~27 sessions done (~28%).
 | M1 — Figma↔code comparison | 1.5 | 1.5 | ✅ | #99 |
 | D1 — token-table spike | 1 | 1 | ✅ C built; A/B/C/D call is the user's | #100 |
 | M2 — verifier can fail | 1 | 1 | ✅ | #101 |
-| **M3 — registry** | 4 | 3 | 🟡 sessions 1–3 of 4 done (75%) | #102, #103, this branch |
-| 2d — token work, zero new tokens | 1.5 | 0 | ⏳ | |
+| M3 — registry | 4 | 4 | ✅ exit met except Text (5/6 types) | #102, #103, #104, this branch |
+| **2d — token work, zero new tokens** | 1.5 | 0 | ⏳ next | |
 | M4 — runtime vertical slice | 3.5 | 0 | ⏳ | |
 | Phase 4 — enforcement hardened | 2.5 | 0 | ⏳ | |
 | M5 — semantic tokens + brands | 7 | 0 | ⏳ | |
 | Phase 6 — filtered agent catalog | 2.5 | 0 | ⏳ | |
 | Phase 7 — metrics as release gates | 1.5 | 0 | ⏳ | |
-| **Total** | **~27** | **7.5** | **~28%** | |
+| **Total** | **~27** | **8.5** | **~31%** | |
 
-Metric table (the roadmap's scoreboard): **2 passing · 0 failing · 33 not measurable** of 35.
-M3 exit: 0/6 types `registryComplete`, **47/47 generated contracts** (hand-written 44 not yet deleted), 0/2 target metrics moved.
+Metric table (the roadmap's scoreboard): **5 passing · 0 failing · 30 not measurable** of 35.
+M3 exit: **5/6 types `registryComplete`** (Text deferred: no Text component), **47/47 generated
+contracts** (the 44 hand-written ones deleted), **2/2 target metrics passing** (plus registry-states),
+each over the registered subset (4/47 components registered).
 
 ## State
 - **`main` has Phase 1 (#98), M1 (#99), D1 (#100) and M2 (#101).** The post-merge check passed on
   `dd039b1`: `node scripts/atlas-verify.mjs --only design.schemas` → `PASS schemas (58/58 files valid ·
   5 schemas)`, and the roadmap kept both the M2 and D1 sections.
-- **M3 session 3 is on branch `claude/atlas-m3-session3`** (cut before #103 squash-merged; its diff against `main` is session 3 only). Protocol schemas per
+- **M3 session 4 is on branch `claude/atlas-m3-session4-56af2c`** (PR pending the user's go-ahead).
+  Three-way `design/figma-registry-code`; `design/registry-events|fallback|states` (shared with
+  metrics-report's `registry` source); Button, TextField, Alert, Form and new Field entries
+  `registryComplete: true` (DEC-080); contracts generated for every export straight into
+  `packages/governance/contracts/`, the 44 hand ones deleted after a 524/524 audit; authored
+  `packages/registry/contract-props.json`. `registry:check` → 5 entries, 47 facts, 47 contracts,
+  5 schemas, 144 rules. Details: M3 plan, "Session 4".
+- **M3 session 3 is merged (#104).** Protocol schemas per
   entry, `componentMap.ts`, `no-new-components` covers registry entries; `registry:check` → 4 entries,
   47 facts, 47 contracts, 4 schemas, 115 rules.
 - **M3 session 2 is merged (#103)**, with the progress-table commit. Facts and generated contracts for all 47; `registry:check` → 4 entries, 47 facts, 47
@@ -45,7 +54,7 @@ M3 exit: 0/6 types `registryComplete`, **47/47 generated contracts** (hand-writt
   the full table (463 variables, 5 collections, all modes, aliases). D1 recommends B; the details are in
   the roadmap's D1 section. **The A/B/C/D decision is still the user's**, at the end of Phase 2.
 - 47 web components (35 spec-complete, 12 scaffolded), 17 native (**ports paused by the user**),
-  15 patterns. Latest ids **DEC-079, CAND-055, DISC-104**. Snapshot pulled from Figma 2026-10-21.
+  15 patterns. Latest ids **DEC-080, CAND-055, DISC-105**. Snapshot pulled from Figma 2026-10-21.
 - Benchmarks: waves 1–3 complete (T1–T19), written up in `docs/HARNESS.md` §6–§7. M1 and M2 changed
   `scripts/` and the atlas-verify skill, so `benchmarks/phase-9/pins.json` no longer matches; re-pin
   before the next benchmark run.
@@ -67,44 +76,30 @@ M3 exit: 0/6 types `registryComplete`, **47/47 generated contracts** (hand-writt
 - `--max-figma-age <days>` (CI passes **90**) and `--only <ids>` on `atlas-verify`.
 - All 15 checks have a PASS and a FAIL fixture test (`scripts/tests/atlas-verify.test.mjs`).
 
-## M3 — session 2 is next (the roadmap's §2c; plan `docs/superpowers/plans/2026-10-23-m3-registry.md`)
-**Session 4 (do next, the last M3 session):** fill `compareAxes`'s `registry` slot and rename the
-check `design/figma-registry-code` in that commit; add `design/registry-events`,
-`design/registry-fallback`, `design/registry-states` and wire them into `metrics.manifest.json`;
-extend generation to the sub-parts 10 hand contracts guard (list in the plan, "Session 2"); then move
-the generated contracts into the hand-written paths and delete the 44 in one commit. It needs the
-owner decisions below before any type can reach `registryComplete: true`.
-Sessions 3 and 4 are scoped in the plan. Session 1's design decisions are
-numbered there and summarised in roadmap §2c; do not re-open them without the user.
-**Owner decisions M3 needs before any type can be `registryComplete: true`:** a `fallback` target,
-`nesting`, `a11y` and `responsive` for Form, TextField, Button, Alert, Field, Text. Ask once, batched.
-
-The original scope summary, kept for reference:
-- `packages/registry/` gains `aliases.json` and `src/<Name>.registry.json` (both authored), plus
-  generated `generated/<Name>.facts.json`, `componentMap.ts` and `schemas/<Name>.schema.json`, all
-  committed and gated by `git diff`.
-- New `scripts/registry-build.mjs` generates facts with the **TypeScript compiler API**
-  (`ts.createProgram` + `getPropertiesOfType`, so inherited DOM props and event handlers are included),
-  plus Code Connect slots and `atlas/metadata`. It reads `atlas/` and never writes it.
-- Invariant (`registry-build --check`): **authored ⊆ generated**.
-- M1's comparator becomes three-way by filling its `registry` slot, renamed `design/figma-registry-code`
-  in the same commit.
-- Contracts are regenerated into the same paths, with the deleted-variant and deleted-prop holes closed.
-- **M2 constraints for M3:** every new `packages/registry/**/*.json` needs a schema in
-  `packages/governance/schemas/` and an `INPUTS` rule in `scripts/lib/schemas.mjs` in the same commit,
-  or `design/schemas` fails. A new check must return `inspected`/`scope`. The generated per-component
-  schemas are an exception to decide up front: either exempt `packages/registry/generated/schemas/`
-  like `packages/governance/schemas/` is, or give them a meta-schema rule.
-- Plan it first: a `docs/superpowers/plans/` file, per the roadmap's execution conventions. It is 3–4
-  sessions, so scope the first session to `aliases.json`, the authored schema and `registry-build`'s
-  fact generation for 2–3 components before going wide.
+## M3 is done — what it left you (roadmap §2c; plan `docs/superpowers/plans/2026-10-23-m3-registry.md`)
+- **Registry:** `packages/registry/src/<Type>.registry.json` (authored; 5 complete), `aliases.json`,
+  `contract-props.json` (authored: absent / kept props for contracts), `figma-axis-map.json`; generated
+  `generated/<Name>.facts.json` (now with `exact` per prop, `codeConnect.figmaContent` and a `module`
+  section), `generated/elements.json`, `generated/schemas/`, `generated/componentMap.ts`.
+- **Contracts are generated, never hand-written**, into `packages/governance/contracts/<Name>.contract.ts`;
+  any other `.ts` there fails `registry:check`. Change props → `npm run registry:build` → commit.
+- **Checks:** `design/figma-registry-code` (three-way, fails on the registry side for registry
+  disagreements), `design/registry-events|fallback|states` (one function in
+  `scripts/lib/registry-metrics.mjs`, also read by `metrics-report`'s committed-state `registry` source).
+- **Gotcha:** a registry slot needs a Figma counterpart in Code Connect (`figmaContent`); an undrawn
+  ReactNode prop goes to `hiddenProps` with a reason, or gets drawn in Figma first.
+- **Next is Phase 2d** (roadmap §2d): token work that needs zero new tokens. Read the roadmap section first.
 
 ## Open owner decisions (ask; do not decide these yourself)
-- **`Pagination/Position` — NEW, found by M1.** Figma draws `start|middle|end`; Pagination has no
-  `position` prop. The header comment of `Pagination.tsx` does model it, though: "derived from `page`
-  and `pageCount` here (not a prop)". The recommendation put to the user was to treat it as derived
-  state: reclassify the axis from `unmapped` to `state` in `figma-axis-map.json`, log a DISC, add no
-  prop. **Not decided yet.** It wants a DISC entry and the user's call.
+- **Text (the 6th M3 exit type) — deferred by the user 2026-10-23 (DEC-080).** Atlas has no Text
+  component; register it only after a Figma-first atlas-component session builds one. Until then the
+  M3 exit reads 5/6.
+- **Which of the five named states (loading, empty, error, active, disabled) apply to which
+  component** — not decided. `design/registry-states` checks declared ⇔ drawn only, and the manifest
+  `why` says so; requiring the five needs a per-component applicability decision.
+- **More registry entries.** 4/47 components are registered, so the passing registry rows cover a
+  small subset (each row prints it). Every new entry needs the same owner fields (fallback, nesting,
+  a11y, responsive, capabilities).
 - **D1, the Figma token-table spike** — the roadmap's decision gate, and the highest-leverage unknown
   in the repo: it decides whether the brand axis is a quarter or a year away. The Figma MCP exposes
   variables per *node*, not as a table, so four metrics are unmeasurable. Options A–D are in the
@@ -123,8 +118,8 @@ The original scope summary, kept for reference:
 ## Commands
 ```bash
 npm ci
-npm run test:scripts        # 230 tests: comparator, ci-workflow, metrics-report, registry, schemas, sync, verify
-npm run registry:check      # facts current + authored registry ⊆ generated facts (M3)
+npm run test:scripts        # 288 tests: comparator, ci-workflow, metrics-report, registry, registry-metrics, schemas, sync, verify
+npm run registry:check      # facts, contracts, schemas current + authored registry ⊆ generated facts (M3)
 npm test                    # 1410 vitest
 npm run token-lint
 npx tsc --noEmit
@@ -156,8 +151,9 @@ All three: no new dependency, one `Animated.Value`, `useReducedMotion`, native d
 Search and filter frames (#57); disabled opacity bound (#58); StatCard icon, clickable and sparkline variants (#59, #60, #66); Sparkline primitive (#61); Card hover shadow, closes DISC-093 (#63); Sheet and Drawer Content and Footer slots (#64, #65); OtpInput and Stepper components, Auth and Onboarding patterns using them (#68); CommandMenu (#69); Button `asChild` and Link as a composition (#70); Stepper viewport variant and mobile ring, Navigation shell pattern, `verifiedAt` stamps (#71); native Stepper, tokens, types, CI native typecheck, letterSpacing, Spinner, Skeleton (#73 to #80); batch-2 patterns (#82, #83, #84).
 
 ## Do next (the user decides)
-0. **M3 — the next milestone.** See "M3 — do this next" above. D1 is running in parallel.
-   Everything below is pre-roadmap work the user has not scheduled; none of it blocks M3.
+0. **Phase 2d — the next roadmap session** (see "M3 is done" above). The D1 A/B/C/D call is the
+   user's at the end of Phase 2. Everything below is pre-roadmap work the user has not scheduled;
+   none of it blocks 2d.
 1. **The user's Gate 3 visual check** of the native Stepper, Spinner and Skeleton against their Figma frames (nothing has been run on a device or simulator), then check CI on `main`.
 2. **Next native port** (all logged, none built; each needs plan, Figma on `Atlas/Mobile-Native`, then code): suggested **Progress (CAND-017)**, whose indeterminate slide reuses `duration.pulse` and linear easing, or **Avatar (CAND-005)**. The rest: CAND-007, 009, 010, 016, 018, 019, 028, 029, 052, 054. **Button loading (CAND-014)** needs a colour prop on Spinner and a Figma design of the loading state.
 3. **Other candidates:** DataTable (CAND-024, needs its own Figma design), Button loading with a Spinner (CAND-014, needs a Figma design of the loading state), Load more and infinite scroll (CAND-048, deferred), AppShell (CAND-055, composed locally; not a component until designed and requested).

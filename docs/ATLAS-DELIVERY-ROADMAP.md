@@ -478,7 +478,27 @@ inputs schema-validated — the honest proxy for "100% protocol messages passing
 years before a protocol exists.
 **Exit (M2):** corrupting one field in `atlas/metadata/Button.json` turns a PASS into a FAIL.
 
-### 2c → M3. The registry, and three-way agreement (3–4 sessions) — sessions 1–3 of 4 landed 2026-10-23
+### 2c → M3. The registry, and three-way agreement (3–4 sessions) — ✅ DONE 2026-10-23 (4 sessions); exit met except Text
+
+> **Session 4 landed; M3 is complete.** The comparator is three-way: `design/figma-registry-code`
+> (renamed in the commit that filled the `registry` slot) fails on the registry side for an enum
+> that differs from its Figma axis or the code union, an unclassified Figma `State` member, and a
+> slot with no Figma counterpart — a Code Connect content mapping or drawn literal content, recorded
+> as `figmaContent` in the facts (it found Alert's `children` and `icon` undrawn; both are now
+> hidden). `design/registry-events`, `-fallback` and `-states` share one function with
+> metrics-report's committed-state `registry` source, so the metric region stays deterministic.
+> Owner decisions (DEC-080) set fallback (everything → Alert neutral; Alert terminal), nesting, a11y,
+> responsive, capabilities and tokenRoles. **Exit, honestly:** 5 of the 6 named types are
+> `registryComplete: true` — **Text is deferred** because Atlas has no Text component (it needs a
+> Figma-first component session); all 47 have a generated contract; "typed event contracts" and
+> "components with declared fallback" read **passing**, over the registered subset (4/47 components
+> registered, printed in each row). Contracts now cover every export of each module, with exact prop
+> types, discriminated branches, exported types and one authored input
+> (`packages/registry/contract-props.json`). A script audit found 524/524 hand-contract assertions
+> covered before the 44 were deleted in one commit; contracts generate straight into
+> `packages/governance/contracts/`. `registry:check`: **5 entries, 47 facts, 47 contracts, 5
+> schemas, 144 rules**. Metric table **5 passing · 0 failing · 30 not measurable**. Details: the M3
+> plan, "Session 4".
 
 > **Session 3 landed.** A protocol schema per registry entry (`generated/schemas/`, closed objects
 > whose props are the entry's protocolProps typed from the code; exempt from `INPUTS` and compiled by
