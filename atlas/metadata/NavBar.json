@@ -4,6 +4,7 @@
   "tier": "layouts",
   "status": "stable",
   "deprecated": null,
+  "owner": "@rizwan-uxd",
   "import": "@atlas/ui-web/layouts/NavBar/NavBar",
   "variants": ["default", "transparent", "bordered", "floating"],
   "sizes": ["sm", "md", "lg"],

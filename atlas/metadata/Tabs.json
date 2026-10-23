@@ -4,6 +4,7 @@
   "tier": "patterns",
   "status": "stable",
   "deprecated": null,
+  "owner": "@rizwan-uxd",
   "import": "@atlas/ui-web/patterns/Tabs/Tabs",
   "variants": ["line", "pill", "segmented", "outline"],
   "sizes": ["sm", "md", "lg"],

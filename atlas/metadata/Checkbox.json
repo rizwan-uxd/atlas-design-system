@@ -4,6 +4,7 @@
   "tier": "primitives",
   "status": "stable",
   "deprecated": null,
+  "owner": "@rizwan-uxd",
   "import": "@atlas/ui-web/primitives/Checkbox/Checkbox",
   "variants": ["default", "card"],
   "sizes": ["sm", "md", "lg"],

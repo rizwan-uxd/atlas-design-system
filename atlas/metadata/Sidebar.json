@@ -4,6 +4,7 @@
   "tier": "layouts",
   "status": "stable",
   "deprecated": null,
+  "owner": "@rizwan-uxd",
   "import": "@atlas/ui-web/layouts/Sidebar/Sidebar",
   "variants": [],
   "sizes": [],

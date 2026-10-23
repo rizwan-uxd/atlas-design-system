@@ -4,6 +4,7 @@
   "tier": "primitives",
   "status": "stable",
   "deprecated": null,
+  "owner": "@rizwan-uxd",
   "import": "@atlas/ui-web/primitives/Label/Label",
   "variants": ["default", "inline"],
   "sizes": ["sm", "md", "lg"],

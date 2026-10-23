@@ -37,6 +37,15 @@
       "why": "Phase 2d: token-lint's colour rules, no-raw-length (strict over packages/ui-web/src; @media widths, em units and the visually-hidden 1px are not lengths) and no-private-var-escape (a --_ var is one semantic alias or an allowlisted, reasoned exception)."
     },
     {
+      "principle": "Catalog Over Code",
+      "metric": "Registered types removed between releases",
+      "target": "0",
+      "source": "atlas-verify",
+      "check": "scope.registry-complete",
+      "milestone": "Phase 4",
+      "why": "Phase 4 registryComplete ratchet: the authored-entry count under packages/registry/src may only increase. An entry is an agent-visible type; removal is breaking and goes through an owner decision first."
+    },
+    {
       "principle": "Grammar Parsimony",
       "metric": "Protocol messages passing schema validation",
       "target": "100%",

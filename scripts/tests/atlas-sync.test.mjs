@@ -121,7 +121,9 @@ test("empty deprecation registry: every component is stable, index says none, st
     const button = readJson(dir, "atlas/metadata/Button.json")
     assert.equal(button.status, "stable")
     assert.equal(button.deprecated, null)
-    assert.equal("owner" in button, false, "no per-component owner unless one is authored")
+    // Phase 4: componentOwners is authored (one handle for every component — an empty map hides the
+    // gap), so every component carries its owner into the snapshot
+    assert.equal(button.owner, readJson(dir, "packages/governance/ownership.json").componentOwners.Button)
     assert.equal("deprecatedVariants" in button, false)
     assert.deepEqual(readJson(dir, "atlas/state/deprecations.json").entries, [])
     assert.equal(readJson(dir, "atlas/state/ownership.json").owners["design-system"], "@rizwan-uxd")

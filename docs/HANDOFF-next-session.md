@@ -1,16 +1,18 @@
-# Handoff: M4 is merged (#108); Phase 4 session 1 is done (Atlas roadmap)
+# Handoff: Phase 4 is complete (3 sessions); M5 is next (Atlas roadmap)
 
-Written 2026-10-22, updated 2026-10-23 after D1 option B, M4 (#108) and Phase 4 session 1. **Read in this order: `AGENTS.md` → `docs/ATLAS-DELIVERY-ROADMAP.md` → this file.**
+Written 2026-10-22, updated 2026-10-23 after D1 option B, M4 (#108) and Phase 4 (all three sessions). **Read in this order: `AGENTS.md` → `docs/ATLAS-DELIVERY-ROADMAP.md` → this file.**
 The roadmap is normative now (referenced from `AGENTS.md` §2) and owns the phase order; this file is
 only current state plus the gotchas that will bite again. **This is the only handoff doc** — earlier
 ones were deleted and live in git history.
 
 ## Progress (update at the end of every session, and report it at the start and end of each)
 Counted in sessions, using the roadmap's own estimates (midpoint where it gives a range). Change N
-and say so when an estimate changes. **Roadmap: 15 of ~28 sessions done (~54%). M4 is complete in 3.5 sessions (estimate 3.5).
-Phase 4 session 1 is complete: the four atlas-verify extensions (plan
-`docs/superpowers/plans/2026-10-23-phase-4-enforcement.md`). Next: session 17 of ~28 = Phase 4
-session 2 of ~2.5 (CI reporting + the ui-native freeze).**
+and say so when an estimate changes. **Roadmap: 17 of ~28 sessions done (~61%). Phase 4 is complete in
+3 sessions (estimate 2–3): the four atlas-verify extensions, the CI metrics collection with a blocking
+staleness gate, the ui-native freeze, the overflow check, runtime-demo visual sections, the @theme inline
+reduction and componentOwners (plan `docs/superpowers/plans/2026-10-23-phase-4-enforcement.md`).
+Next: session 18 of ~28 = M5.1 radius (the semantic token tier; the @theme reduction was its hard
+prerequisite and is done).**
 
 | Phase | Sessions (est.) | Done | Status | PR |
 |---|---|---|---|---|
@@ -22,11 +24,11 @@ session 2 of ~2.5 (CI reporting + the ui-native freeze).**
 | M3 — registry | 4 | 4 | ✅ exit met except Text (5/6 types) | #102, #103, #104, #105 |
 | 2d — token work, zero new tokens | 1.5 | 1 | ✅ in 1 session (est. 1.5) | #106 |
 | **M4 — runtime vertical slice** | 3.5 | 3.5 | ✅ all 12 M4 rows measured: 11 pass, size fails (report-only, DEC-085) | #108 |
-| **Phase 4 — enforcement hardened** | 2.5 | 1 | 🔨 session 1 done: 4 new checks + contrast findings logged (DISC-108) | |
-| M5 — semantic tokens + brands | 7 | 0 | ⏳ | |
+| **Phase 4 — enforcement hardened** | 2.5 | 3 | ✅ in 3 sessions (est. range 2–3) | this branch |
+| M5 — semantic tokens + brands | 7 | 0 | ⏳ next: M5.1 radius | |
 | Phase 6 — filtered agent catalog | 2.5 | 0 | ⏳ | |
 | Phase 7 — metrics as release gates | 1.5 | 0 | ⏳ | |
-| **Total** | **~28** | **15** | **~54%** | |
+| **Total** | **~28** | **17** | **~61%** | |
 
 Metric table (the roadmap's scoreboard): **7 passing · 2 failing · 26 not measurable** of 35. 2d moved
 the two raw-design-values rows and reduced-motion to passing; D1-B measured the three token-drift rows
@@ -145,10 +147,25 @@ each over the registered subset (4/47 components registered).
   `-checked-background`; the unit test pins it.
 - The metric row stays `not measurable` until session 2's CI collection (the committed region is still the
   deterministic no-results state; `metrics:check` unchanged).
-- **Session 2 (next): CI reporting + freeze** — metrics job collects `.metrics/` in-job, `metrics:check` blocking,
-  `atlas-report.json` + PR comment; `ui-native` fails on any diff without the `atlas-native-thaw` label; the report
-  gains the registryComplete ratchet and the D1 coverage fraction. Session 3: overflow Playwright check,
-  runtime-demo visual sections, `@theme inline` reduction, `componentOwners`.
+- **Sessions 2–3 also done, on the same branch:**
+  - **CI metrics collection is live and blocking.** The metrics job collects atlas-verify/vitest/test:metrics/Playwright
+    JSON into `.metrics/` in-job (collection steps continue-on-error: a red check is a reading), writes `atlas-report.json`,
+    uploads the `metrics` artifact, comments the totals on the PR, and `metrics:check` BLOCKS on a stale region. Refresh
+    protocol: download the `metrics` artifact, drop the files into `.metrics/`, `npm run metrics:report`, commit. Locally
+    (no result sources) `--check` tolerates a result-derived region and says so — CI verifies it strictly.
+  - **`Native freeze` job:** any diff under `packages/ui-native/**` fails without the `atlas-native-thaw` label
+    (merged-PR lookup on pushes, the atlas-approved-new mechanism).
+  - **Manifest +32nd→36 rows:** the registryComplete ratchet ("Registered types removed between releases" →
+    `scope.registry-complete`) and the D1 coverage fraction rendered on all three token-drift rows.
+  - **Overflow check** (`visual > no horizontal scroll at each breakpoint`, tests/runtime/overflow.spec.ts): sandbox +
+    runtime-demo at sm–2xl, all clean. **Known gap (not a library regression): the sandbox overflows 86px at 375px**
+    (Tooltip demo 437px wide; Tabs row, NavBar search, Bar Chart stats also overshoot) — below-sm is not a supported
+    breakpoint; fix the sandbox demo layout if phone-width demos matter.
+  - **runtime-demo visual sections** (tests/visual/runtime-demo.spec.ts, light+dark; linux baselines via the
+    Visual baseline workflow) and **@theme inline reduced to the five breakpoint mirrors** (R4 closed for M5: ~90
+    build-time-flattened mirrors deleted; nothing consumed them).
+  - **componentOwners populated** for all 47 (one handle); `atlas-sync` now carries `owner` into every metadata file
+    (the atlas-sync test asserts it).
 
 ## Open owner decisions (ask; do not decide these yourself)
 - **Text (the 6th M3 exit type) — deferred by the user 2026-10-23 (DEC-080).** Atlas has no Text

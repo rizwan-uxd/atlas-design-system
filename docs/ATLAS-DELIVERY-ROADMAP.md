@@ -121,7 +121,7 @@ fails when this region is stale. Statuses are exactly three: **passing** (a decl
 **failing** (ran and failed), **not measurable** (no result for the declared check — reported as `n/a`,
 never `0`). A metric with no check is *not measurable*, never passing: absence of a signal is not a pass.
 
-**7 passing · 2 failing · 26 not measurable** of 35. 3 of the measured rows cover only part of their population; the row says how much.
+**7 passing · 2 failing · 27 not measurable** of 36. 3 of the measured rows cover only part of their population; the row says how much.
 
 Result sources read: `atlas-sync`, `registry`, `token-lint`. Sources not present leave their metrics not measurable.
 
@@ -132,6 +132,7 @@ Result sources read: `atlas-sync`, `registry`, `token-lint`. Sources not present
 | Agent outputs containing CSS, HTML, JSX, or arbitrary markup | 0 | not measurable | `runtime/validator > rejects markup in prop values` | M4 |
 | Rendered nodes mapped to registered components | 100% | not measurable | `runtime-demo > every node carries a registered data-atlas-type` | M4 |
 | Direct raw color or spacing values accepted by components | 0 | **passing** | `code.raw-design-values` | Phase 2d |
+| Registered types removed between releases | 0 | not measurable | `scope.registry-complete` | Phase 4 |
 
 ### Grammar Parsimony
 
@@ -184,9 +185,9 @@ Result sources read: `atlas-sync`, `registry`, `token-lint`. Sources not present
 
 | Metric | Target | Status | Check | Measurable at |
 |---|---:|---|---|---|
-| Token-name drift | 0 | **passing** | `tokens.name-drift` | D1 option B (full variable table) |
-| Missing code tokens | 0 | **failing** — 2 over all 463 Figma variables and 432 code tokens | `tokens.missing-in-code` | D1 option B (full variable table) |
-| Missing Figma tokens | 0 | **failing** — 15 over all 463 Figma variables and 432 code tokens | `tokens.missing-in-figma` | D1 option B (full variable table) |
+| Token-name drift | 0 | **passing** — 0 drift — all 463 Figma variables and 432 code tokens | `tokens.name-drift` | D1 option B (full variable table) |
+| Missing code tokens | 0 | **failing** — 2 drift — all 463 Figma variables and 432 code tokens | `tokens.missing-in-code` | D1 option B (full variable table) |
+| Missing Figma tokens | 0 | **failing** — 15 drift — all 463 Figma variables and 432 code tokens | `tokens.missing-in-figma` | D1 option B (full variable table) |
 | All supported brand modes compile successfully | pass | not measurable | `design.brand-modes` | M5.6 |
 | Critical visual regression tests pass for every brand mode | pass | not measurable | `visual > sandbox` | now (light/dark only), M5.6 (brands) |
 
@@ -860,7 +861,7 @@ All extensions, no new scripts:
   hand-edits a status, and a metric with no check reports *not measurable* rather than passing. Plus
   the `registryComplete` ratchet and the D1 coverage fraction. This substitutes for a second reviewer.
 
-**As built (session 1, 2026-10-23; plan `docs/superpowers/plans/2026-10-23-phase-4-enforcement.md`).**
+**As built (sessions 1–3, 2026-10-23; plan `docs/superpowers/plans/2026-10-23-phase-4-enforcement.md`).**
 The four `atlas-verify` extensions are in, each with PASS and FAIL fixture tests:
 `design/deprecation-expiry`, `code/contrast`, `scope/registry-complete`, `scope/breaking-change`.
 `code.contrast` derives 25 pairs from the tokens' own naming (scale, component — control glyphs pair
@@ -868,9 +869,16 @@ with their **checked** fills — and the canonical surface set) and measures bot
 14 pairs sit under 4.5:1, tracing to five root values, logged as **DISC-108** and seeded (with their
 measured ratios) in `packages/governance/contrast-allow.json`; an allowance fails as stale the moment
 its pair recovers, and a pair more than 0.15 below its allowance is a new violation the allowance
-cannot mask. The metric row reads `not measurable` until session 2's CI collection lands. Remaining:
-CI reporting + `ui-native` freeze (session 2), overflow check + runtime-demo visual sections +
-`@theme inline` reduction + `componentOwners` (session 3).
+cannot mask. Sessions 2–3 closed the rest of the bullet list: the metrics job collects every result
+source in-job, comments the totals on the PR and blocks on a stale region (`metrics:check`; refresh
+from the `metrics` artifact — locally `--check` tolerates a result-derived region, CI verifies it
+strictly); the `Native freeze` job fails any `packages/ui-native` diff without the
+`atlas-native-thaw` label; the manifest gained the registryComplete ratchet row (36 rows) and the D1
+coverage fraction on the token-drift rows; `visual > no horizontal scroll at each breakpoint` runs
+the sandbox and `app/runtime-demo` at sm–2xl (all clean; the sandbox's 86px overflow at 375px is
+below the smallest supported breakpoint and noted in the handoff); `app/runtime-demo` joined the
+visual-regression surface; `@theme inline` is reduced to the five breakpoint mirrors (R4 closed for
+M5); and `componentOwners` lists all 47 components, carried into every metadata file by the sync.
 
 ---
 

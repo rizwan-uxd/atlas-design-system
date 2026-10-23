@@ -212,6 +212,31 @@ test("--check fails when results changed but the region was not regenerated", ()
   assert.equal(run(dir, ["--check"]).code, 1)
 })
 
+// Phase 4: a region derived from CI-collected results names its result sources inside the region.
+// Without those files a local run cannot reproduce it, so --check says so and passes (CI, which has
+// the files, runs the same check strictly and blocks); with them present the comparison is strict
+// again, wherever it runs.
+test("--check tolerates a CI result-derived region only when no result sources are present", () => {
+  const dir = scaffold({ metrics: ONE })
+  fs.mkdirSync(path.join(dir, ".metrics"), { recursive: true })
+  fs.writeFileSync(path.join(dir, ".metrics/vitest.json"),
+    JSON.stringify(vitestRow("runtime/fuzz > no payload throws", "passed")))
+  run(dir) // writes the result-derived region
+  fs.rmSync(path.join(dir, ".metrics"), { recursive: true, force: true })
+  const tolerated = run(dir, ["--check"])
+  assert.equal(tolerated.code, 0, tolerated.out)
+  assert.match(tolerated.out, /result-derived/)
+  // result sources present again → strict, and the (unchanged) region matches → clean pass
+  fs.mkdirSync(path.join(dir, ".metrics"), { recursive: true })
+  fs.writeFileSync(path.join(dir, ".metrics/vitest.json"),
+    JSON.stringify(vitestRow("runtime/fuzz > no payload throws", "passed")))
+  assert.equal(run(dir, ["--check"]).code, 0)
+  // a DIFFERENT result set with sources present still fails strictly
+  fs.writeFileSync(path.join(dir, ".metrics/vitest.json"),
+    JSON.stringify(vitestRow("runtime/fuzz > no payload throws", "failed")))
+  assert.equal(run(dir, ["--check"]).code, 1)
+})
+
 test("--check does not write the roadmap", () => {
   const dir = scaffold({ metrics: ONE })
   run(dir)
@@ -296,7 +321,7 @@ test("token-drift rows read the full table: failing with a count over the whole 
     assert.equal(rows["tokens.name-drift"].status, "passing")
     assert.equal(rows["tokens.missing-in-figma"].status, "passing")
     assert.equal(rows["tokens.missing-in-code"].status, "failing")
-    assert.match(rows["tokens.missing-in-code"].coverage.text, /^1 over all \d+ Figma variables and \d+ code tokens$/)
+    assert.match(rows["tokens.missing-in-code"].coverage.text, /^1 drift — all \d+ Figma variables and \d+ code tokens$/)
     delete tokens.figmaTable.drift.missingInFigma // a renamed or missing field is no result, never a pass
     fs.writeFileSync(file, JSON.stringify(tokens))
     assert.equal(tokenRows(dir)["tokens.missing-in-figma"].status, "not measurable")

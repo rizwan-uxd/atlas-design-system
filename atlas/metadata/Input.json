@@ -4,6 +4,7 @@
   "tier": "primitives",
   "status": "stable",
   "deprecated": null,
+  "owner": "@rizwan-uxd",
   "import": "@atlas/ui-web/primitives/Input/Input",
   "variants": ["default", "filled", "unstyled"],
   "sizes": ["sm", "md", "lg"],

@@ -93,27 +93,33 @@ metric rows ("Contrast meets WCAG AA", "No horizontal overflow at supported brea
       and roadmap notes updated.
 
 ### Session 2 — CI reporting + freeze
-- [ ] 7. `ci.yml` metrics job: run `atlas-verify --json > .metrics/atlas-verify.json`,
-      `vitest run --reporter=json`, `test:metrics`, Playwright JSON into `.metrics/`; then
-      `npm run metrics:check` **blocking**; `atlas-report.json` uploaded as an artifact; a PR comment
-      renders the totals. The committed region becomes result-derived from CI's own run — the roadmap's
-      "no-results" baseline is replaced by the first real scoreboard.
-- [ ] 8. `ui-native` freeze: a CI step fails when the diff touches `packages/ui-native/**` and the PR
-      lacks the `atlas-native-thaw` label (same label mechanism as `atlas-approved-new`, including the
-      merged-PR lookup for pushes). `ui-native` stays out of `SCAN_DIRS` (roadmap: absorbing it
-      surfaces debt with no owner).
-- [ ] 9. `metrics-report` gains the `registryComplete` ratchet row and the D1 coverage fraction
-      (figmaTable coverage) as row coverage, per the roadmap's "Plus the registryComplete ratchet and
-      the D1 coverage fraction".
+- [x] 7. `ci.yml` metrics job: collects `atlas-verify --json`, `vitest --reporter=json`,
+      `test:metrics` and both Playwright projects into `.metrics/` in-job (every collection step
+      `continue-on-error` — a red check is a metric reading, not a broken collection); writes
+      `atlas-report.json`, uploads it with `.metrics/` as the `metrics` artifact, comments the totals
+      on the PR, and `npm run metrics:check` is **blocking**. The committed region becomes
+      result-derived: regenerate from the artifact when it changes. `--check` tolerates a
+      result-derived region ONLY where no result sources exist (local clones); CI runs it strictly.
+- [x] 8. `ui-native` freeze: the `Native freeze` job fails when the diff touches `packages/ui-native/**`
+      and the PR lacks the `atlas-native-thaw` label (same label mechanism as `atlas-approved-new`,
+      including the merged-PR lookup for pushes). `ui-native` stays out of `SCAN_DIRS` (roadmap:
+      absorbing it surfaces debt with no owner).
+- [x] 9. `metrics-report` gains the registryComplete ratchet row (manifest: "Registered types
+      removed between releases", `scope.registry-complete`) and renders the D1 coverage fraction on
+      all three token-drift rows, passing or failing.
 
 ### Session 3 — visual + tokens
-- [ ] 10. Horizontal-overflow Playwright check (`visual > no horizontal scroll at each breakpoint`):
-      the sandbox and `app/runtime-demo` at every `--atlas-breakpoint-*` width, asserting
-      `document.documentElement.scrollWidth <= clientWidth`.
-- [ ] 11. `app/runtime-demo` sections added to the visual-regression spec (light + dark), baselines
+- [x] 10. Horizontal-overflow Playwright check (`visual > no horizontal scroll at each breakpoint`):
+      the sandbox and `app/runtime-demo` at every `--atlas-breakpoint-*` width (640–1536; widths below
+      sm are not a supported breakpoint — the sandbox does overflow at 375, noted in the handoff),
+      asserting `document.documentElement.scrollWidth <= clientWidth`.
+- [x] 11. `app/runtime-demo` sections added to the visual-regression spec (light + dark), baselines
       regenerated through `visual-baseline.yml`.
-- [ ] 12. `@theme inline` reduction (roadmap R4, hard M5 prerequisite) + `componentOwners` populated
-      (one handle, every component — an empty map hides the gap).
+- [x] 12. `@theme inline` reduced to the five breakpoint mirrors (R4: ~90 colour/type/spacing/
+      radius/shadow mirrors flattened at build time cannot express runtime brand switching; nothing
+      consumes them — ui-web has zero Tailwind class literals, app/ uses only flex utilities).
+      `componentOwners` populated for all 47 components (one handle; the sync carries `owner` into
+      every metadata file, and the atlas-sync test asserts it).
 
 ## Findings that motivated decision 5 (measured 2026-10-23 by Task 1's own output, oklch → sRGB, both themes)
 

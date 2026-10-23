@@ -4,6 +4,7 @@
   "tier": "primitives",
   "status": "stable",
   "deprecated": null,
+  "owner": "@rizwan-uxd",
   "import": "@atlas/ui-web/primitives/Badge/Badge",
   "variants": ["neutral", "primary", "success", "warning", "danger", "info"],
   "sizes": ["sm", "md", "lg"],
