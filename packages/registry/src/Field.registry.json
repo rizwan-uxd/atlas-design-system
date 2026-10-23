@@ -1,0 +1,29 @@
+{
+  "_note": "AUTHORED. fallback, nesting, a11y, responsive, capabilities and tokenRoles are owner decisions of 2026-10-23 (DEC-080); a11y and responsive state only what the source does. tokenRoles is empty: Field has no component-token layer.",
+  "type": "Field",
+  "aliasOf": "Field",
+  "kind": "component",
+  "platforms": ["web"],
+  "registryComplete": true,
+  "protocolProps": {
+    "size": {
+      "values": ["sm", "md", "lg"]
+    },
+    "required": {},
+    "optional": {},
+    "disabled": {}
+  },
+  "hiddenProps": { "id": "DOM id wiring; Field generates one with useId when it is absent, and the protocol carries no DOM ids." },
+  "events": {},
+  "slots": ["children", "error", "helpText", "label", "labelAction"],
+  "fallback": { "type": "Alert", "props": { "variant": "neutral" }, "message": "This content is unavailable" },
+  "nesting": { "parents": ["Form"], "children": ["TextField"] },
+  "a11y": {
+    "label": "The label's htmlFor is the control's id; the control receives id, invalid, disabled, aria-describedby and aria-required.",
+    "describedBy": "aria-describedby points at the error text when there is an error, otherwise at the help text.",
+    "error": "Error text is role=alert, with an icon so the error is not colour alone."
+  },
+  "responsive": { "breakpoints": "None: no viewport-dependent layout." },
+  "capabilities": [],
+  "tokenRoles": {}
+}

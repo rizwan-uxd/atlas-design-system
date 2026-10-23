@@ -18,7 +18,7 @@ import { fileURLToPath } from "node:url"
 import ts from "typescript"
 import { loadInputs } from "./lib/schemas.mjs"
 import Ajv2020 from "ajv/dist/2020.js"
-import { ASSERT_SOURCE, checkRegistry, codeConnectFacts, compilerOptions, componentMapSource, contractSource, extractFacts, formatJson, propTypes, protocolSchema } from "./lib/registry.mjs"
+import { ASSERT_SOURCE, checkRegistry, codeConnectFacts, compilerOptions, componentMapSource, contractSource, elementsSource, extractElementEvents, extractFacts, formatJson, propTypes, protocolSchema } from "./lib/registry.mjs"
 
 const args = process.argv.slice(2)
 const CHECK = args.includes("--check")
@@ -57,7 +57,17 @@ function main() {
     if (!m) throw new Error(`atlas/metadata/${name}.json import "${imp}" is not under @atlas/ui-web`)
     return `packages/ui-web/src/${m[1]}.tsx`
   }
-  const program = ts.createProgram(rendered.map((n) => rel(sourceOf(n))), compilerOptions(ROOT))
+  // structural entries name the intrinsic element they render as; a virtual module resolves its props
+  const elementNames = [...new Set(Object.values(entries).filter((e) => e.kind === "structural" && e.element !== undefined).map((e) => e.element))].sort()
+  const ELEMENTS_TSX = rel("packages/registry/__elements__.tsx")
+  const options = compilerOptions(ROOT)
+  const host = ts.createCompilerHost(options)
+  const virtual = elementsSource(elementNames)
+  const { getSourceFile, fileExists, readFile } = host
+  host.getSourceFile = (f, ...a) => (path.resolve(f) === ELEMENTS_TSX ? ts.createSourceFile(f, virtual, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX) : getSourceFile.call(host, f, ...a))
+  host.fileExists = (f) => path.resolve(f) === ELEMENTS_TSX || fileExists.call(host, f)
+  host.readFile = (f) => (path.resolve(f) === ELEMENTS_TSX ? virtual : readFile.call(host, f))
+  const program = ts.createProgram([...rendered.map((n) => rel(sourceOf(n))), ELEMENTS_TSX], options, host)
 
   const facts = {}, written = {}, problems = []
   const entryFor = (name) => Object.values(entries).filter((e) => e.aliasOf === name)
@@ -86,6 +96,12 @@ function main() {
     written[`${CONTRACTS}/${name}.contract.ts`] = contractSource(facts[name], entryFor(name))
   }
   written[`${CONTRACTS}/_assert.ts`] = ASSERT_SOURCE
+  let elements = {}
+  try { elements = elementNames.length ? extractElementEvents(program, ELEMENTS_TSX) : {} } catch (e) { problems.push(e.message) }
+  written[`${GEN}/elements.json`] = formatJson({
+    _generated: "GENERATED — do not hand-edit. registry-build from React's JSX types, for each structural entry's element; run npm run registry:build.",
+    elements,
+  })
 
   // protocol schemas: exempt from INPUTS (they are schemas, not data); ajv's strict compile checks
   // each against the 2020-12 meta-schema instead (plan decision 3)
@@ -121,7 +137,7 @@ function main() {
   stale.push(...orphans.map((f) => `${f} belongs to no component or registry entry — run npm run registry:build`))
 
   const cssTokens = new Set(fs.readFileSync(rel("packages/tokens/atlas.tokens.css"), "utf8").match(/--atlas-[a-z0-9_-]+(?=\s*:)/g) ?? [])
-  const r = checkRegistry({ entries, aliases, facts, components: new Set(Object.keys(metadata)), cssTokens })
+  const r = checkRegistry({ entries, aliases, facts, components: new Set(Object.keys(metadata)), cssTokens, elements })
   for (const w of r.warn) console.log(`  WARN  ${w}`)
   const failures = [...stale, ...r.fail]
   if (failures.length) return fatal(failures)

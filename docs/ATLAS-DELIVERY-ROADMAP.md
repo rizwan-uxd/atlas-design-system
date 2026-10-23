@@ -121,9 +121,9 @@ fails when this region is stale. Statuses are exactly three: **passing** (a decl
 **failing** (ran and failed), **not measurable** (no result for the declared check — reported as `n/a`,
 never `0`). A metric with no check is *not measurable*, never passing: absence of a signal is not a pass.
 
-**2 passing · 0 failing · 33 not measurable** of 35. 2 of the measured rows cover only part of their population; the row says how much.
+**5 passing · 0 failing · 30 not measurable** of 35. 5 of the measured rows cover only part of their population; the row says how much.
 
-Result sources read: `atlas-sync`. Sources not present leave their metrics not measurable.
+Result sources read: `atlas-sync`, `registry`. Sources not present leave their metrics not measurable.
 
 ### Catalog Over Code
 
@@ -146,7 +146,7 @@ Result sources read: `atlas-sync`. Sources not present leave their metrics not m
 
 | Metric | Target | Status | Check | Measurable at |
 |---|---:|---|---|---|
-| Interactive components with typed event contracts | 100% | not measurable | `design.registry-events` | M3 |
+| Interactive components with typed event contracts | 100% | **passing** — 0 failing of 4 interactive registered types (4/47 components registered) | `design.registry-events` | M3 |
 | User events lost or reordered | 0 | not measurable | `runtime-demo > 50 rapid submits keep strictly increasing sequence` | M4 |
 | Interactions requiring full-screen regeneration | 0% | not measurable | `runtime-demo > patch updates only the addressed subtree` | M4 |
 | State acknowledgment latency | Under 300 ms p95 client-side | not measurable | `runtime-demo > state ack p95` | M4 |
@@ -157,7 +157,7 @@ Result sources read: `atlas-sync`. Sources not present leave their metrics not m
 |---|---:|---|---|---|
 | Invalid payloads producing a safe render | 100% | not measurable | `runtime/fuzz > 1000 malformed payloads all render` | M4 |
 | Unhandled render exceptions | 0 | not measurable | `runtime/fuzz > no payload throws` | M4 |
-| Components with declared fallback behavior | 100% | not measurable | `design.registry-fallback` | M3 |
+| Components with declared fallback behavior | 100% | **passing** — 0 failing of 5 registered types (4/47 components registered) | `design.registry-fallback` | M3 |
 | Fallback render latency | Under 100 ms p95 | not measurable | `runtime-demo > fallback render p95` | M4 |
 
 ### Context Containment
@@ -197,7 +197,7 @@ Result sources read: `atlas-sync`. Sources not present leave their metrics not m
 | No raw design values in component implementations | pass | not measurable | `code.raw-design-values` | Phase 2d |
 | No component renders without a valid schema | pass | not measurable | `runtime/validator > unregistered type never renders` | M4 |
 | No unsupported component can reach the renderer | pass | not measurable | `runtime/validator > unknown type replaced by fallback` | M4 |
-| Loading, empty, error, active and disabled states exist for all interactive components | pass | not measurable | `design.registry-states` | M3 |
+| Loading, empty, error, active and disabled states exist for all interactive components | pass | **passing** — 0 failing of 3 interactive registered components (4/47 components registered) | `design.registry-states` | M3 |
 | No horizontal overflow at supported breakpoints | pass | not measurable | `visual > no horizontal scroll at each breakpoint` | Phase 4 |
 
 **How to read this.** A row is only as good as its check. `not measurable` is the honest state for

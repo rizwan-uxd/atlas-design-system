@@ -30,3 +30,9 @@ type Optional_size = Assert<Exact<IsOptional<P, "size">, true>>
 
 // string unions: exactly these members, so removing one fails as well as adding one
 type Union_size = Assert<Exact<NonNullable<P["size"]>, "lg" | "md" | "sm">>
+
+// registry Field: its protocolProps and event handlers exist
+type Registry_Field_size = Assert<Has<P, "size">>
+type Registry_Field_required = Assert<Has<P, "required">>
+type Registry_Field_optional = Assert<Has<P, "optional">>
+type Registry_Field_disabled = Assert<Has<P, "disabled">>

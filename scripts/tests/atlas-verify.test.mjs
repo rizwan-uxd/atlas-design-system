@@ -215,6 +215,22 @@ test("design/figma-registry-code fails closed on a schema-invalid component and 
   assert.match(r.note, /^46\/47 components/)
 }))
 
+// design/registry-events, design/registry-fallback, design/registry-states (M3): PASS on the repo,
+// FAIL on one edit each. The rules themselves are unit-tested in registry-metrics.test.mjs.
+const registryEdit = (id, file, from, to, re) => test(`design/${id} passes the repo and fails ${re}`, () => withRepo(({ dir }) => {
+  const ok = verify(dir, id)
+  assert.equal(ok.status, "pass", ok.mismatches.join("\n"))
+  assert.ok(ok.inspected > 0)
+  assert.match(ok.note, /\/47 components registered/)
+  edit(dir, file, (s) => { assert.ok(s.includes(from), `${file} no longer contains ${from}`); return s.replace(from, to) })
+  const bad = verify(dir, id)
+  assert.equal(bad.status, "fail")
+  assert.match(bad.mismatches.join("\n"), re)
+}))
+registryEdit("registry-events", "packages/registry/src/Button.registry.json", '"handler": "onClick"', '"handler": "onPress"', /Button: event "click" → onPress, which Button does not have/)
+registryEdit("registry-fallback", "packages/registry/src/Field.registry.json", '"fallback": { "type": "Alert"', '"fallback": { "type": "Field"', /more than one terminal fallback/)
+registryEdit("registry-states", "packages/registry/src/TextField.registry.json", '"stateProps": { "disabled": "disabled", "error": "invalid" }', '"stateProps": { "disabled": "disabled", "error": "broken" }', /TextField: State "error" is prop-driven but stateProps names no prop/)
+
 // design/variants-sizes
 test("design/variants-sizes fails an unknown literal variant and passes a real one", () => withRepo(({ dir }) => {
   write(dir, PAGE, button('variant="sparkly"'))

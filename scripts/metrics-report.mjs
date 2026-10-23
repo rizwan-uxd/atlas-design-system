@@ -41,6 +41,10 @@ const arg = (name) => { const i = args.indexOf(name); return i === -1 ? null : a
 const read = (p) => fs.readFileSync(p, "utf8")
 const readJson = (p) => JSON.parse(read(p))
 const exists = (p) => fs.existsSync(p)
+// the registry source needs ajv and the schemas; loaded only in a repo that has a registry
+const registryLib = exists(path.join(ROOT, "packages/registry/src"))
+  ? { ...(await import("./lib/schemas.mjs")), ...(await import("./lib/registry-metrics.mjs")) }
+  : null
 
 /* ── status resolution ──────────────────────────────────── */
 
@@ -98,7 +102,30 @@ function collectResults(manifest) {
     for (const [id, list] of [["tokens.bound-name-drift", bound.drift?.nameDrift], ["tokens.bound-missing-in-code", bound.drift?.missingInCode]]) {
       if (!Array.isArray(list)) continue // a renamed field is not a pass
       results.set(`atlas-sync:${id}`, list.length === 0)
-      if (partial) coverage.set(`atlas-sync:${id}`, { ...partial, drift: list.length })
+      if (partial) coverage.set(`atlas-sync:${id}`, { text: `${list.length} drift over ${partial.covered}/${partial.total} covered (bound subset only)` })
+    }
+  }
+
+  // registry: the committed registry (M3), measured by the same function atlas-verify's
+  // design/registry-* checks run (scripts/lib/registry-metrics.mjs), over schema-valid inputs only. Like
+  // atlas-sync it is committed state, so the region is reproducible with no CI run. Its population is
+  // the registered types, so every row carries its coverage of the components.
+  const inputs = registryLib === null ? { files: [] } : registryLib.loadInputs(ROOT)
+  const valid = inputs.files.filter((f) => f.ok)
+  const registryInvalid = inputs.files.some((f) => !f.ok && (f.file.startsWith("packages/registry/") || f.file.startsWith("atlas/metadata/")))
+  const entries = Object.fromEntries(valid.filter((f) => /^packages\/registry\/src\/[^/]+\.registry\.json$/.test(f.file)).map((f) => [f.data.type, f.data]))
+  if (Object.keys(entries).length > 0) {
+    found.push("registry")
+    const facts = Object.fromEntries(valid.filter((f) => /^packages\/registry\/generated\/[^/]+\.facts\.json$/.test(f.file)).map((f) => [f.data.name, f.data]))
+    const el = valid.find((f) => f.file === "packages/registry/generated/elements.json")
+    const components = valid.filter((f) => f.file.startsWith("atlas/metadata/")).map((f) => f.data.name)
+    const m = registryLib.registryMetrics({ entries, facts, elements: el === undefined ? {} : el.data.elements, components })
+    for (const [id, key] of [["design.registry-events", "events"], ["design.registry-fallback", "fallback"], ["design.registry-states", "states"]]) {
+      const r = m[key]
+      if (r.scope === 0) continue // nothing in scope is no result, never a pass
+      // an invalid registry or metadata file is unreadable state: the metric fails rather than measuring around it
+      results.set(`registry:${id}`, !registryInvalid && r.fails.length === 0)
+      coverage.set(`registry:${id}`, { text: registryLib.coverageText(r) })
     }
   }
 
@@ -202,7 +229,7 @@ function render(rows, manifest) {
     out.push(`### ${g.name}`, "", "| Metric | Target | Status | Check | Measurable at |", "|---|---:|---|---|---|")
     for (const r of g.rows) {
       const status = r.status === NOT_MEASURABLE ? "not measurable"
-        : r.coverage ? `**${r.status}** — ${r.coverage.drift} drift over ${r.coverage.covered}/${r.coverage.total} covered (bound subset only)`
+        : r.coverage ? `**${r.status}** — ${r.coverage.text}`
         : `**${r.status}**`
       out.push(`| ${esc(r.metric)} | ${esc(r.target)} | ${status} | \`${esc(r.check)}\` | ${esc(r.milestone)} |`)
     }

@@ -71,9 +71,10 @@
       "principle": "State Synchronization",
       "metric": "Interactive components with typed event contracts",
       "target": "100%",
-      "source": "atlas-verify",
+      "source": "registry",
       "check": "design.registry-events",
-      "milestone": "M3"
+      "milestone": "M3",
+      "why": "Measured from the committed registry by scripts/lib/registry-metrics.mjs, the function atlas-verify's design/registry-events runs. An interactive registered type (own on* handler, interaction member on Figma's State axis, or a declared capability) must declare events whose handlers exist in the generated facts. The population is the registered types, so the row carries how many of the components that is."
     },
     {
       "principle": "State Synchronization",
@@ -119,9 +120,10 @@
       "principle": "Fallback",
       "metric": "Components with declared fallback behavior",
       "target": "100%",
-      "source": "atlas-verify",
+      "source": "registry",
       "check": "design.registry-fallback",
-      "milestone": "M3"
+      "milestone": "M3",
+      "why": "Measured from the committed registry by scripts/lib/registry-metrics.mjs (atlas-verify design/registry-fallback). Every registered type declares a fallback to a registered type, every chain ends at the one terminal type, and fallback props are valid protocolProps of the target. Declared, not exercised: M4's fuzz rows measure the rendered fallback. The row carries its coverage of the components."
     },
     {
       "principle": "Fallback",
@@ -287,9 +289,10 @@
       "principle": "Runtime quality",
       "metric": "Loading, empty, error, active and disabled states exist for all interactive components",
       "target": "pass",
-      "source": "atlas-verify",
+      "source": "registry",
       "check": "design.registry-states",
-      "milestone": "M3"
+      "milestone": "M3",
+      "why": "Measured from the committed registry by scripts/lib/registry-metrics.mjs (atlas-verify design/registry-states). It checks that every State member Figma draws for an interactive registered type is classified (interaction or prop) and every prop-driven state names a real prop. It does not yet require all five named states per component: which states apply to which component is an owner decision not yet taken. The row carries its coverage of the components."
     },
     {
       "principle": "Runtime quality",

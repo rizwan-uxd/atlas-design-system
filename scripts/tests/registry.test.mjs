@@ -9,7 +9,7 @@ import path from "node:path"
 import { fileURLToPath } from "node:url"
 import ts from "typescript"
 import Ajv2020 from "ajv/dist/2020.js"
-import { ASSERT_SOURCE, checkRegistry, codeConnectFacts, compilerOptions, componentMapSource, contractSource, extractFacts, formatJson, jsonTypeOf, protocolSchema } from "../lib/registry.mjs"
+import { ASSERT_SOURCE, checkRegistry, codeConnectFacts, compilerOptions, componentMapSource, contractSource, elementsSource, extractElementEvents, extractFacts, formatJson, jsonTypeOf, protocolSchema } from "../lib/registry.mjs"
 
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..")
 const BUTTON = path.join(REPO, "packages/ui-web/src/primitives/Button/Button.tsx")
@@ -271,6 +271,11 @@ const cases = [
   ["composedOf naming a non-component", (s) => { s.entries.Form.composedOf.push("Ghost") }, /composedOf "Ghost" is not a component/],
   ["aliasOf naming a non-component", (s, e) => { e.aliasOf = "Ghost" }, /aliasOf "Ghost" is not a component/],
   ["facts missing for the rendered component", (s) => { delete s.facts.Widget }, /no generated facts for Widget/],
+  ["nesting naming an unregistered type", (s, e) => { e.nesting = { parents: ["Card"] } }, /nesting.parents "Card" is not a registered type/],
+  ["a structural event with no element", (s) => { s.entries.Form.events = { submit: { handler: "onSubmit" } } }, /needs "element"/],
+  ["a structural event the element does not have", (s) => { Object.assign(s.entries.Form, { element: "form", events: { tap: { handler: "onTap" } } }); s.elements = { form: { events: ["onSubmit"] } } }, /handler onTap, which <form> does not have/],
+  ["a structural element with no generated element facts", (s) => { s.entries.Form.element = "form" }, /element <form> has no generated element facts/],
+  ["element on a component entry", (s, e) => { e.element = "div" }, /"element" is for structural types/],
 ]
 for (const [name, mutate, re] of cases)
   test(`FAIL: ${name}`, () => assert.match(run(mutate).fail.join("\n"), re))
@@ -281,6 +286,27 @@ test("an unaccounted own prop WARNs, and FAILs once registryComplete is true", (
   assert.match(warned.warn.join("\n"), /own props not in protocolProps, slots, events or hiddenProps: asChild/)
   const failed = run((s, e) => { delete e.hiddenProps.asChild; e.registryComplete = true })
   assert.match(failed.fail.join("\n"), /asChild/)
+})
+
+test("a structural event backed by its element's handlers passes", () => {
+  assert.deepEqual(run((s) => { Object.assign(s.entries.Form, { element: "form", events: { submit: { handler: "onSubmit" } } }); s.elements = { form: { events: ["onSubmit"] } } }).fail, [])
+})
+
+test("element facts resolve through React's JSX types and reject a non-element", () => {
+  const opts = compilerOptions(REPO)
+  const file = path.join(REPO, "packages/registry/__elements_test__.tsx")
+  const build = (els) => {
+    const host = ts.createCompilerHost(opts)
+    const src = elementsSource(els)
+    const { getSourceFile, fileExists } = host
+    host.getSourceFile = (f, ...a) => (path.resolve(f) === file ? ts.createSourceFile(f, src, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX) : getSourceFile.call(host, f, ...a))
+    host.fileExists = (f) => path.resolve(f) === file || fileExists.call(host, f)
+    return ts.createProgram([file], opts, host)
+  }
+  const ok = extractElementEvents(build(["form"]), file)
+  assert.ok(ok.form.events.includes("onSubmit"))
+  assert.ok(ok.form.events.includes("onReset"))
+  assert.throws(() => extractElementEvents(build(["notanelement"]), file), /resolved to no handler props/)
 })
 
 test("an authored enum narrower than the code union passes with a reason", () => {

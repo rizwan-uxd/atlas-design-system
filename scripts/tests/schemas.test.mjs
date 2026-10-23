@@ -244,9 +244,12 @@ test("an unknown registry field fails, naming it", () => {
 })
 
 test("registryComplete: true requires every declarative field", () => {
-  const e = buttonEntry(); e.registryComplete = true
+  const e = buttonEntry()
+  assert.equal(e.registryComplete, true)
+  assert.deepEqual(validate("registry.schema.json#/$defs/entry", e), [])
+  for (const f of ["fallback", "nesting", "a11y", "responsive", "capabilities", "tokenRoles"]) delete e[f]
   const errors = validate("registry.schema.json#/$defs/entry", e).join("\n")
-  for (const f of ["fallback", "nesting", "a11y", "responsive", "capabilities"]) assert.match(errors, new RegExp(`required property '${f}'`))
+  for (const f of ["fallback", "nesting", "a11y", "responsive", "capabilities", "tokenRoles"]) assert.match(errors, new RegExp(`required property '${f}'`))
 })
 
 test("a registry entry whose type differs from its file name fails", () => {

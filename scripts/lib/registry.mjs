@@ -104,6 +104,30 @@ export function extractFacts(program, file, part) {
 
 const sortKeys = (o) => Object.fromEntries(Object.keys(o).sort().map((k) => [k, o[k]]))
 
+/* ── facts for intrinsic elements (structural entries' `element`) ──────── */
+
+/** A virtual module naming each element's props, so the program resolves them through React's JSX types. */
+export const elementsSource = (elements) =>
+  `import type React from "react"\n${elements.map((el) => `export type El_${el} = React.ComponentProps<${JSON.stringify(el)}>`).join("\n")}\n`
+
+/**
+ * The handler props of every element in the virtual module: `{ form: { events: ["onSubmit", …] } }`.
+ * Throws when an element does not resolve, so a misspelt `element` is a failure, not an empty list.
+ */
+export function extractElementEvents(program, file) {
+  const checker = program.getTypeChecker()
+  const sf = program.getSourceFile(file)
+  if (!sf) throw new Error(`registry: ${file} is not in the program`)
+  const out = {}
+  for (const sym of checker.getExportsOfModule(checker.getSymbolAtLocation(sf)).sort((a, b) => a.name.localeCompare(b.name))) {
+    const el = sym.name.replace(/^El_/, "")
+    const events = checker.getPropertiesOfType(checker.getDeclaredTypeOfSymbol(sym)).map((p) => p.name).filter((n) => /^on[A-Z]/.test(n)).sort()
+    if (!events.length) throw new Error(`registry: <${el}> resolved to no handler props — is "${el}" an HTML element?`)
+    out[el] = { events }
+  }
+  return out
+}
+
 /* ── facts from Code Connect ────────────────────────────────────────────── */
 
 const isFigmaCall = (n, method) =>
@@ -249,9 +273,10 @@ const NODE_TYPE = /ReactNode|ReactElement|Element|=>/
  * @param {Record<string, object>} a.facts    component → generated facts
  * @param {Set<string>} a.components          every component name in atlas/metadata
  * @param {Set<string>} a.cssTokens           every --atlas-* declared in atlas.tokens.css
+ * @param {Record<string, {events: string[]}>} [a.elements]  intrinsic element → handler props (generated)
  * @returns {{ fail: string[], warn: string[], inspected: number, rules: number }}
  */
-export function checkRegistry({ entries, aliases, facts, components, cssTokens }) {
+export function checkRegistry({ entries, aliases, facts, components, cssTokens, elements = {} }) {
   const fail = [], warn = []
   let rules = 0
   const F = (type, msg) => fail.push(`${type}: ${msg}`)
@@ -280,7 +305,20 @@ export function checkRegistry({ entries, aliases, facts, components, cssTokens }
       const t = e.fallback.type
       if (!(t in entries)) F(type, `fallback "${t}" is not a registered type`)
     }
-    if (e.kind === "structural") continue
+    for (const rel of ["children", "parents"]) for (const t of (e.nesting ?? {})[rel] ?? []) {
+      rules++
+      if (!(t in entries)) F(type, `nesting.${rel} "${t}" is not a registered type`)
+    }
+    if (e.kind === "structural") {
+      if (e.element !== undefined && !(e.element in elements)) F(type, `element <${e.element}> has no generated element facts — run npm run registry:build`)
+      for (const [event, { handler }] of Object.entries(e.events ?? {})) {
+        rules++
+        if (e.element === undefined) F(type, `event "${event}" needs "element": a structural type's handlers are those of the element it renders as`)
+        else if (e.element in elements && !elements[e.element].events.includes(handler)) F(type, `event "${event}" names handler ${handler}, which <${e.element}> does not have`)
+      }
+      continue
+    }
+    if (e.element !== undefined) F(type, `"element" is for structural types; ${type} renders ${e.aliasOf}`)
 
     const f = facts[e.aliasOf]
     if (!f) { F(type, `no generated facts for ${e.aliasOf} — run npm run registry:build`); continue }

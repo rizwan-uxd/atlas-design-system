@@ -26,6 +26,7 @@ import path from "path"
 import { fileURLToPath } from "url"
 import { sh, ATLAS_IMPORT, RAW_ELEMENT, lengthLiterals, PRIMITIVE_TOKEN_REF, BRAND_FILE, lineOf, jsxTags, literalProp, UNKNOWN } from "./lib/quality-checks.mjs"
 import { compareAxes } from "./lib/compare-axes.mjs"
+import { registryMetrics, coverageText } from "./lib/registry-metrics.mjs"
 import { loadInputs } from "./lib/schemas.mjs"
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..")
@@ -96,6 +97,15 @@ const invalidInputs = (prefix) => inputs.files.filter((f) => !f.ok && f.file.sta
 const metadata = {}
 for (const f of inputs.files) if (f.ok && f.file.startsWith("atlas/metadata/")) metadata[f.data.name] = f.data
 const invalidMetadata = invalidInputs("atlas/metadata/")
+// the registry (M3): authored entries, generated facts and element facts, each only if it validated
+const registry = { entries: {}, facts: {}, elements: {} }
+for (const f of inputs.files) {
+  if (!f.ok) continue
+  if (/^packages\/registry\/src\/[^/]+\.registry\.json$/.test(f.file)) registry.entries[f.data.type] = f.data
+  if (/^packages\/registry\/generated\/[^/]+\.facts\.json$/.test(f.file)) registry.facts[f.data.name] = f.data
+  if (f.file === "packages/registry/generated/elements.json") registry.elements = f.data.elements
+}
+const invalidRegistry = [...invalidInputs("packages/registry/src/"), ...invalidInputs("packages/registry/generated/")]
 const TOKEN_CSS = "packages/tokens/atlas.tokens.css"
 const definedTokens = (css) => new Set([...css.matchAll(/(--atlas-[\w-]+)\s*:/g)].map((m) => m[1]))
 const tokens = exists(TOKEN_CSS) ? definedTokens(read(TOKEN_CSS)) : new Set()
@@ -179,19 +189,12 @@ check("design", "figma-registry-code", () => {
   }
 
   // the registry leg: entries and facts that failed their schema are failures here too, never skipped
-  for (const f of [...invalidInputs("packages/registry/src/"), ...invalidInputs("packages/registry/generated/")])
-    fails.push(`${f} failed its schema — the registry leg cannot trust it (see design/schemas)`)
-  const registry = { entries: {}, facts: {} }
-  for (const f of inputs.files) {
-    if (!f.ok) continue
-    if (/^packages\/registry\/src\/[^/]+\.registry\.json$/.test(f.file)) registry.entries[f.data.type] = f.data
-    if (/^packages\/registry\/generated\/[^/]+\.facts\.json$/.test(f.file)) registry.facts[f.data.name] = f.data
-  }
+  for (const f of invalidRegistry) fails.push(`${f} failed its schema — the registry leg cannot trust it (see design/schemas)`)
   if (Object.keys(registry.entries).length === 0) fails.push("0 registry entries in packages/registry/src — the registry leg compared nothing")
 
   let result
   try {
-    result = compareAxes({ components: Object.values(metadata), codeConnect, axisMap, registry })
+    result = compareAxes({ components: Object.values(metadata), codeConnect, axisMap, registry: { entries: registry.entries, facts: registry.facts } })
   } catch (e) {
     // the comparator throws rather than optional-chaining past an absent field; a throw is a FAIL
     // that names the cause, never a skip
@@ -248,6 +251,21 @@ check("design", "figma-registry-code", () => {
     + (result.unmappedAxes.length ? ` · ${result.unmappedAxes.length} unmapped` : "") + ageNote
   return { ...verdict(fails, warns), inspected: axes, scope: total, note }
 })
+
+// M3 — the three registry metrics (metrics.manifest.json). The logic is scripts/lib/registry-metrics.mjs,
+// shared with metrics-report so the check and the metric row cannot disagree. Repo-wide like
+// figma-registry-code. The population is registered types only; the note says how many of the
+// components that is, so a pass is never read as covering all of them.
+const metrics = registryMetrics({ ...registry, components: Object.keys(metadata) })
+const registryCheck = (id, key, what) => check("design", id, () => {
+  const r = metrics[key]
+  const fails = [...invalidRegistry.map((f) => `${f} failed its schema — not measured (see design/schemas)`), ...r.fails]
+  if (Object.keys(registry.entries).length === 0) fails.push("0 registry entries in packages/registry/src — nothing to measure")
+  return { ...verdict(fails), inspected: r.inspected, scope: r.scope, note: `${what} · ${coverageText(r)}` }
+})
+registryCheck("registry-events", "events", "typed events")
+registryCheck("registry-fallback", "fallback", "terminating fallback")
+registryCheck("registry-states", "states", "Figma states classified")
 
 // A literal variant/size is checked against metadata; an expression or spread is UNKNOWN — counted and
 // reported in the note, never read as "no variant". Scope is every changed file that renders an Atlas

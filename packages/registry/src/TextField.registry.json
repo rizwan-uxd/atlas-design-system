@@ -1,10 +1,10 @@
 {
-  "_note": "AUTHORED. registryComplete stays false until the owner decides fallback, nesting, a11y and responsive (M3 plan, Global constraints).",
+  "_note": "AUTHORED. fallback, nesting, a11y, responsive, capabilities and tokenRoles are owner decisions of 2026-10-23 (DEC-080); a11y and responsive state only what the source does.",
   "type": "TextField",
   "aliasOf": "Input",
   "kind": "component",
   "platforms": ["web"],
-  "registryComplete": false,
+  "registryComplete": true,
   "protocolProps": {
     "variant": {
       "values": ["default", "filled", "unstyled"]
@@ -29,6 +29,17 @@
   "slots": ["leadingIcon", "prefix", "suffix", "trailingIcon"],
   "states": { "default": "interaction", "hover": "interaction", "focus-visible": "interaction", "disabled": "prop", "error": "prop" },
   "stateProps": { "disabled": "disabled", "error": "invalid" },
+  "fallback": { "type": "Alert", "props": { "variant": "neutral" }, "message": "This content is unavailable" },
+  "nesting": { "parents": ["Field", "Form"] },
+  "a11y": {
+    "invalid": "aria-invalid is true when invalid.",
+    "label": "The input has no label of its own; Field supplies the label, aria-describedby and aria-required."
+  },
+  "responsive": {
+    "breakpoints": "None: no viewport-dependent layout.",
+    "touch": "Under pointer: coarse, sm grows to --atlas-touch-min (BUG-063)."
+  },
+  "capabilities": ["input"],
   "tokenRoles": {
     "adornment-padding": "--atlas-input-adornment-padding",
     "affix-foreground": "--atlas-input-affix-foreground",

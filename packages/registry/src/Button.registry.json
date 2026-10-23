@@ -1,10 +1,10 @@
 {
-  "_note": "AUTHORED. registryComplete stays false until the owner decides fallback, nesting, a11y and responsive (M3 plan, Global constraints).",
+  "_note": "AUTHORED. fallback, nesting, a11y, responsive, capabilities and tokenRoles are owner decisions of 2026-10-23 (DEC-080); a11y and responsive state only what the source does.",
   "type": "Button",
   "aliasOf": "Button",
   "kind": "component",
   "platforms": ["web"],
-  "registryComplete": false,
+  "registryComplete": true,
   "protocolProps": {
     "variant": {
       "values": ["primary", "secondary", "outline", "ghost", "destructive", "link"]
@@ -30,6 +30,18 @@
     "loading": "prop"
   },
   "stateProps": { "disabled": "disabled", "loading": "loading" },
+  "fallback": { "type": "Alert", "props": { "variant": "neutral" }, "message": "This content is unavailable" },
+  "nesting": { "parents": ["Alert", "Form"] },
+  "a11y": {
+    "name": "iconOnly requires aria-label or aria-labelledby (a dev-mode warning fires without one).",
+    "busy": "aria-busy is true while loading.",
+    "disabled": "aria-disabled is true when disabled or loading; the button stays focusable so the state is announced."
+  },
+  "responsive": {
+    "breakpoints": "None: the button sizes with its content at every viewport.",
+    "touch": "Under pointer: coarse, xs and sm grow to --atlas-touch-min (BUG-063)."
+  },
+  "capabilities": ["press"],
   "tokenRoles": {
     "destructive-background": "--atlas-button-destructive-background",
     "destructive-background-active": "--atlas-button-destructive-background-active",

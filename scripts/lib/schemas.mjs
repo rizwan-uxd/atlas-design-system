@@ -33,6 +33,7 @@ export const INPUTS = [
   { glob: "packages/registry/aliases.json", schema: "registry.schema.json#/$defs/aliases", required: true },
   { glob: "packages/registry/src/*.registry.json", schema: "registry.schema.json#/$defs/entry", min: 1, typeMatchesFile: true },
   { glob: "packages/registry/generated/*.facts.json", schema: "registry.schema.json#/$defs/facts", nameMatchesFile: true },
+  { glob: "packages/registry/generated/elements.json", schema: "registry.schema.json#/$defs/elements" },
 ]
 /**
  * Directories whose every *.json must be covered by an INPUTS rule. Schemas themselves are exempt:
