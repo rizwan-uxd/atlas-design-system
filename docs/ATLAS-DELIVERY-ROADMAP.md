@@ -121,16 +121,16 @@ fails when this region is stale. Statuses are exactly three: **passing** (a decl
 **failing** (ran and failed), **not measurable** (no result for the declared check — reported as `n/a`,
 never `0`). A metric with no check is *not measurable*, never passing: absence of a signal is not a pass.
 
-**7 passing · 2 failing · 27 not measurable** of 36. 3 of the measured rows cover only part of their population; the row says how much.
+**20 passing · 3 failing · 13 not measurable** of 36. 3 of the measured rows cover only part of their population; the row says how much.
 
-Result sources read: `atlas-sync`, `registry`, `token-lint`. Sources not present leave their metrics not measurable.
+Result sources read: `vitest`, `playwright`, `atlas-sync`, `registry`, `token-lint`. Sources not present leave their metrics not measurable.
 
 ### Catalog Over Code
 
 | Metric | Target | Status | Check | Measurable at |
 |---|---:|---|---|---|
-| Agent outputs containing CSS, HTML, JSX, or arbitrary markup | 0 | not measurable | `runtime/validator > rejects markup in prop values` | M4 |
-| Rendered nodes mapped to registered components | 100% | not measurable | `runtime-demo > every node carries a registered data-atlas-type` | M4 |
+| Agent outputs containing CSS, HTML, JSX, or arbitrary markup | 0 | **passing** | `runtime/validator > rejects markup in prop values` | M4 |
+| Rendered nodes mapped to registered components | 100% | **passing** | `runtime-demo > every node carries a registered data-atlas-type` | M4 |
 | Direct raw color or spacing values accepted by components | 0 | **passing** | `code.raw-design-values` | Phase 2d |
 | Registered types removed between releases | 0 | not measurable | `scope.registry-complete` | Phase 4 |
 
@@ -139,8 +139,8 @@ Result sources read: `atlas-sync`, `registry`, `token-lint`. Sources not present
 | Metric | Target | Status | Check | Measurable at |
 |---|---:|---|---|---|
 | Protocol messages passing schema validation | 100% | not measurable | `design.schemas` | M2 (JSON inputs), M4 (protocol) |
-| Full conversation replay required for UI interaction | 0% | not measurable | `runtime-demo > interaction sends a state delta, not a re-render` | M4 |
-| Median protocol size versus equivalent markup | At least 70% smaller | not measurable | `runtime/protocol > payload is at most 30% of rendered markup bytes` | M4 |
+| Full conversation replay required for UI interaction | 0% | **passing** | `runtime-demo > interaction sends a state delta, not a re-render` | M4 |
+| Median protocol size versus equivalent markup | At least 70% smaller | **failing** | `runtime/protocol > payload is at most 30% of rendered markup bytes` | M4 |
 | First valid streamed operation | Under 250 ms p95 | not measurable | `protocol.firstOpP95` | Phase 6 |
 
 ### State Synchronization
@@ -148,18 +148,18 @@ Result sources read: `atlas-sync`, `registry`, `token-lint`. Sources not present
 | Metric | Target | Status | Check | Measurable at |
 |---|---:|---|---|---|
 | Interactive components with typed event contracts | 100% | **passing** — 0 failing of 4 interactive registered types (4/47 components registered) | `design.registry-events` | M3 |
-| User events lost or reordered | 0 | not measurable | `runtime-demo > 50 rapid submits keep strictly increasing sequence` | M4 |
-| Interactions requiring full-screen regeneration | 0% | not measurable | `runtime-demo > patch updates only the addressed subtree` | M4 |
-| State acknowledgment latency | Under 300 ms p95 client-side | not measurable | `runtime-demo > state ack p95` | M4 |
+| User events lost or reordered | 0 | **passing** | `runtime-demo > 50 rapid submits keep strictly increasing sequence` | M4 |
+| Interactions requiring full-screen regeneration | 0% | **passing** | `runtime-demo > patch updates only the addressed subtree` | M4 |
+| State acknowledgment latency | Under 300 ms p95 client-side | **passing** | `runtime-demo > state ack p95` | M4 |
 
 ### Fallback
 
 | Metric | Target | Status | Check | Measurable at |
 |---|---:|---|---|---|
-| Invalid payloads producing a safe render | 100% | not measurable | `runtime/fuzz > 1000 malformed payloads all render` | M4 |
-| Unhandled render exceptions | 0 | not measurable | `runtime/fuzz > no payload throws` | M4 |
+| Invalid payloads producing a safe render | 100% | **passing** | `runtime/fuzz > 1000 malformed payloads all render` | M4 |
+| Unhandled render exceptions | 0 | **passing** | `runtime/fuzz > no payload throws` | M4 |
 | Components with declared fallback behavior | 100% | **passing** — 0 failing of 5 registered types (4/47 components registered) | `design.registry-fallback` | M3 |
-| Fallback render latency | Under 100 ms p95 | not measurable | `runtime-demo > fallback render p95` | M4 |
+| Fallback render latency | Under 100 ms p95 | **passing** | `runtime-demo > fallback render p95` | M4 |
 
 ### Context Containment
 
@@ -178,7 +178,7 @@ Result sources read: `atlas-sync`, `registry`, `token-lint`. Sources not present
 | Contrast meets WCAG AA | pass | not measurable | `code.contrast` | Phase 4 |
 | Keyboard navigation works for every interactive component | pass | not measurable | `keyboard > every interactive component suite` | Phase 4 |
 | Focus states are visible | pass | not measurable | `code.focus-visible` | Phase 4 |
-| Form errors are associated with their fields | pass | not measurable | `Field — help and error` | now |
+| Form errors are associated with their fields | pass | **passing** | `Field — help and error` | now |
 | Reduced-motion behavior is supported | pass | **passing** | `code.reduced-motion-required` | Phase 2d |
 
 ### Figma parity
@@ -196,10 +196,10 @@ Result sources read: `atlas-sync`, `registry`, `token-lint`. Sources not present
 | Metric | Target | Status | Check | Measurable at |
 |---|---:|---|---|---|
 | No raw design values in component implementations | pass | **passing** | `code.raw-design-values` | Phase 2d |
-| No component renders without a valid schema | pass | not measurable | `runtime/validator > unregistered type never renders` | M4 |
-| No unsupported component can reach the renderer | pass | not measurable | `runtime/validator > unknown type replaced by fallback` | M4 |
+| No component renders without a valid schema | pass | **passing** | `runtime/validator > unregistered type never renders` | M4 |
+| No unsupported component can reach the renderer | pass | **passing** | `runtime/validator > unknown type replaced by fallback` | M4 |
 | Loading, empty, error, active and disabled states exist for all interactive components | pass | **passing** — 0 failing of 3 interactive registered components (4/47 components registered) | `design.registry-states` | M3 |
-| No horizontal overflow at supported breakpoints | pass | not measurable | `visual > no horizontal scroll at each breakpoint` | Phase 4 |
+| No horizontal overflow at supported breakpoints | pass | **passing** | `visual > no horizontal scroll at each breakpoint` | Phase 4 |
 
 **How to read this.** A row is only as good as its check. `not measurable` is the honest state for
 most of this table today and it is what the roadmap's early phases exist to reduce — each phase is

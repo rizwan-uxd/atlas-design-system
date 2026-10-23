@@ -40,7 +40,11 @@ const JSON_ONLY = args.includes("--json")
 const arg = (name) => { const i = args.indexOf(name); return i === -1 ? null : args[i + 1] }
 
 const read = (p) => fs.readFileSync(p, "utf8")
-const readJson = (p) => JSON.parse(read(p))
+// a present-but-invalid results file must be named, not crash the report: it contributes no results
+// (its metrics read not measurable) and the warning says why
+const readJson = (p) => {
+  try { return JSON.parse(read(p)) } catch (e) { console.error(`  ⚠ ${path.relative(ROOT, p)} is not JSON (${e.message}) — its results are not read`); return null }
+}
 const exists = (p) => fs.existsSync(p)
 // the registry source needs ajv and the schemas; loaded only in a repo that has a registry
 // the token-lint source shares atlas-verify's rule grouping, whose module needs typescript; loaded only
@@ -69,8 +73,10 @@ function collectResults(manifest) {
   // atlas-verify --json: { results: [{ group, id, status }] }
   const verify = path.join(dir, "atlas-verify.json")
   if (exists(verify)) {
+    const parsed = readJson(verify)
+    if (!parsed) return results
     found.push("atlas-verify")
-    for (const r of readJson(verify).results ?? []) {
+    for (const r of parsed.results ?? []) {
       if (r.status === "skip") continue // skipped is not a result; leave the metric not measurable
       results.set(`atlas-verify:${r.group}.${r.id}`, r.status === "pass")
       results.set(`atlas-verify:${r.id}`, r.status === "pass")
@@ -83,8 +89,9 @@ function collectResults(manifest) {
   for (const [source, file] of [["vitest", "vitest.json"], ["vitest", "vitest-metrics.json"], ["playwright", "playwright.json"]]) {
     const p = path.join(dir, file)
     if (!exists(p)) continue
-    if (!found.includes(source)) found.push(source)
     const data = readJson(p)
+    if (!data) continue
+    if (!found.includes(source)) found.push(source)
     for (const suite of data.testResults ?? data.suites ?? []) {
       for (const t of suite.assertionResults ?? suite.specs ?? []) {
         const name = t.fullName ?? t.title ?? ""

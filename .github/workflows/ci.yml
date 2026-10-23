@@ -215,7 +215,8 @@ jobs:
         continue-on-error: true
         env:
           BASE: ${{ github.event_name == 'pull_request' && format('origin/{0}', github.base_ref) || 'HEAD~1' }}
-        run: npm run atlas:verify -- --base "$BASE" --skip tsc,tests,token-lint --max-figma-age 90 --json > .metrics/atlas-verify.json
+        # node directly, not npm run: npm's "> package@script" banner would land in the JSON file
+        run: node scripts/atlas-verify.mjs --base "$BASE" --skip tsc,tests,token-lint --max-figma-age 90 --json > .metrics/atlas-verify.json
       - name: Collect vitest results
         continue-on-error: true
         run: npx vitest run --reporter=json --outputFile .metrics/vitest.json
