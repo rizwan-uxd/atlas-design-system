@@ -212,6 +212,20 @@ jobs:
         continue-on-error: true
         run: npm run test:metrics
 
+  # ─── Runtime (M4): registry lookups, validator, reducer, renderer and seeded fuzz ───
+  runtime:
+    name: Runtime
+    runs-on: ubuntu-latest
+    needs: setup
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci --legacy-peer-deps
+      - run: npx vitest run packages/registry packages/runtime
+
   # ─── Visual regression (sandbox sections, light + dark) ────────────────────
   # Baselines are linux screenshots made by the "Visual baseline" workflow and committed under
   # tests/visual/. Until they exist this job is skipped.
@@ -233,7 +247,9 @@ jobs:
       - if: steps.baselines.outputs.found != '0'
         run: npx playwright install --with-deps chromium
       - if: steps.baselines.outputs.found != '0'
-        run: npm run test:visual
+        # Both Playwright projects in one invocation, so the production build runs once: chromium (visual
+        # regression) and runtime-demo (the M4 runtime metrics, DEC-084 (7)).
+        run: npx playwright test
       - if: failure()
         uses: actions/upload-artifact@v4
         with:

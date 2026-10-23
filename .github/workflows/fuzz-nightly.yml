@@ -1,0 +1,28 @@
+name: Fuzz (nightly, random seed)
+# The runtime fuzz with a random seed (roadmap M4). CI's blocking run uses the fixed seed; this one explores and,
+# on a failure, opens an issue naming the seed. It never blocks a PR.
+on:
+  schedule: [{ cron: "17 3 * * *" }]
+  workflow_dispatch:
+permissions:
+  contents: read
+  issues: write
+jobs:
+  fuzz:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci --legacy-peer-deps
+      - id: seed
+        run: echo "seed=$(( (RANDOM << 15) | RANDOM ))" >> "$GITHUB_OUTPUT"
+      - id: run
+        continue-on-error: true
+        run: FUZZ_SEED=${{ steps.seed.outputs.seed }} npx vitest run packages/runtime/tests/fuzz.test.tsx
+      - if: steps.run.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh issue create --title "runtime fuzz failed with seed ${{ steps.seed.outputs.seed }}" --body "Reproduce with FUZZ_SEED=${{ steps.seed.outputs.seed }} npx vitest run packages/runtime/tests/fuzz.test.tsx — run ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
