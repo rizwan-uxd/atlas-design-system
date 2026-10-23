@@ -772,7 +772,23 @@ table unless the plan changes; D is not needed. The decision is the user's, at t
 
 ---
 
-## M4 — Vertical slice: the first production milestone (3–4 sessions)
+## M4 — Vertical slice: the first production milestone (3–4 sessions) — ✅ DONE 2026-10-23 (4 sessions)
+
+**As built** (plan `docs/superpowers/plans/2026-10-23-m4-runtime-slice.md`; decisions DEC-082 to DEC-085):
+`app/runtime-demo` renders the Request access form from the fixture's JSON tree through `packages/registry`
+(`generated/runtimeRegistry.ts` plus `lib`: `resolve`, `filter`, `without`) and `packages/runtime` (protocol,
+`validateTree`, `fallbackFor`, sequenced reducer, `<AtlasRuntime>`, stub agent). **All 12 M4 manifest rows are
+measured** (the prose below says 11; the manifest has 12): 11 pass and 1 fails. Deviations from the text below:
+- **Fallback copy is DEC-080's Alert** (neutral, "This content is unavailable"), not `Card + Text`: Text does not exist.
+- **Deleting the Alert entry drops the node** and keeps the page (DEC-082, owner): Alert is itself the one terminal
+  fallback, so there is no registered fallback left to render.
+- **One Playwright server (3031) with two projects**, not a second port, 3032 (DEC-084 (7)); CI runs both in one
+  invocation, so the production build runs once.
+- **The size metric reads failing at 0.308** (513 B payload / 1663 B markup; 521 B of that markup is runtime
+  tagging, so against component markup alone it is about 0.45). It is report-only on the owner's decision
+  (DEC-085): `size.metric.tsx`, `npm run test:metrics`, non-blocking in CI. A more compact protocol is a later decision.
+- **Measured p95 on the production build:** state ack 0.4 ms, fallback render 0.5 ms (gates 600 and 200 ms). The
+  agent is an in-page stub, so this proves the client path only.
 
 Begins only after M1–M3. This is the first thing that renders a real screen from a semantic tree.
 

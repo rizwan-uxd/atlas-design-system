@@ -7,10 +7,9 @@ ones were deleted and live in git history.
 
 ## Progress (update at the end of every session, and report it at the start and end of each)
 Counted in sessions, using the roadmap's own estimates (midpoint where it gives a range). Change N
-and say so when an estimate changes. **Roadmap: 13 of ~28 sessions done (~46%). M4 is 2.5 of 3.5: session 1 wrote the
-plan (`docs/superpowers/plans/2026-10-23-m4-runtime-slice.md`, owner decisions DEC-082 and DEC-083), session 2
-built plan Tasks 1–5, session 3 built Tasks 6–9 (Task 8, the size metric, is report-only and reads failing at 0.308, DEC-085).
-Next: session 15 of ~28 = M4 session 4, plan Tasks 10–14 (stub agent, route, Playwright, CI, records, PR).**
+and say so when an estimate changes. **Roadmap: 14 of ~28 sessions done (~50%). M4 is complete in 3.5 sessions (estimate 3.5):
+plan, Tasks 1–5, Tasks 6–9, Tasks 10–14, on `claude/m4-runtime-slice`. Next: session 16 of ~28 = Phase 4
+(enforcement hardened), session 1 of ~2.5.**
 
 | Phase | Sessions (est.) | Done | Status | PR |
 |---|---|---|---|---|
@@ -21,12 +20,12 @@ Next: session 15 of ~28 = M4 session 4, plan Tasks 10–14 (stub agent, route, P
 | M2 — verifier can fail | 1 | 1 | ✅ | #101 |
 | M3 — registry | 4 | 4 | ✅ exit met except Text (5/6 types) | #102, #103, #104, #105 |
 | 2d — token work, zero new tokens | 1.5 | 1 | ✅ in 1 session (est. 1.5) | #106 |
-| **M4 — runtime vertical slice** | 3.5 | 2.5 | 🔄 Tasks 1–9 done (size reads failing, DEC-085); 10–14 next | `claude/m4-runtime-slice` (no PR yet) |
-| Phase 4 — enforcement hardened | 2.5 | 0 | ⏳ | |
+| **M4 — runtime vertical slice** | 3.5 | 3.5 | ✅ all 12 M4 rows measured: 11 pass, size fails (report-only, DEC-085) | `claude/m4-runtime-slice` |
+| **Phase 4 — enforcement hardened** | 2.5 | 0 | ⏳ next | |
 | M5 — semantic tokens + brands | 7 | 0 | ⏳ | |
 | Phase 6 — filtered agent catalog | 2.5 | 0 | ⏳ | |
 | Phase 7 — metrics as release gates | 1.5 | 0 | ⏳ | |
-| **Total** | **~28** | **13** | **~46%** | |
+| **Total** | **~28** | **14** | **~50%** | |
 
 Metric table (the roadmap's scoreboard): **7 passing · 2 failing · 26 not measurable** of 35. 2d moved
 the two raw-design-values rows and reduced-motion to passing; D1-B measured the three token-drift rows
@@ -109,8 +108,13 @@ each over the registered subset (4/47 components registered).
 - **Native tokens are fully derived** from `atlas.tokens.css`: change a token, run
   `npm run tokens:build`, commit the native file, or CI's Tokens Build fails. A value in a new unit
   throws instead of being written.
-- **M4 is in progress on `claude/m4-runtime-slice`.** Follow the plan
-  (`docs/superpowers/plans/2026-10-23-m4-runtime-slice.md`) from Task 6. Done: `TextField.name` required
+- **M4 is done on `claude/m4-runtime-slice`** (plan `docs/superpowers/plans/2026-10-23-m4-runtime-slice.md`;
+  roadmap §M4 "As built"). Session 4 added the stub agent, `app/runtime-demo`, `tests/runtime/runtime-demo.spec.ts`
+  (six metrics plus page-level axe, on one Playwright server with two projects), the `runtime` CI job, both
+  Playwright projects in the visual job, the nightly random-seed fuzz workflow, the `atlas-runtime` skill, CAND-056
+  (the Form gap) and dropped `ui-web`'s false `main`. All 12 M4 rows are measured: 11 pass, size fails (0.308,
+  report-only). Measured p95 (production build): ack 0.4 ms, fallback 0.5 ms. The committed metrics region stays the
+  no-results state (see the gotcha below); the M4 readings are in the roadmap prose. **Next is Phase 4.** Earlier: Done: `TextField.name` required
   (DEC-083); `registry-build` writes `generated/runtimeRegistry.ts`, which `packages/registry/lib` wraps as
   `registry`, `resolve`, `filter` and `without`; `packages/runtime` has the protocol types, the
   `protocol.schema.json` envelope, the request-access fixture (an `INPUTS` rule, `packages/runtime` watched),
@@ -151,9 +155,11 @@ each over the registered subset (4/47 components registered).
 ## Commands
 ```bash
 npm ci
-npm run test:scripts        # 314 tests: comparator, ci-workflow, convert-tokens, metrics-report, registry, registry-metrics, schemas, sync, token-coverage, token-rules, verify
+npm run test:scripts        # 319 tests: comparator, ci-workflow, convert-tokens, metrics-report, registry, registry-metrics, schemas, sync, token-coverage, token-rules, verify
 npm run registry:check      # facts, contracts, schemas current + authored registry ⊆ generated facts (M3)
-npm test                    # 1411 vitest
+npm test                    # 1475 vitest (blocking; *.metric.tsx excluded)
+npm run test:metrics        # report-only metrics (exit 1 while the size metric reads failing, DEC-085)
+npm run test:runtime        # Playwright runtime-demo project (PW_CHROMIUM may point at an installed Chromium)
 npm run token-lint
 npx tsc --noEmit
 npm run metrics:check       # the committed metric region matches a fresh run
