@@ -108,32 +108,43 @@ function typecheck(files, check) {
   return check.flatMap((f) => program.getSemanticDiagnostics(program.getSourceFile(f))).map((d) => ts.flattenDiagnosticMessageText(d.messageText, "\n"))
 }
 
-const GEN_DIR = path.join(REPO, "packages/governance/contracts/generated")
+const CONTRACT_PROPS = JSON.parse(fs.readFileSync(path.join(REPO, "packages/registry/contract-props.json"), "utf8")).components
+const GEN_DIR = path.join(REPO, "packages/governance/contracts")
 const buttonFacts = () => JSON.parse(fs.readFileSync(path.join(REPO, "packages/registry/generated/Button.facts.json"), "utf8"))
+// The shape of the 44 hand-written contracts deleted in M3 session 4, kept as a fixture so the two
+// holes the generated contracts close stay demonstrated: a subset check that only catches widening,
+// and a Pick that collapses when the prop is gone.
+const HAND_PATTERN = `import type { ButtonProps, ButtonVariant } from "@atlas/ui-web/primitives/Button/Button"
+type AssertButtonVariant = ButtonVariant extends "primary" | "secondary" | "outline" | "ghost" | "destructive" | "link" ? true : false
+const _v: AssertButtonVariant = true; void _v
+type AssertButtonShape = { variant?: ButtonVariant; iconOnly?: boolean; loading?: boolean }
+type _CheckButtonProps = AssertButtonShape extends Pick<ButtonProps, keyof AssertButtonShape & keyof ButtonProps> ? true : never
+const _p: _CheckButtonProps = true; void _p
+`
+const hand = path.join(REPO, "packages/governance/contracts/__hand_pattern__.ts")
+const generated = path.join(GEN_DIR, "Button.contract.ts")
 const buttonContracts = (buttonSource) => {
   const files = {
     [path.join(GEN_DIR, "_assert.ts")]: ASSERT_SOURCE,
-    [path.join(GEN_DIR, "Button.contract.ts")]: contractSource(buttonFacts(), []),
-    [path.join(REPO, "packages/governance/contracts/Button.contract.ts")]: fs.readFileSync(path.join(REPO, "packages/governance/contracts/Button.contract.ts"), "utf8"),
+    [generated]: contractSource(buttonFacts(), [], CONTRACT_PROPS.Button),
+    [hand]: HAND_PATTERN,
   }
   if (buttonSource) files[BUTTON] = buttonSource
   return files
 }
-const hand = path.join(REPO, "packages/governance/contracts/Button.contract.ts")
-const generated = path.join(GEN_DIR, "Button.contract.ts")
 
 test("the generated contract compiles cleanly against the real Button", () => {
   assert.deepEqual(typecheck(buttonContracts(), [generated, hand]), [])
 })
 
-test("deleting a variant fails the generated contract; the hand-written one lets it through", () => {
+test("deleting a variant fails the generated contract; the old hand-written pattern lets it through", () => {
   const src = fs.readFileSync(BUTTON, "utf8").replace('  | "destructive"\n  | "link"', '  | "destructive"')
   const files = buttonContracts(src)
   assert.match(typecheck(files, [generated]).join("\n"), /'false' does not satisfy the constraint 'true'/)
-  assert.deepEqual(typecheck(files, [hand]), [], "the hand-written Button contract only catches widening")
+  assert.deepEqual(typecheck(files, [hand]), [], "the hand-written pattern only catches widening")
 })
 
-test("deleting a prop fails the generated contract; the hand-written one lets it through", () => {
+test("deleting a prop fails the generated contract; the old hand-written pattern lets it through", () => {
   const src = fs.readFileSync(BUTTON, "utf8").replace("  iconOnly?: boolean\n", "")
   const files = buttonContracts(src)
   assert.notDeepEqual(typecheck(files, [generated]), [])
@@ -147,7 +158,6 @@ test("making an optional prop required fails the generated contract", () => {
 
 // sub-parts, branches, exported types and contract-props.json (M3 session 4): each kind of assertion
 // fails on a real regression, typechecked against an edited copy of the component source
-const CONTRACT_PROPS = JSON.parse(fs.readFileSync(path.join(REPO, "packages/registry/contract-props.json"), "utf8")).components
 const contractCheck = (name, edit) => {
   const f = JSON.parse(fs.readFileSync(path.join(REPO, `packages/registry/generated/${name}.facts.json`), "utf8"))
   const src = path.join(REPO, f.source)
@@ -400,7 +410,7 @@ test("--check fails on an orphaned facts file", () => {
 
 test("--check fails on a missing generated contract — all 47 must have one", () => {
   const dir = fixture()
-  fs.rmSync(path.join(dir, "packages/governance/contracts/generated/ListItem.contract.ts"))
+  fs.rmSync(path.join(dir, "packages/governance/contracts/ListItem.contract.ts"))
   const r = cli(dir, "--check")
   assert.equal(r.code, 1)
   assert.match(r.out, /ListItem.contract.ts is stale or missing/)
@@ -417,7 +427,7 @@ test("--check fails on an orphaned protocol schema, and on a stale componentMap"
 
 test("a hand-edited generated contract is stale", () => {
   const dir = fixture()
-  const f = path.join(dir, "packages/governance/contracts/generated/Button.contract.ts")
+  const f = path.join(dir, "packages/governance/contracts/Button.contract.ts")
   fs.writeFileSync(f, fs.readFileSync(f, "utf8").replace(/^type Union_variant.*$/m, ""))
   assert.match(cli(dir, "--check").out, /Button.contract.ts is stale or missing/)
 })

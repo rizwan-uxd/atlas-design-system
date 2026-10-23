@@ -1,31 +1,52 @@
-import type {
-  TableAlign,
-  TableSort,
-  TableHeadProps,
-  TableCellProps,
-  TableRowProps,
-} from "@atlas/ui-web/primitives/Table/Table"
+// GENERATED — do not hand-edit. registry-build from packages/registry/generated/Table.facts.json; run npm run registry:build.
+// A one-way tripwire (roadmap §2c): it asserts what the facts recorded and is never consulted as a definition.
+import type React from "react"
+import type { Table, TableAlign, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow, TableSort } from "@atlas/ui-web/primitives/Table/Table"
+import type { Assert, Exact, Has, IsOptional } from "./_assert"
 
-type AssertTableAlign = TableAlign extends "start" | "end" ? true : false
-const _a: AssertTableAlign = true; void _a
+type P = React.ComponentProps<typeof TableHead>
 
-type AssertTableAlignExhaustive = "start" | "end" extends TableAlign ? true : false
-const _ae: AssertTableAlignExhaustive = true; void _ae
+// own props of TableHead: deleting one, flipping its optionality or changing its type fails here
+type Own_align = Assert<Has<P, "align">>
+type Optional_align = Assert<Exact<IsOptional<P, "align">, true>>
+type Type_align = Assert<Exact<NonNullable<P["align"]>, NonNullable<TableAlign>>>
+type Own_onSort = Assert<Has<P, "onSort">>
+type Optional_onSort = Assert<Exact<IsOptional<P, "onSort">, true>>
+type Type_onSort = Assert<Exact<NonNullable<P["onSort"]>, NonNullable<() => void>>>
+type Own_sort = Assert<Has<P, "sort">>
+type Optional_sort = Assert<Exact<IsOptional<P, "sort">, true>>
+type Type_sort = Assert<Exact<NonNullable<P["sort"]>, NonNullable<TableSort>>>
+type Union_align = Assert<Exact<NonNullable<P["align"]>, "end" | "start">>
+type Union_sort = Assert<Exact<NonNullable<P["sort"]>, "ascending" | "descending" | "none" | "unsorted">>
 
-type AssertTableSort = TableSort extends "none" | "unsorted" | "ascending" | "descending" ? true : false
-const _s: AssertTableSort = true; void _s
+// Table: another exported part of the module
+type P_Table = React.ComponentProps<typeof Table>
 
-type AssertTableSortExhaustive = "none" | "unsorted" | "ascending" | "descending" extends TableSort ? true : false
-const _se: AssertTableSortExhaustive = true; void _se
+// TableBody: another exported part of the module
+type P_TableBody = React.ComponentProps<typeof TableBody>
 
-type AssertTableHeadShape = { align?: TableAlign; sort?: TableSort; onSort?: () => void }
-type _CheckTableHeadProps = AssertTableHeadShape extends Pick<TableHeadProps, keyof AssertTableHeadShape & keyof TableHeadProps> ? true : never
-const _h: _CheckTableHeadProps = true; void _h
+// TableCaption: another exported part of the module
+type P_TableCaption = React.ComponentProps<typeof TableCaption>
 
-type AssertTableCellShape = { align?: TableAlign }
-type _CheckTableCellProps = AssertTableCellShape extends Pick<TableCellProps, keyof AssertTableCellShape & keyof TableCellProps> ? true : never
-const _c: _CheckTableCellProps = true; void _c
+// TableCell: another exported part of the module
+type P_TableCell = React.ComponentProps<typeof TableCell>
+type TableCell_Own_align = Assert<Has<P_TableCell, "align">>
+type TableCell_Optional_align = Assert<Exact<IsOptional<P_TableCell, "align">, true>>
+type TableCell_Type_align = Assert<Exact<NonNullable<P_TableCell["align"]>, NonNullable<TableAlign>>>
+type TableCell_Union_align = Assert<Exact<NonNullable<P_TableCell["align"]>, "end" | "start">>
 
-type AssertTableRowShape = { selected?: boolean }
-type _CheckTableRowProps = AssertTableRowShape extends Pick<TableRowProps, keyof AssertTableRowShape & keyof TableRowProps> ? true : never
-const _r: _CheckTableRowProps = true; void _r
+// TableFooter: another exported part of the module
+type P_TableFooter = React.ComponentProps<typeof TableFooter>
+
+// TableHeader: another exported part of the module
+type P_TableHeader = React.ComponentProps<typeof TableHeader>
+
+// TableRow: another exported part of the module
+type P_TableRow = React.ComponentProps<typeof TableRow>
+type TableRow_Own_selected = Assert<Has<P_TableRow, "selected">>
+type TableRow_Optional_selected = Assert<Exact<IsOptional<P_TableRow, "selected">, true>>
+type TableRow_Type_selected = Assert<Exact<NonNullable<P_TableRow["selected"]>, NonNullable<boolean>>>
+
+// exported types of the module
+type Type_TableAlign = Assert<Exact<TableAlign, "end" | "start">>
+type Type_TableSort = Assert<Exact<TableSort, "ascending" | "descending" | "none" | "unsorted">>

@@ -40,8 +40,8 @@ Skipping ahead to code is the mistake this skill exists to prevent.
    exported `<Name>Variant`/`<Name>Size` unions match Figma values exactly (DEC-002), value props
    stay props (DEC-003), semantic tokens only, every state, logical properties, reduced motion.
 5. **Code Connect, contract, tests** — **read `references/companions.md` before touching them
-   (required)**; it has the patterns, so don't open another component's companion files. Update all three: `figma.enum` maps list every Figma value; the contract asserts the
-   new unions and prop shape; the test covers the variant × size matrix, states and axe.
+   (required)**; it has the patterns, so don't open another component's companion files. Update all three: `figma.enum` maps list every Figma value; regenerate the contract
+   with `npm run registry:build` (generated — never hand-edit); the test covers the variant × size matrix, states and axe.
 6. **Re-sync and state** — `npm run atlas:sync` again: code-derived `variants`/`sizes` update and
    sync-detected discrepancies close themselves. Run it after the last code or companion edit and read
    its full output (no `| tail`/`| head`): the `written N file(s)` line near the top is the result.

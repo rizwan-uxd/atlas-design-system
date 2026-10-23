@@ -25,7 +25,9 @@ const CHECK = args.includes("--check")
 const rootArg = args.indexOf("--root")
 const ROOT = rootArg >= 0 ? path.resolve(args[rootArg + 1]) : path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..")
 const GEN = "packages/registry/generated"
-const CONTRACTS = "packages/governance/contracts/generated"
+// contracts live at their historical paths so the CHANGELOG policy ("the contract changes in the
+// same commit as a breaking change") keeps working; every file there is generated (M3 session 4)
+const CONTRACTS = "packages/governance/contracts"
 const SCHEMAS = `${GEN}/schemas`
 const rel = (...p) => path.join(ROOT, ...p)
 
