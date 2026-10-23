@@ -6,14 +6,14 @@
   "part": "Input",
   "propsType": "InputProps",
   "props": [
-    { "name": "invalid", "type": "boolean", "optional": true },
-    { "name": "leadingIcon", "type": "React.ReactNode", "optional": true },
-    { "name": "loading", "type": "boolean", "optional": true },
-    { "name": "prefix", "type": "React.ReactNode", "optional": true },
-    { "name": "size", "type": "InputSize", "optional": true },
-    { "name": "suffix", "type": "React.ReactNode", "optional": true },
-    { "name": "trailingIcon", "type": "React.ReactNode", "optional": true },
-    { "name": "variant", "type": "InputVariant", "optional": true }
+    { "name": "invalid", "type": "boolean", "optional": true, "exact": true },
+    { "name": "leadingIcon", "type": "React.ReactNode", "optional": true, "exact": true },
+    { "name": "loading", "type": "boolean", "optional": true, "exact": true },
+    { "name": "prefix", "type": "React.ReactNode", "optional": true, "exact": true },
+    { "name": "size", "type": "InputSize", "optional": true, "exact": true },
+    { "name": "suffix", "type": "React.ReactNode", "optional": true, "exact": true },
+    { "name": "trailingIcon", "type": "React.ReactNode", "optional": true, "exact": true },
+    { "name": "variant", "type": "InputVariant", "optional": true, "exact": true }
   ],
   "inherited": {
     "AriaAttributes": ["aria-activedescendant", "aria-atomic", "aria-autocomplete", "aria-braillelabel", "aria-brailleroledescription", "aria-busy", "aria-checked", "aria-colcount", "aria-colindex", "aria-colindextext", "aria-colspan", "aria-controls", "aria-current", "aria-describedby", "aria-description", "aria-details", "aria-disabled", "aria-dropeffect", "aria-errormessage", "aria-expanded", "aria-flowto", "aria-grabbed", "aria-haspopup", "aria-hidden", "aria-invalid", "aria-keyshortcuts", "aria-label", "aria-labelledby", "aria-level", "aria-live", "aria-modal", "aria-multiline", "aria-multiselectable", "aria-orientation", "aria-owns", "aria-placeholder", "aria-posinset", "aria-pressed", "aria-readonly", "aria-relevant", "aria-required", "aria-roledescription", "aria-rowcount", "aria-rowindex", "aria-rowindextext", "aria-rowspan", "aria-selected", "aria-setsize", "aria-sort", "aria-valuemax", "aria-valuemin", "aria-valuenow", "aria-valuetext"],
@@ -223,5 +223,22 @@
       "State": ["default", "hover", "focus-visible", "disabled", "error"]
     }
   },
-  "tokensUsed": ["--atlas-background-muted", "--atlas-border-width-1", "--atlas-border-width-2", "--atlas-duration-fast", "--atlas-duration-slow", "--atlas-easing-linear", "--atlas-easing-standard", "--atlas-focus-ring", "--atlas-font-sans", "--atlas-font-size-sm", "--atlas-foreground-muted", "--atlas-input-adornment-padding", "--atlas-input-affix-foreground", "--atlas-input-background", "--atlas-input-background-disabled", "--atlas-input-border", "--atlas-input-border-focus", "--atlas-input-border-hover", "--atlas-input-border-invalid", "--atlas-input-filled-background", "--atlas-input-filled-background-focus", "--atlas-input-filled-background-hover", "--atlas-input-foreground", "--atlas-input-foreground-disabled", "--atlas-input-icon-foreground", "--atlas-input-icon-size", "--atlas-input-placeholder", "--atlas-input-radius", "--atlas-input-size-lg-font-size", "--atlas-input-size-lg-height", "--atlas-input-size-lg-padding-inline", "--atlas-input-size-md-font-size", "--atlas-input-size-md-height", "--atlas-input-size-md-padding-inline", "--atlas-input-size-sm-font-size", "--atlas-input-size-sm-height", "--atlas-input-size-sm-padding-inline", "--atlas-opacity-disabled", "--atlas-radius-full", "--atlas-radius-none", "--atlas-spacing-0_5", "--atlas-spacing-10", "--atlas-spacing-12", "--atlas-spacing-3", "--atlas-spacing-4", "--atlas-spacing-5", "--atlas-spacing-8", "--atlas-touch-min"]
+  "tokensUsed": ["--atlas-background-muted", "--atlas-border-width-1", "--atlas-border-width-2", "--atlas-duration-fast", "--atlas-duration-slow", "--atlas-easing-linear", "--atlas-easing-standard", "--atlas-focus-ring", "--atlas-font-sans", "--atlas-font-size-sm", "--atlas-foreground-muted", "--atlas-input-adornment-padding", "--atlas-input-affix-foreground", "--atlas-input-background", "--atlas-input-background-disabled", "--atlas-input-border", "--atlas-input-border-focus", "--atlas-input-border-hover", "--atlas-input-border-invalid", "--atlas-input-filled-background", "--atlas-input-filled-background-focus", "--atlas-input-filled-background-hover", "--atlas-input-foreground", "--atlas-input-foreground-disabled", "--atlas-input-icon-foreground", "--atlas-input-icon-size", "--atlas-input-placeholder", "--atlas-input-radius", "--atlas-input-size-lg-font-size", "--atlas-input-size-lg-height", "--atlas-input-size-lg-padding-inline", "--atlas-input-size-md-font-size", "--atlas-input-size-md-height", "--atlas-input-size-md-padding-inline", "--atlas-input-size-sm-font-size", "--atlas-input-size-sm-height", "--atlas-input-size-sm-padding-inline", "--atlas-opacity-disabled", "--atlas-radius-full", "--atlas-radius-none", "--atlas-spacing-0_5", "--atlas-spacing-10", "--atlas-spacing-12", "--atlas-spacing-3", "--atlas-spacing-4", "--atlas-spacing-5", "--atlas-spacing-8", "--atlas-touch-min"],
+  "module": {
+    "imports": [
+      { "from": "@atlas/ui-web/primitives/Input/Input", "name": "InputSize", "kind": "named" },
+      { "from": "@atlas/ui-web/primitives/Input/Input", "name": "InputVariant", "kind": "named" }
+    ],
+    "parts": {},
+    "types": {
+      "InputSize": {
+        "kind": "union",
+        "members": ["lg", "md", "sm"]
+      },
+      "InputVariant": {
+        "kind": "union",
+        "members": ["default", "filled", "unstyled"]
+      }
+    }
+  }
 }

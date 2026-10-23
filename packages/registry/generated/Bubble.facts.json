@@ -6,9 +6,9 @@
   "part": "Bubble",
   "propsType": "BubbleProps",
   "props": [
-    { "name": "align", "type": "BubbleAlign", "optional": true },
-    { "name": "asChild", "type": "boolean", "optional": true },
-    { "name": "variant", "type": "BubbleVariant", "optional": true }
+    { "name": "align", "type": "BubbleAlign", "optional": true, "exact": true },
+    { "name": "asChild", "type": "boolean", "optional": true, "exact": true },
+    { "name": "variant", "type": "BubbleVariant", "optional": true, "exact": true }
   ],
   "inherited": {
     "AriaAttributes": ["aria-activedescendant", "aria-atomic", "aria-autocomplete", "aria-braillelabel", "aria-brailleroledescription", "aria-busy", "aria-checked", "aria-colcount", "aria-colindex", "aria-colindextext", "aria-colspan", "aria-controls", "aria-current", "aria-describedby", "aria-description", "aria-details", "aria-disabled", "aria-dropeffect", "aria-errormessage", "aria-expanded", "aria-flowto", "aria-grabbed", "aria-haspopup", "aria-hidden", "aria-invalid", "aria-keyshortcuts", "aria-label", "aria-labelledby", "aria-level", "aria-live", "aria-modal", "aria-multiline", "aria-multiselectable", "aria-orientation", "aria-owns", "aria-placeholder", "aria-posinset", "aria-pressed", "aria-readonly", "aria-relevant", "aria-required", "aria-roledescription", "aria-rowcount", "aria-rowindex", "aria-rowindextext", "aria-rowspan", "aria-selected", "aria-setsize", "aria-sort", "aria-valuemax", "aria-valuemin", "aria-valuenow", "aria-valuetext"],
@@ -218,5 +218,59 @@
       "Align": ["start", "end"]
     }
   },
-  "tokensUsed": ["--atlas-background-muted", "--atlas-background-subtle", "--atlas-border", "--atlas-border-width-0", "--atlas-border-width-1", "--atlas-border-width-2", "--atlas-content-width-md", "--atlas-danger", "--atlas-danger-subtle", "--atlas-focus-ring", "--atlas-font-sans", "--atlas-font-weight-regular", "--atlas-foreground", "--atlas-line-height-normal", "--atlas-primary", "--atlas-primary-foreground", "--atlas-primary-subtle", "--atlas-radius-2xl", "--atlas-radius-full", "--atlas-spacing-0_5", "--atlas-spacing-1", "--atlas-spacing-1_5", "--atlas-spacing-2", "--atlas-spacing-3", "--atlas-spacing-4", "--atlas-surface", "--atlas-text-body-sm"]
+  "tokensUsed": ["--atlas-background-muted", "--atlas-background-subtle", "--atlas-border", "--atlas-border-width-0", "--atlas-border-width-1", "--atlas-border-width-2", "--atlas-content-width-md", "--atlas-danger", "--atlas-danger-subtle", "--atlas-focus-ring", "--atlas-font-sans", "--atlas-font-weight-regular", "--atlas-foreground", "--atlas-line-height-normal", "--atlas-primary", "--atlas-primary-foreground", "--atlas-primary-subtle", "--atlas-radius-2xl", "--atlas-radius-full", "--atlas-spacing-0_5", "--atlas-spacing-1", "--atlas-spacing-1_5", "--atlas-spacing-2", "--atlas-spacing-3", "--atlas-spacing-4", "--atlas-surface", "--atlas-text-body-sm"],
+  "module": {
+    "imports": [
+      { "from": "@atlas/ui-web/primitives/Bubble/Bubble", "name": "BubbleAlign", "kind": "named" },
+      { "from": "@atlas/ui-web/primitives/Bubble/Bubble", "name": "BubbleVariant", "kind": "named" }
+    ],
+    "parts": {
+      "BubbleGroup": {
+        "propsType": "BubbleGroupProps",
+        "props": [],
+        "unions": {
+          "aria-autocomplete": ["both", "inline", "list", "none"],
+          "aria-dropeffect": ["copy", "execute", "link", "move", "none", "popup"],
+          "aria-live": ["assertive", "off", "polite"],
+          "aria-orientation": ["horizontal", "vertical"],
+          "aria-relevant": ["additions", "additions removals", "additions text", "all", "removals", "removals additions", "removals text", "text", "text additions", "text removals"],
+          "aria-sort": ["ascending", "descending", "none", "other"],
+          "enterKeyHint": ["done", "enter", "go", "next", "previous", "search", "send"],
+          "inputMode": ["decimal", "email", "none", "numeric", "search", "tel", "text", "url"],
+          "popover": ["", "auto", "hint", "manual"],
+          "popoverTargetAction": ["hide", "show", "toggle"],
+          "translate": ["no", "yes"],
+          "unselectable": ["off", "on"]
+        }
+      },
+      "BubbleReactions": {
+        "propsType": "BubbleReactionsProps",
+        "props": [],
+        "unions": {
+          "aria-autocomplete": ["both", "inline", "list", "none"],
+          "aria-dropeffect": ["copy", "execute", "link", "move", "none", "popup"],
+          "aria-live": ["assertive", "off", "polite"],
+          "aria-orientation": ["horizontal", "vertical"],
+          "aria-relevant": ["additions", "additions removals", "additions text", "all", "removals", "removals additions", "removals text", "text", "text additions", "text removals"],
+          "aria-sort": ["ascending", "descending", "none", "other"],
+          "enterKeyHint": ["done", "enter", "go", "next", "previous", "search", "send"],
+          "inputMode": ["decimal", "email", "none", "numeric", "search", "tel", "text", "url"],
+          "popover": ["", "auto", "hint", "manual"],
+          "popoverTargetAction": ["hide", "show", "toggle"],
+          "translate": ["no", "yes"],
+          "unselectable": ["off", "on"]
+        }
+      }
+    },
+    "types": {
+      "BubbleAlign": {
+        "kind": "union",
+        "members": ["end", "start"]
+      },
+      "BubbleVariant": {
+        "kind": "union",
+        "members": ["destructive", "muted", "outline", "primary", "secondary", "tinted"]
+      }
+    }
+  }
 }

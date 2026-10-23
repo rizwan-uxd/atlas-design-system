@@ -6,19 +6,19 @@
   "part": "Checkbox",
   "propsType": "CheckboxProps",
   "props": [
-    { "name": "aria-describedby", "type": "string", "optional": true },
-    { "name": "checked", "type": "boolean | \"indeterminate\"", "optional": true },
-    { "name": "className", "type": "string", "optional": true },
-    { "name": "defaultChecked", "type": "boolean | \"indeterminate\"", "optional": true },
-    { "name": "description", "type": "React.ReactNode", "optional": true },
-    { "name": "disabled", "type": "boolean", "optional": true },
-    { "name": "id", "type": "string", "optional": true },
-    { "name": "invalid", "type": "boolean", "optional": true },
-    { "name": "label", "type": "React.ReactNode", "optional": true },
-    { "name": "onCheckedChange", "type": "(checked: boolean | \"indeterminate\") => void", "optional": true },
-    { "name": "required", "type": "boolean", "optional": true },
-    { "name": "size", "type": "CheckboxSize", "optional": true },
-    { "name": "variant", "type": "CheckboxVariant", "optional": true }
+    { "name": "aria-describedby", "type": "string", "optional": true, "exact": true },
+    { "name": "checked", "type": "boolean | \"indeterminate\"", "optional": true, "exact": true },
+    { "name": "className", "type": "string", "optional": true, "exact": true },
+    { "name": "defaultChecked", "type": "boolean | \"indeterminate\"", "optional": true, "exact": true },
+    { "name": "description", "type": "React.ReactNode", "optional": true, "exact": true },
+    { "name": "disabled", "type": "boolean", "optional": true, "exact": true },
+    { "name": "id", "type": "string", "optional": true, "exact": true },
+    { "name": "invalid", "type": "boolean", "optional": true, "exact": true },
+    { "name": "label", "type": "React.ReactNode", "optional": true, "exact": true },
+    { "name": "onCheckedChange", "type": "(checked: boolean | \"indeterminate\") => void", "optional": true, "exact": true },
+    { "name": "required", "type": "boolean", "optional": true, "exact": true },
+    { "name": "size", "type": "CheckboxSize", "optional": true, "exact": true },
+    { "name": "variant", "type": "CheckboxVariant", "optional": true, "exact": true }
   ],
   "inherited": {},
   "events": [
@@ -45,5 +45,22 @@
       "State": ["default", "hover", "focus-visible", "active", "disabled"]
     }
   },
-  "tokensUsed": ["--atlas-border-width-1", "--atlas-border-width-2", "--atlas-checkbox-background", "--atlas-checkbox-background-disabled", "--atlas-checkbox-background-hover", "--atlas-checkbox-border", "--atlas-checkbox-border-disabled", "--atlas-checkbox-border-hover", "--atlas-checkbox-card-background", "--atlas-checkbox-card-border", "--atlas-checkbox-card-checked-border", "--atlas-checkbox-card-invalid-border", "--atlas-checkbox-card-radius", "--atlas-checkbox-checked-background", "--atlas-checkbox-checked-background-hover", "--atlas-checkbox-description-foreground", "--atlas-checkbox-description-foreground-disabled", "--atlas-checkbox-foreground", "--atlas-checkbox-gap", "--atlas-checkbox-invalid-border", "--atlas-checkbox-invalid-checked-background", "--atlas-checkbox-invalid-checked-background-hover", "--atlas-checkbox-invalid-checked-foreground", "--atlas-checkbox-label-foreground", "--atlas-checkbox-label-foreground-disabled", "--atlas-checkbox-radius", "--atlas-checkbox-required-foreground", "--atlas-checkbox-required-foreground-disabled", "--atlas-checkbox-size-lg-box", "--atlas-checkbox-size-md-box", "--atlas-checkbox-size-sm-box", "--atlas-duration-fast", "--atlas-easing-emphasized", "--atlas-easing-standard", "--atlas-focus-ring", "--atlas-font-sans", "--atlas-font-size-lg", "--atlas-font-size-sm", "--atlas-font-size-xs", "--atlas-font-weight-semibold", "--atlas-line-height-normal", "--atlas-opacity-disabled", "--atlas-primary", "--atlas-primary-subtle", "--atlas-spacing-0_5", "--atlas-spacing-1", "--atlas-spacing-2", "--atlas-spacing-3", "--atlas-spacing-4", "--atlas-spacing-5", "--atlas-spacing-6", "--atlas-surface-raised", "--atlas-text-body", "--atlas-touch-min"]
+  "tokensUsed": ["--atlas-border-width-1", "--atlas-border-width-2", "--atlas-checkbox-background", "--atlas-checkbox-background-disabled", "--atlas-checkbox-background-hover", "--atlas-checkbox-border", "--atlas-checkbox-border-disabled", "--atlas-checkbox-border-hover", "--atlas-checkbox-card-background", "--atlas-checkbox-card-border", "--atlas-checkbox-card-checked-border", "--atlas-checkbox-card-invalid-border", "--atlas-checkbox-card-radius", "--atlas-checkbox-checked-background", "--atlas-checkbox-checked-background-hover", "--atlas-checkbox-description-foreground", "--atlas-checkbox-description-foreground-disabled", "--atlas-checkbox-foreground", "--atlas-checkbox-gap", "--atlas-checkbox-invalid-border", "--atlas-checkbox-invalid-checked-background", "--atlas-checkbox-invalid-checked-background-hover", "--atlas-checkbox-invalid-checked-foreground", "--atlas-checkbox-label-foreground", "--atlas-checkbox-label-foreground-disabled", "--atlas-checkbox-radius", "--atlas-checkbox-required-foreground", "--atlas-checkbox-required-foreground-disabled", "--atlas-checkbox-size-lg-box", "--atlas-checkbox-size-md-box", "--atlas-checkbox-size-sm-box", "--atlas-duration-fast", "--atlas-easing-emphasized", "--atlas-easing-standard", "--atlas-focus-ring", "--atlas-font-sans", "--atlas-font-size-lg", "--atlas-font-size-sm", "--atlas-font-size-xs", "--atlas-font-weight-semibold", "--atlas-line-height-normal", "--atlas-opacity-disabled", "--atlas-primary", "--atlas-primary-subtle", "--atlas-spacing-0_5", "--atlas-spacing-1", "--atlas-spacing-2", "--atlas-spacing-3", "--atlas-spacing-4", "--atlas-spacing-5", "--atlas-spacing-6", "--atlas-surface-raised", "--atlas-text-body", "--atlas-touch-min"],
+  "module": {
+    "imports": [
+      { "from": "@atlas/ui-web/primitives/Checkbox/Checkbox", "name": "CheckboxSize", "kind": "named" },
+      { "from": "@atlas/ui-web/primitives/Checkbox/Checkbox", "name": "CheckboxVariant", "kind": "named" }
+    ],
+    "parts": {},
+    "types": {
+      "CheckboxSize": {
+        "kind": "union",
+        "members": ["lg", "md", "sm"]
+      },
+      "CheckboxVariant": {
+        "kind": "union",
+        "members": ["card", "default"]
+      }
+    }
+  }
 }

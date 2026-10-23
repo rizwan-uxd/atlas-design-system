@@ -6,14 +6,14 @@
   "part": "Textarea",
   "propsType": "TextareaProps",
   "props": [
-    { "name": "autoGrow", "type": "boolean", "optional": true },
-    { "name": "invalid", "type": "boolean", "optional": true },
-    { "name": "maxRows", "type": "number", "optional": true },
-    { "name": "required", "type": "boolean", "optional": true },
-    { "name": "resize", "type": "TextareaResize", "optional": true },
-    { "name": "showCount", "type": "boolean", "optional": true },
-    { "name": "size", "type": "TextareaSize", "optional": true },
-    { "name": "variant", "type": "TextareaVariant", "optional": true }
+    { "name": "autoGrow", "type": "boolean", "optional": true, "exact": true },
+    { "name": "invalid", "type": "boolean", "optional": true, "exact": true },
+    { "name": "maxRows", "type": "number", "optional": true, "exact": true },
+    { "name": "required", "type": "boolean", "optional": true, "exact": true },
+    { "name": "resize", "type": "TextareaResize", "optional": true, "exact": true },
+    { "name": "showCount", "type": "boolean", "optional": true, "exact": true },
+    { "name": "size", "type": "TextareaSize", "optional": true, "exact": true },
+    { "name": "variant", "type": "TextareaVariant", "optional": true, "exact": true }
   ],
   "inherited": {
     "AriaAttributes": ["aria-activedescendant", "aria-atomic", "aria-autocomplete", "aria-braillelabel", "aria-brailleroledescription", "aria-busy", "aria-checked", "aria-colcount", "aria-colindex", "aria-colindextext", "aria-colspan", "aria-controls", "aria-current", "aria-describedby", "aria-description", "aria-details", "aria-disabled", "aria-dropeffect", "aria-errormessage", "aria-expanded", "aria-flowto", "aria-grabbed", "aria-haspopup", "aria-hidden", "aria-invalid", "aria-keyshortcuts", "aria-label", "aria-labelledby", "aria-level", "aria-live", "aria-modal", "aria-multiline", "aria-multiselectable", "aria-orientation", "aria-owns", "aria-placeholder", "aria-posinset", "aria-pressed", "aria-readonly", "aria-relevant", "aria-required", "aria-roledescription", "aria-rowcount", "aria-rowindex", "aria-rowindextext", "aria-rowspan", "aria-selected", "aria-setsize", "aria-sort", "aria-valuemax", "aria-valuemin", "aria-valuenow", "aria-valuetext"],
@@ -224,5 +224,27 @@
       "State": ["default", "hover", "focus-visible", "disabled", "error"]
     }
   },
-  "tokensUsed": ["--atlas-border-width-1", "--atlas-border-width-2", "--atlas-duration-fast", "--atlas-easing-standard", "--atlas-focus-ring", "--atlas-font-sans", "--atlas-line-height-normal", "--atlas-line-height-tight", "--atlas-opacity-disabled", "--atlas-radius-none", "--atlas-spacing-0_5", "--atlas-spacing-10", "--atlas-spacing-12", "--atlas-spacing-16", "--atlas-spacing-2", "--atlas-spacing-3", "--atlas-spacing-6", "--atlas-text-body", "--atlas-text-caption", "--atlas-textarea-background", "--atlas-textarea-background-disabled", "--atlas-textarea-border", "--atlas-textarea-border-focus", "--atlas-textarea-border-hover", "--atlas-textarea-border-invalid", "--atlas-textarea-counter-foreground", "--atlas-textarea-counter-foreground-over", "--atlas-textarea-filled-background", "--atlas-textarea-filled-background-focus", "--atlas-textarea-filled-background-hover", "--atlas-textarea-foreground", "--atlas-textarea-foreground-disabled", "--atlas-textarea-placeholder", "--atlas-textarea-radius", "--atlas-textarea-size-lg-padding-block", "--atlas-textarea-size-lg-padding-inline", "--atlas-textarea-size-md-padding-block", "--atlas-textarea-size-md-padding-inline", "--atlas-textarea-size-sm-font-size", "--atlas-textarea-size-sm-padding-block", "--atlas-textarea-size-sm-padding-inline"]
+  "tokensUsed": ["--atlas-border-width-1", "--atlas-border-width-2", "--atlas-duration-fast", "--atlas-easing-standard", "--atlas-focus-ring", "--atlas-font-sans", "--atlas-line-height-normal", "--atlas-line-height-tight", "--atlas-opacity-disabled", "--atlas-radius-none", "--atlas-spacing-0_5", "--atlas-spacing-10", "--atlas-spacing-12", "--atlas-spacing-16", "--atlas-spacing-2", "--atlas-spacing-3", "--atlas-spacing-6", "--atlas-text-body", "--atlas-text-caption", "--atlas-textarea-background", "--atlas-textarea-background-disabled", "--atlas-textarea-border", "--atlas-textarea-border-focus", "--atlas-textarea-border-hover", "--atlas-textarea-border-invalid", "--atlas-textarea-counter-foreground", "--atlas-textarea-counter-foreground-over", "--atlas-textarea-filled-background", "--atlas-textarea-filled-background-focus", "--atlas-textarea-filled-background-hover", "--atlas-textarea-foreground", "--atlas-textarea-foreground-disabled", "--atlas-textarea-placeholder", "--atlas-textarea-radius", "--atlas-textarea-size-lg-padding-block", "--atlas-textarea-size-lg-padding-inline", "--atlas-textarea-size-md-padding-block", "--atlas-textarea-size-md-padding-inline", "--atlas-textarea-size-sm-font-size", "--atlas-textarea-size-sm-padding-block", "--atlas-textarea-size-sm-padding-inline"],
+  "module": {
+    "imports": [
+      { "from": "@atlas/ui-web/primitives/Textarea/Textarea", "name": "TextareaResize", "kind": "named" },
+      { "from": "@atlas/ui-web/primitives/Textarea/Textarea", "name": "TextareaSize", "kind": "named" },
+      { "from": "@atlas/ui-web/primitives/Textarea/Textarea", "name": "TextareaVariant", "kind": "named" }
+    ],
+    "parts": {},
+    "types": {
+      "TextareaResize": {
+        "kind": "union",
+        "members": ["both", "none", "vertical"]
+      },
+      "TextareaSize": {
+        "kind": "union",
+        "members": ["lg", "md", "sm"]
+      },
+      "TextareaVariant": {
+        "kind": "union",
+        "members": ["default", "filled", "unstyled"]
+      }
+    }
+  }
 }

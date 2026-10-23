@@ -6,13 +6,13 @@
   "part": "EmptyState",
   "propsType": "EmptyStateProps",
   "props": [
-    { "name": "action", "type": "React.ReactNode", "optional": true },
-    { "name": "className", "type": "string", "optional": true },
-    { "name": "description", "type": "React.ReactNode", "optional": true },
-    { "name": "icon", "type": "React.ReactNode", "optional": true },
-    { "name": "secondaryAction", "type": "React.ReactNode", "optional": true },
-    { "name": "size", "type": "EmptyStateSize", "optional": true },
-    { "name": "title", "type": "React.ReactNode", "optional": true }
+    { "name": "action", "type": "React.ReactNode", "optional": true, "exact": true },
+    { "name": "className", "type": "string", "optional": true, "exact": true },
+    { "name": "description", "type": "React.ReactNode", "optional": true, "exact": true },
+    { "name": "icon", "type": "React.ReactNode", "optional": true, "exact": true },
+    { "name": "secondaryAction", "type": "React.ReactNode", "optional": true, "exact": true },
+    { "name": "size", "type": "EmptyStateSize", "optional": true, "exact": true },
+    { "name": "title", "type": "React.ReactNode", "optional": true, "exact": true }
   ],
   "inherited": {},
   "events": [],
@@ -33,5 +33,17 @@
       "Size": ["sm", "md", "lg"]
     }
   },
-  "tokensUsed": ["--atlas-font-sans", "--atlas-font-weight-regular", "--atlas-font-weight-semibold", "--atlas-foreground", "--atlas-foreground-muted", "--atlas-foreground-subtle", "--atlas-icon-size-lg", "--atlas-icon-size-md", "--atlas-icon-stroke-lg", "--atlas-icon-stroke-md", "--atlas-line-height-normal", "--atlas-line-height-snug", "--atlas-spacing-12", "--atlas-spacing-3", "--atlas-spacing-6", "--atlas-text-body", "--atlas-text-body-sm", "--atlas-text-h2", "--atlas-text-h3", "--atlas-text-h4"]
+  "tokensUsed": ["--atlas-font-sans", "--atlas-font-weight-regular", "--atlas-font-weight-semibold", "--atlas-foreground", "--atlas-foreground-muted", "--atlas-foreground-subtle", "--atlas-icon-size-lg", "--atlas-icon-size-md", "--atlas-icon-stroke-lg", "--atlas-icon-stroke-md", "--atlas-line-height-normal", "--atlas-line-height-snug", "--atlas-spacing-12", "--atlas-spacing-3", "--atlas-spacing-6", "--atlas-text-body", "--atlas-text-body-sm", "--atlas-text-h2", "--atlas-text-h3", "--atlas-text-h4"],
+  "module": {
+    "imports": [
+      { "from": "@atlas/ui-web/compositions/EmptyState/EmptyState", "name": "EmptyStateSize", "kind": "named" }
+    ],
+    "parts": {},
+    "types": {
+      "EmptyStateSize": {
+        "kind": "union",
+        "members": ["lg", "md", "sm"]
+      }
+    }
+  }
 }

@@ -6,25 +6,25 @@
   "part": "Slider",
   "propsType": "SliderProps",
   "props": [
-    { "name": "aria-describedby", "type": "string", "optional": true },
-    { "name": "aria-label", "type": "string", "optional": true },
-    { "name": "aria-labelledby", "type": "string", "optional": true },
-    { "name": "defaultValue", "type": "number | [number, number]", "optional": true },
-    { "name": "disabled", "type": "boolean", "optional": true },
-    { "name": "getAriaValueText", "type": "(value: number) => string", "optional": true },
-    { "name": "helperText", "type": "React.ReactNode", "optional": true },
-    { "name": "label", "type": "React.ReactNode", "optional": true },
-    { "name": "leading", "type": "React.ReactNode", "optional": true },
-    { "name": "max", "type": "number", "optional": true },
-    { "name": "min", "type": "number", "optional": true },
-    { "name": "name", "type": "string", "optional": true },
-    { "name": "onValueChange", "type": "(value: number | [number, number]) => void", "optional": true },
-    { "name": "orientation", "type": "SliderOrientation", "optional": true },
-    { "name": "range", "type": "boolean", "optional": true },
-    { "name": "step", "type": "number", "optional": true },
-    { "name": "trailing", "type": "React.ReactNode", "optional": true },
-    { "name": "value", "type": "number | [number, number]", "optional": true },
-    { "name": "valueLabel", "type": "React.ReactNode", "optional": true }
+    { "name": "aria-describedby", "type": "string", "optional": true, "exact": true },
+    { "name": "aria-label", "type": "string", "optional": true, "exact": true },
+    { "name": "aria-labelledby", "type": "string", "optional": true, "exact": true },
+    { "name": "defaultValue", "type": "number | [number, number]", "optional": true, "exact": true },
+    { "name": "disabled", "type": "boolean", "optional": true, "exact": true },
+    { "name": "getAriaValueText", "type": "(value: number) => string", "optional": true, "exact": true },
+    { "name": "helperText", "type": "React.ReactNode", "optional": true, "exact": true },
+    { "name": "label", "type": "React.ReactNode", "optional": true, "exact": true },
+    { "name": "leading", "type": "React.ReactNode", "optional": true, "exact": true },
+    { "name": "max", "type": "number", "optional": true, "exact": true },
+    { "name": "min", "type": "number", "optional": true, "exact": true },
+    { "name": "name", "type": "string", "optional": true, "exact": true },
+    { "name": "onValueChange", "type": "(value: number | [number, number]) => void", "optional": true, "exact": true },
+    { "name": "orientation", "type": "SliderOrientation", "optional": true, "exact": true },
+    { "name": "range", "type": "boolean", "optional": true, "exact": true },
+    { "name": "step", "type": "number", "optional": true, "exact": true },
+    { "name": "trailing", "type": "React.ReactNode", "optional": true, "exact": true },
+    { "name": "value", "type": "number | [number, number]", "optional": true, "exact": true },
+    { "name": "valueLabel", "type": "React.ReactNode", "optional": true, "exact": true }
   ],
   "inherited": {
     "AriaAttributes": ["aria-activedescendant", "aria-atomic", "aria-autocomplete", "aria-braillelabel", "aria-brailleroledescription", "aria-busy", "aria-checked", "aria-colcount", "aria-colindex", "aria-colindextext", "aria-colspan", "aria-controls", "aria-current", "aria-description", "aria-details", "aria-disabled", "aria-dropeffect", "aria-errormessage", "aria-expanded", "aria-flowto", "aria-grabbed", "aria-haspopup", "aria-hidden", "aria-invalid", "aria-keyshortcuts", "aria-level", "aria-live", "aria-modal", "aria-multiline", "aria-multiselectable", "aria-orientation", "aria-owns", "aria-placeholder", "aria-posinset", "aria-pressed", "aria-readonly", "aria-relevant", "aria-required", "aria-roledescription", "aria-rowcount", "aria-rowindex", "aria-rowindextext", "aria-rowspan", "aria-selected", "aria-setsize", "aria-sort", "aria-valuemax", "aria-valuemin", "aria-valuenow", "aria-valuetext"],
@@ -232,5 +232,17 @@
       "State": ["default", "disabled"]
     }
   },
-  "tokensUsed": ["--atlas-background-muted", "--atlas-border-width-2", "--atlas-duration-fast", "--atlas-easing-standard", "--atlas-focus-ring", "--atlas-font-sans", "--atlas-font-weight-medium", "--atlas-font-weight-regular", "--atlas-foreground", "--atlas-foreground-muted", "--atlas-line-height-normal", "--atlas-opacity-disabled", "--atlas-primary", "--atlas-primary-subtle", "--atlas-radius-full", "--atlas-shadow-sm", "--atlas-spacing-0_5", "--atlas-spacing-1", "--atlas-spacing-16", "--atlas-spacing-2", "--atlas-spacing-4", "--atlas-surface", "--atlas-text-body-sm", "--atlas-text-caption", "--atlas-touch-min"]
+  "tokensUsed": ["--atlas-background-muted", "--atlas-border-width-2", "--atlas-duration-fast", "--atlas-easing-standard", "--atlas-focus-ring", "--atlas-font-sans", "--atlas-font-weight-medium", "--atlas-font-weight-regular", "--atlas-foreground", "--atlas-foreground-muted", "--atlas-line-height-normal", "--atlas-opacity-disabled", "--atlas-primary", "--atlas-primary-subtle", "--atlas-radius-full", "--atlas-shadow-sm", "--atlas-spacing-0_5", "--atlas-spacing-1", "--atlas-spacing-16", "--atlas-spacing-2", "--atlas-spacing-4", "--atlas-surface", "--atlas-text-body-sm", "--atlas-text-caption", "--atlas-touch-min"],
+  "module": {
+    "imports": [
+      { "from": "@atlas/ui-web/primitives/Slider/Slider", "name": "SliderOrientation", "kind": "named" }
+    ],
+    "parts": {},
+    "types": {
+      "SliderOrientation": {
+        "kind": "union",
+        "members": ["horizontal", "vertical"]
+      }
+    }
+  }
 }

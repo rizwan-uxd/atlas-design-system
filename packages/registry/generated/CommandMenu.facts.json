@@ -6,18 +6,18 @@
   "part": "CommandMenuContent",
   "propsType": "CommandMenuContentProps",
   "props": [
-    { "name": "children", "type": "React.ReactNode", "optional": true },
-    { "name": "className", "type": "string", "optional": true },
-    { "name": "closeOnSelect", "type": "boolean", "optional": true },
-    { "name": "defaultValue", "type": "string", "optional": true },
-    { "name": "emptyText", "type": "string", "optional": true },
-    { "name": "filter", "type": "CommandMenuFilter | false", "optional": true },
-    { "name": "label", "type": "string", "optional": true },
-    { "name": "loading", "type": "boolean", "optional": true },
-    { "name": "onValueChange", "type": "(value: string) => void", "optional": true },
-    { "name": "placeholder", "type": "string", "optional": true },
-    { "name": "size", "type": "CommandMenuSize", "optional": true },
-    { "name": "value", "type": "string", "optional": true }
+    { "name": "children", "type": "React.ReactNode", "optional": true, "exact": true },
+    { "name": "className", "type": "string", "optional": true, "exact": true },
+    { "name": "closeOnSelect", "type": "boolean", "optional": true, "exact": true },
+    { "name": "defaultValue", "type": "string", "optional": true, "exact": true },
+    { "name": "emptyText", "type": "string", "optional": true, "exact": true },
+    { "name": "filter", "type": "CommandMenuFilter | false", "optional": true, "exact": true },
+    { "name": "label", "type": "string", "optional": true, "exact": true },
+    { "name": "loading", "type": "boolean", "optional": true, "exact": true },
+    { "name": "onValueChange", "type": "(value: string) => void", "optional": true, "exact": true },
+    { "name": "placeholder", "type": "string", "optional": true, "exact": true },
+    { "name": "size", "type": "CommandMenuSize", "optional": true, "exact": true },
+    { "name": "value", "type": "string", "optional": true, "exact": true }
   ],
   "inherited": {},
   "events": [
@@ -41,5 +41,76 @@
       "State": ["default", "empty", "loading"]
     }
   },
-  "tokensUsed": ["--atlas-background-accent", "--atlas-border-width-2", "--atlas-font-size-sm", "--atlas-font-size-xs", "--atlas-font-weight-medium", "--atlas-foreground", "--atlas-foreground-muted", "--atlas-icon-size-xs", "--atlas-letter-spacing-wide", "--atlas-opacity-disabled", "--atlas-radius-sm", "--atlas-spacing-1", "--atlas-spacing-10", "--atlas-spacing-1_5", "--atlas-spacing-2", "--atlas-spacing-6"]
+  "tokensUsed": ["--atlas-background-accent", "--atlas-border-width-2", "--atlas-font-size-sm", "--atlas-font-size-xs", "--atlas-font-weight-medium", "--atlas-foreground", "--atlas-foreground-muted", "--atlas-icon-size-xs", "--atlas-letter-spacing-wide", "--atlas-opacity-disabled", "--atlas-radius-sm", "--atlas-spacing-1", "--atlas-spacing-10", "--atlas-spacing-1_5", "--atlas-spacing-2", "--atlas-spacing-6"],
+  "module": {
+    "imports": [
+      { "from": "@atlas/ui-web/compositions/CommandMenu/CommandMenu", "name": "CommandMenuFilter", "kind": "named" },
+      { "from": "@atlas/ui-web/compositions/CommandMenu/CommandMenu", "name": "CommandMenuSize", "kind": "named" }
+    ],
+    "parts": {
+      "CommandMenu": {
+        "propsType": "CommandMenuProps",
+        "props": [
+          { "name": "children", "type": "React.ReactNode", "optional": true, "exact": true },
+          { "name": "defaultOpen", "type": "boolean", "optional": true, "exact": true },
+          { "name": "hotkey", "type": "string | false", "optional": true, "exact": true },
+          { "name": "onOpenChange", "type": "(open: boolean) => void", "optional": true, "exact": true },
+          { "name": "open", "type": "boolean", "optional": true, "exact": true }
+        ],
+        "unions": {}
+      },
+      "CommandMenuGroup": {
+        "propsType": "CommandMenuGroupProps",
+        "props": [
+          { "name": "heading", "type": "React.ReactNode", "optional": true, "exact": true }
+        ],
+        "unions": {
+          "aria-autocomplete": ["both", "inline", "list", "none"],
+          "aria-dropeffect": ["copy", "execute", "link", "move", "none", "popup"],
+          "aria-live": ["assertive", "off", "polite"],
+          "aria-orientation": ["horizontal", "vertical"],
+          "aria-relevant": ["additions", "additions removals", "additions text", "all", "removals", "removals additions", "removals text", "text", "text additions", "text removals"],
+          "aria-sort": ["ascending", "descending", "none", "other"],
+          "enterKeyHint": ["done", "enter", "go", "next", "previous", "search", "send"],
+          "inputMode": ["decimal", "email", "none", "numeric", "search", "tel", "text", "url"],
+          "popover": ["", "auto", "hint", "manual"],
+          "popoverTargetAction": ["hide", "show", "toggle"],
+          "translate": ["no", "yes"],
+          "unselectable": ["off", "on"]
+        }
+      },
+      "CommandMenuItem": {
+        "propsType": "CommandMenuItemProps",
+        "props": [
+          { "name": "disabled", "type": "boolean", "optional": true, "exact": true },
+          { "name": "icon", "type": "React.ReactNode", "optional": true, "exact": true },
+          { "name": "keywords", "type": "string[]", "optional": true, "exact": true },
+          { "name": "onSelect", "type": "(value: string) => void", "optional": true, "exact": true },
+          { "name": "shortcut", "type": "string", "optional": true, "exact": true },
+          { "name": "value", "type": "string", "optional": true, "exact": true }
+        ],
+        "unions": {
+          "aria-autocomplete": ["both", "inline", "list", "none"],
+          "aria-dropeffect": ["copy", "execute", "link", "move", "none", "popup"],
+          "aria-live": ["assertive", "off", "polite"],
+          "aria-orientation": ["horizontal", "vertical"],
+          "aria-relevant": ["additions", "additions removals", "additions text", "all", "removals", "removals additions", "removals text", "text", "text additions", "text removals"],
+          "aria-sort": ["ascending", "descending", "none", "other"],
+          "enterKeyHint": ["done", "enter", "go", "next", "previous", "search", "send"],
+          "inputMode": ["decimal", "email", "none", "numeric", "search", "tel", "text", "url"],
+          "popover": ["", "auto", "hint", "manual"],
+          "popoverTargetAction": ["hide", "show", "toggle"],
+          "translate": ["no", "yes"],
+          "unselectable": ["off", "on"]
+        }
+      }
+    },
+    "types": {
+      "CommandMenuFilter": { "kind": "alias", "text": "(value: string, query: string, keywords?: string[]) => boolean" },
+      "CommandMenuSize": {
+        "kind": "union",
+        "members": ["lg", "md"]
+      }
+    }
+  }
 }

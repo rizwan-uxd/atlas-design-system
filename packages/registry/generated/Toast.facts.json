@@ -6,8 +6,8 @@
   "part": "Toast",
   "propsType": "ToastProps",
   "props": [
-    { "name": "icon", "type": "React.ReactNode | boolean", "optional": true },
-    { "name": "variant", "type": "ToastVariant", "optional": true }
+    { "name": "icon", "type": "React.ReactNode | boolean", "optional": true, "exact": true },
+    { "name": "variant", "type": "ToastVariant", "optional": true, "exact": true }
   ],
   "inherited": {
     "(anonymous)": ["asChild"],
@@ -226,5 +226,140 @@
       "Variant": ["default", "success", "danger"]
     }
   },
-  "tokensUsed": ["--atlas-border", "--atlas-border-width-1", "--atlas-content-width-md", "--atlas-danger", "--atlas-danger-muted", "--atlas-danger-subtle", "--atlas-duration-base", "--atlas-duration-fast", "--atlas-duration-slow", "--atlas-easing-exit", "--atlas-easing-standard", "--atlas-font-sans", "--atlas-font-size-sm", "--atlas-font-size-xs", "--atlas-font-weight-medium", "--atlas-font-weight-regular", "--atlas-foreground", "--atlas-foreground-muted", "--atlas-line-height-normal", "--atlas-line-height-snug", "--atlas-radius-2xl", "--atlas-shadow-lg", "--atlas-spacing-1", "--atlas-spacing-2", "--atlas-spacing-3", "--atlas-spacing-4", "--atlas-spacing-8", "--atlas-success", "--atlas-success-muted", "--atlas-success-subtle", "--atlas-surface-raised", "--atlas-z-toast"]
+  "tokensUsed": ["--atlas-border", "--atlas-border-width-1", "--atlas-content-width-md", "--atlas-danger", "--atlas-danger-muted", "--atlas-danger-subtle", "--atlas-duration-base", "--atlas-duration-fast", "--atlas-duration-slow", "--atlas-easing-exit", "--atlas-easing-standard", "--atlas-font-sans", "--atlas-font-size-sm", "--atlas-font-size-xs", "--atlas-font-weight-medium", "--atlas-font-weight-regular", "--atlas-foreground", "--atlas-foreground-muted", "--atlas-line-height-normal", "--atlas-line-height-snug", "--atlas-radius-2xl", "--atlas-shadow-lg", "--atlas-spacing-1", "--atlas-spacing-2", "--atlas-spacing-3", "--atlas-spacing-4", "--atlas-spacing-8", "--atlas-success", "--atlas-success-muted", "--atlas-success-subtle", "--atlas-surface-raised", "--atlas-z-toast"],
+  "module": {
+    "imports": [
+      { "from": "@atlas/ui-web/compositions/Toast/Toast", "name": "ToastVariant", "kind": "named" }
+    ],
+    "parts": {
+      "ToastAction": {
+        "propsType": "ToastActionProps",
+        "props": [
+          { "name": "altText", "type": "string", "optional": false, "exact": true }
+        ],
+        "unions": {
+          "aria-autocomplete": ["both", "inline", "list", "none"],
+          "aria-dropeffect": ["copy", "execute", "link", "move", "none", "popup"],
+          "aria-live": ["assertive", "off", "polite"],
+          "aria-orientation": ["horizontal", "vertical"],
+          "aria-relevant": ["additions", "additions removals", "additions text", "all", "removals", "removals additions", "removals text", "text", "text additions", "text removals"],
+          "aria-sort": ["ascending", "descending", "none", "other"],
+          "enterKeyHint": ["done", "enter", "go", "next", "previous", "search", "send"],
+          "inputMode": ["decimal", "email", "none", "numeric", "search", "tel", "text", "url"],
+          "popover": ["", "auto", "hint", "manual"],
+          "popoverTargetAction": ["hide", "show", "toggle"],
+          "translate": ["no", "yes"],
+          "type": ["button", "reset", "submit"],
+          "unselectable": ["off", "on"]
+        }
+      },
+      "ToastClose": {
+        "propsType": "ToastCloseProps",
+        "props": [],
+        "unions": {
+          "aria-autocomplete": ["both", "inline", "list", "none"],
+          "aria-dropeffect": ["copy", "execute", "link", "move", "none", "popup"],
+          "aria-live": ["assertive", "off", "polite"],
+          "aria-orientation": ["horizontal", "vertical"],
+          "aria-relevant": ["additions", "additions removals", "additions text", "all", "removals", "removals additions", "removals text", "text", "text additions", "text removals"],
+          "aria-sort": ["ascending", "descending", "none", "other"],
+          "enterKeyHint": ["done", "enter", "go", "next", "previous", "search", "send"],
+          "inputMode": ["decimal", "email", "none", "numeric", "search", "tel", "text", "url"],
+          "popover": ["", "auto", "hint", "manual"],
+          "popoverTargetAction": ["hide", "show", "toggle"],
+          "translate": ["no", "yes"],
+          "type": ["button", "reset", "submit"],
+          "unselectable": ["off", "on"]
+        }
+      },
+      "ToastDescription": {
+        "propsType": "ToastDescriptionProps & RefAttributes<HTMLDivElement>",
+        "props": [],
+        "unions": {
+          "aria-autocomplete": ["both", "inline", "list", "none"],
+          "aria-dropeffect": ["copy", "execute", "link", "move", "none", "popup"],
+          "aria-live": ["assertive", "off", "polite"],
+          "aria-orientation": ["horizontal", "vertical"],
+          "aria-relevant": ["additions", "additions removals", "additions text", "all", "removals", "removals additions", "removals text", "text", "text additions", "text removals"],
+          "aria-sort": ["ascending", "descending", "none", "other"],
+          "enterKeyHint": ["done", "enter", "go", "next", "previous", "search", "send"],
+          "inputMode": ["decimal", "email", "none", "numeric", "search", "tel", "text", "url"],
+          "popover": ["", "auto", "hint", "manual"],
+          "popoverTargetAction": ["hide", "show", "toggle"],
+          "translate": ["no", "yes"],
+          "unselectable": ["off", "on"]
+        }
+      },
+      "Toaster": {
+        "propsType": "Omit<ToastProviderProps, \"children\">",
+        "props": [],
+        "unions": {
+          "swipeDirection": ["down", "left", "right", "up"]
+        }
+      },
+      "ToastProvider": {
+        "propsType": "ToastProviderProps",
+        "props": [],
+        "unions": {
+          "swipeDirection": ["down", "left", "right", "up"]
+        }
+      },
+      "ToastTitle": {
+        "propsType": "ToastTitleProps & RefAttributes<HTMLDivElement>",
+        "props": [],
+        "unions": {
+          "aria-autocomplete": ["both", "inline", "list", "none"],
+          "aria-dropeffect": ["copy", "execute", "link", "move", "none", "popup"],
+          "aria-live": ["assertive", "off", "polite"],
+          "aria-orientation": ["horizontal", "vertical"],
+          "aria-relevant": ["additions", "additions removals", "additions text", "all", "removals", "removals additions", "removals text", "text", "text additions", "text removals"],
+          "aria-sort": ["ascending", "descending", "none", "other"],
+          "enterKeyHint": ["done", "enter", "go", "next", "previous", "search", "send"],
+          "inputMode": ["decimal", "email", "none", "numeric", "search", "tel", "text", "url"],
+          "popover": ["", "auto", "hint", "manual"],
+          "popoverTargetAction": ["hide", "show", "toggle"],
+          "translate": ["no", "yes"],
+          "unselectable": ["off", "on"]
+        }
+      },
+      "ToastViewport": {
+        "propsType": "ToastViewportProps & RefAttributes<HTMLOListElement>",
+        "props": [],
+        "unions": {
+          "aria-autocomplete": ["both", "inline", "list", "none"],
+          "aria-dropeffect": ["copy", "execute", "link", "move", "none", "popup"],
+          "aria-live": ["assertive", "off", "polite"],
+          "aria-orientation": ["horizontal", "vertical"],
+          "aria-relevant": ["additions", "additions removals", "additions text", "all", "removals", "removals additions", "removals text", "text", "text additions", "text removals"],
+          "aria-sort": ["ascending", "descending", "none", "other"],
+          "enterKeyHint": ["done", "enter", "go", "next", "previous", "search", "send"],
+          "inputMode": ["decimal", "email", "none", "numeric", "search", "tel", "text", "url"],
+          "popover": ["", "auto", "hint", "manual"],
+          "popoverTargetAction": ["hide", "show", "toggle"],
+          "translate": ["no", "yes"],
+          "type": ["1", "A", "I", "a", "i"],
+          "unselectable": ["off", "on"]
+        }
+      }
+    },
+    "types": {
+      "ToastOptions": {
+        "kind": "object",
+        "props": [
+          { "name": "action", "type": "{ label: string; altText: string; onClick?: () => void }", "optional": true, "exact": true },
+          { "name": "description", "type": "React.ReactNode", "optional": true, "exact": true },
+          { "name": "dismissible", "type": "boolean", "optional": true, "exact": true },
+          { "name": "duration", "type": "number", "optional": true, "exact": true },
+          { "name": "icon", "type": "React.ReactNode | boolean", "optional": true, "exact": true },
+          { "name": "title", "type": "React.ReactNode", "optional": true, "exact": true },
+          { "name": "variant", "type": "ToastVariant", "optional": true, "exact": true }
+        ],
+        "closed": true
+      },
+      "ToastVariant": {
+        "kind": "union",
+        "members": ["danger", "default", "success"]
+      }
+    }
+  }
 }

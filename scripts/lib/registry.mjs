@@ -64,20 +64,15 @@ function declaringName(decl) {
  * component, a `forwardRef` and a re-exported Radix part are read the same way.
  * Throws when the part is not exported or not callable: a component the registry cannot read is a
  * failure, never an empty fact sheet.
- * @returns {{ propsType: string, props: {name,type,optional}[], inherited: Record<string,string[]>, events: {name,type}[], unions: Record<string,string[]> }}
+ * Pass `ctx` (from `moduleContext`) to also mark each own prop whose annotation the contract can
+ * assert exactly (`exact: true`, imports collected in `ctx.imports`).
+ * @returns {{ propsType: string, props: {name,type,optional,exact?}[], inherited: Record<string,string[]>, events: {name,type}[], unions: Record<string,string[]> }}
  */
-export function extractFacts(program, file, part) {
+export function extractFacts(program, file, part, ctx = null) {
   const checker = program.getTypeChecker()
   const sf = program.getSourceFile(file)
   if (!sf) throw new Error(`registry: ${file} is not in the program`)
-  const mod = checker.getSymbolAtLocation(sf)
-  let sym = mod && checker.getExportsOfModule(mod).find((s) => s.name === part)
-  if (!sym) throw new Error(`registry: ${path.basename(file)} does not export ${part}`)
-  if (sym.flags & ts.SymbolFlags.Alias) sym = checker.getAliasedSymbol(sym)
-  const [sig] = checker.getTypeOfSymbol(sym).getCallSignatures()
-  const param = sig?.getParameters()[0]
-  if (!param) throw new Error(`registry: ${part} in ${path.basename(file)} is not a component that takes props`)
-  const type = checker.getTypeOfSymbol(param)
+  const type = propsTypeOf(checker, sf, part, file)
 
   const props = [], inherited = {}, events = [], unions = {}
   for (const p of checker.getPropertiesOfType(type)) {
@@ -87,7 +82,7 @@ export function extractFacts(program, file, part) {
     const ownDecl = decls.find((d) => d.getSourceFile() === sf)
     // an own prop keeps its annotation as written (`React.ReactNode`, `ButtonVariant`): stripping
     // undefined from ReactNode would otherwise expand the alias into its nine members
-    if (ownDecl) props.push({ name: p.name, type: ownDecl.type ? ownDecl.type.getText(sf) : typeText, optional: (p.flags & ts.SymbolFlags.Optional) !== 0 })
+    if (ownDecl) props.push(ownProp(checker, p, ownDecl, sf, typeText, ctx))
     else {
       const group = decls.length ? declaringName(decls[0]) : "(anonymous)"
       ;(inherited[group] ??= []).push(p.name)
@@ -100,6 +95,200 @@ export function extractFacts(program, file, part) {
   for (const g of Object.keys(inherited)) inherited[g].sort()
   const propsType = checker.typeToString(type, undefined, ts.TypeFormatFlags.NoTruncation)
   return { propsType, props, inherited: sortKeys(inherited), events, unions: sortKeys(unions) }
+}
+
+/** The props type of an exported callable: its first parameter's type. */
+function propsTypeOf(checker, sf, part, file) {
+  const mod = checker.getSymbolAtLocation(sf)
+  let sym = mod && checker.getExportsOfModule(mod).find((s) => s.name === part)
+  if (!sym) throw new Error(`registry: ${path.basename(file)} does not export ${part}`)
+  if (sym.flags & ts.SymbolFlags.Alias) sym = checker.getAliasedSymbol(sym)
+  const [sig] = checker.getTypeOfSymbol(sym).getCallSignatures()
+  const param = sig?.getParameters()[0]
+  if (!param) throw new Error(`registry: ${part} in ${path.basename(file)} is not a component that takes props`)
+  return checker.getTypeOfSymbol(param)
+}
+
+function ownProp(checker, p, decl, sf, typeText, ctx) {
+  const out = { name: p.name, type: decl.type ? decl.type.getText(sf) : typeText, optional: (p.flags & ts.SymbolFlags.Optional) !== 0 }
+  if (ctx && ts.isPropertySignature(decl) && decl.type && exactAnnotation(checker, decl.type, checker.getTypeOfSymbol(p), ctx)) out.exact = true
+  return out
+}
+
+/* ── which annotations a contract can assert exactly ───────────────────── */
+
+const RESERVED = new Set(["P", "Assert", "Exact", "Has", "IsOptional"])
+
+/**
+ * Context for reading every export of one component module: the imports that contract-scope type
+ * annotations need accumulate in `imports`.
+ */
+export function moduleContext(program, file, moduleImport, root) {
+  const checker = program.getTypeChecker()
+  const sf = program.getSourceFile(file)
+  const exportNames = new Set(checker.getExportsOfModule(checker.getSymbolAtLocation(sf)).map((s) => s.name))
+  return { program, sf, moduleImport, exportNames, uiRoot: path.join(root, "packages/ui-web/src"), imports: new Map() }
+}
+
+/**
+ * True when `node` (a type annotation in the component file) names only things a contract can import
+ * — globals, exports of this module, React, other `@atlas/ui-web` modules and packages — and equals
+ * `actual` (the prop's real type) both ways, so `Exact<NonNullable<P["x"]>, NonNullable<annotation>>`
+ * holds today and fails when either side changes. The imports it needs are added to `ctx.imports`
+ * only when it qualifies.
+ */
+function exactAnnotation(checker, node, actual, ctx) {
+  const needed = []
+  let ok = true
+  const leftmost = (n) => (ts.isQualifiedName(n) ? leftmost(n.left) : ts.isPropertyAccessExpression(n) ? leftmost(n.expression) : n)
+  const visit = (n) => {
+    if (!ok) return
+    if (ts.isImportTypeNode(n)) { ok = false; return }
+    let id
+    if (ts.isTypeReferenceNode(n)) id = leftmost(n.typeName)
+    else if (ts.isTypeQueryNode(n)) id = leftmost(n.exprName)
+    else if (ts.isExpressionWithTypeArguments(n)) id = leftmost(n.expression)
+    if (id && ts.isIdentifier(id)) {
+      const need = importFor(checker, id, node, ctx)
+      if (need === null) { ok = false; return }
+      if (need !== undefined) needed.push(need)
+    }
+    ts.forEachChild(n, visit)
+  }
+  visit(node)
+  if (!ok) return false
+  const a = checker.getNonNullableType(checker.getTypeFromTypeNode(node))
+  const b = checker.getNonNullableType(actual)
+  if (!(checker.isTypeAssignableTo(a, b) && checker.isTypeAssignableTo(b, a))) return false
+  for (const n of needed) ctx.imports.set(`${n.kind}:${n.from}:${n.name}`, n)
+  return true
+}
+
+/** The import a contract needs for identifier `id`: undefined for none (a global), null when impossible. */
+function importFor(checker, id, root, ctx) {
+  const sym = checker.getSymbolAtLocation(id)
+  const decl = sym?.declarations?.[0]
+  if (!decl) return null
+  if (sym.flags & ts.SymbolFlags.TypeParameter) return decl.pos >= root.pos && decl.end <= root.end ? undefined : null
+  const local = id.text
+  const spec = (d) => d.moduleSpecifier.text
+  let from, kind, name = local
+  if (ts.isImportSpecifier(decl)) { from = spec(decl.parent.parent.parent); kind = "named"; name = (decl.propertyName ?? decl.name).text }
+  else if (ts.isImportClause(decl)) { from = spec(decl.parent); kind = "default" }
+  else if (ts.isNamespaceImport(decl)) { from = spec(decl.parent.parent); kind = "namespace" }
+  else {
+    const dsf = decl.getSourceFile()
+    if (ctx.program.isSourceFileDefaultLibrary(dsf)) return undefined
+    if (dsf === ctx.sf && ctx.exportNames.has(local)) { from = ctx.moduleImport; kind = "named" }
+    else return null
+  }
+  if (from === "react" && local === "React") return undefined // the contract imports React itself
+  if (from.startsWith(".")) {
+    const abs = path.resolve(path.dirname(ctx.sf.fileName), from)
+    const rel = path.relative(ctx.uiRoot, abs)
+    if (rel.startsWith("..")) return null
+    from = `@atlas/ui-web/${rel.split(path.sep).join("/")}`
+  }
+  if (RESERVED.has(local) || name !== local) return null // a contract cannot rename what it imports
+  return { from, name: local, kind }
+}
+
+/* ── every other export of a component module ──────────────────────────── */
+
+/**
+ * Facts for the exports of a component module other than `mainPart`: every PascalCase callable that
+ * takes props (a component part), split into branches when its props type is a discriminated union,
+ * and every exported type alias or interface that is not a part's props type: string unions, object
+ * types (own members) and aliases whose text is portable. Returns `{ imports, parts, types }`.
+ */
+export function extractModule(program, file, mainPart, ctx) {
+  const checker = program.getTypeChecker()
+  const sf = ctx.sf
+  const exportsList = checker.getExportsOfModule(checker.getSymbolAtLocation(sf)).sort((a, b) => a.name.localeCompare(b.name))
+  const parts = {}, types = {}, propsTypeNames = new Set()
+
+  for (const ex of exportsList) {
+    const sym = ex.flags & ts.SymbolFlags.Alias ? checker.getAliasedSymbol(ex) : ex
+    if (!(sym.flags & ts.SymbolFlags.Value) || !/^[A-Z]/.test(ex.name)) continue
+    const sig = checker.getTypeOfSymbol(sym).getCallSignatures()[0]
+    const param = sig?.getParameters()[0]
+    if (!param) continue
+    const pdecl = param.declarations?.[0]
+    if (pdecl && ts.isParameter(pdecl) && pdecl.type && ts.isTypeReferenceNode(pdecl.type)) propsTypeNames.add(pdecl.type.typeName.getText(sf))
+    if (ex.name === mainPart) continue
+    const type = checker.getTypeOfSymbol(param)
+    const { propsType, props, unions } = extractFacts(program, sf.fileName, ex.name, ctx)
+    const part = { propsType, props, unions }
+    const branches = discriminated(checker, sf, type, ctx)
+    if (branches) part.branches = branches
+    parts[ex.name] = part
+  }
+  // the main part's props type is covered by the top-level facts
+  for (const ex of exportsList) {
+    const sym = ex.flags & ts.SymbolFlags.Alias ? checker.getAliasedSymbol(ex) : ex
+    const decl = sym.declarations?.[0]
+    if (!decl || decl.getSourceFile() !== sf || propsTypeNames.has(ex.name)) continue
+    if (ts.isTypeAliasDeclaration(decl) && !decl.typeParameters) {
+      const t = checker.getDeclaredTypeOfSymbol(sym)
+      if (t.isUnion() && t.types.every((m) => m.isStringLiteral())) { types[ex.name] = { kind: "union", members: t.types.map((m) => m.value).sort() }; continue }
+      if (ts.isTypeLiteralNode(decl.type)) { types[ex.name] = objectFacts(checker, sf, t, ctx); continue }
+      if (exactAnnotation(checker, decl.type, t, ctx)) types[ex.name] = { kind: "alias", text: decl.type.getText(sf) }
+    } else if (ts.isInterfaceDeclaration(decl) && !decl.typeParameters) {
+      types[ex.name] = objectFacts(checker, sf, checker.getDeclaredTypeOfSymbol(sym), ctx)
+    }
+  }
+  return { parts, types }
+}
+
+/** An exported object type: its own members, and `closed` when it has no others (so its key set is asserted). */
+function objectFacts(checker, sf, type, ctx) {
+  const props = memberProps(checker, sf, type, ctx)
+  return { kind: "object", props, ...(props.length === checker.getPropertiesOfType(type).length ? { closed: true } : {}) }
+}
+
+/** Own members (declared in this file) of an object type, as facts props. */
+function memberProps(checker, sf, type, ctx) {
+  const out = []
+  for (const p of checker.getPropertiesOfType(type)) {
+    const decl = (p.declarations ?? []).find((d) => d.getSourceFile() === sf)
+    if (!decl) continue
+    out.push(ownProp(checker, p, decl, sf, checker.typeToString(checker.getNonNullableType(checker.getTypeOfSymbol(p)), undefined, ts.TypeFormatFlags.NoTruncation), ctx))
+  }
+  return out.sort((a, b) => a.name.localeCompare(b.name))
+}
+
+/**
+ * Split a union props type by its discriminant: the one property that every member declares with a
+ * single, distinct string literal (`mode?: "single"` | `mode: "range"`). Returns null for a non-union
+ * or a union with no such property.
+ */
+function discriminated(checker, sf, type, ctx) {
+  if (!type.isUnion() || !type.types.every((m) => m.getFlags() & ts.TypeFlags.Object || m.isIntersection())) return null
+  const literal = (m, key) => {
+    const p = checker.getPropertyOfType(m, key)
+    if (!p) return undefined
+    const t = checker.getNonNullableType(checker.getTypeOfSymbol(p))
+    return t.isStringLiteral() ? t.value : undefined
+  }
+  const first = type.types[0]
+  for (const p of checker.getPropertiesOfType(first)) {
+    const values = type.types.map((m) => literal(m, p.name))
+    if (values.some((v) => v === undefined) || new Set(values).size !== values.length) continue
+    const members = {}
+    type.types.forEach((m, i) => {
+      const props = [], unions = {}
+      for (const q of checker.getPropertiesOfType(m)) {
+        const decl = (q.declarations ?? []).find((d) => d.getSourceFile() === sf)
+        if (!decl) continue
+        const t = checker.getNonNullableType(checker.getTypeOfSymbol(q))
+        props.push(ownProp(checker, q, decl, sf, checker.typeToString(t, undefined, ts.TypeFormatFlags.NoTruncation), ctx))
+        if (t.isUnion() && t.types.every((x) => x.isStringLiteral())) unions[q.name] = t.types.map((x) => x.value).sort()
+      }
+      members[values[i]] = { props: props.sort((a, b) => a.name.localeCompare(b.name)), unions: sortKeys(unions) }
+    })
+    return { key: p.name, members: sortKeys(members) }
+  }
+  return null
 }
 
 const sortKeys = (o) => Object.fromEntries(Object.keys(o).sort().map((k) => [k, o[k]]))
@@ -410,32 +599,88 @@ export type Assert<T extends true> = T
 
 /**
  * The contract for one component: a one-way tripwire derived from the facts (own props, their
- * optionality, string unions) and from any registry entry rendering it (protocolProps, event handlers).
- * Authoritative over neither; never hand-edited.
+ * optionality and exact types, string unions — for the part Code Connect drives and for every other
+ * exported part, branch and type of the module), from any registry entry rendering it (protocolProps,
+ * event handlers), and from packages/registry/contract-props.json (props a part must not have, and
+ * inherited props it must keep).
+ * Authoritative over none of them; never hand-edited.
  */
-export function contractSource(f, entries) {
+export function contractSource(f, entries, authored = {}) {
   const root = f.part.split(".")[0]
   const q = JSON.stringify
   const id = (n) => n.replace(/[^A-Za-z0-9]/g, "_")
+  const mod = f.module
   const lines = []
-  lines.push(`// own props of ${f.part}: deleting one, or flipping its optionality, fails here`)
-  for (const p of f.props) {
-    lines.push(`type Own_${id(p.name)} = Assert<Has<P, ${q(p.name)}>>`)
-    lines.push(`type Optional_${id(p.name)} = Assert<Exact<IsOptional<P, ${q(p.name)}>, ${p.optional}>>`)
+  /** Own/Optional/Type/Union assertions for one props type `alias`, names prefixed with `pre`. */
+  const propLines = (alias, pre, props, unions) => {
+    for (const p of props) {
+      lines.push(`type ${pre}Own_${id(p.name)} = Assert<Has<${alias}, ${q(p.name)}>>`)
+      lines.push(`type ${pre}Optional_${id(p.name)} = Assert<Exact<IsOptional<${alias}, ${q(p.name)}>, ${p.optional}>>`)
+      if (p.exact) lines.push(`type ${pre}Type_${id(p.name)} = Assert<Exact<NonNullable<${alias}[${q(p.name)}]>, NonNullable<${p.type}>>>`)
+    }
+    for (const [k, members] of Object.entries(unions).filter(([k]) => props.some((p) => p.name === k)))
+      lines.push(`type ${pre}Union_${id(k)} = Assert<Exact<NonNullable<${alias}[${q(k)}]>, ${members.map(q).join(" | ")}>>`)
   }
-  const unions = Object.entries(f.unions).filter(([k]) => f.props.some((p) => p.name === k))
-  if (unions.length) lines.push("", `// string unions: exactly these members, so removing one fails as well as adding one`)
-  for (const [k, members] of unions) lines.push(`type Union_${id(k)} = Assert<Exact<NonNullable<P[${q(k)}]>, ${members.map(q).join(" | ")}>>`)
+
+  lines.push(`// own props of ${f.part}: deleting one, flipping its optionality or changing its type fails here`)
+  propLines("P", "", f.props, f.unions)
+
+  const aliasOf = (part) => (part === f.part ? "P" : `P_${id(part)}`)
+  const partNames = Object.keys(mod.parts)
+  for (const name of partNames) {
+    const part = mod.parts[name]
+    lines.push("", `// ${name}: another exported part of the module`, `type P_${id(name)} = React.ComponentProps<typeof ${name}>`)
+    propLines(`P_${id(name)}`, `${id(name)}_`, part.props, part.unions)
+    if (part.branches) for (const [value, b] of Object.entries(part.branches.members)) {
+      const alias = `P_${id(name)}_${id(value)}`
+      lines.push("", `// ${name} with ${part.branches.key} "${value}"`, `type ${alias} = Extract<P_${id(name)}, { ${part.branches.key}?: ${q(value)} }>`)
+      propLines(alias, `${id(name)}_${id(value)}_`, b.props, b.unions)
+    }
+  }
+
+  const typeNames = Object.keys(mod.types)
+  if (typeNames.length) lines.push("", "// exported types of the module")
+  for (const name of typeNames) {
+    const t = mod.types[name]
+    if (t.kind === "union") lines.push(`type Type_${id(name)} = Assert<Exact<${name}, ${t.members.map(q).join(" | ")}>>`)
+    else if (t.kind === "alias") lines.push(`type Type_${id(name)} = Assert<Exact<${name}, ${t.text}>>`)
+    else {
+      propLines(name, `${id(name)}_`, t.props, {})
+      if (t.closed) lines.push(`type ${id(name)}_Keys = Assert<Exact<keyof ${name}, ${t.props.length ? t.props.map((p) => q(p.name)).join(" | ") : "never"}>>`)
+    }
+  }
+
+  for (const [part, spec] of Object.entries(authored)) {
+    if (part !== f.part && !(part in mod.parts)) throw new Error(`registry: contract-props.json names ${f.name}.${part}, which is not an exported part of ${f.source}`)
+    const alias = aliasOf(part)
+    if (spec.absent) {
+      lines.push("", `// ${part}: absent by design (packages/registry/contract-props.json)`)
+      for (const [prop, reason] of Object.entries(spec.absent)) lines.push(`/** ${reason} */`, `type ${id(part)}_Absent_${id(prop)} = Assert<Exact<Has<${alias}, ${q(prop)}>, false>>`)
+    }
+    if (spec.present) {
+      lines.push("", `// ${part}: inherited props it must keep (packages/registry/contract-props.json)`)
+      for (const [prop, { type }] of Object.entries(spec.present)) {
+        lines.push(`type ${id(part)}_Kept_${id(prop)} = Assert<Has<${alias}, ${q(prop)}>>`)
+        lines.push(`type ${id(part)}_KeptType_${id(prop)} = Assert<Exact<NonNullable<${alias}[${q(prop)}]>, NonNullable<${type}>>>`)
+      }
+    }
+  }
+
   for (const e of entries) {
     const names = [...Object.keys(e.protocolProps ?? {}), ...Object.values(e.events ?? {}).map((x) => x.handler)]
     if (!names.length) continue
     lines.push("", `// registry ${e.type}: its protocolProps and event handlers exist`)
     for (const n of names) lines.push(`type Registry_${e.type}_${id(n)} = Assert<Has<P, ${q(n)}>>`)
   }
+
+  const fromModule = [root, ...partNames, ...typeNames, ...mod.imports.filter((i) => i.from === f.import).map((i) => i.name)]
+  const imports = [`import type { ${[...new Set(fromModule)].sort().join(", ")} } from "${f.import}"`]
+  for (const i of mod.imports.filter((i) => i.from !== f.import))
+    imports.push(i.kind === "named" ? `import type { ${i.name} } from "${i.from}"` : i.kind === "default" ? `import type ${i.name} from "${i.from}"` : `import type * as ${i.name} from "${i.from}"`)
   return `// GENERATED — do not hand-edit. registry-build from packages/registry/generated/${f.name}.facts.json; run npm run registry:build.
 // A one-way tripwire (roadmap §2c): it asserts what the facts recorded and is never consulted as a definition.
 import type React from "react"
-import type { ${root} } from "${f.import}"
+${imports.join("\n")}
 import type { Assert, Exact, Has, IsOptional } from "./_assert"
 
 type P = React.ComponentProps<typeof ${f.part}>

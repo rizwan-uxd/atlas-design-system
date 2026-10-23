@@ -6,11 +6,11 @@
   "part": "DatePickerTrigger",
   "propsType": "DatePickerTriggerProps",
   "props": [
-    { "name": "formatDate", "type": "(date: Date) => string", "optional": true },
-    { "name": "formatRange", "type": "(range: DatePickerRange) => string", "optional": true },
-    { "name": "icon", "type": "boolean | React.ReactNode", "optional": true },
-    { "name": "invalid", "type": "boolean", "optional": true },
-    { "name": "placeholder", "type": "string", "optional": true }
+    { "name": "formatDate", "type": "(date: Date) => string", "optional": true, "exact": true },
+    { "name": "formatRange", "type": "(range: DatePickerRange) => string", "optional": true, "exact": true },
+    { "name": "icon", "type": "boolean | React.ReactNode", "optional": true, "exact": true },
+    { "name": "invalid", "type": "boolean", "optional": true, "exact": true },
+    { "name": "placeholder", "type": "string", "optional": true, "exact": true }
   ],
   "inherited": {
     "AriaAttributes": ["aria-activedescendant", "aria-atomic", "aria-autocomplete", "aria-braillelabel", "aria-brailleroledescription", "aria-busy", "aria-checked", "aria-colcount", "aria-colindex", "aria-colindextext", "aria-colspan", "aria-controls", "aria-current", "aria-describedby", "aria-description", "aria-details", "aria-disabled", "aria-dropeffect", "aria-errormessage", "aria-expanded", "aria-flowto", "aria-grabbed", "aria-haspopup", "aria-hidden", "aria-invalid", "aria-keyshortcuts", "aria-label", "aria-labelledby", "aria-level", "aria-live", "aria-modal", "aria-multiline", "aria-multiselectable", "aria-orientation", "aria-owns", "aria-placeholder", "aria-posinset", "aria-pressed", "aria-readonly", "aria-relevant", "aria-required", "aria-roledescription", "aria-rowcount", "aria-rowindex", "aria-rowindextext", "aria-rowspan", "aria-selected", "aria-setsize", "aria-sort", "aria-valuemax", "aria-valuemin", "aria-valuenow", "aria-valuetext"],
@@ -220,5 +220,147 @@
       "Placeholder": ["true", "false"]
     }
   },
-  "tokensUsed": ["--atlas-background", "--atlas-background-muted", "--atlas-background-subtle", "--atlas-border", "--atlas-border-strong", "--atlas-border-width-1", "--atlas-border-width-2", "--atlas-danger", "--atlas-duration-fast", "--atlas-easing-standard", "--atlas-focus-ring", "--atlas-font-sans", "--atlas-font-size-sm", "--atlas-font-size-xs", "--atlas-font-weight-medium", "--atlas-font-weight-regular", "--atlas-foreground", "--atlas-foreground-disabled", "--atlas-foreground-muted", "--atlas-foreground-subtle", "--atlas-icon-size-xs", "--atlas-opacity-disabled", "--atlas-primary", "--atlas-primary-foreground", "--atlas-primary-subtle", "--atlas-radius-lg", "--atlas-radius-none", "--atlas-radius-sm", "--atlas-shadow-md", "--atlas-spacing-0_5", "--atlas-spacing-1", "--atlas-spacing-10", "--atlas-spacing-2", "--atlas-spacing-3", "--atlas-spacing-4", "--atlas-spacing-6", "--atlas-surface-overlay", "--atlas-touch-min", "--atlas-z-popover"]
+  "tokensUsed": ["--atlas-background", "--atlas-background-muted", "--atlas-background-subtle", "--atlas-border", "--atlas-border-strong", "--atlas-border-width-1", "--atlas-border-width-2", "--atlas-danger", "--atlas-duration-fast", "--atlas-easing-standard", "--atlas-focus-ring", "--atlas-font-sans", "--atlas-font-size-sm", "--atlas-font-size-xs", "--atlas-font-weight-medium", "--atlas-font-weight-regular", "--atlas-foreground", "--atlas-foreground-disabled", "--atlas-foreground-muted", "--atlas-foreground-subtle", "--atlas-icon-size-xs", "--atlas-opacity-disabled", "--atlas-primary", "--atlas-primary-foreground", "--atlas-primary-subtle", "--atlas-radius-lg", "--atlas-radius-none", "--atlas-radius-sm", "--atlas-shadow-md", "--atlas-spacing-0_5", "--atlas-spacing-1", "--atlas-spacing-10", "--atlas-spacing-2", "--atlas-spacing-3", "--atlas-spacing-4", "--atlas-spacing-6", "--atlas-surface-overlay", "--atlas-touch-min", "--atlas-z-popover"],
+  "module": {
+    "imports": [
+      { "from": "@atlas/ui-web/compositions/DatePicker/DatePicker", "name": "DatePickerRange", "kind": "named" },
+      { "from": "@atlas/ui-web/compositions/DatePicker/DatePicker", "name": "DatePickerSide", "kind": "named" }
+    ],
+    "parts": {
+      "DatePicker": {
+        "propsType": "DatePickerProps",
+        "props": [
+          { "name": "children", "type": "React.ReactNode", "optional": true, "exact": true },
+          { "name": "defaultValue", "type": "Date", "optional": true },
+          { "name": "disabled", "type": "boolean", "optional": true, "exact": true },
+          { "name": "max", "type": "Date", "optional": true, "exact": true },
+          { "name": "min", "type": "Date", "optional": true, "exact": true },
+          { "name": "mode", "type": "\"single\"", "optional": true },
+          { "name": "name", "type": "string", "optional": true, "exact": true },
+          { "name": "onValueChange", "type": "(date: Date | undefined) => void", "optional": true },
+          { "name": "required", "type": "boolean", "optional": true, "exact": true },
+          { "name": "value", "type": "Date", "optional": true }
+        ],
+        "unions": {
+          "mode": ["range", "single"]
+        },
+        "branches": {
+          "key": "mode",
+          "members": {
+            "range": {
+              "props": [
+                { "name": "children", "type": "React.ReactNode", "optional": true, "exact": true },
+                { "name": "defaultValue", "type": "DatePickerRange", "optional": true, "exact": true },
+                { "name": "disabled", "type": "boolean", "optional": true, "exact": true },
+                { "name": "max", "type": "Date", "optional": true, "exact": true },
+                { "name": "min", "type": "Date", "optional": true, "exact": true },
+                { "name": "mode", "type": "\"range\"", "optional": false, "exact": true },
+                { "name": "name", "type": "string", "optional": true, "exact": true },
+                { "name": "onValueChange", "type": "(range: DatePickerRange) => void", "optional": true, "exact": true },
+                { "name": "required", "type": "boolean", "optional": true, "exact": true },
+                { "name": "value", "type": "DatePickerRange", "optional": true, "exact": true }
+              ],
+              "unions": {}
+            },
+            "single": {
+              "props": [
+                { "name": "children", "type": "React.ReactNode", "optional": true, "exact": true },
+                { "name": "defaultValue", "type": "Date", "optional": true, "exact": true },
+                { "name": "disabled", "type": "boolean", "optional": true, "exact": true },
+                { "name": "max", "type": "Date", "optional": true, "exact": true },
+                { "name": "min", "type": "Date", "optional": true, "exact": true },
+                { "name": "mode", "type": "\"single\"", "optional": true, "exact": true },
+                { "name": "name", "type": "string", "optional": true, "exact": true },
+                { "name": "onValueChange", "type": "(date: Date | undefined) => void", "optional": true, "exact": true },
+                { "name": "required", "type": "boolean", "optional": true, "exact": true },
+                { "name": "value", "type": "Date", "optional": true, "exact": true }
+              ],
+              "unions": {}
+            }
+          }
+        }
+      },
+      "DatePickerContent": {
+        "propsType": "DatePickerContentProps",
+        "props": [
+          { "name": "captionLayout", "type": "\"label\" | \"dropdown\"", "optional": true, "exact": true },
+          { "name": "side", "type": "DatePickerSide", "optional": true, "exact": true },
+          { "name": "yearRange", "type": "[number, number]", "optional": true, "exact": true }
+        ],
+        "unions": {
+          "aria-autocomplete": ["both", "inline", "list", "none"],
+          "aria-dropeffect": ["copy", "execute", "link", "move", "none", "popup"],
+          "aria-live": ["assertive", "off", "polite"],
+          "aria-orientation": ["horizontal", "vertical"],
+          "aria-relevant": ["additions", "additions removals", "additions text", "all", "removals", "removals additions", "removals text", "text", "text additions", "text removals"],
+          "aria-sort": ["ascending", "descending", "none", "other"],
+          "captionLayout": ["dropdown", "label"],
+          "enterKeyHint": ["done", "enter", "go", "next", "previous", "search", "send"],
+          "inputMode": ["decimal", "email", "none", "numeric", "search", "tel", "text", "url"],
+          "popover": ["", "auto", "hint", "manual"],
+          "popoverTargetAction": ["hide", "show", "toggle"],
+          "side": ["bottom", "top"],
+          "translate": ["no", "yes"],
+          "unselectable": ["off", "on"]
+        }
+      },
+      "DatePickerInput": {
+        "propsType": "DatePickerInputProps",
+        "props": [
+          { "name": "formatDate", "type": "(date: Date) => string", "optional": true, "exact": true },
+          { "name": "parseDate", "type": "(text: string) => Date | undefined", "optional": true, "exact": true }
+        ],
+        "unions": {
+          "aria-autocomplete": ["both", "inline", "list", "none"],
+          "aria-dropeffect": ["copy", "execute", "link", "move", "none", "popup"],
+          "aria-live": ["assertive", "off", "polite"],
+          "aria-orientation": ["horizontal", "vertical"],
+          "aria-relevant": ["additions", "additions removals", "additions text", "all", "removals", "removals additions", "removals text", "text", "text additions", "text removals"],
+          "aria-sort": ["ascending", "descending", "none", "other"],
+          "enterKeyHint": ["done", "enter", "go", "next", "previous", "search", "send"],
+          "inputMode": ["decimal", "email", "none", "numeric", "search", "tel", "text", "url"],
+          "popover": ["", "auto", "hint", "manual"],
+          "popoverTargetAction": ["hide", "show", "toggle"],
+          "size": ["lg", "md", "sm"],
+          "translate": ["no", "yes"],
+          "unselectable": ["off", "on"],
+          "variant": ["default", "filled", "unstyled"]
+        }
+      },
+      "DatePickerNaturalInput": {
+        "propsType": "DatePickerNaturalInputProps",
+        "props": [
+          { "name": "parseText", "type": "(text: string) => Date | undefined", "optional": true, "exact": true },
+          { "name": "renderPreview", "type": "(date: Date | undefined) => React.ReactNode", "optional": true, "exact": true }
+        ],
+        "unions": {
+          "aria-autocomplete": ["both", "inline", "list", "none"],
+          "aria-dropeffect": ["copy", "execute", "link", "move", "none", "popup"],
+          "aria-live": ["assertive", "off", "polite"],
+          "aria-orientation": ["horizontal", "vertical"],
+          "aria-relevant": ["additions", "additions removals", "additions text", "all", "removals", "removals additions", "removals text", "text", "text additions", "text removals"],
+          "aria-sort": ["ascending", "descending", "none", "other"],
+          "enterKeyHint": ["done", "enter", "go", "next", "previous", "search", "send"],
+          "inputMode": ["decimal", "email", "none", "numeric", "search", "tel", "text", "url"],
+          "popover": ["", "auto", "hint", "manual"],
+          "popoverTargetAction": ["hide", "show", "toggle"],
+          "size": ["lg", "md", "sm"],
+          "translate": ["no", "yes"],
+          "unselectable": ["off", "on"],
+          "variant": ["default", "filled", "unstyled"]
+        }
+      }
+    },
+    "types": {
+      "DatePickerMode": {
+        "kind": "union",
+        "members": ["range", "single"]
+      },
+      "DatePickerRange": { "kind": "alias", "text": "[Date | undefined, Date | undefined]" },
+      "DatePickerSide": {
+        "kind": "union",
+        "members": ["bottom", "top"]
+      }
+    }
+  }
 }

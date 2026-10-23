@@ -1,0 +1,231 @@
+{
+  "_note": "AUTHORED. What a generated contract cannot derive from code, per component → part: `absent` props a part must not have (a design decision; asserted absent), and `present` inherited props a part must keep (asserted present, optional, and exactly of `type`). Carried over from the 44 hand-written contracts deleted in M3 session 4, with their reasons.",
+  "components": {
+    "Button": {
+      "Button": {
+        "present": {
+          "disabled": {
+            "type": "boolean",
+            "reason": "Inherited from the base DOM or component props and part of the documented API; kept so a change of base type cannot drop it."
+          },
+          "onClick": {
+            "type": "React.MouseEventHandler<HTMLButtonElement>",
+            "reason": "Inherited from the base DOM or component props and part of the documented API; kept so a change of base type cannot drop it."
+          },
+          "ref": {
+            "type": "React.Ref<HTMLButtonElement>",
+            "reason": "Inherited from the base DOM or component props and part of the documented API; kept so a change of base type cannot drop it."
+          }
+        }
+      }
+    },
+    "ButtonGroup": {
+      "ButtonGroup": {
+        "present": {
+          "className": {
+            "type": "string",
+            "reason": "Inherited from the base DOM or component props and part of the documented API; kept so a change of base type cannot drop it."
+          }
+        }
+      },
+      "ButtonGroupButton": {
+        "present": {
+          "disabled": {
+            "type": "boolean",
+            "reason": "Inherited from the base DOM or component props and part of the documented API; kept so a change of base type cannot drop it."
+          }
+        }
+      },
+      "ButtonGroupIconButton": {
+        "present": {
+          "disabled": {
+            "type": "boolean",
+            "reason": "Inherited from the base DOM or component props and part of the documented API; kept so a change of base type cannot drop it."
+          }
+        }
+      }
+    },
+    "CommandMenu": {
+      "CommandMenuItem": {
+        "absent": {
+          "role": "The roles are fixed so the combobox and listbox pattern cannot be broken from outside."
+        }
+      },
+      "CommandMenuGroup": {
+        "absent": {
+          "role": "The roles are fixed so the combobox and listbox pattern cannot be broken from outside."
+        }
+      }
+    },
+    "DatePicker": {
+      "DatePickerInput": {
+        "present": {
+          "placeholder": {
+            "type": "string",
+            "reason": "Inherited from the base DOM or component props and part of the documented API; kept so a change of base type cannot drop it."
+          },
+          "invalid": {
+            "type": "boolean",
+            "reason": "Inherited from the base DOM or component props and part of the documented API; kept so a change of base type cannot drop it."
+          }
+        }
+      },
+      "DatePickerNaturalInput": {
+        "present": {
+          "placeholder": {
+            "type": "string",
+            "reason": "Inherited from the base DOM or component props and part of the documented API; kept so a change of base type cannot drop it."
+          },
+          "invalid": {
+            "type": "boolean",
+            "reason": "Inherited from the base DOM or component props and part of the documented API; kept so a change of base type cannot drop it."
+          }
+        }
+      }
+    },
+    "Input": {
+      "Input": {
+        "present": {
+          "disabled": {
+            "type": "boolean",
+            "reason": "Inherited from the base DOM or component props and part of the documented API; kept so a change of base type cannot drop it."
+          },
+          "placeholder": {
+            "type": "string",
+            "reason": "Inherited from the base DOM or component props and part of the documented API; kept so a change of base type cannot drop it."
+          }
+        }
+      }
+    },
+    "Label": {
+      "Label": {
+        "present": {
+          "ref": {
+            "type": "React.Ref<HTMLLabelElement>",
+            "reason": "Inherited from the base DOM or component props and part of the documented API; kept so a change of base type cannot drop it."
+          }
+        }
+      }
+    },
+    "OtpInput": {
+      "OtpInput": {
+        "absent": {
+          "type": "One real input fixes the type, mode and length handling: callers cannot override them.",
+          "inputMode": "One real input fixes the type, mode and length handling: callers cannot override them.",
+          "maxLength": "One real input fixes the type, mode and length handling: callers cannot override them."
+        },
+        "present": {
+          "disabled": {
+            "type": "boolean",
+            "reason": "Inherited from the base DOM or component props and part of the documented API; kept so a change of base type cannot drop it."
+          },
+          "autoComplete": {
+            "type": "string",
+            "reason": "Inherited from the base DOM or component props and part of the documented API; kept so a change of base type cannot drop it."
+          },
+          "className": {
+            "type": "string",
+            "reason": "Inherited from the base DOM or component props and part of the documented API; kept so a change of base type cannot drop it."
+          }
+        }
+      }
+    },
+    "Pagination": {
+      "Pagination": {
+        "present": {
+          "className": {
+            "type": "string",
+            "reason": "Inherited from the base DOM or component props and part of the documented API; kept so a change of base type cannot drop it."
+          }
+        }
+      }
+    },
+    "PasswordInput": {
+      "PasswordInput": {
+        "absent": {
+          "type": "The field is always a password input in the default look.",
+          "variant": "The field is always a password input in the default look."
+        },
+        "present": {
+          "invalid": {
+            "type": "boolean",
+            "reason": "Inherited from the base DOM or component props and part of the documented API; kept so a change of base type cannot drop it."
+          },
+          "disabled": {
+            "type": "boolean",
+            "reason": "Inherited from the base DOM or component props and part of the documented API; kept so a change of base type cannot drop it."
+          },
+          "autoComplete": {
+            "type": "string",
+            "reason": "Inherited from the base DOM or component props and part of the documented API; kept so a change of base type cannot drop it."
+          },
+          "className": {
+            "type": "string",
+            "reason": "Inherited from the base DOM or component props and part of the documented API; kept so a change of base type cannot drop it."
+          }
+        }
+      }
+    },
+    "Progress": {
+      "Progress": {
+        "absent": {
+          "role": "role is fixed (progressbar)."
+        }
+      }
+    },
+    "Sparkline": {
+      "Sparkline": {
+        "present": {
+          "className": {
+            "type": "string",
+            "reason": "Inherited from the base DOM or component props and part of the documented API; kept so a change of base type cannot drop it."
+          }
+        }
+      }
+    },
+    "Stepper": {
+      "Stepper": {
+        "absent": {
+          "status": "Status is derived from current, never passed in.",
+          "children": "Children come from steps.",
+          "size": "The viewport is chosen by CSS, never by a prop (DEC-074).",
+          "viewport": "The viewport is chosen by CSS, never by a prop (DEC-074)."
+        },
+        "present": {
+          "className": {
+            "type": "string",
+            "reason": "Inherited from the base DOM or component props and part of the documented API; kept so a change of base type cannot drop it."
+          },
+          "aria-label": {
+            "type": "string",
+            "reason": "Inherited from the base DOM or component props and part of the documented API; kept so a change of base type cannot drop it."
+          }
+        }
+      }
+    },
+    "Textarea": {
+      "Textarea": {
+        "present": {
+          "disabled": {
+            "type": "boolean",
+            "reason": "Inherited from the base DOM or component props and part of the documented API; kept so a change of base type cannot drop it."
+          },
+          "placeholder": {
+            "type": "string",
+            "reason": "Inherited from the base DOM or component props and part of the documented API; kept so a change of base type cannot drop it."
+          }
+        }
+      }
+    },
+    "Toast": {
+      "Toast": {
+        "present": {
+          "open": {
+            "type": "boolean",
+            "reason": "Inherited from the base DOM or component props and part of the documented API; kept so a change of base type cannot drop it."
+          }
+        }
+      }
+    }
+  }
+}

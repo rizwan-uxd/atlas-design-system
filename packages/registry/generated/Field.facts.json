@@ -6,16 +6,16 @@
   "part": "Field",
   "propsType": "FieldProps",
   "props": [
-    { "name": "children", "type": "(control: FieldControlProps) => React.ReactNode", "optional": false },
-    { "name": "disabled", "type": "boolean", "optional": true },
-    { "name": "error", "type": "React.ReactNode", "optional": true },
-    { "name": "helpText", "type": "React.ReactNode", "optional": true },
-    { "name": "id", "type": "string", "optional": true },
-    { "name": "label", "type": "React.ReactNode", "optional": false },
-    { "name": "labelAction", "type": "React.ReactNode", "optional": true },
-    { "name": "optional", "type": "boolean", "optional": true },
-    { "name": "required", "type": "boolean", "optional": true },
-    { "name": "size", "type": "FieldSize", "optional": true }
+    { "name": "children", "type": "(control: FieldControlProps) => React.ReactNode", "optional": false, "exact": true },
+    { "name": "disabled", "type": "boolean", "optional": true, "exact": true },
+    { "name": "error", "type": "React.ReactNode", "optional": true, "exact": true },
+    { "name": "helpText", "type": "React.ReactNode", "optional": true, "exact": true },
+    { "name": "id", "type": "string", "optional": true, "exact": true },
+    { "name": "label", "type": "React.ReactNode", "optional": false, "exact": true },
+    { "name": "labelAction", "type": "React.ReactNode", "optional": true, "exact": true },
+    { "name": "optional", "type": "boolean", "optional": true, "exact": true },
+    { "name": "required", "type": "boolean", "optional": true, "exact": true },
+    { "name": "size", "type": "FieldSize", "optional": true, "exact": true }
   ],
   "inherited": {
     "AriaAttributes": ["aria-activedescendant", "aria-atomic", "aria-autocomplete", "aria-braillelabel", "aria-brailleroledescription", "aria-busy", "aria-checked", "aria-colcount", "aria-colindex", "aria-colindextext", "aria-colspan", "aria-controls", "aria-current", "aria-describedby", "aria-description", "aria-details", "aria-disabled", "aria-dropeffect", "aria-errormessage", "aria-expanded", "aria-flowto", "aria-grabbed", "aria-haspopup", "aria-hidden", "aria-invalid", "aria-keyshortcuts", "aria-label", "aria-labelledby", "aria-level", "aria-live", "aria-modal", "aria-multiline", "aria-multiselectable", "aria-orientation", "aria-owns", "aria-placeholder", "aria-posinset", "aria-pressed", "aria-readonly", "aria-relevant", "aria-required", "aria-roledescription", "aria-rowcount", "aria-rowindex", "aria-rowindextext", "aria-rowspan", "aria-selected", "aria-setsize", "aria-sort", "aria-valuemax", "aria-valuemin", "aria-valuenow", "aria-valuetext"],
@@ -223,5 +223,29 @@
       "Size": ["sm", "md", "lg"]
     }
   },
-  "tokensUsed": ["--atlas-danger", "--atlas-font-sans", "--atlas-font-size-sm", "--atlas-font-size-xs", "--atlas-font-weight-regular", "--atlas-foreground-disabled", "--atlas-foreground-muted", "--atlas-icon-size-xs", "--atlas-icon-stroke-xs", "--atlas-line-height-normal", "--atlas-spacing-1_5", "--atlas-spacing-2"]
+  "tokensUsed": ["--atlas-danger", "--atlas-font-sans", "--atlas-font-size-sm", "--atlas-font-size-xs", "--atlas-font-weight-regular", "--atlas-foreground-disabled", "--atlas-foreground-muted", "--atlas-icon-size-xs", "--atlas-icon-stroke-xs", "--atlas-line-height-normal", "--atlas-spacing-1_5", "--atlas-spacing-2"],
+  "module": {
+    "imports": [
+      { "from": "@atlas/ui-web/compositions/Field/Field", "name": "FieldControlProps", "kind": "named" },
+      { "from": "@atlas/ui-web/compositions/Field/Field", "name": "FieldSize", "kind": "named" }
+    ],
+    "parts": {},
+    "types": {
+      "FieldControlProps": {
+        "kind": "object",
+        "props": [
+          { "name": "aria-describedby", "type": "string", "optional": true, "exact": true },
+          { "name": "aria-required", "type": "true", "optional": true, "exact": true },
+          { "name": "disabled", "type": "boolean", "optional": false, "exact": true },
+          { "name": "id", "type": "string", "optional": false, "exact": true },
+          { "name": "invalid", "type": "boolean", "optional": false, "exact": true }
+        ],
+        "closed": true
+      },
+      "FieldSize": {
+        "kind": "union",
+        "members": ["lg", "md", "sm"]
+      }
+    }
+  }
 }

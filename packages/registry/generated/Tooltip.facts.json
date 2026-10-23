@@ -6,7 +6,7 @@
   "part": "TooltipContent",
   "propsType": "TooltipContentProps",
   "props": [
-    { "name": "side", "type": "TooltipSide", "optional": true }
+    { "name": "side", "type": "TooltipSide", "optional": true, "exact": true }
   ],
   "inherited": {
     "(anonymous)": ["asChild"],
@@ -223,5 +223,47 @@
       "Side": ["bottom", "top", "start", "end"]
     }
   },
-  "tokensUsed": ["--atlas-background", "--atlas-content-width-sm", "--atlas-duration-fast", "--atlas-easing-exit", "--atlas-easing-standard", "--atlas-font-sans", "--atlas-font-size-xs", "--atlas-font-weight-regular", "--atlas-foreground", "--atlas-line-height-snug", "--atlas-radius-md", "--atlas-radius-sm", "--atlas-spacing-0_5", "--atlas-spacing-1_5", "--atlas-spacing-2", "--atlas-spacing-3", "--atlas-spacing-px", "--atlas-z-tooltip"]
+  "tokensUsed": ["--atlas-background", "--atlas-content-width-sm", "--atlas-duration-fast", "--atlas-easing-exit", "--atlas-easing-standard", "--atlas-font-sans", "--atlas-font-size-xs", "--atlas-font-weight-regular", "--atlas-foreground", "--atlas-line-height-snug", "--atlas-radius-md", "--atlas-radius-sm", "--atlas-spacing-0_5", "--atlas-spacing-1_5", "--atlas-spacing-2", "--atlas-spacing-3", "--atlas-spacing-px", "--atlas-z-tooltip"],
+  "module": {
+    "imports": [
+      { "from": "@atlas/ui-web/primitives/Tooltip/Tooltip", "name": "TooltipSide", "kind": "named" }
+    ],
+    "parts": {
+      "Tooltip": {
+        "propsType": "TooltipProps",
+        "props": [],
+        "unions": {}
+      },
+      "TooltipProvider": {
+        "propsType": "TooltipProviderProps",
+        "props": [],
+        "unions": {}
+      },
+      "TooltipTrigger": {
+        "propsType": "TooltipTriggerProps & RefAttributes<HTMLButtonElement>",
+        "props": [],
+        "unions": {
+          "aria-autocomplete": ["both", "inline", "list", "none"],
+          "aria-dropeffect": ["copy", "execute", "link", "move", "none", "popup"],
+          "aria-live": ["assertive", "off", "polite"],
+          "aria-orientation": ["horizontal", "vertical"],
+          "aria-relevant": ["additions", "additions removals", "additions text", "all", "removals", "removals additions", "removals text", "text", "text additions", "text removals"],
+          "aria-sort": ["ascending", "descending", "none", "other"],
+          "enterKeyHint": ["done", "enter", "go", "next", "previous", "search", "send"],
+          "inputMode": ["decimal", "email", "none", "numeric", "search", "tel", "text", "url"],
+          "popover": ["", "auto", "hint", "manual"],
+          "popoverTargetAction": ["hide", "show", "toggle"],
+          "translate": ["no", "yes"],
+          "type": ["button", "reset", "submit"],
+          "unselectable": ["off", "on"]
+        }
+      }
+    },
+    "types": {
+      "TooltipSide": {
+        "kind": "union",
+        "members": ["bottom", "end", "start", "top"]
+      }
+    }
+  }
 }

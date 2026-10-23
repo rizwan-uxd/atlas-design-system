@@ -6,13 +6,13 @@
   "part": "Label",
   "propsType": "LabelProps",
   "props": [
-    { "name": "children", "type": "React.ReactNode", "optional": false },
-    { "name": "disabled", "type": "boolean", "optional": true },
-    { "name": "invalid", "type": "boolean", "optional": true },
-    { "name": "optional", "type": "boolean", "optional": true },
-    { "name": "required", "type": "boolean", "optional": true },
-    { "name": "size", "type": "LabelSize", "optional": true },
-    { "name": "variant", "type": "LabelVariant", "optional": true }
+    { "name": "children", "type": "React.ReactNode", "optional": false, "exact": true },
+    { "name": "disabled", "type": "boolean", "optional": true, "exact": true },
+    { "name": "invalid", "type": "boolean", "optional": true, "exact": true },
+    { "name": "optional", "type": "boolean", "optional": true, "exact": true },
+    { "name": "required", "type": "boolean", "optional": true, "exact": true },
+    { "name": "size", "type": "LabelSize", "optional": true, "exact": true },
+    { "name": "variant", "type": "LabelVariant", "optional": true, "exact": true }
   ],
   "inherited": {
     "AriaAttributes": ["aria-activedescendant", "aria-atomic", "aria-autocomplete", "aria-braillelabel", "aria-brailleroledescription", "aria-busy", "aria-checked", "aria-colcount", "aria-colindex", "aria-colindextext", "aria-colspan", "aria-controls", "aria-current", "aria-describedby", "aria-description", "aria-details", "aria-disabled", "aria-dropeffect", "aria-errormessage", "aria-expanded", "aria-flowto", "aria-grabbed", "aria-haspopup", "aria-hidden", "aria-invalid", "aria-keyshortcuts", "aria-label", "aria-labelledby", "aria-level", "aria-live", "aria-modal", "aria-multiline", "aria-multiselectable", "aria-orientation", "aria-owns", "aria-placeholder", "aria-posinset", "aria-pressed", "aria-readonly", "aria-relevant", "aria-required", "aria-roledescription", "aria-rowcount", "aria-rowindex", "aria-rowindextext", "aria-rowspan", "aria-selected", "aria-setsize", "aria-sort", "aria-valuemax", "aria-valuemin", "aria-valuenow", "aria-valuetext"],
@@ -224,5 +224,22 @@
       "State": ["default", "disabled", "error"]
     }
   },
-  "tokensUsed": ["--atlas-danger", "--atlas-font-sans", "--atlas-font-size-xs", "--atlas-font-weight-regular", "--atlas-font-weight-semibold", "--atlas-foreground", "--atlas-foreground-disabled", "--atlas-foreground-muted", "--atlas-line-height-normal", "--atlas-spacing-1", "--atlas-spacing-1_5", "--atlas-text-body", "--atlas-text-body-sm"]
+  "tokensUsed": ["--atlas-danger", "--atlas-font-sans", "--atlas-font-size-xs", "--atlas-font-weight-regular", "--atlas-font-weight-semibold", "--atlas-foreground", "--atlas-foreground-disabled", "--atlas-foreground-muted", "--atlas-line-height-normal", "--atlas-spacing-1", "--atlas-spacing-1_5", "--atlas-text-body", "--atlas-text-body-sm"],
+  "module": {
+    "imports": [
+      { "from": "@atlas/ui-web/primitives/Label/Label", "name": "LabelSize", "kind": "named" },
+      { "from": "@atlas/ui-web/primitives/Label/Label", "name": "LabelVariant", "kind": "named" }
+    ],
+    "parts": {},
+    "types": {
+      "LabelSize": {
+        "kind": "union",
+        "members": ["lg", "md", "sm"]
+      },
+      "LabelVariant": {
+        "kind": "union",
+        "members": ["default", "inline"]
+      }
+    }
+  }
 }

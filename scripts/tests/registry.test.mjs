@@ -145,6 +145,53 @@ test("making an optional prop required fails the generated contract", () => {
   assert.notDeepEqual(typecheck(buttonContracts(src), [generated]), [])
 })
 
+// sub-parts, branches, exported types and contract-props.json (M3 session 4): each kind of assertion
+// fails on a real regression, typechecked against an edited copy of the component source
+const CONTRACT_PROPS = JSON.parse(fs.readFileSync(path.join(REPO, "packages/registry/contract-props.json"), "utf8")).components
+const contractCheck = (name, edit) => {
+  const f = JSON.parse(fs.readFileSync(path.join(REPO, `packages/registry/generated/${name}.facts.json`), "utf8"))
+  const src = path.join(REPO, f.source)
+  const files = {
+    [path.join(GEN_DIR, "_assert.ts")]: ASSERT_SOURCE,
+    [path.join(GEN_DIR, `${name}.contract.ts`)]: contractSource(f, [], CONTRACT_PROPS[name] ?? {}),
+  }
+  if (edit) {
+    const before = fs.readFileSync(src, "utf8"), after = edit(before)
+    assert.notEqual(after, before, `the edit did not apply to ${f.source}`)
+    files[src] = after
+  }
+  return typecheck(files, [path.join(GEN_DIR, `${name}.contract.ts`)]).join("\n")
+}
+
+test("generated contracts for sub-parts, branches and exported types compile against the real code", () => {
+  for (const name of ["Select", "DatePicker", "Stepper", "Input"]) assert.equal(contractCheck(name), "", name)
+})
+
+test("changing a sub-part prop's type fails (SelectItem value: string → number)", () => {
+  assert.match(contractCheck("Select", (s) => s.replace("  value: string\n  disabled?: boolean\n}", "  value: number\n  disabled?: boolean\n}")), /does not satisfy the constraint 'true'/)
+})
+
+test("changing a discriminated branch fails (DatePicker range onValueChange)", () => {
+  assert.match(contractCheck("DatePicker", (s) => s.replace("onValueChange?: (range: DatePickerRange) => void", "onValueChange?: (range: Date) => void")), /does not satisfy the constraint 'true'/)
+})
+
+test("adding a member to a closed exported object type fails (StepperStep)", () => {
+  assert.match(contractCheck("Stepper", (s) => s.replace("  description?: React.ReactNode\n}", "  description?: React.ReactNode\n  hint?: string\n}")), /does not satisfy the constraint 'true'/)
+})
+
+test("adding a prop that contract-props.json marks absent fails (Stepper viewport)", () => {
+  assert.match(contractCheck("Stepper", (s) => s.replace("  steps: StepperStep[]", "  steps: StepperStep[]\n  viewport?: string")), /does not satisfy the constraint 'true'/)
+})
+
+test("dropping an inherited prop that contract-props.json keeps fails (Input placeholder)", () => {
+  assert.match(contractCheck("Input", (s) => s.replace('"size" | "prefix">', '"size" | "prefix" | "placeholder">')), /does not satisfy the constraint 'true'/)
+})
+
+test("contract-props.json naming a part the module does not export throws", () => {
+  const f = JSON.parse(fs.readFileSync(path.join(REPO, "packages/registry/generated/Input.facts.json"), "utf8"))
+  assert.throws(() => contractSource(f, [], { InputGhost: { absent: { x: "y" } } }), /names Input.InputGhost, which is not an exported part/)
+})
+
 test("a registry entry's protocolProps and handlers become existence assertions", () => {
   const text = contractSource(buttonFacts(), [{ type: "Button", protocolProps: { disabled: {} }, events: { click: { handler: "onClick" } } }])
   assert.match(text, /type Registry_Button_disabled = Assert<Has<P, "disabled">>/)

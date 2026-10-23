@@ -18,7 +18,7 @@ import { fileURLToPath } from "node:url"
 import ts from "typescript"
 import { loadInputs } from "./lib/schemas.mjs"
 import Ajv2020 from "ajv/dist/2020.js"
-import { ASSERT_SOURCE, checkRegistry, codeConnectFacts, compilerOptions, componentMapSource, contractSource, elementsSource, extractElementEvents, extractFacts, formatJson, propTypes, protocolSchema } from "./lib/registry.mjs"
+import { ASSERT_SOURCE, checkRegistry, codeConnectFacts, compilerOptions, componentMapSource, contractSource, elementsSource, extractElementEvents, extractFacts, extractModule, formatJson, moduleContext, propTypes, protocolSchema } from "./lib/registry.mjs"
 
 const args = process.argv.slice(2)
 const CHECK = args.includes("--check")
@@ -46,6 +46,7 @@ function main() {
   const pick = (re) => inputs.files.filter((f) => re.test(f.file))
   const entries = Object.fromEntries(pick(/^packages\/registry\/src\/[^/]+\.registry\.json$/).map((f) => [f.data.type, f.data]))
   const aliases = inputs.valid("packages/registry/aliases.json").aliases
+  const contractProps = inputs.valid("packages/registry/contract-props.json").components
   const metadata = Object.fromEntries(pick(/^atlas\/metadata\/[^/]+\.json$/).map((f) => [f.data.name, f.data]))
   if (Object.keys(entries).length === 0) return fatal(["0 registry entries in packages/registry/src — nothing was inspected"])
 
@@ -78,7 +79,10 @@ function main() {
     try {
       if (!fs.existsSync(rel(ccRel))) throw new Error(`registry: ${ccRel} is missing; facts need Code Connect to know which part Figma binds`)
       const { bound, part, ...cc } = codeConnectFacts(fs.readFileSync(rel(ccRel), "utf8"), m.figmaNodeId, ccRel)
-      const { propsType, ...code } = extractFacts(program, rel(source), part)
+      const ctx = moduleContext(program, rel(source), m.import, ROOT)
+      const { propsType, ...code } = extractFacts(program, rel(source), part, ctx)
+      const { parts, types } = extractModule(program, rel(source), part, ctx)
+      const imports = [...ctx.imports.values()].sort((a, b) => `${a.from}:${a.name}`.localeCompare(`${b.from}:${b.name}`))
       facts[name] = {
         _generated: `GENERATED — do not hand-edit. registry-build from ${source}, Code Connect and atlas/metadata; run npm run registry:build.`,
         name,
@@ -90,10 +94,11 @@ function main() {
         codeConnect: { file: ccRel, bound, ...cc },
         figma: { nodeId: m.figmaNodeId, axes: m.figmaProperties },
         tokensUsed: m.tokensUsed,
+        module: { imports, parts, types },
       }
     } catch (e) { problems.push(`${name}: ${e.message}`); continue }
     written[`${GEN}/${name}.facts.json`] = formatJson(facts[name])
-    written[`${CONTRACTS}/${name}.contract.ts`] = contractSource(facts[name], entryFor(name))
+    written[`${CONTRACTS}/${name}.contract.ts`] = contractSource(facts[name], entryFor(name), contractProps[name] ?? {})
   }
   written[`${CONTRACTS}/_assert.ts`] = ASSERT_SOURCE
   let elements = {}

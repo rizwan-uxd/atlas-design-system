@@ -6,16 +6,16 @@
   "part": "Card",
   "propsType": "CardProps",
   "props": [
-    { "name": "aria-label", "type": "string", "optional": true },
-    { "name": "children", "type": "React.ReactNode", "optional": true },
-    { "name": "className", "type": "string", "optional": true },
-    { "name": "disabled", "type": "boolean", "optional": true },
-    { "name": "id", "type": "string", "optional": true },
-    { "name": "interactive", "type": "boolean", "optional": true },
-    { "name": "onClick", "type": "React.MouseEventHandler<HTMLElement>", "optional": true },
-    { "name": "selected", "type": "boolean", "optional": true },
-    { "name": "size", "type": "CardSize", "optional": true },
-    { "name": "variant", "type": "CardVariant", "optional": true }
+    { "name": "aria-label", "type": "string", "optional": true, "exact": true },
+    { "name": "children", "type": "React.ReactNode", "optional": true, "exact": true },
+    { "name": "className", "type": "string", "optional": true, "exact": true },
+    { "name": "disabled", "type": "boolean", "optional": true, "exact": true },
+    { "name": "id", "type": "string", "optional": true, "exact": true },
+    { "name": "interactive", "type": "boolean", "optional": true, "exact": true },
+    { "name": "onClick", "type": "React.MouseEventHandler<HTMLElement>", "optional": true, "exact": true },
+    { "name": "selected", "type": "boolean", "optional": true, "exact": true },
+    { "name": "size", "type": "CardSize", "optional": true, "exact": true },
+    { "name": "variant", "type": "CardVariant", "optional": true, "exact": true }
   ],
   "inherited": {},
   "events": [
@@ -41,5 +41,71 @@
       "State": ["default", "hover", "focus-visible", "active", "disabled", "selected"]
     }
   },
-  "tokensUsed": ["--atlas-background", "--atlas-background-subtle", "--atlas-border-width-1", "--atlas-border-width-2", "--atlas-card-default-background", "--atlas-card-default-border", "--atlas-card-description-foreground", "--atlas-card-elevated-background", "--atlas-card-elevated-shadow", "--atlas-card-elevated-shadow-hover", "--atlas-card-filled-background", "--atlas-card-filled-background-hover", "--atlas-card-outlined-background", "--atlas-card-outlined-border", "--atlas-card-radius", "--atlas-card-selected-background", "--atlas-card-selected-border", "--atlas-card-size-lg-gap", "--atlas-card-size-lg-padding", "--atlas-card-size-md-gap", "--atlas-card-size-md-padding", "--atlas-card-size-sm-gap", "--atlas-card-size-sm-padding", "--atlas-card-title-foreground", "--atlas-duration-fast", "--atlas-easing-standard", "--atlas-focus-ring", "--atlas-font-sans", "--atlas-font-weight-semibold", "--atlas-line-height-normal", "--atlas-line-height-snug", "--atlas-opacity-disabled", "--atlas-shadow-sm", "--atlas-spacing-0_5", "--atlas-spacing-1", "--atlas-spacing-2", "--atlas-spacing-3", "--atlas-surface-raised", "--atlas-text-body-sm", "--atlas-text-h4"]
+  "tokensUsed": ["--atlas-background", "--atlas-background-subtle", "--atlas-border-width-1", "--atlas-border-width-2", "--atlas-card-default-background", "--atlas-card-default-border", "--atlas-card-description-foreground", "--atlas-card-elevated-background", "--atlas-card-elevated-shadow", "--atlas-card-elevated-shadow-hover", "--atlas-card-filled-background", "--atlas-card-filled-background-hover", "--atlas-card-outlined-background", "--atlas-card-outlined-border", "--atlas-card-radius", "--atlas-card-selected-background", "--atlas-card-selected-border", "--atlas-card-size-lg-gap", "--atlas-card-size-lg-padding", "--atlas-card-size-md-gap", "--atlas-card-size-md-padding", "--atlas-card-size-sm-gap", "--atlas-card-size-sm-padding", "--atlas-card-title-foreground", "--atlas-duration-fast", "--atlas-easing-standard", "--atlas-focus-ring", "--atlas-font-sans", "--atlas-font-weight-semibold", "--atlas-line-height-normal", "--atlas-line-height-snug", "--atlas-opacity-disabled", "--atlas-shadow-sm", "--atlas-spacing-0_5", "--atlas-spacing-1", "--atlas-spacing-2", "--atlas-spacing-3", "--atlas-surface-raised", "--atlas-text-body-sm", "--atlas-text-h4"],
+  "module": {
+    "imports": [
+      { "from": "@atlas/ui-web/compositions/Card/Card", "name": "CardSize", "kind": "named" },
+      { "from": "@atlas/ui-web/compositions/Card/Card", "name": "CardVariant", "kind": "named" }
+    ],
+    "parts": {
+      "CardContent": {
+        "propsType": "CardContentProps",
+        "props": [
+          { "name": "children", "type": "React.ReactNode", "optional": true, "exact": true },
+          { "name": "className", "type": "string", "optional": true, "exact": true }
+        ],
+        "unions": {}
+      },
+      "CardDescription": {
+        "propsType": "CardDescriptionProps",
+        "props": [
+          { "name": "children", "type": "React.ReactNode", "optional": true, "exact": true },
+          { "name": "className", "type": "string", "optional": true, "exact": true }
+        ],
+        "unions": {}
+      },
+      "CardFooter": {
+        "propsType": "CardFooterProps",
+        "props": [
+          { "name": "children", "type": "React.ReactNode", "optional": true, "exact": true },
+          { "name": "className", "type": "string", "optional": true, "exact": true },
+          { "name": "justify", "type": "\"start\" | \"between\" | \"end\"", "optional": true, "exact": true }
+        ],
+        "unions": {
+          "justify": ["between", "end", "start"]
+        }
+      },
+      "CardHeader": {
+        "propsType": "CardHeaderProps",
+        "props": [
+          { "name": "action", "type": "React.ReactNode", "optional": true, "exact": true },
+          { "name": "children", "type": "React.ReactNode", "optional": true, "exact": true },
+          { "name": "className", "type": "string", "optional": true, "exact": true },
+          { "name": "leading", "type": "React.ReactNode", "optional": true, "exact": true }
+        ],
+        "unions": {}
+      },
+      "CardTitle": {
+        "propsType": "CardTitleProps",
+        "props": [
+          { "name": "as", "type": "\"h1\" | \"h2\" | \"h3\" | \"h4\" | \"h5\" | \"h6\"", "optional": true, "exact": true },
+          { "name": "children", "type": "React.ReactNode", "optional": true, "exact": true },
+          { "name": "className", "type": "string", "optional": true, "exact": true }
+        ],
+        "unions": {
+          "as": ["h1", "h2", "h3", "h4", "h5", "h6"]
+        }
+      }
+    },
+    "types": {
+      "CardSize": {
+        "kind": "union",
+        "members": ["lg", "md", "sm"]
+      },
+      "CardVariant": {
+        "kind": "union",
+        "members": ["default", "elevated", "filled", "outlined"]
+      }
+    }
+  }
 }

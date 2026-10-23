@@ -6,11 +6,11 @@
   "part": "ListItem",
   "propsType": "ListItemProps",
   "props": [
-    { "name": "as", "type": "\"div\" | \"li\"", "optional": true },
-    { "name": "children", "type": "React.ReactNode", "optional": true },
-    { "name": "direction", "type": "ListItemDirection", "optional": true },
-    { "name": "size", "type": "ListItemSize", "optional": true },
-    { "name": "variant", "type": "ListItemVariant", "optional": true }
+    { "name": "as", "type": "\"div\" | \"li\"", "optional": true, "exact": true },
+    { "name": "children", "type": "React.ReactNode", "optional": true, "exact": true },
+    { "name": "direction", "type": "ListItemDirection", "optional": true, "exact": true },
+    { "name": "size", "type": "ListItemSize", "optional": true, "exact": true },
+    { "name": "variant", "type": "ListItemVariant", "optional": true, "exact": true }
   ],
   "inherited": {
     "AriaAttributes": ["aria-activedescendant", "aria-atomic", "aria-autocomplete", "aria-braillelabel", "aria-brailleroledescription", "aria-busy", "aria-checked", "aria-colcount", "aria-colindex", "aria-colindextext", "aria-colspan", "aria-controls", "aria-current", "aria-describedby", "aria-description", "aria-details", "aria-disabled", "aria-dropeffect", "aria-errormessage", "aria-expanded", "aria-flowto", "aria-grabbed", "aria-haspopup", "aria-hidden", "aria-invalid", "aria-keyshortcuts", "aria-label", "aria-labelledby", "aria-level", "aria-live", "aria-modal", "aria-multiline", "aria-multiselectable", "aria-orientation", "aria-owns", "aria-placeholder", "aria-posinset", "aria-pressed", "aria-readonly", "aria-relevant", "aria-required", "aria-roledescription", "aria-rowcount", "aria-rowindex", "aria-rowindextext", "aria-rowspan", "aria-selected", "aria-setsize", "aria-sort", "aria-valuemax", "aria-valuemin", "aria-valuenow", "aria-valuetext"],
@@ -221,5 +221,128 @@
       "Size": ["sm", "md"]
     }
   },
-  "tokensUsed": ["--atlas-background-muted", "--atlas-border", "--atlas-border-width-1", "--atlas-font-sans", "--atlas-font-size-sm", "--atlas-font-size-xs", "--atlas-font-weight-medium", "--atlas-foreground", "--atlas-foreground-muted", "--atlas-icon-size-xs", "--atlas-line-height-normal", "--atlas-line-height-snug", "--atlas-radius-lg", "--atlas-radius-md", "--atlas-radius-sm", "--atlas-spacing-0_5", "--atlas-spacing-10", "--atlas-spacing-2", "--atlas-spacing-3", "--atlas-spacing-6", "--atlas-spacing-8", "--atlas-spacing-px"]
+  "tokensUsed": ["--atlas-background-muted", "--atlas-border", "--atlas-border-width-1", "--atlas-font-sans", "--atlas-font-size-sm", "--atlas-font-size-xs", "--atlas-font-weight-medium", "--atlas-foreground", "--atlas-foreground-muted", "--atlas-icon-size-xs", "--atlas-line-height-normal", "--atlas-line-height-snug", "--atlas-radius-lg", "--atlas-radius-md", "--atlas-radius-sm", "--atlas-spacing-0_5", "--atlas-spacing-10", "--atlas-spacing-2", "--atlas-spacing-3", "--atlas-spacing-6", "--atlas-spacing-8", "--atlas-spacing-px"],
+  "module": {
+    "imports": [
+      { "from": "@atlas/ui-web/compositions/ListItem/ListItem", "name": "ListItemDirection", "kind": "named" },
+      { "from": "@atlas/ui-web/compositions/ListItem/ListItem", "name": "ListItemMediaType", "kind": "named" },
+      { "from": "@atlas/ui-web/compositions/ListItem/ListItem", "name": "ListItemSize", "kind": "named" },
+      { "from": "@atlas/ui-web/compositions/ListItem/ListItem", "name": "ListItemVariant", "kind": "named" }
+    ],
+    "parts": {
+      "ListItemActions": {
+        "propsType": "ListItemActionsProps",
+        "props": [],
+        "unions": {
+          "aria-autocomplete": ["both", "inline", "list", "none"],
+          "aria-dropeffect": ["copy", "execute", "link", "move", "none", "popup"],
+          "aria-live": ["assertive", "off", "polite"],
+          "aria-orientation": ["horizontal", "vertical"],
+          "aria-relevant": ["additions", "additions removals", "additions text", "all", "removals", "removals additions", "removals text", "text", "text additions", "text removals"],
+          "aria-sort": ["ascending", "descending", "none", "other"],
+          "enterKeyHint": ["done", "enter", "go", "next", "previous", "search", "send"],
+          "inputMode": ["decimal", "email", "none", "numeric", "search", "tel", "text", "url"],
+          "popover": ["", "auto", "hint", "manual"],
+          "popoverTargetAction": ["hide", "show", "toggle"],
+          "translate": ["no", "yes"],
+          "unselectable": ["off", "on"]
+        }
+      },
+      "ListItemContent": {
+        "propsType": "ListItemContentProps",
+        "props": [],
+        "unions": {
+          "aria-autocomplete": ["both", "inline", "list", "none"],
+          "aria-dropeffect": ["copy", "execute", "link", "move", "none", "popup"],
+          "aria-live": ["assertive", "off", "polite"],
+          "aria-orientation": ["horizontal", "vertical"],
+          "aria-relevant": ["additions", "additions removals", "additions text", "all", "removals", "removals additions", "removals text", "text", "text additions", "text removals"],
+          "aria-sort": ["ascending", "descending", "none", "other"],
+          "enterKeyHint": ["done", "enter", "go", "next", "previous", "search", "send"],
+          "inputMode": ["decimal", "email", "none", "numeric", "search", "tel", "text", "url"],
+          "popover": ["", "auto", "hint", "manual"],
+          "popoverTargetAction": ["hide", "show", "toggle"],
+          "translate": ["no", "yes"],
+          "unselectable": ["off", "on"]
+        }
+      },
+      "ListItemDescription": {
+        "propsType": "ListItemDescriptionProps",
+        "props": [],
+        "unions": {
+          "aria-autocomplete": ["both", "inline", "list", "none"],
+          "aria-dropeffect": ["copy", "execute", "link", "move", "none", "popup"],
+          "aria-live": ["assertive", "off", "polite"],
+          "aria-orientation": ["horizontal", "vertical"],
+          "aria-relevant": ["additions", "additions removals", "additions text", "all", "removals", "removals additions", "removals text", "text", "text additions", "text removals"],
+          "aria-sort": ["ascending", "descending", "none", "other"],
+          "enterKeyHint": ["done", "enter", "go", "next", "previous", "search", "send"],
+          "inputMode": ["decimal", "email", "none", "numeric", "search", "tel", "text", "url"],
+          "popover": ["", "auto", "hint", "manual"],
+          "popoverTargetAction": ["hide", "show", "toggle"],
+          "translate": ["no", "yes"],
+          "unselectable": ["off", "on"]
+        }
+      },
+      "ListItemMedia": {
+        "propsType": "ListItemMediaProps",
+        "props": [
+          { "name": "children", "type": "React.ReactNode", "optional": true, "exact": true },
+          { "name": "decorative", "type": "boolean", "optional": true, "exact": true },
+          { "name": "type", "type": "ListItemMediaType", "optional": true, "exact": true }
+        ],
+        "unions": {
+          "aria-autocomplete": ["both", "inline", "list", "none"],
+          "aria-dropeffect": ["copy", "execute", "link", "move", "none", "popup"],
+          "aria-live": ["assertive", "off", "polite"],
+          "aria-orientation": ["horizontal", "vertical"],
+          "aria-relevant": ["additions", "additions removals", "additions text", "all", "removals", "removals additions", "removals text", "text", "text additions", "text removals"],
+          "aria-sort": ["ascending", "descending", "none", "other"],
+          "enterKeyHint": ["done", "enter", "go", "next", "previous", "search", "send"],
+          "inputMode": ["decimal", "email", "none", "numeric", "search", "tel", "text", "url"],
+          "popover": ["", "auto", "hint", "manual"],
+          "popoverTargetAction": ["hide", "show", "toggle"],
+          "translate": ["no", "yes"],
+          "type": ["icon", "image", "tile"],
+          "unselectable": ["off", "on"]
+        }
+      },
+      "ListItemTitle": {
+        "propsType": "ListItemTitleProps",
+        "props": [],
+        "unions": {
+          "aria-autocomplete": ["both", "inline", "list", "none"],
+          "aria-dropeffect": ["copy", "execute", "link", "move", "none", "popup"],
+          "aria-live": ["assertive", "off", "polite"],
+          "aria-orientation": ["horizontal", "vertical"],
+          "aria-relevant": ["additions", "additions removals", "additions text", "all", "removals", "removals additions", "removals text", "text", "text additions", "text removals"],
+          "aria-sort": ["ascending", "descending", "none", "other"],
+          "enterKeyHint": ["done", "enter", "go", "next", "previous", "search", "send"],
+          "inputMode": ["decimal", "email", "none", "numeric", "search", "tel", "text", "url"],
+          "popover": ["", "auto", "hint", "manual"],
+          "popoverTargetAction": ["hide", "show", "toggle"],
+          "translate": ["no", "yes"],
+          "unselectable": ["off", "on"]
+        }
+      }
+    },
+    "types": {
+      "ListItemDirection": {
+        "kind": "union",
+        "members": ["horizontal", "vertical"]
+      },
+      "ListItemMediaType": {
+        "kind": "union",
+        "members": ["icon", "image", "tile"]
+      },
+      "ListItemSize": {
+        "kind": "union",
+        "members": ["md", "sm"]
+      },
+      "ListItemVariant": {
+        "kind": "union",
+        "members": ["default", "muted", "outline"]
+      }
+    }
+  }
 }
