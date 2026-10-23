@@ -189,7 +189,7 @@ jobs:
   # Every generator input is collected in-job into .metrics/, so the generated region is result-derived
   # and `metrics:check` (BLOCKING) fails a stale or hand-edited committed table the same way tokens-build
   # fails undiffed native output. To refresh the committed region: download this job's `metrics`
-  # artifact, drop the files into .metrics/ at the same commit, run `npm run metrics:report`, commit.
+  # artifact, run `node scripts/metrics-report.mjs --results <artifact>/metrics-input`, commit.
   # A metric whose check did not run reads not measurable, never passing.
   metrics:
     name: Metric manifest
@@ -228,6 +228,13 @@ jobs:
         run: |
           npx playwright install --with-deps chromium
           npx playwright test --reporter=json > .metrics/playwright.json
+      # Artifact + report first (they must exist even when the gate below fails), then the gate.
+      # metrics-report rewrites the roadmap region in this workspace, so the gate restores the
+      # COMMITTED file first: it must compare the committed region against a fresh run, never fresh
+      # output against itself (that order cannot fail, which is the bug this exists to prevent).
+      # The copy exists because artifact globs skip dot-directories.
+      - name: Stage the collected inputs
+        run: cp -r .metrics metrics-input
       - name: Generate atlas-report.json
         run: node scripts/metrics-report.mjs
       - name: Upload metrics artifacts
@@ -235,7 +242,7 @@ jobs:
         with:
           name: metrics
           path: |
-            .metrics/
+            metrics-input/
             atlas-report.json
       - name: Comment the metric totals on the PR
         if: github.event_name == 'pull_request'
@@ -246,7 +253,9 @@ jobs:
           TOTALS=$(node -e "const r=require('./atlas-report.json');const t=r.totals;console.log(t.passing+' passing · '+t.failing+' failing · '+t.notMeasurable+' not measurable of '+t.total)")
           gh pr comment "$PR" --body "Metrics: $TOTALS. Full table: the \`metrics\` artifact (atlas-report.json) and the generated region in docs/ATLAS-DELIVERY-ROADMAP.md."
       - name: Committed metric region is current (blocking)
-        run: npm run metrics:check
+        run: |
+          git checkout -- docs/ATLAS-DELIVERY-ROADMAP.md
+          npm run metrics:check
 
   # ─── ui-native freeze (roadmap R3: freeze rather than absorb) ──────────────
   # Native ports are paused by the owner. Any diff under packages/ui-native fails unless the PR
