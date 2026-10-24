@@ -1,6 +1,6 @@
 # Handoff: M5.4 motion is complete; M5.5 shadow is next (Atlas roadmap)
 
-Written 2026-10-22, updated 2026-10-24 after D1 option B, M4 (#108), Phase 4 (#109), M5.1 radius (#110), M5.2 spacing (#112), M5.3 type (#113, merged) and M5.4 motion (PR opened 2026-10-24). **Read in this order: `AGENTS.md` → `docs/ATLAS-DELIVERY-ROADMAP.md` → this file.**
+Written 2026-10-22, updated 2026-10-24 after D1 option B, M4 (#108), Phase 4 (#109), M5.1 radius (#110), M5.2 spacing (#112), M5.3 type (#113) and M5.4 motion (#115, all merged). **Read in this order: `AGENTS.md` → `docs/ATLAS-DELIVERY-ROADMAP.md` → this file.**
 The roadmap is normative now (referenced from `AGENTS.md` §2) and owns the phase order; this file is
 only current state plus the gotchas that will bite again. **This is the only handoff doc** — earlier
 ones were deleted and live in git history.
@@ -20,19 +20,19 @@ and say so when an estimate changes. **Roadmap: 21 of ~28 sessions done (~75%). 
 | 2d — token work, zero new tokens | 1.5 | 1 | ✅ in 1 session (est. 1.5) | #106 |
 | **M4 — runtime vertical slice** | 3.5 | 3.5 | ✅ all 12 M4 rows measured: 11 pass, size fails (report-only, DEC-085) | #108 |
 | Phase 4 — enforcement hardened | 2.5 | 3 | ✅ in 3 sessions (est. range 2–3) | #109 |
-| **M5 — semantic tokens + brands** | 7 | 4 | 🔄 M5.1 radius ✅ (DEC-086), M5.2 spacing ✅ (DEC-087), M5.3 type ✅ (DEC-088), M5.4 motion ✅ (DEC-089); next M5.5 shadow (Kind B) | #110, #112, #113, M5.4 PR |
+| **M5 — semantic tokens + brands** | 7 | 4 | 🔄 M5.1 radius ✅ (DEC-086), M5.2 spacing ✅ (DEC-087), M5.3 type ✅ (DEC-088), M5.4 motion ✅ (DEC-089); next M5.5 shadow (Kind B) | #110, #112, #113 (+#114 baselines), #115 |
 | Phase 6 — filtered agent catalog | 2.5 | 0 | ⏳ | |
 | Phase 7 — metrics as release gates | 1.5 | 0 | ⏳ | |
 | **Total** | **~28** | **21** | **~75%** | |
 
-Metric table (the roadmap's scoreboard, CI result-derived since Phase 4): **23 passing · 3 failing · 10 not measurable** of 36 (CI run on #110). The 3 failing rows are real findings, not regressions: missing code tokens (2, DISC-106), missing Figma tokens (15, DISC-107) and the report-only protocol size (0.308, DEC-085). M5.1 and M5.2 changed no status.
+Metric table (the roadmap's scoreboard, CI result-derived since Phase 4): **23 passing · 3 failing · 10 not measurable** of 36 (CI run on #115). The 3 failing rows are real findings, not regressions: missing code tokens (2, DISC-106), missing Figma tokens (15, DISC-107) and the report-only protocol size (0.308, DEC-085). M5.1 to M5.4 changed no status.
 M3 exit: **5/6 types `registryComplete`** (Text deferred: no Text component), **47/47 generated
 contracts** (the 44 hand-written ones deleted), **2/2 target metrics passing** (plus registry-states),
 each over the registered subset (4/47 components registered).
 
 ## Start here (session 22, the next fresh session)
 1. **Report progress first** (owner preference): doing / done / % / session X of N. That is 21 of ~28 done (~75%), and this is session 22.
-2. `git fetch origin`, check that the M5.4 PR merged, then branch from `origin/main` and check `gh pr list`.
+2. `git fetch origin`, then branch from `origin/main` (`cc49be1` or later: M5.4 #115 is merged) and check `gh pr list`. Run `npm ci` in a fresh worktree first, because its `node_modules` starts empty (Gotchas).
 3. **Ask the owner one question before any work:** go to **M5.5 shadow**, or first act on the open candidates. Radius: CAND-057 to 060. Spacing: 061 to 065. Type: 066 to 068. Motion: 069 mark draw-in. Or start the proposed sandbox-screenshot fix, so one section's height change stops re-shooting every section below it.
 4. **M5.5 shadow is Kind B** and the only non-colour family with a dark override.
    - Shadows are missing in Figma today: DISC-107 lists `--atlas-shadow-sm|md|lg|xl` and the card elevated shadows as missing Figma tokens. **Settle with the owner first** whether Figma gets effect styles or variables for them. Figma effect styles can bind colour, offset, radius and spread to variables.
@@ -47,12 +47,13 @@ each over the registered subset (4/47 components registered).
 6. **Labels:** `atlas-approved-new`, plus `atlas-native-thaw` only if the native file changes (check `tokens:build`; shadows may be derived there).
 
 ## State
-- **M5.4 motion is in its PR (2026-10-24, commits `8ef442a` PR-0 and `0676add` PR-1).**
+- **M5.4 motion is merged (#115, `cc49be1`, 2026-10-24).** All 15 checks were green: Visual Regression showed no baseline change, and Metric manifest passed because the region was refreshed before pushing.
   - Figma: `motion-<role>-duration|easing` in `Atlas/Semantic` (`VariableID:1106:2-13`).
   - JS: `MotionTokens.roles`; `ROLE_VARS` spells out the CSS names, because `atlas-verify` flags template-built `--atlas-motion-${x}` names as undefined tokens.
   - token-lint `semantic-motion`. The allowlist holds radius 36 + spacing 106 + type 35 + motion 17 entries.
   - Latest ids: **DEC-089, CAND-069, DISC-108**. The variable table holds 513 variables (checksum `c1047803`).
-- **M5.3 type merged (#113, `aa83736`, 2026-10-24), with its baseline PR #114.** Earlier as-built notes: (2026-10-24, commits `c99a3d2` PR-0 and `120be1f` PR-1, plus `f9b4e47`, the metric-region refresh for M5.2).**
+- **M5.3 type is merged (#113, `aa83736`, 2026-10-24), with its baseline PR #114.**
+  - #114's 26 images were the 4 listed changes plus a sub-pixel cascade below Switch.
   - Figma: `type-<role>-size` lives in `Atlas/Responsive Type`; `-weight|-line-height` and `type-overline-letter-spacing` live in `Atlas/Semantic` (`VariableID:1099:2-26`).
   - Styles `Type/Heading|Title|Body|Body-sm|Label|Caption|Overline|Stat` bind size and weight, with line-height and letter-spacing as static percents.
   - token-lint `semantic-type` reads `font-size` only. The allowlist holds 36 radius + 106 spacing + 35 type entries.
@@ -193,8 +194,15 @@ each over the registered subset (4/47 components registered).
     (the atlas-sync test asserts it).
 
 ## Open owner decisions (ask; do not decide these yourself)
+- **M5.5 shadow in Figma (ask first in session 22).** Shadows are not in Figma (DISC-107). Choose between Figma effect styles bound to variables, variables only, or a recorded code-only allowance. The roles come after that.
+- **Nine candidate roles from M5.2–M5.4** (leave each primitive for good, or add it as its own stage; the four radius ones follow):
+  - spacing: CAND-061 control padding scale, 062 stack gap at 8, 063 selection-control label gap, 064 compact-control gap, 065 page/bar inline padding
+  - type: CAND-066 control text scale, 067 inline title, 068 nav label
+  - motion: CAND-069 mark draw-in
+- **Sandbox screenshot cascade.** One section's fractional height change re-shoots every section below it, which turned M5.3's 4 expected images into 26. A follow-up session is proposed (card "Isolate sandbox visual shots from sub-pixel drift"); the owner starts it or not.
+- **Repo setting "Allow GitHub Actions to create and approve pull requests"** is off, so `visual-baseline.yml` pushes its branch but cannot open its PR. Turn it on, or keep opening the PR by hand.
+- **Figma gaps found by M5.3:** Switch has no text layers, and Select's label and content are not drawn. Draw them, then record them as DISCs at the next `--pull` sync.
 - **Four candidate radius roles (CAND-057 to CAND-060, M5.1).** 37 radius uses match a role's value but not its meaning, so they stay primitive: overlay or inline surface at md, compact control or mark at sm, focus-ring corner at sm, and large control at lg. Add any of them (value-identical, Kind A), or leave them primitive for good.
-- **M5.2 spacing role names.** Not chosen yet. Propose a set from the audit and let the owner pick, as with radius (DEC-086).
 - **Text (the 6th M3 exit type) — deferred by the user 2026-10-23 (DEC-080).** Atlas has no Text
   component; register it only after a Figma-first atlas-component session builds one. Until then the
   M3 exit reads 5/6.
@@ -263,7 +271,7 @@ All three: no new dependency, one `Animated.Value`, `useReducedMotion`, native d
 Search and filter frames (#57); disabled opacity bound (#58); StatCard icon, clickable and sparkline variants (#59, #60, #66); Sparkline primitive (#61); Card hover shadow, closes DISC-093 (#63); Sheet and Drawer Content and Footer slots (#64, #65); OtpInput and Stepper components, Auth and Onboarding patterns using them (#68); CommandMenu (#69); Button `asChild` and Link as a composition (#70); Stepper viewport variant and mobile ring, Navigation shell pattern, `verifiedAt` stamps (#71); native Stepper, tokens, types, CI native typecheck, letterSpacing, Spinner, Skeleton (#73 to #80); batch-2 patterns (#82, #83, #84).
 
 ## Do next (the user decides)
-0. **M5.2 spacing** (roadmap order), or first the CAND-057 to CAND-060 radius decision. See "Start here". Everything below is pre-roadmap work the user has not scheduled; none of it blocks M5.
+0. **M5.5 shadow** (roadmap order), or first the candidate-role decisions. See "Start here". Everything below is pre-roadmap work the user has not scheduled; none of it blocks M5.
 1. **The user's Gate 3 visual check** of the native Stepper, Spinner and Skeleton against their Figma frames (nothing has been run on a device or simulator), then check CI on `main`.
 2. **Next native port** (all logged, none built; each needs plan, Figma on `Atlas/Mobile-Native`, then code): suggested **Progress (CAND-017)**, whose indeterminate slide reuses `duration.pulse` and linear easing, or **Avatar (CAND-005)**. The rest: CAND-007, 009, 010, 016, 018, 019, 028, 029, 052, 054. **Button loading (CAND-014)** needs a colour prop on Spinner and a Figma design of the loading state.
 3. **Other candidates:** DataTable (CAND-024, needs its own Figma design), Button loading with a Spinner (CAND-014, needs a Figma design of the loading state), Load more and infinite scroll (CAND-048, deferred), AppShell (CAND-055, composed locally; not a component until designed and requested).
