@@ -195,6 +195,19 @@
   --atlas-easing-standard: cubic-bezier(0.2, 0, 0, 1);
   --atlas-easing-emphasized: cubic-bezier(0.3, 0, 0, 1);
   --atlas-easing-exit: cubic-bezier(0.4, 0, 1, 1);
+  /* M5.4 semantic motion roles (Kind B); Figma Atlas/Semantic motion-* (documentation variables) */
+  --atlas-motion-state-duration: var(--atlas-duration-fast);
+  --atlas-motion-state-easing: var(--atlas-easing-standard);
+  --atlas-motion-move-duration: var(--atlas-duration-base);
+  --atlas-motion-move-easing: var(--atlas-easing-emphasized);
+  --atlas-motion-enter-duration: var(--atlas-duration-base);
+  --atlas-motion-enter-easing: var(--atlas-easing-emphasized);
+  --atlas-motion-exit-duration: var(--atlas-duration-base);
+  --atlas-motion-exit-easing: var(--atlas-easing-exit);
+  --atlas-motion-enter-quick-duration: var(--atlas-duration-fast);
+  --atlas-motion-enter-quick-easing: var(--atlas-easing-standard);
+  --atlas-motion-exit-quick-duration: var(--atlas-duration-fast);
+  --atlas-motion-exit-quick-easing: var(--atlas-easing-exit);
 
   /* ─────────────── Typography · families ─────────────── */
   --atlas-font-sans: "Nunito Sans", ui-sans-serif, system-ui, sans-serif;
