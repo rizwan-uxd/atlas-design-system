@@ -1,13 +1,13 @@
-# Handoff: M5.1 radius is complete; M5.2 spacing is next (Atlas roadmap)
+# Handoff: M5.2 spacing is complete; M5.3 type is next (Atlas roadmap)
 
-Written 2026-10-22, updated 2026-10-23 after D1 option B, M4 (#108), Phase 4 (#109) and M5.1 radius (#110, merged). **Read in this order: `AGENTS.md` → `docs/ATLAS-DELIVERY-ROADMAP.md` → this file.**
+Written 2026-10-22, updated 2026-10-24 after D1 option B, M4 (#108), Phase 4 (#109), M5.1 radius (#110, merged) and M5.2 spacing (PR opened 2026-10-24). **Read in this order: `AGENTS.md` → `docs/ATLAS-DELIVERY-ROADMAP.md` → this file.**
 The roadmap is normative now (referenced from `AGENTS.md` §2) and owns the phase order; this file is
 only current state plus the gotchas that will bite again. **This is the only handoff doc** — earlier
 ones were deleted and live in git history.
 
 ## Progress (update at the end of every session, and report it at the start and end of each)
 Counted in sessions, using the roadmap's own estimates (midpoint where it gives a range). Change N
-and say so when an estimate changes. **Roadmap: 18 of ~28 sessions done (~64%). M5.1 radius is complete in 1 session (Kind A, zero pixel diff): four radius roles in Figma and CSS, 62 component uses migrated, 70 kept primitive with reasons, and the token-lint `semantic-radius` ratchet (plan `docs/superpowers/plans/2026-10-23-m5-1-radius.md`, roadmap §M5 "M5.1 radius"). Next: session 19 of ~28 = M5.2 spacing (value-identical, the largest surface), or first the owner's call on the four candidate radius roles (CAND-057 to CAND-060).**
+and say so when an estimate changes. **Roadmap: 19 of ~28 sessions done (~68%). M5.2 spacing is complete in 1 session (Kind A, zero pixel diff): nine spacing roles chosen by meaning, in Figma and CSS; 139 uses on roles (135 component uses plus 4 component tokens); 188 kept primitive in 106 reasoned entries; and the token-lint `semantic-spacing` ratchet, which reads spacing properties only (plan `docs/superpowers/plans/2026-10-24-m5-2-spacing.md`, roadmap §M5 "M5.2 spacing"). Next: session 20 of ~28 = M5.3 type, the first Kind B (value-changing) stage. The owner may first decide the nine candidate roles (radius CAND-057 to 060, spacing CAND-061 to 065).**
 
 | Phase | Sessions (est.) | Done | Status | PR |
 |---|---|---|---|---|
@@ -20,34 +20,34 @@ and say so when an estimate changes. **Roadmap: 18 of ~28 sessions done (~64%). 
 | 2d — token work, zero new tokens | 1.5 | 1 | ✅ in 1 session (est. 1.5) | #106 |
 | **M4 — runtime vertical slice** | 3.5 | 3.5 | ✅ all 12 M4 rows measured: 11 pass, size fails (report-only, DEC-085) | #108 |
 | Phase 4 — enforcement hardened | 2.5 | 3 | ✅ in 3 sessions (est. range 2–3) | #109 |
-| **M5 — semantic tokens + brands** | 7 | 1 | 🔄 M5.1 radius ✅ (DEC-086); next M5.2 spacing | #110 |
+| **M5 — semantic tokens + brands** | 7 | 2 | 🔄 M5.1 radius ✅ (DEC-086), M5.2 spacing ✅ (DEC-087); next M5.3 type (Kind B) | #110, M5.2 PR |
 | Phase 6 — filtered agent catalog | 2.5 | 0 | ⏳ | |
 | Phase 7 — metrics as release gates | 1.5 | 0 | ⏳ | |
-| **Total** | **~28** | **18** | **~64%** | |
+| **Total** | **~28** | **19** | **~68%** | |
 
-Metric table (the roadmap's scoreboard, CI result-derived since Phase 4): **23 passing · 3 failing · 10 not measurable** of 36 (CI run on #110). The 3 failing rows are real findings, not regressions: missing code tokens (2, DISC-106), missing Figma tokens (15, DISC-107) and the report-only protocol size (0.308, DEC-085). M5.1 changed no status.
+Metric table (the roadmap's scoreboard, CI result-derived since Phase 4): **23 passing · 3 failing · 10 not measurable** of 36 (CI run on #110). The 3 failing rows are real findings, not regressions: missing code tokens (2, DISC-106), missing Figma tokens (15, DISC-107) and the report-only protocol size (0.308, DEC-085). M5.1 and M5.2 changed no status.
 M3 exit: **5/6 types `registryComplete`** (Text deferred: no Text component), **47/47 generated
 contracts** (the 44 hand-written ones deleted), **2/2 target metrics passing** (plus registry-states),
 each over the registered subset (4/47 components registered).
 
-## Start here (session 19, the next fresh session)
-1. **Report progress first** (owner preference): doing / done / % / session X of N. That is 18 of ~28 done (~64%), and this is session 19.
-2. `git fetch origin`, then branch from `origin/main` (`c44fe16` or later). Check `gh pr list` for anything opened since.
-3. **Ask the owner one question before any work:** go straight to **M5.2 spacing**, or first decide the four candidate radius roles CAND-057 to CAND-060. Those are overlay at md (12 uses), compact control or mark at sm (14), focus-ring corner (4) and large control at lg (7). Each is a value-identical Kind A addition: a Figma variable, a CSS alias, then lowering the allowlist counts.
-4. **For M5.2 spacing,** read roadmap §M5: the Kind A rules, then "M5.1 radius" → "Method for M5.2". Then follow the radius stage step by step (plan `docs/superpowers/plans/2026-10-23-m5-1-radius.md`):
-   - **Audit by use, not by line.** The surface is about 465 `var(--atlas-spacing-*)` uses in 45 ui-web files, plus the spacing component tokens in `atlas.tokens.css` and `calc()` compositions.
-   - **Propose a role set to the owner.** This is AGENTS §6: never invent the names. Gap, inset (padding), stack and inline are the usual axes, but the owner picks.
-   - Write the plan (`superpowers:writing-plans`), then get the owner's plan approval (gate 1).
-   - Create the variables in Figma `Atlas/Semantic` with flat names (`spacing-…`), scope `GAP` and/or `WIDTH_HEIGHT` as fits, and WEB code syntax. Then get "Figma built" approval (gate 2).
-   - Sync with the checksum trick (Gotchas), then add the CSS aliases.
-   - Add `"spacing"` to the `tokenPrimitivesAllow` family enum and a `semantic-spacing` rule beside `semanticRadiusViolations`.
-   - Migrate with a line-exact script.
-   - **Prove zero diff twice:** the masked diff, plus a computed-style dump before and after. For spacing the dump must read padding, margin, gap, inset, width and height, not `border-radius`.
-   - Visual Regression must pass with no baseline change.
-   - **Spacing is much larger than radius.** The roadmap allows PR-1..N: split the migration by component tier if one PR is too big to review, but keep one family per PR.
-5. **The PR needs both owner labels:** `atlas-approved-new` (new tokens) and `atlas-native-thaw` (the derived native file changes). Both labels exist in the repo now; `atlas-native-thaw` was created 2026-10-23. Ask before adding them, unless the owner says to.
+## Start here (session 20, the next fresh session)
+1. **Report progress first** (owner preference): doing / done / % / session X of N. That is 19 of ~28 done (~68%), and this is session 20.
+2. `git fetch origin`, check that the M5.2 PR merged, then branch from `origin/main`. Check `gh pr list` for anything opened since.
+3. **Ask the owner one question before any work:** go to **M5.3 type**, or first run a short Kind A pass on some of the nine candidate roles. Radius: CAND-057 overlay at md (12 uses), 058 compact control at sm (14), 059 focus-ring corner (4), 060 large control at lg (7). Spacing: CAND-061 control padding scale (20), 062 stack gap at 8 (4), 063 selection-control label gap (3), 064 compact-control gap (4), 065 page/bar inline padding (1).
+4. **M5.3 type is Kind B (it may change visuals).** Read roadmap §M5, "Kind B". The rule changes: there is no zero-diff proof. Instead, the plan names every component and baseline expected to change *before* any code. Baselines are regenerated through `visual-baseline.yml` in their own PR, and the change is approved in Figma first and recorded as a DEC with before/after values. Type interacts with the responsive `@media` uplift blocks and `Atlas/Responsive Type` (3 modes). A semantic type role may not map 1:1 onto the scale, which is exactly why this stage is Kind B. Propose the role set to the owner (AGENTS §6), then plan (gate 1), then Figma (gate 2).
+5. **Reuse the M5 method:**
+   - the audit by use, and the classifier: declarations parsed with `([-\w]+)\s*:\s*([^;{}]+)`, selectors keyed, offsets replaced exactly
+   - `semanticSpacingViolations` as the shape for a property-scoped ratchet
+   - the shared `token-primitives.allow.json`: widen its `family` enum and `token` pattern
+   - the variable-table checksum rebuild (Gotchas)
+6. **Labels:** a new-token PR needs `atlas-approved-new`, and `atlas-native-thaw` if the native file changes. Ask before adding them, unless the owner says to.
 
 ## State
+- **M5.2 spacing is in its PR (2026-10-24, commits `6842203` PR-0 and `5e554ba` PR-1).**
+  - Figma `Atlas/Semantic` `spacing-focus-offset|item-gap|text-gap|overlay-offset|control-gap|item-padding|section-gap|surface-padding|surface-padding-lg` (`VariableID:1094:2-10`, `GAP` scope) alias `spacing/0_5|1|1|1|2|2|3|4|6`. CSS `--atlas-spacing-<role>`.
+  - token-lint `semantic-spacing` reads spacing properties only. Dimensions are out of scope (DEC-087).
+  - The allowlist now holds 36 radius entries plus 106 spacing entries (188 uses).
+  - Latest ids: **DEC-087, CAND-065, DISC-108**. The variable table holds 476 variables (checksum `11077350`).
 - **M5.1 radius is merged (#110, `c44fe16`, 2026-10-23).** Figma `Atlas/Semantic` `radius-item|control|surface|pill` (`VariableID:1088:2-5`) alias `radius/sm|md|lg|full`. CSS `--atlas-radius-item|control|surface|pill`. token-lint `semantic-radius` and `packages/governance/token-primitives.allow.json` (36 entries, 70 uses). CI was green with both owner labels; Visual Regression showed no baseline change. Latest ids **DEC-086, CAND-060, DISC-108**.
 - **`main` has Phase 1 (#98), M1 (#99), D1 (#100) and M2 (#101).** The post-merge check passed on
   `dd039b1`: `node scripts/atlas-verify.mjs --only design.schemas` → `PASS schemas (58/58 files valid ·
@@ -74,7 +74,7 @@ each over the registered subset (4/47 components registered).
   unpublished colour ramps, 9 mode expansions. `figmaBound` (option C) stays as a cross-check. Refresh
   recipe: "Variable table" in `.agents/skills/atlas-figma-sync/references/pull-file.md`.
 - 47 web components (35 spec-complete, 12 scaffolded), 17 native (**ports paused by the user**),
-  15 patterns. Latest ids: see the M5.1 bullet above. Snapshot pulled from Figma 2026-10-21.
+  15 patterns. Latest ids: see the M5.2 bullet above. Snapshot pulled from Figma 2026-10-21.
 - Benchmarks: waves 1–3 complete (T1–T19), written up in `docs/HARNESS.md` §6–§7. M1 and M2 changed
   `scripts/` and the atlas-verify skill, so `benchmarks/phase-9/pins.json` no longer matches; re-pin
   before the next benchmark run.
@@ -262,6 +262,11 @@ Search and filter frames (#57); disabled opacity bound (#58); StatCard icon, cli
    - The 18 components stamped on 2026-10-15 were compared with live Figma variant properties on 2026-10-19: 0 differences from the snapshot (Stepper's `Viewport` is intentionally not a code prop or Code Connect mapping). Not compared: booleans, text and instance-swap properties, visuals, tokens.
 
 ## Gotchas learned (they will bite again)
+- **A fresh worktree has an empty `node_modules`.** Scripts then resolve the main checkout's older install (ajv 6, with no `ajv/dist/2020.js`), and `atlas-sync` throws ERR_MODULE_NOT_FOUND. Run `npm ci` in the worktree first (about 10 s).
+- **`packages/tokens/atlas.tokens.json` and `atlas.figma.tokens.json` are hand-maintained.** `tokens:build` writes only the native file, so add new roles to both JSON files by hand. The DTCG file keys the half steps as `"0.5"` and `"1.5"`, not `0_5`.
+- **Registry entries can name tokens** (`Alert.registry.json` `tokenRoles`). `registry:check` fails when a component stops using a named token, so a token migration must update them too.
+- **Vitest only includes `packages/*/tests`.** A test under the root `tests/` is silently not found ("No test files found").
+- **A computed-style dump needs its own Playwright script.** Run it from `.atlas-pull/` (gitignored) so `import "playwright"` resolves to the repo install, and take two "before" dumps to show it is deterministic before trusting a 0.
 - **A CI re-run cannot see labels added after its trigger.** `gh run rerun` reuses the original event payload, so the label-gated jobs (Atlas Verify `--allow-new-*`, Native freeze) fail again. Adding the label fires a fresh `labeled` run, because ci.yml listens for `labeled`; use that run. Two labels make two runs, and either one is enough.
 - **`sync_with_base_branch` may refuse** with "pinned Git origin" when `main` changes `.claude/launch.json`. The owner confirms the origin in the app (Help → Troubleshooting → Review Pinned Git Origins). If the worktree branch has no commits of its own, `git merge --ff-only origin/main` works instead.
 - **The metric region goes stale whenever counts in its detail text change** (M5.1: 463→467 variables). Fix: `gh run download <run> -n metrics -D <scratch>`, then `node scripts/metrics-report.mjs --results <scratch>/metrics-input`, commit and push. Auto-fix does this when CI's Metric manifest fails.
