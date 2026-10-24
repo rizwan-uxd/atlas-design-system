@@ -185,9 +185,9 @@ Result sources read: `atlas-verify`, `vitest`, `playwright`, `atlas-sync`, `regi
 
 | Metric | Target | Status | Check | Measurable at |
 |---|---:|---|---|---|
-| Token-name drift | 0 | **passing** — 0 drift — all 513 Figma variables and 482 code tokens | `tokens.name-drift` | D1 option B (full variable table) |
-| Missing code tokens | 0 | **failing** — 2 drift — all 513 Figma variables and 482 code tokens | `tokens.missing-in-code` | D1 option B (full variable table) |
-| Missing Figma tokens | 0 | **failing** — 15 drift — all 513 Figma variables and 482 code tokens | `tokens.missing-in-figma` | D1 option B (full variable table) |
+| Token-name drift | 0 | **passing** — 0 drift — all 518 Figma variables and 487 code tokens | `tokens.name-drift` | D1 option B (full variable table) |
+| Missing code tokens | 0 | **failing** — 2 drift — all 518 Figma variables and 487 code tokens | `tokens.missing-in-code` | D1 option B (full variable table) |
+| Missing Figma tokens | 0 | **failing** — 9 drift — all 518 Figma variables and 487 code tokens | `tokens.missing-in-figma` | D1 option B (full variable table) |
 | All supported brand modes compile successfully | pass | not measurable | `design.brand-modes` | M5.6 |
 | Critical visual regression tests pass for every brand mode | pass | not measurable | `visual > sandbox` | now (light/dark only), M5.6 (brands) |
 
@@ -1082,6 +1082,31 @@ doc says so plainly.
   - NavBar, Sidebar and Progress move easing → emphasized.
   - Preset `enter` easing and `exit` duration.
 - **Proof:** computed motion dumps in four modes (light/dark × reduced motion off/on). With motion on, only the rendered listed rows changed: Progress fill and Sidebar easing. Under `prefers-reduced-motion`, nothing changed. Screenshots are expected unchanged, because visual tests disable animations.
+
+### M5.5 shadow — ✅ DONE 2026-10-24 (1 session, Kind B: two listed changes)
+
+**As built** (plan `docs/superpowers/plans/2026-10-24-m5-5-shadow.md`; DEC-090, DISC-107 partly resolved):
+
+- **Roles (owner-chosen, by intent):** each is an exact alias of one size step.
+
+  | Role | Size | For |
+  |---|---|---|
+  | `shadow-raised` | sm | parts lifted off their track or container (selected tab, thumbs, card hover, scrolled navbar) |
+  | `shadow-surface` | md | a surface resting above the page (Card elevated) |
+  | `shadow-popover` | md | layers anchored to a trigger (menu, select, date picker, chart tooltip) |
+  | `shadow-floating` | lg | non-modal floating chrome (toast, floating navbar, Card elevated hover) |
+  | `shadow-modal` | xl | above the scrim (dialog, alert dialog, sheet, drawer) |
+
+  - **CSS:** `--atlas-shadow-<role>`, 5 alias tokens declared on `:root, [data-theme="dark"], .dark`. A role resolved only on `:root` would carry the light value into a dark subtree. Card's elevated tokens point at surface and floating.
+  - **Figma (hybrid, owner-chosen):** Figma has no composite shadow variable, and effect styles have no modes. So shadows are 11 effect styles with fixed geometry, and their layer colours bind five Light/Dark `shadow/color-*` variables (`VariableID:1111:2-6`, Figma-only). The styles are `shadow/sm|md|lg|xl`, which already existed and were updated in place, plus 5 role styles and 2 Card styles.
+  - **Figma follows code (owner):** seven groups of hand-drawn Figma shadows that differed from the code values were moved onto role styles: Dialog/AlertDialog/CommandMenu, Card elevated and its hover, Card hover, NavBar floating, Switch thumb (18% → 5%) and Tabs selected.
+- **The table reads effect styles:** a style covers the CSS token its name spells (`figmaTable.styleCoverage`). Missing Figma tokens: 15 → 9.
+- **Migration:** all 20 component uses moved onto roles (raised 9, popover 4, floating 3, modal 4). Ratchet: token-lint `semantic-shadow`, which found 20 before and 0 after, with no allowlist entries.
+- **Listed changes:** Chart tooltip sm → popover (md); the mobile NavBar header floating md → floating (lg). That one is code-only, because Figma draws no mobile header.
+- **Proof:**
+  - Computed `box-shadow` dumps of `/` and `/runtime-demo` in light, dark and a dark subtree show 0 differences, because neither listed change renders at rest. The dark subtree equals full dark on all 26 elements.
+  - The hovered Chart tooltip measures the md value in both themes.
+  - Screenshots are expected unchanged.
 
 ---
 

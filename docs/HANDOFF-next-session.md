@@ -1,13 +1,13 @@
-# Handoff: M5.4 motion is complete; M5.5 shadow is next (Atlas roadmap)
+# Handoff: M5.5 shadow is complete; M5.6 brand axis is next (Atlas roadmap)
 
-Written 2026-10-22, updated 2026-10-24 after D1 option B, M4 (#108), Phase 4 (#109), M5.1 radius (#110), M5.2 spacing (#112), M5.3 type (#113) and M5.4 motion (#115, all merged). **Read in this order: `AGENTS.md` → `docs/ATLAS-DELIVERY-ROADMAP.md` → this file.**
+Written 2026-10-22, updated 2026-10-24 after D1 option B, M4 (#108), Phase 4 (#109), M5.1 radius (#110), M5.2 spacing (#112), M5.3 type (#113), M5.4 motion (#115, all merged) and M5.5 shadow (PR opened 2026-10-24). **Read in this order: `AGENTS.md` → `docs/ATLAS-DELIVERY-ROADMAP.md` → this file.**
 The roadmap is normative now (referenced from `AGENTS.md` §2) and owns the phase order; this file is
 only current state plus the gotchas that will bite again. **This is the only handoff doc** — earlier
 ones were deleted and live in git history.
 
 ## Progress (update at the end of every session, and report it at the start and end of each)
 Counted in sessions, using the roadmap's own estimates (midpoint where it gives a range). Change N
-and say so when an estimate changes. **Roadmap: 21 of ~28 sessions done (~75%). M5.4 motion is complete in 1 session (Kind B): six motion roles by intent (duration + easing), 12 CSS tokens and 12 Figma documentation variables; 101 transition and animation items on roles; JS presets on roles; `reduced-motion-required` now sees role tokens; the token-lint `semantic-motion` ratchet; listed timing changes proven by computed motion dumps in four modes, with no change under reduced motion (plan `docs/superpowers/plans/2026-10-24-m5-4-motion.md`, roadmap §M5 "M5.4 motion"). Next: session 22 of ~28 = M5.5 shadow (Kind B, the only non-colour family with a dark override).**
+and say so when an estimate changes. **Roadmap: 22 of ~28 sessions done (~79%). M5.5 shadow is complete in 1 session (Kind B, two listed changes): five shadow roles by intent (raised/surface/popover/floating/modal), each an alias of one size step and declared on the dark selectors too; shadows are now in Figma as 11 effect styles whose layer colours bind five Light/Dark variables; the token table reads effect styles (missing Figma tokens 15 → 9); 20 component uses on roles; the token-lint `semantic-shadow` ratchet; computed box-shadow dumps in light, dark and a dark subtree show no change (plan `docs/superpowers/plans/2026-10-24-m5-5-shadow.md`, roadmap §M5 "M5.5 shadow"). Next: session 23 of ~28 = M5.6 brand axis (Kind B, changes visuals by design).**
 
 | Phase | Sessions (est.) | Done | Status | PR |
 |---|---|---|---|---|
@@ -20,33 +20,36 @@ and say so when an estimate changes. **Roadmap: 21 of ~28 sessions done (~75%). 
 | 2d — token work, zero new tokens | 1.5 | 1 | ✅ in 1 session (est. 1.5) | #106 |
 | **M4 — runtime vertical slice** | 3.5 | 3.5 | ✅ all 12 M4 rows measured: 11 pass, size fails (report-only, DEC-085) | #108 |
 | Phase 4 — enforcement hardened | 2.5 | 3 | ✅ in 3 sessions (est. range 2–3) | #109 |
-| **M5 — semantic tokens + brands** | 7 | 4 | 🔄 M5.1 radius ✅ (DEC-086), M5.2 spacing ✅ (DEC-087), M5.3 type ✅ (DEC-088), M5.4 motion ✅ (DEC-089); next M5.5 shadow (Kind B) | #110, #112, #113 (+#114 baselines), #115 |
+| **M5 — semantic tokens + brands** | 7 | 5 | 🔄 M5.1 radius ✅ (DEC-086), M5.2 spacing ✅ (DEC-087), M5.3 type ✅ (DEC-088), M5.4 motion ✅ (DEC-089), M5.5 shadow ✅ (DEC-090); next M5.6 brand axis (Kind B) | #110, #112, #113 (+#114 baselines), #115, M5.5 PR |
 | Phase 6 — filtered agent catalog | 2.5 | 0 | ⏳ | |
 | Phase 7 — metrics as release gates | 1.5 | 0 | ⏳ | |
-| **Total** | **~28** | **21** | **~75%** | |
+| **Total** | **~28** | **22** | **~79%** | |
 
-Metric table (the roadmap's scoreboard, CI result-derived since Phase 4): **23 passing · 3 failing · 10 not measurable** of 36 (CI run on #115). The 3 failing rows are real findings, not regressions: missing code tokens (2, DISC-106), missing Figma tokens (15, DISC-107) and the report-only protocol size (0.308, DEC-085). M5.1 to M5.4 changed no status.
+Metric table (the roadmap's scoreboard, CI result-derived since Phase 4): **23 passing · 3 failing · 10 not measurable** of 36 (refreshed on the M5.5 branch from the #116 CI run). The 3 failing rows are real findings, not regressions: missing code tokens (2, DISC-106), missing Figma tokens (9, DISC-107; 15 before M5.5) and the report-only protocol size (0.308, DEC-085). M5.1 to M5.5 changed no status.
 M3 exit: **5/6 types `registryComplete`** (Text deferred: no Text component), **47/47 generated
 contracts** (the 44 hand-written ones deleted), **2/2 target metrics passing** (plus registry-states),
 each over the registered subset (4/47 components registered).
 
-## Start here (session 22, the next fresh session)
-1. **Report progress first** (owner preference): doing / done / % / session X of N. That is 21 of ~28 done (~75%), and this is session 22.
-2. `git fetch origin`, then branch from `origin/main` (`cc49be1` or later: M5.4 #115 is merged) and check `gh pr list`. Run `npm ci` in a fresh worktree first, because its `node_modules` starts empty (Gotchas).
-3. **Ask the owner one question before any work:** go to **M5.5 shadow**, or first act on the open candidates. Radius: CAND-057 to 060. Spacing: 061 to 065. Type: 066 to 068. Motion: 069 mark draw-in. Or start the proposed sandbox-screenshot fix, so one section's height change stops re-shooting every section below it.
-4. **M5.5 shadow is Kind B** and the only non-colour family with a dark override.
-   - Shadows are missing in Figma today: DISC-107 lists `--atlas-shadow-sm|md|lg|xl` and the card elevated shadows as missing Figma tokens. **Settle with the owner first** whether Figma gets effect styles or variables for them. Figma effect styles can bind colour, offset, radius and spread to variables.
-   - Roadmap: re-check dark mode and reduced motion for M5.5.
-   - Propose roles (AGENTS §6), then plan (gate 1), then Figma (gate 2).
-   - Shadows are static, so unlike motion, any change shows in screenshots. Expect a `visual-baseline.yml` PR. That workflow cannot open PRs (repo setting off), so open it by hand from its pushed branch, as #114 was.
+## Start here (session 23, the next fresh session)
+1. **Report progress first** (owner preference): doing / done / % / session X of N. That is 22 of ~28 done (~79%), and this is session 23.
+2. `git fetch origin`, check that the M5.5 PR merged, then branch from `origin/main` and check `gh pr list`. Run `npm ci` in a fresh worktree first, because its `node_modules` starts empty (Gotchas).
+3. **Ask the owner one question before any work:** go to **M5.6 brand axis**, or first act on the open candidates (radius CAND-057 to 060, spacing 061 to 065, type 066 to 068, motion 069), DISC-107's remaining 9 tokens (dialog widths, safe-area, `neutral-50`), or the proposed sandbox-screenshot fix.
+4. **M5.6 brand axis is Kind B and changes visuals by design.** It needs every family above (now all on roles) plus D1 for a drift gate. Its exit metrics are the roadmap rows `design.brand-modes` and per-brand visual regression.
+   - **Ask the owner first:** which brands, and what each one varies (colour only, or radius, type and shadow too). A brand is a Figma mode, so settle which collections get brand modes before any plan.
+   - Then roles (AGENTS §6), plan (gate 1), Figma (gate 2).
+   - Shadow colours are already variables (`shadow/color-1..5`), so a brand can tint shadows without touching the styles.
 5. **Reuse the Kind B method:**
    - list every change before code
-   - computed-style before/after dumps (`.atlas-pull/dump-*.mjs`; swap the properties to `box-shadow` and `filter`) in light **and dark**
+   - computed-style before/after dumps (`.atlas-pull/dump-*.mjs`, gitignored; M5.5 added `dump-shadow.mjs` with a dark-subtree mode) in every theme and brand
    - a DEC with before/after values
-   - refresh the metric region from the committed snapshot before pushing when the variable count changes (`metrics-report --results <last CI metrics-input>`)
-6. **Labels:** `atlas-approved-new`, plus `atlas-native-thaw` only if the native file changes (check `tokens:build`; shadows may be derived there).
+   - refresh the metric region before pushing when the variable count changes (`gh run download <run> -n metrics -D <scratch>`, then `node scripts/metrics-report.mjs --results <scratch>/metrics-input`)
+6. **Labels:** `atlas-approved-new` for new tokens, plus `atlas-native-thaw` only if `tokens:build` changes the native file.
 
 ## State
+- **M5.5 shadow is in its PR (2026-10-24, commits `198f628` PR-0 and `1999ab5` PR-1, merged with main at `9d8d101`).**
+  - Figma: `shadow/color-1..5` in `Atlas/Semantic` (`VariableID:1111:2-6`, scope `EFFECT_COLOR`, no WEB syntax). Effect styles: `shadow/sm|md|lg|xl` (pre-existing, updated in place, now 0 direct consumers), `shadow/raised|surface|popover|floating|modal` and `card/elevated-shadow(-hover)`. Every component shadow sits on a role style except Card elevated focus-visible (`109:120|135|150`), which keeps its focus ring plus copies of the card layers.
+  - Code: `--atlas-shadow-<role>` on `:root, [data-theme="dark"], .dark`; token-lint `semantic-shadow` with no allowlist entries; `tableCoverage` returns `styleCoverage` (lowercase style name, `/` → `-`).
+  - Latest ids: **DEC-090, CAND-069, DISC-108**. The variable table holds 518 variables (checksum `5d2ff410`) and 11 effect styles. Drift 0 / 2 / 9.
 - **M5.4 motion is merged (#115, `cc49be1`, 2026-10-24).** All 15 checks were green: Visual Regression showed no baseline change, and Metric manifest passed because the region was refreshed before pushing.
   - Figma: `motion-<role>-duration|easing` in `Atlas/Semantic` (`VariableID:1106:2-13`).
   - JS: `MotionTokens.roles`; `ROLE_VARS` spells out the CSS names, because `atlas-verify` flags template-built `--atlas-motion-${x}` names as undefined tokens.
@@ -285,6 +288,10 @@ Search and filter frames (#57); disabled opacity bound (#58); StatCard icon, cli
    - The 18 components stamped on 2026-10-15 were compared with live Figma variant properties on 2026-10-19: 0 differences from the snapshot (Stepper's `Viewport` is intentionally not a code prop or Code Connect mapping). Not compared: booleans, text and instance-swap properties, visuals, tokens.
 
 ## Gotchas learned (they will bite again)
+- **Audit Figma before trusting a handoff claim about it (M5.5).** The handoff said shadows were "not in Figma at all"; the read-only audit found four `shadow/*` effect styles with 70 consumers plus seven groups of hand-drawn shadows that differed from code. Run the audit first and stop on any mismatch (Figma wins until the owner decides).
+- **An effect style replaces every effect on a node.** Applying a shadow style to a node that also carries a focus ring (a spread-only drop shadow) deletes the ring. Keep the ring and copy the style's bound layers instead, as Card elevated focus-visible does.
+- **Moving a style's consumers:** `style.getStyleConsumersAsync()` lists direct nodes and `I…` ids nested in instances; rebind the direct ones only, nested ones follow their main component.
+- **Sync, then rebuild the registry.** After a CSS migration, `atlas:sync` refreshes `atlas/metadata/*.json` `tokensUsed`, and then `registry:build` must refresh `packages/registry/generated/*.facts.json`, or the registry `--check` test fails.
 - **`atlas-verify` `tokens` flags any `--atlas-<name>-` string that is not a declared token,** including template literals and doc comments in `.ts` (`--atlas-motion-${name}-duration`). Spell out the full names.
 - **`visual-baseline.yml` cannot open its PR:** the repo setting "Allow GitHub Actions to create and approve pull requests" is off. The run still pushes `visual-baseline/<run id>`, so open the PR by hand with base = the stage branch. The owner decides on the setting.
 - **A stage's own component tests may assert token names** (`Progress.test.tsx` lists the CSS variables it expects). Search `packages/ui-web/tests` for the old names before migrating.
