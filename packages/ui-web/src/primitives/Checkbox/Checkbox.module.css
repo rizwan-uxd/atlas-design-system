@@ -225,9 +225,10 @@
 
 .description {
   font-family: var(--atlas-font-sans);
-  font-size: var(--atlas-font-size-xs);
+  font-size: var(--atlas-type-caption-size);
+  font-weight: var(--atlas-type-caption-weight);
   color: var(--atlas-checkbox-description-foreground);
-  line-height: var(--atlas-line-height-normal);
+  line-height: var(--atlas-type-caption-line-height);
 }
 
 .root[data-disabled] .description {

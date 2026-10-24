@@ -196,6 +196,23 @@
         { "name": "spacing-section-gap", "type": "FLOAT", "values": { "Light": { "alias": "Atlas/Primitives:spacing/3" }, "Dark": { "alias": "Atlas/Primitives:spacing/3" } } },
         { "name": "spacing-surface-padding", "type": "FLOAT", "values": { "Light": { "alias": "Atlas/Primitives:spacing/4" }, "Dark": { "alias": "Atlas/Primitives:spacing/4" } } },
         { "name": "spacing-surface-padding-lg", "type": "FLOAT", "values": { "Light": { "alias": "Atlas/Primitives:spacing/6" }, "Dark": { "alias": "Atlas/Primitives:spacing/6" } } },
+        { "name": "type-heading-weight", "type": "FLOAT", "values": { "Light": { "alias": "Atlas/Primitives:font-weight/semibold" }, "Dark": { "alias": "Atlas/Primitives:font-weight/semibold" } } },
+        { "name": "type-heading-line-height", "type": "FLOAT", "values": { "Light": { "alias": "Atlas/Primitives:line-height/tight" }, "Dark": { "alias": "Atlas/Primitives:line-height/tight" } } },
+        { "name": "type-title-weight", "type": "FLOAT", "values": { "Light": { "alias": "Atlas/Primitives:font-weight/semibold" }, "Dark": { "alias": "Atlas/Primitives:font-weight/semibold" } } },
+        { "name": "type-title-line-height", "type": "FLOAT", "values": { "Light": { "alias": "Atlas/Primitives:line-height/snug" }, "Dark": { "alias": "Atlas/Primitives:line-height/snug" } } },
+        { "name": "type-body-weight", "type": "FLOAT", "values": { "Light": { "alias": "Atlas/Primitives:font-weight/regular" }, "Dark": { "alias": "Atlas/Primitives:font-weight/regular" } } },
+        { "name": "type-body-line-height", "type": "FLOAT", "values": { "Light": { "alias": "Atlas/Primitives:line-height/normal" }, "Dark": { "alias": "Atlas/Primitives:line-height/normal" } } },
+        { "name": "type-body-sm-weight", "type": "FLOAT", "values": { "Light": { "alias": "Atlas/Primitives:font-weight/regular" }, "Dark": { "alias": "Atlas/Primitives:font-weight/regular" } } },
+        { "name": "type-body-sm-line-height", "type": "FLOAT", "values": { "Light": { "alias": "Atlas/Primitives:line-height/normal" }, "Dark": { "alias": "Atlas/Primitives:line-height/normal" } } },
+        { "name": "type-label-weight", "type": "FLOAT", "values": { "Light": { "alias": "Atlas/Primitives:font-weight/medium" }, "Dark": { "alias": "Atlas/Primitives:font-weight/medium" } } },
+        { "name": "type-label-line-height", "type": "FLOAT", "values": { "Light": { "alias": "Atlas/Primitives:line-height/normal" }, "Dark": { "alias": "Atlas/Primitives:line-height/normal" } } },
+        { "name": "type-caption-weight", "type": "FLOAT", "values": { "Light": { "alias": "Atlas/Primitives:font-weight/regular" }, "Dark": { "alias": "Atlas/Primitives:font-weight/regular" } } },
+        { "name": "type-caption-line-height", "type": "FLOAT", "values": { "Light": { "alias": "Atlas/Primitives:line-height/normal" }, "Dark": { "alias": "Atlas/Primitives:line-height/normal" } } },
+        { "name": "type-overline-weight", "type": "FLOAT", "values": { "Light": { "alias": "Atlas/Primitives:font-weight/medium" }, "Dark": { "alias": "Atlas/Primitives:font-weight/medium" } } },
+        { "name": "type-overline-line-height", "type": "FLOAT", "values": { "Light": { "alias": "Atlas/Primitives:line-height/normal" }, "Dark": { "alias": "Atlas/Primitives:line-height/normal" } } },
+        { "name": "type-overline-letter-spacing", "type": "FLOAT", "values": { "Light": { "alias": "Atlas/Primitives:letter-spacing/wide" }, "Dark": { "alias": "Atlas/Primitives:letter-spacing/wide" } } },
+        { "name": "type-stat-weight", "type": "FLOAT", "values": { "Light": { "alias": "Atlas/Primitives:font-weight/semibold" }, "Dark": { "alias": "Atlas/Primitives:font-weight/semibold" } } },
+        { "name": "type-stat-line-height", "type": "FLOAT", "values": { "Light": { "alias": "Atlas/Primitives:line-height/tight" }, "Dark": { "alias": "Atlas/Primitives:line-height/tight" } } },
         { "name": "avatar-group-overlap", "type": "FLOAT", "values": { "Light": -8, "Dark": -8 } }
       ]
     },
@@ -218,7 +235,15 @@
         { "name": "text/h4", "type": "FLOAT", "values": { "Mobile": 16, "Tablet": 18, "Desktop": 20 } },
         { "name": "text/body",    "type": "FLOAT", "values": { "Mobile": 16, "Tablet": 16, "Desktop": 16 } },
         { "name": "text/body-sm", "type": "FLOAT", "values": { "Mobile": 14, "Tablet": 14, "Desktop": 14 } },
-        { "name": "text/caption", "type": "FLOAT", "values": { "Mobile": 12, "Tablet": 12, "Desktop": 12 } }
+        { "name": "text/caption", "type": "FLOAT", "values": { "Mobile": 12, "Tablet": 12, "Desktop": 12 } },
+        { "name": "type-heading-size", "type": "FLOAT", "values": { "Mobile": { "alias": "Atlas/Responsive Type:text/h3" }, "Tablet": { "alias": "Atlas/Responsive Type:text/h3" }, "Desktop": { "alias": "Atlas/Responsive Type:text/h3" } } },
+        { "name": "type-title-size", "type": "FLOAT", "values": { "Mobile": { "alias": "Atlas/Responsive Type:text/h4" }, "Tablet": { "alias": "Atlas/Responsive Type:text/h4" }, "Desktop": { "alias": "Atlas/Responsive Type:text/h4" } } },
+        { "name": "type-body-size", "type": "FLOAT", "values": { "Mobile": { "alias": "Atlas/Responsive Type:text/body" }, "Tablet": { "alias": "Atlas/Responsive Type:text/body" }, "Desktop": { "alias": "Atlas/Responsive Type:text/body" } } },
+        { "name": "type-body-sm-size", "type": "FLOAT", "values": { "Mobile": { "alias": "Atlas/Responsive Type:text/body-sm" }, "Tablet": { "alias": "Atlas/Responsive Type:text/body-sm" }, "Desktop": { "alias": "Atlas/Responsive Type:text/body-sm" } } },
+        { "name": "type-label-size", "type": "FLOAT", "values": { "Mobile": { "alias": "Atlas/Responsive Type:text/body-sm" }, "Tablet": { "alias": "Atlas/Responsive Type:text/body-sm" }, "Desktop": { "alias": "Atlas/Responsive Type:text/body-sm" } } },
+        { "name": "type-caption-size", "type": "FLOAT", "values": { "Mobile": { "alias": "Atlas/Responsive Type:text/caption" }, "Tablet": { "alias": "Atlas/Responsive Type:text/caption" }, "Desktop": { "alias": "Atlas/Responsive Type:text/caption" } } },
+        { "name": "type-overline-size", "type": "FLOAT", "values": { "Mobile": { "alias": "Atlas/Responsive Type:text/caption" }, "Tablet": { "alias": "Atlas/Responsive Type:text/caption" }, "Desktop": { "alias": "Atlas/Responsive Type:text/caption" } } },
+        { "name": "type-stat-size", "type": "FLOAT", "values": { "Mobile": { "alias": "Atlas/Primitives:font-size/3xl" }, "Tablet": { "alias": "Atlas/Primitives:font-size/3xl" }, "Desktop": { "alias": "Atlas/Primitives:font-size/3xl" } } }
       ]
     }
   ]

@@ -15,9 +15,9 @@
   border: var(--atlas-border-width-0) solid transparent;
   border-radius: var(--atlas-radius-2xl);
   font-family: var(--atlas-font-sans);
-  font-size: var(--atlas-text-body-sm);
-  font-weight: var(--atlas-font-weight-regular);
-  line-height: var(--atlas-line-height-normal);
+  font-size: var(--atlas-type-body-sm-size);
+  font-weight: var(--atlas-type-body-sm-weight);
+  line-height: var(--atlas-type-body-sm-line-height);
   overflow-wrap: anywhere;
 }
 
@@ -110,8 +110,9 @@
   background: var(--atlas-background-muted);
   color: var(--atlas-foreground);
   font-family: var(--atlas-font-sans);
-  font-size: var(--atlas-text-body-sm);
-  line-height: var(--atlas-line-height-normal);
+  font-size: var(--atlas-type-body-sm-size);
+  font-weight: var(--atlas-type-body-sm-weight);
+  line-height: var(--atlas-type-body-sm-line-height);
   white-space: nowrap;
 }
 

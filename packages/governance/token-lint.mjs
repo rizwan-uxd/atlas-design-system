@@ -29,6 +29,9 @@
  *      custom properties named for spacing) component CSS and component-token aliases use a spacing
  *      role; a primitive step is listed with a reason and its exact count in the same allowlist.
  *      Width, height and other dimension uses are out of scope (DEC-087)
+ *  M5.3:
+ *  13. semantic-type — a component font-size names a type role, a component font-size token or a private
+ *      var; a step of --atlas-font-size-* or --atlas-text-* is listed with a reason and exact count (DEC-088)
  *
  * Allow-list:
  *   - Lines containing "token-lint-disable-next-line" suppress the NEXT line only.
@@ -52,7 +55,7 @@ import fs from "fs"
 import path from "path"
 import { fileURLToPath } from "url"
 import { BEGIN, lintComponentTokens } from "../../scripts/lib/component-tokens.mjs"
-import { privateVarViolations, rawLengths, breakpointViolations, reducedMotionMissing, semanticRadiusViolations, semanticSpacingViolations } from "../../scripts/lib/token-rules.mjs"
+import { privateVarViolations, rawLengths, breakpointViolations, reducedMotionMissing, semanticRadiusViolations, semanticSpacingViolations, semanticTypeViolations } from "../../scripts/lib/token-rules.mjs"
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const ROOT = path.resolve(__dirname, "../..")
@@ -292,6 +295,11 @@ const componentTokenSpacing = tokenCss.split("\n").map((l) => (/^\s*--atlas-(?!s
 const ss = semanticSpacingViolations([...componentCss, { file: TOKEN_REL, src: componentTokenSpacing }], primitivesAllow)
 ss.violations.forEach(add("semantic-spacing"))
 inspected["semantic-spacing"] = ss.inspected
+
+// semantic-type (M5.3): component CSS only; the token file declares the scales and roles legally.
+const st = semanticTypeViolations(componentCss, primitivesAllow)
+st.violations.forEach(add("semantic-type"))
+inspected["semantic-type"] = st.inspected
 
 // ─── Report ──────────────────────────────────────────────────────────────────
 

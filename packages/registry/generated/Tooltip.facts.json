@@ -223,7 +223,7 @@
       "Side": ["bottom", "top", "start", "end"]
     }
   },
-  "tokensUsed": ["--atlas-background", "--atlas-content-width-sm", "--atlas-duration-fast", "--atlas-easing-exit", "--atlas-easing-standard", "--atlas-font-sans", "--atlas-font-size-xs", "--atlas-font-weight-regular", "--atlas-foreground", "--atlas-line-height-snug", "--atlas-radius-md", "--atlas-radius-sm", "--atlas-spacing-0_5", "--atlas-spacing-1_5", "--atlas-spacing-2", "--atlas-spacing-3", "--atlas-spacing-px", "--atlas-z-tooltip"],
+  "tokensUsed": ["--atlas-background", "--atlas-content-width-sm", "--atlas-duration-fast", "--atlas-easing-exit", "--atlas-easing-standard", "--atlas-font-sans", "--atlas-foreground", "--atlas-radius-md", "--atlas-radius-sm", "--atlas-spacing-0_5", "--atlas-spacing-1_5", "--atlas-spacing-2", "--atlas-spacing-3", "--atlas-spacing-px", "--atlas-type-caption-line-height", "--atlas-type-caption-size", "--atlas-type-caption-weight", "--atlas-z-tooltip"],
   "module": {
     "imports": [
       { "from": "@atlas/ui-web/primitives/Tooltip/Tooltip", "name": "TooltipSide", "kind": "named" }

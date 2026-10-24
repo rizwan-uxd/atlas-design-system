@@ -48,9 +48,10 @@
   white-space: nowrap;
   color: var(--atlas-foreground-muted);
   font-family: var(--atlas-font-sans);
-  font-size: var(--atlas-font-size-xs);
-  font-weight: var(--atlas-font-weight-medium);
-  line-height: var(--atlas-line-height-relaxed);
+  font-size: var(--atlas-type-overline-size);
+  letter-spacing: var(--atlas-type-overline-letter-spacing);
+  font-weight: var(--atlas-type-overline-weight);
+  line-height: var(--atlas-type-overline-line-height);
 }
 
 .root[data-size="lg"] .label {

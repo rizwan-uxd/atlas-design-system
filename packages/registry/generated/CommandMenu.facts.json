@@ -41,7 +41,7 @@
       "State": ["default", "empty", "loading"]
     }
   },
-  "tokensUsed": ["--atlas-background-accent", "--atlas-border-width-2", "--atlas-font-size-sm", "--atlas-font-size-xs", "--atlas-font-weight-medium", "--atlas-foreground", "--atlas-foreground-muted", "--atlas-icon-size-xs", "--atlas-letter-spacing-wide", "--atlas-opacity-disabled", "--atlas-radius-item", "--atlas-spacing-1", "--atlas-spacing-10", "--atlas-spacing-1_5", "--atlas-spacing-2", "--atlas-spacing-6", "--atlas-spacing-control-gap", "--atlas-spacing-item-padding"],
+  "tokensUsed": ["--atlas-background-accent", "--atlas-border-width-2", "--atlas-font-size-sm", "--atlas-font-weight-medium", "--atlas-foreground", "--atlas-foreground-muted", "--atlas-icon-size-xs", "--atlas-opacity-disabled", "--atlas-radius-item", "--atlas-spacing-1", "--atlas-spacing-10", "--atlas-spacing-1_5", "--atlas-spacing-2", "--atlas-spacing-6", "--atlas-spacing-control-gap", "--atlas-spacing-item-padding", "--atlas-type-overline-letter-spacing", "--atlas-type-overline-line-height", "--atlas-type-overline-size", "--atlas-type-overline-weight"],
   "module": {
     "imports": [
       { "from": "@atlas/ui-web/compositions/CommandMenu/CommandMenu", "name": "CommandMenuFilter", "kind": "named" },

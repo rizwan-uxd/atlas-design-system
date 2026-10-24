@@ -76,8 +76,9 @@
 /* ── Optional hint ────────────────────────────────────────────── */
 
 .optional {
-  font-size: var(--atlas-font-size-xs);
-  font-weight: var(--atlas-font-weight-regular);
+  font-size: var(--atlas-type-caption-size);
+  line-height: var(--atlas-type-caption-line-height);
+  font-weight: var(--atlas-type-caption-weight);
   color: var(--atlas-foreground-muted);
 }
 

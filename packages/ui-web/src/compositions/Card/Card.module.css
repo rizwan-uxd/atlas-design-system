@@ -184,10 +184,10 @@
 .title {
   margin: 0;
   font-family: var(--atlas-font-sans);
-  font-weight: var(--atlas-font-weight-semibold);
-  font-size: var(--atlas-text-h4); /* responsive heading token */
+  font-weight: var(--atlas-type-title-weight);
+  font-size: var(--atlas-type-title-size);
   color: var(--atlas-card-title-foreground);
-  line-height: var(--atlas-line-height-snug);
+  line-height: var(--atlas-type-title-line-height);
 }
 
 /* ── Description ──────────────────────────────────────────────── */
@@ -198,9 +198,10 @@
      browser defaults (0) and need not be declared. */
   margin-block-start: var(--atlas-spacing-text-gap);
   font-family: var(--atlas-font-sans);
-  font-size: var(--atlas-text-body-sm);
+  font-size: var(--atlas-type-body-sm-size);
+  font-weight: var(--atlas-type-body-sm-weight);
   color: var(--atlas-card-description-foreground);
-  line-height: var(--atlas-line-height-normal);
+  line-height: var(--atlas-type-body-sm-line-height);
 }
 
 /* ── Content ──────────────────────────────────────────────────── */

@@ -109,9 +109,9 @@
 
 .title {
   margin: 0;
-  font-size: var(--atlas-text-h3);
-  font-weight: var(--atlas-font-weight-semibold);
-  line-height: var(--atlas-line-height-tight);
+  font-size: var(--atlas-type-heading-size);
+  font-weight: var(--atlas-type-heading-weight);
+  line-height: var(--atlas-type-heading-line-height);
   color: var(--atlas-foreground);
 }
 
@@ -120,8 +120,9 @@
 .description {
   margin: 0;
   margin-block-start: var(--atlas-spacing-text-gap);
-  font-size: var(--atlas-text-body-sm);
-  line-height: var(--atlas-line-height-normal);
+  font-size: var(--atlas-type-body-size);
+  font-weight: var(--atlas-type-body-weight);
+  line-height: var(--atlas-type-body-line-height);
   color: var(--atlas-foreground-muted);
 }
 

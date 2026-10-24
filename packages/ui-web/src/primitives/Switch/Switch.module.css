@@ -218,11 +218,11 @@
 
 .label {
   font-family: var(--atlas-font-sans);
-  font-size: var(--atlas-font-size-sm);
-  font-weight: var(--atlas-font-weight-medium);
+  font-size: var(--atlas-type-label-size);
+  font-weight: var(--atlas-type-label-weight);
   color: var(--atlas-switch-label-foreground);
   /* BUG-017 — was magic number 1.4 */
-  line-height: var(--atlas-line-height-snug);
+  line-height: var(--atlas-type-label-line-height);
   cursor: pointer;
 }
 
@@ -232,8 +232,9 @@
 
 .description {
   font-family: var(--atlas-font-sans);
-  font-size: var(--atlas-font-size-xs);
+  font-size: var(--atlas-type-caption-size);
+  font-weight: var(--atlas-type-caption-weight);
   color: var(--atlas-switch-description-foreground);
   /* BUG-017 — was magic number 1.4 */
-  line-height: var(--atlas-line-height-snug);
+  line-height: var(--atlas-type-caption-line-height);
 }

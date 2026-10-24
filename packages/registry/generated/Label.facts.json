@@ -224,7 +224,7 @@
       "State": ["default", "disabled", "error"]
     }
   },
-  "tokensUsed": ["--atlas-danger", "--atlas-font-sans", "--atlas-font-size-xs", "--atlas-font-weight-regular", "--atlas-font-weight-semibold", "--atlas-foreground", "--atlas-foreground-disabled", "--atlas-foreground-muted", "--atlas-line-height-normal", "--atlas-spacing-1_5", "--atlas-spacing-item-gap", "--atlas-text-body", "--atlas-text-body-sm"],
+  "tokensUsed": ["--atlas-danger", "--atlas-font-sans", "--atlas-font-size-xs", "--atlas-font-weight-semibold", "--atlas-foreground", "--atlas-foreground-disabled", "--atlas-foreground-muted", "--atlas-line-height-normal", "--atlas-spacing-1_5", "--atlas-spacing-item-gap", "--atlas-text-body", "--atlas-text-body-sm", "--atlas-type-caption-line-height", "--atlas-type-caption-size", "--atlas-type-caption-weight"],
   "module": {
     "imports": [
       { "from": "@atlas/ui-web/primitives/Label/Label", "name": "LabelSize", "kind": "named" },

@@ -2,7 +2,7 @@
 // reduced motion). One PASS case, then the FAIL cases each rule exists for.
 import { test } from "node:test"
 import assert from "node:assert/strict"
-import { privateVarViolations, rawLengths, breakpointViolations, reducedMotionMissing, semanticRadiusViolations, semanticSpacingViolations } from "../lib/token-rules.mjs"
+import { privateVarViolations, rawLengths, breakpointViolations, reducedMotionMissing, semanticRadiusViolations, semanticSpacingViolations, semanticTypeViolations } from "../lib/token-rules.mjs"
 
 const F = "c/X.module.css"
 
@@ -124,4 +124,29 @@ test("semantic spacing: the allowlist matches an exact count per file and token;
 test("semantic spacing: a radius allowlist entry is not read as a spacing entry", () => {
   const allow = [{ family: "radius", file: F, token: "--atlas-radius-none", count: 1, reason: "x" }]
   assert.deepEqual(semanticSpacingViolations([{ file: F, src: ".a {}" }], allow).violations, [])
+})
+
+test("semantic type: a role or a component token passes; a primitive scale step fails", () => {
+  const ok = ".a { font-size: var(--atlas-type-label-size); } .b { font-size: var(--atlas-button-size-md-font-size); } .c { font-size: 1em; }"
+  assert.deepEqual(semanticTypeViolations([{ file: F, src: ok }], []).violations, [])
+  const { violations } = semanticTypeViolations([{ file: F, src: ".x {\n  font-size: var(--atlas-font-size-sm);\n}" }], [])
+  assert.equal(violations[0].line, 2)
+  assert.match(violations[0].text, /--atlas-font-size-sm.*type role/)
+})
+
+test("semantic type: only font-size is read", () => {
+  assert.deepEqual(semanticTypeViolations([{ file: F, src: ".x { --_h: var(--atlas-text-h3); line-height: var(--atlas-line-height-tight); }" }], []), { violations: [], inspected: 0 })
+})
+
+test("semantic type: exact count per file and token; a changed count or stale entry fails", () => {
+  const allow = [{ family: "type", file: F, token: "--atlas-text-caption", count: 1, reason: "badge size variant" }]
+  const one = ".sm { font-size: var(--atlas-text-caption); }"
+  assert.deepEqual(semanticTypeViolations([{ file: F, src: one }], allow).violations, [])
+  assert.match(semanticTypeViolations([{ file: F, src: one + one }], allow).violations[0].text, /2 uses, allowlist says 1/)
+  assert.match(semanticTypeViolations([{ file: F, src: ".a {}" }], allow).violations[0].text, /stale allowlist entry/)
+})
+
+test("semantic type: a spacing allowlist entry is not read as a type entry", () => {
+  const allow = [{ family: "spacing", file: F, token: "--atlas-spacing-2", count: 1, reason: "x" }]
+  assert.deepEqual(semanticTypeViolations([{ file: F, src: ".a {}" }], allow).violations, [])
 })

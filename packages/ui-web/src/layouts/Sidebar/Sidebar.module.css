@@ -62,9 +62,10 @@
   display: block;
   padding-inline-start: var(--atlas-spacing-3);
   padding-block-end: var(--atlas-spacing-1);
-  font-size: var(--atlas-font-size-xs);
-  font-weight: var(--atlas-font-weight-medium);
-  letter-spacing: var(--atlas-letter-spacing-wide);
+  font-size: var(--atlas-type-overline-size);
+  line-height: var(--atlas-type-overline-line-height);
+  font-weight: var(--atlas-type-overline-weight);
+  letter-spacing: var(--atlas-type-overline-letter-spacing);
   text-transform: uppercase;
   color: var(--atlas-foreground-subtle);
   user-select: none;

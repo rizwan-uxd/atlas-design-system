@@ -107,9 +107,9 @@
 
 .caption {
   padding-block: var(--atlas-spacing-4);
-  font-size: var(--atlas-font-size-sm);
-  font-weight: var(--atlas-font-weight-regular);
-  line-height: var(--atlas-line-height-normal);
+  font-size: var(--atlas-type-body-sm-size);
+  font-weight: var(--atlas-type-body-sm-weight);
+  line-height: var(--atlas-type-body-sm-line-height);
   color: var(--atlas-foreground-muted);
   text-align: start;
 }

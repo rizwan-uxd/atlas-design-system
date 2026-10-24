@@ -10,7 +10,7 @@
   "sizes": [],
   "props": [],
   "subcomponents": ["TableHeader", "TableBody", "TableFooter", "TableRow", "TableHead", "TableCell", "TableCaption"],
-  "tokensUsed": ["--atlas-background-muted", "--atlas-background-subtle", "--atlas-border", "--atlas-border-width-1", "--atlas-border-width-2", "--atlas-focus-ring", "--atlas-font-sans", "--atlas-font-size-sm", "--atlas-font-weight-medium", "--atlas-font-weight-regular", "--atlas-foreground", "--atlas-foreground-muted", "--atlas-line-height-normal", "--atlas-radius-md", "--atlas-spacing-10", "--atlas-spacing-4", "--atlas-spacing-item-padding"],
+  "tokensUsed": ["--atlas-background-muted", "--atlas-background-subtle", "--atlas-border", "--atlas-border-width-1", "--atlas-border-width-2", "--atlas-focus-ring", "--atlas-font-sans", "--atlas-font-size-sm", "--atlas-font-weight-medium", "--atlas-font-weight-regular", "--atlas-foreground", "--atlas-foreground-muted", "--atlas-line-height-normal", "--atlas-radius-md", "--atlas-spacing-10", "--atlas-spacing-4", "--atlas-spacing-item-padding", "--atlas-type-body-sm-line-height", "--atlas-type-body-sm-size", "--atlas-type-body-sm-weight"],
   "figmaNodeId": "674:68",
   "figmaFileKey": "cKYhfaHLCoyMHi9nKr63Ig",
   "figmaProperties": { "Content": ["text", "checkbox"], "Align": ["start", "end"], "Sort": ["none", "unsorted", "ascending", "descending"] },

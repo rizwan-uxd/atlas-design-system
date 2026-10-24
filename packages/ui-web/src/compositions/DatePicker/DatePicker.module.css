@@ -147,7 +147,9 @@
   margin-block-start: var(--atlas-spacing-1);
   margin-block-end: 0;
   font-family: var(--atlas-font-sans);
-  font-size: var(--atlas-font-size-xs);
+  font-size: var(--atlas-type-caption-size);
+  line-height: var(--atlas-type-caption-line-height);
+  font-weight: var(--atlas-type-caption-weight);
   color: var(--atlas-foreground-muted);
 }
 
@@ -221,8 +223,9 @@
   flex: 1 1 0;
   min-inline-size: 0;
   text-align: center;
-  font-size: var(--atlas-font-size-sm);
-  font-weight: var(--atlas-font-weight-medium);
+  font-size: var(--atlas-type-label-size);
+  line-height: var(--atlas-type-label-line-height);
+  font-weight: var(--atlas-type-label-weight);
   color: var(--atlas-foreground);
   overflow: hidden;
   text-overflow: ellipsis;

@@ -221,7 +221,7 @@
       "Size": ["sm", "md"]
     }
   },
-  "tokensUsed": ["--atlas-background-muted", "--atlas-border", "--atlas-border-width-1", "--atlas-font-sans", "--atlas-font-size-sm", "--atlas-font-size-xs", "--atlas-font-weight-medium", "--atlas-foreground", "--atlas-foreground-muted", "--atlas-icon-size-xs", "--atlas-line-height-normal", "--atlas-line-height-snug", "--atlas-radius-md", "--atlas-radius-sm", "--atlas-radius-surface", "--atlas-spacing-0_5", "--atlas-spacing-10", "--atlas-spacing-3", "--atlas-spacing-6", "--atlas-spacing-8", "--atlas-spacing-control-gap", "--atlas-spacing-item-padding", "--atlas-spacing-px"],
+  "tokensUsed": ["--atlas-background-muted", "--atlas-border", "--atlas-border-width-1", "--atlas-font-sans", "--atlas-font-size-sm", "--atlas-font-size-xs", "--atlas-foreground", "--atlas-foreground-muted", "--atlas-icon-size-xs", "--atlas-line-height-normal", "--atlas-line-height-snug", "--atlas-radius-md", "--atlas-radius-sm", "--atlas-radius-surface", "--atlas-spacing-0_5", "--atlas-spacing-10", "--atlas-spacing-3", "--atlas-spacing-6", "--atlas-spacing-8", "--atlas-spacing-control-gap", "--atlas-spacing-item-padding", "--atlas-spacing-px", "--atlas-type-label-line-height", "--atlas-type-label-size", "--atlas-type-label-weight"],
   "module": {
     "imports": [
       { "from": "@atlas/ui-web/compositions/ListItem/ListItem", "name": "ListItemDirection", "kind": "named" },

@@ -185,9 +185,9 @@ Result sources read: `atlas-verify`, `vitest`, `playwright`, `atlas-sync`, `regi
 
 | Metric | Target | Status | Check | Measurable at |
 |---|---:|---|---|---|
-| Token-name drift | 0 | **passing** — 0 drift — all 467 Figma variables and 436 code tokens | `tokens.name-drift` | D1 option B (full variable table) |
-| Missing code tokens | 0 | **failing** — 2 drift — all 467 Figma variables and 436 code tokens | `tokens.missing-in-code` | D1 option B (full variable table) |
-| Missing Figma tokens | 0 | **failing** — 15 drift — all 467 Figma variables and 436 code tokens | `tokens.missing-in-figma` | D1 option B (full variable table) |
+| Token-name drift | 0 | **passing** — 0 drift — all 501 Figma variables and 470 code tokens | `tokens.name-drift` | D1 option B (full variable table) |
+| Missing code tokens | 0 | **failing** — 2 drift — all 501 Figma variables and 470 code tokens | `tokens.missing-in-code` | D1 option B (full variable table) |
+| Missing Figma tokens | 0 | **failing** — 15 drift — all 501 Figma variables and 470 code tokens | `tokens.missing-in-figma` | D1 option B (full variable table) |
 | All supported brand modes compile successfully | pass | not measurable | `design.brand-modes` | M5.6 |
 | Critical visual regression tests pass for every brand mode | pass | not measurable | `visual > sandbox` | now (light/dark only), M5.6 (brands) |
 
@@ -1014,6 +1014,42 @@ doc says so plainly.
   - Computed padding, margin, row/column gap, inset, `outline-offset`, width and height for every element plus `::before`/`::after` on `/` (3,446) and `/runtime-demo` (65): 0 differences before and after, and 0 between two before runs.
 
   CI's visual job must pass with no baseline change. The PR carries `atlas-approved-new` (nine new tokens) and `atlas-native-thaw` (the derived native file gains nine keys).
+
+---
+
+### M5.3 type — ✅ DONE 2026-10-24 (1 session, Kind B: listed visual changes)
+
+**As built** (plan `docs/superpowers/plans/2026-10-24-m5-3-type.md`; DEC-088, CAND-066 to CAND-068):
+
+- **Roles (owner-chosen):** eight composite roles. Each one is a size + line-height + weight bundle, and overline adds letter-spacing:
+
+  | Role | Size | Line-height | Weight |
+  |---|---|---|---|
+  | `type-heading` | `text-h3` (responsive) | tight | semibold |
+  | `type-title` | `text-h4` (responsive) | snug | semibold |
+  | `type-body` | `text-body` | normal | regular |
+  | `type-body-sm` | `text-body-sm` | normal | regular |
+  | `type-label` | `text-body-sm` | normal | medium |
+  | `type-caption` | `text-caption` | normal | regular |
+  | `type-overline` | `text-caption` | normal | medium, plus `letter-spacing-wide` |
+  | `type-stat` | `font-size-3xl` | tight | semibold |
+
+  - **CSS:** 25 alias tokens `--atlas-type-<role>-size|line-height|weight`. Sizes alias the responsive `--atlas-text-*`, so the `@media` uplift applies with no new blocks.
+  - **Figma:** 25 variables (`VariableID:1099:2-26`) and 8 `Type/*` text styles, applied to 913 text layers in 26 components.
+  - **Figma binding limit:** Figma reads a bound line-height or letter-spacing as pixels. So (owner) the styles bind size and weight, and carry line-height and letter-spacing as static percents equal to the CSS.
+- **Gate 2 (owner):**
+  - Figma wins on description size: the AlertDialog and Dialog descriptions are `type-body` (14 → 16px).
+  - The Chart title keeps semibold: its shared rule was split.
+- **Migration:**
+  - 46 rules now set their full role.
+  - 48 uses stay on the primitive scales in 35 reasoned entries: control font sizes stay on component tokens, plus size variants, glyphs, and control and nav text.
+  - Ratchet: token-lint `semantic-type`. It reads `font-size` only, and a primitive scale step fails unless it is allowlisted.
+- **Change proof (Kind B):** the plan listed 9 explicit changes before any code. The computed-style diff on `/` and `/runtime-demo` shows exactly the rendered subset:
+  - RadioGroup label weight 600 → 500
+  - Switch label and description line-height snug → normal
+
+  None of the 21 inherit-only rules changed any rendered element. The overlay changes are reviewed as images in the `visual-baseline.yml` PR, never bundled with the CSS change.
+- **Figma gaps:** Switch has no text layers, and Select's label and content are not drawn. These are for the next sync's discrepancy list.
 
 ---
 
