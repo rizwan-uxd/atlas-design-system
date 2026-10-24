@@ -60,6 +60,14 @@ describe("motion — token parity with atlas.tokens.css", () => {
   it("pulse opacity", () => {
     expect(pulseOpacity).toBe(Number.parseFloat(cssValue("--atlas-opacity-pulse")))
   })
+
+  // A role is var(--atlas-duration-*) + var(--atlas-easing-*) in CSS; follow the alias to the step.
+  const aliased = (name: string) => cssValue(/^var\((--[\w-]+)\)$/.exec(cssValue(name))?.[1] ?? "")
+  it.each(Object.keys(defaultMotionTokens.roles))("role %s", (name) => {
+    const role = defaultMotionTokens.roles[name as keyof typeof defaultMotionTokens.roles]
+    expect(role.duration).toBeCloseTo(parseDuration(aliased(`--atlas-motion-${name}-duration`), NaN))
+    expect(role.easing).toEqual(parseBezier(aliased(`--atlas-motion-${name}-easing`), [NaN, NaN, NaN, NaN]))
+  })
 })
 
 describe("motion — resolveMotionTokens", () => {
@@ -83,10 +91,12 @@ describe("motion — resolveMotionTokens", () => {
 describe("motion — presets", () => {
   it("derive durations and easings from the tokens", () => {
     const presets = createMotionPresets(defaultMotionTokens)
-    expect(presets.quick.duration).toBe(defaultMotionTokens.duration.fast)
-    expect(presets.enter.ease).toEqual([...defaultMotionTokens.easing.standard])
+    const { roles } = defaultMotionTokens
+    // quick, enter and exit are the motion roles state, enter and exit (DEC-089)
+    expect(presets.quick).toEqual({ duration: roles.state.duration, ease: [...roles.state.easing] })
+    expect(presets.enter).toEqual({ duration: roles.enter.duration, ease: [...roles.enter.easing] })
+    expect(presets.exit).toEqual({ duration: roles.exit.duration, ease: [...roles.exit.easing] })
     expect(presets.emphasis.ease).toEqual([...defaultMotionTokens.easing.emphasized])
-    expect(presets.exit.ease).toEqual([...defaultMotionTokens.easing.exit])
     expect(presets.spin.duration).toBe(defaultMotionTokens.duration.spin)
     expect(presets.spin.repeat).toBe(Infinity)
     expect(presets.pulse.duration).toBe(defaultMotionTokens.duration.pulse)
@@ -95,7 +105,7 @@ describe("motion — presets", () => {
   it("follow a changed token", () => {
     const presets = createMotionPresets({
       ...defaultMotionTokens,
-      duration: { ...defaultMotionTokens.duration, fast: 0.5 },
+      roles: { ...defaultMotionTokens.roles, state: { ...defaultMotionTokens.roles.state, duration: 0.5 } },
     })
     expect(presets.quick.duration).toBe(0.5)
   })

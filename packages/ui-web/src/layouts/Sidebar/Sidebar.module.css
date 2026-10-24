@@ -8,7 +8,7 @@
   background-color: var(--atlas-surface);
   border-inline-end: var(--atlas-border-width-1) solid var(--atlas-border);
   overflow: hidden;
-  transition: inline-size var(--atlas-duration-base) var(--atlas-easing-standard);
+  transition: inline-size var(--atlas-motion-move-duration) var(--atlas-motion-move-easing);
 }
 
 .collapsed {

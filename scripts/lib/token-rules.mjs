@@ -118,10 +118,10 @@ export function breakpointViolations(tokenCss, files) {
 
 // ─── reduced-motion-required ─────────────────────────────────────────────────
 
-/** True when a CSS source animates with --atlas-duration-* and has no prefers-reduced-motion block. */
+/** True when a CSS source animates with --atlas-duration-* or a motion role (--atlas-motion-*, M5.4) and has no prefers-reduced-motion block. */
 export function reducedMotionMissing(css) {
   const src = stripComments(css)
-  return /var\(\s*--atlas-duration-/.test(src) && !/@media[^{]*prefers-reduced-motion/.test(src)
+  return /var\(\s*--atlas-(?:duration|motion)-/.test(src) && !/@media[^{]*prefers-reduced-motion/.test(src)
 }
 
 // ─── semantic-radius (M5.1) ──────────────────────────────────────────────────
@@ -242,6 +242,42 @@ export function semanticTypeViolations(files, allow) {
   }
   allow.forEach((a, i) => {
     if (a.family === "type" && !used.has(i)) violations.push({ file: a.file, line: 0, text: `stale allowlist entry ${a.token} — no such use; remove it from packages/governance/token-primitives.allow.json` })
+  })
+  return { violations, inspected }
+}
+
+// ─── semantic-motion (M5.4) ──────────────────────────────────────────────────
+// Component motion names a motion ROLE (--atlas-motion-<role>-duration|easing). A primitive duration or easing
+// is legal only where packages/governance/token-primitives.allow.json gives a reason and the exact count per
+// file (DEC-089). --atlas-duration-instant is exempt: it is how reduced-motion blocks switch motion off.
+const MOTION_STEP = /var\(\s*(--atlas-(?:duration|easing)-[\w-]+)\s*\)/g
+const MOTION_ANY = /var\(\s*--atlas-(?:duration|easing|motion)-[\w-]+\s*\)/g
+
+export function semanticMotionViolations(files, allow) {
+  const violations = []
+  const used = new Set()
+  let inspected = 0
+  for (const { file, src } of files) {
+    const s = stripComments(src)
+    inspected += (s.match(MOTION_ANY) ?? []).length
+    const byToken = new Map()
+    for (const m of s.matchAll(MOTION_STEP)) {
+      if (m[1] === "--atlas-duration-instant") continue
+      if (!byToken.has(m[1])) byToken.set(m[1], [])
+      byToken.get(m[1]).push(lineOf(s, m.index))
+    }
+    for (const [token, lines] of byToken) {
+      const i = allow.findIndex((a) => a.family === "motion" && a.file === file && a.token === token)
+      if (i === -1) {
+        lines.forEach((line) => violations.push({ file, line, text: `${token} — use a motion role (--atlas-motion-state|move|enter|exit|enter-quick|exit-quick-duration|easing), or list it with a reason in packages/governance/token-primitives.allow.json` }))
+        continue
+      }
+      used.add(i)
+      if (allow[i].count !== lines.length) violations.push({ file, line: lines[0], text: `${token}: ${lines.length} uses, allowlist says ${allow[i].count} — update the count or use a role` })
+    }
+  }
+  allow.forEach((a, i) => {
+    if (a.family === "motion" && !used.has(i)) violations.push({ file: a.file, line: 0, text: `stale allowlist entry ${a.token} — no such use; remove it from packages/governance/token-primitives.allow.json` })
   })
   return { violations, inspected }
 }

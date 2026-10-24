@@ -12,7 +12,7 @@
     { "name": "separator", "required": false, "type": "BreadcrumbSeparatorStyle" }
   ],
   "subcomponents": ["BreadcrumbList", "BreadcrumbItem", "BreadcrumbLink", "BreadcrumbPage", "BreadcrumbSeparator", "BreadcrumbEllipsis", "BreadcrumbDropdown"],
-  "tokensUsed": ["--atlas-background", "--atlas-border-width-2", "--atlas-duration-fast", "--atlas-easing-standard", "--atlas-focus-ring", "--atlas-font-sans", "--atlas-foreground", "--atlas-foreground-muted", "--atlas-icon-size-xs", "--atlas-primary", "--atlas-radius-control", "--atlas-radius-item", "--atlas-spacing-0", "--atlas-spacing-1_5", "--atlas-spacing-6", "--atlas-spacing-item-gap", "--atlas-touch-min", "--atlas-type-body-sm-line-height", "--atlas-type-body-sm-size", "--atlas-type-body-sm-weight"],
+  "tokensUsed": ["--atlas-background", "--atlas-border-width-2", "--atlas-focus-ring", "--atlas-font-sans", "--atlas-foreground", "--atlas-foreground-muted", "--atlas-icon-size-xs", "--atlas-motion-state-duration", "--atlas-motion-state-easing", "--atlas-primary", "--atlas-radius-control", "--atlas-radius-item", "--atlas-spacing-0", "--atlas-spacing-1_5", "--atlas-spacing-6", "--atlas-spacing-item-gap", "--atlas-touch-min", "--atlas-type-body-sm-line-height", "--atlas-type-body-sm-size", "--atlas-type-body-sm-weight"],
   "figmaNodeId": "493:75",
   "figmaFileKey": "cKYhfaHLCoyMHi9nKr63Ig",
   "figmaProperties": { "Separator": ["chevron", "dot"] },

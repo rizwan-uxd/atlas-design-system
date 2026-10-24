@@ -76,11 +76,11 @@
 
 .content[data-state="delayed-open"],
 .content[data-state="instant-open"] {
-  animation: tooltip-in var(--atlas-duration-fast) var(--atlas-easing-standard);
+  animation: tooltip-in var(--atlas-motion-enter-quick-duration) var(--atlas-motion-enter-quick-easing);
 }
 
 .content[data-state="closed"] {
-  animation: tooltip-out var(--atlas-duration-fast) var(--atlas-easing-exit);
+  animation: tooltip-out var(--atlas-motion-exit-quick-duration) var(--atlas-motion-exit-quick-easing);
 }
 
 @keyframes tooltip-in {

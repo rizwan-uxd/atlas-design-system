@@ -2,7 +2,7 @@
 // reduced motion). One PASS case, then the FAIL cases each rule exists for.
 import { test } from "node:test"
 import assert from "node:assert/strict"
-import { privateVarViolations, rawLengths, breakpointViolations, reducedMotionMissing, semanticRadiusViolations, semanticSpacingViolations, semanticTypeViolations } from "../lib/token-rules.mjs"
+import { privateVarViolations, rawLengths, breakpointViolations, reducedMotionMissing, semanticRadiusViolations, semanticSpacingViolations, semanticTypeViolations, semanticMotionViolations } from "../lib/token-rules.mjs"
 
 const F = "c/X.module.css"
 
@@ -149,4 +149,29 @@ test("semantic type: exact count per file and token; a changed count or stale en
 test("semantic type: a spacing allowlist entry is not read as a type entry", () => {
   const allow = [{ family: "spacing", file: F, token: "--atlas-spacing-2", count: 1, reason: "x" }]
   assert.deepEqual(semanticTypeViolations([{ file: F, src: ".a {}" }], allow).violations, [])
+})
+
+test("reduced motion: a file animating only with motion roles still needs a reduced-motion block", () => {
+  assert.equal(reducedMotionMissing(".a { transition: color var(--atlas-motion-state-duration) var(--atlas-motion-state-easing); }"), true)
+  assert.equal(reducedMotionMissing(".a { transition: color var(--atlas-motion-state-duration); } @media (prefers-reduced-motion: reduce) { .a { transition: none; } }"), false)
+})
+
+test("semantic motion: a role passes; a primitive duration or easing fails", () => {
+  const ok = ".a { transition: color var(--atlas-motion-state-duration) var(--atlas-motion-state-easing); }"
+  assert.deepEqual(semanticMotionViolations([{ file: F, src: ok }], []).violations, [])
+  const { violations } = semanticMotionViolations([{ file: F, src: ".a {\n  animation: x var(--atlas-duration-base) var(--atlas-easing-exit);\n}" }], [])
+  assert.deepEqual(violations.map((v) => v.line), [2, 2])
+  assert.match(violations[0].text, /motion role/)
+})
+
+test("semantic motion: an instant duration inside a reduced-motion block is legal", () => {
+  const src = "@media (prefers-reduced-motion: reduce) { .a { transition-duration: var(--atlas-duration-instant); } }"
+  assert.deepEqual(semanticMotionViolations([{ file: F, src }], []).violations, [])
+})
+
+test("semantic motion: exact count per file and token; a stale entry fails", () => {
+  const allow = [{ family: "motion", file: F, token: "--atlas-duration-spin", count: 1, reason: "spinner loop" }]
+  const one = ".s { animation: spin var(--atlas-duration-spin) linear infinite; }"
+  assert.deepEqual(semanticMotionViolations([{ file: F, src: one }], allow).violations, [])
+  assert.match(semanticMotionViolations([{ file: F, src: ".a {}" }], allow).violations[0].text, /stale allowlist entry/)
 })

@@ -50,7 +50,7 @@
   background-color: var(--atlas-input-background);
   border: var(--atlas-border-width-1) solid var(--atlas-input-border);
   border-radius: var(--atlas-input-radius);
-  transition: border-color var(--atlas-duration-fast) var(--atlas-easing-standard);
+  transition: border-color var(--atlas-motion-state-duration) var(--atlas-motion-state-easing);
 }
 
 /* Sizes: a slot is a square as wide as the Input is tall */

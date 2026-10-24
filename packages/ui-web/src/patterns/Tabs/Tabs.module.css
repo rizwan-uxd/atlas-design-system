@@ -62,8 +62,8 @@
   width: var(--_ind-w, 0px);
   transform: translateX(var(--_ind-x, 0px));
   transition:
-    transform var(--atlas-duration-base) var(--atlas-easing-emphasized),
-    width     var(--atlas-duration-base) var(--atlas-easing-emphasized);
+    transform var(--atlas-motion-move-duration) var(--atlas-motion-move-easing),
+    width     var(--atlas-motion-move-duration) var(--atlas-motion-move-easing);
   pointer-events: none;
 }
 
@@ -116,10 +116,10 @@
   flex-shrink: 0;
   outline: none;
   transition:
-    color            var(--atlas-duration-fast) var(--atlas-easing-standard),
-    background-color var(--atlas-duration-fast) var(--atlas-easing-standard),
-    border-color     var(--atlas-duration-fast) var(--atlas-easing-standard),
-    box-shadow       var(--atlas-duration-fast) var(--atlas-easing-standard);
+    color            var(--atlas-motion-state-duration) var(--atlas-motion-state-easing),
+    background-color var(--atlas-motion-state-duration) var(--atlas-motion-state-easing),
+    border-color     var(--atlas-motion-state-duration) var(--atlas-motion-state-easing),
+    box-shadow       var(--atlas-motion-state-duration) var(--atlas-motion-state-easing);
 }
 
 /* ── Focus ring (all variants) ────────────────────────────────── */
@@ -323,8 +323,8 @@
   opacity: 0;
   pointer-events: none;
   transition:
-    transform var(--atlas-duration-base) var(--atlas-easing-emphasized),
-    width     var(--atlas-duration-base) var(--atlas-easing-emphasized);
+    transform var(--atlas-motion-move-duration) var(--atlas-motion-move-easing),
+    width     var(--atlas-motion-move-duration) var(--atlas-motion-move-easing);
 }
 
 .animated:is(.pill, .segmented, .outline) .list[data-ready]::after {
@@ -366,8 +366,8 @@
   height: var(--_ind-h, 0px);
   transform: translateY(var(--_ind-y, 0px));
   transition:
-    transform var(--atlas-duration-base) var(--atlas-easing-emphasized),
-    height    var(--atlas-duration-base) var(--atlas-easing-emphasized);
+    transform var(--atlas-motion-move-duration) var(--atlas-motion-move-easing),
+    height    var(--atlas-motion-move-duration) var(--atlas-motion-move-easing);
 }
 
 .animated.segmented .list[data-orientation="vertical"]::after {
@@ -378,7 +378,7 @@
 
 /* Incoming panel: fades in and rises by spacing-1 — only after the user changes tab. */
 .animated[data-changed] .panel[data-state="active"] {
-  animation: panel-in var(--atlas-duration-base) var(--atlas-easing-emphasized);
+  animation: panel-in var(--atlas-motion-enter-duration) var(--atlas-motion-enter-easing);
 }
 
 @keyframes panel-in {

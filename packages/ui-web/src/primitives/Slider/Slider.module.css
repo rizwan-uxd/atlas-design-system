@@ -168,7 +168,7 @@
   outline: none;
   transition:
     inset-inline-start var(--atlas-duration-fast) var(--atlas-easing-standard),
-    box-shadow         var(--atlas-duration-fast) var(--atlas-easing-standard);
+    box-shadow         var(--atlas-motion-state-duration) var(--atlas-motion-state-easing);
 }
 
 .root[data-orientation="vertical"] .thumb {
@@ -178,7 +178,7 @@
   translate: calc(-50% * var(--_dir)) 50%;
   transition:
     inset-block-end var(--atlas-duration-fast) var(--atlas-easing-standard),
-    box-shadow      var(--atlas-duration-fast) var(--atlas-easing-standard);
+    box-shadow      var(--atlas-motion-state-duration) var(--atlas-motion-state-easing);
 }
 
 /* Hover and dragging: a primary-subtle halo of spacing-1 around the thumb. */

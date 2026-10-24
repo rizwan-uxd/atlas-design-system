@@ -19,7 +19,7 @@
  *      reason in packages/governance/private-vars.allow.json
  *   8. no-raw-length — no hardcoded length in packages/ui-web/src (not @media, em, or visually-hidden 1px)
  *   9. breakpoint-literal-consistency — --atlas-breakpoint-*, @theme --breakpoint-* and @media widths agree
- *  10. reduced-motion-required — component CSS using --atlas-duration-* has a prefers-reduced-motion block
+ *  10. reduced-motion-required — component CSS using --atlas-duration-* or a motion role has a prefers-reduced-motion block
  *  M5.1:
  *  11. semantic-radius — component CSS and component-token aliases use a radius role
  *      (item|control|surface|pill); a primitive step is listed with a reason and its exact count in
@@ -32,6 +32,9 @@
  *  M5.3:
  *  13. semantic-type — a component font-size names a type role, a component font-size token or a private
  *      var; a step of --atlas-font-size-* or --atlas-text-* is listed with a reason and exact count (DEC-088)
+ *  M5.4:
+ *  14. semantic-motion — component motion names a motion role; a primitive duration or easing is listed
+ *      with a reason and exact count (DEC-089). --atlas-duration-instant (reduced-motion off switch) is exempt
  *
  * Allow-list:
  *   - Lines containing "token-lint-disable-next-line" suppress the NEXT line only.
@@ -55,7 +58,7 @@ import fs from "fs"
 import path from "path"
 import { fileURLToPath } from "url"
 import { BEGIN, lintComponentTokens } from "../../scripts/lib/component-tokens.mjs"
-import { privateVarViolations, rawLengths, breakpointViolations, reducedMotionMissing, semanticRadiusViolations, semanticSpacingViolations, semanticTypeViolations } from "../../scripts/lib/token-rules.mjs"
+import { privateVarViolations, rawLengths, breakpointViolations, reducedMotionMissing, semanticRadiusViolations, semanticSpacingViolations, semanticTypeViolations, semanticMotionViolations } from "../../scripts/lib/token-rules.mjs"
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const ROOT = path.resolve(__dirname, "../..")
@@ -273,9 +276,9 @@ const bp = breakpointViolations(tokenCss, [{ file: TOKEN_REL, src: tokenCss }, .
 bp.violations.forEach(add("breakpoint-literal-consistency"))
 inspected["breakpoint-literal-consistency"] = bp.inspected
 
-const animated = componentCss.filter((s) => /--atlas-duration-/.test(s.src))
+const animated = componentCss.filter((s) => /--atlas-(?:duration|motion)-/.test(s.src))
 for (const { file, src } of animated) {
-  if (reducedMotionMissing(src)) violations.push({ file, line: 0, rule: "reduced-motion-required", text: "uses --atlas-duration-* with no @media (prefers-reduced-motion) block" })
+  if (reducedMotionMissing(src)) violations.push({ file, line: 0, rule: "reduced-motion-required", text: "uses --atlas-duration-* or a motion role with no @media (prefers-reduced-motion) block" })
 }
 inspected["reduced-motion-required"] = animated.length
 
@@ -300,6 +303,11 @@ inspected["semantic-spacing"] = ss.inspected
 const st = semanticTypeViolations(componentCss, primitivesAllow)
 st.violations.forEach(add("semantic-type"))
 inspected["semantic-type"] = st.inspected
+
+// semantic-motion (M5.4): component CSS only.
+const sm = semanticMotionViolations(componentCss, primitivesAllow)
+sm.violations.forEach(add("semantic-motion"))
+inspected["semantic-motion"] = sm.inspected
 
 // ─── Report ──────────────────────────────────────────────────────────────────
 

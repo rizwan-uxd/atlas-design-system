@@ -185,9 +185,9 @@ Result sources read: `atlas-verify`, `vitest`, `playwright`, `atlas-sync`, `regi
 
 | Metric | Target | Status | Check | Measurable at |
 |---|---:|---|---|---|
-| Token-name drift | 0 | **passing** — 0 drift — all 501 Figma variables and 470 code tokens | `tokens.name-drift` | D1 option B (full variable table) |
-| Missing code tokens | 0 | **failing** — 2 drift — all 501 Figma variables and 470 code tokens | `tokens.missing-in-code` | D1 option B (full variable table) |
-| Missing Figma tokens | 0 | **failing** — 15 drift — all 501 Figma variables and 470 code tokens | `tokens.missing-in-figma` | D1 option B (full variable table) |
+| Token-name drift | 0 | **passing** — 0 drift — all 513 Figma variables and 482 code tokens | `tokens.name-drift` | D1 option B (full variable table) |
+| Missing code tokens | 0 | **failing** — 2 drift — all 513 Figma variables and 482 code tokens | `tokens.missing-in-code` | D1 option B (full variable table) |
+| Missing Figma tokens | 0 | **failing** — 15 drift — all 513 Figma variables and 482 code tokens | `tokens.missing-in-figma` | D1 option B (full variable table) |
 | All supported brand modes compile successfully | pass | not measurable | `design.brand-modes` | M5.6 |
 | Critical visual regression tests pass for every brand mode | pass | not measurable | `visual > sandbox` | now (light/dark only), M5.6 (brands) |
 
@@ -1050,6 +1050,38 @@ doc says so plainly.
 
   None of the 21 inherit-only rules changed any rendered element. The overlay changes are reviewed as images in the `visual-baseline.yml` PR, never bundled with the CSS change.
 - **Figma gaps:** Switch has no text layers, and Select's label and content are not drawn. These are for the next sync's discrepancy list.
+
+---
+
+### M5.4 motion — ✅ DONE 2026-10-24 (1 session, Kind B: listed timing changes)
+
+**As built** (plan `docs/superpowers/plans/2026-10-24-m5-4-motion.md`; DEC-089, CAND-069):
+
+- **Roles (owner-chosen, by intent):** each is a duration + easing pair.
+
+  | Role | Duration | Easing |
+  |---|---|---|
+  | `motion-state` | fast | standard |
+  | `motion-move` | base | emphasized |
+  | `motion-enter` | base | emphasized |
+  | `motion-exit` | base | exit |
+  | `motion-enter-quick` | fast | standard |
+  | `motion-exit-quick` | fast | exit |
+
+  - **CSS:** `--atlas-motion-<role>-duration|easing`, 12 alias tokens.
+  - **Figma:** 12 documentation variables in `Atlas/Semantic` (`VariableID:1106:2-13`, empty scopes). Figma cannot bind prototype timing.
+  - **JS:** `MotionTokens.roles` is read from CSS, and the presets `quick`/`enter`/`exit` use state/enter/exit.
+- **Reduced motion first:** `reduced-motion-required` now detects role tokens as well as `--atlas-duration-*`, so no animated file drops out of the check (30 files).
+- **Migration:**
+  - 101 transition and animation items on roles.
+  - 15 stay primitive with reasons: loops, the Checkbox mark draw-in, and pointer- or scroll-following motion.
+  - Ratchet: token-lint `semantic-motion`. `--atlas-duration-instant` is exempt.
+- **Listed changes:**
+  - Alert exit and Toast enter easing.
+  - Toast exit 120 → 200ms.
+  - NavBar, Sidebar and Progress move easing → emphasized.
+  - Preset `enter` easing and `exit` duration.
+- **Proof:** computed motion dumps in four modes (light/dark × reduced motion off/on). With motion on, only the rendered listed rows changed: Progress fill and Sidebar easing. Under `prefers-reduced-motion`, nothing changed. Screenshots are expected unchanged, because visual tests disable animations.
 
 ---
 

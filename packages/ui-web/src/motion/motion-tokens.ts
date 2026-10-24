@@ -1,6 +1,6 @@
 /**
- * Atlas motion tokens — the JS view of the duration and easing CSS variables and
- * `--atlas-opacity-pulse` in packages/tokens/atlas.tokens.css.
+ * Atlas motion tokens — the JS view of the duration and easing CSS variables, the six motion role pairs
+ * (M5.4, DEC-089) and `--atlas-opacity-pulse` in packages/tokens/atlas.tokens.css.
  *
  * `motion/react` needs numbers (seconds) and bezier tuples, not CSS strings. The CSS file stays the
  * single source of truth: `resolveMotionTokens` reads the live variables, and `defaultMotionTokens`
@@ -11,13 +11,31 @@ export type Bezier = readonly [number, number, number, number]
 
 export type MotionDurationName = "instant" | "fast" | "base" | "slow" | "spin" | "pulse"
 export type MotionEasingName = "linear" | "standard" | "emphasized" | "exit"
+/** Motion roles by intent (DEC-089): each pairs a duration with an easing. */
+export type MotionRoleName = "state" | "move" | "enter" | "exit" | "enter-quick" | "exit-quick"
+export interface MotionRole {
+  /** Seconds. */
+  duration: number
+  easing: Bezier
+}
 
 export interface MotionTokens {
   /** Seconds. */
   duration: Record<MotionDurationName, number>
   easing: Record<MotionEasingName, Bezier>
+  roles: Record<MotionRoleName, MotionRole>
   /** Lowest opacity of a loading pulse (`--atlas-opacity-pulse`). */
   pulseOpacity: number
+}
+
+/** The CSS variables behind each role, spelled out so every name is a declared token. */
+const ROLE_VARS: Record<MotionRoleName, readonly [duration: string, easing: string]> = {
+  state: ["--atlas-motion-state-duration", "--atlas-motion-state-easing"],
+  move: ["--atlas-motion-move-duration", "--atlas-motion-move-easing"],
+  enter: ["--atlas-motion-enter-duration", "--atlas-motion-enter-easing"],
+  exit: ["--atlas-motion-exit-duration", "--atlas-motion-exit-easing"],
+  "enter-quick": ["--atlas-motion-enter-quick-duration", "--atlas-motion-enter-quick-easing"],
+  "exit-quick": ["--atlas-motion-exit-quick-duration", "--atlas-motion-exit-quick-easing"],
 }
 
 export const defaultMotionTokens: MotionTokens = {
@@ -27,6 +45,14 @@ export const defaultMotionTokens: MotionTokens = {
     standard: [0.2, 0, 0, 1],
     emphasized: [0.3, 0, 0, 1],
     exit: [0.4, 0, 1, 1],
+  },
+  roles: {
+    state: { duration: 0.12, easing: [0.2, 0, 0, 1] },
+    move: { duration: 0.2, easing: [0.3, 0, 0, 1] },
+    enter: { duration: 0.2, easing: [0.3, 0, 0, 1] },
+    exit: { duration: 0.2, easing: [0.4, 0, 1, 1] },
+    "enter-quick": { duration: 0.12, easing: [0.2, 0, 0, 1] },
+    "exit-quick": { duration: 0.12, easing: [0.4, 0, 1, 1] },
   },
   pulseOpacity: 0.5,
 }
@@ -58,6 +84,10 @@ export function resolveMotionTokens(element?: Element): MotionTokens {
 
   const d = defaultMotionTokens
   const pulse = Number.parseFloat(read("--atlas-opacity-pulse"))
+  const role = (name: MotionRoleName): MotionRole => ({
+    duration: parseDuration(read(ROLE_VARS[name][0]), d.roles[name].duration),
+    easing: parseBezier(read(ROLE_VARS[name][1]), d.roles[name].easing),
+  })
 
   return {
     duration: {
@@ -73,6 +103,14 @@ export function resolveMotionTokens(element?: Element): MotionTokens {
       standard: parseBezier(read("--atlas-easing-standard"), d.easing.standard),
       emphasized: parseBezier(read("--atlas-easing-emphasized"), d.easing.emphasized),
       exit: parseBezier(read("--atlas-easing-exit"), d.easing.exit),
+    },
+    roles: {
+      state: role("state"),
+      move: role("move"),
+      enter: role("enter"),
+      exit: role("exit"),
+      "enter-quick": role("enter-quick"),
+      "exit-quick": role("exit-quick"),
     },
     pulseOpacity: Number.isFinite(pulse) ? pulse : d.pulseOpacity,
   }

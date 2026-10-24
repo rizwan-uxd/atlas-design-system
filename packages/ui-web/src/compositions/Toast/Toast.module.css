@@ -120,11 +120,11 @@
 /* Swipe follows the inline end; Radix exposes the pointer offset as a variable. */
 
 .root[data-state="open"] {
-  animation: toast-in var(--atlas-duration-base) var(--atlas-easing-standard);
+  animation: toast-in var(--atlas-motion-enter-duration) var(--atlas-motion-enter-easing);
 }
 
 .root[data-state="closed"] {
-  animation: toast-out var(--atlas-duration-fast) var(--atlas-easing-exit);
+  animation: toast-out var(--atlas-motion-exit-duration) var(--atlas-motion-exit-easing);
 }
 
 .root[data-swipe="move"] {
@@ -133,11 +133,11 @@
 
 .root[data-swipe="cancel"] {
   transform: translateX(0);
-  transition: transform var(--atlas-duration-fast) var(--atlas-easing-standard);
+  transition: transform var(--atlas-motion-state-duration) var(--atlas-motion-state-easing);
 }
 
 .root[data-swipe="end"] {
-  animation: toast-swipe-out var(--atlas-duration-fast) var(--atlas-easing-exit);
+  animation: toast-swipe-out var(--atlas-motion-exit-quick-duration) var(--atlas-motion-exit-quick-easing);
 }
 
 @keyframes toast-in {

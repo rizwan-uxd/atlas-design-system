@@ -183,7 +183,7 @@
   border-radius: var(--atlas-radius-pill);
   color: inherit;
   cursor: pointer;
-  transition: opacity var(--atlas-duration-fast) var(--atlas-easing-standard);
+  transition: opacity var(--atlas-motion-state-duration) var(--atlas-motion-state-easing);
 }
 
 .addButton[data-shape="squircle"] {
@@ -220,7 +220,7 @@
   display: inline-flex;
   flex-shrink: 0;
   border-radius: var(--atlas-radius-pill);
-  transition: transform var(--atlas-duration-base) var(--atlas-easing-emphasized);
+  transition: transform var(--atlas-motion-move-duration) var(--atlas-motion-move-easing);
 }
 
 .member[data-shape="squircle"] {

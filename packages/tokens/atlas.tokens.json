@@ -281,6 +281,14 @@
         "standard":   { "$type": "cubicBezier", "$value": [0.2, 0, 0, 1] },
         "emphasized": { "$type": "cubicBezier", "$value": [0.3, 0, 0, 1] },
         "exit":       { "$type": "cubicBezier", "$value": [0.4, 0, 1, 1] }
+      },
+      "role": {
+        "state": { "$type": "transition", "$value": { "duration": "{atlas.motion.duration.fast}", "delay": "0ms", "timingFunction": "{atlas.motion.easing.standard}" } },
+        "move": { "$type": "transition", "$value": { "duration": "{atlas.motion.duration.base}", "delay": "0ms", "timingFunction": "{atlas.motion.easing.emphasized}" } },
+        "enter": { "$type": "transition", "$value": { "duration": "{atlas.motion.duration.base}", "delay": "0ms", "timingFunction": "{atlas.motion.easing.emphasized}" } },
+        "exit": { "$type": "transition", "$value": { "duration": "{atlas.motion.duration.base}", "delay": "0ms", "timingFunction": "{atlas.motion.easing.exit}" } },
+        "enter-quick": { "$type": "transition", "$value": { "duration": "{atlas.motion.duration.fast}", "delay": "0ms", "timingFunction": "{atlas.motion.easing.standard}" } },
+        "exit-quick": { "$type": "transition", "$value": { "duration": "{atlas.motion.duration.fast}", "delay": "0ms", "timingFunction": "{atlas.motion.easing.exit}" } }
       }
     },
     "shadow": {

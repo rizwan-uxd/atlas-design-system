@@ -10,7 +10,7 @@
   "sizes": [],
   "props": [],
   "subcomponents": ["TooltipProvider", "TooltipTrigger", "TooltipContent"],
-  "tokensUsed": ["--atlas-background", "--atlas-content-width-sm", "--atlas-duration-fast", "--atlas-easing-exit", "--atlas-easing-standard", "--atlas-font-sans", "--atlas-foreground", "--atlas-radius-md", "--atlas-radius-sm", "--atlas-spacing-0_5", "--atlas-spacing-1_5", "--atlas-spacing-2", "--atlas-spacing-3", "--atlas-spacing-px", "--atlas-type-caption-line-height", "--atlas-type-caption-size", "--atlas-type-caption-weight", "--atlas-z-tooltip"],
+  "tokensUsed": ["--atlas-background", "--atlas-content-width-sm", "--atlas-font-sans", "--atlas-foreground", "--atlas-motion-enter-quick-duration", "--atlas-motion-enter-quick-easing", "--atlas-motion-exit-quick-duration", "--atlas-motion-exit-quick-easing", "--atlas-radius-md", "--atlas-radius-sm", "--atlas-spacing-0_5", "--atlas-spacing-1_5", "--atlas-spacing-2", "--atlas-spacing-3", "--atlas-spacing-px", "--atlas-type-caption-line-height", "--atlas-type-caption-size", "--atlas-type-caption-weight", "--atlas-z-tooltip"],
   "figmaNodeId": "645:397",
   "figmaFileKey": "cKYhfaHLCoyMHi9nKr63Ig",
   "figmaProperties": { "Side": ["bottom", "top", "start", "end"] },

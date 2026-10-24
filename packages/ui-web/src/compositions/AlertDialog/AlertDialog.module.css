@@ -16,11 +16,11 @@
 }
 
 .overlay[data-state="open"] {
-  animation: overlayShow var(--atlas-duration-fast) var(--atlas-easing-standard);
+  animation: overlayShow var(--atlas-motion-enter-quick-duration) var(--atlas-motion-enter-quick-easing);
 }
 
 .overlay[data-state="closed"] {
-  animation: overlayHide var(--atlas-duration-fast) var(--atlas-easing-exit);
+  animation: overlayHide var(--atlas-motion-exit-quick-duration) var(--atlas-motion-exit-quick-easing);
 }
 
 @keyframes overlayShow {
@@ -60,11 +60,11 @@
 }
 
 .content[data-state="open"] {
-  animation: contentShow var(--atlas-duration-base) var(--atlas-easing-emphasized);
+  animation: contentShow var(--atlas-motion-enter-duration) var(--atlas-motion-enter-easing);
 }
 
 .content[data-state="closed"] {
-  animation: contentHide var(--atlas-duration-base) var(--atlas-easing-exit);
+  animation: contentHide var(--atlas-motion-exit-duration) var(--atlas-motion-exit-easing);
 }
 
 @keyframes contentShow {

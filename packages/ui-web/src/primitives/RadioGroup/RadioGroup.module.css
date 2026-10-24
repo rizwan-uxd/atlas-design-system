@@ -54,8 +54,8 @@
   color: var(--atlas-radio-foreground);
   cursor: inherit;
   transition:
-    background-color var(--atlas-duration-fast) var(--atlas-easing-standard),
-    border-color     var(--atlas-duration-fast) var(--atlas-easing-standard);
+    background-color var(--atlas-motion-state-duration) var(--atlas-motion-state-easing),
+    border-color     var(--atlas-motion-state-duration) var(--atlas-motion-state-easing);
 }
 
 .input::before {
@@ -65,7 +65,7 @@
   border-radius: var(--atlas-radius-pill);
   background-color: currentColor;
   transform: scale(0);
-  transition: transform var(--atlas-duration-fast) var(--atlas-easing-standard);
+  transition: transform var(--atlas-motion-state-duration) var(--atlas-motion-state-easing);
 }
 
 .input:checked::before {
@@ -178,8 +178,8 @@
   border-radius: var(--atlas-radio-card-radius);
   background-color: var(--atlas-radio-card-background);
   transition:
-    border-color     var(--atlas-duration-fast) var(--atlas-easing-standard),
-    background-color var(--atlas-duration-fast) var(--atlas-easing-standard);
+    border-color     var(--atlas-motion-state-duration) var(--atlas-motion-state-easing),
+    background-color var(--atlas-motion-state-duration) var(--atlas-motion-state-easing);
 }
 
 .root[data-variant="card"][data-checked] {

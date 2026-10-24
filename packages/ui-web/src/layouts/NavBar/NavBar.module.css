@@ -24,9 +24,9 @@
   font-family: var(--atlas-font-sans);
   box-sizing: border-box;
   transition:
-    background-color var(--atlas-duration-fast) var(--atlas-easing-standard),
-    box-shadow       var(--atlas-duration-fast) var(--atlas-easing-standard),
-    border-color     var(--atlas-duration-fast) var(--atlas-easing-standard);
+    background-color var(--atlas-motion-state-duration) var(--atlas-motion-state-easing),
+    box-shadow       var(--atlas-motion-state-duration) var(--atlas-motion-state-easing),
+    border-color     var(--atlas-motion-state-duration) var(--atlas-motion-state-easing);
 }
 
 /* ── Sizes ────────────────────────────────────────────────────── */
@@ -163,8 +163,8 @@
   border-block-end: var(--atlas-border-width-2) solid transparent;
   outline: none;
   transition:
-    color        var(--atlas-duration-fast) var(--atlas-easing-standard),
-    border-color var(--atlas-duration-fast) var(--atlas-easing-standard);
+    color        var(--atlas-motion-state-duration) var(--atlas-motion-state-easing),
+    border-color var(--atlas-motion-state-duration) var(--atlas-motion-state-easing);
 }
 
 .link:hover {
@@ -246,7 +246,7 @@
   height: var(--atlas-border-width-2);                            /* 2px */
   background-color: currentColor;
   border-radius: var(--atlas-radius-pill);
-  transition: opacity var(--atlas-duration-fast) var(--atlas-easing-standard);
+  transition: opacity var(--atlas-motion-state-duration) var(--atlas-motion-state-easing);
 }
 
 @media (min-width: 768px) {
@@ -279,9 +279,9 @@
   border-inline-start: var(--atlas-border-width-2) solid transparent;
   outline: none;
   transition:
-    color            var(--atlas-duration-fast) var(--atlas-easing-standard),
-    background-color var(--atlas-duration-fast) var(--atlas-easing-standard),
-    border-color     var(--atlas-duration-fast) var(--atlas-easing-standard);
+    color            var(--atlas-motion-state-duration) var(--atlas-motion-state-easing),
+    background-color var(--atlas-motion-state-duration) var(--atlas-motion-state-easing),
+    border-color     var(--atlas-motion-state-duration) var(--atlas-motion-state-easing);
 }
 
 .drawerLink:hover {
@@ -322,10 +322,10 @@
 .navbarHidden {
   transform: translateY(-100%);
   transition:
-    transform            var(--atlas-duration-base)   var(--atlas-easing-standard),
-    background-color     var(--atlas-duration-fast)   var(--atlas-easing-standard),
-    box-shadow           var(--atlas-duration-fast)   var(--atlas-easing-standard),
-    border-color         var(--atlas-duration-fast)   var(--atlas-easing-standard);
+    transform            var(--atlas-motion-move-duration)   var(--atlas-motion-move-easing),
+    background-color     var(--atlas-motion-state-duration)   var(--atlas-motion-state-easing),
+    box-shadow           var(--atlas-motion-state-duration)   var(--atlas-motion-state-easing),
+    border-color         var(--atlas-motion-state-duration)   var(--atlas-motion-state-easing);
 }
 
 /* ── Reduced motion ───────────────────────────────────────────── */
@@ -368,8 +368,8 @@
   background-color: var(--atlas-background);
   border-block-end: var(--atlas-border-width-1) solid var(--atlas-border);
   transition:
-    background-color var(--atlas-duration-fast) var(--atlas-easing-standard),
-    border-color     var(--atlas-duration-fast) var(--atlas-easing-standard);
+    background-color var(--atlas-motion-state-duration) var(--atlas-motion-state-easing),
+    border-color     var(--atlas-motion-state-duration) var(--atlas-motion-state-easing);
 }
 
 /* Size modifiers — content height only (padding-block-start from safe-top is additive) */
@@ -496,8 +496,8 @@
   outline: none;
   text-decoration: none;
   transition:
-    color       var(--atlas-duration-fast) var(--atlas-easing-standard),
-    border-color var(--atlas-duration-fast) var(--atlas-easing-standard);
+    color       var(--atlas-motion-state-duration) var(--atlas-motion-state-easing),
+    border-color var(--atlas-motion-state-duration) var(--atlas-motion-state-easing);
 }
 
 .tab:focus-visible {

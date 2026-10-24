@@ -1,13 +1,13 @@
-# Handoff: M5.3 type is complete; M5.4 motion is next (Atlas roadmap)
+# Handoff: M5.4 motion is complete; M5.5 shadow is next (Atlas roadmap)
 
-Written 2026-10-22, updated 2026-10-24 after D1 option B, M4 (#108), Phase 4 (#109), M5.1 radius (#110), M5.2 spacing (#112, merged) and M5.3 type (PR opened 2026-10-24). **Read in this order: `AGENTS.md` → `docs/ATLAS-DELIVERY-ROADMAP.md` → this file.**
+Written 2026-10-22, updated 2026-10-24 after D1 option B, M4 (#108), Phase 4 (#109), M5.1 radius (#110), M5.2 spacing (#112), M5.3 type (#113, merged) and M5.4 motion (PR opened 2026-10-24). **Read in this order: `AGENTS.md` → `docs/ATLAS-DELIVERY-ROADMAP.md` → this file.**
 The roadmap is normative now (referenced from `AGENTS.md` §2) and owns the phase order; this file is
 only current state plus the gotchas that will bite again. **This is the only handoff doc** — earlier
 ones were deleted and live in git history.
 
 ## Progress (update at the end of every session, and report it at the start and end of each)
 Counted in sessions, using the roadmap's own estimates (midpoint where it gives a range). Change N
-and say so when an estimate changes. **Roadmap: 20 of ~28 sessions done (~71%). M5.3 type is complete in 1 session (Kind B): eight composite text roles in Figma (variables plus `Type/*` text styles on 913 layers) and CSS (25 tokens); 46 rules on roles; 48 uses kept primitive with reasons; the token-lint `semantic-type` ratchet; and the listed visual changes proven by a computed-style diff (plan `docs/superpowers/plans/2026-10-24-m5-3-type.md`, roadmap §M5 "M5.3 type"). Its image diff is reviewed in the `visual-baseline.yml` PR before the M5.3 PR can merge. Next: session 21 of ~28 = M5.4 motion (Kind B).**
+and say so when an estimate changes. **Roadmap: 21 of ~28 sessions done (~75%). M5.4 motion is complete in 1 session (Kind B): six motion roles by intent (duration + easing), 12 CSS tokens and 12 Figma documentation variables; 101 transition and animation items on roles; JS presets on roles; `reduced-motion-required` now sees role tokens; the token-lint `semantic-motion` ratchet; listed timing changes proven by computed motion dumps in four modes, with no change under reduced motion (plan `docs/superpowers/plans/2026-10-24-m5-4-motion.md`, roadmap §M5 "M5.4 motion"). Next: session 22 of ~28 = M5.5 shadow (Kind B, the only non-colour family with a dark override).**
 
 | Phase | Sessions (est.) | Done | Status | PR |
 |---|---|---|---|---|
@@ -20,30 +20,39 @@ and say so when an estimate changes. **Roadmap: 20 of ~28 sessions done (~71%). 
 | 2d — token work, zero new tokens | 1.5 | 1 | ✅ in 1 session (est. 1.5) | #106 |
 | **M4 — runtime vertical slice** | 3.5 | 3.5 | ✅ all 12 M4 rows measured: 11 pass, size fails (report-only, DEC-085) | #108 |
 | Phase 4 — enforcement hardened | 2.5 | 3 | ✅ in 3 sessions (est. range 2–3) | #109 |
-| **M5 — semantic tokens + brands** | 7 | 3 | 🔄 M5.1 radius ✅ (DEC-086), M5.2 spacing ✅ (DEC-087), M5.3 type ✅ (DEC-088); next M5.4 motion (Kind B) | #110, #112, M5.3 PR |
+| **M5 — semantic tokens + brands** | 7 | 4 | 🔄 M5.1 radius ✅ (DEC-086), M5.2 spacing ✅ (DEC-087), M5.3 type ✅ (DEC-088), M5.4 motion ✅ (DEC-089); next M5.5 shadow (Kind B) | #110, #112, #113, M5.4 PR |
 | Phase 6 — filtered agent catalog | 2.5 | 0 | ⏳ | |
 | Phase 7 — metrics as release gates | 1.5 | 0 | ⏳ | |
-| **Total** | **~28** | **20** | **~71%** | |
+| **Total** | **~28** | **21** | **~75%** | |
 
 Metric table (the roadmap's scoreboard, CI result-derived since Phase 4): **23 passing · 3 failing · 10 not measurable** of 36 (CI run on #110). The 3 failing rows are real findings, not regressions: missing code tokens (2, DISC-106), missing Figma tokens (15, DISC-107) and the report-only protocol size (0.308, DEC-085). M5.1 and M5.2 changed no status.
 M3 exit: **5/6 types `registryComplete`** (Text deferred: no Text component), **47/47 generated
 contracts** (the 44 hand-written ones deleted), **2/2 target metrics passing** (plus registry-states),
 each over the registered subset (4/47 components registered).
 
-## Start here (session 21, the next fresh session)
-1. **Report progress first** (owner preference): doing / done / % / session X of N. That is 20 of ~28 done (~71%), and this is session 21.
-2. `git fetch origin`, then check that the M5.3 PR **and its `visual-baseline/<run>` PR** both merged. `Visual Regression` is a required check, so the M5.3 PR cannot merge until you approve and merge the baseline PR into its branch. Then branch from `origin/main` and check `gh pr list`.
-3. **Ask the owner one question before any work:** go to **M5.4 motion**, or first act on the open candidates. Radius: CAND-057 to 060. Spacing: CAND-061 to 065. Type: CAND-066 control text scale, 067 inline title, 068 nav label.
-4. **M5.4 motion is Kind B.** It interacts with the 36 reduced-motion blocks, and `reduced-motion-required` is already live. Read roadmap §M5, "Kind B", and the M5.3 "As built". Motion tokens are CSS-first (AGENTS §11): `motion-tokens.ts` reads them, and `tests/motion.test.ts` fails until `defaultMotionTokens` matches. Re-check `prefers-reduced-motion` and dark mode (roadmap). Propose the role set to the owner (AGENTS §6), then plan (gate 1), then Figma (gate 2). Figma `Atlas/Primitives` already holds the duration and easing tokens.
-5. **Reuse the M5.3 method for a Kind B stage:**
-   - list every expected change before code
-   - computed-style before/after dumps (`.atlas-pull/dump-type.mjs` pattern; swap the properties)
-   - a separate `visual-baseline.yml` PR for the images
-   - DEC with before/after values
-6. **Labels:** `atlas-approved-new` for new tokens, plus `atlas-native-thaw` only if the derived native file changes. M5.3 did not need it.
+## Start here (session 22, the next fresh session)
+1. **Report progress first** (owner preference): doing / done / % / session X of N. That is 21 of ~28 done (~75%), and this is session 22.
+2. `git fetch origin`, check that the M5.4 PR merged, then branch from `origin/main` and check `gh pr list`.
+3. **Ask the owner one question before any work:** go to **M5.5 shadow**, or first act on the open candidates. Radius: CAND-057 to 060. Spacing: 061 to 065. Type: 066 to 068. Motion: 069 mark draw-in. Or start the proposed sandbox-screenshot fix, so one section's height change stops re-shooting every section below it.
+4. **M5.5 shadow is Kind B** and the only non-colour family with a dark override.
+   - Shadows are missing in Figma today: DISC-107 lists `--atlas-shadow-sm|md|lg|xl` and the card elevated shadows as missing Figma tokens. **Settle with the owner first** whether Figma gets effect styles or variables for them. Figma effect styles can bind colour, offset, radius and spread to variables.
+   - Roadmap: re-check dark mode and reduced motion for M5.5.
+   - Propose roles (AGENTS §6), then plan (gate 1), then Figma (gate 2).
+   - Shadows are static, so unlike motion, any change shows in screenshots. Expect a `visual-baseline.yml` PR. That workflow cannot open PRs (repo setting off), so open it by hand from its pushed branch, as #114 was.
+5. **Reuse the Kind B method:**
+   - list every change before code
+   - computed-style before/after dumps (`.atlas-pull/dump-*.mjs`; swap the properties to `box-shadow` and `filter`) in light **and dark**
+   - a DEC with before/after values
+   - refresh the metric region from the committed snapshot before pushing when the variable count changes (`metrics-report --results <last CI metrics-input>`)
+6. **Labels:** `atlas-approved-new`, plus `atlas-native-thaw` only if the native file changes (check `tokens:build`; shadows may be derived there).
 
 ## State
-- **M5.3 type is in its PR (2026-10-24, commits `c99a3d2` PR-0 and `120be1f` PR-1, plus `f9b4e47`, the metric-region refresh for M5.2).**
+- **M5.4 motion is in its PR (2026-10-24, commits `8ef442a` PR-0 and `0676add` PR-1).**
+  - Figma: `motion-<role>-duration|easing` in `Atlas/Semantic` (`VariableID:1106:2-13`).
+  - JS: `MotionTokens.roles`; `ROLE_VARS` spells out the CSS names, because `atlas-verify` flags template-built `--atlas-motion-${x}` names as undefined tokens.
+  - token-lint `semantic-motion`. The allowlist holds radius 36 + spacing 106 + type 35 + motion 17 entries.
+  - Latest ids: **DEC-089, CAND-069, DISC-108**. The variable table holds 513 variables (checksum `c1047803`).
+- **M5.3 type merged (#113, `aa83736`, 2026-10-24), with its baseline PR #114.** Earlier as-built notes: (2026-10-24, commits `c99a3d2` PR-0 and `120be1f` PR-1, plus `f9b4e47`, the metric-region refresh for M5.2).**
   - Figma: `type-<role>-size` lives in `Atlas/Responsive Type`; `-weight|-line-height` and `type-overline-letter-spacing` live in `Atlas/Semantic` (`VariableID:1099:2-26`).
   - Styles `Type/Heading|Title|Body|Body-sm|Label|Caption|Overline|Stat` bind size and weight, with line-height and letter-spacing as static percents.
   - token-lint `semantic-type` reads `font-size` only. The allowlist holds 36 radius + 106 spacing + 35 type entries.
@@ -80,7 +89,7 @@ each over the registered subset (4/47 components registered).
   unpublished colour ramps, 9 mode expansions. `figmaBound` (option C) stays as a cross-check. Refresh
   recipe: "Variable table" in `.agents/skills/atlas-figma-sync/references/pull-file.md`.
 - 47 web components (35 spec-complete, 12 scaffolded), 17 native (**ports paused by the user**),
-  15 patterns. Latest ids: see the M5.3 bullet above. Snapshot pulled from Figma 2026-10-21.
+  15 patterns. Latest ids: see the M5.4 bullet above. Snapshot pulled from Figma 2026-10-21.
 - Benchmarks: waves 1–3 complete (T1–T19), written up in `docs/HARNESS.md` §6–§7. M1 and M2 changed
   `scripts/` and the atlas-verify skill, so `benchmarks/phase-9/pins.json` no longer matches; re-pin
   before the next benchmark run.
@@ -268,6 +277,9 @@ Search and filter frames (#57); disabled opacity bound (#58); StatCard icon, cli
    - The 18 components stamped on 2026-10-15 were compared with live Figma variant properties on 2026-10-19: 0 differences from the snapshot (Stepper's `Viewport` is intentionally not a code prop or Code Connect mapping). Not compared: booleans, text and instance-swap properties, visuals, tokens.
 
 ## Gotchas learned (they will bite again)
+- **`atlas-verify` `tokens` flags any `--atlas-<name>-` string that is not a declared token,** including template literals and doc comments in `.ts` (`--atlas-motion-${name}-duration`). Spell out the full names.
+- **`visual-baseline.yml` cannot open its PR:** the repo setting "Allow GitHub Actions to create and approve pull requests" is off. The run still pushes `visual-baseline/<run id>`, so open the PR by hand with base = the stage branch. The owner decides on the setting.
+- **A stage's own component tests may assert token names** (`Progress.test.tsx` lists the CSS variables it expects). Search `packages/ui-web/tests` for the old names before migrating.
 - **Figma reads a bound line-height or letter-spacing FLOAT as pixels.** Line-height/normal (1.5) bound to a text style became 1.5px. Text styles bind `fontSize` and `fontWeight` only and carry line-height and letter-spacing as static percents (DEC-088). Probe with a temporary style before binding a new kind of variable.
 - **Text inside nested instances is styled at its source component.** Chart Stat, Chart Legend Item, BreadcrumbItem, Dropdown Menu Item, Step, Radio Group Item and Password strength each own their text. Styling only the outer set's instance children leaves the source unstyled.
 - **A Kind B dump only sees what the sandbox renders.** Closed overlays (Dialog, Toast, Tooltip, menus, Select) and blocks not on `/` never appear in the computed-style diff, so the visual stories are their only check. Say so in the PR.

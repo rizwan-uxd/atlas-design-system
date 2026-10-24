@@ -21,8 +21,8 @@
   cursor: default;
   user-select: none;
   transition:
-    border-color     var(--atlas-duration-fast) var(--atlas-easing-standard),
-    background-color var(--atlas-duration-fast) var(--atlas-easing-standard);
+    border-color     var(--atlas-motion-state-duration) var(--atlas-motion-state-easing),
+    background-color var(--atlas-motion-state-duration) var(--atlas-motion-state-easing);
 }
 
 .trigger:hover:not(:disabled):not([aria-invalid="true"]) {
@@ -92,7 +92,7 @@
   align-items: center;
   justify-content: center;
   color: var(--atlas-select-chevron-foreground);
-  transition: transform var(--atlas-duration-fast) var(--atlas-easing-standard);
+  transition: transform var(--atlas-motion-state-duration) var(--atlas-motion-state-easing);
 }
 
 .chevron > svg {

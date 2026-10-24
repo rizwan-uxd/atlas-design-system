@@ -16,11 +16,11 @@
 }
 
 .overlay[data-state="open"] {
-  animation: overlayShow var(--atlas-duration-fast) var(--atlas-easing-standard);
+  animation: overlayShow var(--atlas-motion-enter-quick-duration) var(--atlas-motion-enter-quick-easing);
 }
 
 .overlay[data-state="closed"] {
-  animation: overlayHide var(--atlas-duration-fast) var(--atlas-easing-exit);
+  animation: overlayHide var(--atlas-motion-exit-quick-duration) var(--atlas-motion-exit-quick-easing);
 }
 
 @keyframes overlayShow {
@@ -87,19 +87,19 @@
 }
 
 .content[data-side="end"][data-state="open"] {
-  animation: drawerEndShow var(--atlas-duration-base) var(--atlas-easing-emphasized);
+  animation: drawerEndShow var(--atlas-motion-enter-duration) var(--atlas-motion-enter-easing);
 }
 
 .content[data-side="end"][data-state="closed"] {
-  animation: drawerEndHide var(--atlas-duration-base) var(--atlas-easing-exit);
+  animation: drawerEndHide var(--atlas-motion-exit-duration) var(--atlas-motion-exit-easing);
 }
 
 .content[data-side="start"][data-state="open"] {
-  animation: drawerStartShow var(--atlas-duration-base) var(--atlas-easing-emphasized);
+  animation: drawerStartShow var(--atlas-motion-enter-duration) var(--atlas-motion-enter-easing);
 }
 
 .content[data-side="start"][data-state="closed"] {
-  animation: drawerStartHide var(--atlas-duration-base) var(--atlas-easing-exit);
+  animation: drawerStartHide var(--atlas-motion-exit-duration) var(--atlas-motion-exit-easing);
 }
 
 @keyframes drawerEndShow   { from { opacity: 0; transform: translateX(100%); } to { opacity: 1; transform: translateX(0); } }

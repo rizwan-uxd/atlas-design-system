@@ -261,11 +261,11 @@
 }
 
 .alert {
-  animation: alertEnter var(--atlas-duration-base) var(--atlas-easing-emphasized) both;
+  animation: alertEnter var(--atlas-motion-enter-duration) var(--atlas-motion-enter-easing) both;
 }
 
 .dismissing {
-  animation: alertExit var(--atlas-duration-base) var(--atlas-easing-standard) forwards;
+  animation: alertExit var(--atlas-motion-exit-duration) var(--atlas-motion-exit-easing) forwards;
   overflow: hidden;
   pointer-events: none;
 }

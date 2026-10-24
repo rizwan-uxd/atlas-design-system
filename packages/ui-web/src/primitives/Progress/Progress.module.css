@@ -59,7 +59,7 @@
 
 .progress[data-state="determinate"] .fill {
   inline-size: calc(var(--progress, 0) * 1%);
-  transition: inline-size var(--atlas-duration-base) var(--atlas-easing-standard);
+  transition: inline-size var(--atlas-motion-move-duration) var(--atlas-motion-move-easing);
 }
 
 /* ── Indeterminate ─────────────────────────────────────────────── */

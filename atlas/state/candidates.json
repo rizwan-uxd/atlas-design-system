@@ -254,6 +254,14 @@
       "composedFrom": "--atlas-font-size-lg|xs and --atlas-text-body-sm on NavBar .brand, .tabLabel and .link",
       "occurrences": 3,
       "note": "Raised by M5.3 (2026-10-24, DEC-088): navigation text has its own size scale per bar size. These rules stay on the primitive scales, allowlisted in packages/governance/token-primitives.allow.json; a new role needs Figma first plus the owner's go-ahead, and is value-changing (Kind B) unless it matches today's values exactly."
+    },
+    {
+      "id": "CAND-069",
+      "name": "Motion role: mark draw-in",
+      "seenIn": ["packages/ui-web/src/primitives/Checkbox"],
+      "composedFrom": "--atlas-duration-fast with --atlas-easing-emphasized on the Checkbox check mark draw-in (atlas-check-in)",
+      "occurrences": 1,
+      "note": "Raised by M5.4 (2026-10-24, DEC-089): a mark drawing itself in is neither a state change (motion-state is standard easing) nor an enter (motion-enter is 200ms). It stays on the primitives, allowlisted in packages/governance/token-primitives.allow.json; the animated icons' emphasis preset (slow + emphasized) is the nearest relative. A new role needs Figma first plus the owner's go-ahead."
     }
   ]
 }
