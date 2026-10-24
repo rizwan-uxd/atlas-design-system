@@ -74,9 +74,9 @@
   grid-column: 2;
   grid-row: 1;
   margin: 0;
-  font-size: var(--atlas-font-size-sm);
-  font-weight: var(--atlas-font-weight-medium);
-  line-height: var(--atlas-line-height-normal);
+  font-size: var(--atlas-type-label-size);
+  font-weight: var(--atlas-type-label-weight);
+  line-height: var(--atlas-type-label-line-height);
   color: var(--atlas-foreground);
   overflow-wrap: anywhere;
 }
@@ -86,9 +86,9 @@
   grid-row: 2;
   margin: 0;
   margin-block-start: var(--atlas-spacing-text-gap);
-  font-size: var(--atlas-font-size-xs);
-  font-weight: var(--atlas-font-weight-regular);
-  line-height: var(--atlas-line-height-snug);
+  font-size: var(--atlas-type-caption-size);
+  font-weight: var(--atlas-type-caption-weight);
+  line-height: var(--atlas-type-caption-line-height);
   color: var(--atlas-foreground-muted);
   overflow-wrap: anywhere;
 }

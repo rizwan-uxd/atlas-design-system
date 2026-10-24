@@ -24,7 +24,7 @@
     { "name": "onDone", "required": false, "type": "() => void" }
   ],
   "subcomponents": [],
-  "tokensUsed": ["--atlas-border", "--atlas-border-subtle", "--atlas-border-width-1", "--atlas-border-width-2", "--atlas-duration-pulse", "--atlas-focus-ring", "--atlas-font-mono", "--atlas-font-sans", "--atlas-font-size-base", "--atlas-font-size-sm", "--atlas-font-size-xs", "--atlas-font-weight-medium", "--atlas-foreground", "--atlas-foreground-muted", "--atlas-foreground-subtle", "--atlas-icon-size-xs", "--atlas-line-height-relaxed", "--atlas-opacity-pulse", "--atlas-radius-sm", "--atlas-radius-surface", "--atlas-spacing-2", "--atlas-spacing-3", "--atlas-spacing-4", "--atlas-spacing-5", "--atlas-spacing-control-gap", "--atlas-spacing-px", "--atlas-spacing-surface-padding", "--atlas-surface"],
+  "tokensUsed": ["--atlas-border", "--atlas-border-subtle", "--atlas-border-width-1", "--atlas-border-width-2", "--atlas-duration-pulse", "--atlas-focus-ring", "--atlas-font-mono", "--atlas-font-sans", "--atlas-font-size-base", "--atlas-font-size-sm", "--atlas-font-size-xs", "--atlas-foreground", "--atlas-foreground-muted", "--atlas-foreground-subtle", "--atlas-icon-size-xs", "--atlas-line-height-relaxed", "--atlas-opacity-pulse", "--atlas-radius-sm", "--atlas-radius-surface", "--atlas-spacing-2", "--atlas-spacing-3", "--atlas-spacing-4", "--atlas-spacing-5", "--atlas-spacing-control-gap", "--atlas-spacing-px", "--atlas-spacing-surface-padding", "--atlas-surface", "--atlas-type-overline-letter-spacing", "--atlas-type-overline-line-height", "--atlas-type-overline-size", "--atlas-type-overline-weight"],
   "figmaNodeId": "731:108",
   "figmaFileKey": "cKYhfaHLCoyMHi9nKr63Ig",
   "figmaProperties": { "Variant": ["default", "typing"], "Size": ["sm", "md", "lg"] },

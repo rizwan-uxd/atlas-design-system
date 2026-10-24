@@ -153,16 +153,17 @@
 
 .label {
   font-family: var(--atlas-font-sans);
-  font-size: var(--atlas-font-size-sm);
-  font-weight: var(--atlas-font-weight-semibold);
-  line-height: var(--atlas-line-height-normal);
+  font-size: var(--atlas-type-label-size);
+  font-weight: var(--atlas-type-label-weight);
+  line-height: var(--atlas-type-label-line-height);
   color: var(--atlas-radio-label-foreground);
 }
 
 .description {
   font-family: var(--atlas-font-sans);
-  font-size: var(--atlas-font-size-xs);
-  line-height: var(--atlas-line-height-normal);
+  font-size: var(--atlas-type-caption-size);
+  font-weight: var(--atlas-type-caption-weight);
+  line-height: var(--atlas-type-caption-line-height);
   color: var(--atlas-radio-description-foreground);
 }
 

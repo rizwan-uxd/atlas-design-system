@@ -131,9 +131,9 @@
 
 .label {
   position: relative;
-  font-size: var(--atlas-text-body-sm);
-  font-weight: var(--atlas-font-weight-medium);
-  line-height: var(--atlas-line-height-normal);
+  font-size: var(--atlas-type-label-size);
+  font-weight: var(--atlas-type-label-weight);
+  line-height: var(--atlas-type-label-line-height);
   color: var(--atlas-foreground);
 }
 
@@ -142,9 +142,9 @@
 }
 
 .description {
-  font-size: var(--atlas-text-caption);
-  font-weight: var(--atlas-font-weight-regular);
-  line-height: var(--atlas-line-height-normal);
+  font-size: var(--atlas-type-caption-size);
+  font-weight: var(--atlas-type-caption-weight);
+  line-height: var(--atlas-type-caption-line-height);
   color: var(--atlas-foreground-muted);
 }
 

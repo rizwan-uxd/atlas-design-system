@@ -146,8 +146,9 @@
 
 .description {
   margin: 0;
-  font-size: var(--atlas-text-body-sm);
-  line-height: var(--atlas-line-height-normal);
+  font-size: var(--atlas-type-body-sm-size);
+  font-weight: var(--atlas-type-body-sm-weight);
+  line-height: var(--atlas-type-body-sm-line-height);
   color: var(--atlas-foreground);
 }
 

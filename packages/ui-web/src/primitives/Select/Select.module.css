@@ -121,9 +121,9 @@
   border-radius: var(--atlas-select-content-radius);
   box-shadow: var(--atlas-shadow-md);
   font-family: var(--atlas-font-sans);
-  font-size: var(--atlas-font-size-sm);
-  font-weight: var(--atlas-font-weight-regular);
-  line-height: var(--atlas-line-height-normal);
+  font-size: var(--atlas-type-body-sm-size);
+  font-weight: var(--atlas-type-body-sm-weight);
+  line-height: var(--atlas-type-body-sm-line-height);
   outline: none;
 }
 
@@ -185,9 +185,11 @@
 .label {
   padding-block: var(--atlas-spacing-1_5);
   padding-inline: var(--atlas-spacing-item-padding);
-  font-weight: var(--atlas-font-weight-medium);
+  font-weight: var(--atlas-type-overline-weight);
   color: var(--atlas-select-label-foreground);
-  font-size: var(--atlas-font-size-xs);
+  font-size: var(--atlas-type-overline-size);
+  line-height: var(--atlas-type-overline-line-height);
+  letter-spacing: var(--atlas-type-overline-letter-spacing);
 }
 
 .group {

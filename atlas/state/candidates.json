@@ -230,6 +230,30 @@
       "composedFrom": "--atlas-spacing-6 as the NavBar .navbar padding-inline",
       "occurrences": 1,
       "note": "Raised by M5.2 (2026-10-24, DEC-087): spacing-surface-padding-lg means the padding of a roomy surface; a page-wide bar's edge padding is a layout gutter, closer to --atlas-margin-*. These uses stay on the primitive step, allowlisted in packages/governance/token-primitives.allow.json; a new role is value-identical (Kind A) and needs Figma first plus the owner's go-ahead."
+    },
+    {
+      "id": "CAND-066",
+      "name": "Type role scale: control text (per size)",
+      "seenIn": ["packages/ui-web/src/compositions/DatePicker", "packages/ui-web/src/primitives/Checkbox", "packages/ui-web/src/primitives/Input", "packages/ui-web/src/primitives/Table", "packages/ui-web/src/primitives/SidebarMenuRow", "packages/ui-web/src/compositions/CommandMenu"],
+      "composedFrom": "--atlas-font-size-xs|sm|lg and --atlas-text-body on control text: DatePicker trigger/date/caption/weekday, Checkbox labelSm/Md/Lg, Input affix, Table body, SidebarMenuRow, CommandMenu menu",
+      "occurrences": 11,
+      "note": "Raised by M5.3 (2026-10-24, DEC-088): this text follows the control's sm/md/lg size, so it needs a role scale, like the button and input font-size component tokens, not one role. These rules stay on the primitive scales, allowlisted in packages/governance/token-primitives.allow.json; a new role needs Figma first plus the owner's go-ahead, and is value-changing (Kind B) unless it matches today's values exactly."
+    },
+    {
+      "id": "CAND-067",
+      "name": "Type role: inline title (body or body-sm at semibold)",
+      "seenIn": ["packages/ui-web/src/compositions/Alert", "packages/ui-web/src/compositions/Chart", "packages/ui-web/src/patterns/Stepper", "packages/ui-web/src/layouts/Sidebar"],
+      "composedFrom": "--atlas-text-body|body-sm and --atlas-font-size-base at semibold: Alert .title, Chart .title, Stepper .summaryLabel, Sidebar .header",
+      "occurrences": 4,
+      "note": "Raised by M5.3 (2026-10-24, DEC-088): type-title is h4 + snug and type-label is medium, so neither fits a semibold title at body size. These rules stay on the primitive scales, allowlisted in packages/governance/token-primitives.allow.json; a new role needs Figma first plus the owner's go-ahead, and is value-changing (Kind B) unless it matches today's values exactly."
+    },
+    {
+      "id": "CAND-068",
+      "name": "Type role: nav label",
+      "seenIn": ["packages/ui-web/src/layouts/NavBar"],
+      "composedFrom": "--atlas-font-size-lg|xs and --atlas-text-body-sm on NavBar .brand, .tabLabel and .link",
+      "occurrences": 3,
+      "note": "Raised by M5.3 (2026-10-24, DEC-088): navigation text has its own size scale per bar size. These rules stay on the primitive scales, allowlisted in packages/governance/token-primitives.allow.json; a new role needs Figma first plus the owner's go-ahead, and is value-changing (Kind B) unless it matches today's values exactly."
     }
   ]
 }

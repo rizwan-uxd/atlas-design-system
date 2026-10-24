@@ -33,20 +33,20 @@
   padding-inline: var(--atlas-spacing-surface-padding-lg);
 }
 
-.title,
-.description {
+/* The title is body-sm at semibold, which no type role covers (Figma draws it SemiBold, DEC-088). */
+.title {
   margin: 0;
   font-size: var(--atlas-text-body-sm);
   line-height: var(--atlas-line-height-normal);
-}
-
-.title {
   font-weight: var(--atlas-font-weight-semibold);
   color: var(--atlas-foreground);
 }
 
 .description {
-  font-weight: var(--atlas-font-weight-regular);
+  margin: 0;
+  font-size: var(--atlas-type-body-sm-size);
+  line-height: var(--atlas-type-body-sm-line-height);
+  font-weight: var(--atlas-type-body-sm-weight);
   color: var(--atlas-foreground-muted);
 }
 
@@ -85,15 +85,16 @@
 }
 
 .statLabel {
-  font-size: var(--atlas-font-size-xs);
-  line-height: var(--atlas-line-height-normal);
+  font-size: var(--atlas-type-caption-size);
+  font-weight: var(--atlas-type-caption-weight);
+  line-height: var(--atlas-type-caption-line-height);
   color: var(--atlas-foreground-muted);
 }
 
 .statValue {
-  font-size: var(--atlas-font-size-3xl);
-  font-weight: var(--atlas-font-weight-semibold);
-  line-height: var(--atlas-line-height-tight);
+  font-size: var(--atlas-type-stat-size);
+  font-weight: var(--atlas-type-stat-weight);
+  line-height: var(--atlas-type-stat-line-height);
   color: var(--atlas-foreground);
 }
 
@@ -120,7 +121,9 @@
 .plot :global(.recharts-cartesian-axis-tick-value) {
   fill: var(--atlas-foreground-muted);
   font-family: var(--atlas-font-sans);
-  font-size: var(--atlas-font-size-xs);
+  font-size: var(--atlas-type-caption-size);
+  line-height: var(--atlas-type-caption-line-height);
+  font-weight: var(--atlas-type-caption-weight);
 }
 
 .plot :global(.recharts-cartesian-grid-horizontal) line {
@@ -152,7 +155,9 @@
   align-items: center;
   justify-content: center;
   margin: 0;
-  font-size: var(--atlas-text-body-sm);
+  font-size: var(--atlas-type-body-sm-size);
+  line-height: var(--atlas-type-body-sm-line-height);
+  font-weight: var(--atlas-type-body-sm-weight);
   color: var(--atlas-foreground-muted);
 }
 
@@ -183,8 +188,9 @@
   display: inline-flex;
   align-items: center;
   gap: var(--atlas-spacing-control-gap);
-  font-size: var(--atlas-font-size-xs);
-  line-height: var(--atlas-line-height-normal);
+  font-size: var(--atlas-type-caption-size);
+  font-weight: var(--atlas-type-caption-weight);
+  line-height: var(--atlas-type-caption-line-height);
   color: var(--atlas-foreground);
 }
 
@@ -209,8 +215,9 @@
   background: var(--atlas-surface-raised);
   box-shadow: var(--atlas-shadow-sm);
   font-family: var(--atlas-font-sans);
-  font-size: var(--atlas-font-size-xs);
-  line-height: var(--atlas-line-height-normal);
+  font-size: var(--atlas-type-caption-size);
+  font-weight: var(--atlas-type-caption-weight);
+  line-height: var(--atlas-type-caption-line-height);
   color: var(--atlas-foreground);
 }
 

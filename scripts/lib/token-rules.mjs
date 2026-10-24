@@ -207,6 +207,45 @@ export function semanticSpacingViolations(files, allow) {
   return { violations, inspected }
 }
 
+// ─── semantic-type (M5.3) ────────────────────────────────────────────────────
+// A component's font-size names a type ROLE (--atlas-type-<role>-size), a component font-size token, or a
+// private var. A step of the primitive scales (--atlas-font-size-*, --atlas-text-*) is legal only where
+// packages/governance/token-primitives.allow.json gives a reason and the exact count per file (DEC-088).
+const TYPE_STEP = /var\(\s*(--atlas-(?:font-size|text)-[\w-]+)\s*\)/g
+const TYPE_ANY = /var\(\s*--atlas-(?:font-size|text|type)-[\w-]+\s*\)/g
+
+export function semanticTypeViolations(files, allow) {
+  const violations = []
+  const used = new Set()
+  let inspected = 0
+  for (const { file, src } of files) {
+    const s = stripComments(src)
+    const byToken = new Map()
+    for (const d of s.matchAll(DECL)) {
+      if (d[1] !== "font-size") continue
+      const at = d.index + d[0].length - d[2].length
+      inspected += (d[2].match(TYPE_ANY) ?? []).length
+      for (const m of d[2].matchAll(TYPE_STEP)) {
+        if (!byToken.has(m[1])) byToken.set(m[1], [])
+        byToken.get(m[1]).push(lineOf(s, at + m.index))
+      }
+    }
+    for (const [token, lines] of byToken) {
+      const i = allow.findIndex((a) => a.family === "type" && a.file === file && a.token === token)
+      if (i === -1) {
+        lines.forEach((line) => violations.push({ file, line, text: `${token} — use a type role (--atlas-type-heading|title|body|body-sm|label|caption|overline|stat-size with its line-height and weight), or list it with a reason in packages/governance/token-primitives.allow.json` }))
+        continue
+      }
+      used.add(i)
+      if (allow[i].count !== lines.length) violations.push({ file, line: lines[0], text: `${token}: ${lines.length} uses, allowlist says ${allow[i].count} — update the count or use a role` })
+    }
+  }
+  allow.forEach((a, i) => {
+    if (a.family === "type" && !used.has(i)) violations.push({ file: a.file, line: 0, text: `stale allowlist entry ${a.token} — no such use; remove it from packages/governance/token-primitives.allow.json` })
+  })
+  return { violations, inspected }
+}
+
 // ─── metric rows ─────────────────────────────────────────────────────────────
 // The token-lint rules behind each Phase 2d metric row. atlas-verify reports one check per row and
 // metrics-report measures the committed tree with the same grouping, so the two cannot disagree.

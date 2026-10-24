@@ -38,9 +38,9 @@
 .message {
   margin: 0;
   margin-block-start: var(--atlas-spacing-1_5);
-  font-size: var(--atlas-font-size-sm);
-  font-weight: var(--atlas-font-weight-regular);
-  line-height: var(--atlas-line-height-normal);
+  font-size: var(--atlas-type-body-sm-size);
+  font-weight: var(--atlas-type-body-sm-weight);
+  line-height: var(--atlas-type-body-sm-line-height);
 }
 
 .field[data-size="sm"] .message {
