@@ -45,7 +45,7 @@
   background-color: var(--_fill);
   border: var(--atlas-border-width-1) solid var(--_border);
   border-radius: var(--atlas-radius-2xl);
-  box-shadow: var(--atlas-shadow-lg);
+  box-shadow: var(--atlas-shadow-floating);
 }
 
 .root[data-variant="success"] {

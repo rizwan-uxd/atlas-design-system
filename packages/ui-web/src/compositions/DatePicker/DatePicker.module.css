@@ -167,7 +167,7 @@
   color: var(--atlas-foreground);
   border: var(--atlas-border-width-1) solid var(--atlas-border);
   border-radius: var(--atlas-radius-surface);
-  box-shadow: var(--atlas-shadow-md);
+  box-shadow: var(--atlas-shadow-popover);
   font-family: var(--atlas-font-sans);
   outline: none;
 }

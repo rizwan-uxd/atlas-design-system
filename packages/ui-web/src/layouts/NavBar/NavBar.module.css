@@ -40,7 +40,7 @@
   Spec (Figma NavBar 148:306, DISC-010/025/026, 2026-09-27):
     default:     surface fill, no border, no shadow, radius-sm
     bordered:    surface fill, border-subtle bottom border, radius-sm
-    floating:    surface-raised fill, shadow-lg, radius-xl, no border
+    floating:    surface-raised fill, shadow-floating, radius-xl, no border
     transparent: no fill, no border, no shadow, radius-sm (code addition, no Figma fill drawn)
   `default` was previously code's only bare-ish variant but carried a border; that border moved to
   the new `bordered` value to match what Figma actually draws for "default" (no border at all).
@@ -65,7 +65,7 @@
 
 .floating {
   background-color: var(--atlas-surface-raised);
-  box-shadow: var(--atlas-shadow-lg);
+  box-shadow: var(--atlas-shadow-floating);
   border-radius: var(--atlas-radius-xl);
 }
 
@@ -310,7 +310,7 @@
 .transparent.scrolled {
   background-color: var(--atlas-surface);
   border-block-end: var(--atlas-border-width-1) solid var(--atlas-border-subtle);
-  box-shadow: var(--atlas-shadow-sm);
+  box-shadow: var(--atlas-shadow-raised);
 }
 
 /* ── Hide-on-scroll (BUG-046) ─────────────────────────────────── */
@@ -391,7 +391,7 @@
 }
 .navbarHeader.floating {
   background-color: var(--atlas-background);
-  box-shadow: var(--atlas-shadow-md);
+  box-shadow: var(--atlas-shadow-floating);
   border-block-end: none;
 }
 

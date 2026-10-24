@@ -2,7 +2,7 @@
 // reduced motion). One PASS case, then the FAIL cases each rule exists for.
 import { test } from "node:test"
 import assert from "node:assert/strict"
-import { privateVarViolations, rawLengths, breakpointViolations, reducedMotionMissing, semanticRadiusViolations, semanticSpacingViolations, semanticTypeViolations, semanticMotionViolations } from "../lib/token-rules.mjs"
+import { privateVarViolations, rawLengths, breakpointViolations, reducedMotionMissing, semanticRadiusViolations, semanticSpacingViolations, semanticTypeViolations, semanticMotionViolations, semanticShadowViolations } from "../lib/token-rules.mjs"
 
 const F = "c/X.module.css"
 
@@ -174,4 +174,18 @@ test("semantic motion: exact count per file and token; a stale entry fails", () 
   const one = ".s { animation: spin var(--atlas-duration-spin) linear infinite; }"
   assert.deepEqual(semanticMotionViolations([{ file: F, src: one }], allow).violations, [])
   assert.match(semanticMotionViolations([{ file: F, src: ".a {}" }], allow).violations[0].text, /stale allowlist entry/)
+})
+
+test("semantic shadow: a role or a component token passes; a size step fails", () => {
+  const ok = ".a { box-shadow: var(--atlas-shadow-raised); }\n.b { box-shadow: var(--atlas-card-elevated-shadow); }"
+  assert.deepEqual(semanticShadowViolations([{ file: F, src: ok }], []).violations, [])
+  const { violations } = semanticShadowViolations([{ file: F, src: ".a {\n  box-shadow: var(--atlas-shadow-sm), 0 0 0 var(--atlas-spacing-1) var(--atlas-primary-subtle);\n}" }], [])
+  assert.deepEqual(violations.map((v) => v.line), [2])
+  assert.match(violations[0].text, /shadow role/)
+})
+
+test("semantic shadow: exact count per file and token; a stale entry fails", () => {
+  const allow = [{ family: "shadow", file: F, token: "--atlas-shadow-xl", count: 1, reason: "device frame" }]
+  assert.deepEqual(semanticShadowViolations([{ file: F, src: ".p { box-shadow: var(--atlas-shadow-xl); }" }], allow).violations, [])
+  assert.match(semanticShadowViolations([{ file: F, src: ".a {}" }], allow).violations[0].text, /stale allowlist entry/)
 })

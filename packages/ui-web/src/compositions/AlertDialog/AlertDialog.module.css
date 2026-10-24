@@ -48,7 +48,7 @@
   background-color: var(--atlas-surface-overlay);
   border: var(--atlas-border-width-1) solid var(--atlas-border);
   border-radius: var(--atlas-radius-surface);
-  box-shadow: var(--atlas-shadow-xl);
+  box-shadow: var(--atlas-shadow-modal);
   font-family: var(--atlas-font-sans);
   display: flex;
   flex-direction: column;
