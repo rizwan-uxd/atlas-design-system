@@ -17,11 +17,11 @@
 }
 
 .overlay[data-state="open"] {
-  animation: overlayShow var(--atlas-duration-fast) var(--atlas-easing-standard);
+  animation: overlayShow var(--atlas-motion-enter-quick-duration) var(--atlas-motion-enter-quick-easing);
 }
 
 .overlay[data-state="closed"] {
-  animation: overlayHide var(--atlas-duration-fast) var(--atlas-easing-exit);
+  animation: overlayHide var(--atlas-motion-exit-quick-duration) var(--atlas-motion-exit-quick-easing);
 }
 
 @keyframes overlayShow {
@@ -87,19 +87,19 @@
 }
 
 .content[data-side="bottom"][data-state="open"] {
-  animation: sheetBottomShow var(--atlas-duration-base) var(--atlas-easing-emphasized);
+  animation: sheetBottomShow var(--atlas-motion-enter-duration) var(--atlas-motion-enter-easing);
 }
 
 .content[data-side="bottom"][data-state="closed"] {
-  animation: sheetBottomHide var(--atlas-duration-base) var(--atlas-easing-exit);
+  animation: sheetBottomHide var(--atlas-motion-exit-duration) var(--atlas-motion-exit-easing);
 }
 
 .content[data-side="top"][data-state="open"] {
-  animation: sheetTopShow var(--atlas-duration-base) var(--atlas-easing-emphasized);
+  animation: sheetTopShow var(--atlas-motion-enter-duration) var(--atlas-motion-enter-easing);
 }
 
 .content[data-side="top"][data-state="closed"] {
-  animation: sheetTopHide var(--atlas-duration-base) var(--atlas-easing-exit);
+  animation: sheetTopHide var(--atlas-motion-exit-duration) var(--atlas-motion-exit-easing);
 }
 
 @keyframes sheetBottomShow { from { opacity: 0; transform: translateY(100%); } to { opacity: 1; transform: translateY(0); } }
@@ -138,19 +138,19 @@
 }
 
 .content[data-side="end"][data-state="open"] {
-  animation: sheetEndShow var(--atlas-duration-base) var(--atlas-easing-emphasized);
+  animation: sheetEndShow var(--atlas-motion-enter-duration) var(--atlas-motion-enter-easing);
 }
 
 .content[data-side="end"][data-state="closed"] {
-  animation: sheetEndHide var(--atlas-duration-base) var(--atlas-easing-exit);
+  animation: sheetEndHide var(--atlas-motion-exit-duration) var(--atlas-motion-exit-easing);
 }
 
 .content[data-side="start"][data-state="open"] {
-  animation: sheetStartShow var(--atlas-duration-base) var(--atlas-easing-emphasized);
+  animation: sheetStartShow var(--atlas-motion-enter-duration) var(--atlas-motion-enter-easing);
 }
 
 .content[data-side="start"][data-state="closed"] {
-  animation: sheetStartHide var(--atlas-duration-base) var(--atlas-easing-exit);
+  animation: sheetStartHide var(--atlas-motion-exit-duration) var(--atlas-motion-exit-easing);
 }
 
 @keyframes sheetEndShow   { from { opacity: 0; transform: translateX(100%); } to { opacity: 1; transform: translateX(0); } }

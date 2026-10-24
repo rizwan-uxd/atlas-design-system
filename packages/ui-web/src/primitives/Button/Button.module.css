@@ -23,9 +23,9 @@
   outline: none;
   box-sizing: border-box;
   transition:
-    background-color var(--atlas-duration-fast) var(--atlas-easing-standard),
-    color           var(--atlas-duration-fast) var(--atlas-easing-standard),
-    border-color    var(--atlas-duration-fast) var(--atlas-easing-standard);
+    background-color var(--atlas-motion-state-duration) var(--atlas-motion-state-easing),
+    color           var(--atlas-motion-state-duration) var(--atlas-motion-state-easing),
+    border-color    var(--atlas-motion-state-duration) var(--atlas-motion-state-easing);
 }
 
 

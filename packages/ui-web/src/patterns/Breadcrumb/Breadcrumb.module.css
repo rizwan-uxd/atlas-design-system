@@ -40,7 +40,7 @@
 .link,
 .ellipsis,
 .dropdown {
-  transition: color var(--atlas-duration-fast) var(--atlas-easing-standard);
+  transition: color var(--atlas-motion-state-duration) var(--atlas-motion-state-easing);
 }
 
 .link:focus-visible,

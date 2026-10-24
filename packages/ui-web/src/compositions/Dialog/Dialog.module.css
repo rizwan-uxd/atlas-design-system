@@ -14,11 +14,11 @@
 }
 
 .overlay[data-state="open"] {
-  animation: overlayShow var(--atlas-duration-fast) var(--atlas-easing-standard);
+  animation: overlayShow var(--atlas-motion-enter-quick-duration) var(--atlas-motion-enter-quick-easing);
 }
 
 .overlay[data-state="closed"] {
-  animation: overlayHide var(--atlas-duration-fast) var(--atlas-easing-exit);
+  animation: overlayHide var(--atlas-motion-exit-quick-duration) var(--atlas-motion-exit-quick-easing);
 }
 
 @keyframes overlayShow {
@@ -79,11 +79,11 @@
 }
 
 .modal[data-state="open"] {
-  animation: modalShow var(--atlas-duration-base) var(--atlas-easing-emphasized);
+  animation: modalShow var(--atlas-motion-enter-duration) var(--atlas-motion-enter-easing);
 }
 
 .modal[data-state="closed"] {
-  animation: modalHide var(--atlas-duration-base) var(--atlas-easing-exit);
+  animation: modalHide var(--atlas-motion-exit-duration) var(--atlas-motion-exit-easing);
 }
 
 @keyframes modalShow {
@@ -217,8 +217,8 @@
   line-height: var(--atlas-line-height-tight); /* FIX BUG-035: was line-height: 1 */
   border-radius: var(--atlas-radius-control);
   outline: none;
-  transition: background-color var(--atlas-duration-fast) var(--atlas-easing-standard),
-              color            var(--atlas-duration-fast) var(--atlas-easing-standard);
+  transition: background-color var(--atlas-motion-state-duration) var(--atlas-motion-state-easing),
+              color            var(--atlas-motion-state-duration) var(--atlas-motion-state-easing);
 }
 
 .closeIcon {

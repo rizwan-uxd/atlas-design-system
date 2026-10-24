@@ -29,7 +29,7 @@
   cursor: pointer;
   outline: none;
   transition:
-    background-color var(--atlas-duration-fast) var(--atlas-easing-standard);
+    background-color var(--atlas-motion-state-duration) var(--atlas-motion-state-easing);
 }
 
 .track[data-state="checked"] {
@@ -150,7 +150,7 @@
   inset-block-start: var(--atlas-spacing-0_5);
   inset-inline-start: var(--atlas-spacing-0_5);
   /* Spec: thumb glide uses duration-base + easing-emphasized */
-  transition: transform var(--atlas-duration-base) var(--atlas-easing-emphasized);
+  transition: transform var(--atlas-motion-move-duration) var(--atlas-motion-move-easing);
 }
 
 .sm .thumb {

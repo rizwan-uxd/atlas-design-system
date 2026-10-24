@@ -27,8 +27,8 @@
   border-radius: var(--atlas-input-radius);
   outline: none;
   transition:
-    border-color       var(--atlas-duration-fast) var(--atlas-easing-standard),
-    background-color   var(--atlas-duration-fast) var(--atlas-easing-standard);
+    border-color       var(--atlas-motion-state-duration) var(--atlas-motion-state-easing),
+    background-color   var(--atlas-motion-state-duration) var(--atlas-motion-state-easing);
 }
 
 .input::placeholder {
