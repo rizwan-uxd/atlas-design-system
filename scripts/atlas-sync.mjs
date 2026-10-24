@@ -865,6 +865,7 @@ function variableTable() {
     entries: Object.entries(prev.variables).map(([name, v]) => ({
       name, collection: v.collection, type: v.type, web: v.css ? `var(${v.css})` : (v.web ?? null),
     })),
+    effectStyles: prev.effectStyles ?? [],
   }
 }
 const table = variableTable()
@@ -889,8 +890,9 @@ write("atlas/tokens.json", compactJson({
     source: "figma-synced — the whole local variable table (getLocalVariablesAsync through use_figma; roadmap D1, option B). Names, collections, modes and codeSyntax.WEB; values are not pulled.",
     syncedAt: table.pulledAt,
     figmaVersion: table.figmaVersion ?? null,
-    note: "Full coverage: every Figma variable against every --atlas-* token in atlas.tokens.css. unpublished = Figma variables with no codeSyntax.WEB and no CSS token (Figma-only, never counted as drift); modeExpansions = CSS tokens that spell out a Figma variable's modes.",
+    note: "Full coverage: every Figma variable against every --atlas-* token in atlas.tokens.css. unpublished = Figma variables with no codeSyntax.WEB and no CSS token (Figma-only, never counted as drift); modeExpansions = CSS tokens that spell out a Figma variable's modes; styleCoverage = CSS tokens covered by an effect style of the same name (shadows, DEC-090).",
     collections: table.collections,
+    effectStyles: [...(table.effectStyles ?? [])].sort(),
     ...tableResult,
   } : null,
 }))

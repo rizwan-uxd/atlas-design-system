@@ -1,6 +1,6 @@
 {
   "version": "1.1",
-  "notes": ["Figma OPACITY-scoped variables hold percent (50 = 50%). CSS tokens in atlas.tokens.css hold fractions (0.5). An importer must divide opacity/* by 100. See DEC-058."],
+  "notes": ["Figma OPACITY-scoped variables hold percent (50 = 50%). CSS tokens in atlas.tokens.css hold fractions (0.5). An importer must divide opacity/* by 100. See DEC-058.","Shadows (M5.5, DEC-090): Figma has no shadow variable. Effect styles shadow/sm|md|lg|xl|raised|surface|popover|floating|modal and card/elevated-shadow(-hover) hold fixed geometry; each layer colour binds a shadow/color-* variable above (Figma-only, no WEB syntax). The CSS keeps whole shadows in --atlas-shadow-*."],
   "collections": [
     {
       "name": "Atlas/Primitives",
@@ -225,7 +225,12 @@
         { "name": "motion-exit-quick-easing", "type": "STRING", "values": { "Light": { "alias": "Atlas/Primitives:easing/exit" }, "Dark": { "alias": "Atlas/Primitives:easing/exit" } } },
         { "name": "type-stat-weight", "type": "FLOAT", "values": { "Light": { "alias": "Atlas/Primitives:font-weight/semibold" }, "Dark": { "alias": "Atlas/Primitives:font-weight/semibold" } } },
         { "name": "type-stat-line-height", "type": "FLOAT", "values": { "Light": { "alias": "Atlas/Primitives:line-height/tight" }, "Dark": { "alias": "Atlas/Primitives:line-height/tight" } } },
-        { "name": "avatar-group-overlap", "type": "FLOAT", "values": { "Light": -8, "Dark": -8 } }
+        { "name": "avatar-group-overlap", "type": "FLOAT", "values": { "Light": -8, "Dark": -8 } },
+        { "name": "shadow/color-1", "type": "COLOR", "values": { "Light": "oklch(0 0 0 / 0.05)", "Dark": "oklch(0 0 0 / 0.40)" } },
+        { "name": "shadow/color-2", "type": "COLOR", "values": { "Light": "oklch(0 0 0 / 0.06)", "Dark": "oklch(0 0 0 / 0.45)" } },
+        { "name": "shadow/color-3", "type": "COLOR", "values": { "Light": "oklch(0 0 0 / 0.08)", "Dark": "oklch(0 0 0 / 0.50)" } },
+        { "name": "shadow/color-4", "type": "COLOR", "values": { "Light": "oklch(0 0 0 / 0.10)", "Dark": "oklch(0 0 0 / 0.55)" } },
+        { "name": "shadow/color-5", "type": "COLOR", "values": { "Light": "oklch(0 0 0 / 0.14)", "Dark": "oklch(0 0 0 / 0.60)" } }
       ]
     },
     {

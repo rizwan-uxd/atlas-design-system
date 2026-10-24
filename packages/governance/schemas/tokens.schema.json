@@ -237,6 +237,8 @@
             "modeExpansions",
             "conventionExceptions",
             "unpublished",
+            "effectStyles",
+            "styleCoverage",
             "variables"
           ],
           "properties": {
@@ -425,6 +427,34 @@
               "type": "array",
               "items": {
                 "$ref": "common.schema.json#/$defs/text"
+              }
+            },
+            "effectStyles": {
+              "type": "array",
+              "description": "M5.5 (DEC-090): local effect style names (getLocalEffectStylesAsync). Figma has no shadow variable; a style covers the --atlas- token its name spells (lowercased, / to -).",
+              "items": {
+                "$ref": "common.schema.json#/$defs/text"
+              }
+            },
+            "styleCoverage": {
+              "type": "array",
+              "description": "Effect styles that cover a declared CSS token, by name convention (DEC-090).",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "style",
+                  "css"
+                ],
+                "properties": {
+                  "style": {
+                    "$ref": "common.schema.json#/$defs/text"
+                  },
+                  "css": {
+                    "type": "string",
+                    "pattern": "^--atlas-[a-z0-9-]+$"
+                  }
+                }
               }
             },
             "variables": {

@@ -189,6 +189,13 @@
             }
           },
           "minItems": 1
+        },
+        "effectStyles": {
+          "type": "array",
+          "description": "M5.5 (DEC-090): local effect style names (getLocalEffectStylesAsync). Figma has no shadow variable; a style covers the --atlas- token its name spells (lowercased, / to -).",
+          "items": {
+            "$ref": "common.schema.json#/$defs/text"
+          }
         }
       }
     }
