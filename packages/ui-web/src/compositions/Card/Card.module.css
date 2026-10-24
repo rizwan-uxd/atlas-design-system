@@ -131,7 +131,7 @@
 /* Focus ring — outline renders outside overflow:hidden in modern browsers */
 .interactive:focus-visible {
   outline: var(--atlas-border-width-2) solid var(--atlas-focus-ring);
-  outline-offset: var(--atlas-spacing-0_5);
+  outline-offset: var(--atlas-spacing-focus-offset);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -157,7 +157,7 @@
 .header {
   display: flex;
   align-items: flex-start;
-  gap: var(--atlas-spacing-3);
+  gap: var(--atlas-spacing-section-gap);
   padding-block-start: var(--_card-padding);
   padding-block-end: 0;
   padding-inline: var(--_card-padding);
@@ -196,7 +196,7 @@
   /* BUG-028 — was: margin: var(--atlas-spacing-1) 0 0 (physical shorthand).
      Replaced with a single logical property; inline and block-end are
      browser defaults (0) and need not be declared. */
-  margin-block-start: var(--atlas-spacing-1);
+  margin-block-start: var(--atlas-spacing-text-gap);
   font-family: var(--atlas-font-sans);
   font-size: var(--atlas-text-body-sm);
   color: var(--atlas-card-description-foreground);
@@ -234,7 +234,7 @@
 .footer {
   display: flex;
   align-items: center;
-  gap: var(--atlas-spacing-2);
+  gap: var(--atlas-spacing-control-gap);
   padding-block-start: 0;
   padding-block-end: var(--_card-padding);
   padding-inline: var(--_card-padding);

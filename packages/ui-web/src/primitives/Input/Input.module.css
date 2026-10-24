@@ -110,13 +110,13 @@
 
 .default:has(.input:focus-visible) {
   outline: var(--atlas-border-width-2) solid var(--atlas-focus-ring);
-  outline-offset: var(--atlas-spacing-0_5);
+  outline-offset: var(--atlas-spacing-focus-offset);
   border-radius: var(--atlas-input-radius);
 }
 
 .filled:has(.input:focus-visible) {
   outline: var(--atlas-border-width-2) solid var(--atlas-focus-ring);
-  outline-offset: var(--atlas-spacing-0_5);
+  outline-offset: var(--atlas-spacing-focus-offset);
   border-radius: var(--atlas-input-radius);
 }
 

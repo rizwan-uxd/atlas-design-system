@@ -190,6 +190,46 @@
       "composedFrom": "--atlas-radius-lg on the date-picker trigger, caption select and date cells, including range row ends",
       "occurrences": 7,
       "note": "Raised by M5.1 (2026-10-23, DEC-086): radius-surface (lg) means a raised container, so it would mislabel these controls; radius-control is md (8px). These uses stay on the primitive step, allowlisted in packages/governance/token-primitives.allow.json; a new role is value-identical (Kind A) and needs Figma first plus the owner's go-ahead."
+    },
+    {
+      "id": "CAND-061",
+      "name": "Spacing role scale: control padding (per size)",
+      "seenIn": ["packages/tokens/atlas.tokens.css", "packages/ui-web/src/patterns/Tabs"],
+      "composedFrom": "--atlas-spacing-2|3|4|5|6 in the button, input, select and textarea size padding tokens and the Tabs --_px trigger padding",
+      "occurrences": 20,
+      "note": "Raised by M5.2 (2026-10-24, DEC-087): control padding is a per-size scale (sm/md/lg), so no single role fits; it needs a role scale, not one alias. These uses stay on the primitive step, allowlisted in packages/governance/token-primitives.allow.json; a new role is value-identical (Kind A) and needs Figma first plus the owner's go-ahead."
+    },
+    {
+      "id": "CAND-062",
+      "name": "Spacing role: stack gap at 8px",
+      "seenIn": ["packages/ui-web/src/compositions/PasswordInput", "packages/ui-web/src/compositions/StatCard", "packages/ui-web/src/primitives/Progress", "packages/ui-web/src/primitives/Slider"],
+      "composedFrom": "--atlas-spacing-2 as the gap of a vertical stack (PasswordInput .root, StatCard .stat, Progress .progress, Slider .root)",
+      "occurrences": 4,
+      "note": "Raised by M5.2 (2026-10-24, DEC-087): spacing-control-gap means the parts of one row or control, so it would mislabel a vertical stack. These uses stay on the primitive step, allowlisted in packages/governance/token-primitives.allow.json; a new role is value-identical (Kind A) and needs Figma first plus the owner's go-ahead."
+    },
+    {
+      "id": "CAND-063",
+      "name": "Spacing role: selection-control label gap at 12px",
+      "seenIn": ["packages/tokens/atlas.tokens.css"],
+      "composedFrom": "--atlas-spacing-3 in --atlas-checkbox-gap, --atlas-switch-gap and --atlas-radio-gap (control to label)",
+      "occurrences": 3,
+      "note": "Raised by M5.2 (2026-10-24, DEC-087): spacing-section-gap (12) means the blocks of a surface, not a control and its label. These uses stay on the primitive step, allowlisted in packages/governance/token-primitives.allow.json; a new role is value-identical (Kind A) and needs Figma first plus the owner's go-ahead."
+    },
+    {
+      "id": "CAND-064",
+      "name": "Spacing role: compact-control gap at 4px",
+      "seenIn": ["packages/tokens/atlas.tokens.css", "packages/ui-web/src/primitives/Badge"],
+      "composedFrom": "--atlas-spacing-1 in --atlas-button-size-xs-gap, --atlas-select-size-sm|md-gap and the Badge .badge gap",
+      "occurrences": 4,
+      "note": "Raised by M5.2 (2026-10-24, DEC-087): spacing-control-gap is 8px; the inner gap of a compact control is 4px, and item-gap means sibling items, not the parts of one control. These uses stay on the primitive step, allowlisted in packages/governance/token-primitives.allow.json; a new role is value-identical (Kind A) and needs Figma first plus the owner's go-ahead."
+    },
+    {
+      "id": "CAND-065",
+      "name": "Spacing role: page or bar inline padding",
+      "seenIn": ["packages/ui-web/src/layouts/NavBar"],
+      "composedFrom": "--atlas-spacing-6 as the NavBar .navbar padding-inline",
+      "occurrences": 1,
+      "note": "Raised by M5.2 (2026-10-24, DEC-087): spacing-surface-padding-lg means the padding of a roomy surface; a page-wide bar's edge padding is a layout gutter, closer to --atlas-margin-*. These uses stay on the primitive step, allowlisted in packages/governance/token-primitives.allow.json; a new role is value-identical (Kind A) and needs Figma first plus the owner's go-ahead."
     }
   ]
 }

@@ -216,7 +216,7 @@
       "Size": ["sm", "md", "lg"]
     }
   },
-  "tokensUsed": ["--atlas-border-width-0", "--atlas-border-width-1", "--atlas-radius-none", "--atlas-spacing-0", "--atlas-spacing-1"],
+  "tokensUsed": ["--atlas-border-width-0", "--atlas-border-width-1", "--atlas-radius-none", "--atlas-spacing-0", "--atlas-spacing-item-gap"],
   "module": {
     "imports": [
       { "from": "@atlas/ui-web/compositions/ButtonGroup/ButtonGroup", "name": "ButtonGroupItemVariant", "kind": "named" },

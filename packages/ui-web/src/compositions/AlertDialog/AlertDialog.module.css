@@ -36,7 +36,7 @@
 /* ── Content ──────────────────────────────────────────────────── */
 
 .content {
-  --_pad: var(--atlas-spacing-6);        /* overridden by size variants */
+  --_pad: var(--atlas-spacing-surface-padding-lg);        /* overridden by size variants */
   --_max-w: var(--atlas-dialog-md);      /* overridden by size variants */
 
   position: fixed;
@@ -52,7 +52,7 @@
   font-family: var(--atlas-font-sans);
   display: flex;
   flex-direction: column;
-  gap: var(--atlas-spacing-1);
+  gap: var(--atlas-spacing-text-gap);
   padding: var(--_pad);
   max-height: calc(100vh - var(--atlas-spacing-8) * 2);
   overflow: auto;
@@ -79,9 +79,9 @@
 
 /* ── Sizes ────────────────────────────────────────────────────── */
 
-.sm { --_pad: var(--atlas-spacing-4); --_max-w: var(--atlas-dialog-sm); }
+.sm { --_pad: var(--atlas-spacing-surface-padding); --_max-w: var(--atlas-dialog-sm); }
 /* md is the default (--_pad: spacing-6, --_max-w: atlas-dialog-md) */
-.lg { --_pad: var(--atlas-spacing-6); --_max-w: var(--atlas-dialog-lg); }
+.lg { --_pad: var(--atlas-spacing-surface-padding-lg); --_max-w: var(--atlas-dialog-lg); }
 
 /* ── Responsive — < 640px: bottom sheet geometry (matches Dialog) ── */
 
@@ -119,7 +119,7 @@
 
 .description {
   margin: 0;
-  margin-block-start: var(--atlas-spacing-1);
+  margin-block-start: var(--atlas-spacing-text-gap);
   font-size: var(--atlas-text-body-sm);
   line-height: var(--atlas-line-height-normal);
   color: var(--atlas-foreground-muted);
@@ -131,6 +131,6 @@
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: var(--atlas-spacing-3);
-  margin-block-start: var(--atlas-spacing-3);
+  gap: var(--atlas-spacing-section-gap);
+  margin-block-start: var(--atlas-spacing-section-gap);
 }

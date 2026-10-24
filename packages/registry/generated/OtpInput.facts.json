@@ -221,7 +221,7 @@
       "Length": ["4", "5", "6", "7", "8"]
     }
   },
-  "tokensUsed": ["--atlas-border-width-1", "--atlas-border-width-2", "--atlas-duration-fast", "--atlas-easing-standard", "--atlas-focus-ring", "--atlas-font-sans", "--atlas-input-background", "--atlas-input-background-disabled", "--atlas-input-border", "--atlas-input-border-focus", "--atlas-input-border-hover", "--atlas-input-border-invalid", "--atlas-input-foreground", "--atlas-input-foreground-disabled", "--atlas-input-radius", "--atlas-input-size-lg-font-size", "--atlas-input-size-lg-height", "--atlas-input-size-md-font-size", "--atlas-input-size-md-height", "--atlas-input-size-sm-font-size", "--atlas-input-size-sm-height", "--atlas-spacing-0_5", "--atlas-spacing-2"],
+  "tokensUsed": ["--atlas-border-width-1", "--atlas-border-width-2", "--atlas-duration-fast", "--atlas-easing-standard", "--atlas-focus-ring", "--atlas-font-sans", "--atlas-input-background", "--atlas-input-background-disabled", "--atlas-input-border", "--atlas-input-border-focus", "--atlas-input-border-hover", "--atlas-input-border-invalid", "--atlas-input-foreground", "--atlas-input-foreground-disabled", "--atlas-input-radius", "--atlas-input-size-lg-font-size", "--atlas-input-size-lg-height", "--atlas-input-size-md-font-size", "--atlas-input-size-md-height", "--atlas-input-size-sm-font-size", "--atlas-input-size-sm-height", "--atlas-spacing-control-gap", "--atlas-spacing-focus-offset"],
   "module": {
     "imports": [
       { "from": "@atlas/ui-web/compositions/OtpInput/OtpInput", "name": "OtpInputSize", "kind": "named" }

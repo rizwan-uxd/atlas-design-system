@@ -10,7 +10,7 @@
   "sizes": ["sm", "md", "lg", "xl", "full"],
   "props": [],
   "subcomponents": ["DrawerContent"],
-  "tokensUsed": ["--atlas-border", "--atlas-border-width-1", "--atlas-dialog-lg", "--atlas-dialog-md", "--atlas-dialog-sm", "--atlas-dialog-xl", "--atlas-duration-base", "--atlas-duration-fast", "--atlas-easing-emphasized", "--atlas-easing-exit", "--atlas-easing-standard", "--atlas-font-sans", "--atlas-overlay", "--atlas-radius-surface", "--atlas-safe-top", "--atlas-shadow-xl", "--atlas-spacing-4", "--atlas-spacing-6", "--atlas-spacing-8", "--atlas-surface-overlay", "--atlas-z-modal", "--atlas-z-overlay"],
+  "tokensUsed": ["--atlas-border", "--atlas-border-width-1", "--atlas-dialog-lg", "--atlas-dialog-md", "--atlas-dialog-sm", "--atlas-dialog-xl", "--atlas-duration-base", "--atlas-duration-fast", "--atlas-easing-emphasized", "--atlas-easing-exit", "--atlas-easing-standard", "--atlas-font-sans", "--atlas-overlay", "--atlas-radius-surface", "--atlas-safe-top", "--atlas-shadow-xl", "--atlas-spacing-8", "--atlas-spacing-surface-padding", "--atlas-spacing-surface-padding-lg", "--atlas-surface-overlay", "--atlas-z-modal", "--atlas-z-overlay"],
   "figmaNodeId": "577:24",
   "figmaFileKey": "cKYhfaHLCoyMHi9nKr63Ig",
   "figmaProperties": { "Side": ["start", "end"] },

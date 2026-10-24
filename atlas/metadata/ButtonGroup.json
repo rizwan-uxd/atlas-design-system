@@ -14,7 +14,7 @@
     { "name": "children", "required": false, "type": "React.ReactNode" }
   ],
   "subcomponents": ["ButtonGroupButton", "ButtonGroupIconButton"],
-  "tokensUsed": ["--atlas-border-width-0", "--atlas-border-width-1", "--atlas-radius-none", "--atlas-spacing-0", "--atlas-spacing-1"],
+  "tokensUsed": ["--atlas-border-width-0", "--atlas-border-width-1", "--atlas-radius-none", "--atlas-spacing-0", "--atlas-spacing-item-gap"],
   "figmaNodeId": "666:5817",
   "figmaFileKey": "cKYhfaHLCoyMHi9nKr63Ig",
   "figmaProperties": { "Orientation": ["horizontal", "vertical"], "Size": ["sm", "md", "lg"] },

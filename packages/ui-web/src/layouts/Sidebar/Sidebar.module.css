@@ -26,9 +26,9 @@
 .header {
   display: flex;
   align-items: center;
-  gap: var(--atlas-spacing-2);
-  padding-block: var(--atlas-spacing-4);
-  padding-inline: var(--atlas-spacing-4);
+  gap: var(--atlas-spacing-control-gap);
+  padding-block: var(--atlas-spacing-surface-padding);
+  padding-inline: var(--atlas-spacing-surface-padding);
   flex-shrink: 0;
   font-size: var(--atlas-text-body-sm); /* Figma: workspace name SemiBold 14 */
   font-weight: var(--atlas-font-weight-semibold);
@@ -75,9 +75,9 @@
 .footer {
   display: flex;
   align-items: center;
-  gap: var(--atlas-spacing-2);
-  padding-block: var(--atlas-spacing-4);
-  padding-inline: var(--atlas-spacing-4);
+  gap: var(--atlas-spacing-control-gap);
+  padding-block: var(--atlas-spacing-surface-padding);
+  padding-inline: var(--atlas-spacing-surface-padding);
   flex-shrink: 0;
   border-block-start: var(--atlas-border-width-1) solid var(--atlas-border);
 }
@@ -110,7 +110,7 @@
 
 .collapseToggle:focus-visible {
   outline: var(--atlas-border-width-2) solid var(--atlas-focus-ring);
-  outline-offset: var(--atlas-spacing-0_5);
+  outline-offset: var(--atlas-spacing-focus-offset);
 }
 
 .collapseIcon {

@@ -24,6 +24,11 @@
  *  11. semantic-radius — component CSS and component-token aliases use a radius role
  *      (item|control|surface|pill); a primitive step is listed with a reason and its exact count in
  *      packages/governance/token-primitives.allow.json
+ *  M5.2:
+ *  12. semantic-spacing — inside spacing properties (padding, margin, gap, inset, outline-offset, and
+ *      custom properties named for spacing) component CSS and component-token aliases use a spacing
+ *      role; a primitive step is listed with a reason and its exact count in the same allowlist.
+ *      Width, height and other dimension uses are out of scope (DEC-087)
  *
  * Allow-list:
  *   - Lines containing "token-lint-disable-next-line" suppress the NEXT line only.
@@ -47,7 +52,7 @@ import fs from "fs"
 import path from "path"
 import { fileURLToPath } from "url"
 import { BEGIN, lintComponentTokens } from "../../scripts/lib/component-tokens.mjs"
-import { privateVarViolations, rawLengths, breakpointViolations, reducedMotionMissing, semanticRadiusViolations } from "../../scripts/lib/token-rules.mjs"
+import { privateVarViolations, rawLengths, breakpointViolations, reducedMotionMissing, semanticRadiusViolations, semanticSpacingViolations } from "../../scripts/lib/token-rules.mjs"
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const ROOT = path.resolve(__dirname, "../..")
@@ -279,6 +284,14 @@ const primitivesAllow = JSON.parse(fs.readFileSync(path.join(ROOT, "packages/gov
 const sr = semanticRadiusViolations([...componentCss, { file: TOKEN_REL, src: componentTokenRadius }], primitivesAllow)
 sr.violations.forEach(add("semantic-radius"))
 inspected["semantic-radius"] = sr.inspected
+
+// semantic-spacing (M5.2): the token file contributes only its component-token spacing declarations
+// (--atlas-<component>-…padding|gap|margin|offset…); the steps, the roles and the layout gutter/margin tokens
+// are declared there legally. Other lines are blanked, not dropped, so reported line numbers stay right.
+const componentTokenSpacing = tokenCss.split("\n").map((l) => (/^\s*--atlas-(?!spacing-|gutter-|margin-)[\w-]*(?:padding|gap|margin|offset)[\w-]*\s*:/.test(l) ? l : "")).join("\n")
+const ss = semanticSpacingViolations([...componentCss, { file: TOKEN_REL, src: componentTokenSpacing }], primitivesAllow)
+ss.violations.forEach(add("semantic-spacing"))
+inspected["semantic-spacing"] = ss.inspected
 
 // ─── Report ──────────────────────────────────────────────────────────────────
 

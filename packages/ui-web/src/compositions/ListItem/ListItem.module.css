@@ -35,8 +35,8 @@
 }
 
 .root[data-size="sm"] {
-  --_item-padding-block: var(--atlas-spacing-2);
-  --_item-gap:           var(--atlas-spacing-2);
+  --_item-padding-block: var(--atlas-spacing-item-padding);
+  --_item-gap:           var(--atlas-spacing-control-gap);
   --_content-gap:        0;
   --_description-size:   var(--atlas-font-size-xs);
   --_description-lh:     var(--atlas-line-height-snug);

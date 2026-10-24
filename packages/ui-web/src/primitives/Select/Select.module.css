@@ -32,7 +32,7 @@
 .trigger:focus-visible {
   border-color: var(--atlas-select-border-focus);
   outline: var(--atlas-border-width-2) solid var(--atlas-focus-ring);
-  outline-offset: var(--atlas-spacing-0_5);
+  outline-offset: var(--atlas-spacing-focus-offset);
 }
 
 .trigger:disabled {
@@ -128,11 +128,11 @@
 }
 
 .content[data-side="bottom"] {
-  margin-block-start: var(--atlas-spacing-1);
+  margin-block-start: var(--atlas-spacing-overlay-offset);
 }
 
 .content[data-side="top"] {
-  margin-block-end: var(--atlas-spacing-1);
+  margin-block-end: var(--atlas-spacing-overlay-offset);
 }
 
 /* ── Item ────────────────────────────────────────────────────── */
@@ -141,10 +141,10 @@
   position: relative;
   display: flex;
   align-items: center;
-  gap: var(--atlas-spacing-2);
+  gap: var(--atlas-spacing-control-gap);
   padding-block: var(--atlas-spacing-1_5);
   padding-inline-start: var(--atlas-spacing-8);
-  padding-inline-end: var(--atlas-spacing-2);
+  padding-inline-end: var(--atlas-spacing-item-padding);
   border-radius: var(--atlas-radius-item);
   color: var(--atlas-select-item-foreground);
   cursor: default;
@@ -184,7 +184,7 @@
 
 .label {
   padding-block: var(--atlas-spacing-1_5);
-  padding-inline: var(--atlas-spacing-2);
+  padding-inline: var(--atlas-spacing-item-padding);
   font-weight: var(--atlas-font-weight-medium);
   color: var(--atlas-select-label-foreground);
   font-size: var(--atlas-font-size-xs);

@@ -44,7 +44,7 @@
 /* Focus-visible */
 .textarea:focus-visible {
   outline: var(--atlas-border-width-2) solid var(--atlas-focus-ring);
-  outline-offset: var(--atlas-spacing-0_5);
+  outline-offset: var(--atlas-spacing-focus-offset);
   border-color: var(--atlas-textarea-border-focus);
 }
 
@@ -130,7 +130,7 @@
 .filled .textarea:focus-visible {
   background-color: var(--atlas-textarea-filled-background-focus);
   outline: var(--atlas-border-width-2) solid var(--atlas-focus-ring);
-  outline-offset: var(--atlas-spacing-0_5);
+  outline-offset: var(--atlas-spacing-focus-offset);
   border-block-end-color: var(--atlas-textarea-border-focus);
 }
 

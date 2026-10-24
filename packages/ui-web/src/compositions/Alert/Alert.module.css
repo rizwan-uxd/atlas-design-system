@@ -8,14 +8,14 @@
 
 .alert {
   /* Size-driven padding, overridden by .sm */
-  --_pad: var(--atlas-spacing-4);
+  --_pad: var(--atlas-spacing-surface-padding);
   /* Accent bar color, overridden per variant */
   --_accent: var(--atlas-info);
 
   position: relative;
   display: flex;
   align-items: flex-start;
-  gap: var(--atlas-spacing-3);
+  gap: var(--atlas-spacing-section-gap);
   /* Extra inline-start padding to clear the 4px accent bar + a small gap */
   padding: var(--_pad);
   padding-inline-start: calc(var(--_pad) + var(--atlas-spacing-1) + var(--atlas-spacing-2));
@@ -160,7 +160,7 @@
 }
 
 .title + .description {
-  margin-block-start: var(--atlas-spacing-1);
+  margin-block-start: var(--atlas-spacing-text-gap);
 }
 
 /* ── Actions slot ─────────────────────────────────────────────── */
@@ -169,7 +169,7 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--atlas-spacing-2);
+  gap: var(--atlas-spacing-control-gap);
   /* Figma: 8px slot padding under the 2px body gap; no single spacing token is 10px */
   margin-block-start: calc(var(--atlas-spacing-2) + var(--atlas-spacing-0_5));
 }
@@ -215,7 +215,7 @@
 .dismissBtn:focus-visible {
   opacity: 1;
   outline: var(--atlas-border-width-2) solid var(--atlas-focus-ring);
-  outline-offset: var(--atlas-spacing-0_5);
+  outline-offset: var(--atlas-spacing-focus-offset);
 }
 
 /* ── Enter animation ──────────────────────────────────────────── */

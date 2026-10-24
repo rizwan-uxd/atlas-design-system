@@ -17,7 +17,7 @@
     { "name": "disabled", "required": false, "type": "boolean" }
   ],
   "subcomponents": [],
-  "tokensUsed": ["--atlas-button-size-md-height", "--atlas-button-size-sm-height", "--atlas-foreground-muted", "--atlas-icon-size-xs", "--atlas-spacing-1"],
+  "tokensUsed": ["--atlas-button-size-md-height", "--atlas-button-size-sm-height", "--atlas-foreground-muted", "--atlas-icon-size-xs", "--atlas-spacing-item-gap"],
   "figmaNodeId": "903:537",
   "figmaFileKey": "cKYhfaHLCoyMHi9nKr63Ig",
   "figmaProperties": { "Size": ["sm", "md"], "Position": ["start", "middle", "end"] },

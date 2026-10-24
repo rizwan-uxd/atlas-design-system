@@ -10,7 +10,7 @@
   position: relative;
   display: inline-flex;
   align-items: center;
-  gap: var(--atlas-spacing-2);
+  gap: var(--atlas-spacing-control-gap);
   width: 100%;
   box-sizing: border-box;
   height: var(--atlas-spacing-10);
@@ -36,7 +36,7 @@
 .trigger:focus-visible {
   border-color: var(--atlas-primary);
   outline: var(--atlas-border-width-2) solid var(--atlas-focus-ring);
-  outline-offset: var(--atlas-spacing-0_5);
+  outline-offset: var(--atlas-spacing-focus-offset);
 }
 
 .trigger:disabled {
@@ -127,7 +127,7 @@
 
 .inputTrailingButton:focus-visible {
   outline: var(--atlas-border-width-2) solid var(--atlas-focus-ring);
-  outline-offset: var(--atlas-spacing-0_5);
+  outline-offset: var(--atlas-spacing-focus-offset);
 }
 
 .inputTrailingButton > svg {
@@ -171,11 +171,11 @@
 }
 
 .content[data-side="bottom"] {
-  margin-block-start: var(--atlas-spacing-1);
+  margin-block-start: var(--atlas-spacing-overlay-offset);
 }
 
 .content[data-side="top"] {
-  margin-block-end: var(--atlas-spacing-1);
+  margin-block-end: var(--atlas-spacing-overlay-offset);
 }
 
 /* ── Header (month nav) ──────────────────────────────────────── */
@@ -183,7 +183,7 @@
 .header {
   display: flex;
   align-items: center;
-  gap: var(--atlas-spacing-2);
+  gap: var(--atlas-spacing-control-gap);
 }
 
 .navButton {
@@ -208,7 +208,7 @@
 
 .navButton:focus-visible {
   outline: var(--atlas-border-width-2) solid var(--atlas-focus-ring);
-  outline-offset: var(--atlas-spacing-0_5);
+  outline-offset: var(--atlas-spacing-focus-offset);
 }
 
 .navButton > svg {
@@ -264,7 +264,7 @@
 .captionSelect:focus-visible {
   border-color: var(--atlas-primary);
   outline: var(--atlas-border-width-2) solid var(--atlas-focus-ring);
-  outline-offset: var(--atlas-spacing-0_5);
+  outline-offset: var(--atlas-spacing-focus-offset);
 }
 
 .captionChevron {
@@ -328,7 +328,7 @@
 
 .date:focus-visible {
   outline: var(--atlas-border-width-2) solid var(--atlas-focus-ring);
-  outline-offset: var(--atlas-spacing-0_5);
+  outline-offset: var(--atlas-spacing-focus-offset);
 }
 
 .date[data-outside] {

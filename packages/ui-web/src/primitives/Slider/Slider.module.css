@@ -29,7 +29,7 @@
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: var(--atlas-spacing-2);
+  gap: var(--atlas-spacing-control-gap);
   align-self: stretch;
 }
 
@@ -63,7 +63,7 @@
 .row {
   display: flex;
   align-items: center;
-  gap: var(--atlas-spacing-2);
+  gap: var(--atlas-spacing-control-gap);
   align-self: stretch;
 }
 
@@ -192,7 +192,7 @@
 /* Focus-visible: the ring sits on the thumb only. */
 .thumb:focus-visible {
   outline: var(--atlas-border-width-2) solid var(--atlas-focus-ring);
-  outline-offset: var(--atlas-spacing-0_5);
+  outline-offset: var(--atlas-spacing-focus-offset);
 }
 
 /* No easing while the pointer is moving the value. */
