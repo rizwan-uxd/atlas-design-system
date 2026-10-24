@@ -1017,6 +1017,42 @@ doc says so plainly.
 
 ---
 
+### M5.3 type — ✅ DONE 2026-10-24 (1 session, Kind B: listed visual changes)
+
+**As built** (plan `docs/superpowers/plans/2026-10-24-m5-3-type.md`; DEC-088, CAND-066 to CAND-068):
+
+- **Roles (owner-chosen):** eight composite roles. Each one is a size + line-height + weight bundle, and overline adds letter-spacing:
+
+  | Role | Size | Line-height | Weight |
+  |---|---|---|---|
+  | `type-heading` | `text-h3` (responsive) | tight | semibold |
+  | `type-title` | `text-h4` (responsive) | snug | semibold |
+  | `type-body` | `text-body` | normal | regular |
+  | `type-body-sm` | `text-body-sm` | normal | regular |
+  | `type-label` | `text-body-sm` | normal | medium |
+  | `type-caption` | `text-caption` | normal | regular |
+  | `type-overline` | `text-caption` | normal | medium, plus `letter-spacing-wide` |
+  | `type-stat` | `font-size-3xl` | tight | semibold |
+
+  - **CSS:** 25 alias tokens `--atlas-type-<role>-size|line-height|weight`. Sizes alias the responsive `--atlas-text-*`, so the `@media` uplift applies with no new blocks.
+  - **Figma:** 25 variables (`VariableID:1099:2-26`) and 8 `Type/*` text styles, applied to 913 text layers in 26 components.
+  - **Figma binding limit:** Figma reads a bound line-height or letter-spacing as pixels. So (owner) the styles bind size and weight, and carry line-height and letter-spacing as static percents equal to the CSS.
+- **Gate 2 (owner):**
+  - Figma wins on description size: the AlertDialog and Dialog descriptions are `type-body` (14 → 16px).
+  - The Chart title keeps semibold: its shared rule was split.
+- **Migration:**
+  - 46 rules now set their full role.
+  - 48 uses stay on the primitive scales in 35 reasoned entries: control font sizes stay on component tokens, plus size variants, glyphs, and control and nav text.
+  - Ratchet: token-lint `semantic-type`. It reads `font-size` only, and a primitive scale step fails unless it is allowlisted.
+- **Change proof (Kind B):** the plan listed 9 explicit changes before any code. The computed-style diff on `/` and `/runtime-demo` shows exactly the rendered subset:
+  - RadioGroup label weight 600 → 500
+  - Switch label and description line-height snug → normal
+
+  None of the 21 inherit-only rules changed any rendered element. The overlay changes are reviewed as images in the `visual-baseline.yml` PR, never bundled with the CSS change.
+- **Figma gaps:** Switch has no text layers, and Select's label and content are not drawn. These are for the next sync's discrepancy list.
+
+---
+
 ## Phase 6 — Filtered agent composition (2–3 sessions)
 
 `packages/registry/filter.ts`, enforced **outside** the agent: the agent receives a catalog subset,
