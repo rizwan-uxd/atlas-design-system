@@ -62,9 +62,9 @@
             "additionalProperties": false,
             "required": ["family", "file", "token", "count", "reason"],
             "properties": {
-              "family": { "enum": ["radius", "spacing", "type", "motion"] },
+              "family": { "enum": ["radius", "spacing", "type", "motion", "shadow"] },
               "file": { "type": "string", "pattern": "^packages/ui-web/src/.+\\.css$|^packages/tokens/atlas\\.tokens\\.css$" },
-              "token": { "type": "string", "pattern": "^--atlas-(radius|spacing|font-size|text|duration|easing)-[\\w-]+$" },
+              "token": { "type": "string", "pattern": "^--atlas-(radius|spacing|font-size|text|duration|easing|shadow)-[\\w-]+$" },
               "count": { "type": "integer", "minimum": 1 },
               "reason": { "$ref": "common.schema.json#/$defs/text" }
             }

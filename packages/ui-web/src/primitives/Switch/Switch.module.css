@@ -145,7 +145,7 @@
    * always appear as a white circle. This is a documented spec deviation.
    */
   background-color: var(--atlas-switch-thumb-background);
-  box-shadow: var(--atlas-shadow-sm);
+  box-shadow: var(--atlas-shadow-raised);
   /* Logical inset — RTL-safe starting position */
   inset-block-start: var(--atlas-spacing-0_5);
   inset-inline-start: var(--atlas-spacing-0_5);

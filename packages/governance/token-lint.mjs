@@ -35,6 +35,9 @@
  *  M5.4:
  *  14. semantic-motion — component motion names a motion role; a primitive duration or easing is listed
  *      with a reason and exact count (DEC-089). --atlas-duration-instant (reduced-motion off switch) is exempt
+ *  M5.5:
+ *  15. semantic-shadow — a component shadow names a shadow role or a component token; a size step
+ *      (--atlas-shadow-sm|md|lg|xl) is listed with a reason and exact count (DEC-090)
  *
  * Allow-list:
  *   - Lines containing "token-lint-disable-next-line" suppress the NEXT line only.
@@ -58,7 +61,7 @@ import fs from "fs"
 import path from "path"
 import { fileURLToPath } from "url"
 import { BEGIN, lintComponentTokens } from "../../scripts/lib/component-tokens.mjs"
-import { privateVarViolations, rawLengths, breakpointViolations, reducedMotionMissing, semanticRadiusViolations, semanticSpacingViolations, semanticTypeViolations, semanticMotionViolations } from "../../scripts/lib/token-rules.mjs"
+import { privateVarViolations, rawLengths, breakpointViolations, reducedMotionMissing, semanticRadiusViolations, semanticSpacingViolations, semanticTypeViolations, semanticMotionViolations, semanticShadowViolations } from "../../scripts/lib/token-rules.mjs"
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const ROOT = path.resolve(__dirname, "../..")
@@ -308,6 +311,11 @@ inspected["semantic-type"] = st.inspected
 const sm = semanticMotionViolations(componentCss, primitivesAllow)
 sm.violations.forEach(add("semantic-motion"))
 inspected["semantic-motion"] = sm.inspected
+
+// semantic-shadow (M5.5): component CSS only.
+const sh = semanticShadowViolations(componentCss, primitivesAllow)
+sh.violations.forEach(add("semantic-shadow"))
+inspected["semantic-shadow"] = sh.inspected
 
 // ─── Report ──────────────────────────────────────────────────────────────────
 

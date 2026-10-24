@@ -282,6 +282,40 @@ export function semanticMotionViolations(files, allow) {
   return { violations, inspected }
 }
 
+// Component shadows name a shadow ROLE (--atlas-shadow-raised|surface|popover|floating|modal) or a
+// component token. A size step is legal only where packages/governance/token-primitives.allow.json
+// gives a reason and the exact count per file (DEC-090).
+const SHADOW_STEP = /var\(\s*(--atlas-shadow-(?:sm|md|lg|xl))\s*\)/g
+const SHADOW_ANY = /var\(\s*--atlas-[\w-]*shadow[\w-]*\s*\)/g
+
+export function semanticShadowViolations(files, allow) {
+  const violations = []
+  const used = new Set()
+  let inspected = 0
+  for (const { file, src } of files) {
+    const s = stripComments(src)
+    inspected += (s.match(SHADOW_ANY) ?? []).length
+    const byToken = new Map()
+    for (const m of s.matchAll(SHADOW_STEP)) {
+      if (!byToken.has(m[1])) byToken.set(m[1], [])
+      byToken.get(m[1]).push(lineOf(s, m.index))
+    }
+    for (const [token, lines] of byToken) {
+      const i = allow.findIndex((a) => a.family === "shadow" && a.file === file && a.token === token)
+      if (i === -1) {
+        lines.forEach((line) => violations.push({ file, line, text: `${token} — use a shadow role (--atlas-shadow-raised|surface|popover|floating|modal), or list it with a reason in packages/governance/token-primitives.allow.json` }))
+        continue
+      }
+      used.add(i)
+      if (allow[i].count !== lines.length) violations.push({ file, line: lines[0], text: `${token}: ${lines.length} uses, allowlist says ${allow[i].count} — update the count or use a role` })
+    }
+  }
+  allow.forEach((a, i) => {
+    if (a.family === "shadow" && !used.has(i)) violations.push({ file: a.file, line: 0, text: `stale allowlist entry ${a.token} — no such use; remove it from packages/governance/token-primitives.allow.json` })
+  })
+  return { violations, inspected }
+}
+
 // ─── metric rows ─────────────────────────────────────────────────────────────
 // The token-lint rules behind each Phase 2d metric row. atlas-verify reports one check per row and
 // metrics-report measures the committed tree with the same grouping, so the two cannot disagree.

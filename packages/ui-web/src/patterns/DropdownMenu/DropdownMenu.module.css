@@ -19,7 +19,7 @@
   color: var(--atlas-foreground);
   border: var(--atlas-border-width-1) solid var(--atlas-border);
   border-radius: var(--atlas-radius-md);
-  box-shadow: var(--atlas-shadow-md);
+  box-shadow: var(--atlas-shadow-popover);
   font-family: var(--atlas-font-sans);
   font-size: var(--atlas-type-body-sm-size);
   font-weight: var(--atlas-type-body-sm-weight);

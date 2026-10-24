@@ -80,7 +80,7 @@
   gap: var(--atlas-spacing-item-gap);
 }
 
-/* Outline list — same per-trigger treatment as segmented (surface + shadow-sm on
+/* Outline list — same per-trigger treatment as segmented (surface + shadow-raised on
    selected) but with no track background/padding, matching the shadcn reference's
    "Default" style */
 .outline .list {
@@ -247,7 +247,7 @@
 .segmented .trigger[data-state="active"] {
   background-color: var(--atlas-surface);
   color: var(--atlas-foreground);
-  box-shadow: var(--atlas-shadow-sm);
+  box-shadow: var(--atlas-shadow-raised);
 }
 
 /* ── Outline variant triggers ──────────────────────────────────────────── */
@@ -271,7 +271,7 @@
 .outline .trigger[data-state="active"] {
   background-color: var(--atlas-surface);
   color: var(--atlas-foreground);
-  box-shadow: var(--atlas-shadow-sm);
+  box-shadow: var(--atlas-shadow-raised);
 }
 
 /* ── Trigger icon slot ────────────────────────────────────────── */
@@ -341,7 +341,7 @@
 
 .animated:is(.segmented, .outline) .list::after {
   background-color: var(--atlas-surface);
-  box-shadow: var(--atlas-shadow-sm);
+  box-shadow: var(--atlas-shadow-raised);
 }
 
 /* The highlight paints the selected fill; the trigger keeps only its text colour. */

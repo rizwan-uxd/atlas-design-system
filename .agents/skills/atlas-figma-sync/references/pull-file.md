@@ -103,7 +103,8 @@ const entries = vars.map((v) => {
 }).sort((a, b) => (a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : a[1] - b[1]))
 const fnv = (s) => { let h = 0x811c9dc5; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0 } return h.toString(16) }
 const full = entries.map(([n, c, t, w]) => ({ name: n, collection: cols[c].name, type: t, web: w === 0 ? null : w === 1 ? conv(n) : w }))
-return { collections: cols.map((c) => ({ name: c.name, modes: c.modes.map((m) => m.name), count: c.variableIds.length })), total: vars.length, checksum: fnv(JSON.stringify(full)), entries }
+const effectStyles = (await figma.getLocalEffectStylesAsync()).map((s) => s.name).sort()
+return { collections: cols.map((c) => ({ name: c.name, modes: c.modes.map((m) => m.name), count: c.variableIds.length })), total: vars.length, checksum: fnv(JSON.stringify(full)), entries, effectStyles }
 ```
 
 `web` is `0` for no `codeSyntax.WEB`, `1` for the slash→dash name, else the literal WEB string; the
@@ -112,11 +113,18 @@ type is its first letter (`C`OLOR, `F`LOAT, `S`TRING, `B`OOLEAN). Save the resul
 one-letter type) in node and compare it with `checksum` — the 2026-10-23 run read 463 variables in 5
 collections, `e11ec099`. Then expand it to `.atlas-pull/variables.json` in the shape of
 `figma-pull.schema.json#/$defs/variableTable` —
-`{ pulledAt: <now>, figmaVersion: null, collections, entries: [{ name, collection, type: "COLOR"|…, web }] }` —
+`{ pulledAt: <now>, figmaVersion: null, collections, entries: [{ name, collection, type: "COLOR"|…, web }], effectStyles }` —
 and run `node scripts/atlas-sync.mjs --variables .atlas-pull/variables.json`. The generator writes
 `atlas/tokens.json` `figmaTable`: coverage, `drift.nameDrift|missingInCode|missingInFigma`,
 `modeExpansions` (CSS tokens that spell out a multi-mode variable's modes), `conventionExceptions`,
-`unpublished` (no WEB and no CSS token: Figma-only, never drift) and the name→CSS map.
+`unpublished` (no WEB and no CSS token: Figma-only, never drift), `effectStyles`, `styleCoverage` and
+the name→CSS map.
+
+**Effect styles (M5.5, DEC-090).** Figma has no shadow variable, so shadows are effect styles whose
+layer colours are `shadow/color-*` variables. A style covers the CSS token its name spells:
+`--atlas-` + the name lowercased with `/` → `-` (`shadow/md` ↔ `--atlas-shadow-md`,
+`card/elevated-shadow` ↔ `--atlas-card-elevated-shadow`). A style whose name maps to no token is
+`missingInCode`. The style list is short and outside the checksum; copy it as returned.
 
 ## Bound variables (D1 option C)
 

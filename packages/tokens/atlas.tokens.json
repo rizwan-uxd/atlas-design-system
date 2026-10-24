@@ -303,6 +303,23 @@
         "md": { "$type": "shadow", "$value": "0 2px 4px -1px oklch(0 0 0 / 0.45), 0 4px 8px -2px oklch(0 0 0 / 0.50)" },
         "lg": { "$type": "shadow", "$value": "0 4px 8px -2px oklch(0 0 0 / 0.50), 0 12px 24px -4px oklch(0 0 0 / 0.55)" },
         "xl": { "$type": "shadow", "$value": "0 8px 16px -4px oklch(0 0 0 / 0.55), 0 24px 48px -8px oklch(0 0 0 / 0.60)" }
+      },
+      "role": {
+        "$description": "M5.5 (DEC-090): shadow roles by intent, each an alias of one size step per theme.",
+        "light": {
+          "raised": { "$type": "shadow", "$value": "{atlas.shadow.light.sm}" },
+          "surface": { "$type": "shadow", "$value": "{atlas.shadow.light.md}" },
+          "popover": { "$type": "shadow", "$value": "{atlas.shadow.light.md}" },
+          "floating": { "$type": "shadow", "$value": "{atlas.shadow.light.lg}" },
+          "modal": { "$type": "shadow", "$value": "{atlas.shadow.light.xl}" }
+        },
+        "dark": {
+          "raised": { "$type": "shadow", "$value": "{atlas.shadow.dark.sm}" },
+          "surface": { "$type": "shadow", "$value": "{atlas.shadow.dark.md}" },
+          "popover": { "$type": "shadow", "$value": "{atlas.shadow.dark.md}" },
+          "floating": { "$type": "shadow", "$value": "{atlas.shadow.dark.lg}" },
+          "modal": { "$type": "shadow", "$value": "{atlas.shadow.dark.xl}" }
+        }
       }
     },
     "typography": {

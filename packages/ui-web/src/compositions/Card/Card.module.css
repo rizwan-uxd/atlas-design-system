@@ -111,11 +111,11 @@
 
 /* Default and outlined hover — soft shadow, fill unchanged (Figma, DISC-093); active is drawn the same as default */
 .interactive.default:hover {
-  box-shadow: var(--atlas-shadow-sm);
+  box-shadow: var(--atlas-shadow-raised);
 }
 
 .interactive.outlined:hover {
-  box-shadow: var(--atlas-shadow-sm);
+  box-shadow: var(--atlas-shadow-raised);
 }
 
 /* Filled hover lightens the resting fill in both themes (background-hovered); retired the dark-only color-mix from BUG-054. */

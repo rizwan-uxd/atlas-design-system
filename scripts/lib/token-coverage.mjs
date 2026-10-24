@@ -72,7 +72,7 @@ export function tokenCoverage(entries, cssText) {
  * Plugin API's getLocalVariablesAsync through use_figma). Every metric here is over the whole table and
  * the whole CSS, so no result is a fraction.
  *
- * table: { collections: [{ name, modes: [..] }], entries: [{ name, collection, type, web }] }
+ * table: { collections: [{ name, modes: [..] }], entries: [{ name, collection, type, web }], effectStyles?: [name] }
  *
  * Classification, per Figma variable:
  *   unpublished    no codeSyntax.WEB and the slash→dash name is not declared: a Figma-only variable
@@ -87,6 +87,9 @@ export function tokenCoverage(entries, cssText) {
  *                  Mobile|Tablet|Desktop modes ↔ CSS `--atlas-columns-mobile|tablet|desktop`): the CSS
  *                  spells out the modes the Figma variable holds. Covered.
  *   missingInFigma declared in the CSS, and neither covered nor a mode expansion.
+ * Per Figma effect style (M5.5, DEC-090 — Figma has no shadow variable):
+ *   styleCoverage  `--atlas-` + the style name lowercased with / → - is declared (`shadow/md` ↔
+ *                  `--atlas-shadow-md`). Covered. A style whose name maps to no token is missingInCode.
  */
 export function tableCoverage(table, cssText) {
   const declared = declaredTokens(cssText)
@@ -116,6 +119,13 @@ export function tableCoverage(table, cssText) {
       missingInCode.push({ figma: e.name, css })
     }
   }
+  // M5.5 (DEC-090): Figma has no shadow variable; an effect style covers the token its name spells.
+  const styleCoverage = []
+  for (const style of [...(table.effectStyles ?? [])].sort()) {
+    const css = `--atlas-${style.toLowerCase().replaceAll("/", "-")}`
+    if (declared.has(css)) { covered.add(css); styleCoverage.push({ style, css }) }
+    else missingInCode.push({ figma: style, css })
+  }
   const missingInFigma = [...declared].filter((t) => !covered.has(t)).sort()
   const published = table.entries.length - unpublished.length
   return {
@@ -130,6 +140,7 @@ export function tableCoverage(table, cssText) {
     modeExpansions,
     conventionExceptions,
     unpublished,
+    styleCoverage,
     variables,
   }
 }

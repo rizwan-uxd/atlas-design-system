@@ -60,3 +60,22 @@ test("a mode suffix only counts for a mode the variable's collection has", () =>
   const r = tableCoverage({ collections, entries: clean() }, CSS.replace("}", "  --atlas-columns-tablet: 8;\n}"))
   assert.deepEqual(r.drift.missingInFigma, ["--atlas-columns-tablet"])
 })
+
+test("an effect style covers the CSS token its name spells", () => {
+  const css = CSS.replace("}", "  --atlas-shadow-sm: 0 1px 2px;\n  --atlas-card-elevated-shadow: var(--atlas-shadow-sm);\n}")
+  const r = tableCoverage({ collections, entries: clean(), effectStyles: ["shadow/sm", "card/elevated-shadow"] }, css)
+  assert.deepEqual(r.drift.missingInFigma, [])
+  assert.deepEqual(r.styleCoverage, [
+    { style: "card/elevated-shadow", css: "--atlas-card-elevated-shadow" },
+    { style: "shadow/sm", css: "--atlas-shadow-sm" },
+  ])
+})
+
+test("an effect style naming no CSS token is missing in code", () => {
+  const r = tableCoverage({ collections, entries: clean(), effectStyles: ["shadow/2xl"] }, CSS)
+  assert.deepEqual(r.drift.missingInCode, [{ figma: "shadow/2xl", css: "--atlas-shadow-2xl" }])
+})
+
+test("a table with no effect styles reports none", () => {
+  assert.deepEqual(tableCoverage({ collections, entries: clean() }, CSS).styleCoverage, [])
+})

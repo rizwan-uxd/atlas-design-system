@@ -391,6 +391,19 @@
   --atlas-shadow-xl: 0 8px 16px -4px oklch(0 0 0 / 0.55), 0 24px 48px -8px oklch(0 0 0 / 0.60);
 }
 
+/* ─────────────── M5.5 semantic shadow roles (Kind B, DEC-090) ───────────────
+   Declared on the dark selectors too: a role resolved only on :root would carry the light
+   value into a [data-theme="dark"] or .dark subtree. */
+:root,
+[data-theme="dark"],
+.dark {
+  --atlas-shadow-raised: var(--atlas-shadow-sm);
+  --atlas-shadow-surface: var(--atlas-shadow-md);
+  --atlas-shadow-popover: var(--atlas-shadow-md);
+  --atlas-shadow-floating: var(--atlas-shadow-lg);
+  --atlas-shadow-modal: var(--atlas-shadow-xl);
+}
+
 /* ─────────────── Component tokens (Atlas implementation tokens) ───────────────
    For implementing and documenting Atlas components. Every token aliases a semantic
    token; product code uses the semantic tokens instead. Declared on the same selectors
@@ -476,8 +489,8 @@
   --atlas-card-default-background: var(--atlas-surface);
   --atlas-card-default-border: var(--atlas-border);
   --atlas-card-elevated-background: var(--atlas-surface-raised);
-  --atlas-card-elevated-shadow: var(--atlas-shadow-md);
-  --atlas-card-elevated-shadow-hover: var(--atlas-shadow-lg);
+  --atlas-card-elevated-shadow: var(--atlas-shadow-surface);
+  --atlas-card-elevated-shadow-hover: var(--atlas-shadow-floating);
   --atlas-card-outlined-background: var(--atlas-surface);
   --atlas-card-outlined-border: var(--atlas-border-strong);
   --atlas-card-filled-background: var(--atlas-background-muted);

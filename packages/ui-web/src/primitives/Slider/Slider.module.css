@@ -163,7 +163,7 @@
   border: var(--atlas-border-width-2) solid var(--atlas-primary);
   border-radius: var(--atlas-radius-pill);
   background-color: var(--atlas-surface);
-  box-shadow: var(--atlas-shadow-sm);
+  box-shadow: var(--atlas-shadow-raised);
   cursor: grab;
   outline: none;
   transition:
@@ -184,7 +184,7 @@
 /* Hover and dragging: a primary-subtle halo of spacing-1 around the thumb. */
 .root:not([data-disabled]) .thumb:hover,
 .thumb[data-active] {
-  box-shadow: var(--atlas-shadow-sm), 0 0 0 var(--atlas-spacing-1) var(--atlas-primary-subtle);
+  box-shadow: var(--atlas-shadow-raised), 0 0 0 var(--atlas-spacing-1) var(--atlas-primary-subtle);
 }
 
 .thumb[data-active] {

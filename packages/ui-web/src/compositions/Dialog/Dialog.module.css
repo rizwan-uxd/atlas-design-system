@@ -42,7 +42,7 @@
   /* FIX BUG-050: was --atlas-background; merges with page in dark mode */
   background-color: var(--atlas-surface-overlay);
   border: var(--atlas-border-width-1) solid var(--atlas-border);
-  box-shadow: var(--atlas-shadow-xl);
+  box-shadow: var(--atlas-shadow-modal);
   font-family: var(--atlas-font-sans);
   display: flex;
   flex-direction: column;

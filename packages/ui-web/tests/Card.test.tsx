@@ -220,7 +220,7 @@ describe("Card — interactive hover", () => {
   for (const variant of ["default", "outlined"]) {
     it(`${variant} hover adds a shadow and keeps the fill; active has no rule`, () => {
       const body = rule(`.interactive.${variant}`)
-      expect(body).toContain("box-shadow: var(--atlas-shadow-sm)")
+      expect(body).toContain("box-shadow: var(--atlas-shadow-raised)")
       expect(body).not.toContain("background")
     })
   }
