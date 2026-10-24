@@ -1053,6 +1053,38 @@ doc says so plainly.
 
 ---
 
+### M5.4 motion — ✅ DONE 2026-10-24 (1 session, Kind B: listed timing changes)
+
+**As built** (plan `docs/superpowers/plans/2026-10-24-m5-4-motion.md`; DEC-089, CAND-069):
+
+- **Roles (owner-chosen, by intent):** each is a duration + easing pair.
+
+  | Role | Duration | Easing |
+  |---|---|---|
+  | `motion-state` | fast | standard |
+  | `motion-move` | base | emphasized |
+  | `motion-enter` | base | emphasized |
+  | `motion-exit` | base | exit |
+  | `motion-enter-quick` | fast | standard |
+  | `motion-exit-quick` | fast | exit |
+
+  - **CSS:** `--atlas-motion-<role>-duration|easing`, 12 alias tokens.
+  - **Figma:** 12 documentation variables in `Atlas/Semantic` (`VariableID:1106:2-13`, empty scopes). Figma cannot bind prototype timing.
+  - **JS:** `MotionTokens.roles` is read from CSS, and the presets `quick`/`enter`/`exit` use state/enter/exit.
+- **Reduced motion first:** `reduced-motion-required` now detects role tokens as well as `--atlas-duration-*`, so no animated file drops out of the check (30 files).
+- **Migration:**
+  - 101 transition and animation items on roles.
+  - 15 stay primitive with reasons: loops, the Checkbox mark draw-in, and pointer- or scroll-following motion.
+  - Ratchet: token-lint `semantic-motion`. `--atlas-duration-instant` is exempt.
+- **Listed changes:**
+  - Alert exit and Toast enter easing.
+  - Toast exit 120 → 200ms.
+  - NavBar, Sidebar and Progress move easing → emphasized.
+  - Preset `enter` easing and `exit` duration.
+- **Proof:** computed motion dumps in four modes (light/dark × reduced motion off/on). With motion on, only the rendered listed rows changed: Progress fill and Sidebar easing. Under `prefers-reduced-motion`, nothing changed. Screenshots are expected unchanged, because visual tests disable animations.
+
+---
+
 ## Phase 6 — Filtered agent composition (2–3 sessions)
 
 `packages/registry/filter.ts`, enforced **outside** the agent: the agent receives a catalog subset,
