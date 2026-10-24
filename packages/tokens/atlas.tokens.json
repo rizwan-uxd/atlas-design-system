@@ -355,6 +355,16 @@
         "body":     { "$type": "dimension", "$value": "{atlas.typography.font-size.base}" },
         "body-sm":  { "$type": "dimension", "$value": "{atlas.typography.font-size.sm}" },
         "caption":  { "$type": "dimension", "$value": "{atlas.typography.font-size.xs}" }
+      },
+      "role": {
+        "heading": { "$type": "typography", "$value": { "fontFamily": "{atlas.typography.font-family.sans}", "fontSize": "{atlas.typography.responsive.h3.mobile}", "fontWeight": "{atlas.typography.font-weight.semibold}", "lineHeight": "{atlas.typography.line-height.tight}", "letterSpacing": "{atlas.typography.letter-spacing.normal}" }, "$description": "Size follows h3 at each breakpoint (mobile shown)." },
+        "title": { "$type": "typography", "$value": { "fontFamily": "{atlas.typography.font-family.sans}", "fontSize": "{atlas.typography.responsive.h4.mobile}", "fontWeight": "{atlas.typography.font-weight.semibold}", "lineHeight": "{atlas.typography.line-height.snug}", "letterSpacing": "{atlas.typography.letter-spacing.normal}" }, "$description": "Size follows h4 at each breakpoint (mobile shown)." },
+        "body": { "$type": "typography", "$value": { "fontFamily": "{atlas.typography.font-family.sans}", "fontSize": "{atlas.typography.responsive.body}", "fontWeight": "{atlas.typography.font-weight.regular}", "lineHeight": "{atlas.typography.line-height.normal}", "letterSpacing": "{atlas.typography.letter-spacing.normal}" } },
+        "body-sm": { "$type": "typography", "$value": { "fontFamily": "{atlas.typography.font-family.sans}", "fontSize": "{atlas.typography.responsive.body-sm}", "fontWeight": "{atlas.typography.font-weight.regular}", "lineHeight": "{atlas.typography.line-height.normal}", "letterSpacing": "{atlas.typography.letter-spacing.normal}" } },
+        "label": { "$type": "typography", "$value": { "fontFamily": "{atlas.typography.font-family.sans}", "fontSize": "{atlas.typography.responsive.body-sm}", "fontWeight": "{atlas.typography.font-weight.medium}", "lineHeight": "{atlas.typography.line-height.normal}", "letterSpacing": "{atlas.typography.letter-spacing.normal}" } },
+        "caption": { "$type": "typography", "$value": { "fontFamily": "{atlas.typography.font-family.sans}", "fontSize": "{atlas.typography.responsive.caption}", "fontWeight": "{atlas.typography.font-weight.regular}", "lineHeight": "{atlas.typography.line-height.normal}", "letterSpacing": "{atlas.typography.letter-spacing.normal}" } },
+        "overline": { "$type": "typography", "$value": { "fontFamily": "{atlas.typography.font-family.sans}", "fontSize": "{atlas.typography.responsive.caption}", "fontWeight": "{atlas.typography.font-weight.medium}", "lineHeight": "{atlas.typography.line-height.normal}", "letterSpacing": "{atlas.typography.letter-spacing.wide}" } },
+        "stat": { "$type": "typography", "$value": { "fontFamily": "{atlas.typography.font-family.sans}", "fontSize": "{atlas.typography.font-size.3xl}", "fontWeight": "{atlas.typography.font-weight.semibold}", "lineHeight": "{atlas.typography.line-height.tight}", "letterSpacing": "{atlas.typography.letter-spacing.normal}" } }
       }
     },
     "border-width": {

@@ -228,6 +228,34 @@
   --atlas-text-body-sm: var(--atlas-font-size-sm);
   --atlas-text-caption: var(--atlas-font-size-xs);
 
+  /* M5.3 semantic type roles (Kind B); Figma Type/* text styles. Sizes alias the responsive --atlas-text-*,
+     so the @media uplift applies without new blocks. */
+  --atlas-type-heading-size: var(--atlas-text-h3);
+  --atlas-type-heading-line-height: var(--atlas-line-height-tight);
+  --atlas-type-heading-weight: var(--atlas-font-weight-semibold);
+  --atlas-type-title-size: var(--atlas-text-h4);
+  --atlas-type-title-line-height: var(--atlas-line-height-snug);
+  --atlas-type-title-weight: var(--atlas-font-weight-semibold);
+  --atlas-type-body-size: var(--atlas-text-body);
+  --atlas-type-body-line-height: var(--atlas-line-height-normal);
+  --atlas-type-body-weight: var(--atlas-font-weight-regular);
+  --atlas-type-body-sm-size: var(--atlas-text-body-sm);
+  --atlas-type-body-sm-line-height: var(--atlas-line-height-normal);
+  --atlas-type-body-sm-weight: var(--atlas-font-weight-regular);
+  --atlas-type-label-size: var(--atlas-text-body-sm);
+  --atlas-type-label-line-height: var(--atlas-line-height-normal);
+  --atlas-type-label-weight: var(--atlas-font-weight-medium);
+  --atlas-type-caption-size: var(--atlas-text-caption);
+  --atlas-type-caption-line-height: var(--atlas-line-height-normal);
+  --atlas-type-caption-weight: var(--atlas-font-weight-regular);
+  --atlas-type-overline-size: var(--atlas-text-caption);
+  --atlas-type-overline-line-height: var(--atlas-line-height-normal);
+  --atlas-type-overline-weight: var(--atlas-font-weight-medium);
+  --atlas-type-overline-letter-spacing: var(--atlas-letter-spacing-wide);
+  --atlas-type-stat-size: var(--atlas-font-size-3xl);
+  --atlas-type-stat-line-height: var(--atlas-line-height-tight);
+  --atlas-type-stat-weight: var(--atlas-font-weight-semibold);
+
   /* ─────────────── Line-height & letter-spacing ─────────────── */
   --atlas-line-height-tight: 1.2;
   --atlas-line-height-snug: 1.35;
