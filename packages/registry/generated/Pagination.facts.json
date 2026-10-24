@@ -220,7 +220,7 @@
       "Position": ["start", "middle", "end"]
     }
   },
-  "tokensUsed": ["--atlas-button-size-md-height", "--atlas-button-size-sm-height", "--atlas-foreground-muted", "--atlas-icon-size-xs", "--atlas-spacing-1"],
+  "tokensUsed": ["--atlas-button-size-md-height", "--atlas-button-size-sm-height", "--atlas-foreground-muted", "--atlas-icon-size-xs", "--atlas-spacing-item-gap"],
   "module": {
     "imports": [
       { "from": "@atlas/ui-web/patterns/Pagination/Pagination", "name": "PaginationSize", "kind": "named" }

@@ -3,7 +3,7 @@
   display: flex;
   align-items: center;
   width: 100%;
-  gap: var(--atlas-spacing-2);
+  gap: var(--atlas-spacing-control-gap);
   border: none;
   background: none;
   cursor: pointer;
@@ -58,7 +58,7 @@
 .root:focus-visible,
 .child:focus-visible {
   outline: var(--atlas-border-width-2) solid var(--atlas-focus-ring);
-  outline-offset: var(--atlas-spacing-0_5);
+  outline-offset: var(--atlas-spacing-focus-offset);
 }
 
 /* ── Slots ──────────────────────────────────────────────────────── */
@@ -128,5 +128,5 @@
 :global([data-collapsed]) .root,
 :global([data-collapsed]) .child {
   justify-content: center;
-  padding-inline: var(--atlas-spacing-2);
+  padding-inline: var(--atlas-spacing-item-padding);
 }

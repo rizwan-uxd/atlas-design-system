@@ -20,7 +20,7 @@
 .vertical {
   flex-direction: column;
   align-items: flex-start;
-  gap: var(--atlas-spacing-1);
+  gap: var(--atlas-spacing-item-gap);
 }
 
 /* ── Step ─────────────────────────────────────────────────────── */
@@ -34,7 +34,7 @@
 .horizontal .step {
   flex: 1 1 0;
   align-items: center;
-  gap: var(--atlas-spacing-2);
+  gap: var(--atlas-spacing-control-gap);
 }
 
 .horizontal .step[data-last] {
@@ -51,7 +51,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--atlas-spacing-1);
+  gap: var(--atlas-spacing-item-gap);
 }
 
 /* ── Marker ───────────────────────────────────────────────────── */

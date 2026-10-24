@@ -24,7 +24,7 @@
 
 /* Ghost items are never joined; keep them apart. */
 .group[data-spaced] {
-  gap: var(--atlas-spacing-1);
+  gap: var(--atlas-spacing-item-gap);
 }
 
 /* Attribute selectors lift these above Button's single-class rules. */

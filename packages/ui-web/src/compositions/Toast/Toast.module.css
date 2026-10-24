@@ -39,7 +39,7 @@
   align-items: center;
   inline-size: 100%;
   max-inline-size: var(--atlas-content-width-md);
-  padding: var(--atlas-spacing-4);
+  padding: var(--atlas-spacing-surface-padding);
   font-family: var(--atlas-font-sans);
   color: var(--atlas-foreground);
   background-color: var(--_fill);
@@ -66,7 +66,7 @@
   grid-column: 1;
   grid-row: 1 / span 2;
   display: inline-flex;
-  margin-inline-end: var(--atlas-spacing-3);
+  margin-inline-end: var(--atlas-spacing-section-gap);
   color: var(--_icon);
 }
 
@@ -85,7 +85,7 @@
   grid-column: 2;
   grid-row: 2;
   margin: 0;
-  margin-block-start: var(--atlas-spacing-1);
+  margin-block-start: var(--atlas-spacing-text-gap);
   font-size: var(--atlas-font-size-xs);
   font-weight: var(--atlas-font-weight-regular);
   line-height: var(--atlas-line-height-snug);
@@ -102,13 +102,13 @@
 .action {
   grid-column: 3;
   grid-row: 1 / span 2;
-  margin-inline-start: var(--atlas-spacing-3);
+  margin-inline-start: var(--atlas-spacing-section-gap);
 }
 
 .close {
   grid-column: 4;
   grid-row: 1 / span 2;
-  margin-inline-start: var(--atlas-spacing-3);
+  margin-inline-start: var(--atlas-spacing-section-gap);
 }
 
 /* With no action the close button takes the third column's place. */

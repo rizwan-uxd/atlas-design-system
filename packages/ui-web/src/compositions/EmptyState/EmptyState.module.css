@@ -28,7 +28,7 @@
 /* ── Sizes ────────────────────────────────────────────────────── */
 
 .sm {
-  --_pad: var(--atlas-spacing-6);
+  --_pad: var(--atlas-spacing-surface-padding-lg);
   --_icon-size: var(--atlas-icon-size-md);
   --_icon-stroke: var(--atlas-icon-stroke-md);
   --_title-size: var(--atlas-text-h4);
@@ -90,5 +90,5 @@
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  gap: var(--atlas-spacing-3);
+  gap: var(--atlas-spacing-section-gap);
 }

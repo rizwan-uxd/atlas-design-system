@@ -29,16 +29,16 @@
 
 /* The 4px gap off the trigger */
 .content[data-side="bottom"] {
-  margin-block-start: var(--atlas-spacing-1);
+  margin-block-start: var(--atlas-spacing-overlay-offset);
 }
 
 .content[data-side="top"] {
-  margin-block-end: var(--atlas-spacing-1);
+  margin-block-end: var(--atlas-spacing-overlay-offset);
 }
 
 /* Submenu: opens beside the parent panel, first row level with the trigger row */
 .content[data-side="inline-end"] {
-  margin-inline-start: var(--atlas-spacing-1);
+  margin-inline-start: var(--atlas-spacing-overlay-offset);
   margin-block-start: calc((var(--atlas-spacing-1) + var(--atlas-border-width-1)) * -1);
   inline-size: calc(var(--atlas-spacing-16) * 2.5);
 }
@@ -49,9 +49,9 @@
   position: relative;
   display: flex;
   align-items: center;
-  gap: var(--atlas-spacing-2);
+  gap: var(--atlas-spacing-control-gap);
   padding-block: var(--atlas-spacing-1_5);
-  padding-inline: var(--atlas-spacing-2);
+  padding-inline: var(--atlas-spacing-item-padding);
   border-radius: var(--atlas-radius-item);
   color: var(--atlas-foreground);
   cursor: default;
@@ -161,7 +161,7 @@
 
 .menuLabel {
   padding-block: var(--atlas-spacing-1_5);
-  padding-inline: var(--atlas-spacing-2);
+  padding-inline: var(--atlas-spacing-item-padding);
   font-weight: var(--atlas-font-weight-medium);
   color: var(--atlas-foreground);
 }

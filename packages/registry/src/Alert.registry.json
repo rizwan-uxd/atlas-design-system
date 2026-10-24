@@ -39,7 +39,7 @@
     "accent-success": "--atlas-success",
     "accent-warning": "--atlas-warning",
     "pad-lg": "--atlas-spacing-5",
-    "pad-md": "--atlas-spacing-4",
+    "pad-md": "--atlas-spacing-surface-padding",
     "pad-sm": "--atlas-spacing-3"
   }
 }

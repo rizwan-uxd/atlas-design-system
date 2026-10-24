@@ -121,7 +121,7 @@
 }
 
 .dropdown {
-  gap: var(--atlas-spacing-1);
+  gap: var(--atlas-spacing-item-gap);
 }
 
 /* Touch target: grow the hit area to --atlas-touch-min without changing the visual size */

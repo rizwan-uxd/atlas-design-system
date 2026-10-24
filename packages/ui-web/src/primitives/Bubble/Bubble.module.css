@@ -82,7 +82,7 @@
 
 .interactive:focus-visible {
   outline: var(--atlas-border-width-2) solid var(--atlas-focus-ring);
-  outline-offset: var(--atlas-spacing-0_5);
+  outline-offset: var(--atlas-spacing-focus-offset);
 }
 
 /* ── Group ────────────────────────────────────────────────────── */
@@ -90,7 +90,7 @@
 .group {
   display: flex;
   flex-direction: column;
-  gap: var(--atlas-spacing-1);
+  gap: var(--atlas-spacing-item-gap);
 }
 
 /* ── Reactions ────────────────────────────────────────────────── */
@@ -102,7 +102,7 @@
   inset-inline-end: var(--atlas-spacing-3);
   display: inline-flex;
   align-items: center;
-  gap: var(--atlas-spacing-1);
+  gap: var(--atlas-spacing-item-gap);
   padding-block: var(--atlas-spacing-0_5);
   padding-inline: var(--atlas-spacing-1_5);
   border: var(--atlas-border-width-2) solid var(--atlas-surface);

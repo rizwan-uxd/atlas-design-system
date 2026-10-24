@@ -73,6 +73,16 @@
   --atlas-spacing-10: 40px;
   --atlas-spacing-12: 48px;
   --atlas-spacing-16: 64px;
+  /* M5.2 semantic spacing roles — value-identical aliases (Kind A); Figma Atlas/Semantic spacing-* */
+  --atlas-spacing-focus-offset: var(--atlas-spacing-0_5);
+  --atlas-spacing-item-gap: var(--atlas-spacing-1);
+  --atlas-spacing-text-gap: var(--atlas-spacing-1);
+  --atlas-spacing-overlay-offset: var(--atlas-spacing-1);
+  --atlas-spacing-control-gap: var(--atlas-spacing-2);
+  --atlas-spacing-item-padding: var(--atlas-spacing-2);
+  --atlas-spacing-section-gap: var(--atlas-spacing-3);
+  --atlas-spacing-surface-padding: var(--atlas-spacing-4);
+  --atlas-spacing-surface-padding-lg: var(--atlas-spacing-6);
 
   /* ─────────────── Radius ─────────────── */
   --atlas-radius-base: 8px;
@@ -377,7 +387,7 @@
   --atlas-button-foreground-disabled: var(--atlas-foreground-disabled);
   /* Button · size and shape */
   --atlas-button-radius: var(--atlas-radius-control);
-  --atlas-button-gap: var(--atlas-spacing-2);
+  --atlas-button-gap: var(--atlas-spacing-control-gap);
   --atlas-button-size-xs-gap: var(--atlas-spacing-1);
   --atlas-button-size-xs-height: var(--atlas-spacing-6);
   --atlas-button-size-xs-padding-inline: var(--atlas-spacing-2);
@@ -439,9 +449,9 @@
   --atlas-card-radius: var(--atlas-radius-surface);
   --atlas-card-size-sm-padding: var(--atlas-spacing-3);
   --atlas-card-size-sm-gap: var(--atlas-spacing-2);
-  --atlas-card-size-md-padding: var(--atlas-spacing-4);
-  --atlas-card-size-md-gap: var(--atlas-spacing-3);
-  --atlas-card-size-lg-padding: var(--atlas-spacing-6);
+  --atlas-card-size-md-padding: var(--atlas-spacing-surface-padding);
+  --atlas-card-size-md-gap: var(--atlas-spacing-section-gap);
+  --atlas-card-size-lg-padding: var(--atlas-spacing-surface-padding-lg);
   --atlas-card-size-lg-gap: var(--atlas-spacing-4);
 
   /* Textarea · colour */

@@ -167,6 +167,15 @@ export const spacing = {
   10: 40,
   12: 48,
   16: 64,
+  "focus-offset": 2,
+  "item-gap": 4,
+  "text-gap": 4,
+  "overlay-offset": 4,
+  "control-gap": 8,
+  "item-padding": 8,
+  "section-gap": 12,
+  "surface-padding": 16,
+  "surface-padding-lg": 24,
 } as const
 
 // ─── Border radius (--atlas-radius-*) ─────────────────────────────────────────

@@ -39,7 +39,7 @@
 
 .heading {
   padding-block: var(--atlas-spacing-1_5);
-  padding-inline: var(--atlas-spacing-2);
+  padding-inline: var(--atlas-spacing-item-padding);
   font-weight: var(--atlas-font-weight-medium);
   color: var(--atlas-foreground);
 }
@@ -49,9 +49,9 @@
 .item {
   display: flex;
   align-items: center;
-  gap: var(--atlas-spacing-2);
+  gap: var(--atlas-spacing-control-gap);
   padding-block: var(--atlas-spacing-1_5);
-  padding-inline: var(--atlas-spacing-2);
+  padding-inline: var(--atlas-spacing-item-padding);
   border-radius: var(--atlas-radius-item);
   color: var(--atlas-foreground);
   cursor: default;

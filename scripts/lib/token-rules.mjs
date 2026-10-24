@@ -165,6 +165,48 @@ export function semanticRadiusViolations(files, allow) {
   return { violations, inspected }
 }
 
+// ─── semantic-spacing (M5.2) ─────────────────────────────────────────────────
+// Inside a spacing property (padding, margin, gap, inset, outline-offset, or a custom property named for
+// spacing), component code names a spacing ROLE. A primitive step is legal only where
+// packages/governance/token-primitives.allow.json gives a reason and the exact count per file. Width,
+// height and other dimension uses are out of scope: they belong to a later size family (DEC-087).
+const SPACING_PROP = /^(?:padding|margin|gap|row-gap|column-gap|inset|top|right|bottom|left|outline-offset)(?:-|$)|^--(?!atlas-spacing-)[\w-]*(?:padding|pad|gap|margin|offset|px)\b/
+const SPACING_STEP = /var\(\s*(--atlas-spacing-(?:0|px|0_5|1|1_5|2|3|4|5|6|8|9|10|12|16))\s*\)/g
+const SPACING_ANY = /var\(\s*--atlas-spacing-[\w-]+\s*\)/g
+const DECL = /([-\w]+)\s*:\s*([^;{}]+)/g
+
+export function semanticSpacingViolations(files, allow) {
+  const violations = []
+  const used = new Set()
+  let inspected = 0
+  for (const { file, src } of files) {
+    const s = stripComments(src)
+    const byToken = new Map()
+    for (const d of s.matchAll(DECL)) {
+      if (!SPACING_PROP.test(d[1])) continue
+      const at = d.index + d[0].length - d[2].length
+      inspected += (d[2].match(SPACING_ANY) ?? []).length
+      for (const m of d[2].matchAll(SPACING_STEP)) {
+        if (!byToken.has(m[1])) byToken.set(m[1], [])
+        byToken.get(m[1]).push(lineOf(s, at + m.index))
+      }
+    }
+    for (const [token, lines] of byToken) {
+      const i = allow.findIndex((a) => a.family === "spacing" && a.file === file && a.token === token)
+      if (i === -1) {
+        lines.forEach((line) => violations.push({ file, line, text: `${token} — use a spacing role (focus-offset|item-gap|text-gap|overlay-offset|control-gap|item-padding|section-gap|surface-padding|surface-padding-lg), or list it with a reason in packages/governance/token-primitives.allow.json` }))
+        continue
+      }
+      used.add(i)
+      if (allow[i].count !== lines.length) violations.push({ file, line: lines[0], text: `${token}: ${lines.length} uses, allowlist says ${allow[i].count} — update the count or use a role` })
+    }
+  }
+  allow.forEach((a, i) => {
+    if (a.family === "spacing" && !used.has(i)) violations.push({ file: a.file, line: 0, text: `stale allowlist entry ${a.token} — no such use; remove it from packages/governance/token-primitives.allow.json` })
+  })
+  return { violations, inspected }
+}
+
 // ─── metric rows ─────────────────────────────────────────────────────────────
 // The token-lint rules behind each Phase 2d metric row. atlas-verify reports one check per row and
 // metrics-report measures the committed tree with the same grouping, so the two cannot disagree.

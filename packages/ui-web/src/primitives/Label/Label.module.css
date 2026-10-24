@@ -9,7 +9,7 @@
 .label {
   display: inline-flex;
   align-items: baseline;
-  gap: var(--atlas-spacing-1);
+  gap: var(--atlas-spacing-item-gap);
   font-family: var(--atlas-font-sans);
   font-weight: var(--atlas-font-weight-semibold); /* Figma: SemiBold at every size */
   color: var(--atlas-foreground);

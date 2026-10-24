@@ -187,6 +187,15 @@
         { "name": "radius-control", "type": "FLOAT", "values": { "Light": { "alias": "Atlas/Primitives:radius/md" }, "Dark": { "alias": "Atlas/Primitives:radius/md" } } },
         { "name": "radius-surface", "type": "FLOAT", "values": { "Light": { "alias": "Atlas/Primitives:radius/lg" }, "Dark": { "alias": "Atlas/Primitives:radius/lg" } } },
         { "name": "radius-pill", "type": "FLOAT", "values": { "Light": { "alias": "Atlas/Primitives:radius/full" }, "Dark": { "alias": "Atlas/Primitives:radius/full" } } },
+        { "name": "spacing-focus-offset", "type": "FLOAT", "values": { "Light": { "alias": "Atlas/Primitives:spacing/0_5" }, "Dark": { "alias": "Atlas/Primitives:spacing/0_5" } } },
+        { "name": "spacing-item-gap", "type": "FLOAT", "values": { "Light": { "alias": "Atlas/Primitives:spacing/1" }, "Dark": { "alias": "Atlas/Primitives:spacing/1" } } },
+        { "name": "spacing-text-gap", "type": "FLOAT", "values": { "Light": { "alias": "Atlas/Primitives:spacing/1" }, "Dark": { "alias": "Atlas/Primitives:spacing/1" } } },
+        { "name": "spacing-overlay-offset", "type": "FLOAT", "values": { "Light": { "alias": "Atlas/Primitives:spacing/1" }, "Dark": { "alias": "Atlas/Primitives:spacing/1" } } },
+        { "name": "spacing-control-gap", "type": "FLOAT", "values": { "Light": { "alias": "Atlas/Primitives:spacing/2" }, "Dark": { "alias": "Atlas/Primitives:spacing/2" } } },
+        { "name": "spacing-item-padding", "type": "FLOAT", "values": { "Light": { "alias": "Atlas/Primitives:spacing/2" }, "Dark": { "alias": "Atlas/Primitives:spacing/2" } } },
+        { "name": "spacing-section-gap", "type": "FLOAT", "values": { "Light": { "alias": "Atlas/Primitives:spacing/3" }, "Dark": { "alias": "Atlas/Primitives:spacing/3" } } },
+        { "name": "spacing-surface-padding", "type": "FLOAT", "values": { "Light": { "alias": "Atlas/Primitives:spacing/4" }, "Dark": { "alias": "Atlas/Primitives:spacing/4" } } },
+        { "name": "spacing-surface-padding-lg", "type": "FLOAT", "values": { "Light": { "alias": "Atlas/Primitives:spacing/6" }, "Dark": { "alias": "Atlas/Primitives:spacing/6" } } },
         { "name": "avatar-group-overlap", "type": "FLOAT", "values": { "Light": -8, "Dark": -8 } }
       ]
     },

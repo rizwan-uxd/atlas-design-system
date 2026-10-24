@@ -214,7 +214,7 @@
       "Collapsed": ["false", "true"]
     }
   },
-  "tokensUsed": ["--atlas-background-hovered", "--atlas-border", "--atlas-border-width-1", "--atlas-border-width-2", "--atlas-content-width-xs", "--atlas-duration-base", "--atlas-easing-standard", "--atlas-focus-ring", "--atlas-font-size-xs", "--atlas-font-weight-medium", "--atlas-font-weight-semibold", "--atlas-foreground-muted", "--atlas-foreground-subtle", "--atlas-icon-size-xs", "--atlas-letter-spacing-wide", "--atlas-radius-control", "--atlas-spacing-0_5", "--atlas-spacing-1", "--atlas-spacing-2", "--atlas-spacing-3", "--atlas-spacing-4", "--atlas-spacing-8", "--atlas-surface", "--atlas-text-body-sm"],
+  "tokensUsed": ["--atlas-background-hovered", "--atlas-border", "--atlas-border-width-1", "--atlas-border-width-2", "--atlas-content-width-xs", "--atlas-duration-base", "--atlas-easing-standard", "--atlas-focus-ring", "--atlas-font-size-xs", "--atlas-font-weight-medium", "--atlas-font-weight-semibold", "--atlas-foreground-muted", "--atlas-foreground-subtle", "--atlas-icon-size-xs", "--atlas-letter-spacing-wide", "--atlas-radius-control", "--atlas-spacing-0_5", "--atlas-spacing-1", "--atlas-spacing-2", "--atlas-spacing-3", "--atlas-spacing-8", "--atlas-spacing-control-gap", "--atlas-spacing-focus-offset", "--atlas-spacing-surface-padding", "--atlas-surface", "--atlas-text-body-sm"],
   "module": {
     "imports": [],
     "parts": {

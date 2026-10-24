@@ -979,6 +979,42 @@ doc says so plainly.
   - Migrate with a line-exact script, then prove it with the masked diff plus the computed-style dump.
   - `token-primitives.allow.json` already has a `family` field: add `"spacing"` to the schema enum.
 
+### M5.2 spacing — ✅ DONE 2026-10-24 (1 session, Kind A)
+
+**As built** (plan `docs/superpowers/plans/2026-10-24-m5-2-spacing.md`; DEC-087, CAND-061 to CAND-065):
+
+- **Roles (owner-chosen, by meaning):**
+
+  | Role | Step | Meaning |
+  |---|---|---|
+  | `spacing-focus-offset` | 0_5 (2) | focus-ring offset |
+  | `spacing-item-gap` | 1 (4) | between sibling items of a tight group |
+  | `spacing-text-gap` | 1 (4) | title to description |
+  | `spacing-overlay-offset` | 1 (4) | trigger to popover |
+  | `spacing-control-gap` | 2 (8) | parts of one row or control |
+  | `spacing-item-padding` | 2 (8) | menu/list item and table cell |
+  | `spacing-section-gap` | 3 (12) | blocks of a surface |
+  | `spacing-surface-padding` | 4 (16) | surface |
+  | `spacing-surface-padding-lg` | 6 (24) | roomy surface |
+
+  The variables were created first in Figma `Atlas/Semantic` (`VariableID:1094:2-10`, `GAP` scope, Light and Dark alias the primitive). The variable table was then re-synced: 476 variables, drift unchanged at 0 / 2 / 15. The roles were added to `atlas.tokens.css` as exact `var()` aliases, and four component tokens (`button-gap`, `card-size-md-gap|md-padding|lg-padding`) moved onto roles in Figma and code.
+- **Rule scope (owner):** token-lint `semantic-spacing` reads only spacing properties: padding, margin, gap, inset, `outline-offset`, and custom properties named for spacing. Width, height and other dimension uses of the spacing scale (about 226) are out of scope, left for a later size family.
+- **Migration:** 327 uses in scope.
+  - 139 now name a role: 135 in 38 component files, plus the 4 component tokens.
+  - **188 stay primitive** in 106 reasoned entries of `token-primitives.allow.json`:
+    - composed `calc()`/`min()` (28)
+    - inset positions (19)
+    - steps outside the role set (29)
+    - per-size control padding and other component tokens (27)
+    - uses whose step matches a role but whose meaning does not (84)
+    - one error ring
+  - The gaps are the five candidate roles: control padding scale, stack gap at 8, selection-control label gap, compact-control gap, and page/bar inline padding.
+- **Zero diff, proven twice:**
+  - The masked edit diff is identical line for line (135 lines).
+  - Computed padding, margin, row/column gap, inset, `outline-offset`, width and height for every element plus `::before`/`::after` on `/` (3,446) and `/runtime-demo` (65): 0 differences before and after, and 0 between two before runs.
+
+  CI's visual job must pass with no baseline change. The PR carries `atlas-approved-new` (nine new tokens) and `atlas-native-thaw` (the derived native file gains nine keys).
+
 ---
 
 ## Phase 6 — Filtered agent composition (2–3 sessions)

@@ -119,7 +119,7 @@
 
 .badge[data-interactive]:focus-visible {
   outline: var(--atlas-border-width-2) solid var(--atlas-focus-ring);
-  outline-offset: var(--atlas-spacing-0_5);
+  outline-offset: var(--atlas-spacing-focus-offset);
 }
 
 .badge.neutral[data-interactive]:hover   { background-color: var(--atlas-background-subtle); }
@@ -196,7 +196,7 @@
 
 .removeBtn:focus-visible {
   outline: var(--atlas-border-width-2) solid var(--atlas-focus-ring);
-  outline-offset: var(--atlas-spacing-0_5);
+  outline-offset: var(--atlas-spacing-focus-offset);
 }
 
 /* FIX BUG-074: coarse-pointer touch target expansion */

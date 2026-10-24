@@ -160,7 +160,16 @@
       "8":   { "$type": "dimension", "$value": "32px" },
       "10":  { "$type": "dimension", "$value": "40px" },
       "12":  { "$type": "dimension", "$value": "48px" },
-      "16":  { "$type": "dimension", "$value": "64px" }
+      "16":  { "$type": "dimension", "$value": "64px" },
+      "focus-offset":       { "$type": "dimension", "$value": "{atlas.spacing.0.5}" },
+      "item-gap":           { "$type": "dimension", "$value": "{atlas.spacing.1}" },
+      "text-gap":           { "$type": "dimension", "$value": "{atlas.spacing.1}" },
+      "overlay-offset":     { "$type": "dimension", "$value": "{atlas.spacing.1}" },
+      "control-gap":        { "$type": "dimension", "$value": "{atlas.spacing.2}" },
+      "item-padding":       { "$type": "dimension", "$value": "{atlas.spacing.2}" },
+      "section-gap":        { "$type": "dimension", "$value": "{atlas.spacing.3}" },
+      "surface-padding":    { "$type": "dimension", "$value": "{atlas.spacing.4}" },
+      "surface-padding-lg": { "$type": "dimension", "$value": "{atlas.spacing.6}" }
     },
     "radius": {
       "base": { "$type": "dimension", "$value": "8px" },

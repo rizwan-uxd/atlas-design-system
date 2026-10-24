@@ -69,7 +69,7 @@
 
 /* Pill list */
 .pill .list {
-  gap: var(--atlas-spacing-1);
+  gap: var(--atlas-spacing-item-gap);
 }
 
 /* Segmented list */
@@ -77,14 +77,14 @@
   background-color: var(--atlas-background-muted);
   border-radius: var(--atlas-radius-control);
   padding: var(--atlas-spacing-1);
-  gap: var(--atlas-spacing-1);
+  gap: var(--atlas-spacing-item-gap);
 }
 
 /* Outline list — same per-trigger treatment as segmented (surface + shadow-sm on
    selected) but with no track background/padding, matching the shadcn reference's
    "Default" style */
 .outline .list {
-  gap: var(--atlas-spacing-1);
+  gap: var(--atlas-spacing-item-gap);
 }
 
 /* ── Vertical orientation (layout-only — no Figma variant) ──────────────── */
@@ -102,7 +102,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--atlas-spacing-2);
+  gap: var(--atlas-spacing-control-gap);
   height: var(--_h);
   padding-inline: var(--_px);
   font-family: inherit;
@@ -126,7 +126,7 @@
 
 .trigger:focus-visible {
   outline: var(--atlas-border-width-2) solid var(--atlas-focus-ring);
-  outline-offset: var(--atlas-spacing-0_5);
+  outline-offset: var(--atlas-spacing-focus-offset);
   border-radius: var(--atlas-radius-sm);
 }
 

@@ -34,7 +34,7 @@
 /* ── Content base ─────────────────────────────────────────────── */
 
 .content {
-  --_pad: var(--atlas-spacing-6);        /* overridden by size variants */
+  --_pad: var(--atlas-spacing-surface-padding-lg);        /* overridden by size variants */
   --_max-w: var(--atlas-dialog-md);      /* overridden by size variants */
 
   position: fixed;
@@ -53,13 +53,13 @@
 
 /* ── Size tokens ──────────────────────────────────────────────── */
 
-.sm  { --_pad: var(--atlas-spacing-4); --_max-w: var(--atlas-dialog-sm); }
+.sm  { --_pad: var(--atlas-spacing-surface-padding); --_max-w: var(--atlas-dialog-sm); }
 /* .md is the default (--_pad: spacing-6, --_max-w: atlas-dialog-md = 560px) */
-.lg  { --_pad: var(--atlas-spacing-6); --_max-w: var(--atlas-dialog-lg); }
+.lg  { --_pad: var(--atlas-spacing-surface-padding-lg); --_max-w: var(--atlas-dialog-lg); }
 .xl  { --_pad: var(--atlas-spacing-8); --_max-w: var(--atlas-dialog-xl); }
 /* FIX BUG-057: added max-height constraint for full size */
 .full {
-  --_pad: var(--atlas-spacing-6);
+  --_pad: var(--atlas-spacing-surface-padding-lg);
   --_max-w: calc(100% - var(--atlas-spacing-6) * 2);
   max-height: calc(100vh - var(--atlas-spacing-6) * 2);
 }
@@ -143,8 +143,8 @@
 .header {
   display: flex;
   align-items: flex-start;
-  gap: var(--atlas-spacing-3);
-  padding: var(--_pad) var(--_pad) var(--atlas-spacing-4);
+  gap: var(--atlas-spacing-section-gap);
+  padding: var(--_pad) var(--_pad) var(--atlas-spacing-surface-padding);
   border-block-end: var(--atlas-border-width-1) solid var(--atlas-border);
   flex-shrink: 0;
 }
@@ -169,7 +169,7 @@
 .description {
   margin: 0;
   /* FIX BUG-034: was margin: var(--atlas-spacing-1) 0 0 — non-logical shorthand */
-  margin-block-start: var(--atlas-spacing-1);
+  margin-block-start: var(--atlas-spacing-text-gap);
   font-size: var(--atlas-text-body-sm);
   line-height: var(--atlas-line-height-normal);
   color: var(--atlas-foreground-muted);
@@ -180,7 +180,7 @@
 .body {
   flex: 1;
   overflow: auto;
-  padding: var(--atlas-spacing-4) var(--_pad);
+  padding: var(--atlas-spacing-surface-padding) var(--_pad);
 }
 
 /* ── Footer ───────────────────────────────────────────────────── */
@@ -188,8 +188,8 @@
 .footer {
   display: flex;
   align-items: center;
-  gap: var(--atlas-spacing-3);
-  padding: var(--atlas-spacing-4) var(--_pad) var(--_pad);
+  gap: var(--atlas-spacing-section-gap);
+  padding: var(--atlas-spacing-surface-padding) var(--_pad) var(--_pad);
   border-block-start: var(--atlas-border-width-1) solid var(--atlas-border);
   flex-shrink: 0;
 }
@@ -233,7 +233,7 @@
 
 .closeBtn:focus-visible {
   outline: var(--atlas-border-width-2) solid var(--atlas-focus-ring);
-  outline-offset: var(--atlas-spacing-0_5);
+  outline-offset: var(--atlas-spacing-focus-offset);
   color: var(--atlas-foreground);
 }
 

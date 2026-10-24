@@ -2,7 +2,7 @@
 // reduced motion). One PASS case, then the FAIL cases each rule exists for.
 import { test } from "node:test"
 import assert from "node:assert/strict"
-import { privateVarViolations, rawLengths, breakpointViolations, reducedMotionMissing, semanticRadiusViolations } from "../lib/token-rules.mjs"
+import { privateVarViolations, rawLengths, breakpointViolations, reducedMotionMissing, semanticRadiusViolations, semanticSpacingViolations } from "../lib/token-rules.mjs"
 
 const F = "c/X.module.css"
 
@@ -91,4 +91,37 @@ test("semantic radius: the allowlist matches an exact count per file and token; 
 
 test("semantic radius: a use inside a comment is not read", () => {
   assert.equal(semanticRadiusViolations([{ file: F, src: "/* var(--atlas-radius-md) */ .x {}" }], []).inspected, 0)
+})
+
+test("semantic spacing: a role passes; an unlisted primitive in a spacing property fails", () => {
+  assert.deepEqual(semanticSpacingViolations([{ file: F, src: ".x { gap: var(--atlas-spacing-control-gap); }" }], []), { violations: [], inspected: 1 })
+  const { violations } = semanticSpacingViolations([{ file: F, src: ".x {\n  padding-inline: var(--atlas-spacing-2);\n}" }], [])
+  assert.equal(violations[0].line, 2)
+  assert.match(violations[0].text, /--atlas-spacing-2.*role/)
+})
+
+test("semantic spacing: dimension properties are out of scope", () => {
+  const src = ".x { width: var(--atlas-spacing-6); block-size: var(--atlas-spacing-10); transform: translateX(var(--atlas-spacing-1)); }"
+  assert.deepEqual(semanticSpacingViolations([{ file: F, src }], []), { violations: [], inspected: 0 })
+})
+
+test("semantic spacing: spacing-named custom properties and multi-line values are read", () => {
+  const src = ".x { --_pad: var(--atlas-spacing-6); }\n.y {\n  padding:\n    var(--atlas-spacing-4)\n    var(--atlas-spacing-2);\n}"
+  const { violations, inspected } = semanticSpacingViolations([{ file: F, src }], [])
+  assert.equal(inspected, 3)
+  assert.deepEqual(violations.map((v) => v.line), [1, 4, 5])
+})
+
+test("semantic spacing: the allowlist matches an exact count per file and token; a changed count or stale entry fails", () => {
+  const allow = [{ family: "spacing", file: F, token: "--atlas-spacing-3", count: 2, reason: "control padding" }]
+  const two = ".a { padding-inline: var(--atlas-spacing-3); } .b { padding-inline: var(--atlas-spacing-3); }"
+  assert.deepEqual(semanticSpacingViolations([{ file: F, src: two }], allow).violations, [])
+  const three = two + " .c { margin: var(--atlas-spacing-3); }"
+  assert.match(semanticSpacingViolations([{ file: F, src: three }], allow).violations[0].text, /3 uses, allowlist says 2/)
+  assert.match(semanticSpacingViolations([{ file: F, src: ".a {}" }], allow).violations[0].text, /stale allowlist entry/)
+})
+
+test("semantic spacing: a radius allowlist entry is not read as a spacing entry", () => {
+  const allow = [{ family: "radius", file: F, token: "--atlas-radius-none", count: 1, reason: "x" }]
+  assert.deepEqual(semanticSpacingViolations([{ file: F, src: ".a {}" }], allow).violations, [])
 })

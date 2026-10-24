@@ -46,7 +46,7 @@
 /* Focus ring — never suppressed */
 .btn:focus-visible {
   outline: var(--atlas-border-width-2) solid var(--atlas-focus-ring);
-  outline-offset: var(--atlas-spacing-0_5); /* 2px */
+  outline-offset: var(--atlas-spacing-focus-offset); /* 2px */
 }
 
 /* Disabled — covers native :disabled AND aria-disabled (e.g. asChild on <a>) */

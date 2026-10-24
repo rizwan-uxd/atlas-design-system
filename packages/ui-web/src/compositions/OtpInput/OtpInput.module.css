@@ -12,7 +12,7 @@
 
 .slots {
   display: inline-flex;
-  gap: var(--atlas-spacing-2);
+  gap: var(--atlas-spacing-control-gap);
 }
 
 /* ── Hidden input ─────────────────────────────────────────────── */
@@ -81,7 +81,7 @@
 .root:has(.input:focus-visible) .slot[data-active] {
   border-color: var(--atlas-input-border-focus);
   outline: var(--atlas-border-width-2) solid var(--atlas-focus-ring);
-  outline-offset: var(--atlas-spacing-0_5);
+  outline-offset: var(--atlas-spacing-focus-offset);
 }
 
 /* Invalid */
