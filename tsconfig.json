@@ -24,6 +24,7 @@
     "packages/registry/**/*.ts",
     "packages/runtime/**/*.ts",
     "packages/runtime/**/*.tsx",
+    "benchmarks/protocol/**/*.ts",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts"
   ],
