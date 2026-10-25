@@ -1164,8 +1164,23 @@ Plan `docs/superpowers/plans/2026-10-25-phase-6-filtered-catalog.md`. What lande
 - Three vitest Context Containment rows are measurable. Open risk: the submit catalog is all 5 registered
   types, so for forms the guarantee covers only the 43 unregistered names until more types are registered.
 
-**PR-1 (next):** decide D-C (transport, model, spend cap), then a model-backed agent fed only
-`openSession().request`, and a `protocol` bench type for `protocol.promptReduction` and `protocol.firstOpP95`.
+### PR-1 model agent and protocol bench — ✅ DONE 2026-10-25 (session 26; DEC-093: D-C amended, D1, E1)
+
+Plan `docs/superpowers/plans/2026-10-25-phase-6-pr1-model-agent.md`. What landed:
+- `packages/runtime`: `op-stream.ts` (incremental JSONL parser), `agent-prompt.ts`, `model-agent.ts`: a `Transport`
+  over an injected text stream, given only `openSession().request`. `out-of-catalog` now drives the fallback
+  latency mark. The runtime imports no SDK.
+- `benchmarks/protocol/`: the bench through `vitest.protocol.config.ts`, `run.sh` type `protocol` (task P1),
+  and a `claude -p --output-format stream-json` binding. D-C was amended: the owner has no API key and the SDK
+  cannot use a subscription login, so the bench runs on the subscription (tools, settings and MCP off, empty
+  working directory). First-op time includes CLI startup, and token counts are the CLI's reported input tokens
+  minus its fixed overhead (641 tokens).
+- The latest batch's `bench.json` is committed in `benchmarks/results/protocol-latest/`; CI copies it into
+  `.metrics/` and never calls a model. The manifest gains the `protocol.agentCompliance` row (37 rows).
+- **Readings, batch `protocol-v1` (4 tasks × 5 reps, `claude-sonnet-5-5`, $0.10), recorded as measured:**
+  `promptReduction` min 0.676 / mean 0.761 (passing, mostly the 43 unregistered names, DEC-092);
+  `firstOpP95` 5240 ms (failing, dominated by CLI startup plus time to first token); `agentCompliance` 0
+  markup issues but 8 of 20 reps streamed at least one non-op line (failing as the row is defined).
 
 Only now do the model-dependent metrics become real: first streamed op <250ms p95, ≥50% prompt
 reduction, and agent-side CSS/HTML/JSX compliance measured against a model rather than the validator.

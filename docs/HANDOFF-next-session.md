@@ -1,4 +1,4 @@
-# Handoff: Phase 6 PR-0 (filtered catalog, enforcement) done; PR-1 (model agent) is next (Atlas roadmap)
+# Handoff: Phase 6 done (PR-0 enforcement, PR-1 model agent and protocol bench); Phase 7 is next (Atlas roadmap)
 
 Written 2026-10-22, updated 2026-10-25 after D1 option B, M4 (#108), Phase 4 (#109), M5.1 radius (#110), M5.2 spacing (#112), M5.3 type (#113), M5.4 motion (#115), M5.5 shadow (#117) and M5.6 brand axis (#118, #119 with baselines #120) and Phase 6 PR-0. **Read in this order: `AGENTS.md` → `docs/ATLAS-DELIVERY-ROADMAP.md` → this file.**
 The roadmap is normative now (referenced from `AGENTS.md` §2) and owns the phase order; this file is
@@ -7,7 +7,7 @@ ones were deleted and live in git history.
 
 ## Progress (update at the end of every session, and report it at the start and end of each)
 Counted in sessions, using the roadmap's own estimates (midpoint where it gives a range). Change N
-and say so when an estimate changes. **Roadmap: 25 of ~28 sessions done (~89%). N changed from ~27 to ~28: Phase 6 needs 3 sessions against an estimate of 2.5 (plan, PR-0 enforcement, PR-1 model agent). Sessions 24 and 25 ran in one conversation on 2026-10-25: the Phase 6 plan (A1 + B1, DEC-092) and PR-0. PR-0 makes every agent request carry a filtered catalog: `packages/registry/lib/filter.ts` (`filter`, `fullCatalog`, `catalogFor`, `restrict`), `openSession()` in `packages/runtime/src/session.ts` pairs the agent request with a registry restricted to the catalog, and the validator reports a withheld type as `out-of-catalog` and falls back (plan `docs/superpowers/plans/2026-10-25-phase-6-filtered-catalog.md`). Next: session 26 of ~28 = decide D-C, then plan and build Phase 6 PR-1 (model agent, `protocol` bench type).**
+and say so when an estimate changes. **Roadmap: 26 of ~28 sessions done (~93%). Session 26 (2026-10-25) built Phase 6 PR-1 (model agent, protocol bench over `claude -p` on the subscription, DEC-093); next is Phase 7. Earlier: 25 of ~28 (~89%). N changed from ~27 to ~28: Phase 6 needs 3 sessions against an estimate of 2.5 (plan, PR-0 enforcement, PR-1 model agent). Sessions 24 and 25 ran in one conversation on 2026-10-25: the Phase 6 plan (A1 + B1, DEC-092) and PR-0. PR-0 makes every agent request carry a filtered catalog: `packages/registry/lib/filter.ts` (`filter`, `fullCatalog`, `catalogFor`, `restrict`), `openSession()` in `packages/runtime/src/session.ts` pairs the agent request with a registry restricted to the catalog, and the validator reports a withheld type as `out-of-catalog` and falls back (plan `docs/superpowers/plans/2026-10-25-phase-6-filtered-catalog.md`). Next: session 26 of ~28 = decide D-C, then plan and build Phase 6 PR-1 (model agent, `protocol` bench type).**
 
 | Phase | Sessions (est.) | Done | Status | PR |
 |---|---|---|---|---|
@@ -21,9 +21,9 @@ and say so when an estimate changes. **Roadmap: 25 of ~28 sessions done (~89%). 
 | **M4 — runtime vertical slice** | 3.5 | 3.5 | ✅ all 12 M4 rows measured: 11 pass, size fails (report-only, DEC-085) | #108 |
 | Phase 4 — enforcement hardened | 2.5 | 3 | ✅ in 3 sessions (est. range 2–3) | #109 |
 | **M5 — semantic tokens + brands** | 6 | 6 | ✅ in 6 sessions (est. 7): M5.1 radius (DEC-086), M5.2 spacing (DEC-087), M5.3 type (DEC-088), M5.4 motion (DEC-089), M5.5 shadow (DEC-090), M5.6 brand axis (DEC-091) | #110, #112, #113 (+#114), #115, #117, #118, #119 (+#120) |
-| Phase 6 — filtered agent catalog | 3 | 2 | 🟡 plan + PR-0 done (DEC-092); PR-1 next | #121 |
+| Phase 6 — filtered agent catalog | 3 | 3 | ✅ plan + PR-0 (DEC-092) + PR-1 (DEC-093); bench readings: reduction passing, first op and compliance failing | #121, PR-1 |
 | Phase 7 — metrics as release gates | 1.5 | 0 | ⏳ | |
-| **Total** | **~28** | **25** | **~89%** | |
+| **Total** | **~28** | **26** | **~93%** | |
 
 Phase 6 PR-0 (#121) moved the three vitest Context Containment rows to passing: **27 passing · 3 failing · 6 not measurable** of 36, refreshed from the #121 CI run.
 Metric table (the roadmap's scoreboard, CI result-derived since Phase 4): **24 passing · 3 failing · 9 not measurable** of 36 (refreshed from the #118 CI run, carried in #119). M5.6 moved `design.brand-modes` from not measurable to passing. The 3 failing rows are real findings, not regressions: missing code tokens (2, DISC-106), missing Figma tokens (9, DISC-107) and the report-only protocol size (0.308, DEC-085).
@@ -31,15 +31,16 @@ M3 exit: **5/6 types `registryComplete`** (Text deferred: no Text component), **
 contracts** (the 44 hand-written ones deleted), **2/2 target metrics passing** (plus registry-states),
 each over the registered subset (4/47 components registered).
 
-## Start here (session 26, the next fresh session)
-1. **Report progress first** (owner preference): doing / done / % / session X of N. That is 25 of ~28 done (~89%), and this is session 26.
-2. `git fetch origin`, check that Phase 6 PR-0 merged and that `main`'s metric region is current (27 passing · 3 failing · 6 not measurable expected), then branch from `origin/main` and check `gh pr list`. Run `npm ci` in a fresh worktree first.
-3. **Ask the owner D-C before any work** (plan "Decisions for the owner"): the model agent's transport (Anthropic API streaming, which needs `@anthropic-ai/sdk` and an API key, or `claude -p --output-format stream-json`, whose CLI startup makes <250 ms first op unreachable), the model pin, and a spend cap for the bench ledger.
-4. **Then plan PR-1 (gate 1)** in `docs/superpowers/plans/`: a model-backed agent that receives only `openSession().request`, a `protocol` type in `benchmarks/run.sh` (reuse the rep loop, pins and budget; not the code rubrics), and `bench.json` results for `protocol.promptReduction` (filtered `catalogPrompt` against the full catalog's) and `protocol.firstOpP95`. Read the `claude-api` skill first.
-5. **Metric refresh, race-proof:** refresh from the PR's own CI artifact (`gh run download <run> -n metrics -D <scratch>`, then `node scripts/metrics-report.mjs --results <scratch>/metrics-input`) before the required checks finish, or keep auto-merge off until it lands.
-6. **Labels:** `atlas-approved-new` for new tokens, plus `atlas-native-thaw` whenever `tokens:build` changes the native file.
+## Start here (session 27, the next fresh session)
+1. **Report progress first** (owner preference): doing / done / % / session X of N. That is 26 of ~28 done (~93%), and this is session 27.
+2. `git fetch origin`, check that Phase 6 PR-1 merged and that `main`'s metric region is current (37 rows, with the three bench rows read from `benchmarks/results/protocol-latest/bench.json`), then branch from `origin/main`. Run `npm ci` in a fresh worktree first.
+3. **Phase 7 — metrics as release gates** (roadmap). Hard gates for the deterministic rows; trend gates (>20% regression) for the Tier 3 bench rows. The first protocol batch reads `firstOpP95` 5240 ms and `agentCompliance` failing (8 of 20 reps streamed a non-op line): decide with the owner whether a trend gate starts from those readings, whether the bench should move to the API (CLI startup dominates the latency), and whether `agentCompliance` should count non-op lines or markup only.
+4. **Metric refresh, race-proof:** refresh from the PR's own CI artifact (`gh run download <run> -n metrics -D <scratch>`, then `node scripts/metrics-report.mjs --results <scratch>/metrics-input`) before the required checks finish, or keep auto-merge off until it lands.
+5. **Labels:** `atlas-approved-new` for new tokens, plus `atlas-native-thaw` whenever `tokens:build` changes the native file.
+6. **Bench re-run:** `benchmarks/run.sh <label> P1 5 claude-sonnet-5-5` (needs a logged-in `claude` CLI; ledger `benchmarks/results/protocol-spend.json`, cap $3). A new reading lands only by committing a new batch and copying its `bench.json` to `protocol-latest/`.
 
 ## State
+- **Phase 6 PR-1 is done (2026-10-25, DEC-093).** `packages/runtime/src/{op-stream,agent-prompt,model-agent}.ts`; `benchmarks/protocol/` (bench, `claude-cli-stream.ts`, stats, full-catalog baseline); `run.sh` type `protocol`; manifest row `protocol.agentCompliance`; CI copies `protocol-latest/bench.json` into `.metrics/`. Latest ids: **DEC-093, CAND-069, DISC-109**.
 - **Phase 6 PR-0 is done (2026-10-25, DEC-092: A1 + B1).**
   - Registry: `lib/filter.ts`; `lib/registry.ts` holds the value and types (split from `index.ts` to avoid an import cycle); `Registry.components` (47 facts names, generated into `runtimeRegistry.ts`) and `Registry.withheld` (set only by `restrict`). The full catalog is 48 agent-visible names. `filter()` walks nesting both ways and adds fallback targets, so press → `["Alert", "Button"]`.
   - Evaluation set `packages/registry/tests/eval-tasks.json` (schema `registry.schema.json#/$defs/evalTasks`): request-access, confirm, notice, text-entry.
