@@ -1,0 +1,71 @@
+/* =================================================================
+   Atlas Text — component styles
+   All values reference semantic tokens only.
+   No hex literals. No magic numbers. Logical properties throughout.
+   Text has no motion and no interactive states.
+   ================================================================= */
+
+/* ── Base ─────────────────────────────────────────────────────── */
+
+.text {
+  margin: 0; /* the type role owns spacing; the caller's layout owns the gap */
+  font-family: var(--atlas-font-sans);
+  text-align: start;
+  overflow-wrap: break-word; /* wrap, never clip or fix a height */
+}
+
+/* ── Variants: the type role ──────────────────────────────────── */
+
+.heading {
+  font-size: var(--atlas-type-heading-size);
+  font-weight: var(--atlas-type-heading-weight);
+  line-height: var(--atlas-type-heading-line-height);
+}
+
+.title {
+  font-size: var(--atlas-type-title-size);
+  font-weight: var(--atlas-type-title-weight);
+  line-height: var(--atlas-type-title-line-height);
+}
+
+.body {
+  font-size: var(--atlas-type-body-size);
+  font-weight: var(--atlas-type-body-weight);
+  line-height: var(--atlas-type-body-line-height);
+}
+
+.body-sm {
+  font-size: var(--atlas-type-body-sm-size);
+  font-weight: var(--atlas-type-body-sm-weight);
+  line-height: var(--atlas-type-body-sm-line-height);
+}
+
+.label {
+  font-size: var(--atlas-type-label-size);
+  font-weight: var(--atlas-type-label-weight);
+  line-height: var(--atlas-type-label-line-height);
+}
+
+.caption {
+  font-size: var(--atlas-type-caption-size);
+  font-weight: var(--atlas-type-caption-weight);
+  line-height: var(--atlas-type-caption-line-height);
+}
+
+.overline {
+  font-size: var(--atlas-type-overline-size);
+  font-weight: var(--atlas-type-overline-weight);
+  line-height: var(--atlas-type-overline-line-height);
+  letter-spacing: var(--atlas-type-overline-letter-spacing);
+}
+
+/* ── Tones ────────────────────────────────────────────────────── */
+/* Both measure at least 4.5:1 on background, surface and surface-raised in light and dark. */
+
+.default {
+  color: var(--atlas-foreground);
+}
+
+.muted {
+  color: var(--atlas-foreground-muted);
+}

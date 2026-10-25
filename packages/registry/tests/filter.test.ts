@@ -25,13 +25,13 @@ describe("registry/filter >", () => {
 })
 
 describe("registry/fullCatalog >", () => {
-  it("is every registered type plus every unaliased component (48 today)", () => {
+  it("is every registered type plus every unaliased component (49 today)", () => {
     const full = fullCatalog()
     expect(full).toEqual([...full].sort())
     for (const type of Object.keys(registry.entries)) expect(full).toContain(type)
     expect(full).not.toContain("Input")
     expect(full).toContain("Dialog")
-    expect(full.length).toBe(48)
+    expect(full.length).toBe(49)
   })
 })
 

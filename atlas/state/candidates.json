@@ -262,6 +262,22 @@
       "composedFrom": "--atlas-duration-fast with --atlas-easing-emphasized on the Checkbox check mark draw-in (atlas-check-in)",
       "occurrences": 1,
       "note": "Raised by M5.4 (2026-10-24, DEC-089): a mark drawing itself in is neither a state change (motion-state is standard easing) nor an enter (motion-enter is 200ms). It stays on the primitives, allowlisted in packages/governance/token-primitives.allow.json; the animated icons' emphasis preset (slow + emphasized) is the nearest relative. A new role needs Figma first plus the owner's go-ahead."
+    },
+    {
+      "id": "CAND-070",
+      "name": "Type role: display / page title",
+      "seenIn": ["Text gate 1 plan (2026-10-25)"],
+      "composedFrom": "--atlas-text-h1 and --atlas-text-h2 primitives have no --atlas-type-* role; type-heading maps to h3 (18px)",
+      "occurrences": 0,
+      "note": "Raised by the Text gate-1 plan: Text offers only the existing prose roles, so a page title (h1, 28px) cannot be expressed through Text. A new role needs Figma first plus the owner's go-ahead; not added."
+    },
+    {
+      "id": "CAND-071",
+      "name": "Text colour roles (color.text.*)",
+      "seenIn": ["Text gate 1 plan (2026-10-25)"],
+      "composedFrom": "--atlas-foreground, -muted, -subtle, --atlas-danger, --atlas-success, --atlas-info",
+      "occurrences": 0,
+      "note": "Raised by the Text gate-1 plan: the architecture names color.text.primary|muted|danger, Atlas has no text-specific colour role. Text v1 ships only default (--atlas-foreground) and muted (--atlas-foreground-muted), the two that pass 4.5:1 on background, surface and surface-raised in light and dark (Warm does not change them). subtle, danger, success, info and warning are omitted: as text they miss 4.5:1 (subtle in dark; danger on dark raised; success in light and on dark raised; info in light). Bringing any of them back needs a separate token-correction decision and visual-baseline review. No token added, no alias, no lowered threshold."
     }
   ]
 }

@@ -215,7 +215,7 @@ test("design/figma-registry-code fails closed on a schema-invalid component and 
   const r = verify(dir, "figma-registry-code")
   assert.equal(r.status, "fail")
   assert.match(r.mismatches.join("\n"), /atlas\/metadata\/Button\.json failed its schema — not compared/)
-  assert.match(r.note, /^46\/47 components/)
+  assert.match(r.note, /^47\/48 components/)
 }))
 
 // design/registry-events, design/registry-fallback, design/registry-states (M3): PASS on the repo,
@@ -224,7 +224,7 @@ const registryEdit = (id, file, from, to, re) => test(`design/${id} passes the r
   const ok = verify(dir, id)
   assert.equal(ok.status, "pass", ok.mismatches.join("\n"))
   assert.ok(ok.inspected > 0)
-  assert.match(ok.note, /\/47 components registered/)
+  assert.match(ok.note, /\/48 components registered/)
   edit(dir, file, (s) => { assert.ok(s.includes(from), `${file} no longer contains ${from}`); return s.replace(from, to) })
   const bad = verify(dir, id)
   assert.equal(bad.status, "fail")

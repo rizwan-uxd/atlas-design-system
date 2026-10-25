@@ -51,6 +51,7 @@ One line per component. Read `atlas/<Name>.md` only for the components you will 
 | StatCard | compositions | `@atlas/ui-web/compositions/StatCard/StatCard` | — | sm, md, lg | **Use:** A dashboard or summary shows a single number the user should read at a glance (visitors, revenue, conversion rate). **Not:** A trend or many values over time are the point → Chart. |
 | Stepper | patterns | `@atlas/ui-web/patterns/Stepper/Stepper` | — | — | **Use:** A flow with a known, small number of steps (onboarding, checkout, setup) where each step has a name. **Not:** Only a percentage or a single task bar is needed → Progress. |
 | Table | primitives | `@atlas/ui-web/primitives/Table/Table` | — | — | **Use:** Comparing rows of structured data across the same columns (users, invoices, orders). **Not:** A single record's fields → Card |
+| Text | primitives | `@atlas/ui-web/primitives/Text/Text` | heading, title, body, body-sm, label, caption, overline | — | **Use:** Showing headings, titles, body copy, helper text, captions or overlines outside a control. **Not:** Naming a form control → Label. |
 | Toast | compositions | `@atlas/ui-web/compositions/Toast/Toast` | default, success, danger | — | **Use:** Confirming a completed action ("Link copied", "Changes saved"). **Not:** The message must persist or the user must not miss it → Alert (inline). |
 | Tooltip | primitives | `@atlas/ui-web/primitives/Tooltip/Tooltip` | — | — | **Use:** Naming an icon-only button or control. **Not:** The content is essential to finish the task → helper text or inline copy |
 
