@@ -26,7 +26,7 @@
       "source": "bench",
       "check": "protocol.agentCompliance",
       "milestone": "Phase 6",
-      "why": "Tier 3, bench-only (DEC-093): the reading is the committed batch in benchmarks/results/protocol-latest (label, date and model in its run.json); claude-sonnet-5-5, streaming, thinking off, fallback-served reps excluded. Passes when no kept rep streams a markup issue or a non-op line; the vitest row above measures the validator's enforcement instead."
+      "why": "Tier 3, bench-only (DEC-093): the reading is the committed batch in benchmarks/results/protocol-latest (label, date and model in its run.json); claude-sonnet-5-5 through `claude -p` on the subscription (tools, settings and MCP off, empty working directory), fallback-served reps excluded. Passes when no kept rep streams a markup issue or a non-op line; the vitest row above measures the validator's enforcement instead."
     },
     {
       "principle": "Catalog Over Code",
@@ -85,7 +85,7 @@
       "source": "bench",
       "check": "protocol.firstOpP95",
       "milestone": "Phase 6",
-      "why": "Tier 3, bench-only (DEC-093): the reading is the committed batch in benchmarks/results/protocol-latest (label, date and model in its run.json); claude-sonnet-5-5, streaming, thinking off, fallback-served reps excluded. Measured from request send, so it includes time to first token."
+      "why": "Tier 3, bench-only (DEC-093): the reading is the committed batch in benchmarks/results/protocol-latest (label, date and model in its run.json); claude-sonnet-5-5 through `claude -p` on the subscription (tools, settings and MCP off, empty working directory), fallback-served reps excluded. Measured from process spawn, so it includes CLI startup and time to first token; the reading reflects the transport as much as the protocol."
     },
     {
       "principle": "State Synchronization",
@@ -178,7 +178,7 @@
       "source": "bench",
       "check": "protocol.promptReduction",
       "milestone": "Phase 6",
-      "why": "Tier 3, bench-only (DEC-093): the reading is the committed batch in benchmarks/results/protocol-latest (label, date and model in its run.json); claude-sonnet-5-5, streaming, thinking off, fallback-served reps excluded. Most of the reduction is the 43 unregistered components the full catalog counts (DEC-092)."
+      "why": "Tier 3, bench-only (DEC-093): the reading is the committed batch in benchmarks/results/protocol-latest (label, date and model in its run.json); claude-sonnet-5-5 through `claude -p` on the subscription (tools, settings and MCP off, empty working directory), fallback-served reps excluded. Most of the reduction is the 43 unregistered components the full catalog counts (DEC-092). Token counts are the CLI's reported input tokens minus its fixed overhead."
     },
     {
       "principle": "Context Containment",

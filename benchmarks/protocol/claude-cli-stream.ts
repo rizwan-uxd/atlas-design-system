@@ -15,6 +15,11 @@ export type StreamRecord = {
   model: string; fallback: boolean; stopReason: string | null; costUsd: number
 }
 
+type CliLine = {
+  type?: string
+  event?: { type?: string; delta?: { type?: string; text?: string; stop_reason?: string | null }; message?: { model?: string; usage?: Usage } }
+  total_cost_usd?: number; usage?: Usage; stop_reason?: string
+}
 type Usage = { input_tokens?: number; output_tokens?: number; cache_read_input_tokens?: number; cache_creation_input_tokens?: number }
 
 const cwd = () => fs.mkdtempSync(path.join(os.tmpdir(), "atlas-p1-"))
@@ -38,13 +43,13 @@ export function claudeCliTextStream(model: string, onDone: (r: StreamRecord) => 
     let usage: Usage = {}
     try {
       for await (const line of readline.createInterface({ input: child.stdout })) {
-        let e: Record<string, any>
+        let e: CliLine
         try { e = JSON.parse(line) } catch { continue }
         const ev = e.type === "stream_event" ? e.event : null
-        if (ev?.type === "message_start") started = ev.message.model ?? started
+        if (ev?.type === "message_start") started = ev.message?.model ?? started
         if (ev?.type === "content_block_delta" && ev.delta?.type === "text_delta") {
           if (firstTokenMs === null) firstTokenMs = performance.now() - t0
-          yield ev.delta.text as string
+          yield ev.delta.text ?? ""
         }
         if (ev?.type === "message_delta") stopReason = ev.delta?.stop_reason ?? stopReason
         if (typeof e.total_cost_usd === "number") { costUsd = e.total_cost_usd; usage = e.usage ?? usage; stopReason = e.stop_reason ?? stopReason }
@@ -69,10 +74,10 @@ export async function cliInputTokens(model: string, system: string, task: string
   const child = spawn("claude", cliArgs(model, system, task), { cwd: dir, stdio: ["ignore", "pipe", "ignore"] })
   try {
     for await (const line of readline.createInterface({ input: child.stdout })) {
-      let e: Record<string, any>
+      let e: CliLine
       try { e = JSON.parse(line) } catch { continue }
       if (e.type === "stream_event" && e.event?.type === "message_start") {
-        const u = e.event.message.usage as Usage
+        const u = e.event.message?.usage ?? {}
         return (u.input_tokens ?? 0) + (u.cache_read_input_tokens ?? 0) + (u.cache_creation_input_tokens ?? 0)
       }
     }
