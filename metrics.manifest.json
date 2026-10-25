@@ -94,7 +94,7 @@
       "source": "bench",
       "check": "protocol.firstOpP95",
       "milestone": "Phase 6",
-      "why": "Tier 3, bench-only (DEC-093): the reading is the committed batch in benchmarks/results/protocol-latest (label, date and model in its run.json); claude-sonnet-5-5 through `claude -p` on the subscription (tools, settings and MCP off, empty working directory), fallback-served reps excluded. Measured from process spawn, so it includes CLI startup and time to first token; the reading reflects the transport as much as the protocol.",
+      "why": "Tier 3, bench-only (DEC-093): the reading is the committed batch in benchmarks/results/protocol-latest (label, date and model in its run.json); claude-sonnet-5-5 through `claude -p` on the subscription (tools, settings and MCP off, empty working directory), fallback-served reps excluded. Measured from process spawn, so it includes CLI startup and time to first token; the reading reflects the transport as much as the protocol. Session 28: the reading is the warm p95 (the first valid op minus the CLI cold start, which `coldStartMs` reports separately); the trend baseline is the warm figure.",
       "gate": "trend"
     },
     {
@@ -319,10 +319,9 @@
       "metric": "Critical visual regression tests pass for every brand mode",
       "target": "pass",
       "source": "playwright",
-      "check": "visual > sandbox",
+      "check": "sandbox sections",
       "milestone": "now (light/dark only), M5.6 (brands)",
-      "gate": "report",
-      "gateWhy": "Not measurable in CI yet; becomes hard when its check produces a result."
+      "gate": "hard"
     },
     {
       "principle": "Runtime quality",

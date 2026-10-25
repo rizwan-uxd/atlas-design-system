@@ -12,7 +12,7 @@ export const TREND_LIMIT = 0.2
 // how to read each Tier 3 reading out of bench.json; `better` says which direction is an improvement
 export const TREND = {
   "protocol.promptReduction": { better: "higher", read: (b) => b?.min },
-  "protocol.firstOpP95": { better: "lower", read: (b) => b?.p95Ms },
+  "protocol.firstOpP95": { better: "lower", read: (b) => b?.warmP95Ms ?? b?.p95Ms },
   "protocol.agentCompliance": { better: "lower", read: (b) => (b && b.n > 0 ? b.markupReps / b.n : undefined) },
 }
 

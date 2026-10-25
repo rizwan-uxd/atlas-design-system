@@ -92,12 +92,17 @@ function collectResults(manifest) {
     const data = readJson(p)
     if (!data) continue
     if (!found.includes(source)) found.push(source)
+    // Playwright nests describe blocks as suites inside the file suite; walk them, or specs under a
+    // describe never reach a result. Specs that share a title (the same test per theme or brand) AND their
+    // results: one failing instance fails the title, a later passing one cannot hide it.
+    const specsOf = (suite) => [...(suite.assertionResults ?? suite.specs ?? []), ...(suite.suites ?? []).flatMap(specsOf)]
     for (const suite of data.testResults ?? data.suites ?? []) {
-      for (const t of suite.assertionResults ?? suite.specs ?? []) {
+      for (const t of specsOf(suite)) {
         const name = t.fullName ?? t.title ?? ""
         if (!name) continue
         const ok = (t.status ?? t.ok) === "passed" || t.ok === true
-        results.set(`${source}:${name}`, ok)
+        const key = `${source}:${name}`
+        results.set(key, ok && (results.get(key) ?? true))
       }
     }
   }

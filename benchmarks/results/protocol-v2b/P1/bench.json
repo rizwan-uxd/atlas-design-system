@@ -1,0 +1,51 @@
+{
+  "protocol.promptReduction": {
+    "overheadTokens": 646,
+    "pass": true,
+    "min": 0.6740054074932407,
+    "mean": 0.7621528954371781,
+    "perTask": {
+      "request-access": {
+        "filtered": 844,
+        "full": 2589,
+        "reduction": 0.6740054074932407
+      },
+      "confirm": {
+        "filtered": 536,
+        "full": 2591,
+        "reduction": 0.7931300656117329
+      },
+      "notice": {
+        "filtered": 531,
+        "full": 2595,
+        "reduction": 0.7953757225433526
+      },
+      "text-entry": {
+        "filtered": 554,
+        "full": 2590,
+        "reduction": 0.7861003861003861
+      }
+    }
+  },
+  "protocol.firstOpP95": {
+    "pass": false,
+    "warmP95Ms": 2764.9049589999777,
+    "coldStartMs": 2182.4378330000036,
+    "p95Ms": 4947.342791999981,
+    "n": 20,
+    "noValidOp": 0,
+    "excluded": 0
+  },
+  "protocol.agentCompliance": {
+    "pass": true,
+    "markupReps": 0,
+    "nonOpReps": 5,
+    "n": 20
+  },
+  "protocol.repairLoop": {
+    "pass": true,
+    "repaired": 0,
+    "maxAttempts": 1,
+    "n": 20
+  }
+}
