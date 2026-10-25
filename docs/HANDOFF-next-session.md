@@ -31,6 +31,20 @@ M3 exit: **6/6 types `registryComplete`** (Text built in #125, registered in #12
 contracts** (the 44 hand-written ones deleted), **2/2 target metrics passing** (plus registry-states),
 each over the registered subset (5/48 components registered).
 
+## Roadmap closure plan (DEC-098 to DEC-102, decided 2026-10-25; nothing below is closed)
+Owner and dates are placeholders: owner = the design-system owner role (no name given), dates are proposals. Each row ends as passed, fixed or explicitly decided with evidence; no metric is marked green to finish.
+
+| End state | Status | Reason and next step | Follow-up |
+|---|---|---|---|
+| `registryProductionReady` 6/6 | OPEN, 3/6 | Alert and Input are scaffolded; Form needs the structural rule (the gate treats a structural entry as never stable, DEC-100). One component per session, Figma first, then re-check TextField and Form. | 2026-11-08 |
+| Contrast resolved or formally waived | OPEN | 14 allowances (DISC-108), each fixed by an existing primitive (DEC-099); Kind B, Figma first, baselines. Open sub-decision: subtle in dark equals muted at neutral-400. | 2026-11-22 |
+| Token drift measured or blocked | OPEN, measured, not blocked | DISC-106 and DISC-107 are measured through the plugin API (DEC-098); fix or accept each. | 2026-11-22 |
+| Accessibility rows measurable | OPEN | axe-coverage, keyboard and focus-visible are specified (DEC-102); axe-coverage fails today on Checkbox (no test file). Rows stay `not measurable` until built. | 2026-11-15 |
+| Benchmark against a justified target | OPEN | Reclassified in two rows (DEC-101): Atlas first op at 250 ms (0.015 ms p95 measured in Node, baseline run needed) and end-to-end through `claude -p` as a trend row (warm P95 2649 ms, cold 2256 ms). | 2026-11-15 |
+| Owner backlog, no undecided rows | DECIDED, not built | Add 7 role stages, leave 8 primitive, do the sandbox cascade and the Switch and Select Figma gaps (DEC-102); implementation issues not opened. | 2026-11-22 |
+
+Latest ids: **DEC-102**, CAND-071, DISC-109.
+
 ## Start here (session 29, what session 28 left)
 0. **Report progress first**: doing / done / % / session X of N. Session 28 did the benchmark half of the closing work (DEC-095); the roadmap stays at 27 of ~28 until the two items below are decided.
 1. **Waiting on the owner (both are blast-radius calls, not built):**
