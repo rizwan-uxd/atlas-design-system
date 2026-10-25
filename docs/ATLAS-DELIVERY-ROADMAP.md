@@ -161,7 +161,7 @@ Result sources read: `atlas-verify`, `vitest`, `playwright`, `atlas-sync`, `regi
 | Unhandled render exceptions | 0 | **passing** | `runtime/fuzz > no payload throws` | M4 |
 | Components with declared fallback behavior | 100% | **passing** — 0 failing of 6 registered types (5/48 components registered) | `design.registry-fallback` | M3 |
 | Registered types (the M3 exit types) | 6 of 6 | **passing** — 6/6 M3 types registered | `design.registry-registered` | M3 |
-| Registered types that are production-ready | 6 of 6 | **failing** — 3/6 registered entries production-ready | `design.registry-production-ready` | M3 |
+| Registered types that are production-ready | 6 of 6 | **failing** — 4/6 registered entries production-ready | `design.registry-production-ready` | M3 |
 | Fallback render latency | Under 100 ms p95 | **passing** | `runtime-demo > fallback render p95` | M4 |
 
 ### Context Containment

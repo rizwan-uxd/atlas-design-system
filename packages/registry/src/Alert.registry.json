@@ -5,7 +5,6 @@
   "kind": "component",
   "platforms": ["web"],
   "registryComplete": true,
-  "provisional": { "waitingOn": ["Alert"], "reason": "The Alert component is still scaffolded (status.json): the actions slot with inline buttons and the per-variant icon are not at spec. Every registered type falls back to Alert, so it stays registered for development and benchmarks." },
   "protocolProps": {
     "variant": {
       "values": ["info", "success", "warning", "danger", "neutral"]

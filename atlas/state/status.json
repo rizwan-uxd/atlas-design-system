@@ -17,7 +17,7 @@
     "Checkbox": { "parity": "code-applied", "figmaMetadata": "description-written", "code": "scaffolded", "verifiedAt": "2026-10-12T17:27:26.123Z" },
     "Switch": { "parity": "match", "figmaMetadata": "description-written", "code": "scaffolded", "verifiedAt": "2026-10-09T03:29:08.502Z" },
     "Badge": { "parity": "match", "figmaMetadata": "description-written", "code": "scaffolded", "verifiedAt": "2026-10-12T17:27:26.123Z" },
-    "Alert": { "parity": "match", "figmaMetadata": "description-written", "code": "scaffolded", "verifiedAt": "2026-10-12T15:57:51.166Z" },
+    "Alert": { "parity": "match", "figmaMetadata": "description-written", "code": "spec-complete", "verifiedAt": "2026-10-25T17:12:16.962Z" },
     "Card": { "parity": "open", "figmaMetadata": "description-written", "code": "spec-complete", "verifiedAt": "2026-10-21T03:26:25.289Z" },
     "Dialog": { "parity": "match", "figmaMetadata": "description-written", "code": "scaffolded", "verifiedAt": "2026-10-12T15:57:51.166Z" },
     "AlertDialog": { "parity": "match", "figmaMetadata": "description-written", "code": "spec-complete", "verifiedAt": "2026-09-29T10:49:00.540Z" },

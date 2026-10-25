@@ -36,19 +36,25 @@ Owner and dates are placeholders: owner = the design-system owner role (no name 
 
 | End state | Status | Reason and next step | Follow-up |
 |---|---|---|---|
-| `registryProductionReady` 6/6 | OPEN, 3/6 | Alert and Input are scaffolded; Form needs the structural rule (the gate treats a structural entry as never stable, DEC-100). One component per session, Figma first, then re-check TextField and Form. | 2026-11-08 |
+| `registryProductionReady` 6/6 | OPEN, 4/6 | Alert promoted (PR #134, 2026-10-25): spec-complete, `provisional` dropped, Form now waits on Input only. Remaining: **Input** (scaffolded: affixes, sm/md heights, focus ring; Figma first, one session) unblocks TextField, then Form needs the structural rule (the gate treats a structural entry as never stable, DEC-100; owner call). Re-check TextField and Form after Input. | 2026-11-08 |
 | Contrast resolved or formally waived | OPEN | 14 allowances (DISC-108), each fixed by an existing primitive (DEC-099); Kind B, Figma first, baselines. Open sub-decision: subtle in dark equals muted at neutral-400. | 2026-11-22 |
 | Token drift measured or blocked | OPEN, measured, not blocked | DISC-106 and DISC-107 are measured through the plugin API (DEC-098); fix or accept each. | 2026-11-22 |
 | Accessibility rows measurable | OPEN | axe-coverage, keyboard and focus-visible are specified (DEC-102); axe-coverage fails today on Checkbox (no test file). Rows stay `not measurable` until built. | 2026-11-15 |
 | Benchmark against a justified target | OPEN | Reclassified in two rows (DEC-101): Atlas first op at 250 ms (0.015 ms p95 measured in Node, baseline run needed) and end-to-end through `claude -p` as a trend row (warm P95 2649 ms, cold 2256 ms). | 2026-11-15 |
 | Owner backlog, no undecided rows | DECIDED, not built | Add 7 role stages, leave 8 primitive, do the sandbox cascade and the Switch and Select Figma gaps (DEC-102); implementation issues not opened. | 2026-11-22 |
 
+**Remaining after Alert (#134):**
+1. Input refinement pass (Figma first, then code; `atlas-component` skill, four gates). When it is spec-complete, drop `provisional` from `TextField.registry.json` and from `Form.registry.json` `waitingOn`, set `status.json` code, and update `filter.test.ts` (it hard-codes which entries are provisional) and run `npm run test:scripts`.
+2. Owner decision: the structural rule for Form (DEC-100). Without it `registryProductionReady` stops at 5/6.
+3. Alert Figma description stores `&#39;` and `&quot;` where quotes belong; check whether the sync or Figma wrote them and fix at the source.
+4. Worktrees have no `node_modules`; run `npm ci` before `atlas:verify`. `--stamp` alone stamps nothing for a registry-only change: use `--stamp-components <Name>`.
+
 Latest ids: **DEC-102**, CAND-071, DISC-109.
 
 ## Start here (session 29, what session 28 left)
 0. **Report progress first**: doing / done / % / session X of N. Session 28 did the benchmark half of the closing work (DEC-095); the roadmap stays at 27 of ~28 until the two items below are decided.
 1. **Waiting on the owner (both are blast-radius calls, not built):**
-   - **Exclude scaffolded registry entries.** Alert is `scaffolded` in `atlas/state/status.json`; TextField and Form compose scaffolded parts (Input, Alert). Removing them drops `registryComplete` from 5 to 2 (the ratchet and `### Breaking` CHANGELOG rule apply), and breaks the runtime demo, the request-access, notice and text-entry eval tasks, the fuzz fixtures and the protocol bench readings. Confirm which entries go before touching them.
+   - **Exclude scaffolded registry entries.** Alert is now `spec-complete` (#134); TextField and Form still compose a scaffolded part (Input). Removing them drops `registryComplete` from 5 to 2 (the ratchet and `### Breaking` CHANGELOG rule apply), and breaks the runtime demo, the request-access, notice and text-entry eval tasks, the fuzz fixtures and the protocol bench readings. Confirm which entries go before touching them.
    - **Text as the 6th type: done.** Built in #125 and registered in #128 (DEC-096): root-level, capability `display`, which the interactive test ignores. Nesting Text inside Form, Field or Alert is a separate decision: it edits those entries and the request-access and notice eval catalogs.
 2. **Readings (protocol-v2a, committed as `protocol-latest`):** cold start 2256 ms, warm `firstOpP95` 2649 ms (target 250, failing), promptReduction min 0.676, markup 0 of 20, repair loop max 1 attempt and never triggered. Spend 0.33 of 3.00 USD in `protocol-spend.json`.
 3. **Waived, not resolved:** the 14 contrast allowances (DISC-108 open). Token drift (DISC-106, DISC-107) is untouched and waits for the token-sync gate.

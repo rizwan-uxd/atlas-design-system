@@ -5,7 +5,7 @@
   "kind": "structural",
   "platforms": ["web"],
   "registryComplete": true,
-  "provisional": { "waitingOn": ["Alert", "Input"], "reason": "Form has no component of its own; it renders Alert (scaffolded) and, through Field, TextField, which is the Input component (scaffolded). It is production-ready once both are spec-complete." },
+  "provisional": { "waitingOn": ["Input"], "reason": "Form has no component of its own; through Field it renders TextField, which is the Input component (scaffolded). It is production-ready once Input is spec-complete." },
   "composedOf": ["Field", "Input", "Button", "Alert"],
   "element": "form",
   "protocolProps": {},
