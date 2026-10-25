@@ -121,7 +121,7 @@ fails when this region is stale. Statuses are exactly three: **passing** (a decl
 **failing** (ran and failed), **not measurable** (no result for the declared check — reported as `n/a`,
 never `0`). A metric with no check is *not measurable*, never passing: absence of a signal is not a pass.
 
-**23 passing · 3 failing · 10 not measurable** of 36. 3 of the measured rows cover only part of their population; the row says how much.
+**24 passing · 3 failing · 9 not measurable** of 36. 3 of the measured rows cover only part of their population; the row says how much.
 
 Result sources read: `atlas-verify`, `vitest`, `playwright`, `atlas-sync`, `registry`, `token-lint`. Sources not present leave their metrics not measurable.
 
@@ -185,10 +185,10 @@ Result sources read: `atlas-verify`, `vitest`, `playwright`, `atlas-sync`, `regi
 
 | Metric | Target | Status | Check | Measurable at |
 |---|---:|---|---|---|
-| Token-name drift | 0 | **passing** — 0 drift — all 518 Figma variables and 487 code tokens | `tokens.name-drift` | D1 option B (full variable table) |
-| Missing code tokens | 0 | **failing** — 2 drift — all 518 Figma variables and 487 code tokens | `tokens.missing-in-code` | D1 option B (full variable table) |
-| Missing Figma tokens | 0 | **failing** — 9 drift — all 518 Figma variables and 487 code tokens | `tokens.missing-in-figma` | D1 option B (full variable table) |
-| All supported brand modes compile successfully | pass | not measurable | `design.brand-modes` | M5.6 |
+| Token-name drift | 0 | **passing** — 0 drift — all 530 Figma variables and 496 code tokens | `tokens.name-drift` | D1 option B (full variable table) |
+| Missing code tokens | 0 | **failing** — 2 drift — all 530 Figma variables and 496 code tokens | `tokens.missing-in-code` | D1 option B (full variable table) |
+| Missing Figma tokens | 0 | **failing** — 9 drift — all 530 Figma variables and 496 code tokens | `tokens.missing-in-figma` | D1 option B (full variable table) |
+| All supported brand modes compile successfully | pass | **passing** | `design.brand-modes` | M5.6 |
 | Critical visual regression tests pass for every brand mode | pass | not measurable | `visual > sandbox` | now (light/dark only), M5.6 (brands) |
 
 ### Runtime quality
