@@ -16,6 +16,17 @@ LABEL=${1:?label, e.g. baseline}; TASK=${2:?task, e.g. T1}; REPS=${3:-3}; MODEL=
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 TDIR="$ROOT/benchmarks/tasks/$TASK"; [ -f "$TDIR/prompt.md" ] || { echo "no task $TASK"; exit 1; }
 OUT="$ROOT/benchmarks/results/$LABEL/$TASK"; mkdir -p "$OUT"
+# Phase 6 protocol bench (P1): live API calls through vitest, with no workspace copy and no claude -p, so it is
+# dispatched before the claude CLI check. Its own ledger and cap (DEC-093); BENCH_DRY=1 stops after the budget check.
+if [ "$(node -e 'console.log(require(process.argv[1]).type || "")' "$TDIR/meta.json")" = "protocol" ]; then
+  export BENCH_LEDGER="${BENCH_LEDGER:-$ROOT/benchmarks/results/protocol-spend.json}" BENCH_CAP="${BENCH_CAP:-3}" BENCH_FLOOR="${BENCH_FLOOR:-0.5}"
+  node "$ROOT/benchmarks/phase-9/budget.mjs" pre "$TASK" 1 || exit 1
+  [ -n "${BENCH_DRY:-}" ] && { echo "  dry run: budget checked, no API call"; exit 0; }
+  { echo "date: $(date -u +%FT%TZ)"; echo "model: $MODEL"; echo "git HEAD: $(git -C "$ROOT" rev-parse --short HEAD)"; } > "$OUT/env.txt"
+  ( cd "$ROOT" && BENCH_OUT="$OUT" BENCH_REPS="$REPS" BENCH_MODEL="$MODEL" npm run -s bench:protocol ) || { echo "✗ protocol bench failed"; exit 1; }
+  node "$ROOT/benchmarks/phase-9/budget.mjs" post "$LABEL" "$TASK" 1 "$OUT/run.json"
+  exit $?
+fi
 command -v claude >/dev/null || { echo "claude CLI not found"; exit 1; }
 COMMIT=${BENCH_COMMIT:-}; PATCH=${BENCH_PATCH:-}; DRY=${BENCH_DRY:-}; ONLY=${BENCH_ONLY:-}
 P9="$ROOT/benchmarks/phase-9"

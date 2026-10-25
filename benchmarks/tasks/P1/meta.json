@@ -1,0 +1,4 @@
+{
+  "type": "protocol",
+  "_note": "Phase 6 PR-1 (DEC-093): the task set is packages/registry/tests/eval-tasks.json; see benchmarks/protocol/protocol.bench.ts."
+}
