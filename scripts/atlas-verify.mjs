@@ -29,7 +29,7 @@ import { compareAxes } from "./lib/compare-axes.mjs"
 import { registryMetrics, coverageText } from "./lib/registry-metrics.mjs"
 import { loadInputs } from "./lib/schemas.mjs"
 import { METRIC_RULES } from "./lib/token-rules.mjs"
-import { contrastCheck } from "./lib/contrast.mjs"
+import { contrastCheck, parseTokens, resolveColor } from "./lib/contrast.mjs"
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..")
 const args = process.argv.slice(2)
@@ -383,6 +383,34 @@ check("design", "tokens", () => {
   // The silent-pass risk here is an empty token set, failed above.
   return { ...verdict(fails), inspected: scanned.size, scope: 0,
     note: `${refs} token refs in ${scanned.size} files · ${tokens.size} tokens defined` }
+})
+
+// M5.6 — metric `design.brand-modes` ("All supported brand modes compile successfully"): every
+// [data-brand] block overrides the same colours in light and dark, each declared in :root and each
+// resolving to a colour, and the Figma Atlas/Brand modes name exactly the CSS brands (DEC-091).
+check("design", "brand-modes", () => {
+  const t = parseTokens(read(TOKEN_CSS))
+  const names = Object.keys(t.brands).sort()
+  const fails = []
+  if (!names.length) fails.push(`${TOKEN_CSS} declares no [data-brand] block — there is no brand axis to compile`)
+  let inspected = 0
+  for (const b of names) {
+    const { light, dark } = t.brands[b]
+    const l = [...light.keys()].sort(), d = [...dark.keys()].sort()
+    if (l.join() !== d.join()) fails.push(`${b}: light and dark override different colours — light ${l.join(" ")} · dark ${d.join(" ")}`)
+    for (const [theme, own, map] of [["light", light, new Map([...t.light, ...light])], ["dark", dark, new Map([...t.light, ...t.dark, ...light, ...dark])]]) {
+      for (const name of own.keys()) {
+        inspected++
+        if (!t.light.has(name)) fails.push(`${b} ${theme}: ${name} is not declared in :root — a brand may only override existing tokens`)
+        else if (!resolveColor(name, map).color) fails.push(`${b} ${theme}: ${name} does not resolve to a colour`)
+      }
+    }
+  }
+  const col = (inputs.valid("atlas/tokens.json") ?? JSON.parse(read("atlas/tokens.json")))?.figmaTable?.collections?.find((c) => c.name === "Atlas/Brand")
+  const figma = (col?.modes ?? []).map((m) => m.toLowerCase()).filter((m) => m !== "atlas").sort()
+  if (!col) fails.push("atlas/tokens.json figmaTable has no Atlas/Brand collection — pull the variable table")
+  else if (figma.join() !== names.join()) fails.push(`Figma Atlas/Brand modes (${figma.join(", ") || "none"}) do not match the CSS brands (${names.join(", ") || "none"})`)
+  return { ...verdict(fails), inspected, scope: names.length }
 })
 
 // ─── code ────────────────────────────────────────────────────────────────────

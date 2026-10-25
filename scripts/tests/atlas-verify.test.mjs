@@ -283,6 +283,18 @@ test("design/tokens fails when the token CSS defines nothing", () => withRepo(({
   assert.match(verify(dir, "design.tokens").mismatches.join("\n"), /defines no --atlas-\* tokens/)
 }))
 
+// design/brand-modes (M5.6)
+test("design/brand-modes passes every brand that compiles, and fails a broken or unmatched one", () => withRepo(({ dir }) => {
+  assert.equal(verify(dir, "design.brand-modes").status, "pass", "the committed warm brand compiles in both themes")
+  // a dark override that resolves to nothing
+  edit(dir, "packages/tokens/atlas.tokens.css", (s) => s.replace("--atlas-primary: var(--atlas-color-coral-400);", "--atlas-primary: var(--atlas-color-coral-999);"))
+  assert.match(verify(dir, "design.brand-modes").mismatches.join("\n"), /warm dark: --atlas-primary does not resolve/)
+  edit(dir, "packages/tokens/atlas.tokens.css", (s) => s.replace("var(--atlas-color-coral-999)", "var(--atlas-color-coral-400)"))
+  // light and dark override different sets
+  edit(dir, "packages/tokens/atlas.tokens.css", (s) => s.replace("  --atlas-focus-ring: var(--atlas-color-coral-500);\n", ""))
+  assert.match(verify(dir, "design.brand-modes").mismatches.join("\n"), /warm: light and dark override different colours .*--atlas-focus-ring/)
+}))
+
 // code/token-lint
 test("code/token-lint passes clean, fails a hardcoded colour, and reports files scanned", () => withRepo(({ dir }) => {
   const ok = verify(dir, "token-lint")
