@@ -1,5 +1,5 @@
 {
-  "_note": "One row per metric in docs/architecture/ATLAS-TARGET-ARCHITECTURE.md. AUTHORED — scripts/metrics-report.mjs reads it and never writes it. A metric whose `check` produces no result is reported `not measurable`, never `passing`: absence of a signal is not a pass. `milestone` is the roadmap milestone at which the check is expected to exist; it is documentation, not logic.",
+  "_note": "One row per metric in docs/architecture/ATLAS-TARGET-ARCHITECTURE.md. AUTHORED — scripts/metrics-report.mjs reads it and never writes it. A metric whose `check` produces no result is reported `not measurable`, never `passing`: absence of a signal is not a pass. `milestone` is the roadmap milestone at which the check is expected to exist; it is documentation, not logic. `gate` (Phase 7): `hard` = CI fails unless the row reads passing; `trend` = bench-only, a >20% regression against benchmarks/results/protocol-baseline.json opens a report and never blocks; `report` = shown, not gated, with `gateWhy`.",
   "spec": "docs/architecture/ATLAS-TARGET-ARCHITECTURE.md",
   "roadmap": "docs/ATLAS-DELIVERY-ROADMAP.md",
   "sources": {
@@ -17,7 +17,8 @@
       "target": "0",
       "source": "vitest",
       "check": "runtime/validator > rejects markup in prop values",
-      "milestone": "M4"
+      "milestone": "M4",
+      "gate": "hard"
     },
     {
       "principle": "Catalog Over Code",
@@ -26,7 +27,8 @@
       "source": "bench",
       "check": "protocol.agentCompliance",
       "milestone": "Phase 6",
-      "why": "Tier 3, bench-only (DEC-093): the reading is the committed batch in benchmarks/results/protocol-latest (label, date and model in its run.json); claude-sonnet-5-5 through `claude -p` on the subscription (tools, settings and MCP off, empty working directory), fallback-served reps excluded. Passes when no kept rep streams a markup issue or a non-op line; the vitest row above measures the validator's enforcement instead."
+      "why": "Tier 3, bench-only (DEC-093): the reading is the committed batch in benchmarks/results/protocol-latest (label, date and model in its run.json); claude-sonnet-5-5 through `claude -p` on the subscription (tools, settings and MCP off, empty working directory), fallback-served reps excluded. Passes when no kept rep streams a markup issue (owner decision, session 27: non-op lines are reported as `nonOpReps`, not counted); the vitest row above measures the validator's enforcement instead.",
+      "gate": "trend"
     },
     {
       "principle": "Catalog Over Code",
@@ -34,7 +36,8 @@
       "target": "100%",
       "source": "playwright",
       "check": "runtime-demo > every node carries a registered data-atlas-type",
-      "milestone": "M4"
+      "milestone": "M4",
+      "gate": "hard"
     },
     {
       "principle": "Catalog Over Code",
@@ -43,7 +46,8 @@
       "source": "token-lint",
       "check": "code.raw-design-values",
       "milestone": "Phase 2d",
-      "why": "Phase 2d: token-lint's colour rules, no-raw-length (strict over packages/ui-web/src; @media widths, em units and the visually-hidden 1px are not lengths) and no-private-var-escape (a --_ var is one semantic alias or an allowlisted, reasoned exception)."
+      "why": "Phase 2d: token-lint's colour rules, no-raw-length (strict over packages/ui-web/src; @media widths, em units and the visually-hidden 1px are not lengths) and no-private-var-escape (a --_ var is one semantic alias or an allowlisted, reasoned exception).",
+      "gate": "hard"
     },
     {
       "principle": "Catalog Over Code",
@@ -52,7 +56,8 @@
       "source": "atlas-verify",
       "check": "scope.registry-complete",
       "milestone": "Phase 4",
-      "why": "Phase 4 registryComplete ratchet: the authored-entry count under packages/registry/src may only increase. An entry is an agent-visible type; removal is breaking and goes through an owner decision first."
+      "why": "Phase 4 registryComplete ratchet: the authored-entry count under packages/registry/src may only increase. An entry is an agent-visible type; removal is breaking and goes through an owner decision first.",
+      "gate": "hard"
     },
     {
       "principle": "Grammar Parsimony",
@@ -60,7 +65,8 @@
       "target": "100%",
       "source": "atlas-verify",
       "check": "design.schemas",
-      "milestone": "M2 (JSON inputs), M4 (protocol)"
+      "milestone": "M2 (JSON inputs), M4 (protocol)",
+      "gate": "hard"
     },
     {
       "principle": "Grammar Parsimony",
@@ -68,7 +74,8 @@
       "target": "0%",
       "source": "playwright",
       "check": "runtime-demo > interaction sends a state delta, not a re-render",
-      "milestone": "M4"
+      "milestone": "M4",
+      "gate": "hard"
     },
     {
       "principle": "Grammar Parsimony",
@@ -76,7 +83,9 @@
       "target": "At least 70% smaller",
       "source": "vitest",
       "check": "runtime/protocol > payload is at most 30% of rendered markup bytes",
-      "milestone": "M4"
+      "milestone": "M4",
+      "gate": "report",
+      "gateWhy": "Report-only by decision (DEC-085): the protocol size ratio reads 0.308 against 0.30; a more compact protocol is a separate decision."
     },
     {
       "principle": "Grammar Parsimony",
@@ -85,7 +94,8 @@
       "source": "bench",
       "check": "protocol.firstOpP95",
       "milestone": "Phase 6",
-      "why": "Tier 3, bench-only (DEC-093): the reading is the committed batch in benchmarks/results/protocol-latest (label, date and model in its run.json); claude-sonnet-5-5 through `claude -p` on the subscription (tools, settings and MCP off, empty working directory), fallback-served reps excluded. Measured from process spawn, so it includes CLI startup and time to first token; the reading reflects the transport as much as the protocol."
+      "why": "Tier 3, bench-only (DEC-093): the reading is the committed batch in benchmarks/results/protocol-latest (label, date and model in its run.json); claude-sonnet-5-5 through `claude -p` on the subscription (tools, settings and MCP off, empty working directory), fallback-served reps excluded. Measured from process spawn, so it includes CLI startup and time to first token; the reading reflects the transport as much as the protocol.",
+      "gate": "trend"
     },
     {
       "principle": "State Synchronization",
@@ -94,7 +104,8 @@
       "source": "registry",
       "check": "design.registry-events",
       "milestone": "M3",
-      "why": "Measured from the committed registry by scripts/lib/registry-metrics.mjs, the function atlas-verify's design/registry-events runs. An interactive registered type (own on* handler, interaction member on Figma's State axis, or a declared capability) must declare events whose handlers exist in the generated facts. The population is the registered types, so the row carries how many of the components that is."
+      "why": "Measured from the committed registry by scripts/lib/registry-metrics.mjs, the function atlas-verify's design/registry-events runs. An interactive registered type (own on* handler, interaction member on Figma's State axis, or a declared capability) must declare events whose handlers exist in the generated facts. The population is the registered types, so the row carries how many of the components that is.",
+      "gate": "hard"
     },
     {
       "principle": "State Synchronization",
@@ -102,7 +113,8 @@
       "target": "0",
       "source": "playwright",
       "check": "runtime-demo > 50 rapid submits keep strictly increasing sequence",
-      "milestone": "M4"
+      "milestone": "M4",
+      "gate": "hard"
     },
     {
       "principle": "State Synchronization",
@@ -110,7 +122,8 @@
       "target": "0%",
       "source": "playwright",
       "check": "runtime-demo > patch updates only the addressed subtree",
-      "milestone": "M4"
+      "milestone": "M4",
+      "gate": "hard"
     },
     {
       "principle": "State Synchronization",
@@ -118,7 +131,8 @@
       "target": "Under 300 ms p95 client-side",
       "source": "playwright",
       "check": "runtime-demo > state ack p95",
-      "milestone": "M4"
+      "milestone": "M4",
+      "gate": "hard"
     },
     {
       "principle": "Fallback",
@@ -126,7 +140,8 @@
       "target": "100%",
       "source": "vitest",
       "check": "runtime/fuzz > 1000 malformed payloads all render",
-      "milestone": "M4"
+      "milestone": "M4",
+      "gate": "hard"
     },
     {
       "principle": "Fallback",
@@ -134,7 +149,8 @@
       "target": "0",
       "source": "vitest",
       "check": "runtime/fuzz > no payload throws",
-      "milestone": "M4"
+      "milestone": "M4",
+      "gate": "hard"
     },
     {
       "principle": "Fallback",
@@ -143,7 +159,8 @@
       "source": "registry",
       "check": "design.registry-fallback",
       "milestone": "M3",
-      "why": "Measured from the committed registry by scripts/lib/registry-metrics.mjs (atlas-verify design/registry-fallback). Every registered type declares a fallback to a registered type, every chain ends at the one terminal type, and fallback props are valid protocolProps of the target. Declared, not exercised: M4's fuzz rows measure the rendered fallback. The row carries its coverage of the components."
+      "why": "Measured from the committed registry by scripts/lib/registry-metrics.mjs (atlas-verify design/registry-fallback). Every registered type declares a fallback to a registered type, every chain ends at the one terminal type, and fallback props are valid protocolProps of the target. Declared, not exercised: M4's fuzz rows measure the rendered fallback. The row carries its coverage of the components.",
+      "gate": "hard"
     },
     {
       "principle": "Fallback",
@@ -151,7 +168,8 @@
       "target": "Under 100 ms p95",
       "source": "playwright",
       "check": "runtime-demo > fallback render p95",
-      "milestone": "M4"
+      "milestone": "M4",
+      "gate": "hard"
     },
     {
       "principle": "Context Containment",
@@ -160,7 +178,8 @@
       "source": "vitest",
       "check": "registry/filter > every request carries a filtered catalog",
       "milestone": "Phase 6",
-      "why": "Phase 6 (DEC-092): 5 of 48 agent-visible names are registered, and a catalog can only hold registered types; the full catalog counts the 43 unregistered components too, so this row is not evidence that filtering removed them."
+      "why": "Phase 6 (DEC-092): 5 of 48 agent-visible names are registered, and a catalog can only hold registered types; the full catalog counts the 43 unregistered components too, so this row is not evidence that filtering removed them.",
+      "gate": "hard"
     },
     {
       "principle": "Context Containment",
@@ -169,7 +188,8 @@
       "source": "vitest",
       "check": "registry/filter > no request exposes the full catalog",
       "milestone": "Phase 6",
-      "why": "Phase 6 (DEC-092): 5 of 48 agent-visible names are registered, and a catalog can only hold registered types; the full catalog counts the 43 unregistered components too, so this row is not evidence that filtering removed them."
+      "why": "Phase 6 (DEC-092): 5 of 48 agent-visible names are registered, and a catalog can only hold registered types; the full catalog counts the 43 unregistered components too, so this row is not evidence that filtering removed them.",
+      "gate": "hard"
     },
     {
       "principle": "Context Containment",
@@ -178,7 +198,8 @@
       "source": "bench",
       "check": "protocol.promptReduction",
       "milestone": "Phase 6",
-      "why": "Tier 3, bench-only (DEC-093): the reading is the committed batch in benchmarks/results/protocol-latest (label, date and model in its run.json); claude-sonnet-5-5 through `claude -p` on the subscription (tools, settings and MCP off, empty working directory), fallback-served reps excluded. Most of the reduction is the 43 unregistered components the full catalog counts (DEC-092). Token counts are the CLI's reported input tokens minus its fixed overhead."
+      "why": "Tier 3, bench-only (DEC-093): the reading is the committed batch in benchmarks/results/protocol-latest (label, date and model in its run.json); claude-sonnet-5-5 through `claude -p` on the subscription (tools, settings and MCP off, empty working directory), fallback-served reps excluded. Most of the reduction is the 43 unregistered components the full catalog counts (DEC-092). Token counts are the CLI's reported input tokens minus its fixed overhead.",
+      "gate": "trend"
     },
     {
       "principle": "Context Containment",
@@ -187,7 +208,8 @@
       "source": "vitest",
       "check": "registry/filter > catalog excludes out-of-task types",
       "milestone": "Phase 6",
-      "why": "Phase 6 (DEC-092): 5 of 48 agent-visible names are registered, and a catalog can only hold registered types; the full catalog counts the 43 unregistered components too, so this row is not evidence that filtering removed them."
+      "why": "Phase 6 (DEC-092): 5 of 48 agent-visible names are registered, and a catalog can only hold registered types; the full catalog counts the 43 unregistered components too, so this row is not evidence that filtering removed them.",
+      "gate": "hard"
     },
     {
       "principle": "Accessibility",
@@ -196,7 +218,9 @@
       "source": "vitest",
       "check": "axe-coverage > every registered component has a passing axe assertion",
       "milestone": "M3",
-      "why": "268 axe assertions pass across 48 suites, but Checkbox has NO test file, so coverage is not 100% and a per-test name match cannot detect a missing suite. Needs a coverage check driven by the registry."
+      "why": "268 axe assertions pass across 48 suites, but Checkbox has NO test file, so coverage is not 100% and a per-test name match cannot detect a missing suite. Needs a coverage check driven by the registry.",
+      "gate": "report",
+      "gateWhy": "Not measurable in CI yet; becomes hard when its check produces a result."
     },
     {
       "principle": "Accessibility",
@@ -204,7 +228,8 @@
       "target": "pass",
       "source": "atlas-verify",
       "check": "code.contrast",
-      "milestone": "Phase 4"
+      "milestone": "Phase 4",
+      "gate": "hard"
     },
     {
       "principle": "Accessibility",
@@ -213,7 +238,9 @@
       "source": "vitest",
       "check": "keyboard > every interactive component suite",
       "milestone": "Phase 4",
-      "why": "Per-component suites test keyboard behaviour ad hoc; nothing asserts coverage across all interactive components."
+      "why": "Per-component suites test keyboard behaviour ad hoc; nothing asserts coverage across all interactive components.",
+      "gate": "report",
+      "gateWhy": "Not measurable in CI yet; becomes hard when its check produces a result."
     },
     {
       "principle": "Accessibility",
@@ -222,7 +249,9 @@
       "source": "atlas-verify",
       "check": "code.focus-visible",
       "milestone": "Phase 4",
-      "why": "code.a11y only flags `outline: none` without `focus` on the same line; that does not prove a visible focus state. Needs a real check."
+      "why": "code.a11y only flags `outline: none` without `focus` on the same line; that does not prove a visible focus state. Needs a real check.",
+      "gate": "report",
+      "gateWhy": "Not measurable in CI yet; becomes hard when its check produces a result."
     },
     {
       "principle": "Accessibility",
@@ -231,7 +260,8 @@
       "source": "vitest",
       "check": "Field — help and error",
       "milestone": "now",
-      "why": "Real, passing suite: aria-describedby points at the error, the error replaces the help text, and the icon is hidden from assistive tech. Field is the wiring contract every Atlas form uses."
+      "why": "Real, passing suite: aria-describedby points at the error, the error replaces the help text, and the icon is hidden from assistive tech. Field is the wiring contract every Atlas form uses.",
+      "gate": "hard"
     },
     {
       "principle": "Accessibility",
@@ -240,7 +270,8 @@
       "source": "token-lint",
       "check": "code.reduced-motion-required",
       "milestone": "Phase 2d",
-      "why": "Phase 2d: every component CSS file using --atlas-duration-* has a prefers-reduced-motion block (file-level)."
+      "why": "Phase 2d: every component CSS file using --atlas-duration-* has a prefers-reduced-motion block (file-level).",
+      "gate": "hard"
     },
     {
       "principle": "Figma parity",
@@ -249,7 +280,8 @@
       "source": "atlas-sync",
       "check": "tokens.name-drift",
       "milestone": "D1 option B (full variable table)",
-      "why": "Over the whole Figma variable table (atlas/tokens.json figmaTable): a variable whose codeSyntax.WEB is not a var(--atlas-*) reference, or names an undeclared token while its slash-to-dash name is declared. The bound subset (figmaBound) is a cross-check, not the metric."
+      "why": "Over the whole Figma variable table (atlas/tokens.json figmaTable): a variable whose codeSyntax.WEB is not a var(--atlas-*) reference, or names an undeclared token while its slash-to-dash name is declared. The bound subset (figmaBound) is a cross-check, not the metric.",
+      "gate": "hard"
     },
     {
       "principle": "Figma parity",
@@ -258,7 +290,9 @@
       "source": "atlas-sync",
       "check": "tokens.missing-in-code",
       "milestone": "D1 option B (full variable table)",
-      "why": "A Figma variable whose codeSyntax.WEB names a token atlas.tokens.css does not declare. Variables with no codeSyntax.WEB and no CSS token are Figma-only (figmaTable.unpublished) and not counted."
+      "why": "A Figma variable whose codeSyntax.WEB names a token atlas.tokens.css does not declare. Variables with no codeSyntax.WEB and no CSS token are Figma-only (figmaTable.unpublished) and not counted.",
+      "gate": "report",
+      "gateWhy": "Open owner decision (DISC-106): two Figma Card hover variables have no code token."
     },
     {
       "principle": "Figma parity",
@@ -267,7 +301,9 @@
       "source": "atlas-sync",
       "check": "tokens.missing-in-figma",
       "milestone": "D1 option B (full variable table)",
-      "why": "A token declared in atlas.tokens.css that no Figma variable's codeSyntax.WEB names and that is not a mode spelled out from one (columns-mobile from the Layout collection's Mobile mode)."
+      "why": "A token declared in atlas.tokens.css that no Figma variable's codeSyntax.WEB names and that is not a mode spelled out from one (columns-mobile from the Layout collection's Mobile mode).",
+      "gate": "report",
+      "gateWhy": "Open owner decision (DISC-107): 15 code tokens have no Figma variable."
     },
     {
       "principle": "Figma parity",
@@ -275,7 +311,8 @@
       "target": "pass",
       "source": "atlas-verify",
       "check": "design.brand-modes",
-      "milestone": "M5.6"
+      "milestone": "M5.6",
+      "gate": "hard"
     },
     {
       "principle": "Figma parity",
@@ -283,7 +320,9 @@
       "target": "pass",
       "source": "playwright",
       "check": "visual > sandbox",
-      "milestone": "now (light/dark only), M5.6 (brands)"
+      "milestone": "now (light/dark only), M5.6 (brands)",
+      "gate": "report",
+      "gateWhy": "Not measurable in CI yet; becomes hard when its check produces a result."
     },
     {
       "principle": "Runtime quality",
@@ -292,7 +331,8 @@
       "source": "token-lint",
       "check": "code.raw-design-values",
       "milestone": "Phase 2d",
-      "why": "Same as the Catalog Over Code row: colour is enforced, length literals are not."
+      "why": "Same as the Catalog Over Code row: colour is enforced, length literals are not.",
+      "gate": "hard"
     },
     {
       "principle": "Runtime quality",
@@ -300,7 +340,8 @@
       "target": "pass",
       "source": "vitest",
       "check": "runtime/validator > unregistered type never renders",
-      "milestone": "M4"
+      "milestone": "M4",
+      "gate": "hard"
     },
     {
       "principle": "Runtime quality",
@@ -308,7 +349,8 @@
       "target": "pass",
       "source": "vitest",
       "check": "runtime/validator > unknown type replaced by fallback",
-      "milestone": "M4"
+      "milestone": "M4",
+      "gate": "hard"
     },
     {
       "principle": "Runtime quality",
@@ -317,7 +359,8 @@
       "source": "registry",
       "check": "design.registry-states",
       "milestone": "M3",
-      "why": "Measured from the committed registry by scripts/lib/registry-metrics.mjs (atlas-verify design/registry-states). It checks that every State member Figma draws for an interactive registered type is classified (interaction or prop) and every prop-driven state names a real prop. It does not yet require all five named states per component: which states apply to which component is an owner decision not yet taken. The row carries its coverage of the components."
+      "why": "Measured from the committed registry by scripts/lib/registry-metrics.mjs (atlas-verify design/registry-states). It checks that every State member Figma draws for an interactive registered type is classified (interaction or prop) and every prop-driven state names a real prop. It does not yet require all five named states per component: which states apply to which component is an owner decision not yet taken. The row carries its coverage of the components.",
+      "gate": "hard"
     },
     {
       "principle": "Runtime quality",
@@ -325,7 +368,8 @@
       "target": "pass",
       "source": "playwright",
       "check": "visual > no horizontal scroll at each breakpoint",
-      "milestone": "Phase 4"
+      "milestone": "Phase 4",
+      "gate": "hard"
     }
   ]
 }

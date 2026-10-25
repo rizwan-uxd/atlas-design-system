@@ -121,7 +121,7 @@ fails when this region is stale. Statuses are exactly three: **passing** (a decl
 **failing** (ran and failed), **not measurable** (no result for the declared check — reported as `n/a`,
 never `0`). A metric with no check is *not measurable*, never passing: absence of a signal is not a pass.
 
-**28 passing · 5 failing · 4 not measurable** of 37. 3 of the measured rows cover only part of their population; the row says how much.
+**29 passing · 4 failing · 4 not measurable** of 37. 3 of the measured rows cover only part of their population; the row says how much.
 
 Result sources read: `atlas-verify`, `vitest`, `playwright`, `atlas-sync`, `registry`, `token-lint`, `bench`. Sources not present leave their metrics not measurable.
 
@@ -130,7 +130,7 @@ Result sources read: `atlas-verify`, `vitest`, `playwright`, `atlas-sync`, `regi
 | Metric | Target | Status | Check | Measurable at |
 |---|---:|---|---|---|
 | Agent outputs containing CSS, HTML, JSX, or arbitrary markup | 0 | **passing** | `runtime/validator > rejects markup in prop values` | M4 |
-| Agent outputs containing CSS, HTML, JSX, or markup (agent compliance) | 0 | **failing** | `protocol.agentCompliance` | Phase 6 |
+| Agent outputs containing CSS, HTML, JSX, or markup (agent compliance) | 0 | **passing** | `protocol.agentCompliance` | Phase 6 |
 | Rendered nodes mapped to registered components | 100% | **passing** | `runtime-demo > every node carries a registered data-atlas-type` | M4 |
 | Direct raw color or spacing values accepted by components | 0 | **passing** | `code.raw-design-values` | Phase 2d |
 | Registered types removed between releases | 0 | **passing** | `scope.registry-complete` | Phase 4 |
@@ -1211,6 +1211,8 @@ gate.
 dispatches on `meta.json`'s `type`, so `protocol` is a new type, not a new harness. **Do not reuse:**
 the three rubrics and the strict pattern-adherence regexes — they score authored code, a concern the
 protocol deletes. Keep them for the code-authoring harness running in parallel.
+
+**As built (session 27, DEC-094).** Every manifest row carries `gate`: 27 `hard`, 3 `trend`, 7 `report` (each with a `gateWhy`). `scripts/metrics-gate.mjs` (logic in `scripts/lib/metrics-gate.mjs`) runs in CI's metrics job after the stale-region check and fails when a hard row is not passing or a row has no gate. The Tier 3 baseline is `benchmarks/results/protocol-baseline.json` (protocol-v1 readings; `--accept-trend` rewrites it); a >20% regression is a job-summary table plus a warning, never blocking. `protocol.agentCompliance` counts markup only, so it reads 0 of 20 and passes; the 8 non-op reps are `nonOpReps`. `createModelAgent(request, stream, { registry, maxRepairs = 1 })` records `diagnostics[]` per attempt and re-asks once with the validator's issues before the runtime falls back; the protocol is unchanged. Metric table: 29 passing, 4 failing, 4 not measurable of 37.
 
 ---
 

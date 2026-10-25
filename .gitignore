@@ -67,3 +67,4 @@ tests/visual/*-snapshots/*-win32.png
 # docs/ATLAS-DELIVERY-ROADMAP.md is committed.
 .metrics/
 atlas-report.json
+trend-report.md
