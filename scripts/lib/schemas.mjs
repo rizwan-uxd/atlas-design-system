@@ -38,6 +38,7 @@ export const INPUTS = [
   { glob: "packages/registry/src/*.registry.json", schema: "registry.schema.json#/$defs/entry", min: 1, typeMatchesFile: true },
   { glob: "packages/registry/generated/*.facts.json", schema: "registry.schema.json#/$defs/facts", nameMatchesFile: true },
   { glob: "packages/registry/generated/elements.json", schema: "registry.schema.json#/$defs/elements" },
+  { glob: "packages/registry/tests/eval-tasks.json", schema: "registry.schema.json#/$defs/evalTasks", required: true },
   { glob: "packages/runtime/tests/fixtures/*.json", schema: "protocol.schema.json#/$defs/fixture", min: 1 },
 ]
 /**

@@ -1150,6 +1150,23 @@ The filter is a prompt optimisation; the validator is the guarantee. Assertions:
 filtered catalog, 0 expose the full 47, and the *validator* rejects an out-of-catalog type even when the
 agent emits it.
 
+### PR-0 enforcement — ✅ DONE 2026-10-25 (plan + PR-0 in 2 sessions; DEC-092: A1 + B1)
+
+Plan `docs/superpowers/plans/2026-10-25-phase-6-filtered-catalog.md`. What landed:
+- `packages/registry/lib/filter.ts` (in `lib/`, the existing import path): `filter`, `fullCatalog`,
+  `catalogFor`, `restrict`. The full catalog is the 48 agent-visible names: 5 registered types plus the
+  43 components with facts that no entry aliases (A1). Every catalog includes its fallback targets, so the
+  set the agent sees is the set the validator accepts (B1).
+- `packages/runtime/src/session.ts`: `openSession()` is the only way to build an `AgentRequest`. It
+  returns that request and the restricted registry from one catalog; no server op carries a catalog.
+- The validator reports a withheld name as `out-of-catalog` and falls back, as for `unknown-type`.
+- The runtime demo runs inside a submit session. Visual baselines are unchanged (Kind A).
+- Three vitest Context Containment rows are measurable. Open risk: the submit catalog is all 5 registered
+  types, so for forms the guarantee covers only the 43 unregistered names until more types are registered.
+
+**PR-1 (next):** decide D-C (transport, model, spend cap), then a model-backed agent fed only
+`openSession().request`, and a `protocol` bench type for `protocol.promptReduction` and `protocol.firstOpP95`.
+
 Only now do the model-dependent metrics become real: first streamed op <250ms p95, ≥50% prompt
 reduction, and agent-side CSS/HTML/JSX compliance measured against a model rather than the validator.
 

@@ -1,5 +1,5 @@
 {
-  "_note": "One row per metric in docs/architecture/ATLAS-TARGET-ARCHITECTURE.md. AUTHORED \u2014 scripts/metrics-report.mjs reads it and never writes it. A metric whose `check` produces no result is reported `not measurable`, never `passing`: absence of a signal is not a pass. `milestone` is the roadmap milestone at which the check is expected to exist; it is documentation, not logic.",
+  "_note": "One row per metric in docs/architecture/ATLAS-TARGET-ARCHITECTURE.md. AUTHORED — scripts/metrics-report.mjs reads it and never writes it. A metric whose `check` produces no result is reported `not measurable`, never `passing`: absence of a signal is not a pass. `milestone` is the roadmap milestone at which the check is expected to exist; it is documentation, not logic.",
   "spec": "docs/architecture/ATLAS-TARGET-ARCHITECTURE.md",
   "roadmap": "docs/ATLAS-DELIVERY-ROADMAP.md",
   "sources": {
@@ -149,15 +149,17 @@
       "target": "100%",
       "source": "vitest",
       "check": "registry/filter > every request carries a filtered catalog",
-      "milestone": "Phase 6"
+      "milestone": "Phase 6",
+      "why": "Phase 6 (DEC-092): 5 of 48 agent-visible names are registered, and a catalog can only hold registered types; the full catalog counts the 43 unregistered components too, so this row is not evidence that filtering removed them."
     },
     {
       "principle": "Context Containment",
       "metric": "Requests exposing the full catalog",
       "target": "0",
       "source": "vitest",
-      "check": "registry/filter > no request exposes every registered type",
-      "milestone": "Phase 6"
+      "check": "registry/filter > no request exposes the full catalog",
+      "milestone": "Phase 6",
+      "why": "Phase 6 (DEC-092): 5 of 48 agent-visible names are registered, and a catalog can only hold registered types; the full catalog counts the 43 unregistered components too, so this row is not evidence that filtering removed them."
     },
     {
       "principle": "Context Containment",
@@ -173,7 +175,8 @@
       "target": "0 in evaluation tests",
       "source": "vitest",
       "check": "registry/filter > catalog excludes out-of-task types",
-      "milestone": "Phase 6"
+      "milestone": "Phase 6",
+      "why": "Phase 6 (DEC-092): 5 of 48 agent-visible names are registered, and a catalog can only hold registered types; the full catalog counts the 43 unregistered components too, so this row is not evidence that filtering removed them."
     },
     {
       "principle": "Accessibility",
@@ -215,7 +218,7 @@
       "metric": "Form errors are associated with their fields",
       "target": "pass",
       "source": "vitest",
-      "check": "Field \u2014 help and error",
+      "check": "Field — help and error",
       "milestone": "now",
       "why": "Real, passing suite: aria-describedby points at the error, the error replaces the help text, and the icon is hidden from assistive tech. Field is the wiring contract every Atlas form uses."
     },
