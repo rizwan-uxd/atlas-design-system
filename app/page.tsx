@@ -103,6 +103,15 @@ export default function SandboxPage() {
     document.documentElement.setAttribute("data-theme", next ? "dark" : "light")
   }
 
+  // M5.6 brand axis (DEC-091): Atlas is the default and has no attribute
+  const [warm, setWarm] = useState(false)
+  const toggleBrand = () => {
+    const next = !warm
+    setWarm(next)
+    if (next) document.documentElement.setAttribute("data-brand", "warm")
+    else document.documentElement.removeAttribute("data-brand")
+  }
+
   return (
     <div style={{
       minHeight: "100vh", backgroundColor: "var(--atlas-background)", color: "var(--atlas-foreground)",
@@ -123,6 +132,9 @@ export default function SandboxPage() {
             </Link>
             <Button variant="ghost" size="sm" onClick={toggleTheme} leadingIcon={dark ? <Sun size={16} aria-hidden="true" /> : <Moon size={16} aria-hidden="true" />}>
               {dark ? "Light" : "Dark"}
+            </Button>
+            <Button variant="ghost" size="sm" onClick={toggleBrand}>
+              {warm ? "Atlas" : "Warm"}
             </Button>
           </div>
         }
