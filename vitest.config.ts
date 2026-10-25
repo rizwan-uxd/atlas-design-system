@@ -6,7 +6,7 @@ export default defineConfig({
     environment: "jsdom",
     globals: true,
     setupFiles: ["./packages/ui-web/tests/setup.ts"],
-    include: ["packages/ui-web/tests/**/*.test.{ts,tsx}", "packages/registry/tests/**/*.test.ts", "packages/runtime/tests/**/*.test.{ts,tsx}"],
+    include: ["packages/ui-web/tests/**/*.test.{ts,tsx}", "packages/registry/tests/**/*.test.ts", "packages/runtime/tests/**/*.test.{ts,tsx}", "benchmarks/protocol/**/*.test.ts"],
     coverage: {
       provider: "v8",
       include: ["packages/ui-web/src/**"],

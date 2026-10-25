@@ -211,6 +211,9 @@ jobs:
       # redirect into .metrics/ fails before anything creates the directory.
       - name: Prepare .metrics
         run: mkdir -p .metrics
+      # Phase 6 (DEC-093, D1): bench rows read the last recorded protocol batch, committed by hand; CI never calls a model.
+      - name: Collect the recorded protocol bench
+        run: if [ -f benchmarks/results/protocol-latest/bench.json ]; then cp benchmarks/results/protocol-latest/bench.json .metrics/bench.json; fi
       - name: Collect atlas-verify results
         continue-on-error: true
         env:

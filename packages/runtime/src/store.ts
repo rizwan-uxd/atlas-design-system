@@ -19,7 +19,7 @@ export type Action = { kind: "server"; op: ServerOp } | { kind: "input"; path: s
 
 export const initialState: RuntimeState = { root: null, values: {}, errors: {}, lastSeq: 0, issues: [], acks: [], fallbackSeq: null }
 
-const FALLBACK_CODES = new Set(["malformed", "unknown-type", "missing-required"])
+const FALLBACK_CODES = new Set(["malformed", "unknown-type", "out-of-catalog", "missing-required"])
 
 function repath(item: SafeItem, path: string): SafeItem {
   if (typeof item === "string" || item.path === path) return item
