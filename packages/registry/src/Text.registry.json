@@ -1,0 +1,43 @@
+{
+  "_note": "AUTHORED. Text is registered as a root-level node with capability display (owner decisions of 2026-10-25, DEC-096); fallback follows DEC-080. a11y and responsive state only what the source does. Text has no component-token layer, so tokenRoles maps its tone and type roles to the semantic tokens Text.module.css reads.",
+  "type": "Text",
+  "aliasOf": "Text",
+  "kind": "component",
+  "platforms": ["web"],
+  "registryComplete": true,
+  "protocolProps": {
+    "variant": {
+      "values": ["heading", "title", "body", "body-sm", "label", "caption", "overline"]
+    },
+    "tone": {
+      "values": ["default", "muted"]
+    },
+    "as": {
+      "values": ["p", "span", "div", "h1", "h2", "h3", "h4", "h5", "h6"]
+    }
+  },
+  "hiddenProps": {
+    "ref": "A React ref has no protocol form."
+  },
+  "events": {},
+  "slots": ["children"],
+  "fallback": { "type": "Alert", "props": { "variant": "neutral" }, "message": "This content is unavailable" },
+  "nesting": { "parents": [] },
+  "a11y": {
+    "element": "Renders a native element with no role override; as picks it, so a heading level fits the page outline whatever the visual role.",
+    "colour": "Tone never carries meaning alone: Text has no status tones."
+  },
+  "responsive": { "breakpoints": "Heading and title sizes step up with the responsive type collection (--atlas-text-h3 and --atlas-text-h4); no layout change." },
+  "capabilities": ["display"],
+  "tokenRoles": {
+    "tone-default": "--atlas-foreground",
+    "tone-muted": "--atlas-foreground-muted",
+    "type-body": "--atlas-type-body-size",
+    "type-body-sm": "--atlas-type-body-sm-size",
+    "type-caption": "--atlas-type-caption-size",
+    "type-heading": "--atlas-type-heading-size",
+    "type-label": "--atlas-type-label-size",
+    "type-overline": "--atlas-type-overline-size",
+    "type-title": "--atlas-type-title-size"
+  }
+}

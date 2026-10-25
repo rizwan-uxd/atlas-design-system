@@ -9,6 +9,8 @@ import FieldEntry from "../src/Field.registry.json"
 import FieldSchema from "./schemas/Field.schema.json"
 import FormEntry from "../src/Form.registry.json"
 import FormSchema from "./schemas/Form.schema.json"
+import TextEntry from "../src/Text.registry.json"
+import TextSchema from "./schemas/Text.schema.json"
 import TextFieldEntry from "../src/TextField.registry.json"
 import TextFieldSchema from "./schemas/TextField.schema.json"
 
@@ -17,6 +19,7 @@ export const entries = {
   Button: ButtonEntry,
   Field: FieldEntry,
   Form: FormEntry,
+  Text: TextEntry,
   TextField: TextFieldEntry,
 }
 
@@ -25,6 +28,7 @@ export const schemas = {
   Button: ButtonSchema,
   Field: FieldSchema,
   Form: FormSchema,
+  Text: TextSchema,
   TextField: TextFieldSchema,
 }
 

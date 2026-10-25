@@ -440,9 +440,9 @@ test("scope/no-new-components passes a new registry entry for a real component, 
 test("scope/registry-complete passes at the same count or higher, and fails a deleted entry", () => withRepo(({ dir }) => {
   const same = verify(dir, "scope.registry-complete")
   assert.equal(same.status, "pass", same.mismatches?.join("\n"))
-  assert.match(same.note, /5 authored entries/)
+  assert.match(same.note, /6 authored entries/)
   write(dir, "packages/registry/src/NewOne.registry.json", entry("NewOne", "Button"))
-  assert.match(verify(dir, "scope.registry-complete").note, /6 authored entries/)
+  assert.match(verify(dir, "scope.registry-complete").note, /7 authored entries/)
   fs.rmSync(path.join(dir, "packages/registry/src/Alert.registry.json"))
   const r = verify(dir, "scope.registry-complete")
   assert.equal(r.status, "fail")

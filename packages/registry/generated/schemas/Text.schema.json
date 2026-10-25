@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://atlas.design-system/schemas/registry/Text.schema.json",
+  "$comment": "GENERATED — do not hand-edit. registry-build from packages/registry/src/Text.registry.json and the Text facts; run npm run registry:build.",
+  "title": "Text protocol node",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["type"],
+  "properties": {
+    "type": { "const": "Text" },
+    "props": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "variant": {
+          "enum": ["heading", "title", "body", "body-sm", "label", "caption", "overline"]
+        },
+        "tone": {
+          "enum": ["default", "muted"]
+        },
+        "as": {
+          "enum": ["p", "span", "div", "h1", "h2", "h3", "h4", "h5", "h6"]
+        }
+      }
+    },
+    "slots": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "children": { "type": "array" }
+      }
+    }
+  }
+}

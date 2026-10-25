@@ -20,6 +20,8 @@
 
 const own = (o, k) => o !== null && typeof o === "object" && Object.prototype.hasOwnProperty.call(o, k)
 const INTERACTION = new Set(["hover", "focus", "focus-visible", "active", "pressed"])
+// capabilities an agent only reads, never wires up (DEC-096); an entry with only these is not interactive
+const DISPLAY_ONLY = new Set(["display"])
 
 /**
  * @param {object} a
@@ -41,7 +43,7 @@ export function registryMetrics({ entries, facts, elements, components }) {
     return own(e, "element") && own(elements, e.element) ? new Set(elements[e.element].events) : undefined
   }
   const interactive = (e) => {
-    if (own(e, "capabilities") && e.capabilities.length > 0) return true
+    if (own(e, "capabilities") && e.capabilities.some((c) => !DISPLAY_ONLY.has(c))) return true
     const f = factsOf(e)
     if (f === undefined) return false
     if (f.props.some((p) => /^on[A-Z]/.test(p.name))) return true
