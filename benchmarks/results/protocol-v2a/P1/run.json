@@ -1,0 +1,456 @@
+{
+  "model": "claude-sonnet-5-5",
+  "reps": 5,
+  "coldReps": 5,
+  "cold": [
+    2240.0645839999997,
+    2256.253291000001,
+    2348.235375,
+    2202.9915,
+    2328.2608340000006
+  ],
+  "costUsd": 0.11454399999999999,
+  "date": "2026-10-25T09:05:38.386Z",
+  "runs": [
+    {
+      "task": "request-access",
+      "rep": 1,
+      "firstValidMs": 2125.027000000002,
+      "markup": 0,
+      "rejected": 0,
+      "attempts": 1,
+      "excluded": false,
+      "record": {
+        "firstTokenMs": 1726.2466249999998,
+        "usage": {
+          "input": 2,
+          "output": 755,
+          "cacheRead": 1059,
+          "cacheWrite": 427
+        },
+        "model": "claude-sonnet-5-5",
+        "fallback": false,
+        "stopReason": "end_turn",
+        "costUsd": 0.0094738
+      }
+    },
+    {
+      "task": "request-access",
+      "rep": 2,
+      "firstValidMs": 2309.449167000006,
+      "markup": 0,
+      "rejected": 0,
+      "attempts": 1,
+      "excluded": false,
+      "record": {
+        "firstTokenMs": 1994.4485840000052,
+        "usage": {
+          "input": 2,
+          "output": 771,
+          "cacheRead": 1059,
+          "cacheWrite": 424
+        },
+        "model": "claude-sonnet-5-5",
+        "fallback": false,
+        "stopReason": "end_turn",
+        "costUsd": 0.0096218
+      }
+    },
+    {
+      "task": "request-access",
+      "rep": 3,
+      "firstValidMs": 2749.282500000001,
+      "markup": 0,
+      "rejected": 0,
+      "attempts": 1,
+      "excluded": false,
+      "record": {
+        "firstTokenMs": 2252.3856250000026,
+        "usage": {
+          "input": 2,
+          "output": 771,
+          "cacheRead": 1059,
+          "cacheWrite": 425
+        },
+        "model": "claude-sonnet-5-5",
+        "fallback": false,
+        "stopReason": "end_turn",
+        "costUsd": 0.0096258
+      }
+    },
+    {
+      "task": "request-access",
+      "rep": 4,
+      "firstValidMs": 2428.9124999999985,
+      "markup": 0,
+      "rejected": 0,
+      "attempts": 1,
+      "excluded": false,
+      "record": {
+        "firstTokenMs": 2037.270666999997,
+        "usage": {
+          "input": 2,
+          "output": 773,
+          "cacheRead": 1059,
+          "cacheWrite": 430
+        },
+        "model": "claude-sonnet-5-5",
+        "fallback": false,
+        "stopReason": "end_turn",
+        "costUsd": 0.0096658
+      }
+    },
+    {
+      "task": "request-access",
+      "rep": 5,
+      "firstValidMs": 2354.5904160000064,
+      "markup": 0,
+      "rejected": 0,
+      "attempts": 1,
+      "excluded": false,
+      "record": {
+        "firstTokenMs": 1923.639875000008,
+        "usage": {
+          "input": 2,
+          "output": 728,
+          "cacheRead": 1059,
+          "cacheWrite": 427
+        },
+        "model": "claude-sonnet-5-5",
+        "fallback": false,
+        "stopReason": "end_turn",
+        "costUsd": 0.0092038
+      }
+    },
+    {
+      "task": "confirm",
+      "rep": 1,
+      "firstValidMs": 4878.118291000006,
+      "markup": 0,
+      "rejected": 3,
+      "attempts": 1,
+      "excluded": false,
+      "record": {
+        "firstTokenMs": 4686.944916000008,
+        "usage": {
+          "input": 2,
+          "output": 504,
+          "cacheRead": 747,
+          "cacheWrite": 429
+        },
+        "model": "claude-sonnet-5-5",
+        "fallback": false,
+        "stopReason": "end_turn",
+        "costUsd": 0.0069094
+      }
+    },
+    {
+      "task": "confirm",
+      "rep": 2,
+      "firstValidMs": 4355.426791999998,
+      "markup": 0,
+      "rejected": 0,
+      "attempts": 1,
+      "excluded": false,
+      "record": {
+        "firstTokenMs": 4108.652291999999,
+        "usage": {
+          "input": 2,
+          "output": 361,
+          "cacheRead": 747,
+          "cacheWrite": 428
+        },
+        "model": "claude-sonnet-5-5",
+        "fallback": false,
+        "stopReason": "end_turn",
+        "costUsd": 0.0054754
+      }
+    },
+    {
+      "task": "confirm",
+      "rep": 3,
+      "firstValidMs": 3492.2110829999874,
+      "markup": 0,
+      "rejected": 2,
+      "attempts": 1,
+      "excluded": false,
+      "record": {
+        "firstTokenMs": 3188.444832999987,
+        "usage": {
+          "input": 2,
+          "output": 309,
+          "cacheRead": 747,
+          "cacheWrite": 427
+        },
+        "model": "claude-sonnet-5-5",
+        "fallback": false,
+        "stopReason": "end_turn",
+        "costUsd": 0.0049514
+      }
+    },
+    {
+      "task": "confirm",
+      "rep": 4,
+      "firstValidMs": 5397.638500000001,
+      "markup": 0,
+      "rejected": 0,
+      "attempts": 1,
+      "excluded": false,
+      "record": {
+        "firstTokenMs": 2987.9248329999973,
+        "usage": {
+          "input": 2,
+          "output": 54,
+          "cacheRead": 747,
+          "cacheWrite": 427
+        },
+        "model": "claude-sonnet-5-5",
+        "fallback": false,
+        "stopReason": "end_turn",
+        "costUsd": 0.0024014
+      }
+    },
+    {
+      "task": "confirm",
+      "rep": 5,
+      "firstValidMs": 3326.159083999999,
+      "markup": 0,
+      "rejected": 0,
+      "attempts": 1,
+      "excluded": false,
+      "record": {
+        "firstTokenMs": 2137.88949999999,
+        "usage": {
+          "input": 2,
+          "output": 155,
+          "cacheRead": 747,
+          "cacheWrite": 430
+        },
+        "model": "claude-sonnet-5-5",
+        "fallback": false,
+        "stopReason": "end_turn",
+        "costUsd": 0.0034234
+      }
+    },
+    {
+      "task": "notice",
+      "rep": 1,
+      "firstValidMs": 3397.326000000001,
+      "markup": 0,
+      "rejected": 2,
+      "attempts": 1,
+      "excluded": false,
+      "record": {
+        "firstTokenMs": 3093.307667000001,
+        "usage": {
+          "input": 2,
+          "output": 132,
+          "cacheRead": 748,
+          "cacheWrite": 425
+        },
+        "model": "claude-sonnet-5-5",
+        "fallback": false,
+        "stopReason": "end_turn",
+        "costUsd": 0.0031736
+      }
+    },
+    {
+      "task": "notice",
+      "rep": 2,
+      "firstValidMs": 2492.1795830000046,
+      "markup": 0,
+      "rejected": 2,
+      "attempts": 1,
+      "excluded": false,
+      "record": {
+        "firstTokenMs": 2146.9426250000106,
+        "usage": {
+          "input": 2,
+          "output": 204,
+          "cacheRead": 748,
+          "cacheWrite": 425
+        },
+        "model": "claude-sonnet-5-5",
+        "fallback": false,
+        "stopReason": "end_turn",
+        "costUsd": 0.0038936000000000005
+      }
+    },
+    {
+      "task": "notice",
+      "rep": 3,
+      "firstValidMs": 2193.5154170000023,
+      "markup": 0,
+      "rejected": 3,
+      "attempts": 1,
+      "excluded": false,
+      "record": {
+        "firstTokenMs": 1867.2767920000042,
+        "usage": {
+          "input": 2,
+          "output": 237,
+          "cacheRead": 748,
+          "cacheWrite": 429
+        },
+        "model": "claude-sonnet-5-5",
+        "fallback": false,
+        "stopReason": "end_turn",
+        "costUsd": 0.0042396
+      }
+    },
+    {
+      "task": "notice",
+      "rep": 4,
+      "firstValidMs": 3633.1792080000014,
+      "markup": 0,
+      "rejected": 3,
+      "attempts": 1,
+      "excluded": false,
+      "record": {
+        "firstTokenMs": 3267.0362500000047,
+        "usage": {
+          "input": 2,
+          "output": 234,
+          "cacheRead": 748,
+          "cacheWrite": 432
+        },
+        "model": "claude-sonnet-5-5",
+        "fallback": false,
+        "stopReason": "end_turn",
+        "costUsd": 0.004221600000000001
+      }
+    },
+    {
+      "task": "notice",
+      "rep": 5,
+      "firstValidMs": 4756.077791000003,
+      "markup": 0,
+      "rejected": 0,
+      "attempts": 1,
+      "excluded": false,
+      "record": {
+        "firstTokenMs": 2066.9507909999957,
+        "usage": {
+          "input": 2,
+          "output": 82,
+          "cacheRead": 748,
+          "cacheWrite": 430
+        },
+        "model": "claude-sonnet-5-5",
+        "fallback": false,
+        "stopReason": "end_turn",
+        "costUsd": 0.0026936
+      }
+    },
+    {
+      "task": "text-entry",
+      "rep": 1,
+      "firstValidMs": 4905.621749999991,
+      "markup": 0,
+      "rejected": 0,
+      "attempts": 1,
+      "excluded": false,
+      "record": {
+        "firstTokenMs": 2522.104250000004,
+        "usage": {
+          "input": 2,
+          "output": 61,
+          "cacheRead": 770,
+          "cacheWrite": 429
+        },
+        "model": "claude-sonnet-5-5",
+        "fallback": false,
+        "stopReason": "end_turn",
+        "costUsd": 0.002484
+      }
+    },
+    {
+      "task": "text-entry",
+      "rep": 2,
+      "firstValidMs": 4572.54783299999,
+      "markup": 0,
+      "rejected": 0,
+      "attempts": 1,
+      "excluded": false,
+      "record": {
+        "firstTokenMs": 2183.8363329999847,
+        "usage": {
+          "input": 2,
+          "output": 61,
+          "cacheRead": 770,
+          "cacheWrite": 433
+        },
+        "model": "claude-sonnet-5-5",
+        "fallback": false,
+        "stopReason": "end_turn",
+        "costUsd": 0.0025
+      }
+    },
+    {
+      "task": "text-entry",
+      "rep": 3,
+      "firstValidMs": 4331.111875000002,
+      "markup": 0,
+      "rejected": 0,
+      "attempts": 1,
+      "excluded": false,
+      "record": {
+        "firstTokenMs": 2109.333958000003,
+        "usage": {
+          "input": 2,
+          "output": 61,
+          "cacheRead": 770,
+          "cacheWrite": 431
+        },
+        "model": "claude-sonnet-5-5",
+        "fallback": false,
+        "stopReason": "end_turn",
+        "costUsd": 0.0024920000000000003
+      }
+    },
+    {
+      "task": "text-entry",
+      "rep": 4,
+      "firstValidMs": 4853.1494999999995,
+      "markup": 0,
+      "rejected": 0,
+      "attempts": 1,
+      "excluded": false,
+      "record": {
+        "firstTokenMs": 2407.881040999986,
+        "usage": {
+          "input": 2,
+          "output": 61,
+          "cacheRead": 770,
+          "cacheWrite": 428
+        },
+        "model": "claude-sonnet-5-5",
+        "fallback": false,
+        "stopReason": "end_turn",
+        "costUsd": 0.00248
+      }
+    },
+    {
+      "task": "text-entry",
+      "rep": 5,
+      "firstValidMs": 4216.049541999993,
+      "markup": 0,
+      "rejected": 0,
+      "attempts": 1,
+      "excluded": false,
+      "record": {
+        "firstTokenMs": 1876.2904999999737,
+        "usage": {
+          "input": 2,
+          "output": 61,
+          "cacheRead": 770,
+          "cacheWrite": 426
+        },
+        "model": "claude-sonnet-5-5",
+        "fallback": false,
+        "stopReason": "end_turn",
+        "costUsd": 0.0024720000000000002
+      }
+    }
+  ]
+}

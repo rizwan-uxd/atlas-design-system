@@ -121,7 +121,7 @@ fails when this region is stale. Statuses are exactly three: **passing** (a decl
 **failing** (ran and failed), **not measurable** (no result for the declared check — reported as `n/a`,
 never `0`). A metric with no check is *not measurable*, never passing: absence of a signal is not a pass.
 
-**29 passing · 4 failing · 4 not measurable** of 37. 3 of the measured rows cover only part of their population; the row says how much.
+**30 passing · 4 failing · 3 not measurable** of 37. 3 of the measured rows cover only part of their population; the row says how much.
 
 Result sources read: `atlas-verify`, `vitest`, `playwright`, `atlas-sync`, `registry`, `token-lint`, `bench`. Sources not present leave their metrics not measurable.
 
@@ -190,7 +190,7 @@ Result sources read: `atlas-verify`, `vitest`, `playwright`, `atlas-sync`, `regi
 | Missing code tokens | 0 | **failing** — 2 drift — all 530 Figma variables and 496 code tokens | `tokens.missing-in-code` | D1 option B (full variable table) |
 | Missing Figma tokens | 0 | **failing** — 9 drift — all 530 Figma variables and 496 code tokens | `tokens.missing-in-figma` | D1 option B (full variable table) |
 | All supported brand modes compile successfully | pass | **passing** | `design.brand-modes` | M5.6 |
-| Critical visual regression tests pass for every brand mode | pass | not measurable | `visual > sandbox` | now (light/dark only), M5.6 (brands) |
+| Critical visual regression tests pass for every brand mode | pass | **passing** | `sandbox sections` | now (light/dark only), M5.6 (brands) |
 
 ### Runtime quality
 

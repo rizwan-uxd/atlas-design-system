@@ -9,6 +9,24 @@
       "date": "2026-10-25T06:46:13.323Z",
       "stop": [],
       "infra": false
+    },
+    {
+      "label": "protocol-v2a",
+      "task": "P1",
+      "run": 1,
+      "costUsd": 0.11454399999999999,
+      "date": "2026-10-25T09:05:38.471Z",
+      "stop": [],
+      "infra": false
+    },
+    {
+      "label": "protocol-v2b",
+      "task": "P1",
+      "run": 1,
+      "costUsd": 0.10689,
+      "date": "2026-10-25T09:08:19.843Z",
+      "stop": [],
+      "infra": false
     }
   ],
   "interactive": []

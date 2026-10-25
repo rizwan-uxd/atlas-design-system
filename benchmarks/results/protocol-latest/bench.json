@@ -1,35 +1,37 @@
 {
   "protocol.promptReduction": {
-    "overheadTokens": 641,
+    "overheadTokens": 646,
     "pass": true,
-    "min": 0.676040061633282,
-    "mean": 0.7614840366035706,
+    "min": 0.6761757902852736,
+    "mean": 0.762503798599571,
     "perTask": {
       "request-access": {
-        "filtered": 841,
-        "full": 2596,
-        "reduction": 0.676040061633282
+        "filtered": 840,
+        "full": 2594,
+        "reduction": 0.6761757902852736
       },
       "confirm": {
-        "filtered": 538,
-        "full": 2596,
-        "reduction": 0.7927580893682589
+        "filtered": 530,
+        "full": 2592,
+        "reduction": 0.7955246913580247
       },
       "notice": {
-        "filtered": 538,
-        "full": 2601,
-        "reduction": 0.7931564782775855
+        "filtered": 536,
+        "full": 2593,
+        "reduction": 0.7932896259159274
       },
       "text-entry": {
-        "filtered": 561,
-        "full": 2597,
-        "reduction": 0.783981517135156
+        "filtered": 557,
+        "full": 2591,
+        "reduction": 0.7850250868390583
       }
     }
   },
   "protocol.firstOpP95": {
     "pass": false,
-    "p95Ms": 5240.137583000003,
+    "warmP95Ms": 2649.3684589999903,
+    "coldStartMs": 2256.253291000001,
+    "p95Ms": 4905.621749999991,
     "n": 20,
     "noValidOp": 0,
     "excluded": 0
@@ -37,7 +39,13 @@
   "protocol.agentCompliance": {
     "pass": true,
     "markupReps": 0,
-    "nonOpReps": 8,
+    "nonOpReps": 6,
+    "n": 20
+  },
+  "protocol.repairLoop": {
+    "pass": true,
+    "repaired": 0,
+    "maxAttempts": 1,
     "n": 20
   }
 }

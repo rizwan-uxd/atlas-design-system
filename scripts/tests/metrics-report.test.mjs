@@ -153,6 +153,17 @@ test("a missing source file leaves its metrics not measurable rather than errori
   assert.match(rows(dir), /not measurable/)
 })
 
+test("playwright specs under a describe are read, and one failing instance of a shared title fails it", () => {
+  const metrics = [{ ...ONE[0], source: "playwright", check: "sandbox sections" }]
+  const file = (...specs) => ({ suites: [{ title: "sandbox.spec.ts", specs: [], suites: specs.map((ok) => ({ title: "theme", specs: [{ title: "sandbox sections", ok }] })) }] })
+  const pass = scaffold({ metrics, results: { "playwright.json": file(true, true) } })
+  run(pass)
+  assert.match(rows(pass), /\*\*passing\*\*/)
+  const fail = scaffold({ metrics, results: { "playwright.json": file(false, true) } })
+  run(fail)
+  assert.match(rows(fail), /\*\*failing\*\*/)
+})
+
 test("the word 0 is never used to report an unmeasured metric", () => {
   const dir = scaffold({ metrics: ONE })
   run(dir)
