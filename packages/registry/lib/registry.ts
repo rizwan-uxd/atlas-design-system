@@ -15,7 +15,11 @@ export type Entry = {
   fallback?: Fallback
   nesting?: { parents?: string[]; children?: string[] }
   capabilities?: string[]
+  /** Registered but not production-ready (DEC-097): the scaffolded components it waits on. */
+  provisional?: { waitingOn: string[]; reason: string }
 }
+
+export const isProvisional = (e: Entry): boolean => e.provisional !== undefined
 export type JsonSchema = Record<string, unknown>
 export type Registry = {
   entries: Record<string, Entry>

@@ -164,6 +164,27 @@
     },
     {
       "principle": "Fallback",
+      "metric": "Registered types (the M3 exit types)",
+      "target": "6 of 6",
+      "source": "registry",
+      "check": "design.registry-registered",
+      "milestone": "M3",
+      "why": "Measured from the committed registry by scripts/lib/registry-promotion.mjs (atlas-verify design/registry-registered): Form, TextField, Button, Alert, Field and Text each have a complete authored entry (DEC-097). A provisional entry counts as registered; this row says nothing about production readiness, which the next row measures.",
+      "gate": "hard"
+    },
+    {
+      "principle": "Fallback",
+      "metric": "Registered types that are production-ready",
+      "target": "6 of 6",
+      "source": "registry",
+      "check": "design.registry-production-ready",
+      "milestone": "M3",
+      "why": "Measured by scripts/lib/registry-promotion.mjs (atlas-verify design/registry-production-ready, a warn, never a failure): an entry counts only when it is not provisional, its component is spec-complete, and it has a generated contract and a test with an axe check. Alert, TextField and Form are provisional (DEC-097) and wait on the scaffolded Alert and Input components, so this reads incomplete until those are finished.",
+      "gate": "report",
+      "gateWhy": "Reads incomplete by decision (DEC-097) until Alert and Input are spec-complete; promotion is then enforced by the registry-promotion check."
+    },
+    {
+      "principle": "Fallback",
       "metric": "Fallback render latency",
       "target": "Under 100 ms p95",
       "source": "playwright",

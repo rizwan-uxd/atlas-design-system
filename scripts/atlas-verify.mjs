@@ -27,6 +27,7 @@ import { fileURLToPath } from "url"
 import { sh, ATLAS_IMPORT, RAW_ELEMENT, lengthLiterals, PRIMITIVE_TOKEN_REF, BRAND_FILE, lineOf, jsxTags, literalProp, UNKNOWN } from "./lib/quality-checks.mjs"
 import { compareAxes } from "./lib/compare-axes.mjs"
 import { registryMetrics, coverageText } from "./lib/registry-metrics.mjs"
+import { loadEvidence, M3_TYPES, productionReadyMetric, promotionCheck, registeredMetric } from "./lib/registry-promotion.mjs"
 import { loadInputs } from "./lib/schemas.mjs"
 import { METRIC_RULES } from "./lib/token-rules.mjs"
 import { contrastCheck, parseTokens, resolveColor } from "./lib/contrast.mjs"
@@ -268,6 +269,27 @@ const registryCheck = (id, key, what) => check("design", id, () => {
 registryCheck("registry-events", "events", "typed events")
 registryCheck("registry-fallback", "fallback", "terminating fallback")
 registryCheck("registry-states", "states", "Figma states classified")
+
+// DEC-097 — registered versus production-ready, and the promotion gate between them. registry-registered is
+// a hard pass at M3; registry-production-ready reads incomplete (warn, never fail) until the scaffolded
+// dependencies of the provisional entries are finished; registry-promotion fails a stable entry that lacks
+// promotion evidence, or a provisional one that waits on something already done.
+const promoEvidence = loadEvidence(ROOT)
+const promoAllow = inputs.valid("packages/governance/promotion-allow.json")
+check("design", "registry-registered", () => {
+  const r = registeredMetric({ entries: registry.entries })
+  const fails = [...invalidRegistry.map((f) => `${f} failed its schema — not measured (see design/schemas)`), ...r.fails]
+  return { ...verdict(fails), inspected: r.registered, scope: r.total, note: `${r.registered}/${r.total} M3 types registered (${M3_TYPES.join(", ")})` }
+})
+check("design", "registry-production-ready", () => {
+  const r = productionReadyMetric({ entries: registry.entries, evidence: promoEvidence })
+  return { ...verdict([], r.fails), inspected: r.ready, scope: r.total, note: `${r.ready}/${r.total} registered entries production-ready · ${r.total - r.ready} provisional or incomplete (reported, not a failure)` }
+})
+check("design", "registry-promotion", () => {
+  if (!promoAllow) return { status: "fail", inspected: 0, mismatches: ["packages/governance/promotion-allow.json is missing or failed its schema — promotion gaps cannot be checked"] }
+  const r = promotionCheck({ entries: registry.entries, evidence: promoEvidence, allow: promoAllow.entries })
+  return { ...verdict(r.fails), inspected: r.inspected, note: `${Object.values(registry.entries).filter((e) => e.provisional).length} provisional · ${promoAllow.entries.length} allowed gaps` }
+})
 
 // A literal variant/size is checked against metadata; an expression or spread is UNKNOWN — counted and
 // reported in the note, never read as "no variant". Scope is every changed file that renders an Atlas

@@ -399,6 +399,8 @@ Figma defines the visual source. Atlas runtime defines the production behavior.
 | Fallback | Invalid payloads producing a safe render | 100% |
 | Fallback | Unhandled render exceptions | 0 |
 | Fallback | Components with declared fallback behavior | 100% |
+| Fallback | Registered types (the M3 exit types) | 6 of 6 |
+| Fallback | Registered types that are production-ready | 6 of 6 |
 | Fallback | Fallback render latency | Under 100 ms p95 |
 | Context Containment | Requests using filtered catalog capabilities | 100% |
 | Context Containment | Requests exposing the full catalog | 0 |

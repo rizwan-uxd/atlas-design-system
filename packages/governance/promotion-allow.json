@@ -1,0 +1,15 @@
+{
+  "_note": "AUTHORED. Gaps in a stable (non-provisional) registry entry's promotion evidence (atlas-verify design/registry-promotion, DEC-097), each with its reason. An entry whose gap is now closed is STALE and fails, so the list cannot outlive its findings. Every entry here is an open finding, not an approval.",
+  "entries": [
+    {
+      "type": "Field",
+      "gap": "visual",
+      "reason": "Field is not rendered in the sandbox (app/page.tsx), so no sandbox screenshot covers it. Add a Field section and its baselines, then delete this entry."
+    },
+    {
+      "type": "Text",
+      "gap": "visual",
+      "reason": "Text is not rendered in the sandbox (app/page.tsx), so no sandbox screenshot covers it. Add a Text section and its baselines, then delete this entry."
+    }
+  ]
+}
