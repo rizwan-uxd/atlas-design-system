@@ -131,7 +131,7 @@
   font-size: var(--atlas-text-body);
   font-weight: var(--atlas-font-weight-semibold);
   line-height: var(--atlas-line-height-tight);
-  color: inherit;
+  color: var(--atlas-foreground); /* Figma: foreground in every variant; the accent stays on the fill, border and icon */
 }
 
 .sm .title {
@@ -189,7 +189,7 @@
   background: none;
   border: none;
   cursor: pointer;
-  color: inherit;
+  color: var(--atlas-foreground); /* the close glyph is not accent-tinted: warning's accent is 2.12:1 on its fill */
   font-size: var(--atlas-font-size-base);
   line-height: var(--atlas-line-height-tight); /* FIX BUG-033: was line-height: 1 */
   border-radius: var(--atlas-radius-sm);
