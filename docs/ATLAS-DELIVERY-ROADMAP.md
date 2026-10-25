@@ -121,7 +121,7 @@ fails when this region is stale. Statuses are exactly three: **passing** (a decl
 **failing** (ran and failed), **not measurable** (no result for the declared check — reported as `n/a`,
 never `0`). A metric with no check is *not measurable*, never passing: absence of a signal is not a pass.
 
-**24 passing · 3 failing · 9 not measurable** of 36. 3 of the measured rows cover only part of their population; the row says how much.
+**27 passing · 3 failing · 6 not measurable** of 36. 3 of the measured rows cover only part of their population; the row says how much.
 
 Result sources read: `atlas-verify`, `vitest`, `playwright`, `atlas-sync`, `registry`, `token-lint`. Sources not present leave their metrics not measurable.
 
@@ -165,10 +165,10 @@ Result sources read: `atlas-verify`, `vitest`, `playwright`, `atlas-sync`, `regi
 
 | Metric | Target | Status | Check | Measurable at |
 |---|---:|---|---|---|
-| Requests using filtered catalog capabilities | 100% | not measurable | `registry/filter > every request carries a filtered catalog` | Phase 6 |
-| Requests exposing the full catalog | 0 | not measurable | `registry/filter > no request exposes every registered type` | Phase 6 |
+| Requests using filtered catalog capabilities | 100% | **passing** | `registry/filter > every request carries a filtered catalog` | Phase 6 |
+| Requests exposing the full catalog | 0 | **passing** | `registry/filter > no request exposes the full catalog` | Phase 6 |
 | Prompt reduction from dynamic filtering | At least 50% | not measurable | `protocol.promptReduction` | Phase 6 |
-| Irrelevant components exposed to the agent | 0 in evaluation tests | not measurable | `registry/filter > catalog excludes out-of-task types` | Phase 6 |
+| Irrelevant components exposed to the agent | 0 in evaluation tests | **passing** | `registry/filter > catalog excludes out-of-task types` | Phase 6 |
 
 ### Accessibility
 

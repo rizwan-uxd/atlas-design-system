@@ -21,11 +21,11 @@ and say so when an estimate changes. **Roadmap: 25 of ~28 sessions done (~89%). 
 | **M4 — runtime vertical slice** | 3.5 | 3.5 | ✅ all 12 M4 rows measured: 11 pass, size fails (report-only, DEC-085) | #108 |
 | Phase 4 — enforcement hardened | 2.5 | 3 | ✅ in 3 sessions (est. range 2–3) | #109 |
 | **M5 — semantic tokens + brands** | 6 | 6 | ✅ in 6 sessions (est. 7): M5.1 radius (DEC-086), M5.2 spacing (DEC-087), M5.3 type (DEC-088), M5.4 motion (DEC-089), M5.5 shadow (DEC-090), M5.6 brand axis (DEC-091) | #110, #112, #113 (+#114), #115, #117, #118, #119 (+#120) |
-| Phase 6 — filtered agent catalog | 3 | 2 | 🟡 plan + PR-0 done (DEC-092); PR-1 next | PR-0 (pending) |
+| Phase 6 — filtered agent catalog | 3 | 2 | 🟡 plan + PR-0 done (DEC-092); PR-1 next | #121 |
 | Phase 7 — metrics as release gates | 1.5 | 0 | ⏳ | |
 | **Total** | **~28** | **25** | **~89%** | |
 
-Phase 6 PR-0 should move the three vitest Context Containment rows to passing (27 · 3 · 6) once the region is refreshed from its CI artifact.
+Phase 6 PR-0 (#121) moved the three vitest Context Containment rows to passing: **27 passing · 3 failing · 6 not measurable** of 36, refreshed from the #121 CI run.
 Metric table (the roadmap's scoreboard, CI result-derived since Phase 4): **24 passing · 3 failing · 9 not measurable** of 36 (refreshed from the #118 CI run, carried in #119). M5.6 moved `design.brand-modes` from not measurable to passing. The 3 failing rows are real findings, not regressions: missing code tokens (2, DISC-106), missing Figma tokens (9, DISC-107) and the report-only protocol size (0.308, DEC-085).
 M3 exit: **5/6 types `registryComplete`** (Text deferred: no Text component), **47/47 generated
 contracts** (the 44 hand-written ones deleted), **2/2 target metrics passing** (plus registry-states),
