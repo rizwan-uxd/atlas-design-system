@@ -24,4 +24,7 @@ export type ClientEvent = { kind: "event"; seq: number; type: "submit"; source: 
 
 export type Transport = { send(event: ClientEvent): void; subscribe(listener: (op: ServerOp) => void): () => void }
 
+/** What an agent receives (Phase 6): the task and its filtered catalog. Built only by openSession; no server op carries one. */
+export type AgentRequest = { task: string; catalog: { types: string[]; prompt: string } }
+
 export type Fixture = { _note: string; render: Extract<ServerOp, { op: "render" }>; responses: Record<string, ServerOp[]> }
