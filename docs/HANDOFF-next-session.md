@@ -16,7 +16,7 @@ and say so when an estimate changes. **Roadmap: 27 of ~28 sessions done (~96%). 
 | D1 — token-table spike | 1 | 1 | ✅ C built, A/B spiked | #100 |
 | D1 — option B, the full variable table | 1 | 1 | ✅ user chose B (DEC-081) | #107 |
 | M2 — verifier can fail | 1 | 1 | ✅ | #101 |
-| M3 — registry | 4 | 4 | ✅ exit met except Text (5/6 types) | #102, #103, #104, #105 |
+| M3 — registry | 4 | 4 | ✅ exit met except the Text entry (5/6 types; Text is built, not registered) | #102, #103, #104, #105 |
 | 2d — token work, zero new tokens | 1.5 | 1 | ✅ in 1 session (est. 1.5) | #106 |
 | **M4 — runtime vertical slice** | 3.5 | 3.5 | ✅ all 12 M4 rows measured: 11 pass, size fails (report-only, DEC-085) | #108 |
 | Phase 4 — enforcement hardened | 2.5 | 3 | ✅ in 3 sessions (est. range 2–3) | #109 |
@@ -27,9 +27,9 @@ and say so when an estimate changes. **Roadmap: 27 of ~28 sessions done (~96%). 
 
 Phase 6 PR-0 (#121) moved the three vitest Context Containment rows to passing: **27 passing · 3 failing · 6 not measurable** of 36, refreshed from the #121 CI run.
 Metric table (the roadmap's scoreboard, CI result-derived since Phase 4): **24 passing · 3 failing · 9 not measurable** of 36 (refreshed from the #118 CI run, carried in #119). M5.6 moved `design.brand-modes` from not measurable to passing. The 3 failing rows are real findings, not regressions: missing code tokens (2, DISC-106), missing Figma tokens (9, DISC-107) and the report-only protocol size (0.308, DEC-085).
-M3 exit: **5/6 types `registryComplete`** (Text deferred: no Text component), **47/47 generated
+M3 exit: **5/6 types `registryComplete`** (Text is built, #125, but has no registry entry yet), **48/48 generated
 contracts** (the 44 hand-written ones deleted), **2/2 target metrics passing** (plus registry-states),
-each over the registered subset (4/47 components registered).
+each over the registered subset (4/48 components registered).
 
 ## Start here (session 29, what session 28 left)
 0. **Report progress first**: doing / done / % / session X of N. Session 28 did the benchmark half of the closing work (DEC-095); the roadmap stays at 27 of ~28 until the two items below are decided.
@@ -43,6 +43,7 @@ each over the registered subset (4/47 components registered).
 6. **Labels:** `atlas-approved-new` for new tokens, plus `atlas-native-thaw` whenever `tokens:build` changes the native file.
 
 ## State
+- **Text is built (#125, 2026-10-25), outside the roadmap's session count.** Figma page `Text` (set `1120:31`), 7 roles x 2 tones (default, muted), `packages/ui-web/src/primitives/Text/`, tests, Code Connect and a generated contract. No authored registry entry, so Text is not registered and the full catalog is 49 agent-visible names (48 components plus Form). The CI `atlas-approved-new` label was needed for the new component. Latest ids: **DEC-095, CAND-071, DISC-109**.
 - **Phase 7 is built (2026-10-25, DEC-094).** `metrics.manifest.json` `gate` per row (27 hard, 3 trend, 7 report); `scripts/metrics-gate.mjs` + `scripts/lib/metrics-gate.mjs` (+ `scripts/tests/metrics-gate.test.mjs`); CI step "Metric gates"; `benchmarks/results/protocol-baseline.json`; `agentCompliance` is markup only (`nonOpReps` reported separately); `packages/runtime/src/model-agent.ts` repair loop with `diagnostics[]`. Latest ids: **DEC-095, CAND-069, DISC-109**.
 - **Phase 6 PR-1 is done (2026-10-25, DEC-093).** `packages/runtime/src/{op-stream,agent-prompt,model-agent}.ts`; `benchmarks/protocol/` (bench, `claude-cli-stream.ts`, stats, full-catalog baseline); `run.sh` type `protocol`; manifest row `protocol.agentCompliance`; CI copies `protocol-latest/bench.json` into `.metrics/`. Latest ids: **DEC-093, CAND-069, DISC-109**.
 - **Phase 6 PR-0 is done (2026-10-25, DEC-092: A1 + B1).**
@@ -217,13 +218,15 @@ each over the registered subset (4/47 components registered).
 - **Repo setting "Allow GitHub Actions to create and approve pull requests"** is off, so `visual-baseline.yml` pushes its branch but cannot open its PR. Turn it on, or keep opening the PR by hand.
 - **Figma gaps found by M5.3:** Switch has no text layers, and Select's label and content are not drawn. Draw them, then record them as DISCs at the next `--pull` sync.
 - **Four candidate radius roles (CAND-057 to CAND-060, M5.1).** 37 radius uses match a role's value but not its meaning, so they stay primitive: overlay or inline surface at md, compact control or mark at sm, focus-ring corner at sm, and large control at lg. Add any of them (value-identical, Kind A), or leave them primitive for good.
-- **Text (the 6th M3 exit type) — deferred by the user 2026-10-23 (DEC-080).** Atlas has no Text
-  component; register it only after a Figma-first atlas-component session builds one. Until then the
-  M3 exit reads 5/6.
+- **Text (the 6th M3 exit type): built (#125), not registered.** The Figma-first session DEC-080 asked
+  for is done. Register it with its owner fields (fallback, nesting, a11y, responsive, capabilities,
+  tokenRoles) as its own task; until then the M3 exit reads 5/6. Its v1 tones are default and muted
+  only: subtle, danger, success and info miss 4.5:1 on some surfaces and wait for the colour tokens
+  (DISC-108, CAND-071); CAND-070 logs the missing page-title role.
 - **Which of the five named states (loading, empty, error, active, disabled) apply to which
   component** — not decided. `design/registry-states` checks declared ⇔ drawn only, and the manifest
   `why` says so; requiring the five needs a per-component applicability decision.
-- **More registry entries.** 4/47 components are registered, so the passing registry rows cover a
+- **More registry entries.** 4/48 components are registered, so the passing registry rows cover a
   small subset (each row prints it). Every new entry needs the same owner fields (fallback, nesting,
   a11y, responsive, capabilities).
 - **Token drift found by D1-B (DISC-106, DISC-107).** Two Figma Card hover variables have no code
