@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { registry } from "@atlas/registry/lib"
+import { catalogFor, registry, restrict } from "@atlas/registry/lib"
 import { initialState, reduce } from "@atlas/runtime/store"
 import type { SafeNode, ServerOp } from "@atlas/runtime/protocol"
 import fixture from "./fixtures/request-access.json"
@@ -59,5 +59,13 @@ describe("runtime/store >", () => {
   it("input stores a value locally and emits nothing", () => {
     const s = step(rendered(), { kind: "input", path: "form.email", value: "a@b.co" })
     expect(s.values).toEqual({ "form.email": "a@b.co" })
+  })
+})
+
+describe("runtime/store > catalog", () => {
+  it("an out-of-catalog render records the fallback seq", () => {
+    const r = restrict(registry, catalogFor({ task: "confirm", capabilities: ["press"] }))
+    const s = reduce(r)(initialState, { kind: "server", op: { op: "render", seq: 1, root: { type: "Form" } } })
+    expect(s.fallbackSeq).toBe(1)
   })
 })
