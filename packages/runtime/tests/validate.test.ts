@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { registry, without } from "@atlas/registry/lib"
+import { catalogFor, registry, restrict, without } from "@atlas/registry/lib"
 import { validateTree } from "@atlas/runtime/validate"
 import { fallbackFor } from "@atlas/runtime/fallback"
 import type { SafeNode } from "@atlas/runtime/protocol"
@@ -89,5 +89,27 @@ describe("runtime/fallback >", () => {
   it("deleting Alert keeps the rest of the tree", () => {
     const { node } = validateTree(form({ type: "Alert", slots: { title: ["Hi"] } }, button()), without("Alert"))
     expect(kids(node).map((c) => (c as SafeNode).type)).toEqual(["Button"])
+  })
+})
+
+describe("runtime/validator > catalog", () => {
+  const confirm = restrict(registry, catalogFor({ task: "confirm", capabilities: ["press"] }))
+  it("rejects a registered type outside the catalog even when the agent emits it", () => {
+    const { node, issues } = validateTree({ type: "Form", slots: { children: [] } }, confirm)
+    expect(issues).toContainEqual(expect.objectContaining({ code: "out-of-catalog", path: "" }))
+    expect(node).toMatchObject(FALLBACK)
+  })
+  it("reports a withheld unregistered component as out-of-catalog too", () => {
+    const { issues } = validateTree({ type: "Dialog" }, confirm)
+    expect(issues).toContainEqual(expect.objectContaining({ code: "out-of-catalog" }))
+  })
+  it("still reports a name nobody knows as unknown-type", () => {
+    const { issues } = validateTree({ type: "Hologram" }, confirm)
+    expect(issues).toContainEqual(expect.objectContaining({ code: "unknown-type" }))
+  })
+  it("accepts the catalog's own types", () => {
+    const { node, issues } = validateTree(button(), confirm)
+    expect(issues.filter((i) => i.code === "out-of-catalog" || i.code === "unknown-type")).toEqual([])
+    expect(node).toMatchObject({ type: "Button" })
   })
 })

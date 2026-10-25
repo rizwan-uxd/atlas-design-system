@@ -1,0 +1,17 @@
+{
+  "_note": "AUTHORED. Phase 6 evaluation requests (DEC-092). expected is the catalog filter() must return, fallback targets included; outOfTask are agent-visible names irrelevant to the task. Add a row when a capability is authored.",
+  "tasks": [
+    { "id": "request-access", "task": "Request access form", "capabilities": ["submit"],
+      "expected": ["Alert", "Button", "Field", "Form", "TextField"],
+      "outOfTask": ["Dialog", "Tabs", "Table", "Chart", "NavBar", "DatePicker"] },
+    { "id": "confirm", "task": "A single confirm action", "capabilities": ["press"],
+      "expected": ["Alert", "Button"],
+      "outOfTask": ["Form", "Field", "TextField", "Dialog", "Select"] },
+    { "id": "notice", "task": "A dismissible notice", "capabilities": ["dismiss"],
+      "expected": ["Alert", "Button"],
+      "outOfTask": ["Form", "Field", "TextField", "Toast", "Dialog"] },
+    { "id": "text-entry", "task": "A single text entry", "capabilities": ["input"],
+      "expected": ["Alert", "TextField"],
+      "outOfTask": ["Form", "Button", "Field", "Textarea", "Select"] }
+  ]
+}

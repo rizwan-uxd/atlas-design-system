@@ -775,7 +775,7 @@ export type RegisteredType = keyof typeof componentMap | (typeof structuralTypes
 }
 
 /** `runtimeRegistry.ts`: every authored entry and its protocol schema as JSON imports, for the M4 runtime (no fs at runtime). */
-export function runtimeRegistrySource(entries) {
+export function runtimeRegistrySource(entries, components) {
   const types = Object.keys(entries).sort()
   return `// GENERATED — do not hand-edit. registry-build from packages/registry/src, generated/schemas and aliases.json; run npm run registry:build.
 // Every registered entry and its protocol schema, bundled so the runtime reads the registry without fs (roadmap M4).
@@ -791,5 +791,8 @@ ${types.map((t) => `  ${t}: ${t}Schema,`).join("\n")}
 }
 
 export const aliasTable: Record<string, string> = aliases.aliases
+
+/** Every Atlas component with generated facts, registered or not: the agent-visible universe (Phase 6, D-A). */
+export const components: string[] = ${JSON.stringify([...components].sort())}
 `
 }

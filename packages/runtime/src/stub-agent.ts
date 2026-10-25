@@ -1,14 +1,15 @@
-// The M4 stand-in for an agent: it answers submits from fixture ops and never calls a model. Its own seq starts
-// after the fixture's render op. `log` is the wire as the client saw it; the Playwright tests read it.
-import type { ClientEvent, Fixture, ServerOp, Transport } from "./protocol"
+// The M4 stand-in for an agent, given its Phase 6 request: it answers submits from fixture ops and never calls a
+// model. Its own seq starts after the fixture's render op. `log` is the wire as the client saw it; the Playwright
+// tests read it.
+import type { AgentRequest, ClientEvent, Fixture, ServerOp, Transport } from "./protocol"
 
 export type DistributiveOmit<T, K extends keyof T> = T extends unknown ? Omit<T, K> : never
 export type UnsequencedOp = DistributiveOmit<ServerOp, "seq">
-export type StubAgent = Transport & { log: Array<ClientEvent | ServerOp>; inject(op: UnsequencedOp): void }
+export type StubAgent = Transport & { request: AgentRequest; log: Array<ClientEvent | ServerOp>; inject(op: UnsequencedOp): void }
 
 const EMAIL = /^[^@\s]+@[^@\s]+\.[^@\s]+$/
 
-export function createStubAgent(fixture: Fixture, delayMs = 0): StubAgent {
+export function createStubAgent(fixture: Fixture, request: AgentRequest, delayMs = 0): StubAgent {
   const listeners = new Set<(op: ServerOp) => void>()
   const log: Array<ClientEvent | ServerOp> = [fixture.render]
   let seq = fixture.render.seq
@@ -24,6 +25,7 @@ export function createStubAgent(fixture: Fixture, delayMs = 0): StubAgent {
     (fixture.responses[key] ?? []).map((op) => Object.fromEntries(Object.entries(op).filter(([k]) => k !== "seq")) as UnsequencedOp)
 
   return {
+    request,
     log,
     subscribe(listener) { listeners.add(listener); return () => { listeners.delete(listener) } },
     inject(op) { emit([op]) },

@@ -1,13 +1,13 @@
-# Handoff: M5 is complete (M5.6 brand axis done); Phase 6 is next (Atlas roadmap)
+# Handoff: Phase 6 PR-0 (filtered catalog, enforcement) done; PR-1 (model agent) is next (Atlas roadmap)
 
-Written 2026-10-22, updated 2026-10-25 after D1 option B, M4 (#108), Phase 4 (#109), M5.1 radius (#110), M5.2 spacing (#112), M5.3 type (#113), M5.4 motion (#115), M5.5 shadow (#117) and M5.6 brand axis (#118, #119 with baselines #120). **Read in this order: `AGENTS.md` → `docs/ATLAS-DELIVERY-ROADMAP.md` → this file.**
+Written 2026-10-22, updated 2026-10-25 after D1 option B, M4 (#108), Phase 4 (#109), M5.1 radius (#110), M5.2 spacing (#112), M5.3 type (#113), M5.4 motion (#115), M5.5 shadow (#117) and M5.6 brand axis (#118, #119 with baselines #120) and Phase 6 PR-0. **Read in this order: `AGENTS.md` → `docs/ATLAS-DELIVERY-ROADMAP.md` → this file.**
 The roadmap is normative now (referenced from `AGENTS.md` §2) and owns the phase order; this file is
 only current state plus the gotchas that will bite again. **This is the only handoff doc** — earlier
 ones were deleted and live in git history.
 
 ## Progress (update at the end of every session, and report it at the start and end of each)
 Counted in sessions, using the roadmap's own estimates (midpoint where it gives a range). Change N
-and say so when an estimate changes. **Roadmap: 23 of ~27 sessions done (~85%). N changed from ~28 to ~27: M5 finished in 6 sessions against an estimate of 7. M5.6 brand axis is complete in 1 session (Kind B, Atlas unchanged, Warm adds visuals): a second brand, warm (`data-brand="warm"`, Figma mode Warm), changes six semantic colours per theme on Figma's coral ramp; Figma `Atlas/Brand` (12 variables) feeds `Atlas/Semantic`; `code.contrast` measures the pairs each brand changes; the new `design.brand-modes` check passes; the sandbox has a Warm toggle and 50 warm baselines; computed colour dumps show 0 Atlas differences (plan `docs/superpowers/plans/2026-10-24-m5-6-brand.md`, roadmap §M5 "M5.6 brand axis"). Next: session 24 of ~27 = Phase 6, filtered agent catalog.**
+and say so when an estimate changes. **Roadmap: 25 of ~28 sessions done (~89%). N changed from ~27 to ~28: Phase 6 needs 3 sessions against an estimate of 2.5 (plan, PR-0 enforcement, PR-1 model agent). Sessions 24 and 25 ran in one conversation on 2026-10-25: the Phase 6 plan (A1 + B1, DEC-092) and PR-0. PR-0 makes every agent request carry a filtered catalog: `packages/registry/lib/filter.ts` (`filter`, `fullCatalog`, `catalogFor`, `restrict`), `openSession()` in `packages/runtime/src/session.ts` pairs the agent request with a registry restricted to the catalog, and the validator reports a withheld type as `out-of-catalog` and falls back (plan `docs/superpowers/plans/2026-10-25-phase-6-filtered-catalog.md`). Next: session 26 of ~28 = decide D-C, then plan and build Phase 6 PR-1 (model agent, `protocol` bench type).**
 
 | Phase | Sessions (est.) | Done | Status | PR |
 |---|---|---|---|---|
@@ -21,24 +21,31 @@ and say so when an estimate changes. **Roadmap: 23 of ~27 sessions done (~85%). 
 | **M4 — runtime vertical slice** | 3.5 | 3.5 | ✅ all 12 M4 rows measured: 11 pass, size fails (report-only, DEC-085) | #108 |
 | Phase 4 — enforcement hardened | 2.5 | 3 | ✅ in 3 sessions (est. range 2–3) | #109 |
 | **M5 — semantic tokens + brands** | 6 | 6 | ✅ in 6 sessions (est. 7): M5.1 radius (DEC-086), M5.2 spacing (DEC-087), M5.3 type (DEC-088), M5.4 motion (DEC-089), M5.5 shadow (DEC-090), M5.6 brand axis (DEC-091) | #110, #112, #113 (+#114), #115, #117, #118, #119 (+#120) |
-| Phase 6 — filtered agent catalog | 2.5 | 0 | ⏳ next | |
+| Phase 6 — filtered agent catalog | 3 | 2 | 🟡 plan + PR-0 done (DEC-092); PR-1 next | #121 |
 | Phase 7 — metrics as release gates | 1.5 | 0 | ⏳ | |
-| **Total** | **~27** | **23** | **~85%** | |
+| **Total** | **~28** | **25** | **~89%** | |
 
+Phase 6 PR-0 (#121) moved the three vitest Context Containment rows to passing: **27 passing · 3 failing · 6 not measurable** of 36, refreshed from the #121 CI run.
 Metric table (the roadmap's scoreboard, CI result-derived since Phase 4): **24 passing · 3 failing · 9 not measurable** of 36 (refreshed from the #118 CI run, carried in #119). M5.6 moved `design.brand-modes` from not measurable to passing. The 3 failing rows are real findings, not regressions: missing code tokens (2, DISC-106), missing Figma tokens (9, DISC-107) and the report-only protocol size (0.308, DEC-085).
 M3 exit: **5/6 types `registryComplete`** (Text deferred: no Text component), **47/47 generated
 contracts** (the 44 hand-written ones deleted), **2/2 target metrics passing** (plus registry-states),
 each over the registered subset (4/47 components registered).
 
-## Start here (session 24, the next fresh session)
-1. **Report progress first** (owner preference): doing / done / % / session X of N. That is 23 of ~27 done (~85%), and this is session 24.
-2. `git fetch origin`, check that #119 merged and that `main`'s metric region is current (`npm run metrics:check` against the latest CI artifact), then branch from `origin/main` and check `gh pr list`. Run `npm ci` in a fresh worktree first, because its `node_modules` starts empty (Gotchas).
-3. **Ask the owner one question before any work:** go to **Phase 6 (filtered agent catalog)**, or first act on the open items: candidates CAND-057 to 069, DISC-107's 9 tokens, DISC-109 (Switch thumb), or the sandbox-screenshot fix.
-4. **Phase 6** is `packages/registry/filter.ts`, enforced outside the agent; read the roadmap's Phase 6 section and plan it (gate 1) before code.
-5. **Metric refresh, and make it race-proof:** Metric manifest is not a required check, so auto-merge can land a PR before its refresh (it did with #118). Refresh from the PR's own CI artifact (`gh run download <run> -n metrics -D <scratch>`, then `node scripts/metrics-report.mjs --results <scratch>/metrics-input`) before the required checks finish, or keep auto-merge off until it lands. `node scripts/metrics-report.mjs` with no `--results` rewrites the region from nothing; it has no `--help`.
-6. **Labels:** `atlas-approved-new` for new tokens, plus `atlas-native-thaw` whenever `tokens:build` changes the native file (new primitives always do).
+## Start here (session 26, the next fresh session)
+1. **Report progress first** (owner preference): doing / done / % / session X of N. That is 25 of ~28 done (~89%), and this is session 26.
+2. `git fetch origin`, check that Phase 6 PR-0 merged and that `main`'s metric region is current (27 passing · 3 failing · 6 not measurable expected), then branch from `origin/main` and check `gh pr list`. Run `npm ci` in a fresh worktree first.
+3. **Ask the owner D-C before any work** (plan "Decisions for the owner"): the model agent's transport (Anthropic API streaming, which needs `@anthropic-ai/sdk` and an API key, or `claude -p --output-format stream-json`, whose CLI startup makes <250 ms first op unreachable), the model pin, and a spend cap for the bench ledger.
+4. **Then plan PR-1 (gate 1)** in `docs/superpowers/plans/`: a model-backed agent that receives only `openSession().request`, a `protocol` type in `benchmarks/run.sh` (reuse the rep loop, pins and budget; not the code rubrics), and `bench.json` results for `protocol.promptReduction` (filtered `catalogPrompt` against the full catalog's) and `protocol.firstOpP95`. Read the `claude-api` skill first.
+5. **Metric refresh, race-proof:** refresh from the PR's own CI artifact (`gh run download <run> -n metrics -D <scratch>`, then `node scripts/metrics-report.mjs --results <scratch>/metrics-input`) before the required checks finish, or keep auto-merge off until it lands.
+6. **Labels:** `atlas-approved-new` for new tokens, plus `atlas-native-thaw` whenever `tokens:build` changes the native file.
 
 ## State
+- **Phase 6 PR-0 is done (2026-10-25, DEC-092: A1 + B1).**
+  - Registry: `lib/filter.ts`; `lib/registry.ts` holds the value and types (split from `index.ts` to avoid an import cycle); `Registry.components` (47 facts names, generated into `runtimeRegistry.ts`) and `Registry.withheld` (set only by `restrict`). The full catalog is 48 agent-visible names. `filter()` walks nesting both ways and adds fallback targets, so press → `["Alert", "Button"]`.
+  - Evaluation set `packages/registry/tests/eval-tasks.json` (schema `registry.schema.json#/$defs/evalTasks`): request-access, confirm, notice, text-entry.
+  - Runtime: `AgentRequest` in `protocol.ts`; `openSession` and `catalogPrompt` in `session.ts`; `createStubAgent(fixture, request, delayMs?)`; issue code `out-of-catalog`. The runtime demo runs inside a submit session (its catalog is all 5 registered types, so the tree is unchanged).
+  - Manifest: check renamed to `registry/filter > no request exposes the full catalog`; the three rows carry a `why` that says 43 of the 48 names are unregistered.
+  - Latest ids: **DEC-092, CAND-069, DISC-109**.
 - **M5.6 brand axis is done (2026-10-25): PR-0 #118 (`9452f31`), PR-1 #119, baselines #120.**
   - Figma: `Atlas/Brand` (`VariableCollectionId:1115:2`, modes Atlas and Warm), `light/*` and `dark/*` for primary, primary-hover, primary-active, primary-subtle, focus-ring and primary-foreground (`VariableID:1115:3-14`, Figma-only). `Atlas/Semantic`'s six colours alias them. `coral/50, 200–900` have WEB syntax; `coral/100` and `350` stay Figma-only.
   - Code: 9 `--atlas-color-coral-*` primitives; `[data-brand="warm"]` and a (0,2,0) warm dark block after the Atlas dark block; the component-token block also on `[data-brand]`. `parseTokens` returns `brands`; `contrastCheck` measures `<brand>-light|dark` only for pairs the brand changes; `design.brand-modes` in `atlas-verify`.

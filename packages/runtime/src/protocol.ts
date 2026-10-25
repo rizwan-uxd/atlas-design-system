@@ -8,7 +8,7 @@ export type SafeNode = { type: string; props: Record<string, unknown>; slots: Re
 export type SafeItem = SafeNode | string
 
 export type IssueCode =
-  | "malformed" | "unknown-type" | "nesting" | "unknown-prop" | "invalid-prop" | "markup"
+  | "malformed" | "unknown-type" | "out-of-catalog" | "nesting" | "unknown-prop" | "invalid-prop" | "markup"
   | "missing-required" | "unknown-slot" | "stale-seq" | "bad-pointer" | "render-error" | "no-fallback"
 export type Issue = { path: string; code: IssueCode; detail: string }
 
@@ -23,5 +23,8 @@ export type ServerOp =
 export type ClientEvent = { kind: "event"; seq: number; type: "submit"; source: string; values: Record<string, string> }
 
 export type Transport = { send(event: ClientEvent): void; subscribe(listener: (op: ServerOp) => void): () => void }
+
+/** What an agent receives (Phase 6): the task and its filtered catalog. Built only by openSession; no server op carries one. */
+export type AgentRequest = { task: string; catalog: { types: string[]; prompt: string } }
 
 export type Fixture = { _note: string; render: Extract<ServerOp, { op: "render" }>; responses: Record<string, ServerOp[]> }

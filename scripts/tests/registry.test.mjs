@@ -457,11 +457,12 @@ test("zero entries is a failure, not a clean run", () => {
   assert.match(r.out, /src\/\*\.registry\.json matched 0 file/)
 })
 
-test("runtimeRegistry bundles every entry with its schema, sorted, and the alias table", () => {
-  const text = runtimeRegistrySource({ TextField: {}, Alert: {}, Form: {} })
+test("runtimeRegistry bundles every entry with its schema, sorted, the alias table and the component names", () => {
+  const text = runtimeRegistrySource({ TextField: {}, Alert: {}, Form: {} }, ["Input", "Alert", "Dialog"])
   assert.match(text, /^\/\/ GENERATED — do not hand-edit\./)
   assert.ok(text.indexOf('import AlertEntry from "../src/Alert.registry.json"') < text.indexOf("import FormEntry"))
   assert.match(text, /import TextFieldSchema from "\.\/schemas\/TextField\.schema\.json"/)
   assert.match(text, /export const entries = \{\n  Alert: AlertEntry,\n  Form: FormEntry,\n  TextField: TextFieldEntry,\n\}/)
   assert.match(text, /export const aliasTable: Record<string, string> = aliases\.aliases/)
+  assert.match(text, /export const components: string\[\] = \["Alert","Dialog","Input"\]/)
 })
