@@ -1,4 +1,4 @@
-// The validator repairs or drops; it never throws. Unknown or malformed → fallback; disallowed nesting → dropped;
+// The validator repairs or drops; it never throws. Unknown, out-of-catalog or malformed → fallback; disallowed nesting → dropped;
 // unknown, invalid or markup props → stripped (the component default applies); missing required → fallback.
 import type { Registry } from "@atlas/registry/lib"
 import { fallbackFor } from "./fallback"
@@ -30,7 +30,9 @@ function validateNode(raw: unknown, r: Registry, path: string, parent: string | 
   }
   const type = raw.type
   if (!Object.hasOwn(r.entries, type)) {
-    issues.push({ path, code: "unknown-type", detail: `${type} is not a registered type` })
+    // Phase 6: a withheld name is real but outside this session's catalog; both fall back the same way.
+    const withheld = r.withheld?.includes(type) ?? false
+    issues.push({ path, code: withheld ? "out-of-catalog" : "unknown-type", detail: withheld ? `${type} is outside this request's catalog` : `${type} is not a registered type` })
     return fallbackFor(null, r, path)
   }
   if (parent !== null && !nests(r, parent, type)) {
