@@ -148,7 +148,7 @@ Result sources read: `atlas-verify`, `vitest`, `playwright`, `atlas-sync`, `regi
 
 | Metric | Target | Status | Check | Measurable at |
 |---|---:|---|---|---|
-| Interactive components with typed event contracts | 100% | **passing** — 0 failing of 4 interactive registered types (4/47 components registered) | `design.registry-events` | M3 |
+| Interactive components with typed event contracts | 100% | **passing** — 0 failing of 4 interactive registered types (4/48 components registered) | `design.registry-events` | M3 |
 | User events lost or reordered | 0 | **passing** | `runtime-demo > 50 rapid submits keep strictly increasing sequence` | M4 |
 | Interactions requiring full-screen regeneration | 0% | **passing** | `runtime-demo > patch updates only the addressed subtree` | M4 |
 | State acknowledgment latency | Under 300 ms p95 client-side | **passing** | `runtime-demo > state ack p95` | M4 |
@@ -159,7 +159,7 @@ Result sources read: `atlas-verify`, `vitest`, `playwright`, `atlas-sync`, `regi
 |---|---:|---|---|---|
 | Invalid payloads producing a safe render | 100% | **passing** | `runtime/fuzz > 1000 malformed payloads all render` | M4 |
 | Unhandled render exceptions | 0 | **passing** | `runtime/fuzz > no payload throws` | M4 |
-| Components with declared fallback behavior | 100% | **passing** — 0 failing of 5 registered types (4/47 components registered) | `design.registry-fallback` | M3 |
+| Components with declared fallback behavior | 100% | **passing** — 0 failing of 5 registered types (4/48 components registered) | `design.registry-fallback` | M3 |
 | Fallback render latency | Under 100 ms p95 | **passing** | `runtime-demo > fallback render p95` | M4 |
 
 ### Context Containment
@@ -199,7 +199,7 @@ Result sources read: `atlas-verify`, `vitest`, `playwright`, `atlas-sync`, `regi
 | No raw design values in component implementations | pass | **passing** | `code.raw-design-values` | Phase 2d |
 | No component renders without a valid schema | pass | **passing** | `runtime/validator > unregistered type never renders` | M4 |
 | No unsupported component can reach the renderer | pass | **passing** | `runtime/validator > unknown type replaced by fallback` | M4 |
-| Loading, empty, error, active and disabled states exist for all interactive components | pass | **passing** — 0 failing of 3 interactive registered components (4/47 components registered) | `design.registry-states` | M3 |
+| Loading, empty, error, active and disabled states exist for all interactive components | pass | **passing** — 0 failing of 3 interactive registered components (4/48 components registered) | `design.registry-states` | M3 |
 | No horizontal overflow at supported breakpoints | pass | **passing** | `visual > no horizontal scroll at each breakpoint` | Phase 4 |
 
 **How to read this.** A row is only as good as its check. `not measurable` is the honest state for
