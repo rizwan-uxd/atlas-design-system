@@ -1282,6 +1282,16 @@
       "resolution": "Open, needs an owner decision per value. Fixing a value is Figma-first (the variables live in Figma) and removes the pair from packages/governance/contrast-allow.json, whose entries go stale the moment they recover. Alternatively declare a pairing out of the text set or AA-large-only, recorded in the allow file's reason. The check itself is agnostic: it fails only on new, worse-than-allowed or stale pairs.",
       "firstSeen": "2026-10-23",
       "lastSeen": "2026-10-23"
+    },
+    {
+      "id": "DISC-109",
+      "component": "Switch",
+      "side": "both",
+      "status": "open",
+      "issue": "Checked thumb fill differs by theme. Figma (95:114) binds the thumb to semantic `surface` (neutral-0 light, neutral-900 dark), so the dark-mode thumb is dark. Code binds it to --atlas-switch-thumb-background -> --atlas-foreground-on-brand (neutral-0 in both themes), so the dark-mode thumb is white. Found 2026-10-25 by the M5.6 gate-2 brand review frame; pre-existing, not introduced by the brand axis.",
+      "resolution": "Open, out of M5.6 scope (owner, 2026-10-25). Figma wins by default, which would make the code thumb follow `surface`; Switch.module.css BUG-019 records why code moved off a background-coloured thumb (dark thumb on a dark track), so the owner decides which side changes in a Switch refinement pass. On warm dark the white code thumb measures about 2.4:1 against the coral-400 track.",
+      "firstSeen": "2026-10-25",
+      "lastSeen": "2026-10-25"
     }
   ]
 }
