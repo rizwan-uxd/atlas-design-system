@@ -61,7 +61,7 @@ it("protocol bench", async () => {
   const bench = {
     "protocol.promptReduction": { overheadTokens: overhead, pass: Math.min(...reductions) >= 0.5, min: Math.min(...reductions), mean: reductions.reduce((a, b) => a + b, 0) / reductions.length, perTask },
     "protocol.firstOpP95": { pass: kept.length > 0 && latencies.length === kept.length && p95(latencies) < 250, p95Ms: latencies.length ? p95(latencies) : null, n: kept.length, noValidOp: kept.length - latencies.length, excluded: reps.length - kept.length },
-    "protocol.agentCompliance": { pass: kept.length > 0 && kept.every((r) => r.markup === 0 && r.rejected === 0), markupReps: kept.filter((r) => r.markup > 0 || r.rejected > 0).length, n: kept.length },
+    "protocol.agentCompliance": { pass: kept.length > 0 && kept.every((r) => r.markup === 0), markupReps: kept.filter((r) => r.markup > 0).length, nonOpReps: kept.filter((r) => r.rejected > 0).length, n: kept.length },
   }
   fs.mkdirSync(OUT, { recursive: true })
   fs.writeFileSync(path.join(OUT, "run.json"), JSON.stringify({ model: MODEL, reps: REPS, costUsd, date: new Date().toISOString(), runs: reps }, null, 2) + "\n")

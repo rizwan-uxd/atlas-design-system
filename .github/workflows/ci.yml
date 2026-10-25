@@ -263,6 +263,11 @@ jobs:
         run: |
           git checkout -- docs/ATLAS-DELIVERY-ROADMAP.md
           npm run metrics:check
+      # Phase 7: hard rows must read passing; Tier 3 bench rows are trend gates (warn, never block).
+      - name: Metric gates (hard rows blocking, trend rows report)
+        run: |
+          node scripts/metrics-gate.mjs --trend-out trend-report.md
+          if [ -n "$GITHUB_STEP_SUMMARY" ]; then cat trend-report.md >> "$GITHUB_STEP_SUMMARY"; fi
 
   # ─── ui-native freeze (roadmap R3: freeze rather than absorb) ──────────────
   # Native ports are paused by the owner. Any diff under packages/ui-native fails unless the PR

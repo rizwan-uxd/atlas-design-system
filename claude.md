@@ -6,7 +6,7 @@
 
 ## Status
 Monorepo restructured; 47 web components are tracked in `atlas/state/status.json` (35 spec-complete, 12 scaffolded) and live in `packages/ui-web/src/` by tier, with 17 native components in `packages/ui-native/components/` and 15 screen patterns in `packages/governance/patterns/` (generated copies in `atlas/patterns/`). A visual sandbox is at `app/page.tsx` and the prototype scaffold is under `app/prototypes/_shared/` (no flows currently).
-**Current work:** the delivery roadmap (`docs/ATLAS-DELIVERY-ROADMAP.md`): M4, Phase 4 and M5 are done; Phase 6 is done: PR-0 (filtered agent catalog enforced by the validator, DEC-092) and PR-1 (model agent, protocol bench over `claude -p`, DEC-093); Phase 7 (metrics as release gates) is next. Progress and next steps are in `docs/HANDOFF-next-session.md`. The harness (phases 0 to 9) is finished and documented in `docs/HARNESS.md`; H3 is integrated on `main`.
+**Current work:** the delivery roadmap (`docs/ATLAS-DELIVERY-ROADMAP.md`): M4, Phase 4 and M5 are done; Phase 6 is done (DEC-092, DEC-093); Phase 7 (metrics as release gates, DEC-094) is mostly built: manifest `gate` field, `scripts/metrics-gate.mjs`, Tier 3 trend baseline, bounded model-agent repair. Half a session remains (see the handoff). Progress and next steps are in `docs/HANDOFF-next-session.md`. The harness (phases 0 to 9) is finished and documented in `docs/HARNESS.md`; H3 is integrated on `main`.
 
 ## What this is
 A monorepo holding: the visual sandbox (Next.js 16, `app/page.tsx`), the web component library (`packages/ui-web/src/`), a React Native library (`packages/ui-native/`), design tokens (`packages/tokens/`), Figma sync (`packages/figma-sync/`), governance checks (`packages/governance/`), and the agent benchmark (`benchmarks/`).

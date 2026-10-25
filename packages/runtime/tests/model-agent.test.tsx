@@ -48,3 +48,56 @@ describe("runtime/model-agent >", () => {
     expect(issues).toContainEqual(expect.objectContaining({ code: "out-of-catalog" }))
   })
 })
+
+describe("runtime/model-agent repair >", () => {
+  const bad = '{"op":"render","root":{"type":"Form","slots":{"children":[]}}}\n'
+  const good = '{"op":"render","root":{"type":"Alert","slots":{"actions":[]}}}\n'
+  it("records diagnostics per attempt and re-asks once with the issues, then stops", async () => {
+    const s = confirm()
+    const tasks: string[] = []
+    const agent = createModelAgent(s.request, (_sys, task) => { tasks.push(task); return chunks(bad) }, { registry: s.registry })
+    agent.start(); await agent.done
+    expect(tasks).toHaveLength(2)
+    expect(tasks[1]).toContain("out-of-catalog")
+    expect(tasks[1]).toContain("A single confirm action")
+    expect(agent.repairs).toBe(1)
+    expect(agent.diagnostics.map((d) => d.attempt)).toEqual([0, 1])
+    expect(agent.diagnostics[1].issues).toContainEqual(expect.objectContaining({ code: "out-of-catalog" }))
+  })
+  it("a clean first attempt is not repaired", async () => {
+    const s = confirm()
+    let calls = 0
+    const agent = createModelAgent(s.request, () => { calls++; return chunks(good) }, { registry: s.registry })
+    agent.start(); await agent.done
+    expect(calls).toBe(1)
+    expect(agent.repairs).toBe(0)
+    expect(agent.diagnostics).toEqual([{ attempt: 0, issues: [] }])
+  })
+  it("a repair that succeeds streams its ops after the first attempt's, with increasing seq", async () => {
+    const s = confirm()
+    let n = 0
+    const agent = createModelAgent(s.request, () => chunks(n++ === 0 ? bad : good), { registry: s.registry })
+    agent.start(); await agent.done
+    const ops = agent.log.filter((x): x is ServerOp => "op" in x)
+    expect(ops.map((o) => o.seq)).toEqual([1, 2])
+    expect(agent.diagnostics.at(-1)?.issues).toEqual([])
+  })
+  it("maxRepairs 0 never re-asks, and without a registry nothing is validated", async () => {
+    const s = confirm()
+    let calls = 0
+    const a = createModelAgent(s.request, () => { calls++; return chunks(bad) }, { registry: s.registry, maxRepairs: 0 })
+    a.start(); await a.done
+    const b = createModelAgent(s.request, () => { calls++; return chunks(bad) })
+    b.start(); await b.done
+    expect(calls).toBe(2)
+    expect(b.diagnostics).toEqual([])
+  })
+  it("non-op lines are not issues and do not trigger a repair", async () => {
+    const s = confirm()
+    let calls = 0
+    const agent = createModelAgent(s.request, () => { calls++; return chunks("Sure!\n", good) }, { registry: s.registry })
+    agent.start(); await agent.done
+    expect(calls).toBe(1)
+    expect(agent.rejected).toEqual(["Sure!"])
+  })
+})

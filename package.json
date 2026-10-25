@@ -18,6 +18,7 @@
     "registry:check": "node scripts/registry-build.mjs --check",
     "metrics:report": "node scripts/metrics-report.mjs",
     "metrics:check": "node scripts/metrics-report.mjs --check",
+    "metrics:gate": "node scripts/metrics-gate.mjs",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",

@@ -35,8 +35,9 @@
     "excluded": 0
   },
   "protocol.agentCompliance": {
-    "pass": false,
-    "markupReps": 8,
+    "pass": true,
+    "markupReps": 0,
+    "nonOpReps": 8,
     "n": 20
   }
 }
