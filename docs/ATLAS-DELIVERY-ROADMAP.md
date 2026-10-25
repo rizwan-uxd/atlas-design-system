@@ -121,7 +121,7 @@ fails when this region is stale. Statuses are exactly three: **passing** (a decl
 **failing** (ran and failed), **not measurable** (no result for the declared check — reported as `n/a`,
 never `0`). A metric with no check is *not measurable*, never passing: absence of a signal is not a pass.
 
-**30 passing · 4 failing · 3 not measurable** of 37. 3 of the measured rows cover only part of their population; the row says how much.
+**31 passing · 5 failing · 3 not measurable** of 39. 5 of the measured rows cover only part of their population; the row says how much.
 
 Result sources read: `atlas-verify`, `vitest`, `playwright`, `atlas-sync`, `registry`, `token-lint`, `bench`. Sources not present leave their metrics not measurable.
 
@@ -160,6 +160,8 @@ Result sources read: `atlas-verify`, `vitest`, `playwright`, `atlas-sync`, `regi
 | Invalid payloads producing a safe render | 100% | **passing** | `runtime/fuzz > 1000 malformed payloads all render` | M4 |
 | Unhandled render exceptions | 0 | **passing** | `runtime/fuzz > no payload throws` | M4 |
 | Components with declared fallback behavior | 100% | **passing** — 0 failing of 6 registered types (5/48 components registered) | `design.registry-fallback` | M3 |
+| Registered types (the M3 exit types) | 6 of 6 | **passing** — 6/6 M3 types registered | `design.registry-registered` | M3 |
+| Registered types that are production-ready | 6 of 6 | **failing** — 3/6 registered entries production-ready | `design.registry-production-ready` | M3 |
 | Fallback render latency | Under 100 ms p95 | **passing** | `runtime-demo > fallback render p95` | M4 |
 
 ### Context Containment
