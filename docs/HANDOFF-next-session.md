@@ -1,13 +1,13 @@
-# Handoff: M5.5 shadow is complete; M5.6 brand axis is next (Atlas roadmap)
+# Handoff: M5 is complete (M5.6 brand axis done); Phase 6 is next (Atlas roadmap)
 
-Written 2026-10-22, updated 2026-10-24 after D1 option B, M4 (#108), Phase 4 (#109), M5.1 radius (#110), M5.2 spacing (#112), M5.3 type (#113), M5.4 motion (#115, all merged) and M5.5 shadow (PR opened 2026-10-24). **Read in this order: `AGENTS.md` → `docs/ATLAS-DELIVERY-ROADMAP.md` → this file.**
+Written 2026-10-22, updated 2026-10-25 after D1 option B, M4 (#108), Phase 4 (#109), M5.1 radius (#110), M5.2 spacing (#112), M5.3 type (#113), M5.4 motion (#115), M5.5 shadow (#117) and M5.6 brand axis (#118, #119 with baselines #120). **Read in this order: `AGENTS.md` → `docs/ATLAS-DELIVERY-ROADMAP.md` → this file.**
 The roadmap is normative now (referenced from `AGENTS.md` §2) and owns the phase order; this file is
 only current state plus the gotchas that will bite again. **This is the only handoff doc** — earlier
 ones were deleted and live in git history.
 
 ## Progress (update at the end of every session, and report it at the start and end of each)
 Counted in sessions, using the roadmap's own estimates (midpoint where it gives a range). Change N
-and say so when an estimate changes. **Roadmap: 22 of ~28 sessions done (~79%). M5.5 shadow is complete in 1 session (Kind B, two listed changes): five shadow roles by intent (raised/surface/popover/floating/modal), each an alias of one size step and declared on the dark selectors too; shadows are now in Figma as 11 effect styles whose layer colours bind five Light/Dark variables; the token table reads effect styles (missing Figma tokens 15 → 9); 20 component uses on roles; the token-lint `semantic-shadow` ratchet; computed box-shadow dumps in light, dark and a dark subtree show no change (plan `docs/superpowers/plans/2026-10-24-m5-5-shadow.md`, roadmap §M5 "M5.5 shadow"). Next: session 23 of ~28 = M5.6 brand axis (Kind B, changes visuals by design).**
+and say so when an estimate changes. **Roadmap: 23 of ~27 sessions done (~85%). N changed from ~28 to ~27: M5 finished in 6 sessions against an estimate of 7. M5.6 brand axis is complete in 1 session (Kind B, Atlas unchanged, Warm adds visuals): a second brand, warm (`data-brand="warm"`, Figma mode Warm), changes six semantic colours per theme on Figma's coral ramp; Figma `Atlas/Brand` (12 variables) feeds `Atlas/Semantic`; `code.contrast` measures the pairs each brand changes; the new `design.brand-modes` check passes; the sandbox has a Warm toggle and 50 warm baselines; computed colour dumps show 0 Atlas differences (plan `docs/superpowers/plans/2026-10-24-m5-6-brand.md`, roadmap §M5 "M5.6 brand axis"). Next: session 24 of ~27 = Phase 6, filtered agent catalog.**
 
 | Phase | Sessions (est.) | Done | Status | PR |
 |---|---|---|---|---|
@@ -20,33 +20,32 @@ and say so when an estimate changes. **Roadmap: 22 of ~28 sessions done (~79%). 
 | 2d — token work, zero new tokens | 1.5 | 1 | ✅ in 1 session (est. 1.5) | #106 |
 | **M4 — runtime vertical slice** | 3.5 | 3.5 | ✅ all 12 M4 rows measured: 11 pass, size fails (report-only, DEC-085) | #108 |
 | Phase 4 — enforcement hardened | 2.5 | 3 | ✅ in 3 sessions (est. range 2–3) | #109 |
-| **M5 — semantic tokens + brands** | 7 | 5 | 🔄 M5.1 radius ✅ (DEC-086), M5.2 spacing ✅ (DEC-087), M5.3 type ✅ (DEC-088), M5.4 motion ✅ (DEC-089), M5.5 shadow ✅ (DEC-090); next M5.6 brand axis (Kind B) | #110, #112, #113 (+#114 baselines), #115, M5.5 PR |
-| Phase 6 — filtered agent catalog | 2.5 | 0 | ⏳ | |
+| **M5 — semantic tokens + brands** | 6 | 6 | ✅ in 6 sessions (est. 7): M5.1 radius (DEC-086), M5.2 spacing (DEC-087), M5.3 type (DEC-088), M5.4 motion (DEC-089), M5.5 shadow (DEC-090), M5.6 brand axis (DEC-091) | #110, #112, #113 (+#114), #115, #117, #118, #119 (+#120) |
+| Phase 6 — filtered agent catalog | 2.5 | 0 | ⏳ next | |
 | Phase 7 — metrics as release gates | 1.5 | 0 | ⏳ | |
-| **Total** | **~28** | **22** | **~79%** | |
+| **Total** | **~27** | **23** | **~85%** | |
 
-Metric table (the roadmap's scoreboard, CI result-derived since Phase 4): **23 passing · 3 failing · 10 not measurable** of 36 (refreshed on the M5.5 branch from the #116 CI run). The 3 failing rows are real findings, not regressions: missing code tokens (2, DISC-106), missing Figma tokens (9, DISC-107; 15 before M5.5) and the report-only protocol size (0.308, DEC-085). M5.1 to M5.5 changed no status.
+Metric table (the roadmap's scoreboard, CI result-derived since Phase 4): **24 passing · 3 failing · 9 not measurable** of 36 (refreshed from the #118 CI run, carried in #119). M5.6 moved `design.brand-modes` from not measurable to passing. The 3 failing rows are real findings, not regressions: missing code tokens (2, DISC-106), missing Figma tokens (9, DISC-107) and the report-only protocol size (0.308, DEC-085).
 M3 exit: **5/6 types `registryComplete`** (Text deferred: no Text component), **47/47 generated
 contracts** (the 44 hand-written ones deleted), **2/2 target metrics passing** (plus registry-states),
 each over the registered subset (4/47 components registered).
 
-## Start here (session 23, the next fresh session)
-1. **Report progress first** (owner preference): doing / done / % / session X of N. That is 22 of ~28 done (~79%), and this is session 23.
-2. `git fetch origin`, check that the M5.5 PR merged, then branch from `origin/main` and check `gh pr list`. Run `npm ci` in a fresh worktree first, because its `node_modules` starts empty (Gotchas).
-3. **Ask the owner one question before any work:** go to **M5.6 brand axis**, or first act on the open candidates (radius CAND-057 to 060, spacing 061 to 065, type 066 to 068, motion 069), DISC-107's remaining 9 tokens (dialog widths, safe-area, `neutral-50`), or the proposed sandbox-screenshot fix.
-4. **M5.6 brand axis is Kind B and changes visuals by design.** It needs every family above (now all on roles) plus D1 for a drift gate. Its exit metrics are the roadmap rows `design.brand-modes` and per-brand visual regression.
-   - **Ask the owner first:** which brands, and what each one varies (colour only, or radius, type and shadow too). A brand is a Figma mode, so settle which collections get brand modes before any plan.
-   - Then roles (AGENTS §6), plan (gate 1), Figma (gate 2).
-   - Shadow colours are already variables (`shadow/color-1..5`), so a brand can tint shadows without touching the styles.
-5. **Reuse the Kind B method:**
-   - list every change before code
-   - computed-style before/after dumps (`.atlas-pull/dump-*.mjs`, gitignored; M5.5 added `dump-shadow.mjs` with a dark-subtree mode) in every theme and brand
-   - a DEC with before/after values
-   - refresh the metric region before pushing when the variable count changes (`gh run download <run> -n metrics -D <scratch>`, then `node scripts/metrics-report.mjs --results <scratch>/metrics-input`)
-6. **Labels:** `atlas-approved-new` for new tokens, plus `atlas-native-thaw` only if `tokens:build` changes the native file.
+## Start here (session 24, the next fresh session)
+1. **Report progress first** (owner preference): doing / done / % / session X of N. That is 23 of ~27 done (~85%), and this is session 24.
+2. `git fetch origin`, check that #119 merged and that `main`'s metric region is current (`npm run metrics:check` against the latest CI artifact), then branch from `origin/main` and check `gh pr list`. Run `npm ci` in a fresh worktree first, because its `node_modules` starts empty (Gotchas).
+3. **Ask the owner one question before any work:** go to **Phase 6 (filtered agent catalog)**, or first act on the open items: candidates CAND-057 to 069, DISC-107's 9 tokens, DISC-109 (Switch thumb), or the sandbox-screenshot fix.
+4. **Phase 6** is `packages/registry/filter.ts`, enforced outside the agent; read the roadmap's Phase 6 section and plan it (gate 1) before code.
+5. **Metric refresh, and make it race-proof:** Metric manifest is not a required check, so auto-merge can land a PR before its refresh (it did with #118). Refresh from the PR's own CI artifact (`gh run download <run> -n metrics -D <scratch>`, then `node scripts/metrics-report.mjs --results <scratch>/metrics-input`) before the required checks finish, or keep auto-merge off until it lands. `node scripts/metrics-report.mjs` with no `--results` rewrites the region from nothing; it has no `--help`.
+6. **Labels:** `atlas-approved-new` for new tokens, plus `atlas-native-thaw` whenever `tokens:build` changes the native file (new primitives always do).
 
 ## State
-- **M5.5 shadow is in its PR (2026-10-24, commits `198f628` PR-0 and `1999ab5` PR-1, merged with main at `9d8d101`).**
+- **M5.6 brand axis is done (2026-10-25): PR-0 #118 (`9452f31`), PR-1 #119, baselines #120.**
+  - Figma: `Atlas/Brand` (`VariableCollectionId:1115:2`, modes Atlas and Warm), `light/*` and `dark/*` for primary, primary-hover, primary-active, primary-subtle, focus-ring and primary-foreground (`VariableID:1115:3-14`, Figma-only). `Atlas/Semantic`'s six colours alias them. `coral/50, 200–900` have WEB syntax; `coral/100` and `350` stay Figma-only.
+  - Code: 9 `--atlas-color-coral-*` primitives; `[data-brand="warm"]` and a (0,2,0) warm dark block after the Atlas dark block; the component-token block also on `[data-brand]`. `parseTokens` returns `brands`; `contrastCheck` measures `<brand>-light|dark` only for pairs the brand changes; `design.brand-modes` in `atlas-verify`.
+  - Sandbox: a Warm/Atlas toggle; `tests/visual/sandbox.spec.ts` loops brands, and Atlas keeps its file names.
+  - Proof: `.atlas-pull/dump-color.mjs` (gitignored) dumps 12 colour properties per element with transitions disabled, in light, dark, dark subtree and three warm modes. Atlas showed 0 differences, `main` CSS vs branch CSS.
+  - Latest ids: **DEC-091, CAND-069, DISC-109**. The variable table holds 530 variables (checksum `3aa6ec5c`). Drift 0 / 2 / 9.
+- **M5.5 shadow is merged (#117, `df92e22`, 2026-10-24; PR-0 and PR-1 squashed).**
   - Figma: `shadow/color-1..5` in `Atlas/Semantic` (`VariableID:1111:2-6`, scope `EFFECT_COLOR`, no WEB syntax). Effect styles: `shadow/sm|md|lg|xl` (pre-existing, updated in place, now 0 direct consumers), `shadow/raised|surface|popover|floating|modal` and `card/elevated-shadow(-hover)`. Every component shadow sits on a role style except Card elevated focus-visible (`109:120|135|150`), which keeps its focus ring plus copies of the card layers.
   - Code: `--atlas-shadow-<role>` on `:root, [data-theme="dark"], .dark`; token-lint `semantic-shadow` with no allowlist entries; `tableCoverage` returns `styleCoverage` (lowercase style name, `/` → `-`).
   - Latest ids: **DEC-090, CAND-069, DISC-108**. The variable table holds 518 variables (checksum `5d2ff410`) and 11 effect styles. Drift 0 / 2 / 9.

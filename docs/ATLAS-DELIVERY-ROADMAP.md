@@ -1108,6 +1108,38 @@ doc says so plainly.
   - The hovered Chart tooltip measures the md value in both themes.
   - Screenshots are expected unchanged.
 
+### M5.6 brand axis — ✅ DONE 2026-10-25 (1 session, Kind B: Atlas unchanged, Warm adds visuals)
+
+**As built** (plan `docs/superpowers/plans/2026-10-24-m5-6-brand.md`; DEC-091, DISC-109; PR-0 #118, PR-1 #119, baselines #120):
+
+- **Brands (owner-chosen):** Atlas (the default, no selector) and **warm** (`data-brand="warm"`, Figma mode `Warm`). A brand changes **colour only**, and the warm ramp is Figma's coral.
+
+  | Token | Atlas light | Warm light | Atlas dark | Warm dark |
+  |---|---|---|---|---|
+  | `primary` | brand-600 | coral-600 | brand-500 | coral-400 |
+  | `primary-hover` | brand-700 | coral-700 | brand-400 | coral-300 |
+  | `primary-active` | brand-800 | coral-800 | brand-300 | coral-200 |
+  | `primary-subtle` | brand-50 | coral-50 | brand-950 | coral-900 |
+  | `focus-ring` | brand-500 | coral-500 | brand-400 | coral-300 |
+  | `primary-foreground` | neutral-0 | neutral-0 | neutral-0 | neutral-950 |
+
+  - **CSS:**
+    - 9 coral primitives (owner-approved new tokens).
+    - A `[data-brand="warm"]` block, and a warm dark block at (0,2,0) that wins on every brand/theme nesting. Both sit after the Atlas dark block, so `convert-tokens` and `atlas-sync` still read Atlas.
+    - The component-token block is also declared on `[data-brand]`, so a brand subtree re-resolves every alias.
+  - **Figma:** `Atlas/Brand` (modes Atlas and Warm) holds `light/*` and `dark/*` for the six colours: 12 variables, Figma-only. `Atlas/Semantic`'s six colours alias them and stay value-identical in Atlas. `coral/50, 200–900` carry WEB syntax.
+  - **ui-native:** `tokens:build` emits the coral hex values, so #118 carried `atlas-native-thaw`.
+- **Checks:**
+  - **`code.contrast` measures brands:** `parseTokens` splits selectors on top-level commas only. A brand theme measures only the pairs the brand changes (owner): warm light is 5.30:1 and warm dark 8.26:1 on primary, button, checkbox and radio. No new allowances.
+  - **New `design.brand-modes`:** each brand overrides the same colours in both themes, each declared in `:root` and resolving to a colour, and the Figma `Atlas/Brand` modes equal the CSS brands. Inspected 12, scope 1; the metric row now reads **passing**.
+- **Variable table:** 530 variables (518 + 12), checksum `3aa6ec5c`. Drift is unchanged at 0 name / 2 missing in code / 9 missing in Figma.
+- **Sandbox:** a Warm/Atlas toggle. The visual spec loops over brands; Atlas keeps its file names, and warm adds `warm-light-*` and `warm-dark-*` (50 baselines, #120).
+- **Proof:**
+  - Computed colour dumps of `/` and `/runtime-demo`, `main` CSS vs branch CSS, transitions disabled: 12 properties, light, dark and a dark subtree. **0 differences** over 3,448 + 66 elements.
+  - The baseline workflow regenerated every image and changed no Atlas one.
+- **Not done:** the Switch thumb is `surface` in Figma but `foreground-on-brand` in code (DISC-109, a Switch refinement pass).
+- **Process note:** #118 auto-merged before its metric refresh landed, because Metric manifest is not a required check. The refresh rode in #119.
+
 ---
 
 ## Phase 6 — Filtered agent composition (2–3 sessions)
