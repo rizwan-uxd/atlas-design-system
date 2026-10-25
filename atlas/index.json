@@ -545,6 +545,18 @@
       "metadata": "atlas/metadata/Table.json"
     },
     {
+      "name": "Text",
+      "tier": "primitives",
+      "status": "stable",
+      "import": "@atlas/ui-web/primitives/Text/Text",
+      "variants": ["heading", "title", "body", "body-sm", "label", "caption", "overline"],
+      "sizes": [],
+      "use": "Showing headings, titles, body copy, helper text, captions or overlines outside a control.",
+      "notUse": "Naming a form control → Label.",
+      "doc": "atlas/Text.md",
+      "metadata": "atlas/metadata/Text.json"
+    },
+    {
       "name": "Toast",
       "tier": "compositions",
       "status": "stable",

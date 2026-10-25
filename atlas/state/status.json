@@ -56,6 +56,7 @@
     "Sparkline": { "parity": "match", "figmaMetadata": "description-written", "code": "spec-complete", "verifiedAt": "2026-10-14T11:00:32.149Z" },
     "OtpInput": { "parity": "match", "figmaMetadata": "description-written", "code": "spec-complete", "verifiedAt": "2026-10-14T13:46:12.452Z" },
     "Stepper": { "parity": "match", "figmaMetadata": "description-written", "code": "spec-complete", "verifiedAt": "2026-10-15T08:04:42.755Z" },
-    "CommandMenu": { "parity": "match", "figmaMetadata": "description-written", "code": "spec-complete", "verifiedAt": "2026-10-14T15:11:00.934Z" }
+    "CommandMenu": { "parity": "match", "figmaMetadata": "description-written", "code": "spec-complete", "verifiedAt": "2026-10-14T15:11:00.934Z" },
+    "Text": { "parity": "match", "figmaMetadata": "description-written", "code": "spec-complete", "verifiedAt": "2026-10-25T09:38:29.326Z" }
   }
 }
