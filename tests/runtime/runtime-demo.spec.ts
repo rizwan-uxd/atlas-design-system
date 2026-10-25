@@ -87,3 +87,15 @@ test("runtime-demo > fallback render p95", async ({ page }, info) => {
   console.info(`runtime-demo fallback p95 ${p95(ms).toFixed(1)} ms over ${ms.length}`)
   expect(p95(ms)).toBeLessThan(200) // gate = 2 × the 100 ms north-star target
 })
+
+test("runtime-demo > the agent request carries the filtered catalog", async ({ page }) => {
+  const req = await page.evaluate(() => window.__atlasRuntime!.request)
+  expect(req.catalog.types).toEqual(["Alert", "Button", "Field", "Form", "TextField"])
+  expect(req.catalog.prompt).not.toContain('"type":"Dialog"')
+})
+
+test("runtime-demo > an out-of-catalog type falls back", async ({ page }) => {
+  await page.evaluate(() => window.__atlasRuntime!.inject({ op: "patch", at: "/slots/children/3", node: { type: "Dialog" } }))
+  await expect(page.locator('[data-atlas-path="/slots/children/3"][data-atlas-type="Alert"]')).toBeVisible()
+  await expect(page.locator('[data-atlas-type="Dialog"]')).toHaveCount(0)
+})
