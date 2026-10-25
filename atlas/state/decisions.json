@@ -581,6 +581,12 @@
       "topic": "Text is registered as the 6th type: root-level, capability display, as exposed; display is not an interactive capability",
       "decision": "Owner-approved 2026-10-25 (recommendations accepted). Text has an authored registry entry (registryComplete, fallback Alert neutral per DEC-080, no events, slot children, protocol props variant, tone and as). Nesting is root-only (parents []), so no existing entry changed. It carries capability display so a request for static copy can reach it; the registry-metrics interactive test ignores display (DISPLAY_ONLY), so Text is not asked for events. An entry with display plus a handler prop or another capability is still interactive. New eval task static-copy expects Alert and Text. Tones stay default and muted (DISC-108, CAND-071). Nesting Text inside Form, Field or Alert is a separate decision: it edits those entries and the request-access and notice eval catalogs.",
       "date": "2026-10-25"
+    },
+    {
+      "id": "DEC-097",
+      "topic": "Alert, TextField and Form stay registered as provisional entries; registered and production-ready are separate metrics",
+      "decision": "Owner-decided 2026-10-25. Nothing is removed from the registry. Alert (waits on the scaffolded Alert component), TextField (the scaffolded Input) and Form (Alert and, through Field, Input) carry `provisional: { waitingOn, reason }`. (1) registryRegistered: the six M3 types each have a complete entry (6 of 6, a hard row). (2) registryProductionReady: counts entries that are not provisional, whose component is spec-complete, with a generated contract and a test that runs axe (3 of 6 today; a report row that reads incomplete until the scaffolded parts are finished). (3) filter() and catalogFor() take { mode }: development (the default) keeps provisional entries, so the demo, eval tasks, fixtures and benchmarks read as before; production leaves them out of capability matches, nesting and fallback targets. (4) atlas-verify design/registry-promotion blocks promotion: a stable entry needs a spec-complete component, a contract, tests, axe coverage and sandbox (visual) coverage, a structural entry cannot be stable, and waitingOn must name a real, still-scaffolded component. Known gaps are recorded in packages/governance/promotion-allow.json (Field and Text have no sandbox section yet) and go stale when closed.",
+      "date": "2026-10-25"
     }
   ]
 }

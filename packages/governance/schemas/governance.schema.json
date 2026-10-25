@@ -4,6 +4,27 @@
   "title": "Authored governance and registry files",
   "description": "Hand-authored sources: packages/governance/{deprecations,ownership,private-vars.allow,contrast-allow}.json and packages/registry/figma-axis-map.json.",
   "$defs": {
+    "promotionAllow": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["_note", "entries"],
+      "properties": {
+        "_note": { "$ref": "common.schema.json#/$defs/text" },
+        "entries": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["type", "gap", "reason"],
+            "properties": {
+              "type": { "$ref": "common.schema.json#/$defs/componentName" },
+              "gap": { "enum": ["component", "contract", "tests", "accessibility", "visual"] },
+              "reason": { "$ref": "common.schema.json#/$defs/text" }
+            }
+          }
+        }
+      }
+    },
     "contrastAllow": {
       "type": "object",
       "additionalProperties": false,

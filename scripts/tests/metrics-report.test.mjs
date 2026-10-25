@@ -282,8 +282,12 @@ test("registry rows read passing from committed state, with their coverage of th
   const dir = registryRepo()
   try {
     const rows = registryRows(dir)
-    assert.deepEqual(rows.map((r) => r.check).sort(), ["design.registry-events", "design.registry-fallback", "design.registry-states"])
-    for (const r of rows) {
+    assert.deepEqual(rows.map((r) => r.check).sort(), ["design.registry-events", "design.registry-fallback", "design.registry-production-ready", "design.registry-registered", "design.registry-states"])
+    // DEC-097: the two registered/production-ready rows measure the real M3 types, which this small fixture lacks
+    const m3 = rows.filter((r) => /registry-(registered|production-ready)$/.test(r.check))
+    assert.equal(m3.length, 2)
+    assert.ok(m3.every((r) => /^\d+\/\d+ /.test(r.coverage.text)), "both carry a count")
+    for (const r of rows.filter((r) => !m3.includes(r))) {
       assert.equal(r.status, "passing", r.check)
       assert.match(r.coverage.text, /^0 failing of \d+ .* \(\d+\/\d+ components registered\)$/)
     }

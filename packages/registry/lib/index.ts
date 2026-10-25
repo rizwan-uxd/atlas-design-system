@@ -3,7 +3,7 @@
 import { registry, type Registry } from "./registry"
 
 export * from "./registry"
-export { catalogFor, filter, fullCatalog, restrict, type Catalog, type CatalogRequest } from "./filter"
+export { catalogFor, filter, fullCatalog, restrict, type Catalog, type CatalogRequest, type FilterOptions } from "./filter"
 
 /** The Atlas component a type name renders: an alias target, a registered entry's aliasOf, or "structural". */
 export function resolve(name: string, r: Registry = registry): string | null {

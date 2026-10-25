@@ -50,3 +50,30 @@ describe("registry/restrict >", () => {
     expect(Object.keys(restrict(registry, catalogFor({ task: "x", capabilities: ["chart"] })).entries)).toEqual([])
   })
 })
+
+describe("registry/provisional >", () => {
+  it("Alert, TextField and Form are provisional, each waiting on a scaffolded component", () => {
+    const waiting = (t: string) => registry.entries[t].provisional?.waitingOn
+    expect(waiting("Alert")).toEqual(["Alert"])
+    expect(waiting("TextField")).toEqual(["Input"])
+    expect(waiting("Form")).toEqual(["Alert", "Input"])
+    for (const t of ["Button", "Field", "Text"]) expect(registry.entries[t].provisional, t).toBeUndefined()
+  })
+  it("development filtering is unchanged: provisional entries load for every task", () => {
+    expect(filter(["submit"])).toEqual(["Alert", "Button", "Field", "Form", "TextField"])
+    expect(filter(["dismiss"])).toEqual(["Alert", "Button"])
+  })
+  it("production filtering leaves provisional entries out of matches, nesting and fallback targets", () => {
+    const production = (caps: string[]) => filter(caps, registry, { mode: "production" })
+    expect(production(["submit"])).toEqual([])
+    expect(production(["dismiss"])).toEqual([])
+    expect(production(["input"])).toEqual([])
+    expect(production(["press"])).toEqual(["Button"])
+    for (const caps of [["submit"], ["press"], ["input"], ["dismiss"], ["display"]])
+      for (const t of production(caps)) expect(registry.entries[t].provisional, t).toBeUndefined()
+  })
+  it("catalogFor passes the mode through", () => {
+    expect(catalogFor({ task: "confirm", capabilities: ["press"] }, registry, { mode: "production" }).types).toEqual(["Button"])
+    expect(catalogFor({ task: "confirm", capabilities: ["press"] }).types).toEqual(["Alert", "Button"])
+  })
+})

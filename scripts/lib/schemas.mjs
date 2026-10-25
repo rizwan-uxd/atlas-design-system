@@ -32,6 +32,7 @@ export const INPUTS = [
   { glob: "packages/governance/private-vars.allow.json", schema: "governance.schema.json#/$defs/privateVarsAllow", required: true },
   { glob: "packages/governance/token-primitives.allow.json", schema: "governance.schema.json#/$defs/tokenPrimitivesAllow", required: true },
   { glob: "packages/governance/contrast-allow.json", schema: "governance.schema.json#/$defs/contrastAllow", required: true },
+  { glob: "packages/governance/promotion-allow.json", schema: "governance.schema.json#/$defs/promotionAllow", required: true },
   { glob: "packages/registry/figma-axis-map.json", schema: "governance.schema.json#/$defs/figmaAxisMap", required: true },
   { glob: "packages/registry/aliases.json", schema: "registry.schema.json#/$defs/aliases", required: true },
   { glob: "packages/registry/contract-props.json", schema: "registry.schema.json#/$defs/contractProps", required: true },

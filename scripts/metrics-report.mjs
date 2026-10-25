@@ -51,7 +51,7 @@ const exists = (p) => fs.existsSync(p)
 // in a repo that has token-lint
 const tokenRules = exists(path.join(ROOT, "packages/governance/token-lint.mjs")) ? await import("./lib/token-rules.mjs") : null
 const registryLib = exists(path.join(ROOT, "packages/registry/src"))
-  ? { ...(await import("./lib/schemas.mjs")), ...(await import("./lib/registry-metrics.mjs")) }
+  ? { ...(await import("./lib/schemas.mjs")), ...(await import("./lib/registry-metrics.mjs")), ...(await import("./lib/registry-promotion.mjs")) }
   : null
 
 /* ── status resolution ──────────────────────────────────── */
@@ -157,6 +157,13 @@ function collectResults(manifest) {
       results.set(`registry:${id}`, !registryInvalid && r.fails.length === 0)
       coverage.set(`registry:${id}`, { text: registryLib.coverageText(r) })
     }
+    // DEC-097: registered versus production-ready, measured from the same functions as atlas-verify
+    const reg = registryLib.registeredMetric({ entries })
+    results.set("registry:design.registry-registered", !registryInvalid && reg.fails.length === 0)
+    coverage.set("registry:design.registry-registered", { text: `${reg.registered}/${reg.total} M3 types registered` })
+    const ready = registryLib.productionReadyMetric({ entries, evidence: registryLib.loadEvidence(ROOT) })
+    results.set("registry:design.registry-production-ready", !registryInvalid && ready.fails.length === 0)
+    coverage.set("registry:design.registry-production-ready", { text: `${ready.ready}/${ready.total} registered entries production-ready` })
   }
 
   // token-lint: the committed tree, measured by the same rules atlas-verify's code.raw-design-values and
