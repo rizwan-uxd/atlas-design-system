@@ -388,7 +388,7 @@ const editJson = (file, fn) => { const d = JSON.parse(fs.readFileSync(file, "utf
 test("--check passes on the committed repo", () => {
   const r = cli(REPO, "--check")
   assert.equal(r.code, 0, r.out)
-  assert.match(r.out, /PASS \(\d+ entries, 47 facts, 47 contracts, \d+ schemas, \d+ rules checked/)
+  assert.match(r.out, /PASS \(\d+ entries, 48 facts, 48 contracts, \d+ schemas, \d+ rules checked/)
 })
 
 test("--check fails on stale facts, and a build fixes them", () => {
