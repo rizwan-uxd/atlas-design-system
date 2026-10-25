@@ -441,11 +441,13 @@ check("code", "contrast", () => {
     fails.push(`${u.theme}: ${u.fg} on ${u.bg} — ${u.unresolvable}; an unmeasurable pair is a failure, not a pass`)
   for (const s of r.stale)
     fails.push(`${s.entry.theme}: ${s.entry.fg} on ${s.entry.bg} — ${s.why}`)
-  // light and dark, plus <brand>-light and <brand>-dark per [data-brand] block (M5.6)
-  const themes = [...new Set(r.pairs.map((p) => p.theme))]
-  const pairs = r.pairs.length / themes.length
+  // light and dark, plus <brand>-light and <brand>-dark per [data-brand] block, which measure only
+  // the pairs the brand changes (M5.6)
+  const pairs = new Set(r.pairs.map((p) => `${p.fg}|${p.bg}`)).size
+  const perTheme = {}
+  for (const p of r.pairs) perTheme[p.theme] = (perTheme[p.theme] ?? 0) + 1
   return { ...verdict(fails), inspected: r.pairs.length, scope: 1,
-    note: `${pairs} pairs · ${r.pairs.length} measurements (${themes.join("+")}) · ${r.allowed.length} allowed · ${r.violations.length} failing` }
+    note: `${pairs} pairs · ${r.pairs.length} measurements (${Object.entries(perTheme).map(([t, n]) => `${t} ${n}`).join(" + ")}) · ${r.allowed.length} allowed · ${r.violations.length} failing` }
 })
 
 check("code", "tsc", () => {

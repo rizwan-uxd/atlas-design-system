@@ -209,16 +209,21 @@ export function derivePairs(tokens) {
  */
 export function contrastCheck(css, allow = []) {
   const tokens = parseTokens(css)
-  const themes = [["light", tokens.light], ["dark", new Map([...tokens.light, ...tokens.dark])]]
+  const light = tokens.light, dark = new Map([...tokens.light, ...tokens.dark])
+  const themes = [["light", light], ["dark", dark]]
   // per brand: the light brand block also matches dark elements, so warm-dark inherits warm-light
-  // values and the dark brand block overrides them
+  // values and the dark brand block overrides them. A brand theme measures only the pairs the brand
+  // changes (owner, 2026-10-25): a pair resolving to the same colours as its base theme is already
+  // measured, and allowed, there.
   for (const [b, own] of Object.entries(tokens.brands)) {
-    themes.push([`${b}-light`, new Map([...tokens.light, ...own.light])])
-    themes.push([`${b}-dark`, new Map([...tokens.light, ...tokens.dark, ...own.light, ...own.dark])])
+    themes.push([`${b}-light`, new Map([...light, ...own.light]), light])
+    themes.push([`${b}-dark`, new Map([...dark, ...own.light, ...own.dark]), dark])
   }
+  const same = (name, a, z) => JSON.stringify(resolveColor(name, a)) === JSON.stringify(resolveColor(name, z))
   const pairs = []
-  for (const [theme, map] of themes) {
+  for (const [theme, map, base] of themes) {
     for (const { fg, bg, source } of derivePairs(tokens)) {
+      if (base && same(fg, map, base) && same(bg, map, base)) continue
       const f = resolveColor(fg, map), b = resolveColor(bg, map)
       if (!f.color || !b.color) {
         pairs.push({ fg, bg, theme, source, unresolvable: (!f.color && f.unresolvable) || b.unresolvable })

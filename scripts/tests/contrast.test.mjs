@@ -154,3 +154,14 @@ test("contrast is measured per brand and theme", () => {
   const warmDark = r.pairs.find((p) => p.theme === "warm-dark" && p.fg === "--atlas-primary-foreground" && p.bg === "--atlas-primary")
   assert.ok(warmDark.ratio < 4.5, "near-black on the darker coral fails here, proving the brand-dark map was used")
 })
+
+test("a brand theme measures only the pairs the brand changes; shared pairs stay with light and dark", () => {
+  const css = BRAND_CSS.replace(":root {", `:root {
+  --atlas-info: oklch(0.6 0.1 230);
+  --atlas-info-foreground: oklch(1 0 0);`)
+  const r = contrastCheck(css, [])
+  const info = r.pairs.filter((p) => p.fg === "--atlas-info-foreground").map((p) => p.theme).sort()
+  assert.deepEqual(info, ["dark", "light"], "info is not a brand colour, so warm themes do not re-measure it")
+  const primary = r.pairs.filter((p) => p.fg === "--atlas-primary-foreground").map((p) => p.theme).sort()
+  assert.deepEqual(primary, ["dark", "light", "warm-dark", "warm-light"])
+})

@@ -31,6 +31,17 @@
           "900": { "$type": "color", "$value": "oklch(0.336 0.120 264)" },
           "950": { "$type": "color", "$value": "oklch(0.245 0.085 264)" }
         },
+        "coral": {
+          "50":  { "$type": "color", "$value": "oklch(0.934 0.041 58)" },
+          "200": { "$type": "color", "$value": "oklch(0.868 0.073 40)" },
+          "300": { "$type": "color", "$value": "oklch(0.819 0.089 37)" },
+          "400": { "$type": "color", "$value": "oklch(0.739 0.093 37)" },
+          "500": { "$type": "color", "$value": "oklch(0.620 0.098 37)" },
+          "600": { "$type": "color", "$value": "oklch(0.539 0.096 37)" },
+          "700": { "$type": "color", "$value": "oklch(0.459 0.093 37)" },
+          "800": { "$type": "color", "$value": "oklch(0.379 0.089 37)" },
+          "900": { "$type": "color", "$value": "oklch(0.300 0.085 37)" }
+        },
         "success": {
           "50":  { "$type": "color", "$value": "oklch(0.972 0.024 155)" },
           "100": { "$type": "color", "$value": "oklch(0.938 0.052 155)" },
@@ -143,6 +154,27 @@
           "info-foreground":        { "$type": "color", "$value": "{atlas.color.primitive.neutral.0}" },
           "focus-ring":             { "$type": "color", "$value": "{atlas.color.primitive.brand.400}" },
           "overlay":                { "$type": "color", "$value": "{atlas.color.primitive.neutral.1000}" }
+        }
+      },
+      "brand": {
+        "$description": "M5.6 (DEC-091): a brand changes colour only. Atlas is the default (color.semantic); each brand overrides these six per theme, spelled in CSS as [data-brand] blocks.",
+        "warm": {
+          "light": {
+            "primary":              { "$type": "color", "$value": "{atlas.color.primitive.coral.600}" },
+            "primary-hover":        { "$type": "color", "$value": "{atlas.color.primitive.coral.700}" },
+            "primary-active":       { "$type": "color", "$value": "{atlas.color.primitive.coral.800}" },
+            "primary-subtle":       { "$type": "color", "$value": "{atlas.color.primitive.coral.50}" },
+            "focus-ring":           { "$type": "color", "$value": "{atlas.color.primitive.coral.500}" },
+            "primary-foreground":   { "$type": "color", "$value": "{atlas.color.primitive.neutral.0}" }
+          },
+          "dark": {
+            "primary":              { "$type": "color", "$value": "{atlas.color.primitive.coral.400}" },
+            "primary-hover":        { "$type": "color", "$value": "{atlas.color.primitive.coral.300}" },
+            "primary-active":       { "$type": "color", "$value": "{atlas.color.primitive.coral.200}" },
+            "primary-subtle":       { "$type": "color", "$value": "{atlas.color.primitive.coral.900}" },
+            "focus-ring":           { "$type": "color", "$value": "{atlas.color.primitive.coral.300}" },
+            "primary-foreground":   { "$type": "color", "$value": "{atlas.color.primitive.neutral.950}" }
+          }
         }
       }
     },

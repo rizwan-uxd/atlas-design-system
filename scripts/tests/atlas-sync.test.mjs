@@ -478,7 +478,7 @@ const TABLE = {
   collections: [{ name: "Atlas/Primitives", modes: ["Default"], count: 2 }],
   entries: [
     { name: "spacing/2", collection: "Atlas/Primitives", type: "FLOAT", web: "var(--atlas-spacing-2)" },
-    { name: "color/coral/500", collection: "Atlas/Primitives", type: "COLOR", web: null },
+    { name: "color/coral/100", collection: "Atlas/Primitives", type: "COLOR", web: null },
   ],
 }
 const syncWith = (dir, ...args) => execFileSync("node", [path.join(dir, "scripts/atlas-sync.mjs"), ...args], { encoding: "utf8", stdio: "pipe" })
@@ -493,7 +493,7 @@ test("--variables writes figmaTable with its own stamp, leaves the token values 
     assert.equal(tokens.syncedAt, null)
     assert.match(tokens.source, /^repo-derived/)
     assert.equal(tokens.figmaTable.syncedAt, TABLE.pulledAt)
-    assert.deepEqual(tokens.figmaTable.unpublished, ["color/coral/500"])
+    assert.deepEqual(tokens.figmaTable.unpublished, ["color/coral/100"])
     assert.equal(tokens.figmaTable.coverage.figmaVariables, 2)
     assert.ok(tokens.figmaTable.drift.missingInFigma.length > 0) // a two-variable table cannot name the whole CSS
     assert.equal(writtenCount(sync(dir)), 0, "a sync with no table carries the last one forward unchanged")
