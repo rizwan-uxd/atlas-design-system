@@ -1,0 +1,42 @@
+{
+  "protocol.promptReduction": {
+    "overheadTokens": 641,
+    "pass": true,
+    "min": 0.676040061633282,
+    "mean": 0.7614840366035706,
+    "perTask": {
+      "request-access": {
+        "filtered": 841,
+        "full": 2596,
+        "reduction": 0.676040061633282
+      },
+      "confirm": {
+        "filtered": 538,
+        "full": 2596,
+        "reduction": 0.7927580893682589
+      },
+      "notice": {
+        "filtered": 538,
+        "full": 2601,
+        "reduction": 0.7931564782775855
+      },
+      "text-entry": {
+        "filtered": 561,
+        "full": 2597,
+        "reduction": 0.783981517135156
+      }
+    }
+  },
+  "protocol.firstOpP95": {
+    "pass": false,
+    "p95Ms": 5240.137583000003,
+    "n": 20,
+    "noValidOp": 0,
+    "excluded": 0
+  },
+  "protocol.agentCompliance": {
+    "pass": false,
+    "markupReps": 8,
+    "n": 20
+  }
+}

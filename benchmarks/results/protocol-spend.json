@@ -1,0 +1,15 @@
+{
+  "cap": 3,
+  "runs": [
+    {
+      "label": "protocol-v1",
+      "task": "P1",
+      "run": 1,
+      "costUsd": 0.10388199999999999,
+      "date": "2026-10-25T06:46:13.323Z",
+      "stop": [],
+      "infra": false
+    }
+  ],
+  "interactive": []
+}
