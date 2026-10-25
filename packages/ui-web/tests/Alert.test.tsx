@@ -12,6 +12,8 @@
  */
 
 import React from "react"
+import fs from "node:fs"
+import path from "node:path"
 import { describe, it, expect, vi } from "vitest"
 import { render, screen, fireEvent } from "@testing-library/react"
 import { axe } from "jest-axe"
@@ -221,4 +223,61 @@ describe("Alert — a11y (axe)", () => {
       expect(results).toHaveNoViolations()
     })
   }
+})
+
+// ─── 8. Text colour and the dismiss control (Figma: title and description are foreground) ─────────
+
+const css = fs.readFileSync(path.join(__dirname, "../src/compositions/Alert/Alert.module.css"), "utf8")
+const rule = (selector: string) => {
+  const m = css.match(new RegExp(`(?:^|\\n)${selector.replace(/[.:]/g, "\\$&")}\\s*\\{([^}]*)\\}`))
+  if (!m) throw new Error(`no ${selector} rule in Alert.module.css`)
+  return m[1]
+}
+
+describe("Alert — text colour regression", () => {
+  it("the title is foreground, not the variant accent it used to inherit", () => {
+    expect(rule(".title")).toMatch(/color:\s*var\(--atlas-foreground\)/)
+    expect(rule(".title")).not.toMatch(/color:\s*inherit/)
+  })
+
+  it("the description is foreground", () => {
+    expect(rule(".description")).toMatch(/color:\s*var\(--atlas-foreground\)/)
+  })
+
+  it("the dismiss glyph is foreground, not the accent", () => {
+    expect(rule(".dismissBtn")).toMatch(/color:\s*var\(--atlas-foreground\)/)
+  })
+
+  it("the accent stays on the variant rules (fill, border, icon), never on text elements", () => {
+    for (const v of ["info", "success", "warning", "danger"]) {
+      const r = rule(`.${v}`)
+      expect(r).toMatch(new RegExp(`background-color:\\s*var\\(--atlas-${v}-subtle\\)`))
+      expect(r).toMatch(new RegExp(`border-color:\\s*var\\(--atlas-${v}-muted\\)`))
+      expect(r).toMatch(new RegExp(`--_accent:\\s*var\\(--atlas-${v}\\)`))
+    }
+  })
+})
+
+describe("Alert — dismiss control", () => {
+  it.each(["info", "success", "warning", "danger", "neutral"] as const)("%s: a real focusable button with an accessible name", (variant) => {
+    render(<Alert variant={variant} dismissible title="Heads up" />)
+    const btn = screen.getByRole("button", { name: `Dismiss ${variant} alert` })
+    expect(btn.tagName).toBe("BUTTON") // native button: Enter and Space activate it
+    expect(btn).toHaveAttribute("type", "button")
+    expect(btn).not.toHaveAttribute("tabindex", "-1")
+    btn.focus()
+    expect(btn).toHaveFocus()
+  })
+
+  it("shows a visible focus ring with the focus-ring token, offset from the glyph", () => {
+    const r = rule(".dismissBtn:focus-visible")
+    expect(r).toMatch(/outline:[^;]*var\(--atlas-focus-ring\)/)
+    expect(r).toMatch(/outline-offset:/)
+  })
+
+  it("the leading icon is decorative (aria-hidden), whatever the variant", () => {
+    const { container } = render(<Alert variant="warning" title="Careful" />)
+    const icon = container.querySelector("svg")!.closest("[aria-hidden]")
+    expect(icon).toHaveAttribute("aria-hidden", "true")
+  })
 })
