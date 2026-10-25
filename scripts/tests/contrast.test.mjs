@@ -119,3 +119,49 @@ test("an alpha colour the check cannot composite fails closed, never passes sile
 })
 
 test("AA threshold is WCAG normal text", () => assert.equal(AA_NORMAL, 4.5))
+
+const BRAND_CSS = `:root {
+  --atlas-color-a: oklch(0.55 0.2 264);
+  --atlas-color-b: oklch(0.54 0.096 37);
+  --atlas-color-w: oklch(1 0 0);
+  --atlas-color-k: oklch(0.145 0.008 247);
+  --atlas-primary: var(--atlas-color-a);
+  --atlas-primary-foreground: var(--atlas-color-w);
+}
+[data-theme="dark"], .dark {
+  --atlas-primary: var(--atlas-color-a);
+}
+[data-brand="warm"] {
+  --atlas-primary: var(--atlas-color-b);
+}
+[data-brand="warm"]:is([data-theme="dark"], .dark), [data-brand="warm"] :is([data-theme="dark"], .dark), :is([data-theme="dark"], .dark) [data-brand="warm"] {
+  --atlas-primary-foreground: var(--atlas-color-k);
+}`
+
+test("a brand block never leaks into the base light or dark maps", () => {
+  const t = parseTokens(BRAND_CSS)
+  assert.equal(t.light.get("--atlas-primary"), "var(--atlas-color-a)")
+  assert.equal(t.dark.get("--atlas-primary"), "var(--atlas-color-a)")
+  assert.equal(t.dark.has("--atlas-primary-foreground"), false)
+  assert.equal(t.brands.warm.light.get("--atlas-primary"), "var(--atlas-color-b)")
+  assert.equal(t.brands.warm.dark.get("--atlas-primary-foreground"), "var(--atlas-color-k)")
+})
+
+test("contrast is measured per brand and theme", () => {
+  const r = contrastCheck(BRAND_CSS, [])
+  const themes = [...new Set(r.pairs.map((p) => p.theme))].sort()
+  assert.deepEqual(themes, ["dark", "light", "warm-dark", "warm-light"])
+  const warmDark = r.pairs.find((p) => p.theme === "warm-dark" && p.fg === "--atlas-primary-foreground" && p.bg === "--atlas-primary")
+  assert.ok(warmDark.ratio < 4.5, "near-black on the darker coral fails here, proving the brand-dark map was used")
+})
+
+test("a brand theme measures only the pairs the brand changes; shared pairs stay with light and dark", () => {
+  const css = BRAND_CSS.replace(":root {", `:root {
+  --atlas-info: oklch(0.6 0.1 230);
+  --atlas-info-foreground: oklch(1 0 0);`)
+  const r = contrastCheck(css, [])
+  const info = r.pairs.filter((p) => p.fg === "--atlas-info-foreground").map((p) => p.theme).sort()
+  assert.deepEqual(info, ["dark", "light"], "info is not a brand colour, so warm themes do not re-measure it")
+  const primary = r.pairs.filter((p) => p.fg === "--atlas-primary-foreground").map((p) => p.theme).sort()
+  assert.deepEqual(primary, ["dark", "light", "warm-dark", "warm-light"])
+})

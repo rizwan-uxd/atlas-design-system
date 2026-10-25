@@ -1,6 +1,6 @@
 {
   "version": "1.1",
-  "notes": ["Figma OPACITY-scoped variables hold percent (50 = 50%). CSS tokens in atlas.tokens.css hold fractions (0.5). An importer must divide opacity/* by 100. See DEC-058.","Shadows (M5.5, DEC-090): Figma has no shadow variable. Effect styles shadow/sm|md|lg|xl|raised|surface|popover|floating|modal and card/elevated-shadow(-hover) hold fixed geometry; each layer colour binds a shadow/color-* variable above (Figma-only, no WEB syntax). The CSS keeps whole shadows in --atlas-shadow-*."],
+  "notes": ["Figma OPACITY-scoped variables hold percent (50 = 50%). CSS tokens in atlas.tokens.css hold fractions (0.5). An importer must divide opacity/* by 100. See DEC-058.","Shadows (M5.5, DEC-090): Figma has no shadow variable. Effect styles shadow/sm|md|lg|xl|raised|surface|popover|floating|modal and card/elevated-shadow(-hover) hold fixed geometry; each layer colour binds a shadow/color-* variable above (Figma-only, no WEB syntax). The CSS keeps whole shadows in --atlas-shadow-*.","Brands (M5.6, DEC-091): Atlas/Brand modes Atlas and Warm hold the six brand colours per theme (light/*, dark/*), Figma-only with no WEB syntax; the six Atlas/Semantic brand colours alias them. The CSS spells a brand as [data-brand] blocks."],
   "collections": [
     {
       "name": "Atlas/Primitives",
@@ -30,6 +30,15 @@
         { "name": "color/brand/800", "type": "COLOR", "values": { "Default": "oklch(0.398 0.150 264)" } },
         { "name": "color/brand/900", "type": "COLOR", "values": { "Default": "oklch(0.336 0.120 264)" } },
         { "name": "color/brand/950", "type": "COLOR", "values": { "Default": "oklch(0.245 0.085 264)" } },
+        { "name": "color/coral/50", "type": "COLOR", "values": { "Default": "oklch(0.934 0.041 58)" } },
+        { "name": "color/coral/200", "type": "COLOR", "values": { "Default": "oklch(0.868 0.073 40)" } },
+        { "name": "color/coral/300", "type": "COLOR", "values": { "Default": "oklch(0.819 0.089 37)" } },
+        { "name": "color/coral/400", "type": "COLOR", "values": { "Default": "oklch(0.739 0.093 37)" } },
+        { "name": "color/coral/500", "type": "COLOR", "values": { "Default": "oklch(0.620 0.098 37)" } },
+        { "name": "color/coral/600", "type": "COLOR", "values": { "Default": "oklch(0.539 0.096 37)" } },
+        { "name": "color/coral/700", "type": "COLOR", "values": { "Default": "oklch(0.459 0.093 37)" } },
+        { "name": "color/coral/800", "type": "COLOR", "values": { "Default": "oklch(0.379 0.089 37)" } },
+        { "name": "color/coral/900", "type": "COLOR", "values": { "Default": "oklch(0.300 0.085 37)" } },
         { "name": "color/success/50", "type": "COLOR", "values": { "Default": "oklch(0.972 0.024 155)" } },
         { "name": "color/success/100", "type": "COLOR", "values": { "Default": "oklch(0.938 0.052 155)" } },
         { "name": "color/success/500", "type": "COLOR", "values": { "Default": "oklch(0.628 0.155 155)" } },
@@ -138,6 +147,24 @@
       ]
     },
     {
+      "name": "Atlas/Brand",
+      "modes": ["Atlas", "Warm"],
+      "variables": [
+        { "name": "light/primary", "type": "COLOR", "values": { "Atlas": { "alias": "Atlas/Primitives:color/brand/600" }, "Warm": { "alias": "Atlas/Primitives:color/coral/600" } } },
+        { "name": "light/primary-hover", "type": "COLOR", "values": { "Atlas": { "alias": "Atlas/Primitives:color/brand/700" }, "Warm": { "alias": "Atlas/Primitives:color/coral/700" } } },
+        { "name": "light/primary-active", "type": "COLOR", "values": { "Atlas": { "alias": "Atlas/Primitives:color/brand/800" }, "Warm": { "alias": "Atlas/Primitives:color/coral/800" } } },
+        { "name": "light/primary-subtle", "type": "COLOR", "values": { "Atlas": { "alias": "Atlas/Primitives:color/brand/50" }, "Warm": { "alias": "Atlas/Primitives:color/coral/50" } } },
+        { "name": "light/focus-ring", "type": "COLOR", "values": { "Atlas": { "alias": "Atlas/Primitives:color/brand/500" }, "Warm": { "alias": "Atlas/Primitives:color/coral/500" } } },
+        { "name": "light/primary-foreground", "type": "COLOR", "values": { "Atlas": { "alias": "Atlas/Primitives:color/neutral/0" }, "Warm": { "alias": "Atlas/Primitives:color/neutral/0" } } },
+        { "name": "dark/primary", "type": "COLOR", "values": { "Atlas": { "alias": "Atlas/Primitives:color/brand/500" }, "Warm": { "alias": "Atlas/Primitives:color/coral/400" } } },
+        { "name": "dark/primary-hover", "type": "COLOR", "values": { "Atlas": { "alias": "Atlas/Primitives:color/brand/400" }, "Warm": { "alias": "Atlas/Primitives:color/coral/300" } } },
+        { "name": "dark/primary-active", "type": "COLOR", "values": { "Atlas": { "alias": "Atlas/Primitives:color/brand/300" }, "Warm": { "alias": "Atlas/Primitives:color/coral/200" } } },
+        { "name": "dark/primary-subtle", "type": "COLOR", "values": { "Atlas": { "alias": "Atlas/Primitives:color/brand/950" }, "Warm": { "alias": "Atlas/Primitives:color/coral/900" } } },
+        { "name": "dark/focus-ring", "type": "COLOR", "values": { "Atlas": { "alias": "Atlas/Primitives:color/brand/400" }, "Warm": { "alias": "Atlas/Primitives:color/coral/300" } } },
+        { "name": "dark/primary-foreground", "type": "COLOR", "values": { "Atlas": { "alias": "Atlas/Primitives:color/neutral/0" }, "Warm": { "alias": "Atlas/Primitives:color/neutral/950" } } }
+      ]
+    },
+    {
       "name": "Atlas/Semantic",
       "modes": ["Light", "Dark"],
       "variables": [
@@ -158,11 +185,11 @@
         { "name": "foreground-subtle", "type": "COLOR", "values": { "Light": { "alias": "Atlas/Primitives:color/neutral/500" }, "Dark": { "alias": "Atlas/Primitives:color/neutral/500" } } },
         { "name": "foreground-disabled", "type": "COLOR", "values": { "Light": { "alias": "Atlas/Primitives:color/neutral/400" }, "Dark": { "alias": "Atlas/Primitives:color/neutral/600" } } },
         { "name": "foreground-on-brand", "type": "COLOR", "values": { "Light": { "alias": "Atlas/Primitives:color/neutral/0" }, "Dark": { "alias": "Atlas/Primitives:color/neutral/0" } } },
-        { "name": "primary", "type": "COLOR", "values": { "Light": { "alias": "Atlas/Primitives:color/brand/600" }, "Dark": { "alias": "Atlas/Primitives:color/brand/500" } } },
-        { "name": "primary-hover", "type": "COLOR", "values": { "Light": { "alias": "Atlas/Primitives:color/brand/700" }, "Dark": { "alias": "Atlas/Primitives:color/brand/400" } } },
-        { "name": "primary-active", "type": "COLOR", "values": { "Light": { "alias": "Atlas/Primitives:color/brand/800" }, "Dark": { "alias": "Atlas/Primitives:color/brand/300" } } },
-        { "name": "primary-subtle", "type": "COLOR", "values": { "Light": { "alias": "Atlas/Primitives:color/brand/50" }, "Dark": { "alias": "Atlas/Primitives:color/brand/950" } } },
-        { "name": "primary-foreground", "type": "COLOR", "values": { "Light": { "alias": "Atlas/Primitives:color/neutral/0" }, "Dark": { "alias": "Atlas/Primitives:color/neutral/0" } } },
+        { "name": "primary", "type": "COLOR", "values": { "Light": { "alias": "Atlas/Brand:light/primary" }, "Dark": { "alias": "Atlas/Brand:dark/primary" } } },
+        { "name": "primary-hover", "type": "COLOR", "values": { "Light": { "alias": "Atlas/Brand:light/primary-hover" }, "Dark": { "alias": "Atlas/Brand:dark/primary-hover" } } },
+        { "name": "primary-active", "type": "COLOR", "values": { "Light": { "alias": "Atlas/Brand:light/primary-active" }, "Dark": { "alias": "Atlas/Brand:dark/primary-active" } } },
+        { "name": "primary-subtle", "type": "COLOR", "values": { "Light": { "alias": "Atlas/Brand:light/primary-subtle" }, "Dark": { "alias": "Atlas/Brand:dark/primary-subtle" } } },
+        { "name": "primary-foreground", "type": "COLOR", "values": { "Light": { "alias": "Atlas/Brand:light/primary-foreground" }, "Dark": { "alias": "Atlas/Brand:dark/primary-foreground" } } },
         { "name": "success", "type": "COLOR", "values": { "Light": { "alias": "Atlas/Primitives:color/success/600" }, "Dark": { "alias": "Atlas/Primitives:color/success/500" } } },
         { "name": "success-subtle", "type": "COLOR", "values": { "Light": { "alias": "Atlas/Primitives:color/success/50" }, "Dark": { "alias": "Atlas/Primitives:color/success/900" } } },
         { "name": "success-foreground", "type": "COLOR", "values": { "Light": { "alias": "Atlas/Primitives:color/neutral/0" }, "Dark": { "alias": "Atlas/Primitives:color/neutral/950" } } },
@@ -176,7 +203,7 @@
         { "name": "info", "type": "COLOR", "values": { "Light": { "alias": "Atlas/Primitives:color/info/600" }, "Dark": { "alias": "Atlas/Primitives:color/info/500" } } },
         { "name": "info-subtle", "type": "COLOR", "values": { "Light": { "alias": "Atlas/Primitives:color/info/50" }, "Dark": { "alias": "Atlas/Primitives:color/info/900" } } },
         { "name": "info-foreground", "type": "COLOR", "values": { "Light": { "alias": "Atlas/Primitives:color/neutral/0" }, "Dark": { "alias": "Atlas/Primitives:color/neutral/0" } } },
-        { "name": "focus-ring", "type": "COLOR", "values": { "Light": { "alias": "Atlas/Primitives:color/brand/500" }, "Dark": { "alias": "Atlas/Primitives:color/brand/400" } } },
+        { "name": "focus-ring", "type": "COLOR", "values": { "Light": { "alias": "Atlas/Brand:light/focus-ring" }, "Dark": { "alias": "Atlas/Brand:dark/focus-ring" } } },
         { "name": "overlay", "type": "COLOR", "values": { "Light": { "alias": "Atlas/Primitives:color/neutral/950" }, "Dark": { "alias": "Atlas/Primitives:color/neutral/1000" } } },
         { "name": "avatar-squircle-radius-xs", "type": "FLOAT", "values": { "Light": { "alias": "Atlas/Primitives:radius/md" }, "Dark": { "alias": "Atlas/Primitives:radius/md" } } },
         { "name": "avatar-squircle-radius-sm", "type": "FLOAT", "values": { "Light": { "alias": "Atlas/Primitives:radius/md" }, "Dark": { "alias": "Atlas/Primitives:radius/md" } } },

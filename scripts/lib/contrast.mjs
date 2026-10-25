@@ -95,10 +95,27 @@ function parseColor(value) {
  * A block joins light when a selector is `:root`, dark when a selector carries `[data-theme="dark"]`
  * or `.dark` — the shared `:root, [data-theme="dark"], .dark` block therefore joins both, and file
  * order preserves the cascade when a token is re-declared.
+ *
+ * A selector part carrying `[data-brand="x"]` never joins the base maps (M5.6, DEC-091): it joins
+ * `brands.x.dark` when it also carries a dark marker, else `brands.x.light`. Parts are split on
+ * top-level commas only, so `[data-brand="warm"]:is([data-theme="dark"], .dark)` stays one part.
  */
+const splitSelector = (selector) => {
+  const parts = []
+  let depth = 0, start = 0
+  for (let k = 0; k < selector.length; k++) {
+    if (selector[k] === "(") depth++
+    else if (selector[k] === ")") depth--
+    else if (selector[k] === "," && depth === 0) { parts.push(selector.slice(start, k).trim()); start = k + 1 }
+  }
+  parts.push(selector.slice(start).trim())
+  return parts
+}
+const isDarkPart = (s) => s.includes('[data-theme="dark"') || s === ".dark" || s.startsWith(".dark ") || /[\s(,]\.dark\b/.test(s)
+
 export function parseTokens(css) {
   const src = css.replace(/\/\*[\s\S]*?\*\//g, "")
-  const light = new Map(), dark = new Map()
+  const light = new Map(), dark = new Map(), brands = {}
   let i = 0
   while (i < src.length) {
     const open = src.indexOf("{", i)
@@ -113,18 +130,21 @@ export function parseTokens(css) {
     }
     const body = src.slice(open + 1, j - 1)
     if (!selector.startsWith("@")) {
-      const sel = selector.split(",").map((s) => s.trim())
-      const intoLight = sel.some((s) => s === ":root")
-      const intoDark = sel.some((s) => s.includes('[data-theme="dark"') || s === ".dark" || s.startsWith(".dark "))
-      if (intoLight || intoDark)
-        for (const m of body.matchAll(/(--atlas-[\w-]+)\s*:\s*([^;]+);/g)) {
-          if (intoLight) light.set(m[1], m[2].trim())
-          if (intoDark) dark.set(m[1], m[2].trim())
-        }
+      const targets = new Set()
+      for (const s of splitSelector(selector)) {
+        const brand = s.match(/\[data-brand="([\w-]+)"\]/)?.[1]
+        if (brand) {
+          brands[brand] ??= { light: new Map(), dark: new Map() }
+          targets.add(brands[brand][isDarkPart(s) ? "dark" : "light"])
+        } else if (s === ":root") targets.add(light)
+        else if (isDarkPart(s)) targets.add(dark)
+      }
+      for (const m of body.matchAll(/(--atlas-[\w-]+)\s*:\s*([^;]+);/g))
+        for (const map of targets) map.set(m[1], m[2].trim())
     }
     i = j
   }
-  return { light, dark }
+  return { light, dark, brands }
 }
 
 /** Resolve a token through its var() chain to an opaque colour; { color } or { unresolvable }. */
@@ -189,10 +209,21 @@ export function derivePairs(tokens) {
  */
 export function contrastCheck(css, allow = []) {
   const tokens = parseTokens(css)
-  const themes = [["light", tokens.light], ["dark", new Map([...tokens.light, ...tokens.dark])]]
+  const light = tokens.light, dark = new Map([...tokens.light, ...tokens.dark])
+  const themes = [["light", light], ["dark", dark]]
+  // per brand: the light brand block also matches dark elements, so warm-dark inherits warm-light
+  // values and the dark brand block overrides them. A brand theme measures only the pairs the brand
+  // changes (owner, 2026-10-25): a pair resolving to the same colours as its base theme is already
+  // measured, and allowed, there.
+  for (const [b, own] of Object.entries(tokens.brands)) {
+    themes.push([`${b}-light`, new Map([...light, ...own.light]), light])
+    themes.push([`${b}-dark`, new Map([...dark, ...own.light, ...own.dark]), dark])
+  }
+  const same = (name, a, z) => JSON.stringify(resolveColor(name, a)) === JSON.stringify(resolveColor(name, z))
   const pairs = []
-  for (const [theme, map] of themes) {
+  for (const [theme, map, base] of themes) {
     for (const { fg, bg, source } of derivePairs(tokens)) {
+      if (base && same(fg, map, base) && same(bg, map, base)) continue
       const f = resolveColor(fg, map), b = resolveColor(bg, map)
       if (!f.color || !b.color) {
         pairs.push({ fg, bg, theme, source, unresolvable: (!f.color && f.unresolvable) || b.unresolvable })

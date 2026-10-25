@@ -27,6 +27,17 @@
   --atlas-color-brand-900: oklch(0.336 0.120 264);
   --atlas-color-brand-950: oklch(0.245 0.085 264);
 
+  /* Coral (warm brand, M5.6) */
+  --atlas-color-coral-50: oklch(0.934 0.041 58);
+  --atlas-color-coral-200: oklch(0.868 0.073 40);
+  --atlas-color-coral-300: oklch(0.819 0.089 37);
+  --atlas-color-coral-400: oklch(0.739 0.093 37);
+  --atlas-color-coral-500: oklch(0.620 0.098 37);
+  --atlas-color-coral-600: oklch(0.539 0.096 37);
+  --atlas-color-coral-700: oklch(0.459 0.093 37);
+  --atlas-color-coral-800: oklch(0.379 0.089 37);
+  --atlas-color-coral-900: oklch(0.300 0.085 37);
+
   /* ─────────────── Color · Primitive · Semantic scales ─────────────── */
   --atlas-color-success-50: oklch(0.972 0.024 155);
   --atlas-color-success-100: oklch(0.938 0.052 155);
@@ -391,6 +402,27 @@
   --atlas-shadow-xl: 0 8px 16px -4px oklch(0 0 0 / 0.55), 0 24px 48px -8px oklch(0 0 0 / 0.60);
 }
 
+/* ─────────────── M5.6 brand: warm (Kind B, DEC-091) ───────────────
+   A brand changes colour only: six semantic colours per theme. Warm dark (0,2,0) beats Atlas dark
+   (0,1,0) and warm light on every brand/theme nesting. Atlas is the default: no selector. */
+[data-brand="warm"] {
+  --atlas-primary: var(--atlas-color-coral-600);
+  --atlas-primary-hover: var(--atlas-color-coral-700);
+  --atlas-primary-active: var(--atlas-color-coral-800);
+  --atlas-primary-subtle: var(--atlas-color-coral-50);
+  --atlas-focus-ring: var(--atlas-color-coral-500);
+  --atlas-primary-foreground: var(--atlas-color-neutral-0);
+}
+
+[data-brand="warm"]:is([data-theme="dark"], .dark), [data-brand="warm"] :is([data-theme="dark"], .dark), :is([data-theme="dark"], .dark) [data-brand="warm"] {
+  --atlas-primary: var(--atlas-color-coral-400);
+  --atlas-primary-hover: var(--atlas-color-coral-300);
+  --atlas-primary-active: var(--atlas-color-coral-200);
+  --atlas-primary-subtle: var(--atlas-color-coral-900);
+  --atlas-focus-ring: var(--atlas-color-coral-300);
+  --atlas-primary-foreground: var(--atlas-color-neutral-950);
+}
+
 /* ─────────────── M5.5 semantic shadow roles (Kind B, DEC-090) ───────────────
    Declared on the dark selectors too: a role resolved only on :root would carry the light
    value into a [data-theme="dark"] or .dark subtree. */
@@ -407,14 +439,16 @@
 /* ─────────────── Component tokens (Atlas implementation tokens) ───────────────
    For implementing and documenting Atlas components. Every token aliases a semantic
    token; product code uses the semantic tokens instead. Declared on the same selectors
-   as the theme blocks so a .dark subtree re-resolves each alias.
+   as the theme blocks so a .dark subtree re-resolves each alias, and under [data-brand],
+   so a brand subtree re-resolves each alias too (M5.6).
    Naming: colour/state  --atlas-<component>-<variant>-<property>[-<state>]
            size          --atlas-<component>-size-<size>-<property>
    Spec: docs/superpowers/specs/2026-10-09-component-tokens-design.md */
 /* BEGIN:component-tokens */
 :root,
 [data-theme="dark"],
-.dark {
+.dark,
+[data-brand] {
   /* Button · colour */
   --atlas-button-primary-background: var(--atlas-primary);
   --atlas-button-primary-background-hover: var(--atlas-primary-hover);
