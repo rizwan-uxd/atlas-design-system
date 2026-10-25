@@ -23,7 +23,7 @@ describe("registry/filter >", () => {
 describe("registry/without >", () => {
   it("removes one entry and its schema and leaves the shared registry alone", () => {
     const r = without("Alert")
-    expect(Object.keys(r.entries).sort()).toEqual(["Button", "Field", "Form", "TextField"])
+    expect(Object.keys(r.entries).sort()).toEqual(["Button", "Field", "Form", "Text", "TextField"])
     expect(r.schemas).not.toHaveProperty("Alert")
     expect(registry.entries).toHaveProperty("Alert")
   })

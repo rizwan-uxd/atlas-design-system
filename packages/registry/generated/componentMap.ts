@@ -5,11 +5,13 @@ import { Alert } from "@atlas/ui-web/compositions/Alert/Alert"
 import { Button } from "@atlas/ui-web/primitives/Button/Button"
 import { Field } from "@atlas/ui-web/compositions/Field/Field"
 import { Input } from "@atlas/ui-web/primitives/Input/Input"
+import { Text } from "@atlas/ui-web/primitives/Text/Text"
 
 export const componentMap = {
   Alert,
   Button,
   Field,
+  Text,
   TextField: Input,
 } as const
 

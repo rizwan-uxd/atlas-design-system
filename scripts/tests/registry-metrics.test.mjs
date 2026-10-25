@@ -43,6 +43,16 @@ test("interactive is decided from facts, so an entry cannot opt out by omission"
   assert.match(text(own.events), /Notice: interactive, but declares no events/)
 })
 
+test("a display-only capability is not interactive, but a handler prop or another capability still is", () => {
+  const display = run((s) => { s.entries.Notice.capabilities = ["display"] })
+  assert.deepEqual([display.events.scope, display.events.inspected], [2, 2], "Notice with display only stays out")
+  assert.deepEqual(display.events.fails, [])
+  const handler = run((s) => { s.entries.Notice.capabilities = ["display"]; s.facts.Notice.props.push({ name: "onClose" }) })
+  assert.match(text(handler.events), /Notice: interactive, but declares no events/)
+  const mixed = run((s) => { s.entries.Notice.capabilities = ["display", "dismiss"] })
+  assert.match(text(mixed.events), /Notice: interactive, but declares no events/)
+})
+
 test("FAIL events: a handler the component does not have", () => {
   assert.match(text(run((s) => { s.entries.Widget.events.press.handler = "onPress" }).events), /event "press" → onPress, which Widget does not have/)
 })

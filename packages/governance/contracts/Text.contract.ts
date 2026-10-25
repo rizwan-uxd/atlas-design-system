@@ -30,3 +30,8 @@ type Union_variant = Assert<Exact<NonNullable<P["variant"]>, "body" | "body-sm" 
 type Type_TextElement = Assert<Exact<TextElement, "div" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "p" | "span">>
 type Type_TextTone = Assert<Exact<TextTone, "default" | "muted">>
 type Type_TextVariant = Assert<Exact<TextVariant, "body" | "body-sm" | "caption" | "heading" | "label" | "overline" | "title">>
+
+// registry Text: its protocolProps and event handlers exist
+type Registry_Text_variant = Assert<Has<P, "variant">>
+type Registry_Text_tone = Assert<Has<P, "tone">>
+type Registry_Text_as = Assert<Has<P, "as">>

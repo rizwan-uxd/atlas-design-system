@@ -12,6 +12,9 @@
       "outOfTask": ["Form", "Field", "TextField", "Toast", "Dialog"] },
     { "id": "text-entry", "task": "A single text entry", "capabilities": ["input"],
       "expected": ["Alert", "TextField"],
-      "outOfTask": ["Form", "Button", "Field", "Textarea", "Select"] }
+      "outOfTask": ["Form", "Button", "Field", "Textarea", "Select"] },
+    { "id": "static-copy", "task": "Static copy", "capabilities": ["display"],
+      "expected": ["Alert", "Text"],
+      "outOfTask": ["Form", "Button", "Field", "TextField", "Dialog"] }
   ]
 }
