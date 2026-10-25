@@ -121,15 +121,16 @@ fails when this region is stale. Statuses are exactly three: **passing** (a decl
 **failing** (ran and failed), **not measurable** (no result for the declared check — reported as `n/a`,
 never `0`). A metric with no check is *not measurable*, never passing: absence of a signal is not a pass.
 
-**27 passing · 3 failing · 6 not measurable** of 36. 3 of the measured rows cover only part of their population; the row says how much.
+**28 passing · 5 failing · 4 not measurable** of 37. 3 of the measured rows cover only part of their population; the row says how much.
 
-Result sources read: `atlas-verify`, `vitest`, `playwright`, `atlas-sync`, `registry`, `token-lint`. Sources not present leave their metrics not measurable.
+Result sources read: `atlas-verify`, `vitest`, `playwright`, `atlas-sync`, `registry`, `token-lint`, `bench`. Sources not present leave their metrics not measurable.
 
 ### Catalog Over Code
 
 | Metric | Target | Status | Check | Measurable at |
 |---|---:|---|---|---|
 | Agent outputs containing CSS, HTML, JSX, or arbitrary markup | 0 | **passing** | `runtime/validator > rejects markup in prop values` | M4 |
+| Agent outputs containing CSS, HTML, JSX, or markup (agent compliance) | 0 | **failing** | `protocol.agentCompliance` | Phase 6 |
 | Rendered nodes mapped to registered components | 100% | **passing** | `runtime-demo > every node carries a registered data-atlas-type` | M4 |
 | Direct raw color or spacing values accepted by components | 0 | **passing** | `code.raw-design-values` | Phase 2d |
 | Registered types removed between releases | 0 | **passing** | `scope.registry-complete` | Phase 4 |
@@ -141,7 +142,7 @@ Result sources read: `atlas-verify`, `vitest`, `playwright`, `atlas-sync`, `regi
 | Protocol messages passing schema validation | 100% | **passing** | `design.schemas` | M2 (JSON inputs), M4 (protocol) |
 | Full conversation replay required for UI interaction | 0% | **passing** | `runtime-demo > interaction sends a state delta, not a re-render` | M4 |
 | Median protocol size versus equivalent markup | At least 70% smaller | **failing** | `runtime/protocol > payload is at most 30% of rendered markup bytes` | M4 |
-| First valid streamed operation | Under 250 ms p95 | not measurable | `protocol.firstOpP95` | Phase 6 |
+| First valid streamed operation | Under 250 ms p95 | **failing** | `protocol.firstOpP95` | Phase 6 |
 
 ### State Synchronization
 
@@ -167,7 +168,7 @@ Result sources read: `atlas-verify`, `vitest`, `playwright`, `atlas-sync`, `regi
 |---|---:|---|---|---|
 | Requests using filtered catalog capabilities | 100% | **passing** | `registry/filter > every request carries a filtered catalog` | Phase 6 |
 | Requests exposing the full catalog | 0 | **passing** | `registry/filter > no request exposes the full catalog` | Phase 6 |
-| Prompt reduction from dynamic filtering | At least 50% | not measurable | `protocol.promptReduction` | Phase 6 |
+| Prompt reduction from dynamic filtering | At least 50% | **passing** | `protocol.promptReduction` | Phase 6 |
 | Irrelevant components exposed to the agent | 0 in evaluation tests | **passing** | `registry/filter > catalog excludes out-of-task types` | Phase 6 |
 
 ### Accessibility
