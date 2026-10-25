@@ -123,7 +123,7 @@ function main() {
     } catch (err) { problems.push(`${e.type}: ${err.message}`) }
   }
   written[`${GEN}/componentMap.ts`] = componentMapSource(entries, metadata)
-  written[`${GEN}/runtimeRegistry.ts`] = runtimeRegistrySource(entries)
+  written[`${GEN}/runtimeRegistry.ts`] = runtimeRegistrySource(entries, Object.keys(facts))
   if (problems.length) return fatal(problems)
 
   const list = (dir, suffix) => (fs.existsSync(rel(dir)) ? fs.readdirSync(rel(dir)).filter((f) => f.endsWith(suffix)).map((f) => `${dir}/${f}`) : [])

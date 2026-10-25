@@ -16,7 +16,7 @@ describe("registry/filter >", () => {
     expect(types.length).toBeLessThanOrEqual(6)
     expect(types).not.toContain("Dialog")
   })
-  it("a press request gets only Button", () => expect(filter(["press"])).toEqual(["Button"]))
+  it("a press request gets Button and its fallback target", () => expect(filter(["press"])).toEqual(["Alert", "Button"]))
   it("an unknown capability gets nothing", () => expect(filter(["chart"])).toEqual([]))
 })
 
