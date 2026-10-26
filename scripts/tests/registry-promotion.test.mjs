@@ -74,6 +74,11 @@ test("promotion: a structural entry cannot be stable", () => {
   assert.match(promotionCheck(run((s) => { delete s.entries.Form.provisional })).fails.join("\n"), /Form: a structural entry cannot be stable/)
 })
 
+test("promotion: an empty waitingOn is allowed for a structural entry only", () => {
+  assert.equal(promotionCheck(run((s) => { s.entries.Form.provisional.waitingOn = [] })).fails.filter((f) => f.startsWith("Form:")).length, 0)
+  assert.match(promotionCheck(run((s) => { s.entries.Alert.provisional.waitingOn = [] })).fails.join("\n"), /Alert: provisional with nothing to wait on/)
+})
+
 test("promotion: waitingOn must be real and still unfinished", () => {
   assert.match(promotionCheck(run((s) => { s.entries.Alert.provisional.waitingOn = ["Dialog"] })).fails.join("\n"), /Alert: waitingOn "Dialog" is not a component this type is built from/)
   assert.match(promotionCheck(run((s) => { s.evidence.status.Alert = "spec-complete" })).fails.join("\n"), /Alert: waitingOn "Alert", which is spec-complete now/)

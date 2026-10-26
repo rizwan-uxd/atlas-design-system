@@ -51,9 +51,10 @@ import { Input } from "@atlas/ui-web/primitives/Input/Input"
 ```
 
 **Input** — also accepts native `<input>` attributes (except size, prefix)
-- ref: not forwarded — `ref` does not type-check; reach the element by `id`
+- ref: forwarded
 - `variant?: InputVariant`
 - `size?: InputSize`
+- `ref?: React.Ref<HTMLInputElement>`
 - `invalid?: boolean`
 - `loading?: boolean`
 - `leadingIcon?: React.ReactNode`

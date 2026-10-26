@@ -10,6 +10,7 @@
     { "name": "leadingIcon", "type": "React.ReactNode", "optional": true, "exact": true },
     { "name": "loading", "type": "boolean", "optional": true, "exact": true },
     { "name": "prefix", "type": "React.ReactNode", "optional": true, "exact": true },
+    { "name": "ref", "type": "React.Ref<HTMLInputElement>", "optional": true, "exact": true },
     { "name": "size", "type": "InputSize", "optional": true, "exact": true },
     { "name": "suffix", "type": "React.ReactNode", "optional": true, "exact": true },
     { "name": "trailingIcon", "type": "React.ReactNode", "optional": true, "exact": true },
