@@ -5,7 +5,6 @@
   "kind": "component",
   "platforms": ["web"],
   "registryComplete": true,
-  "provisional": { "waitingOn": ["Input"], "reason": "TextField is the Input component, still scaffolded (status.json): prefix and suffix affixes, exact sm and md heights and the focus ring are not at spec." },
   "protocolProps": {
     "variant": {
       "values": ["default", "filled", "unstyled"]
@@ -21,7 +20,7 @@
     "placeholder": {},
     "required": {}
   },
-  "hiddenProps": {},
+  "hiddenProps": { "ref": "A React ref to the native input; the protocol carries no object references." },
   "events": {
     "blur": { "handler": "onBlur" },
     "change": { "handler": "onChange" },

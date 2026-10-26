@@ -8,7 +8,8 @@
  *   4. Loading — spinner replaces the trailing icon
  *   5. Affixes — prefix / suffix, and icon priority over them
  *   6. Disabled and invalid states
- *   7. axe accessibility check
+ *   7. ref reaches the native input
+ *   8. axe accessibility check
  */
 
 import React from "react"
@@ -104,7 +105,20 @@ describe("Input — states", () => {
   })
 })
 
+describe("Input — ref", () => {
+  it("forwards ref to the native input", () => {
+    const ref = React.createRef<HTMLInputElement>()
+    render(<Input aria-label="Field" ref={ref} />)
+    expect(ref.current).toBe(screen.getByRole("textbox", { name: "Field" }))
+  })
+})
+
 describe("Input — accessibility", () => {
+  it.each(VARIANTS)("passes axe for variant=%s", async (variant) => {
+    const { container } = render(<Input aria-label="Field" variant={variant} />)
+    expect(await axe(container)).toHaveNoViolations()
+  })
+
   it("passes axe with icons, invalid and disabled variants", async () => {
     const { container } = render(
       <div>

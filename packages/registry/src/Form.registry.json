@@ -5,7 +5,7 @@
   "kind": "structural",
   "platforms": ["web"],
   "registryComplete": true,
-  "provisional": { "waitingOn": ["Input"], "reason": "Form has no component of its own; through Field it renders TextField, which is the Input component (scaffolded). It is production-ready once Input is spec-complete." },
+  "provisional": { "waitingOn": [], "reason": "Form is structural: it has no component, contract or test of its own to promote on (DEC-100), so it stays provisional until the owner decides the structural rule. Every component it renders (Alert, Input through TextField) is spec-complete." },
   "composedOf": ["Field", "Input", "Button", "Alert"],
   "element": "form",
   "protocolProps": {},

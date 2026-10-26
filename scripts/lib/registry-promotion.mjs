@@ -93,6 +93,7 @@ export function promotionCheck({ entries, evidence, allow = [] }) {
   for (const e of Object.values(entries)) {
     if (e.provisional !== undefined) {
       const reach = closure(entries, e.type)
+      if (e.provisional.waitingOn.length === 0 && e.kind === "component") fails.push(`${e.type}: provisional with nothing to wait on — a component with no unfinished dependency is promoted, not held`)
       for (const dep of e.provisional.waitingOn) {
         if (!reach.has(dep)) fails.push(`${e.type}: waitingOn "${dep}" is not a component this type is built from`)
         else if (evidence.status[dep] === "spec-complete") fails.push(`${e.type}: waitingOn "${dep}", which is spec-complete now — drop it from provisional.waitingOn, and remove provisional once the list is empty and the evidence below exists`)

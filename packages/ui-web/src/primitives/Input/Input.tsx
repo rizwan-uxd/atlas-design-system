@@ -17,7 +17,7 @@
  *   - aria-invalid="true" when invalid prop is set
  *   - aria-required passed through from caller
  *   - aria-describedby wired by caller (to HelperText / ErrorText)
- *   - Focus ring via CSS :focus-visible; never suppressed
+ *   - Focus ring via CSS :focus-visible on the wrapper in every variant; never suppressed
  *
  * Logical properties and prefers-reduced-motion handled in Input.module.css.
  */
@@ -34,6 +34,8 @@ export interface InputProps
   extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "size" | "prefix"> {
   variant?: InputVariant
   size?: InputSize
+  /** Ref to the underlying <input> element */
+  ref?: React.Ref<HTMLInputElement>
   /** Marks the field as invalid — sets aria-invalid and switches border to danger colour */
   invalid?: boolean
   /** Shows a loading spinner in the trailing-icon slot */
@@ -65,6 +67,7 @@ export function Input({
   disabled,
   readOnly,
   className,
+  ref,
   ...rest
 }: InputProps) {
   /*
@@ -107,6 +110,7 @@ export function Input({
 
       <input
         {...rest}
+        ref={ref}
         className={`${styles.input} ${styles[size]}${className ? ` ${className}` : ""}`}
         disabled={disabled}
         readOnly={readOnly}

@@ -69,12 +69,12 @@
         "platforms": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "enum": ["web"] } },
         "registryComplete": { "type": "boolean" },
         "provisional": {
-          "description": "Registered but not production-ready (DEC-097): the scaffolded components it waits on, and why. Provisional entries load for development and benchmarks and are left out of production capability filtering; the flag cannot be dropped until atlas-verify's registry-promotion gate passes.",
+          "description": "Registered but not production-ready (DEC-097): the scaffolded components it waits on, and why. An empty list is allowed only for a structural entry held for its own promotion rule (DEC-100); registry-promotion fails an empty list on a component. Provisional entries load for development and benchmarks and are left out of production capability filtering; the flag cannot be dropped until atlas-verify's registry-promotion gate passes.",
           "type": "object",
           "additionalProperties": false,
           "required": ["waitingOn", "reason"],
           "properties": {
-            "waitingOn": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "common.schema.json#/$defs/componentName" } },
+            "waitingOn": { "type": "array", "minItems": 0, "uniqueItems": true, "items": { "$ref": "common.schema.json#/$defs/componentName" } },
             "reason": { "$ref": "common.schema.json#/$defs/text" }
           }
         },

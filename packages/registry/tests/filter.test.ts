@@ -52,11 +52,10 @@ describe("registry/restrict >", () => {
 })
 
 describe("registry/provisional >", () => {
-  it("TextField and Form are provisional, each waiting on a scaffolded component", () => {
+  it("Form is the only provisional entry: structural, waiting on the DEC-100 rule", () => {
     const waiting = (t: string) => registry.entries[t].provisional?.waitingOn
-    expect(waiting("TextField")).toEqual(["Input"])
-    expect(waiting("Form")).toEqual(["Input"])
-    for (const t of ["Alert", "Button", "Field", "Text"]) expect(registry.entries[t].provisional, t).toBeUndefined()
+    expect(waiting("Form")).toEqual([])
+    for (const t of ["Alert", "Button", "Field", "Text", "TextField"]) expect(registry.entries[t].provisional, t).toBeUndefined()
   })
   it("development filtering is unchanged: provisional entries load for every task", () => {
     expect(filter(["submit"])).toEqual(["Alert", "Button", "Field", "Form", "TextField"])
@@ -66,7 +65,7 @@ describe("registry/provisional >", () => {
     const production = (caps: string[]) => filter(caps, registry, { mode: "production" })
     expect(production(["submit"])).toEqual([])
     expect(production(["dismiss"])).toEqual(["Alert", "Button"])
-    expect(production(["input"])).toEqual([])
+    expect(production(["input"])).toEqual(["Alert", "TextField"])
     expect(production(["press"])).toEqual(["Alert", "Button"])
     for (const caps of [["submit"], ["press"], ["input"], ["dismiss"], ["display"]])
       for (const t of production(caps)) expect(registry.entries[t].provisional, t).toBeUndefined()

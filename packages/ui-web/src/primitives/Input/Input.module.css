@@ -99,13 +99,13 @@
   font-size: var(--atlas-input-size-lg-font-size);
 }
 
-/* ── Wrapper focus ring (default + filled variants only) ──────── */
+/* ── Wrapper focus ring (every variant) ───────────────────────── */
 /*
   The ring is placed on the container div so it visually wraps the full
   input including leading/trailing icons and affixes.
   Uses :has(:focus-visible) so the ring only appears for keyboard focus,
   matching the same intent as :focus-visible on the native input.
-  Unstyled variant: no ring — bottom-border is the sole focus indicator.
+  Unstyled: the ring is square (no radius) and sits with the bottom border (Figma draws both).
 */
 
 .default:has(.input:focus-visible) {
@@ -120,20 +120,22 @@
   border-radius: var(--atlas-input-radius);
 }
 
+.unstyled:has(.input:focus-visible) {
+  outline: var(--atlas-border-width-2) solid var(--atlas-focus-ring);
+  outline-offset: var(--atlas-spacing-focus-offset);
+}
+
 /* ── Variant: filled ──────────────────────────────────────────── */
 /*
   Filled: muted bg, no border at rest, bottom border on focus/error.
-  Rounded top corners only.
+  All four corners round (Figma: input/radius on every corner).
 */
 
 .filled .input {
   background-color: var(--atlas-input-filled-background);
   border: none;
   border-block-end: var(--atlas-border-width-1) solid transparent;
-  border-start-start-radius: var(--atlas-input-radius);
-  border-start-end-radius: var(--atlas-input-radius);
-  border-end-start-radius: var(--atlas-radius-none);
-  border-end-end-radius: var(--atlas-radius-none);
+  border-radius: var(--atlas-input-radius);
 }
 
 .filled .input:hover:not(:disabled):not([readonly]) {
@@ -168,8 +170,7 @@
 }
 
 .unstyled .input:focus-visible {
-  /* No ring for unstyled — bottom border IS the focus indicator (per spec) */
-  outline: none;
+  outline: none; /* Ring is on the wrapper via :has(:focus-visible) */
   border-block-end-color: var(--atlas-input-border-focus);
 }
 

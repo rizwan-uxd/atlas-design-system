@@ -11,6 +11,7 @@
   "props": [
     { "name": "variant", "required": false, "type": "InputVariant" },
     { "name": "size", "required": false, "type": "InputSize" },
+    { "name": "ref", "required": false, "type": "React.Ref<HTMLInputElement>" },
     { "name": "invalid", "required": false, "type": "boolean" },
     { "name": "loading", "required": false, "type": "boolean" },
     { "name": "leadingIcon", "required": false, "type": "React.ReactNode" },
