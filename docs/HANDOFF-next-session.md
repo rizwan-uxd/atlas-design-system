@@ -36,18 +36,18 @@ Owner and dates are placeholders: owner = the design-system owner role (no name 
 
 | End state | Status | Reason and next step | Follow-up |
 |---|---|---|---|
-| `registryProductionReady` 6/6 | OPEN, 4/6 | Alert promoted (PR #134, 2026-10-25): spec-complete, `provisional` dropped, Form now waits on Input only. Remaining: **Input** (scaffolded: affixes, sm/md heights, focus ring; Figma first, one session) unblocks TextField, then Form needs the structural rule (the gate treats a structural entry as never stable, DEC-100; owner call). Re-check TextField and Form after Input. | 2026-11-08 |
+| `registryProductionReady` 6/6 | OPEN, 5/6 | Alert (#134) and Input (#135, 2026-10-26) are spec-complete; TextField is stable. Only **Form** is held: it is structural, so it stays provisional with an empty `waitingOn` (the schema allows that for a structural entry only; `registry-promotion` fails it on a component). Closing it needs the DEC-100 rule built: a structural entry is production-ready when its element facts exist, its events and validation are covered by runtime tests, and its rendered demo has an axe check and a runtime-demo visual snapshot. | 2026-11-08 |
 | Contrast resolved or formally waived | OPEN | 14 allowances (DISC-108), each fixed by an existing primitive (DEC-099); Kind B, Figma first, baselines. Open sub-decision: subtle in dark equals muted at neutral-400. | 2026-11-22 |
 | Token drift measured or blocked | OPEN, measured, not blocked | DISC-106 and DISC-107 are measured through the plugin API (DEC-098); fix or accept each. | 2026-11-22 |
 | Accessibility rows measurable | OPEN | axe-coverage, keyboard and focus-visible are specified (DEC-102); axe-coverage fails today on Checkbox (no test file). Rows stay `not measurable` until built. | 2026-11-15 |
 | Benchmark against a justified target | OPEN | Reclassified in two rows (DEC-101): Atlas first op at 250 ms (0.015 ms p95 measured in Node, baseline run needed) and end-to-end through `claude -p` as a trend row (warm P95 2649 ms, cold 2256 ms). | 2026-11-15 |
 | Owner backlog, no undecided rows | DECIDED, not built | Add 7 role stages, leave 8 primitive, do the sandbox cascade and the Switch and Select Figma gaps (DEC-102); implementation issues not opened. | 2026-11-22 |
 
-**Remaining after Alert (#134):**
-1. Input refinement pass (Figma first, then code; `atlas-component` skill, four gates). When it is spec-complete, drop `provisional` from `TextField.registry.json` and from `Form.registry.json` `waitingOn`, set `status.json` code, and update `filter.test.ts` (it hard-codes which entries are provisional) and run `npm run test:scripts`.
-2. Owner decision: the structural rule for Form (DEC-100). Without it `registryProductionReady` stops at 5/6.
-3. Alert Figma description stores `&#39;` and `&quot;` where quotes belong; check whether the sync or Figma wrote them and fix at the source.
-4. Worktrees have no `node_modules`; run `npm ci` before `atlas:verify`. `--stamp` alone stamps nothing for a registry-only change: use `--stamp-components <Name>`.
+**Remaining after Alert (#134) and Input (#135):**
+1. Build the DEC-100 structural rule for Form (owner-decided 2026-10-25, not built): extend `scripts/lib/registry-promotion.mjs` and the production-ready metric so a structural entry can be stable on the three evidence items above, then drop Form's `provisional`. One session; update `filter.test.ts` (it hard-codes which entries are provisional) and run `npm run test:scripts`.
+2. Input's filled corners and unstyled focus ring changed on purpose (#135). If Visual Regression flagged the sandbox baselines, regenerate them from CI, not locally (local baselines are darwin, CI's are not).
+3. Alert's Figma description stores `&#39;` and `&quot;` where quotes belong; find whether the sync or Figma wrote them and fix at the source.
+4. Worktrees have no `node_modules`; run `npm ci` before `atlas:verify`. `--stamp` alone stamps nothing for a registry-only change: use `--stamp-components <Name>`. The roadmap metric region goes stale on every change to `registryProductionReady`: refresh it from the PR's `metrics` artifact before merging, or the "Metric manifest" check fails after auto-merge.
 
 Latest ids: **DEC-102**, CAND-071, DISC-109.
 
